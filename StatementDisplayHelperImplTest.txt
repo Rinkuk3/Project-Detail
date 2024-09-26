@@ -1,0 +1,155 @@
+package com.td.mbna.msec.account.statement.impl;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.common.midtier.MidTierServiceHelper;
+import com.td.mbna.msec.core.session.SessionProvider;
+import com.td.mbna.msec.midtier.statement.payload.getAvailableStatementList.AvailableStatementListType;
+import com.td.mbna.msec.midtier.statement.payload.getStatementWithActivity.GetStatementWithActivityResponse;
+import com.td.mbna.msec.midtier.statement.payload.getStatementWithActivity.RequestPayload;
+import com.td.mbna.msec.midtier.statement.payload.HistoryStatementListType;
+import com.td.mbna.msec.midtier.types.common.CardHolderInfo;
+import com.td.mbna.msec.common.infrastructure.util.TextProvider;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+public class StatementDisplayHelperImplTest {
+
+    @InjectMocks
+    private StatementDisplayHelperImpl statementDisplayHelper;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private MidTierServiceHelper midTierServiceHelper;
+
+    @Mock
+    private TextProvider textProvider;
+
+    private AccountDetails accountDetails;
+
+    @BeforeEach
+    public void setUp() {
+        accountDetails = new AccountDetails();
+        accountDetails.setAccountId("12345");
+        accountDetails.setCardHolderInfos(new HashMap<>());
+    }
+
+    @Test
+    public void testProcess() {
+        String result = statementDisplayHelper.process();
+        assertEquals("Processed by StatementDisplayHelperImpl", result);
+    }
+
+    @Test
+    public void testBuildClosingDateToStmtMatchTable() {
+        Map<String, String> statementClosingDateList = new HashMap<>();
+        statementClosingDateList.put("2024-09-01", "Some Date");
+        
+        HistoryStatementListType historyStatement = new HistoryStatementListType();
+        historyStatement.setDocumentId("doc123");
+        historyStatement.setStatementDate("2024-09-01");
+        
+        List<HistoryStatementListType> stmtFrDMSList = Arrays.asList(historyStatement);
+        
+        when(midTierServiceHelper.getAvailableStatementListType(accountDetails)).thenReturn(stmtFrDMSList);
+        when(sessionProvider.getSessionAttribute(anyString())).thenReturn(new AvailableStatementListType());
+
+        Map<String, ClosingDateToStmtMatchItem> result = statementDisplayHelper.buildClosingDateToStmtMatchTable(accountDetails);
+
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+        assertTrue(result.containsKey("2024-09-01"));
+    }
+
+    @Test
+    public void testGetAvailableStatementListType() {
+        AvailableStatementListType availableStatementListType = new AvailableStatementListType();
+        when(sessionProvider.getSessionAttribute(anyString())).thenReturn(availableStatementListType);
+        
+        AvailableStatementListType result = statementDisplayHelper.getAvailableStatementListType(accountDetails);
+        assertEquals(availableStatementListType, result);
+    }
+
+    @Test
+    public void testGetAvailableStatementListTypeNull() {
+        when(sessionProvider.getSessionAttribute(anyString())).thenReturn(null);
+        
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setWithAvailableList(true);
+        statementDisplayHelper.populateCardHolderInfo(requestPayload, accountDetails);
+        
+        GetStatementWithActivityResponse response = new GetStatementWithActivityResponse();
+        response.setResponsePayload(new GetStatementWithActivityResponse.ResponsePayload());
+        response.getResponsePayload().setAvailableStatementList(new AvailableStatementListType());
+        
+        when(midTierServiceHelper.getStatementWithActivity(any(), anyString())).thenReturn(response);
+
+        AvailableStatementListType result = statementDisplayHelper.getAvailableStatementListType(accountDetails);
+        assertNotNull(result);
+    }
+
+    @Test
+    public void testBuildStatementClosingDateList() {
+        List<StatementActivityStatusType> statementActivityStatusList = new ArrayList<>();
+        StatementActivityStatusType statusType = new StatementActivityStatusType();
+        statusType.setStatementEndDate("1625107200000"); // Example timestamp
+        statusType.setActivityAvailable(true);
+        
+        statementActivityStatusList.add(statusType);
+        
+        when(statementDisplayHelper.getStatementActivityStatusType(accountDetails)).thenReturn(statementActivityStatusList);
+        
+        Map<String, String> result = statementDisplayHelper.buildStatementClosingDateList(accountDetails);
+        
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+    }
+
+    @Test
+    public void testGetStatementActivityStatusType() {
+        List<StatementActivityStatusType> statementActivityStatusList = new ArrayList<>();
+        StatementActivityStatusType statusType = new StatementActivityStatusType();
+        statementActivityStatusList.add(statusType);
+        
+        AvailableStatementListType availableStatementListType = new AvailableStatementListType();
+        availableStatementListType.setStatementActivityStatus(statementActivityStatusList);
+        
+        when(sessionProvider.getSessionAttribute(anyString())).thenReturn(availableStatementListType);
+        
+        List<StatementActivityStatusType> result = statementDisplayHelper.getStatementActivityStatusType(accountDetails);
+        assertNotNull(result);
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    public void testGetStatementClosingDates() {
+        Map<String, String> result = statementDisplayHelper.getStatementClosingDates(accountDetails);
+        assertNotNull(result);
+        assertTrue(result.containsKey("mostRecentTransactions"));
+    }
+
+    @Test
+    public void testBuildStatementEndDateList() {
+        List<String> result = statementDisplayHelper.buildStatementEndDateList(accountDetails);
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
+
+    // Additional tests for null checks and exception handling can be added here.
+}
