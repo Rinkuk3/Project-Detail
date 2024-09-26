@@ -1,0 +1,196 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.ArgumentCaptor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class CardManagementServiceTest {
+
+    @InjectMocks
+    private CardManagementServiceImpl cardManagementService;
+
+    @Mock
+    private MidTierServiceHelper midTierServiceHelper;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private HttpServletRequest httpServletRequest;
+
+    @Mock
+    private HttpServletResponse httpServletResponse;
+
+    @Mock
+    private AccountDetails accountDetails;
+
+    @Mock
+    private CustomerDetails customerDetails;
+
+    @Mock
+    private CreditCard creditCard;
+
+    @Mock
+    private CardActivationRequest cardActivationRequest;
+
+    @BeforeEach
+    void setUp() {
+        // Common setup for mocks
+        when(sessionProvider.getSessionCustomer()).thenReturn(customerDetails);
+        when(sessionProvider.getCurrentAccount()).thenReturn(accountDetails);
+    }
+
+    @Test
+    void testRetrieveCreditCard_withAccount() {
+        when(accountDetails.isAllowedCardActivation()).thenReturn(true);
+        when(accountDetails.getAccountId()).thenReturn("12345");
+        when(sessionProvider.getRequestedAccount("12345")).thenReturn(accountDetails);
+
+        CreditCard result = cardManagementService.retrieveCreditCard("12345");
+
+        assertNotNull(result);
+        verify(sessionProvider).setCurrentAccount("12345");
+        verify(sessionProvider, times(0)).getCurrentAccount();
+    }
+
+    @Test
+    void testRetrieveCreditCard_noAccount() {
+        when(sessionProvider.getRequestedAccount("12345")).thenReturn(null);
+        when(sessionProvider.getCurrentAccount()).thenReturn(null);
+
+        Exception exception = assertThrows(MidtierUtilHelper.BusinessException.class, () -> {
+            cardManagementService.retrieveCreditCard("12345");
+        });
+
+        assertEquals("account is null", exception.getMessage());
+    }
+
+    @Test
+    void testActivateCard_success() {
+        when(cardActivationRequest.getCvc()).thenReturn("123");
+        when(cardActivationRequest.getExpiryMonth()).thenReturn(12);
+        when(cardActivationRequest.getExpiryYear()).thenReturn("25");
+        when(sessionProvider.getSessionAttribute(CardManagementServiceImpl.SESSION_CARD_NUMBER)).thenReturn("1234567890123456");
+        when(accountDetails.isCardActivated()).thenReturn(false);
+        when(accountDetails.isMultiCard()).thenReturn(false);
+
+        ActivateCardResponse activateCardResponse = new ActivateCardResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatus(true);
+        activateCardResponse.setResponsePayload(responsePayload);
+        when(midTierServiceHelper.activateCard(any())).thenReturn(activateCardResponse);
+
+        CardActivationResponse result = cardManagementService.activateCard(cardActivationRequest);
+
+        assertTrue(result.isCardActivationSuccessful());
+        verify(sessionProvider, times(1)).setErrorCount(0);
+    }
+
+    @Test
+    void testActivateCard_requestIsNull() {
+        Exception exception = assertThrows(MidtierUtilHelper.BusinessException.class, () -> {
+            cardManagementService.activateCard(null);
+        });
+
+        assertEquals("BFF CardActivation Step 1 - failed: request is null", exception.getMessage());
+    }
+
+    @Test
+    void testActivateCard_invalidAccount() {
+        when(sessionProvider.getCurrentAccount()).thenReturn(null);
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(null);
+
+        Exception exception = assertThrows(MidtierUtilHelper.BusinessException.class, () -> {
+            cardManagementService.activateCard(cardActivationRequest);
+        });
+
+        assertEquals("BFF CardActivation Step 2 - failed: current account is null", exception.getMessage());
+    }
+
+    @Test
+    void testGetCardArtInfos() {
+        when(accountDetails.getEnglishAffinityInfo()).thenReturn(new AffinityInfoTypeLanguageSpecific());
+        when(accountDetails.getFrenchAffinityInfo()).thenReturn(new AffinityInfoTypeLanguageSpecific());
+        when(accountDetails.getMobileSmLogo()).thenReturn("logo.png");
+
+        List<CardArtInfo> result = cardManagementService.getCardArtInfos(accountDetails, httpServletRequest);
+
+        assertEquals(2, result.size());
+    }
+
+    @Test
+    void testGetCardReplacementInfo_success() {
+        when(accountDetails.isAllowedStandardEForms()).thenReturn(true);
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(accountDetails);
+
+        CardReplacementInfo result = cardManagementService.getCardReplacementInfo(httpServletRequest, httpServletResponse);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testGetCardReplacementInfo_noAccount() {
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(null);
+
+        CardReplacementInfo result = cardManagementService.getCardReplacementInfo(httpServletRequest, httpServletResponse);
+
+        assertNull(result);
+    }
+
+    @Test
+    void testReplaceCard_success() {
+        when(accountDetails.getAccountId()).thenReturn("12345");
+        when(cardReplacementRequest.getAliasCustID()).thenReturn("aliasId");
+
+        List<AccountHolder> accountHolders = new ArrayList<>();
+        accountHolders.add(new AccountHolder());
+        when(sessionProvider.getCurrentAccount()).thenReturn(accountDetails);
+        when(cardManagementService.populateAccountHoldersList(accountDetails)).thenReturn(accountHolders);
+
+        CardReplacementResponse result = cardManagementService.replaceCard(cardReplacementRequest, false, httpServletRequest, httpServletResponse);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testReplaceCard_noAccount() {
+        when(sessionProvider.getCurrentAccount()).thenReturn(null);
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(null);
+
+        CardReplacementResponse result = cardManagementService.replaceCard(cardReplacementRequest, false, httpServletRequest, httpServletResponse);
+
+        assertNull(result);
+    }
+
+    @Test
+    void testIsAuthorized_success() {
+        when(accountDetails.isAllowedCardActivation()).thenReturn(true);
+        when(sessionProvider.getCurrentAccount()).thenReturn(accountDetails);
+
+        boolean result = cardManagementService.isAuthorized();
+
+        assertTrue(result);
+    }
+
+    @Test
+    void testIsAuthorized_noAccount() {
+        when(sessionProvider.getCurrentAccount()).thenReturn(null);
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(null);
+
+        boolean result = cardManagementService.isAuthorized();
+
+        assertFalse(result);
+    }
+}
