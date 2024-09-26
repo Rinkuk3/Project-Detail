@@ -1,0 +1,144 @@
+package com.td.mbna.msec.account.application.impl;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.td.mbna.msec.account.application.TransactionService;
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.account.domain.IpEligibleTransactionsResponse;
+import com.td.mbna.msec.common.domain.TransactionDetails;
+import com.td.mbna.msec.common.midtier.MidTierServiceHelper;
+import com.td.mbna.msec.core.session.SessionProvider;
+import com.td.mbna.msec.midtier.statement.payload.getIpEligibleTransactions.GetIpEligibleTransactionsResponse;
+import com.td.mbna.msec.midtier.statement.payload.getIpEligibleTransactions.IpEligibleTransactionsPayload;
+import com.td.mbna.msec.offers.application.OffersEligibilityService;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+public class AccountStatementServiceImplTest {
+
+    @Mock
+    private MidTierServiceHelper midTierServiceHelper;
+
+    @Mock
+    private TransactionService transactionService;
+
+    @Mock
+    private OffersEligibilityService offersEligibilityService;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @InjectMocks
+    private AccountStatementServiceImpl accountStatementService;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    // Test for getIpEligibleTransactions() when eligible and session API call has not failed
+    @Test
+    public void testGetIpEligibleTransactions_WhenEligible_NoApiFailure() {
+        AccountDetails account = mock(AccountDetails.class);
+        List<TransactionDetails> mockTransactions = new ArrayList<>();
+        when(offersEligibilityService.isEligibleForIPTransaction(account)).thenReturn(true);
+        when(sessionProvider.getSessionAttribute(anyString())).thenReturn(null); // No API failure
+        when(account.getIpEligibleTransactions()).thenReturn(new ArrayList<>());
+        when(transactionService.convertToAccountTransactions(anyList())).thenReturn(mockTransactions);
+
+        IpEligibleTransactionsResponse response = accountStatementService.getIpEligibleTransactions(account);
+
+        assertNotNull(response);
+        assertEquals(mockTransactions, response.getIpEligibleTransactions());
+        verify(offersEligibilityService).isEligibleForIPTransaction(account);
+        verify(sessionProvider).getSessionAttribute(anyString());
+        verify(transactionService).convertToAccountTransactions(anyList());
+    }
+
+    // Test for getIpEligibleTransactions() when session API call has failed (throws exception)
+    @Test
+    public void testGetIpEligibleTransactions_WhenApiFailure() {
+        AccountDetails account = mock(AccountDetails.class);
+        when(offersEligibilityService.isEligibleForIPTransaction(account)).thenReturn(true);
+        when(sessionProvider.getSessionAttribute(anyString())).thenReturn("YES"); // API failure
+
+        Exception exception = assertThrows(Exception.class, () -> {
+            accountStatementService.getIpEligibleTransactions(account);
+        });
+
+        assertEquals("Failure in API call to retrieve active/inactive plans", exception.getMessage());
+        verify(offersEligibilityService).isEligibleForIPTransaction(account);
+        verify(sessionProvider).getSessionAttribute(anyString());
+    }
+
+    // Test for getIpEligibleTransactions() when not eligible
+    @Test
+    public void testGetIpEligibleTransactions_WhenNotEligible() {
+        AccountDetails account = mock(AccountDetails.class);
+        when(offersEligibilityService.isEligibleForIPTransaction(account)).thenReturn(false);
+
+        IpEligibleTransactionsResponse response = accountStatementService.getIpEligibleTransactions(account);
+
+        assertNotNull(response);
+        assertTrue(response.getIpEligibleTransactions().isEmpty());
+        verify(offersEligibilityService).isEligibleForIPTransaction(account);
+        verifyNoInteractions(sessionProvider);
+        verifyNoInteractions(transactionService);
+    }
+
+    // Test for populateIpEligibleTransactions() when eligible for IP offer
+    @Test
+    public void testPopulateIpEligibleTransactions_WhenEligibleForIpOffer() {
+        AccountDetails account = mock(AccountDetails.class);
+        GetIpEligibleTransactionsResponse mockResponse = mock(GetIpEligibleTransactionsResponse.class);
+        List<TransactionDetails> mockTransactionList = new ArrayList<>();
+        IpEligibleTransactionsPayload mockPayload = mock(IpEligibleTransactionsPayload.class);
+        
+        when(offersEligibilityService.isEligibleForIPOffer(account)).thenReturn(true);
+        when(midTierServiceHelper.getIpEligibleTransaction(account)).thenReturn(mockResponse);
+        when(mockResponse.getResponsePayload()).thenReturn(mockPayload);
+        when(transactionService.getTransactions(eq(account), anyList())).thenReturn(mockTransactionList);
+        when(account.getIpEligibleTransactions()).thenReturn(new ArrayList<>());
+
+        accountStatementService.populateIpEligibleTransactions(account);
+
+        verify(account.getIpEligibleTransactions()).clear();
+        verify(account.getIpEligibleTransactions()).addAll(mockTransactionList);
+        verify(transactionService).getTransactions(eq(account), anyList());
+    }
+
+    // Test for populateIpEligibleTransactions() when not eligible for IP offer
+    @Test
+    public void testPopulateIpEligibleTransactions_WhenNotEligibleForIpOffer() {
+        AccountDetails account = mock(AccountDetails.class);
+        when(offersEligibilityService.isEligibleForIPOffer(account)).thenReturn(false);
+
+        accountStatementService.populateIpEligibleTransactions(account);
+
+        verify(offersEligibilityService).isEligibleForIPOffer(account);
+        verifyNoInteractions(midTierServiceHelper);
+        verifyNoInteractions(transactionService);
+    }
+
+    // Test for populateIpEligibleTransactions() when exception occurs
+    @Test
+    public void testPopulateIpEligibleTransactions_WhenExceptionOccurs() {
+        AccountDetails account = mock(AccountDetails.class);
+        when(offersEligibilityService.isEligibleForIPOffer(account)).thenReturn(true);
+        when(midTierServiceHelper.getIpEligibleTransaction(account)).thenThrow(new RuntimeException("Test Exception"));
+
+        accountStatementService.populateIpEligibleTransactions(account);
+
+        verify(offersEligibilityService).isEligibleForIPOffer(account);
+        verify(midTierServiceHelper).getIpEligibleTransaction(account);
+        verifyNoInteractions(transactionService);
+    }
+}
