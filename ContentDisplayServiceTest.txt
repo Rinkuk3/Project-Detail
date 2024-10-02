@@ -1,0 +1,129 @@
+import com.td.mbna.msec.common.PageContentCacheCmd;
+import com.td.mbna.msec.content.domain.ContentDisplayRequest;
+import com.td.mbna.msec.content.domain.ContentDisplayResponse;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import javax.servlet.http.HttpServletRequest;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+public class ContentDisplayServiceTest {
+
+    private ContentDisplayServiceImpl contentDisplayService;
+
+    @Mock
+    private MidTierServiceHelper midTierServiceHelper; // Assuming MidTierServiceHelper is used in PageContentCacheCmd
+
+    @Mock
+    private HttpServletRequest httpServletRequest;
+
+    @Mock
+    private PageContentCacheCmd pageContentCacheCmd;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        contentDisplayService = new ContentDisplayServiceImpl();
+        // Injecting mocked MidTierServiceHelper into ContentDisplayServiceImpl
+        ReflectionTestUtils.setField(contentDisplayService, "midTierServiceHelper", midTierServiceHelper);
+    }
+
+    @Test
+    public void testGetContent_Success() {
+        ContentDisplayRequest request = new ContentDisplayRequest();
+        request.setId("sampleId");
+        request.setRequestLocale("en_CA");
+
+        // Mock the behavior of getContentId
+        when(contentDisplayService.getContentId("sampleId")).thenReturn("content123");
+        
+        // Mocking the behavior of PageContentCacheCmd
+        when(midTierServiceHelper.performExecute()).thenReturn(pageContentCacheCmd);
+        when(pageContentCacheCmd.getResPayload()).thenReturn(new ResponsePayload("Title", "Content"));
+        
+        ContentDisplayResponse response = contentDisplayService.getContent(request, httpServletRequest);
+
+        assertNotNull(response);
+        assertEquals(MsecbffConstants.SUCCESS, response.getStatus());
+        assertEquals("Title", response.getTitle());
+        assertEquals("Content", response.getContent());
+    }
+
+    @Test
+    public void testGetContent_NoContentId() {
+        ContentDisplayRequest request = new ContentDisplayRequest();
+        request.setId("invalidId");
+
+        // Mock the behavior of getContentId to return null
+        when(contentDisplayService.getContentId("invalidId")).thenReturn(null);
+
+        ContentDisplayResponse response = contentDisplayService.getContent(request, httpServletRequest);
+
+        assertNotNull(response);
+        assertEquals("", response.getStatus());
+    }
+
+    @Test
+    public void testGetContent_EmptyContentId() {
+        ContentDisplayRequest request = new ContentDisplayRequest();
+        request.setId("sampleId");
+
+        // Mock the behavior of getContentId to return empty
+        when(contentDisplayService.getContentId("sampleId")).thenReturn("");
+
+        ContentDisplayResponse response = contentDisplayService.getContent(request, httpServletRequest);
+
+        assertNotNull(response);
+        assertEquals("", response.getStatus());
+    }
+
+    @Test
+    public void testGetContent_ExceptionHandling() {
+        ContentDisplayRequest request = new ContentDisplayRequest();
+        request.setId("sampleId");
+        request.setRequestLocale("en_CA");
+
+        // Mock the behavior of getContentId
+        when(contentDisplayService.getContentId("sampleId")).thenReturn("content123");
+
+        // Throw an exception when executing the PageContentCacheCmd
+        when(pageContentCacheCmd.performExecute()).thenThrow(new RuntimeException("Command exception"));
+
+        Exception exception = assertThrows(BusinessException.class, () -> {
+            contentDisplayService.getContent(request, httpServletRequest);
+        });
+
+        assertNotNull(exception);
+        assertEquals(MsecbffConstants.GENERAL_ERROR, ((BusinessException) exception).getFaultInfo().getErrorCode());
+        assertEquals("PageContentCacheCmd:CommandException", ((BusinessException) exception).getFaultInfo().getErrorDescription());
+    }
+
+    @Test
+    public void testGetContent_LocaleLengthMoreThanFive() {
+        ContentDisplayRequest request = new ContentDisplayRequest();
+        request.setId("sampleId");
+        request.setRequestLocale("en_CA_US");
+
+        // Mock the behavior of getContentId
+        when(contentDisplayService.getContentId("sampleId")).thenReturn("content123");
+
+        // Mocking the behavior of PageContentCacheCmd
+        when(midTierServiceHelper.performExecute()).thenReturn(pageContentCacheCmd);
+        when(pageContentCacheCmd.getResPayload()).thenReturn(new ResponsePayload("Title", "Content"));
+
+        ContentDisplayResponse response = contentDisplayService.getContent(request, httpServletRequest);
+
+        assertNotNull(response);
+        assertEquals(MsecbffConstants.SUCCESS, response.getStatus());
+        assertEquals("Title", response.getTitle());
+        assertEquals("Content", response.getContent());
+    }
+
+    // Additional test for different locale scenarios, etc. can be added here
+}

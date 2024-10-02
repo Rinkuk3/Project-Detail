@@ -1,0 +1,158 @@
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import com.td.api.mbcca.response.account.Accountstatus;
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.cardlock.model.CardControlRequest;
+import com.td.mbna.msec.cardlock.model.CardControlResponse;
+import com.td.mbna.msec.midtier.cardlock.payload.CardLockResponse;
+import com.td.mbna.msec.midtier.cardlock.payload.RequestPayload;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.util.*;
+
+public class CardControlServiceTest {
+
+    @InjectMocks
+    private CardControlServiceImpl cardControlService;
+
+    @Mock
+    private WcmContentService wcmContentService;
+
+    @Mock
+    private MbnaCCA mbnaCCA;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private MidTierServiceHelper midTierServiceHelper;
+
+    private static final boolean CARDLOCK_MOCK_ERROR_SUPPRESS_TOGGLE = false;
+    private static final boolean CARDLOCK_MOCK_ERROR_LOCK_UNLOCK = false;
+    private AccountDetails accountDetails;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        accountDetails = new AccountDetails();
+        accountDetails.setAccountId("12345");
+        accountDetails.setAliasCustId("custId123");
+        accountDetails.setCardNumber("cardNum123");
+    }
+
+    @Test
+    public void testGetCardStatus_MockError() {
+        // Simulate CARDLOCK_MOCK_ERROR_SUPPRESS_TOGGLE
+        cardControlService.CARDLOCK_MOCK_ERROR_SUPPRESS_TOGGLE = true;
+        assertThrows(BusinessException.class, () -> cardControlService.getCardStatus("anyAccountId"));
+    }
+
+    @Test
+    public void testGetCardStatus_DefaultAccount() {
+        when(sessionProvider.getCurrentAccount()).thenReturn(accountDetails);
+        CardControlResponse response = cardControlService.getCardStatus("DEFAULT_ACCOUNT");
+        assertNotNull(response);
+        assertEquals(accountDetails.getAliasCustId(), response.getCustomerId());
+    }
+
+    @Test
+    public void testGetCardStatus_KillSwitchEnabled() {
+        when(sessionProvider.getAccount("12345")).thenReturn(accountDetails);
+        when(cardControlService.killSwitchEnabled()).thenReturn(true);
+        
+        CardControlResponse response = cardControlService.getCardStatus("12345");
+        assertFalse(response.getEligibility());
+    }
+
+    @Test
+    public void testGetCardStatus_CachedAccount() {
+        when(sessionProvider.getAccount("12345")).thenReturn(accountDetails);
+        when(sessionProvider.getSessionAttribute("CACHED_ACCOUNT")).thenReturn("12345");
+        Map<String, Object> cachedResponse = new HashMap<>();
+        cachedResponse.put("custId123", new CardControlResponse());
+        when(sessionProvider.getSessionAttribute("responseMap_Cache")).thenReturn(cachedResponse);
+        
+        CardControlResponse response = cardControlService.getCardStatus("12345");
+        assertNotNull(response);
+    }
+
+    @Test
+    public void testGetCardStatus_CardLockResponseSuccess() {
+        when(sessionProvider.getAccount("12345")).thenReturn(accountDetails);
+        when(sessionProvider.getSessionAttribute("CACHED_ACCOUNT")).thenReturn(null);
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setCustId("custId123");
+        requestPayload.setAccountId("12345");
+        
+        CardLockResponse cardLockResponse = new CardLockResponse();
+        CardAuthorizationStatus status = new CardAuthorizationStatus();
+        status.setActive(true);
+        cardLockResponse.setResponsePayload(new ResponsePayload());
+        cardLockResponse.getResponsePayload().setCardAuthorizationStatus(status);
+        
+        when(midTierServiceHelper.getCardLockStatus(requestPayload)).thenReturn(cardLockResponse);
+        
+        CardControlResponse response = cardControlService.getCardStatus("12345");
+        assertTrue(response.getActive());
+        assertTrue(response.getEligibility());
+    }
+
+    @Test
+    public void testGetCardStatus_CardLockResponseFailure() {
+        when(sessionProvider.getAccount("12345")).thenReturn(accountDetails);
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setCustId("custId123");
+        requestPayload.setAccountId("12345");
+        
+        CardLockResponse cardLockResponse = new CardLockResponse();
+        cardLockResponse.setStatus("400");
+        
+        when(midTierServiceHelper.getCardLockStatus(requestPayload)).thenReturn(cardLockResponse);
+        
+        CardControlResponse response = cardControlService.getCardStatus("12345");
+        assertFalse(response.getEligibility());
+    }
+
+    @Test
+    public void testUpdateCardControlStatus_MockError() {
+        cardControlService.CARDLOCK_MOCK_ERROR_LOCK_UNLOCK = true;
+        assertThrows(BusinessException.class, () -> cardControlService.updateCardControlStatus("12345", new CardControlRequest()));
+    }
+
+    @Test
+    public void testUpdateCardControlStatus_Success() {
+        CardControlRequest request = new CardControlRequest();
+        request.setCustomerId("custId123");
+        request.setActive(true);
+
+        when(midTierServiceHelper.updateCardLockStatus(any())).thenReturn(new CardLockResponse("200", ""));
+        
+        CardControlResponse response = cardControlService.updateCardControlStatus("12345", request);
+        assertEquals("200", response.getStatus());
+        assertTrue(response.getErrorCode().isEmpty());
+    }
+
+    @Test
+    public void testUpdateCardControlStatus_Failure() {
+        CardControlRequest request = new CardControlRequest();
+        request.setCustomerId("custId123");
+        request.setActive(true);
+
+        CardLockResponse cardLockResponse = new CardLockResponse();
+        cardLockResponse.setStatus("400");
+        List<String> errorMsgs = new ArrayList<>();
+        errorMsgs.add("Error occurred");
+        cardLockResponse.setErrorMsgs(errorMsgs);
+        
+        when(midTierServiceHelper.updateCardLockStatus(any())).thenReturn(cardLockResponse);
+        
+        CardControlResponse response = cardControlService.updateCardControlStatus("12345", request);
+        assertEquals("400", response.getStatus());
+        assertEquals("Error occurred", response.getErrorCode());
+    }
+}

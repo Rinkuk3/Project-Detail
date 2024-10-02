@@ -1,0 +1,65 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class TransactionUtilsTest {
+
+    @Test
+    public void testTrimAndGetLastFour_NullString() {
+        String result = TransactionUtils.trimAndGetLastFour(null);
+        assertNull(result, "Expected null when input is null");
+    }
+
+    @Test
+    public void testTrimAndGetLastFour_EmptyString() {
+        String result = TransactionUtils.trimAndGetLastFour("");
+        assertEquals("", result, "Expected empty string when input is empty");
+    }
+
+    @Test
+    public void testTrimAndGetLastFour_StringWithTrailingSpaces() {
+        String result = TransactionUtils.trimAndGetLastFour(" 123456 ");
+        assertEquals("3456", result, "Expected last 4 characters after trimming");
+    }
+
+    @Test
+    public void testTrimAndGetLastFour_StringLessThanFourChars() {
+        String result = TransactionUtils.trimAndGetLastFour("abc");
+        assertEquals("abc", result, "Expected entire string when input is less than 4 characters");
+    }
+
+    @Test
+    public void testMaskCreditCardNumber_NullString() {
+        String result = TransactionUtils.maskCreditCardNumber(null);
+        assertEquals("", result, "Expected empty string when input is null or blank");
+    }
+
+    @Test
+    public void testMaskCreditCardNumber_EmptyString() {
+        String result = TransactionUtils.maskCreditCardNumber("");
+        assertEquals("", result, "Expected empty string when input is blank");
+    }
+
+    @Test
+    public void testMaskCreditCardNumber_ValidCreditCardNumber() {
+        String result = TransactionUtils.maskCreditCardNumber("1234567890123456");
+        assertEquals("1234-XXXX-XXXX-3456", result, "Expected masked credit card number");
+    }
+
+    @Test
+    public void testMaskCreditCardNumber_ShortCreditCardNumber() {
+        String result = TransactionUtils.maskCreditCardNumber("1234");
+        assertEquals("1234-XXXX-XXXX-1234", result, "Expected masked credit card number with only the last 4 digits");
+    }
+
+    @Test
+    public void testMaskCreditCardNumber_CreditCardNumberWithSpaces() {
+        String result = TransactionUtils.maskCreditCardNumber(" 1234 5678 9012 3456 ");
+        assertEquals("1234-XXXX-XXXX-3456", result, "Expected correctly masked credit card number after trimming spaces");
+    }
+
+    @Test
+    public void testMaskCreditCardNumber_CreditCardNumberLessThanTenChars() {
+        String result = TransactionUtils.maskCreditCardNumber("123456789");
+        assertEquals("1234-XXXX-XXXX-6789", result, "Expected partial masking for a short credit card number");
+    }
+}

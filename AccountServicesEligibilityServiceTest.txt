@@ -1,0 +1,99 @@
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import com.td.mbna.msec.account.application.CurrentAccountService;
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.accountservices.domain.AccountServicesEligibility;
+import com.td.mbna.msec.common.infrastructure.util.UIGeneralUtil;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.util.List;
+
+public class AccountServicesEligibilityServiceTest {
+
+    @Mock
+    private CurrentAccountService currentAccountService;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private MidTierServiceHelper midTierServiceHelper;
+
+    @Mock
+    private SessionService sessionService;
+
+    @InjectMocks
+    private AccountServicesEligibilityServiceImpl accountServicesEligibilityService;
+
+    private AccountDetails mockAccountDetails;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+
+        // Setup mock account details
+        mockAccountDetails = new AccountDetails();
+        mockAccountDetails.setAccountId("testAccountId");
+        mockAccountDetails.setAllowedStandardEForms(true);
+        mockAccountDetails.setAllowedReissueEForms(true);
+        mockAccountDetails.setCurrentSetting("Online");
+
+        when(sessionProvider.getSessionCustomer()).thenReturn(null);
+        when(sessionProvider.getCurrentAccount()).thenReturn(mockAccountDetails);
+    }
+
+    @Test
+    public void testGetAccountServicesLinksEligibility_WithValidAccount() {
+        List<String> eligibleLinks = accountServicesEligibilityService.getAccountServicesLinksEligibility("testAccountId", true);
+        
+        assertNotNull(eligibleLinks);
+        assertTrue(eligibleLinks.contains(AccountServicesEligibility.MyProfile_UpdatePersonalInformation.toString()));
+        assertTrue(eligibleLinks.contains(AccountServicesEligibility.MyProfile_RequestReplacementCard.toString()));
+    }
+
+    @Test
+    public void testGetAccountServicesLinksEligibility_AccountNull_ThrowsException() {
+        when(sessionProvider.getCurrentAccount()).thenReturn(null);
+
+        Exception exception = assertThrows(BusinessException.class, () -> {
+            accountServicesEligibilityService.getAccountServicesLinksEligibility("testAccountId", true);
+        });
+
+        assertEquals("MS601", ((BusinessException) exception).getErrorCode());
+    }
+
+    @Test
+    public void testGetAccountServicesLinksEligibility_WithNullEmail() {
+        mockAccountDetails.getProfile().setEmail(null);
+        when(sessionProvider.getCurrentAccount()).thenReturn(mockAccountDetails);
+
+        List<String> eligibleLinks = accountServicesEligibilityService.getAccountServicesLinksEligibility("testAccountId", true);
+
+        assertTrue(eligibleLinks.contains(AccountServicesEligibility.Statements_StopReceivingPaperStatementsNoEmail.toString()));
+    }
+
+    @Test
+    public void testGetAccountServicesLinksEligibility_WithInvalidEmail() {
+        mockAccountDetails.getProfile().setEmail("invalidEmail");
+        when(sessionProvider.getCurrentAccount()).thenReturn(mockAccountDetails);
+
+        List<String> eligibleLinks = accountServicesEligibilityService.getAccountServicesLinksEligibility("testAccountId", true);
+
+        assertTrue(eligibleLinks.contains(AccountServicesEligibility.Statements_StopReceivingPaperStatementsNoEmail.toString()));
+    }
+
+    @Test
+    public void testGetAccountServicesLinksEligibility_WithExceededLoginAttempts() {
+        when(AccountHelper.hasExceededMaxSecLoginAttempts(mockAccountDetails, sessionService.getSession())).thenReturn(true);
+
+        List<String> eligibleLinks = accountServicesEligibilityService.getAccountServicesLinksEligibility("testAccountId", true);
+
+        assertFalse(eligibleLinks.contains(AccountServicesEligibility.Services_ManagePIN.toString()));
+    }
+}
