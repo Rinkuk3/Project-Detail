@@ -1,0 +1,160 @@
+package com.td.mbna.msec.transfertochequing.application.impl;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.common.DisclosureService;
+import com.td.mbna.msec.common.domain.DisclosureDetails;
+import com.td.mbna.msec.midtier.exceptions.BusinessException;
+import com.td.mbna.msec.midtier.transfer.payload.DepositToChequingResponse;
+import com.td.mbna.msec.transfertochequing.domain.TransferToChequingRequest;
+import com.td.mbna.msec.transfertochequing.domain.TransferToChequingVerificationResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+public class TransferToChequingServiceTest {
+
+    @InjectMocks
+    private TransferToChequingServiceImpl transferToChequingService;
+
+    @Mock
+    private DisclosureService disclosureService;
+
+    @Mock
+    private AccountDetails accountDetails;
+
+    @Mock
+    private DepositToChequingResponse depositToChequingResponse;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        // Initialize mocks and test environment here.
+    }
+
+    @Test
+    public void testTransferToChequingVerify_Success() {
+        TransferToChequingRequest request = new TransferToChequingRequest();
+        request.setAgreedToTerms(true);
+        request.setBankId("bankId");
+        request.setAccountNum("123456");
+        request.setTransitNum("789");
+        request.setTransferAmt(BigDecimal.valueOf(100));
+
+        when(depositToChequingResponse.getResponsePayload()).thenReturn(new DepositToChequingResponse.ResponsePayload());
+        when(depositToChequingResponse.getResponsePayload().getTransferFee()).thenReturn(BigDecimal.ZERO);
+        when(depositToChequingService.execute(eq(true), any())).thenReturn(depositToChequingResponse);
+
+        TransferToChequingVerificationResponse response = transferToChequingService.transferToChequingVerify(request);
+
+        assertNotNull(response);
+        assertEquals("Chequing Account", response.getTransferTo());
+        assertEquals("789 123456", response.getAccountNum());
+    }
+
+    @Test
+    public void testTransferToChequingVerify_Failure_AgreementNotChecked() {
+        TransferToChequingRequest request = new TransferToChequingRequest();
+        request.setAgreedToTerms(false); // Agreement not checked
+
+        BusinessException exception = assertThrows(BusinessException.class, () -> {
+            transferToChequingService.transferToChequingVerify(request);
+        });
+
+        assertEquals("MS148", exception.getErrorCode()); // Ensure the correct error code
+    }
+
+    @Test
+    public void testValidateCpi_AccountIsNull() {
+        TransferToChequingRequest request = new TransferToChequingRequest();
+
+        BusinessException exception = assertThrows(BusinessException.class, () -> {
+            transferToChequingService.validateCpi(request, false);
+        });
+
+        assertEquals("MS601", exception.getErrorCode()); // Ensure correct error code
+    }
+
+    @Test
+    public void testTransferToChequingSubmit_Success() {
+        TransferToChequingRequest request = new TransferToChequingRequest();
+        request.setAccountNum("123456");
+        request.setTransitNum("789");
+        request.setTransferAmt(BigDecimal.valueOf(100));
+
+        when(depositToChequingService.execute(eq(false), any())).thenReturn(depositToChequingResponse);
+
+        TransferToChequingResponse response = transferToChequingService.transferToChequingSubmit(request);
+
+        assertNotNull(response);
+        assertEquals("789 123456", response.getAccountNum());
+        assertEquals(BigDecimal.valueOf(100), response.getTransferAmt());
+    }
+
+    @Test
+    public void testIncTtcErrorCounter() {
+        String accountId = "accountId";
+
+        when(sessionProvider.getSessionAttribute(anyString())).thenReturn("1");
+
+        int errorCount = transferToChequingService.incTtcErrorCounter(accountId);
+
+        assertEquals(2, errorCount);
+        verify(sessionProvider).setSessionAttribute(eq("CVV_AUTHENTICATIONATTEMPTS_TTC" + accountId), eq("2"));
+    }
+
+    @Test
+    public void testGetTransferToChequingInfo_Success() {
+        String offerId = "offerId";
+        AccountDetails account = new AccountDetails();
+        // Mock the account details here.
+
+        when(sessionProvider.getCurrentAccount()).thenReturn(account);
+        when(disclosureService.retrieveBtDisclosureDetails(anyString(), anyString(), any(), anyString(), anyString()))
+                .thenReturn(new DisclosureDetails("Test Disclosure"));
+
+        TransferToChequingInfo info = transferToChequingService.getTransferToChequingInfo(offerId);
+
+        assertNotNull(info);
+        assertEquals("Test Disclosure", info.getOfferDisclosureText());
+    }
+
+    @Test
+    public void testGetTransferToChequingInfo_NoCurrentAccount() {
+        String offerId = "offerId";
+
+        when(sessionProvider.getCurrentAccount()).thenReturn(null);
+
+        BusinessException exception = assertThrows(BusinessException.class, () -> {
+            transferToChequingService.getTransferToChequingInfo(offerId);
+        });
+
+        assertEquals("MS601", exception.getErrorCode());
+    }
+
+    // Additional tests for edge cases, exceptions, etc.
+    @Test
+    public void testTransferToChequingVerify_InvalidAccount() {
+        TransferToChequingRequest request = new TransferToChequingRequest();
+        request.setAgreedToTerms(true);
+        request.setBankId("bankId");
+        request.setAccountNum("invalid"); // Invalid account
+
+        BusinessException exception = assertThrows(BusinessException.class, () -> {
+            transferToChequingService.transferToChequingVerify(request);
+        });
+
+        assertEquals("MS601", exception.getErrorCode()); // Ensure the correct error code
+    }
+
+    // Add more tests for edge cases and methods as necessary
+}
