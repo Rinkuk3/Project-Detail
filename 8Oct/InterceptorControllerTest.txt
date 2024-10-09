@@ -1,0 +1,81 @@
+package com.td.mbna.msec.interceptor.controller;
+
+import com.td.mbna.msec.core.session.SessionProvider;
+import com.td.mbna.msec.customer.domain.CustomerDetails;
+import com.td.mbna.msec.interceptor.model.Interceptor;
+import com.td.mbna.msec.interceptor.model.InterceptorRequest;
+import com.td.mbna.msec.interceptor.model.InterceptorResponse;
+import com.td.mbna.msec.interceptor.service.InterceptorService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+public class InterceptorControllerTest {
+
+    @InjectMocks
+    private InterceptorController interceptorController;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private InterceptorService interceptorService;
+
+    @Mock
+    private HttpServletRequest httpRequest;
+
+    @Mock
+    private HttpServletResponse httpResponse;
+
+    @Mock
+    private CustomerDetails customerDetails;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testGetInterceptors() {
+        List<Interceptor> interceptors = new ArrayList<>();
+        interceptors.add(new Interceptor()); // Add a sample Interceptor object
+
+        when(sessionProvider.getCustomer()).thenReturn(customerDetails);
+        when(interceptorService.getInterceptors(customerDetails, httpRequest, httpResponse)).thenReturn(interceptors);
+
+        List<Interceptor> result = interceptorController.getInterceptors(httpRequest, httpResponse);
+
+        assertEquals(interceptors, result);
+        verify(sessionProvider, times(1)).getCustomer();
+        verify(interceptorService, times(1)).getInterceptors(customerDetails, httpRequest, httpResponse);
+    }
+
+    @Test
+    public void testSaveInterceptorDisposition() {
+        InterceptorRequest request = new InterceptorRequest();
+        InterceptorResponse response = new InterceptorResponse();
+
+        when(sessionProvider.getCustomer()).thenReturn(customerDetails);
+        when(interceptorService.saveInterceptorDisposition(customerDetails, request, httpRequest)).thenReturn(response);
+
+        InterceptorResponse result = interceptorController.saveInterceptorDisposition(request, httpRequest);
+
+        assertEquals(response, result);
+        verify(sessionProvider, times(1)).getCustomer();
+        verify(interceptorService, times(1)).saveInterceptorDisposition(customerDetails, request, httpRequest);
+    }
+}

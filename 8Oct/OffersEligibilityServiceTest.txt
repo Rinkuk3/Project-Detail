@@ -1,0 +1,201 @@
+package com.td.mbna.msec.offers.application.impl;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.account.domain.BTOffer;
+import com.td.mbna.msec.account.domain.ProductUpgradeOffer;
+import com.td.mbna.msec.offers.application.PaperlessOfferService;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.util.Collections;
+
+public class OffersEligibilityServiceImplTest {
+
+    @InjectMocks
+    private OffersEligibilityServiceImpl offersEligibilityService;
+
+    @Mock
+    private PaperlessOfferService paperlessOfferService;
+
+    private AccountDetails customerAccount;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        customerAccount = new AccountDetails(); // Mock as needed
+    }
+
+    @Test
+    public void testIsAllowedForCreditLimitIncreaseOffer() {
+        // Test when customerAccount is null
+        assertFalse(offersEligibilityService.isAllowedForCreditLimitIncreaseOffer(null));
+
+        // Test when isAllowedCreditLimitIncrease returns false
+        customerAccount.setAllowedCreditLimitIncrease(false);
+        assertFalse(offersEligibilityService.isAllowedForCreditLimitIncreaseOffer(customerAccount));
+
+        // Test when isAllowedCreditLimitIncrease returns true
+        customerAccount.setAllowedCreditLimitIncrease(true);
+        assertTrue(offersEligibilityService.isAllowedForCreditLimitIncreaseOffer(customerAccount));
+    }
+
+    @Test
+    public void testIsEligibleForAcliOffer() {
+        customerAccount.setAllowedCreditLimitIncrease(true);
+        customerAccount.setTopCLIOffer(new Object()); // Assuming a non-null value
+
+        assertTrue(offersEligibilityService.isEligibleForAcliOffer(customerAccount));
+
+        customerAccount.setTopCLIOffer(null);
+        assertFalse(offersEligibilityService.isEligibleForAcliOffer(customerAccount));
+    }
+
+    @Test
+    public void testIsEligibleForCli() {
+        customerAccount.setAllowedCreditLimitIncrease(true);
+        customerAccount.setTopCLIOffer(null);
+
+        assertTrue(offersEligibilityService.isEligibleForCli(customerAccount));
+
+        customerAccount.setTopCLIOffer(new Object());
+        assertFalse(offersEligibilityService.isEligibleForCli(customerAccount));
+    }
+
+    @Test
+    public void testIsEligibleForProductUpgradeOffer() {
+        customerAccount.setAllowedSpecialOffers(true);
+        customerAccount.setProductUpgradeOffers(Collections.singletonList(new ProductUpgradeOffer()));
+
+        assertTrue(offersEligibilityService.isEligibleForProductUpgradeOffer(customerAccount));
+
+        customerAccount.setProductUpgradeOffers(Collections.emptyList());
+        assertFalse(offersEligibilityService.isEligibleForProductUpgradeOffer(customerAccount));
+    }
+
+    @Test
+    public void testIsEligibleForBalanceProtectionOffer() {
+        customerAccount.setAllowedBalanceProtection(true);
+        customerAccount.setBpOffers(Collections.singletonList(new Object()));
+
+        assertTrue(offersEligibilityService.isEligibleForBalanceProtectionOffer(customerAccount));
+
+        customerAccount.setBpOffers(Collections.emptyList());
+        assertFalse(offersEligibilityService.isEligibleForBalanceProtectionOffer(customerAccount));
+    }
+
+    @Test
+    public void testIsBalanceProtectionOfferAccepted() {
+        customerAccount.setBpiOfferAccepted(true);
+        assertTrue(offersEligibilityService.isBalanceProtectionOfferAccepted(customerAccount));
+
+        customerAccount.setBpiOfferAccepted(false);
+        assertFalse(offersEligibilityService.isBalanceProtectionOfferAccepted(customerAccount));
+    }
+
+    @Test
+    public void testIsEligibleForMiniPaymentOffer() {
+        // Test when account is null
+        assertFalse(offersEligibilityService.isEligibleForMiniPaymentOffer(null));
+
+        // Test when mpdOffers is null
+        customerAccount.setMpdOffers(null);
+        assertFalse(offersEligibilityService.isEligibleForMiniPaymentOffer(customerAccount));
+
+        // Test when all conditions are met
+        customerAccount.setPrimaryUser(true);
+        customerAccount.setAllowedMiniPayment(true);
+        customerAccount.setMpdOffers(Collections.singletonList(new Object()));
+
+        assertTrue(offersEligibilityService.isEligibleForMiniPaymentOffer(customerAccount));
+    }
+
+    @Test
+    public void testIsMinimumPaymentOfferAccepted() {
+        customerAccount.setMpdOfferAccepted(true);
+        assertTrue(offersEligibilityService.isMinimumPaymentOfferAccepted(customerAccount));
+
+        customerAccount.setMpdOfferAccepted(false);
+        assertFalse(offersEligibilityService.isMinimumPaymentOfferAccepted(customerAccount));
+    }
+
+    @Test
+    public void testIsEligibleForBTOffers() {
+        customerAccount.setAllowedBalanceTransfer(true);
+        assertTrue(offersEligibilityService.isEligibleForBTOffers(customerAccount));
+
+        customerAccount.setAllowedBalanceTransfer(false);
+        assertFalse(offersEligibilityService.isEligibleForBTOffers(customerAccount));
+    }
+
+    @Test
+    public void testIsEligibleForIPOffer() {
+        customerAccount.setPrimaryUser(true);
+        customerAccount.setAllowedIp(true);
+        customerAccount.setIPOffers(Collections.singletonList(new Object()));
+
+        assertTrue(offersEligibilityService.isEligibleForIPOffer(customerAccount));
+
+        customerAccount.setPrimaryUser(false);
+        assertFalse(offersEligibilityService.isEligibleForIPOffer(customerAccount));
+    }
+
+    @Test
+    public void testIsEligibleForIPTransaction() {
+        customerAccount.setPrimaryUser(true);
+        customerAccount.setAllowedIp(true);
+        customerAccount.setIPOffers(Collections.singletonList(new Object()));
+        customerAccount.setActivePlans(Collections.singletonList(new Object()));
+
+        assertTrue(offersEligibilityService.isEligibleForIPTransaction(customerAccount));
+
+        customerAccount.setActivePlans(Collections.nCopies(OffersEligibilityServiceImpl.IP_ENROLL_MAXIMUM, new Object()));
+        assertFalse(offersEligibilityService.isEligibleForIPTransaction(customerAccount));
+    }
+
+    @Test
+    public void testIsEligibleForBTPromoOffer() {
+        customerAccount.setAllowedBalanceTransfer(true);
+        customerAccount.setTopBTOffer(new BTOffer());
+        when(paperlessOfferService.hasPaperlessOffer(customerAccount)).thenReturn(true);
+
+        assertTrue(offersEligibilityService.isEligibleForBTPromoOffer(customerAccount));
+    }
+
+    @Test
+    public void testIsEligibleForBTContractOffer() {
+        customerAccount.setAllowedBalanceTransfer(true);
+        customerAccount.setContractRateBanner(new Object());
+
+        assertTrue(offersEligibilityService.isEligibleForBTContractOffer(customerAccount));
+
+        customerAccount.setContractRateBanner(null);
+        assertFalse(offersEligibilityService.isEligibleForBTContractOffer(customerAccount));
+    }
+
+    @Test
+    public void testIsEligibleForPaperlessOffer() {
+        customerAccount.setAllowedStandardEForms(true);
+        when(paperlessOfferService.hasPaperlessOffer(customerAccount)).thenReturn(true);
+        assertTrue(offersEligibilityService.isEligibleForPaperlessOffer(customerAccount));
+
+        when(paperlessOfferService.hasPaperlessOffer(customerAccount)).thenReturn(false);
+        assertFalse(offersEligibilityService.isEligibleForPaperlessOffer(customerAccount));
+    }
+
+    @Test
+    public void testIsEligibleForAddAuthorizedUserOffer() {
+        customerAccount.setAllowedStandardEForms(true);
+        customerAccount.setAllowedToAddAU(5); // Assuming MAX_AUTH_USER_COUNT is 5
+        assertTrue(offersEligibilityService.isEligibleForAddAuthorizedUserOffer(customerAccount));
+
+        customerAccount.setAllowedToAddAU(0); // Not allowed
+        assertFalse(offersEligibilityService.isEligibleForAddAuthorizedUserOffer(customerAccount));
+    }
+}

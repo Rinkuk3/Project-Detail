@@ -1,0 +1,166 @@
+package com.td.mbna.msec.offers.application.impl;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.*;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.midtier.types.common.AccountOffersType;
+import com.td.mbna.msec.midtier.types.common.PromotionOfferType;
+import com.td.mbna.msec.offers.domain.BPIOfferDTO;
+import com.td.mbna.msec.offers.domain.BPIOfferType;
+import com.td.mbna.msec.offers.domain.OfferDetails;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+public class BPIOfferEligibilityProducerServiceImplTest {
+
+    @InjectMocks
+    private BPIOfferEligibilityProducerServiceImpl bpiOfferEligibilityProducerServiceImpl;
+
+    @Mock
+    private AccountDetails accountDetails;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testProduce_Success() {
+        // Setup
+        List<AccountOffersType> accountOffers = new ArrayList<>();
+        AccountOffersType accountOffer = new AccountOffersType();
+        PromotionOfferType promotionOffer = new PromotionOfferType();
+        promotionOffer.setSubProductType("CI");
+        promotionOffer.setOfferID("offer123");
+        promotionOffer.setSubProductId("subProduct123");
+
+        accountOffer.setAcctNum("1234567890");
+        accountOffer.setPromotionOffer(Collections.singletonList(promotionOffer));
+        accountOffers.add(accountOffer);
+
+        // Invoke
+        Map<String, BPIOfferDTO> result = bpiOfferEligibilityProducerServiceImpl.produce(accountOffers);
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.containsKey("1234567890"));
+        BPIOfferDTO dto = result.get("1234567890");
+        assertTrue(dto.isPresentBPIOffer());
+        assertEquals("offer123", dto.getOfferID());
+        assertEquals("subProduct123", dto.getSubProductID());
+    }
+
+    @Test
+    public void testProduce_NoPromotionOffer() {
+        // Setup
+        List<AccountOffersType> accountOffers = new ArrayList<>();
+        AccountOffersType accountOffer = new AccountOffersType();
+        accountOffer.setAcctNum("1234567890");
+        accountOffer.setPromotionOffer(Collections.emptyList());  // No offers
+        accountOffers.add(accountOffer);
+
+        // Invoke
+        Map<String, BPIOfferDTO> result = bpiOfferEligibilityProducerServiceImpl.produce(accountOffers);
+
+        // Assert
+        assertNotNull(result);
+        assertFalse(result.containsKey("1234567890"));
+    }
+
+    @Test
+    public void testProduce_NullPromotionOffer() {
+        // Setup
+        List<AccountOffersType> accountOffers = new ArrayList<>();
+        AccountOffersType accountOffer = new AccountOffersType();
+        accountOffer.setAcctNum("1234567890");
+        accountOffer.setPromotionOffer(null);  // Null promotion offer
+        accountOffers.add(accountOffer);
+
+        // Invoke
+        Map<String, BPIOfferDTO> result = bpiOfferEligibilityProducerServiceImpl.produce(accountOffers);
+
+        // Assert
+        assertNotNull(result);
+        assertFalse(result.containsKey("1234567890"));
+    }
+
+    @Test
+    public void testPopulateBPIOffer_Success() {
+        // Setup
+        Map<String, BPIOfferDTO> eligibilityBPI = new HashMap<>();
+        BPIOfferDTO dto = new BPIOfferDTO();
+        dto.setPresentBPIOffer(true);
+        dto.setOfferID("offer123");
+        dto.setSubProductID("subProduct123");
+        eligibilityBPI.put("account123", dto);
+
+        when(accountDetails.getAccountId()).thenReturn("account123");
+
+        // Invoke
+        bpiOfferEligibilityProducerServiceImpl.populateBPIOffer(accountDetails, eligibilityBPI);
+
+        // Assert
+        verify(accountDetails, times(1)).setAllowedBalanceProtection(true);
+        verify(accountDetails, times(1)).setBpOffers(anyList());
+
+        OfferDetails offer = accountDetails.getBpOffers().get(0);
+        assertNotNull(offer.getBpiOfferType());
+        assertEquals("offer123", offer.getOfferID());
+        assertEquals("subProduct123", offer.getSubProductID());
+    }
+
+    @Test
+    public void testPopulateBPIOffer_NoOfferFound() {
+        // Setup
+        Map<String, BPIOfferDTO> eligibilityBPI = new HashMap<>();
+        when(accountDetails.getAccountId()).thenReturn("account456");
+
+        // Invoke
+        bpiOfferEligibilityProducerServiceImpl.populateBPIOffer(accountDetails, eligibilityBPI);
+
+        // Assert
+        verify(accountDetails, never()).setAllowedBalanceProtection(true);
+        verify(accountDetails, never()).setBpOffers(anyList());
+    }
+
+    @Test
+    public void testPopulateBPIOffer_NullOffer() {
+        // Setup
+        Map<String, BPIOfferDTO> eligibilityBPI = new HashMap<>();
+        BPIOfferDTO dto = null;
+        eligibilityBPI.put("account123", dto);
+
+        when(accountDetails.getAccountId()).thenReturn("account123");
+
+        // Invoke
+        bpiOfferEligibilityProducerServiceImpl.populateBPIOffer(accountDetails, eligibilityBPI);
+
+        // Assert
+        verify(accountDetails, never()).setAllowedBalanceProtection(true);
+        verify(accountDetails, never()).setBpOffers(anyList());
+    }
+
+    @Test
+    public void testPopulateBPIOffer_OfferNotEligible() {
+        // Setup
+        Map<String, BPIOfferDTO> eligibilityBPI = new HashMap<>();
+        BPIOfferDTO dto = new BPIOfferDTO();
+        dto.setPresentBPIOffer(false);  // Not eligible
+        eligibilityBPI.put("account123", dto);
+
+        when(accountDetails.getAccountId()).thenReturn("account123");
+
+        // Invoke
+        bpiOfferEligibilityProducerServiceImpl.populateBPIOffer(accountDetails, eligibilityBPI);
+
+        // Assert
+        verify(accountDetails, never()).setAllowedBalanceProtection(true);
+        verify(accountDetails, never()).setBpOffers(anyList());
+    }
+}

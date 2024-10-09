@@ -1,0 +1,127 @@
+package com.td.mbna.msec.statement.application;
+
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.*;
+import javax.servlet.http.HttpServletRequest;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.account.domain.PaperlessAccount;
+import com.td.mbna.msec.common.domain.BaseMsecbffResponse;
+import com.td.mbna.msec.common.midtier.MidTierServiceHelper;
+import com.td.mbna.msec.customer.domain.CustomerDetails;
+import com.td.mbna.msec.midtier.statement.payload.updateStatementDeliveryPreferences.UpdateStatementDeliveryPreferencesResponse;
+import com.td.mbna.msec.midtier.types.common.DeliveryPreferenceType;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+public class EStatementOptOutServiceImplTest {
+
+    @InjectMocks
+    private EStatementOptOutServiceImpl eStatementOptOutService;
+
+    @Mock
+    private MidTierServiceHelper midTierServiceHelper;
+
+    @Mock
+    private PaperlessOfferService paperlessOfferService;
+
+    @Mock
+    private HttpServletRequest httpServletRequest;
+
+    @Mock
+    private CustomerDetails customerDetails;
+
+    @Mock
+    private BaseMsecbffResponse response;
+
+    private List<String> visibleAccountIds;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        visibleAccountIds = Arrays.asList("account1", "account2");
+    }
+
+    @Test
+    public void testOptOutPreferenceType_WithDeclinedHybridAccounts() {
+        // Mocking the behavior of the session provider
+        when(sessionProvider.getSessionCustomer()).thenReturn(customerDetails);
+        when(customerDetails.getHybridAccountIDs()).thenReturn(Arrays.asList("account1", "account2"));
+        when(customerDetails.getAccount("account1")).thenReturn(mockAccountDetails("account1"));
+        when(customerDetails.getAccount("account2")).thenReturn(mockAccountDetails("account2"));
+
+        // Mocking update response
+        UpdateStatementDeliveryPreferencesResponse updateResponse = mock(UpdateStatementDeliveryPreferencesResponse.class);
+        when(midTierServiceHelper.updateStatementDeliveryPreferences(any(), any())).thenReturn(updateResponse);
+        when(updateResponse.getResponsePayload()).thenReturn(new Object());
+
+        // Call the method to test
+        BaseMsecbffResponse result = eStatementOptOutService.optOutPreferenceType(visibleAccountIds, httpServletRequest);
+
+        // Assertions
+        assertEquals("SUCCESS", result.getStatus());
+        verify(midTierServiceHelper).updateStatementDeliveryPreferences(any(), any());
+    }
+
+    @Test
+    public void testOptOutPreferenceType_WithNonHybridAccounts() {
+        // Similar setup as before
+        when(sessionProvider.getSessionCustomer()).thenReturn(customerDetails);
+        when(customerDetails.getHybridAccountIDs()).thenReturn(Collections.singletonList("account1"));
+        when(customerDetails.getAccount("account2")).thenReturn(mockAccountDetails("account2"));
+
+        UpdateStatementDeliveryPreferencesResponse updateResponse = mock(UpdateStatementDeliveryPreferencesResponse.class);
+        when(midTierServiceHelper.updateStatementDeliveryPreferences(any(), any())).thenReturn(updateResponse);
+        when(updateResponse.getResponsePayload()).thenReturn(new Object());
+
+        // Call the method to test
+        BaseMsecbffResponse result = eStatementOptOutService.optOutPreferenceType(visibleAccountIds, httpServletRequest);
+
+        // Assertions
+        assertEquals("SUCCESS", result.getStatus());
+        verify(midTierServiceHelper).updateStatementDeliveryPreferences(any(), any());
+    }
+
+    @Test
+    public void testHandlePSOForMapp_WithPaperlessAccounts() {
+        List<PaperlessAccount> paperlessAccounts = Arrays.asList(mockPaperlessAccount("account1"));
+        when(paperlessOfferService.getPaperLessAccounts()).thenReturn(paperlessAccounts);
+
+        // Call the method to test
+        eStatementOptOutService.handlePSOForMapp(httpServletRequest);
+
+        // Assertions
+        verify(midTierServiceHelper).updateStatementDeliveryPreferences(any(), any());
+    }
+
+    @Test
+    public void testHandlePSOForMapp_WithNoPaperlessAccounts() {
+        when(paperlessOfferService.getPaperLessAccounts()).thenReturn(Collections.emptyList());
+
+        // Call the method to test
+        eStatementOptOutService.handlePSOForMapp(httpServletRequest);
+
+        // Assertions
+        // Check warning log
+        verify(logger).warning(contains("allPaperlessAccounts is empty"));
+    }
+
+    // Mock AccountDetails creation
+    private AccountDetails mockAccountDetails(String accountId) {
+        AccountDetails accountDetails = mock(AccountDetails.class);
+        when(accountDetails.getAccountId()).thenReturn(accountId);
+        return accountDetails;
+    }
+
+    private PaperlessAccount mockPaperlessAccount(String accountId) {
+        PaperlessAccount paperlessAccount = mock(PaperlessAccount.class);
+        when(paperlessAccount.getAccountId()).thenReturn(accountId);
+        return paperlessAccount;
+    }
+}

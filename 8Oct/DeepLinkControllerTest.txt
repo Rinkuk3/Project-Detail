@@ -1,0 +1,66 @@
+package com.td.mbna.msec.deeplink.controller;
+
+import com.td.mbna.msec.deeplink.model.DeepLinkBtData;
+import com.td.mbna.msec.deeplink.service.DeepLinkService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class DeepLinkControllerTest {
+
+    @InjectMocks
+    private DeepLinkController deepLinkController;
+
+    @Mock
+    private DeepLinkService deepLinkService;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.initMocks(this);  // Initialize mocks
+    }
+
+    @Test
+    void testGetBtData_Success() {
+        // Given: Mocking the service to return a valid DeepLinkBtData
+        DeepLinkBtData mockBtData = new DeepLinkBtData();
+        when(deepLinkService.getBtData()).thenReturn(mockBtData);
+
+        // When: Calling the controller method
+        DeepLinkBtData result = deepLinkController.getBtData();
+
+        // Then: Verifying the result is correct and the service was called once
+        assertNotNull(result);
+        assertEquals(mockBtData, result);
+        verify(deepLinkService, times(1)).getBtData();
+    }
+    
+    @Test
+    void testGetBtData_ReturnsNull() {
+        // Given: Mocking the service to return null
+        when(deepLinkService.getBtData()).thenReturn(null);
+
+        // When: Calling the controller method
+        DeepLinkBtData result = deepLinkController.getBtData();
+
+        // Then: Verifying that result is null and the service was called once
+        assertNull(result);
+        verify(deepLinkService, times(1)).getBtData();
+    }
+
+    @Test
+    void testGetBtData_ExceptionHandling() {
+        // Given: Mocking the service to throw a RuntimeException
+        when(deepLinkService.getBtData()).thenThrow(new RuntimeException("Exception while fetching data"));
+
+        // When & Then: Expecting an exception when calling the controller method
+        assertThrows(RuntimeException.class, () -> deepLinkController.getBtData());
+
+        // Verifying the service was called once
+        verify(deepLinkService, times(1)).getBtData();
+    }
+}

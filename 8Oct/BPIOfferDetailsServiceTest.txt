@@ -1,0 +1,163 @@
+package com.td.mbna.msec.offers.application.impl;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.common.WcmContentService;
+import com.td.mbna.msec.common.SessionProvider;
+import com.td.mbna.msec.common.SessionService;
+import com.td.mbna.msec.core.service.MidTierServiceHelper;
+import com.td.mbna.msec.midtier.content.payload.getpagecontent.ResponsePayload;
+import com.td.mbna.msec.offers.application.BPIOfferDisclosureService;
+import com.td.mbna.msec.offers.domain.CardActivationBPIOfferDetails;
+import com.td.mbna.msec.offers.domain.OfferDetails;
+import com.td.mbna.msec.offers.domain.OfferDetailsResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+
+public class BPIOfferDetailsServiceTest {
+
+    @InjectMocks
+    private BPIOfferDetailsServiceImpl bpiOfferDetailsService;
+
+    @Mock
+    private WcmContentService wcmContentService;
+
+    @Mock
+    private BPIOfferDisclosureService bpiOfferDisclosureService;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private MidTierServiceHelper midTierServiceHelper;
+
+    @Mock
+    private SessionService sessionService;
+
+    @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private AccountDetails account;
+
+    @Mock
+    private ResponsePayload responsePayload;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testGetBpiOfferDetails_Success() {
+        // Setup
+        when(sessionProvider.getSessionCustomer()).thenReturn(null);
+        when(sessionProvider.getCurrentAccount()).thenReturn(account);
+        when(account.getBpOffers()).thenReturn(getMockOffers());
+
+        when(wcmContentService.getPageContentPayload(anyString(), eq(request))).thenReturn(responsePayload);
+        when(responsePayload.getContentContent()).thenReturn("Sample content");
+        when(responsePayload.getTitle()).thenReturn("Sample title");
+        when(responsePayload.getDesktopImage()).thenReturn("Desktop banner");
+        when(responsePayload.getMobileImage()).thenReturn("Mobile banner");
+
+        // Invoke
+        OfferDetailsResponse response = bpiOfferDetailsService.getBpiOfferDetails("accountId", request);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals("Sample title", response.getWcmTitle());
+        assertEquals("Desktop banner", response.getBannerDesktop());
+        assertEquals("Mobile banner", response.getBannerMobile());
+        assertArrayEquals(new String[]{"Sample content"}, response.getWcmText());
+    }
+
+    @Test
+    public void testGetBpiOfferDetails_AccountNull() {
+        // Setup
+        when(sessionProvider.getSessionCustomer()).thenReturn(null);
+        when(sessionProvider.getCurrentAccount()).thenReturn(null);
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(null);
+
+        // Assert
+        Exception exception = assertThrows(Exception.class, () -> {
+            bpiOfferDetailsService.getBpiOfferDetails("accountId", request);
+        });
+
+        assertEquals("MS601: Current account doesn't exist", exception.getMessage());
+    }
+
+    @Test
+    public void testSetOfferInSession() {
+        // Setup
+        when(account.getBpOffers()).thenReturn(getMockOffers());
+
+        // Invoke private method
+        bpiOfferDetailsService.setOfferInSession(account, "BALANCE_PROTECTION_INSURANCE_OFFER");
+
+        // Verify session interaction
+        verify(sessionService.getSession()).put(anyString(), anyString());
+    }
+
+    @Test
+    public void testGetCardActivationBPIDetails_Success() throws Exception {
+        // Setup
+        when(wcmContentService.getPageContentPayload(anyString(), eq(request))).thenReturn(responsePayload);
+        when(responsePayload.getContentContent()).thenReturn("Activation content");
+        when(responsePayload.getTitle()).thenReturn("Activation title");
+        when(bpiOfferDisclosureService.getPppOfferDisclosure()).thenReturn("Disclosure Text");
+
+        // Invoke
+        CardActivationBPIOfferDetails cardActivationBPIOfferDetails = bpiOfferDetailsService.getCardActivationBPIDetails(request);
+
+        // Assert
+        assertNotNull(cardActivationBPIOfferDetails);
+        assertEquals("Activation title", cardActivationBPIOfferDetails.getWcmTitle());
+        assertEquals("Disclosure Text", cardActivationBPIOfferDetails.getDisclosureText());
+        assertEquals("Activation content", cardActivationBPIOfferDetails.getWcmText());
+    }
+
+    @Test
+    public void testIsAuthorized_Success() {
+        // Setup
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(account);
+        when(account.isAllowedSpecialOffers()).thenReturn(true);
+        when(account.getProductUpgradeOffers()).thenReturn(getMockOffers());
+
+        // Invoke
+        boolean result = bpiOfferDetailsService.isAuthorized("strategyId");
+
+        // Assert
+        assertTrue(result);
+    }
+
+    @Test
+    public void testIsAuthorized_AccountNull() {
+        // Setup
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(null);
+        when(sessionProvider.getCurrentAccount()).thenReturn(null);
+
+        // Invoke
+        boolean result = bpiOfferDetailsService.isAuthorized("strategyId");
+
+        // Assert
+        assertFalse(result);
+    }
+
+    private List<OfferDetails> getMockOffers() {
+        OfferDetails offer = new OfferDetails();
+        offer.setBpiOfferType("Type1");
+        List<OfferDetails> offers = new ArrayList<>();
+        offers.add(offer);
+        return offers;
+    }
+}

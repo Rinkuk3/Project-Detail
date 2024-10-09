@@ -1,0 +1,82 @@
+package com.td.mbna.msec.nudge.controller;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.td.mbna.msec.customer.domain.CustomerDetails;
+import com.td.mbna.msec.deeplink.service.DeepLinkService;
+import com.td.mbna.msec.nudge.service.NudgeService;
+import com.td.mbna.msec.nudge.model.Nudge;
+import com.td.mbna.msec.core.session.SessionProvider;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class NudgeControllerTest {
+
+    @InjectMocks
+    private NudgeController nudgeController;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private DeepLinkService deepLinkService;
+
+    @Mock
+    private NudgeService nudgeService;
+
+    @Mock
+    private HttpServletRequest request;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testGetCustomerNudge() {
+        CustomerDetails customer = new CustomerDetails();
+        when(sessionProvider.getCustomer()).thenReturn(customer);
+        when(deepLinkService.getDeepLinkingEligibility()).thenReturn(true);
+
+        Nudge nudge1 = new Nudge();
+        Nudge nudge2 = new Nudge();
+        List<Nudge> nudges = Arrays.asList(nudge1, nudge2);
+        when(nudgeService.getNudge(customer, true, request)).thenReturn(nudges);
+
+        List<Nudge> result = nudgeController.getCustomerNudge(request);
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        verify(sessionProvider).getCustomer();
+        verify(deepLinkService).getDeepLinkingEligibility();
+        verify(nudgeService).getNudge(customer, true, request);
+    }
+
+    @Test
+    public void testGetCustomerNudgeWhenNotEligible() {
+        CustomerDetails customer = new CustomerDetails();
+        when(sessionProvider.getCustomer()).thenReturn(customer);
+        when(deepLinkService.getDeepLinkingEligibility()).thenReturn(false);
+
+        Nudge nudge1 = new Nudge();
+        List<Nudge> nudges = Arrays.asList(nudge1);
+        when(nudgeService.getNudge(customer, false, request)).thenReturn(nudges);
+
+        List<Nudge> result = nudgeController.getCustomerNudge(request);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        verify(sessionProvider).getCustomer();
+        verify(deepLinkService).getDeepLinkingEligibility();
+        verify(nudgeService).getNudge(customer, false, request);
+    }
+}

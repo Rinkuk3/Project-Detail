@@ -1,0 +1,153 @@
+package com.td.mbna.msec.offers.application.impl;
+
+import com.td.mbna.msec.common.infrastructure.util.TimeUtil;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import com.td.mbna.msec.offers.domain.BalanceTransferContractOffer;
+import com.td.mbna.msec.offers.domain.BalanceTransferPromotionalOffer;
+import com.td.mbna.msec.offers.domain.CreditLineIncreaseOffer;
+import com.td.mbna.msec.offers.domain.IPOffer;
+import com.td.mbna.msec.offers.domain.MiniPaymentOffer;
+import com.td.mbna.msec.offers.domain.OfferDetails;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
+
+class OffersFactoryImplTest {
+
+    @InjectMocks
+    private OffersFactoryImpl offersFactory;
+
+    @Mock
+    private TimeUtil timeUtil;
+
+    private OfferDetails promoOffer;
+    private OfferDetails contractOffer;
+    private OfferDetails cliOffer;
+    private OfferDetails ipOffer;
+    private OfferDetails mpdOffer;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+
+        // Setup sample OfferDetails objects for testing
+        promoOffer = new OfferDetails();
+        promoOffer.setOfferID("promo123");
+        promoOffer.setType("PromoType");
+        promoOffer.setInterestRate(new BigDecimal("5.00"));
+        promoOffer.setExpiryDate(LocalDate.now().plusDays(30));
+        promoOffer.setExpiryDuration(30);
+        promoOffer.setDuration(60);
+        promoOffer.setBtOffer(new OfferDetails.BalanceTransferOffer());
+        promoOffer.getBtOffer().setFixedFeeAmount(new BigDecimal("10.00"));
+        promoOffer.getBtOffer().setMinimumFeeAmount(new BigDecimal("1.00"));
+        promoOffer.getBtOffer().setMaximumFeeAmount(new BigDecimal("50.00"));
+        promoOffer.getBtOffer().setFeePercentage(new BigDecimal("2.00"));
+
+        contractOffer = new OfferDetails();
+        contractOffer.setOfferID("contract123");
+        contractOffer.setType("ContractType");
+        contractOffer.setInterestRate(new BigDecimal("3.00"));
+
+        cliOffer = new OfferDetails();
+        cliOffer.setOfferID("cli123");
+        cliOffer.setType("CLIType");
+        cliOffer.setCliOffer(new OfferDetails.CreditLineIncreaseOffer());
+        cliOffer.getCliOffer().setCliAmount(new BigDecimal("5000.00"));
+
+        ipOffer = new OfferDetails();
+        ipOffer.setOfferID("ip123");
+        ipOffer.setType("IPType");
+        ipOffer.setIpOffer(new OfferDetails.IPOffer());
+        ipOffer.getIpOffer().setRate(List.of(new OfferDetails.Rate(65, new BigDecimal("4.00"))));
+        ipOffer.getIpOffer().setFeePercentage(new BigDecimal("1.00"));
+
+        mpdOffer = new OfferDetails();
+        mpdOffer.setOfferID("mpd123");
+        mpdOffer.setType("MPDType");
+    }
+
+    @Test
+    void testCreateBTPromoOffer() {
+        when(timeUtil.convertToLocalDate(promoOffer.getExpiryDate())).thenReturn(LocalDate.now().plusDays(30));
+
+        BalanceTransferPromotionalOffer result = offersFactory.createBTPromoOffer(promoOffer);
+
+        assertEquals("promo123", result.getId());
+        assertEquals("PromoType", result.getType());
+        assertEquals(new BigDecimal("5.00").setScale(2), result.getRate());
+        assertEquals(LocalDate.now().plusDays(30), result.getExpiryDate());
+        assertEquals(30, result.getDuration());
+        assertEquals(new BigDecimal("10.00").setScale(2), result.getFixedFeeAmount());
+        assertEquals(new BigDecimal("1.00").setScale(2), result.getMinimumFeeAmount());
+        assertEquals(new BigDecimal("50.00").setScale(2), result.getMaximumFeeAmount());
+        assertEquals(new BigDecimal("2.00").setScale(2), result.getFeePercentage());
+    }
+
+    @Test
+    void testCreateBTContractOffer() {
+        BalanceTransferContractOffer result = offersFactory.createBTContractOffer(contractOffer, "contractType1");
+
+        assertEquals("contract123", result.getId());
+        assertEquals("ContractType", result.getType());
+        assertEquals(new BigDecimal("3.00").setScale(2), result.getRate());
+        assertEquals("contractType1", result.getContractOfferType());
+    }
+
+    @Test
+    void testCreateCliOffer() {
+        CreditLineIncreaseOffer result = offersFactory.createCliOffer(cliOffer);
+
+        assertEquals("cli123", result.getId());
+        assertEquals("CLIType", result.getType());
+        assertEquals(new BigDecimal("5000.00").setScale(2), result.getCreditLimitAmount());
+    }
+
+    @Test
+    void testCreateIPOffer() {
+        IPOffer result = offersFactory.createIPOffer(ipOffer, true);
+
+        assertEquals("ip123", result.getOfferID());
+        assertEquals("IPType", result.getType());
+        assertEquals(65, result.getUntilAgeNum());
+        assertEquals(new BigDecimal("4.00").setScale(2), result.getFixedRate());
+        assertEquals(new BigDecimal("1.00").setScale(2), result.getFeePercentage());
+        assertTrue(result.getHasIpEligibleTrans());
+    }
+
+    @Test
+    void testCreateMpdOffer() {
+        MiniPaymentOffer result = offersFactory.createMpdOffer(mpdOffer);
+
+        assertEquals("mpd123", result.getId());
+        assertEquals("MPDType", result.getType());
+    }
+
+    @Test
+    void testUseZeroIfValueIsNull_NullValue() {
+        BigDecimal result = offersFactory.useZeroIfValueIsNull(null);
+        assertEquals(BigDecimal.ZERO.setScale(2), result);
+    }
+
+    @Test
+    void testUseZeroIfValueIsNull_NegativeValue() {
+        BigDecimal result = offersFactory.useZeroIfValueIsNull(new BigDecimal("-5.00"));
+        assertEquals(new BigDecimal("-5.00").setScale(2), result);
+    }
+
+    @Test
+    void testUseZeroIfValueIsNull_ValidValue() {
+        BigDecimal result = offersFactory.useZeroIfValueIsNull(new BigDecimal("15.567"));
+        assertEquals(new BigDecimal("15.57").setScale(2, RoundingMode.HALF_EVEN), result);
+    }
+}

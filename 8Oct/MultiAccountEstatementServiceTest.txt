@@ -1,0 +1,214 @@
+package com.td.mbna.msec.statement.application;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.common.domain.BaseMsecbffResponse;
+import com.td.mbna.msec.customer.domain.CustomerDetails;
+import com.td.mbna.msec.midtier.customerprofile.payload.ProfileUpdateType;
+import com.td.mbna.msec.midtier.types.common.EmailNotificationInfoType;
+import com.td.mbna.msec.midtier.util.services.JAXBJsonConverter;
+import com.td.mbna.msec.midtier.util.services.MidtierUtilHelper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import static com.td.mbna.msec.common.infrastructure.util.MsecbffConstants.GENERAL_ERROR;
+import static com.td.mbna.msec.common.infrastructure.util.MsecbffConstants.SESSION_DISCLOSURE_CONTENT;
+import static com.td.mbna.msec.common.infrastructure.util.MsecbffConstants.SESSION_DISCLOSURE_INFO;
+import static com.td.mbna.msec.common.infrastructure.util.MsecbffConstants.SESSION_PRECONSENT_INFO;
+import static com.td.mbna.msec.common.infrastructure.util.MsecbffConstants.SESSION_PRECONSENT_TEXT;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+public class MultiAccountEstatementServiceImplTest {
+
+    private MultiAccountEstatementServiceImpl service;
+    private HttpServletRequest httpServletRequest;
+    private SessionProvider sessionProvider; // Assuming you have a sessionProvider as a mock
+
+    @BeforeEach
+    public void setUp() {
+        service = new MultiAccountEstatementServiceImpl();
+        httpServletRequest = mock(HttpServletRequest.class);
+        sessionProvider = mock(SessionProvider.class);
+        service.setSessionProvider(sessionProvider); // Assume there's a setter for sessionProvider
+    }
+
+    @Test
+    public void testUpdateMultiProfiles_WithValidRequest() throws Exception {
+        // Arrange
+        PaperlessUpdateProfileRequest request = mock(PaperlessUpdateProfileRequest.class);
+        when(request.getNewEmail()).thenReturn("new.email@example.com");
+        when(request.getSelectedAccounts()).thenReturn(new String[]{"account1", "account2"});
+
+        AccountDetails account1 = createMockAccountDetails("account1", true);
+        AccountDetails account2 = createMockAccountDetails("account2", false);
+        Set<AccountDetails> mockAccounts = new LinkedHashSet<>();
+        mockAccounts.add(account1);
+        mockAccounts.add(account2);
+
+        when(sessionProvider.getAccount("account1")).thenReturn(account1);
+        when(sessionProvider.getAccount("account2")).thenReturn(account2);
+        when(sessionProvider.getSessionCustomer()).thenReturn(new CustomerDetails());
+
+        // Mocking the midTierServiceHelper
+        MidTierServiceHelper midTierServiceHelper = mock(MidTierServiceHelper.class);
+        when(midTierServiceHelper.updateMultiProfiles(any(), anyString())).thenReturn(new UpdateCustomerProfileResponse());
+        service.setMidTierServiceHelper(midTierServiceHelper); // Assume there's a setter for midTierServiceHelper
+
+        // Act
+        BaseMsecbffResponse response = service.updateMultiProfiles(request, httpServletRequest);
+
+        // Assert
+        assertEquals("true", response.getStatus());
+        verify(sessionProvider).removeSessionAttribute(SESSION_PRECONSENT_INFO);
+        verify(sessionProvider).removeSessionAttribute(SESSION_PRECONSENT_TEXT);
+        verify(sessionProvider).removeSessionAttribute(SESSION_DISCLOSURE_INFO);
+        verify(sessionProvider).removeSessionAttribute(SESSION_DISCLOSURE_CONTENT);
+    }
+
+    @Test
+    public void testUpdateMultiProfiles_WithNullRequest() {
+        // Act
+        BaseMsecbffResponse response = service.updateMultiProfiles(null, httpServletRequest);
+        
+        // Assert
+        assertEquals("true", response.getStatus());
+    }
+
+    @Test
+    public void testUpdateMultiProfiles_WithNoEmail() throws Exception {
+        // Arrange
+        PaperlessUpdateProfileRequest request = mock(PaperlessUpdateProfileRequest.class);
+        when(request.getNewEmail()).thenReturn(null);
+        when(request.getSelectedAccounts()).thenReturn(new String[]{"account1"});
+
+        AccountDetails account1 = createMockAccountDetails("account1", true);
+        when(sessionProvider.getAccount("account1")).thenReturn(account1);
+
+        // Act
+        BaseMsecbffResponse response = service.updateMultiProfiles(request, httpServletRequest);
+
+        // Assert
+        assertEquals("true", response.getStatus());
+    }
+
+    @Test
+    public void testUpdateMultiProfiles_WithExceptionInPayloadGeneration() throws Exception {
+        // Arrange
+        PaperlessUpdateProfileRequest request = mock(PaperlessUpdateProfileRequest.class);
+        when(request.getNewEmail()).thenReturn("new.email@example.com");
+        when(request.getSelectedAccounts()).thenReturn(new String[]{"account1"});
+
+        AccountDetails account1 = createMockAccountDetails("account1", true);
+        when(sessionProvider.getAccount("account1")).thenReturn(account1);
+
+        // Mocking an exception
+        when(midTierServiceHelper.updateMultiProfiles(any(), anyString())).thenThrow(new RuntimeException());
+
+        // Act & Assert
+        Exception exception = assertThrows(BusinessException.class, () -> {
+            service.updateMultiProfiles(request, httpServletRequest);
+        });
+        assertEquals(GENERAL_ERROR, MidtierUtilHelper.getErrorCode(exception));
+    }
+
+    @Test
+    public void testPopulatePaperlessAccountList_WithValidAccounts() {
+        // Arrange
+        Set<AccountDetails> paperlessAccounts = new LinkedHashSet<>();
+        String[] selectedAccounts = {"account1", "account2"};
+
+        AccountDetails account1 = createMockAccountDetails("account1", true);
+        AccountDetails account2 = createMockAccountDetails("account2", true);
+
+        when(sessionProvider.getAccount("account1")).thenReturn(account1);
+        when(sessionProvider.getAccount("account2")).thenReturn(account2);
+        
+        // Act
+        service.populatePaperlessAccountList(paperlessAccounts, selectedAccounts);
+        
+        // Assert
+        assertEquals(2, paperlessAccounts.size());
+        assertTrue(paperlessAccounts.contains(account1));
+        assertTrue(paperlessAccounts.contains(account2));
+    }
+
+    @Test
+    public void testPopulatePaperlessAccountList_WithNoSelectedAccounts() {
+        // Act
+        service.populatePaperlessAccountList(new LinkedHashSet<>(), null);
+        
+        // Assert (nothing should happen, no exception thrown)
+    }
+
+    @Test
+    public void testPopulatePaperlessAccountList_WithInvalidAccount() {
+        // Arrange
+        Set<AccountDetails> paperlessAccounts = new LinkedHashSet<>();
+        String[] selectedAccounts = {"account1"};
+
+        when(sessionProvider.getAccount("account1")).thenReturn(null); // Invalid account
+
+        // Act
+        service.populatePaperlessAccountList(paperlessAccounts, selectedAccounts);
+        
+        // Assert
+        assertTrue(paperlessAccounts.isEmpty());
+    }
+
+    @Test
+    public void testIsAccountEligibleForEmail_WithNullEmail() {
+        // Arrange
+        AccountDetails account = mock(AccountDetails.class);
+        when(account.getProfile()).thenReturn(new Profile());
+
+        // Act
+        boolean result = service.isAccountEligibleForEmail(account);
+        
+        // Assert
+        assertTrue(result);
+    }
+
+    @Test
+    public void testIsAccountEligibleForEmail_WithEmptyEmail() {
+        // Arrange
+        AccountDetails account = mock(AccountDetails.class);
+        Profile profile = mock(Profile.class);
+        when(profile.getEmail()).thenReturn("");
+        when(account.getProfile()).thenReturn(profile);
+
+        // Act
+        boolean result = service.isAccountEligibleForEmail(account);
+        
+        // Assert
+        assertTrue(result);
+    }
+
+    @Test
+    public void testIsAccountEligibleForEmail_WithValidEmail() {
+        // Arrange
+        AccountDetails account = mock(AccountDetails.class);
+        Profile profile = mock(Profile.class);
+        when(profile.getEmail()).thenReturn("existing.email@example.com");
+        when(account.getProfile()).thenReturn(profile);
+
+        // Act
+        boolean result = service.isAccountEligibleForEmail(account);
+        
+        // Assert
+        assertFalse(result);
+    }
+
+    private AccountDetails createMockAccountDetails(String accountId, boolean primaryUser) {
+        AccountDetails account = mock(AccountDetails.class);
+        when(account.getAccountId()).thenReturn(accountId);
+        when(account.isPrimaryUser()).thenReturn(primaryUser);
+        Profile profile = mock(Profile.class);
+        when(account.getProfile()).thenReturn(profile);
+        return account;
+    }
+}

@@ -1,0 +1,174 @@
+package com.td.mbna.msec.nudge.service.impl;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.google.gson.Gson;
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.common.WcmContentService;
+import com.td.mbna.msec.core.session.SessionProvider;
+import com.td.mbna.msec.customer.domain.CustomerDetails;
+import com.td.mbna.msec.nudge.model.Nudge;
+import com.td.mbna.msec.nudge.model.NudgeInWcm;
+import com.td.mbna.msec.nudge.model.NudgeItemInWcm;
+import com.td.mbna.msec.offers.application.PaperlessOfferService;
+import com.td.mbna.msec.core.support.AccountHelper;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+class NudgeServiceImplTest {
+
+    @InjectMocks
+    private NudgeServiceImpl nudgeService;
+
+    @Mock
+    private WcmContentService wcmContentService;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private HttpServletRequest request;
+
+    private CustomerDetails customer;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        customer = new CustomerDetails();
+    }
+
+    @Test
+    void testGetNudge_CustomerIsNull() {
+        List<Nudge> result = nudgeService.getNudge(null, true, request);
+        assertNull(result);
+    }
+
+    @Test
+    void testGetNudge_WcmContentIsNull() {
+        when(sessionProvider.getSessionAttribute(anyString())).thenReturn("en");
+        when(wcmContentService.getContentByID(anyString(), anyString())).thenReturn(null);
+
+        List<Nudge> result = nudgeService.getNudge(customer, true, request);
+        assertNull(result);
+    }
+
+    @Test
+    void testGetNudge_WcmContentIsEmpty() {
+        when(sessionProvider.getSessionAttribute(anyString())).thenReturn("en");
+        when(wcmContentService.getContentByID(anyString(), anyString())).thenReturn("");
+
+        List<Nudge> result = nudgeService.getNudge(customer, true, request);
+        assertNull(result);
+    }
+
+    @Test
+    void testGetNudge_JsonConversionFails() {
+        when(sessionProvider.getSessionAttribute(anyString())).thenReturn("en");
+        when(wcmContentService.getContentByID(anyString(), anyString())).thenReturn("{\"invalidJson\":}");
+
+        List<Nudge> result = nudgeService.getNudge(customer, true, request);
+        assertNull(result);
+    }
+
+    @Test
+    void testGetNudge_DeepLinkEligible() {
+        when(sessionProvider.getSessionAttribute(anyString())).thenReturn("en");
+        when(wcmContentService.getContentByID(anyString(), anyString())).thenReturn(createWcmContentJson());
+        when(customer.getAccounts()).thenReturn(Collections.emptyList());
+
+        NudgeInWcm nudgeInWcm = createNudgeInWcm();
+        when(wcmContentService.getContentByID(anyString(), anyString())).thenReturn(createWcmContentJson());
+        List<Nudge> result = nudgeService.getNudge(customer, true, request);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("Test Nudge", result.get(0).getName());
+    }
+
+    @Test
+    void testGetNudge_DeepLinkNotEligible() {
+        when(sessionProvider.getSessionAttribute(anyString())).thenReturn("en");
+        when(wcmContentService.getContentByID(anyString(), anyString())).thenReturn(createWcmContentJson());
+        
+        AccountDetails account = mock(AccountDetails.class);
+        when(account.getAccountId()).thenReturn("account123");
+        when(account.isPrimaryUser()).thenReturn(true);
+        customer.setAccounts(Arrays.asList(account));
+
+        List<Nudge> result = nudgeService.getNudge(customer, false, request);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("Test Nudge", result.get(0).getName());
+    }
+
+    @Test
+    void testGetNudge_ShowNudgeCountLessThanOne() {
+        when(sessionProvider.getSessionAttribute(anyString())).thenReturn("en");
+        when(wcmContentService.getContentByID(anyString(), anyString())).thenReturn("{\"showNudgeCount\": 0}");
+
+        List<Nudge> result = nudgeService.getNudge(customer, true, request);
+        assertNull(result);
+    }
+
+    @Test
+    void testGetNudge_AllConditionsPass() {
+        // Setup mocks to ensure all conditions pass
+        when(sessionProvider.getSessionAttribute(anyString())).thenReturn("en");
+        when(wcmContentService.getContentByID(anyString(), anyString())).thenReturn(createWcmContentJson());
+        
+        AccountDetails account = mock(AccountDetails.class);
+        when(account.getAccountId()).thenReturn("account123");
+        when(account.isPrimaryUser()).thenReturn(true);
+        when(customer.getAccounts()).thenReturn(Arrays.asList(account));
+        
+        // Invoke method and assert results
+        List<Nudge> result = nudgeService.getNudge(customer, true, request);
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("Test Nudge", result.get(0).getName());
+    }
+
+    @Test
+    void testGetNudge_SkipIneligibleNudge() {
+        when(sessionProvider.getSessionAttribute(anyString())).thenReturn("en");
+        when(wcmContentService.getContentByID(anyString(), anyString())).thenReturn(createWcmContentJsonWithIneligible());
+
+        List<Nudge> result = nudgeService.getNudge(customer, true, request);
+        assertNotNull(result);
+        assertEquals(0, result.size()); // No nudges should be returned
+    }
+
+    // Helper methods to create JSON content
+    private String createWcmContentJson() {
+        return "{ \"showNudgeCount\": 1, \"nudges\": [ { \"name\": \"Test Nudge\", \"display\": true, \"message\": [\"Message 1\"] } ] }";
+    }
+
+    private String createWcmContentJsonWithIneligible() {
+        return "{ \"showNudgeCount\": 1, \"nudges\": [ { \"name\": \"inEligible\", \"display\": true, \"message\": [\"Message 1\"] } ] }";
+    }
+
+    private NudgeInWcm createNudgeInWcm() {
+        NudgeInWcm nudgeInWcm = new NudgeInWcm();
+        nudgeInWcm.setShowNudgeCount(1);
+        NudgeItemInWcm item = new NudgeItemInWcm();
+        item.setName("Test Nudge");
+        item.setDisplay(true);
+        item.setMessage(new String[] { "Message 1" });
+        nudgeInWcm.setNudges(Arrays.asList(item));
+        return nudgeInWcm;
+    }
+}

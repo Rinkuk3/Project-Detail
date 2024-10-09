@@ -1,0 +1,142 @@
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.common.DisclosureService;
+import com.td.mbna.msec.common.domain.DisclosureDetails;
+import com.td.mbna.msec.core.domain.CustomerDetails;
+import com.td.mbna.msec.core.session.SessionProvider;
+import com.td.mbna.msec.midtier.statement.payload.updateStatementDeliveryPreferences.UpdateStatementDeliveryPreferencesResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class EStatementDisclosureServiceImplTest {
+
+    @InjectMocks
+    private EStatementDisclosureServiceImpl eStatementDisclosureService;
+
+    @Mock
+    private MidTierServiceHelper midTierServiceHelper;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private DisclosureService disclosureService;
+
+    @Mock
+    private PaperlessOfferService paperlessOfferService;
+
+    @Mock
+    private EStatementOptOutServiceImpl eStatementOptOutService;
+
+    @Mock
+    private HttpServletRequest httpServletRequest;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testGetEStatementDisclosure_HybridFlow_SingleAccount() {
+        // Mock the request parameters
+        when(httpServletRequest.getParameter("hybridAccountFlow")).thenReturn("true");
+        when(httpServletRequest.getParameter("multiAccountModal")).thenReturn("false");
+
+        // Mock session provider and customer details
+        CustomerDetails customerDetails = new CustomerDetails();
+        List<AccountDetails> paperlessAccounts = new ArrayList<>();
+        AccountDetails account = new AccountDetails();
+        account.setAccountId("12345");
+        paperlessAccounts.add(account);
+        customerDetails.setPaperlessAccountList(paperlessAccounts);
+        when(sessionProvider.getSessionCustomer()).thenReturn(customerDetails);
+        when(sessionProvider.getHybridAccountIDs()).thenReturn(new ArrayList<>());
+
+        // Mock disclosure service
+        DisclosureDetails disclosureDetails = new DisclosureDetails();
+        disclosureDetails.setDisclosureText("Test Disclosure");
+        when(disclosureService.retrieveDisclosureDetails(anyString(), anyString(), any())).thenReturn(disclosureDetails);
+
+        // Invoke the method
+        EStatementDisclosure result = eStatementDisclosureService.getEStatementDisclosure(httpServletRequest);
+
+        // Verify the results
+        assertNotNull(result);
+        assertEquals("Test Disclosure", result.getPreConsentDisclosureText());
+    }
+
+    @Test
+    public void testGetEStatementDisclosure_NonHybridFlow() {
+        when(httpServletRequest.getParameter("hybridAccountFlow")).thenReturn("false");
+        when(httpServletRequest.getParameter("multiAccountModal")).thenReturn("false");
+
+        CustomerDetails customerDetails = new CustomerDetails();
+        AccountDetails account = new AccountDetails();
+        account.setAccountId("12345");
+        customerDetails.setPaperlessAccountList(List.of(account));
+        when(sessionProvider.getSessionCustomer()).thenReturn(customerDetails);
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(account);
+
+        DisclosureDetails disclosureDetails = new DisclosureDetails();
+        disclosureDetails.setDisclosureText("Test Disclosure");
+        when(disclosureService.retrieveDisclosureDetails(anyString(), anyString(), any())).thenReturn(disclosureDetails);
+
+        EStatementDisclosure result = eStatementDisclosureService.getEStatementDisclosure(httpServletRequest);
+
+        assertNotNull(result);
+        assertEquals("Test Disclosure", result.getDisclosureText());
+    }
+
+    @Test
+    public void testUpdateMultiAccountDeliveryStatus_Authorized() {
+        AccountDetails account = new AccountDetails();
+        account.setAccountId("12345");
+        when(sessionProvider.getCurrentAccount()).thenReturn(account);
+        when(sessionProvider.getSessionCustomer()).thenReturn(new CustomerDetails());
+
+        // Mocking the required session attributes
+        Set<AccountDetails> paperlessAccounts = new HashSet<>();
+        paperlessAccounts.add(account);
+        when(sessionProvider.getSessionCustomer().getPaperlessAccountList()).thenReturn(paperlessAccounts);
+
+        // Mocking request and service responses
+        when(httpServletRequest.getParameter("hybridAccountFlow")).thenReturn("false");
+
+        UpdateStatementDeliveryPreferencesResponse response = new UpdateStatementDeliveryPreferencesResponse();
+        when(midTierServiceHelper.updateStatementDeliveryPreferences(any(), any())).thenReturn(response);
+
+        // Invoke the method
+        BaseMsecbffResponse result = eStatementDisclosureService.updateMultiAccountDeliveryStatus(httpServletRequest);
+
+        assertEquals("SUCCESS", result.getStatus());
+    }
+
+    @Test
+    public void testUpdateMultiAccountDeliveryStatus_NotAuthorized() {
+        AccountDetails account = new AccountDetails();
+        account.setAccountId("12345");
+        when(sessionProvider.getCurrentAccount()).thenReturn(account);
+        when(sessionProvider.getSessionCustomer()).thenReturn(new CustomerDetails());
+
+        // When the account is not authorized
+        when(account.isAllowedPaperStatements()).thenReturn(false);
+
+        assertThrows(BusinessException.class, () -> {
+            eStatementDisclosureService.updateMultiAccountDeliveryStatus(httpServletRequest);
+        });
+    }
+
+    // Add more tests to cover other methods like getHybridAccounts(), isAuthorized(), etc.
+}

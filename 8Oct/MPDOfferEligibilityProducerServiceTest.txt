@@ -1,0 +1,137 @@
+package com.td.mbna.msec.offers.application.impl;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.common.infrastructure.util.MsecbffConstants;
+import com.td.mbna.msec.midtier.types.common.AccountOffersType;
+import com.td.mbna.msec.midtier.types.common.MPDOfferType;
+import com.td.mbna.msec.midtier.types.common.PromotionOfferType;
+import com.td.mbna.msec.offers.domain.MPDOfferDTO;
+import com.td.mbna.msec.offers.domain.OfferDetails;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+public class MPDOfferEligibilityProducerServiceImplTest {
+
+    private MPDOfferEligibilityProducerServiceImpl service;
+
+    @BeforeEach
+    public void setUp() {
+        service = new MPDOfferEligibilityProducerServiceImpl();
+    }
+
+    @Test
+    public void testProduce_WithValidAccountOffers() {
+        // Arrange
+        AccountOffersType accountOffer = mock(AccountOffersType.class);
+        PromotionOfferType promotionOffer = mock(PromotionOfferType.class);
+        
+        when(promotionOffer.getSubProductType()).thenReturn(MsecbffConstants.MPD_TYPE);
+        when(promotionOffer.getOfferID()).thenReturn("offer1");
+        when(promotionOffer.getSubProductId()).thenReturn("subProduct1");
+        
+        when(accountOffer.getPromotionOffer()).thenReturn(Arrays.asList(promotionOffer));
+        when(accountOffer.getAcctNum()).thenReturn("12345");
+
+        List<AccountOffersType> accountOffers = Arrays.asList(accountOffer);
+        
+        // Act
+        Map<String, MPDOfferDTO> result = service.produce(accountOffers);
+        
+        // Assert
+        assertEquals(1, result.size());
+        assertTrue(result.containsKey("12345"));
+        MPDOfferDTO dto = result.get("12345");
+        assertTrue(dto.isPresentMPDOffer());
+        assertEquals("offer1", dto.getOfferID());
+        assertEquals("subProduct1", dto.getSubProductID());
+    }
+
+    @Test
+    public void testProduce_WithNoPromotionOffers() {
+        // Arrange
+        AccountOffersType accountOffer = mock(AccountOffersType.class);
+        
+        when(accountOffer.getPromotionOffer()).thenReturn(null);
+        when(accountOffer.getAcctNum()).thenReturn("12345");
+
+        List<AccountOffersType> accountOffers = Arrays.asList(accountOffer);
+        
+        // Act
+        Map<String, MPDOfferDTO> result = service.produce(accountOffers);
+        
+        // Assert
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void testPopulateMPDOffer_WithEligibleAccount() {
+        // Arrange
+        AccountDetails account = mock(AccountDetails.class);
+        when(account.getAccountId()).thenReturn("12345");
+        when(account.isPrimaryUser()).thenReturn(true);
+
+        Map<String, MPDOfferDTO> eligibilityMap = new HashMap<>();
+        MPDOfferDTO offerDTO = new MPDOfferDTO();
+        offerDTO.setPresentMPDOffer(true);
+        offerDTO.setOfferID("offer1");
+        offerDTO.setSubProductID("subProduct1");
+        eligibilityMap.put("12345", offerDTO);
+        
+        // Act
+        service.populateMPDOffer(account, eligibilityMap);
+        
+        // Assert
+        verify(account).setAllowedMiniPayment(true);
+        OfferDetails expectedOffer = new OfferDetails();
+        expectedOffer.setMpdOfferType(new MPDOfferType());
+        expectedOffer.setOfferID("offer1");
+        expectedOffer.setSubProductID("subProduct1");
+        verify(account).setMpdOffers(Arrays.asList(expectedOffer));
+    }
+
+    @Test
+    public void testPopulateMPDOffer_WithIneligibleAccount() {
+        // Arrange
+        AccountDetails account = mock(AccountDetails.class);
+        when(account.getAccountId()).thenReturn("12345");
+        when(account.isPrimaryUser()).thenReturn(false);
+
+        Map<String, MPDOfferDTO> eligibilityMap = new HashMap<>();
+        MPDOfferDTO offerDTO = new MPDOfferDTO();
+        offerDTO.setPresentMPDOffer(true);
+        eligibilityMap.put("12345", offerDTO);
+        
+        // Act
+        service.populateMPDOffer(account, eligibilityMap);
+        
+        // Assert
+        verify(account, never()).setAllowedMiniPayment(true);
+        verify(account, never()).setMpdOffers(any());
+    }
+
+    @Test
+    public void testPopulateMPDOffer_WithNoOfferInEligibility() {
+        // Arrange
+        AccountDetails account = mock(AccountDetails.class);
+        when(account.getAccountId()).thenReturn("12345");
+        when(account.isPrimaryUser()).thenReturn(true);
+
+        Map<String, MPDOfferDTO> eligibilityMap = new HashMap<>();
+        
+        // Act
+        service.populateMPDOffer(account, eligibilityMap);
+        
+        // Assert
+        verify(account, never()).setAllowedMiniPayment(true);
+        verify(account, never()).setMpdOffers(any());
+    }
+}

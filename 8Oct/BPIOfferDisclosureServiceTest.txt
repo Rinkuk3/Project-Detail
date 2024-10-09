@@ -1,0 +1,159 @@
+package com.td.mbna.msec.offers.application.impl;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import com.google.gson.Gson;
+import com.td.mbna.msec.common.DisclosureService;
+import com.td.mbna.msec.common.SessionProvider;
+import com.td.mbna.msec.common.WcmContentService;
+import com.td.mbna.msec.common.domain.DisclosureDetails;
+import com.td.mbna.msec.midtier.content.payload.getpagecontent.ResponsePayload;
+import com.td.mbna.msec.offers.domain.BPIOfferDisclosureResponse;
+import com.td.mbna.msec.offers.domain.PPPConsent;
+import com.td.mbna.msec.offers.domain.PPPConsentInWCM;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import javax.servlet.http.HttpServletRequest;
+
+public class BPIOfferDisclosureServiceTest {
+
+    @InjectMocks
+    private BPIOfferDisclosureServiceImpl bpiOfferDisclosureServiceImpl;
+
+    @Mock
+    private WcmContentService wcmContentService;
+
+    @Mock
+    private DisclosureService disclosureService;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private Gson gson;
+
+    @Mock
+    private DisclosureDetails disclosureDetails;
+
+    @Mock
+    private ResponsePayload responsePayload;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testGetBpiOfferDisclosure_Success() {
+        // Setup
+        when(wcmContentService.getPageContentPayload(anyString(), eq(request))).thenReturn(responsePayload);
+        when(responsePayload.getContentContent()).thenReturn("Sample WCM Text");
+        when(responsePayload.getTitle()).thenReturn("Sample Title");
+        when(disclosureService.retrieveDisclosureDetails(anyString(), anyString(), any())).thenReturn(disclosureDetails);
+        when(disclosureDetails.getDisclosureText()).thenReturn("Sample Disclosure Text");
+
+        // Invoke
+        BPIOfferDisclosureResponse response = bpiOfferDisclosureServiceImpl.getBpiOfferDisclosure(request);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals("Sample Title", response.getWcmTitle());
+        assertEquals("Sample WCM Text", response.getWcmText());
+        assertEquals("Sample Disclosure Text", response.getDisclosureText());
+    }
+
+    @Test
+    public void testGetBpiOfferDisclosure_EmptyWcmContent() {
+        // Setup
+        when(wcmContentService.getPageContentPayload(anyString(), eq(request))).thenReturn(responsePayload);
+        when(responsePayload.getContentContent()).thenReturn("");
+        when(responsePayload.getTitle()).thenReturn("Sample Title");
+        when(disclosureService.retrieveDisclosureDetails(anyString(), anyString(), any())).thenReturn(disclosureDetails);
+        when(disclosureDetails.getDisclosureText()).thenReturn("Sample Disclosure Text");
+
+        // Invoke
+        BPIOfferDisclosureResponse response = bpiOfferDisclosureServiceImpl.getBpiOfferDisclosure(request);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals("Sample Title", response.getWcmTitle());
+        assertEquals("", response.getWcmText());
+        assertEquals("Sample Disclosure Text", response.getDisclosureText());
+    }
+
+    @Test
+    public void testGetPPPOfferConsent_Success() {
+        // Setup
+        String wcmContent = "{\"checkBox1\": \"consent1\", \"checkBox2\": \"consent2\", \"checkBox3\": \"consent3\"}";
+        PPPConsentInWCM pppConsentInWCM = new PPPConsentInWCM();
+        pppConsentInWCM.setCheckBox1("consent1");
+        pppConsentInWCM.setCheckBox2("consent2");
+        pppConsentInWCM.setCheckBox3("consent3");
+
+        when(sessionProvider.getSessionAttribute(anyString())).thenReturn("en_US");
+        when(wcmContentService.getContentByID(anyString(), anyString())).thenReturn(wcmContent);
+        when(gson.fromJson(eq(wcmContent), eq(PPPConsentInWCM.class))).thenReturn(pppConsentInWCM);
+
+        // Invoke
+        PPPConsent pppConsent = bpiOfferDisclosureServiceImpl.getPPPOfferConsent(request);
+
+        // Assert
+        assertNotNull(pppConsent);
+        assertEquals("consent1", pppConsent.getCheckBox1());
+        assertEquals("consent2", pppConsent.getCheckBox2());
+        assertEquals("consent3", pppConsent.getCheckBox3());
+    }
+
+    @Test
+    public void testGetPPPOfferConsent_JsonException() {
+        // Setup
+        String invalidJson = "invalid-json";
+        when(sessionProvider.getSessionAttribute(anyString())).thenReturn("en_US");
+        when(wcmContentService.getContentByID(anyString(), anyString())).thenReturn(invalidJson);
+        when(gson.fromJson(eq(invalidJson), eq(PPPConsentInWCM.class))).thenThrow(new RuntimeException("JSON error"));
+
+        // Invoke
+        PPPConsent pppConsent = bpiOfferDisclosureServiceImpl.getPPPOfferConsent(request);
+
+        // Assert
+        assertNotNull(pppConsent);
+        assertNull(pppConsent.getCheckBox1());
+        assertNull(pppConsent.getCheckBox2());
+        assertNull(pppConsent.getCheckBox3());
+    }
+
+    @Test
+    public void testGetPppOfferDisclosure_Success() {
+        // Setup
+        when(disclosureService.retrieveDisclosureDetails(anyString(), anyString(), any())).thenReturn(disclosureDetails);
+        when(disclosureDetails.getDisclosureText()).thenReturn("Sample Disclosure Text");
+
+        // Invoke
+        String result = bpiOfferDisclosureServiceImpl.getPppOfferDisclosure();
+
+        // Assert
+        assertEquals("Sample Disclosure Text", result);
+        verify(disclosureService, times(1)).retrieveDisclosureDetails(anyString(), anyString(), any());
+    }
+
+    @Test
+    public void testGetPppOfferDisclosure_NullDisclosureDetails() {
+        // Setup
+        when(disclosureService.retrieveDisclosureDetails(anyString(), anyString(), any())).thenReturn(null);
+
+        // Invoke
+        String result = bpiOfferDisclosureServiceImpl.getPppOfferDisclosure();
+
+        // Assert
+        assertNull(result);
+        verify(disclosureService, times(1)).retrieveDisclosureDetails(anyString(), anyString(), any());
+    }
+}

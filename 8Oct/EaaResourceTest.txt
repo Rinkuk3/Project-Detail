@@ -1,0 +1,76 @@
+package com.td.mbna.msec.eaa.controller;
+
+import com.td.mbna.msec.common.domain.BaseMsecbffResponse;
+import com.td.mbna.msec.eaa.model.EaaReviewContent;
+import com.td.mbna.msec.eaa.service.EaaService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
+class EaaResourceTest {
+
+    @InjectMocks
+    private EaaResource eaaResource;
+
+    @Mock
+    private EaaService eaaService;
+
+    @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private HttpServletResponse response;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testGetEaaReview() throws Exception {
+        EaaReviewContent expectedContent = new EaaReviewContent();
+        when(eaaService.getEaaReviewContent()).thenReturn(expectedContent);
+
+        EaaReviewContent actualContent = eaaResource.getEaaReview();
+
+        assertEquals(expectedContent, actualContent);
+        verify(eaaService, times(1)).getEaaReviewContent();
+    }
+
+    @Test
+    void testConfirmEaa() {
+        BaseMsecbffResponse expectedResponse = new BaseMsecbffResponse();
+        when(eaaService.confirmEaa(request)).thenReturn(expectedResponse);
+
+        BaseMsecbffResponse actualResponse = eaaResource.confirmEaa(request);
+
+        assertEquals(expectedResponse, actualResponse);
+        verify(eaaService, times(1)).confirmEaa(request);
+    }
+
+    @Test
+    void testConfirmDecline() {
+        BaseMsecbffResponse expectedResponse = new BaseMsecbffResponse();
+        when(eaaService.confirmDecline(request, response)).thenReturn(expectedResponse);
+
+        BaseMsecbffResponse actualResponse = eaaResource.confirmDecline(request, response);
+
+        assertEquals(expectedResponse, actualResponse);
+        verify(eaaService, times(1)).confirmDecline(request, response);
+    }
+
+    @Test
+    void testHandleEaaView() {
+        ModelAndView modelAndView = eaaResource.handleEaaView();
+
+        assertEquals("redirect:index.html#/eaa-info", modelAndView.getViewName());
+    }
+}

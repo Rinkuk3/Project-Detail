@@ -1,0 +1,140 @@
+package com.td.mbna.msec.eaa.service.impl;
+
+import com.td.mbna.msec.common.DisclosureService;
+import com.td.mbna.msec.common.domain.BaseMsecbffResponse;
+import com.td.mbna.msec.common.domain.DisclosureDetails;
+import com.td.mbna.msec.eaa.model.EaaReviewContent;
+import com.td.mbna.msec.midtier.MidTierServiceHelper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.td.mbna.msec.common.infrastructure.util.MsecbffConstants.SUCCESS;
+import static com.td.mbna.msec.common.infrastructure.util.MsecbffConstants.MBNA_BUSINESS_EVENT_REASON;
+import static com.td.mbna.msec.common.infrastructure.util.MsecbffConstants.DL_TARGET;
+import static com.td.mbna.msec.common.infrastructure.util.MsecbffConstants.UGO_APP;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
+class EaaServiceImplTest {
+
+    @InjectMocks
+    private EaaServiceImpl eaaService;
+
+    @Mock
+    private DisclosureService disclosureService;
+
+    @Mock
+    private MidTierServiceHelper midTierServiceHelper;
+
+    @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private HttpServletResponse response;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        eaaService.sessionProvider = new MockSessionProvider();
+    }
+
+    @Test
+    void testGetEaaReviewContent() throws Exception {
+        // Mock DisclosureDetails
+        DisclosureDetails disclosureDetails = new DisclosureDetails();
+        disclosureDetails.setDisclosureInfo("disclosureInfo");
+        disclosureDetails.setDisclosureText("disclosureText");
+
+        DisclosureDetails preConsentDetails = new DisclosureDetails();
+        preConsentDetails.setDisclosureInfo("preconsentInfo");
+        preConsentDetails.setDisclosureText("preconsentText");
+
+        when(disclosureService.retrieveEaaDisclosureDetails(anyString(), anyString(), anyString()))
+                .thenReturn(disclosureDetails)
+                .thenReturn(preConsentDetails);
+
+        EaaReviewContent content = eaaService.getEaaReviewContent();
+
+        assertEquals("disclosureText", content.getDisclosureText());
+        assertEquals("preconsentText", content.getPreconsentDisclosureText());
+        verify(disclosureService, times(2)).retrieveEaaDisclosureDetails(anyString(), anyString(), anyString());
+    }
+
+    @Test
+    void testConfirmDecline_WithSessionMapNotEmpty() {
+        Map<String, Object> sessionMap = new HashMap<>();
+        sessionMap.put("key", "value");
+        eaaService.sessionProvider.setSessionMap(sessionMap);
+        
+        BaseMsecbffResponse response = eaaService.confirmDecline(request, response);
+
+        assertEquals(SUCCESS, response.getStatus());
+        verify(midTierServiceHelper, times(1)).createAuditLog("SS0102", null, false);
+        verify(sessionMap, times(1)).clear();
+        verify(HttpUtil.class);
+        verify(HttpUtil.removeCookie(response, DL_TARGET));
+        verify(HttpUtil.removeCookie(response, UGO_APP));
+    }
+
+    @Test
+    void testConfirmDecline_EmptySessionMap() {
+        BaseMsecbffResponse response = eaaService.confirmDecline(request, response);
+
+        assertEquals(SUCCESS, response.getStatus());
+        verify(midTierServiceHelper, times(1)).createAuditLog("SS0102", null, false);
+        verify(HttpUtil.class);
+        verify(HttpUtil.removeCookie(response, DL_TARGET));
+        verify(HttpUtil.removeCookie(response, UGO_APP));
+    }
+
+    @Test
+    void testConfirmEaa() {
+        when(request.getSession(false)).thenReturn(mock(HttpServletRequest.class));
+        eaaService.setSessionPreconsentInfo("preconsentInfo");
+        eaaService.setSessionDisclosureInfo("disclosureInfo");
+
+        BaseMsecbffResponse response = eaaService.confirmEaa(request);
+
+        assertEquals(SUCCESS, response.getStatus());
+        verify(midTierServiceHelper, times(1)).consentDisclosure(any(), anyString(), anyString());
+        verify(midTierServiceHelper, times(1)).createAuditLog("SS3101");
+    }
+
+    // MockSessionProvider to simulate session behavior
+    private class MockSessionProvider extends com.td.mbna.msec.core.support.SessionProvider {
+        private final Map<String, Object> sessionMap = new HashMap<>();
+
+        @Override
+        public void setSessionAttribute(String key, Object value) {
+            sessionMap.put(key, value);
+        }
+
+        @Override
+        public Object getSessionAttribute(String key) {
+            return sessionMap.get(key);
+        }
+
+        @Override
+        public Map<String, Object> getSessionMap() {
+            return sessionMap;
+        }
+
+        @Override
+        public void clearSession() {
+            sessionMap.clear();
+        }
+
+        @Override
+        public String getConnectId() {
+            return "mockConnectId";
+        }
+    }
+}

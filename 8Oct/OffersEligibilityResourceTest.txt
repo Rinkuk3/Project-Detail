@@ -1,0 +1,81 @@
+package com.td.mbna.msec.offers.resource;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.account.domain.BpiEligibilityResponse;
+import com.td.mbna.msec.core.session.SessionProvider;
+import com.td.mbna.msec.offers.application.OffersEligibilityService;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+public class OffersEligibilityResourceTest {
+
+    @InjectMocks
+    private OffersEligibilityResource offersEligibilityResource;
+
+    @Mock
+    private OffersEligibilityService offersEligibilityService;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    private AccountDetails currentAccount;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        currentAccount = new AccountDetails(); // Mock or set up as needed
+    }
+
+    @Test
+    public void testIsEligibleForBalanceProtectionOfferCurrentAccount() {
+        // Given
+        BpiEligibilityResponse response = new BpiEligibilityResponse();
+        response.setEligible(true);
+        response.setAccepted(true);
+
+        when(sessionProvider.getCurrentAccount()).thenReturn(currentAccount);
+        when(offersEligibilityService.isEligibleForBalanceProtectionOffer(currentAccount)).thenReturn(true);
+        when(offersEligibilityService.isBalanceProtectionOfferAccepted(currentAccount)).thenReturn(true);
+
+        // When
+        BpiEligibilityResponse result = offersEligibilityResource.isEligibleForBalanceProtectionOfferCurrentAccount();
+
+        // Then
+        assertNotNull(result);
+        assertTrue(result.isEligible());
+        assertTrue(result.isAccepted());
+
+        // Verify interactions
+        verify(sessionProvider).getCurrentAccount();
+        verify(offersEligibilityService).isEligibleForBalanceProtectionOffer(currentAccount);
+        verify(offersEligibilityService).isBalanceProtectionOfferAccepted(currentAccount);
+    }
+
+    @Test
+    public void testIsEligibleForBalanceProtectionOfferCurrentAccountNotEligible() {
+        // Given
+        when(sessionProvider.getCurrentAccount()).thenReturn(currentAccount);
+        when(offersEligibilityService.isEligibleForBalanceProtectionOffer(currentAccount)).thenReturn(false);
+        when(offersEligibilityService.isBalanceProtectionOfferAccepted(currentAccount)).thenReturn(false);
+
+        // When
+        BpiEligibilityResponse result = offersEligibilityResource.isEligibleForBalanceProtectionOfferCurrentAccount();
+
+        // Then
+        assertNotNull(result);
+        assertFalse(result.isEligible());
+        assertFalse(result.isAccepted());
+
+        // Verify interactions
+        verify(sessionProvider).getCurrentAccount();
+        verify(offersEligibilityService).isEligibleForBalanceProtectionOffer(currentAccount);
+        verify(offersEligibilityService).isBalanceProtectionOfferAccepted(currentAccount);
+    }
+}
