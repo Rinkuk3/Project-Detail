@@ -1,0 +1,65 @@
+import com.td.mbna.msec.account.domain.AccountHolder;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class AccountHolderTest {
+
+    @Test
+    public void testAccountHolderConstructorAndGetters() {
+        // Arrange
+        String key = "accountKey";
+        String value = "accountValue";
+
+        // Act
+        AccountHolder accountHolder = new AccountHolder(key, value);
+
+        // Assert
+        assertEquals(key, accountHolder.getKey(), "The key should match the input value");
+        assertEquals(value, accountHolder.getValue(), "The value should match the input value");
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        // Arrange
+        AccountHolder accountHolder1 = new AccountHolder("key1", "value1");
+        AccountHolder accountHolder2 = new AccountHolder("key1", "value1");
+        AccountHolder accountHolder3 = new AccountHolder("key2", "value2");
+
+        // Act & Assert
+        assertEquals(accountHolder1, accountHolder2, "Objects with the same key and value should be equal");
+        assertNotEquals(accountHolder1, accountHolder3, "Objects with different key and value should not be equal");
+
+        assertEquals(accountHolder1.hashCode(), accountHolder2.hashCode(), "Objects with the same key and value should have the same hash code");
+        assertNotEquals(accountHolder1.hashCode(), accountHolder3.hashCode(), "Objects with different key and value should have different hash codes");
+    }
+
+    @Test
+    public void testToString() {
+        // Arrange
+        AccountHolder accountHolder = new AccountHolder("key1", "value1");
+
+        // Act
+        String result = accountHolder.toString();
+
+        // Assert
+        assertNotNull(result, "The toString result should not be null");
+        assertTrue(result.contains("key=key1"), "The toString result should contain the key");
+        assertTrue(result.contains("value=value1"), "The toString result should contain the value");
+    }
+
+    @Test
+    public void testWithNullValues() {
+        // Arrange
+        AccountHolder accountHolder = new AccountHolder(null, null);
+
+        // Act & Assert
+        assertNull(accountHolder.getKey(), "The key should be null when initialized with null");
+        assertNull(accountHolder.getValue(), "The value should be null when initialized with null");
+
+        // Testing equals and hashCode with null values
+        AccountHolder accountHolderWithNulls = new AccountHolder(null, null);
+        assertEquals(accountHolder, accountHolderWithNulls, "Objects with null key and value should be equal");
+        assertEquals(accountHolder.hashCode(), accountHolderWithNulls.hashCode(), "Objects with null key and value should have the same hash code");
+    }
+}

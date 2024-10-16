@@ -1,0 +1,54 @@
+import com.td.mbna.msec.account.domain.ActiveIpPlanSummary;
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class ActiveIpPlanSummaryTest {
+
+    @Test
+    public void testGettersAndSetters() {
+        // Arrange
+        ActiveIpPlanSummary planSummary = new ActiveIpPlanSummary();
+        
+        // Act
+        planSummary.setId("12345");
+        planSummary.setPlanName("Basic Plan");
+        planSummary.setCreatedOn("2024-10-15");
+        planSummary.setTimeRemaining(30);
+        planSummary.setMonthlyPayment(new BigDecimal("19.99"));
+        planSummary.setRemainingBalance(new BigDecimal("99.99"));
+        
+        // Assert
+        assertEquals("12345", planSummary.getId(), "ID should match");
+        assertEquals("Basic Plan", planSummary.getPlanName(), "Plan name should match");
+        assertEquals("2024-10-15", planSummary.getCreatedOn(), "Created date should match");
+        assertEquals(30, planSummary.getTimeRemaining(), "Time remaining should match");
+        assertEquals(new BigDecimal("19.99"), planSummary.getMonthlyPayment(), "Monthly payment should match");
+        assertEquals(new BigDecimal("99.99"), planSummary.getRemainingBalance(), "Remaining balance should match");
+    }
+
+    @Test
+    public void testWithNullValues() {
+        // Act
+        ActiveIpPlanSummary planSummary = new ActiveIpPlanSummary();
+        
+        // Assert
+        assertNull(planSummary.getId(), "ID should be null");
+        assertNull(planSummary.getPlanName(), "Plan name should be null");
+        assertNull(planSummary.getCreatedOn(), "Created date should be null");
+        assertNull(planSummary.getTimeRemaining(), "Time remaining should be null");
+        assertNull(planSummary.getMonthlyPayment(), "Monthly payment should be null");
+        assertNull(planSummary.getRemainingBalance(), "Remaining balance should be null");
+    }
+
+    @Test
+    public void testDefaultConstructor() {
+        // Act
+        ActiveIpPlanSummary planSummary = new ActiveIpPlanSummary();
+
+        // Assert
+        assertNotNull(planSummary, "ActiveIpPlanSummary object should be instantiated");
+    }
+}

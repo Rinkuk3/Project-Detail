@@ -1,0 +1,67 @@
+package com.td.mbna.msec.balancetransfer.domain;
+
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class BalanceTransferVerificationResponseTest {
+
+    @Test
+    void testBuilderAndGetters() {
+        // Arrange
+        List<BalanceTransferItem> transfers = new ArrayList<>();
+        transfers.add(BalanceTransferItem.builder()
+                .transferFrom("Account1")
+                .accountNumber("123456")
+                .transferAmount(new BigDecimal("1000.00"))
+                .oneTimeTransferFee(new BigDecimal("10.00"))
+                .transferFeePercentage(new BigDecimal("1.00"))
+                .build());
+
+        BigDecimal subTotalTransfers = new BigDecimal("1000.00");
+        BigDecimal totalTransferFees = new BigDecimal("10.00");
+        BigDecimal totalTransferAmount = new BigDecimal("1010.00");
+        BigDecimal interestRate = new BigDecimal("2.50");
+        String rateExpiryDate = "2024-12-31";
+        BigDecimal standardRate = new BigDecimal("3.00");
+
+        // Act
+        BalanceTransferVerificationResponse response = BalanceTransferVerificationResponse.builder()
+                .transfers(transfers)
+                .subTotalTransfers(subTotalTransfers)
+                .totalTransferFees(totalTransferFees)
+                .totalTransferAmount(totalTransferAmount)
+                .interestRate(interestRate)
+                .rateExpiryDate(rateExpiryDate)
+                .standardRate(standardRate)
+                .build();
+
+        // Assert
+        assertEquals(transfers, response.getTransfers());
+        assertEquals(subTotalTransfers, response.getSubTotalTransfers());
+        assertEquals(totalTransferFees, response.getTotalTransferFees());
+        assertEquals(totalTransferAmount, response.getTotalTransferAmount());
+        assertEquals(interestRate, response.getInterestRate());
+        assertEquals(rateExpiryDate, response.getRateExpiryDate());
+        assertEquals(standardRate, response.getStandardRate());
+    }
+
+    @Test
+    void testDefaultValues() {
+        // Act
+        BalanceTransferVerificationResponse response = BalanceTransferVerificationResponse.builder().build();
+
+        // Assert
+        assertNull(response.getTransfers());
+        assertNull(response.getSubTotalTransfers());
+        assertNull(response.getTotalTransferFees());
+        assertNull(response.getTotalTransferAmount());
+        assertNull(response.getInterestRate());
+        assertNull(response.getRateExpiryDate());
+        assertNull(response.getStandardRate());
+    }
+}

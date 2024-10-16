@@ -1,0 +1,100 @@
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class RecentActivityTest {
+
+    @Test
+    public void testConstructorAndGetters() {
+        // Arrange
+        String expectedNextStmtClosingDate = "2024-10-31";
+        boolean expectedHasMoreTxns = true;
+        List<Transactions> expectedTransactions = new ArrayList<>();
+        expectedTransactions.add(new Transactions()); // Assuming a default constructor exists
+
+        // Act
+        RecentActivity recentActivity = new RecentActivity();
+        recentActivity.setNextStmtClosingDate(expectedNextStmtClosingDate);
+        recentActivity.setHasMoreTxns(expectedHasMoreTxns);
+        recentActivity.setTransactions(expectedTransactions);
+
+        // Assert
+        assertEquals(expectedNextStmtClosingDate, recentActivity.getNextStmtClosingDate());
+        assertEquals(expectedHasMoreTxns, recentActivity.isHasMoreTxns());
+        assertEquals(expectedTransactions, recentActivity.getTransactions());
+    }
+
+    @Test
+    public void testSetters() {
+        // Arrange
+        RecentActivity recentActivity = new RecentActivity();
+        
+        String nextStmtClosingDate = "2024-10-31";
+        boolean hasMoreTxns = false;
+        List<Transactions> transactions = new ArrayList<>();
+        transactions.add(new Transactions()); // Assuming a default constructor exists
+
+        // Act
+        recentActivity.setNextStmtClosingDate(nextStmtClosingDate);
+        recentActivity.setHasMoreTxns(hasMoreTxns);
+        recentActivity.setTransactions(transactions);
+
+        // Assert
+        assertEquals(nextStmtClosingDate, recentActivity.getNextStmtClosingDate());
+        assertEquals(hasMoreTxns, recentActivity.isHasMoreTxns());
+        assertEquals(transactions, recentActivity.getTransactions());
+    }
+
+    @Test
+    public void testSerializable() {
+        // Arrange
+        RecentActivity recentActivity = new RecentActivity();
+        recentActivity.setNextStmtClosingDate("2024-10-31");
+        recentActivity.setHasMoreTxns(true);
+        List<Transactions> transactions = new ArrayList<>();
+        transactions.add(new Transactions()); // Assuming a default constructor exists
+        recentActivity.setTransactions(transactions);
+
+        // Act
+        // Check if RecentActivity can be serialized
+        assertNotNull(recentActivity);
+        assertDoesNotThrow(() -> {
+            // Serialize
+            java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
+            java.io.ObjectOutputStream oos = new java.io.ObjectOutputStream(baos);
+            oos.writeObject(recentActivity);
+            oos.flush();
+            oos.close();
+
+            // Deserialize
+            java.io.ByteArrayInputStream bais = new java.io.ByteArrayInputStream(baos.toByteArray());
+            java.io.ObjectInputStream ois = new java.io.ObjectInputStream(bais);
+            RecentActivity deserialized = (RecentActivity) ois.readObject();
+
+            // Assert that deserialized object matches original
+            assertEquals(recentActivity.getNextStmtClosingDate(), deserialized.getNextStmtClosingDate());
+            assertEquals(recentActivity.isHasMoreTxns(), deserialized.isHasMoreTxns());
+            assertEquals(recentActivity.getTransactions(), deserialized.getTransactions());
+        });
+    }
+
+    @Test
+    public void testTransactionsList() {
+        // Arrange
+        RecentActivity recentActivity = new RecentActivity();
+        List<Transactions> transactions = new ArrayList<>();
+        
+        // Add multiple transactions
+        transactions.add(new Transactions()); // Add a transaction
+        transactions.add(new Transactions()); // Add another transaction
+
+        // Act
+        recentActivity.setTransactions(transactions);
+
+        // Assert
+        assertEquals(2, recentActivity.getTransactions().size());
+    }
+}

@@ -1,0 +1,67 @@
+import com.td.mbna.msec.account.domain.AffinityRequest;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class AffinityRequestTest {
+
+    @Test
+    public void testConstructorAndGetters() {
+        // Arrange
+        String productCodes = "PC123";
+        String poCode = "PO456";
+
+        // Act
+        AffinityRequest affinityRequest = new AffinityRequest(productCodes, poCode);
+
+        // Assert
+        assertEquals(productCodes, affinityRequest.getProductCodes(), "Product codes should match");
+        assertEquals(poCode, affinityRequest.getPoCode(), "PO code should match");
+    }
+
+    @Test
+    public void testBuilder() {
+        // Arrange
+        String productCodes = "PC789";
+        String poCode = "PO012";
+
+        // Act
+        AffinityRequest affinityRequest = new AffinityRequest.AffinityRequestBuilder()
+                .setProductCodes(productCodes)
+                .setPoCode(poCode)
+                .build();
+
+        // Assert
+        assertNotNull(affinityRequest, "AffinityRequest object should not be null");
+        assertEquals(productCodes, affinityRequest.getProductCodes(), "Product codes should match");
+        assertEquals(poCode, affinityRequest.getPoCode(), "PO code should match");
+    }
+
+    @Test
+    public void testBuilderWithNullValues() {
+        // Act
+        AffinityRequest affinityRequest = new AffinityRequest.AffinityRequestBuilder()
+                .setProductCodes(null)
+                .setPoCode(null)
+                .build();
+
+        // Assert
+        assertNotNull(affinityRequest, "AffinityRequest object should not be null");
+        assertNull(affinityRequest.getProductCodes(), "Product codes should be null");
+        assertNull(affinityRequest.getPoCode(), "PO code should be null");
+    }
+
+    @Test
+    public void testBuilderWithEmptyValues() {
+        // Act
+        AffinityRequest affinityRequest = new AffinityRequest.AffinityRequestBuilder()
+                .setProductCodes("")
+                .setPoCode("")
+                .build();
+
+        // Assert
+        assertNotNull(affinityRequest, "AffinityRequest object should not be null");
+        assertEquals("", affinityRequest.getProductCodes(), "Product codes should be empty");
+        assertEquals("", affinityRequest.getPoCode(), "PO code should be empty");
+    }
+}

@@ -1,0 +1,141 @@
+import com.td.mbna.msec.account.statement.DownloadStmtDataService;
+import com.td.mbna.msec.common.infrastructure.util.MsecbffConstants;
+import com.td.mbna.msec.statement.domain.DownloadFormatOption;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
+public class DownloadStmtDataResourceTest {
+
+    @InjectMocks
+    private DownloadStmtDataResource downloadStmtDataResource;
+
+    @Mock
+    private DownloadStmtDataService downloadStmtDataService;
+
+    @Mock
+    private HttpServletRequest httpServletRequest;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testGetStatementHistory() {
+        // Arrange
+        List<DownloadFormatOption> formatOptions = Arrays.asList(new DownloadFormatOption(), new DownloadFormatOption());
+        when(downloadStmtDataService.getDownloadFormatOptions()).thenReturn(formatOptions);
+
+        // Act
+        Map<String, Object> result = downloadStmtDataResource.getStatementHistory();
+
+        // Assert
+        assertEquals(true, result.get(MsecbffConstants.SUCCESS));
+        assertEquals(formatOptions, result.get("download-formt"));
+    }
+
+    @Test
+    public void testGetStatementClosingDates() {
+        // Arrange
+        String accountId = "12345";
+        Map<String, String> closingDates = new HashMap<>();
+        closingDates.put("2024-01-01", "January 2024");
+        when(downloadStmtDataService.getStatementClosingDates(accountId, httpServletRequest)).thenReturn(closingDates);
+
+        // Act
+        Map<String, Object> result = downloadStmtDataResource.getStatementClosingDates(accountId, httpServletRequest);
+
+        // Assert
+        assertEquals(true, result.get(MsecbffConstants.SUCCESS));
+        assertEquals(closingDates, result.get("closingDates"));
+    }
+
+    @Test
+    public void testDownloadFileCSV() {
+        // Arrange
+        String accountId = "12345";
+        String stmtClosingDate = "2024-01-01";
+        String format = DownloadStmtDataResource.FORMAT_TYPE_CSV;
+        byte[] bytes = "csv content".getBytes();
+        when(downloadStmtDataService.downloadFileName(accountId, stmtClosingDate)).thenReturn("statement");
+        when(downloadStmtDataService.generateCSVFile(accountId, stmtClosingDate, httpServletRequest)).thenReturn(bytes);
+
+        // Act
+        ResponseEntity<InputStreamResource> response = downloadStmtDataResource.downloadFile(accountId, stmtClosingDate, format, httpServletRequest);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("attachment;filename=statement.csv", response.getHeaders().getFirst("Content-Disposition"));
+        assertEquals(MediaType.parseMediaType("application/octet-stream;charset=ISO-8859-1"), response.getHeaders().getContentType());
+    }
+
+    @Test
+    public void testDownloadFileQFX() {
+        // Arrange
+        String accountId = "12345";
+        String stmtClosingDate = "2024-01-01";
+        String format = DownloadStmtDataResource.FORMAT_TYPE_QFX;
+        byte[] bytes = "qfx content".getBytes();
+        when(downloadStmtDataService.downloadFileName(accountId, stmtClosingDate)).thenReturn("statement");
+        when(downloadStmtDataService.generateQFX(accountId, stmtClosingDate, "SS1112", httpServletRequest)).thenReturn(bytes);
+
+        // Act
+        ResponseEntity<InputStreamResource> response = downloadStmtDataResource.downloadFile(accountId, stmtClosingDate, format, httpServletRequest);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("attachment;filename=statement.qfx", response.getHeaders().getFirst("Content-Disposition"));
+        assertEquals(MediaType.parseMediaType("application/vnd.intu.qfx"), response.getHeaders().getContentType());
+    }
+
+    @Test
+    public void testDownloadFileOFX() {
+        // Arrange
+        String accountId = "12345";
+        String stmtClosingDate = "2024-01-01";
+        String format = DownloadStmtDataResource.FORMAT_TYPE_OFX;
+        byte[] bytes = "ofx content".getBytes();
+        when(downloadStmtDataService.downloadFileName(accountId, stmtClosingDate)).thenReturn("statement");
+        when(downloadStmtDataService.generateQFX(accountId, stmtClosingDate, "SS1113", httpServletRequest)).thenReturn(bytes);
+
+        // Act
+        ResponseEntity<InputStreamResource> response = downloadStmtDataResource.downloadFile(accountId, stmtClosingDate, format, httpServletRequest);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("attachment;filename=statement.ofx", response.getHeaders().getFirst("Content-Disposition"));
+        assertEquals(MediaType.parseMediaType("application/x-ofx"), response.getHeaders().getContentType());
+    }
+
+    @Test
+    public void testGetResponseEntity() {
+        // Arrange
+        InputStream inputStream = new ByteArrayInputStream("data".getBytes());
+        String fileName = "testFile";
+        String fileFormat = DownloadStmtDataResource.FORMAT_TYPE_CSV;
+
+        // Act
+        ResponseEntity<InputStreamResource> response = downloadStmtDataResource.getResponseEntity(inputStream, fileName, fileFormat);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("attachment;filename=testFile.csv", response.getHeaders().getFirst("Content-Disposition"));
+        assertEquals(MediaType.parseMediaType("application/octet-stream;charset=ISO-8859-1"), response.getHeaders().getContentType());
+    }
+}

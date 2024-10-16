@@ -1,0 +1,57 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class DropDownItemTest {
+
+    @Test
+    public void testDefaultConstructor() {
+        // Arrange
+        DropDownItem dropDownItem = new DropDownItem();
+
+        // Act & Assert
+        assertEquals("", dropDownItem.getKey(), "Default key should be empty");
+        assertEquals("", dropDownItem.getValue(), "Default value should be empty");
+    }
+
+    @Test
+    public void testSetKey() {
+        // Arrange
+        DropDownItem dropDownItem = new DropDownItem();
+        String testKey = "testKey";
+
+        // Act
+        dropDownItem.setKey(testKey);
+
+        // Assert
+        assertEquals(testKey, dropDownItem.getKey(), "Key should be set correctly");
+    }
+
+    @Test
+    public void testSetValue() {
+        // Arrange
+        DropDownItem dropDownItem = new DropDownItem();
+        String testValue = "testValue";
+
+        // Act
+        dropDownItem.setValue(testValue);
+
+        // Assert
+        assertEquals(testValue, dropDownItem.getValue(), "Value should be set correctly");
+    }
+
+    @Test
+    public void testConstructorWithParameters() {
+        // Arrange
+        String testKey = "testKey";
+        String testValue = "testValue";
+
+        // Act
+        DropDownItem dropDownItem = new DropDownItem();
+        dropDownItem.setKey(testKey);
+        dropDownItem.setValue(testValue);
+
+        // Assert
+        assertEquals(testKey, dropDownItem.getKey(), "Key should match");
+        assertEquals(testValue, dropDownItem.getValue(), "Value should match");
+    }
+}

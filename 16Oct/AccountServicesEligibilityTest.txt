@@ -1,0 +1,38 @@
+package com.td.mbna.msec.accountservices.domain;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class AccountServicesEligibilityTest {
+
+    @Test
+    void testGetText() {
+        // Test all enum values and their corresponding text
+        for (AccountServicesEligibility eligibility : AccountServicesEligibility.values()) {
+            assertNotNull(eligibility.getText());
+            assertFalse(eligibility.getText().isEmpty());
+        }
+    }
+
+    @Test
+    void testFromString() {
+        // Test valid strings for each enum value
+        for (AccountServicesEligibility eligibility : AccountServicesEligibility.values()) {
+            assertEquals(eligibility, AccountServicesEligibility.fromString(eligibility.getText()));
+        }
+
+        // Test case-insensitive matching
+        assertEquals(AccountServicesEligibility.MyProfile_UpdatePersonalInformation, AccountServicesEligibility.fromString("myprofile_updatepersonalinformation"));
+        assertEquals(AccountServicesEligibility.Services_RequestCreditLimitIncrease, AccountServicesEligibility.fromString("Services_RequestCreditLimitIncrease"));
+
+        // Test invalid string input
+        assertNull(AccountServicesEligibility.fromString("InvalidString"));
+    }
+
+    @Test
+    void testFromStringWithNull() {
+        // Test null input
+        assertNull(AccountServicesEligibility.fromString(null));
+    }
+}

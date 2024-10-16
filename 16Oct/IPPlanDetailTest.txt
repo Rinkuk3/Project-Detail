@@ -1,0 +1,93 @@
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class IPPlanDetailTest {
+
+    @Test
+    public void testDefaultConstructor() {
+        // Arrange
+        IPPlanDetail ipPlanDetail = new IPPlanDetail();
+
+        // Act
+        // No action needed; just check default values
+
+        // Assert
+        assertNull(ipPlanDetail.getId(), "Default id should be null");
+        assertNull(ipPlanDetail.getPlanName(), "Default planName should be null");
+        assertNull(ipPlanDetail.getRemainingBalance(), "Default remainingBalance should be null");
+        assertNull(ipPlanDetail.getMonthlyPayment(), "Default monthlyPayment should be null");
+        assertNull(ipPlanDetail.getPaymentDueOn(), "Default paymentDueOn should be null");
+        assertNull(ipPlanDetail.getTimeRemaining(), "Default timeRemaining should be null");
+        assertNull(ipPlanDetail.getStatus(), "Default status should be null");
+        assertNull(ipPlanDetail.getCreatedOn(), "Default createdOn should be null");
+        assertNull(ipPlanDetail.getIpInterest(), "Default ipInterest should be null");
+        assertNull(ipPlanDetail.getOneTimeTransactionFee(), "Default oneTimeTransactionFee should be null");
+        assertNull(ipPlanDetail.getSetupFees(), "Default setupFees should be null");
+        assertNull(ipPlanDetail.getTransactionAmt(), "Default transactionAmt should be null");
+        assertNull(ipPlanDetail.getExpirationDate(), "Default expirationDate should be null");
+        assertNull(ipPlanDetail.getClosedOn(), "Default closedOn should be null");
+        assertNull(ipPlanDetail.getBalanceAtClosure(), "Default balanceAtClosure should be null");
+        assertNull(ipPlanDetail.getAnnualInterest(), "Default annualInterest should be null");
+    }
+
+    @Test
+    public void testSettersAndGetters() {
+        // Arrange
+        IPPlanDetail ipPlanDetail = new IPPlanDetail();
+        String testId = "123";
+        String testPlanName = "Gold Plan";
+        BigDecimal testRemainingBalance = BigDecimal.valueOf(1000.00);
+        BigDecimal testMonthlyPayment = BigDecimal.valueOf(100.00);
+        String testPaymentDueOn = "2024-01-01";
+        Integer testTimeRemaining = 12;
+        String testStatus = "Active";
+        String testCreatedOn = "2023-01-01";
+        BigDecimal testIpInterest = BigDecimal.valueOf(5.0);
+        BigDecimal testOneTimeTransactionFee = BigDecimal.valueOf(15.0);
+        BigDecimal testSetupFees = BigDecimal.valueOf(50.0);
+        BigDecimal testTransactionAmt = BigDecimal.valueOf(200.0);
+        String testExpirationDate = "2025-01-01";
+        String testClosedOn = "2024-06-01";
+        BigDecimal testBalanceAtClosure = BigDecimal.valueOf(900.00);
+        BigDecimal testAnnualInterest = BigDecimal.valueOf(7.5);
+
+        // Act
+        ipPlanDetail.setId(testId);
+        ipPlanDetail.setPlanName(testPlanName);
+        ipPlanDetail.setRemainingBalance(testRemainingBalance);
+        ipPlanDetail.setMonthlyPayment(testMonthlyPayment);
+        ipPlanDetail.setPaymentDueOn(testPaymentDueOn);
+        ipPlanDetail.setTimeRemaining(testTimeRemaining);
+        ipPlanDetail.setStatus(testStatus);
+        ipPlanDetail.setCreatedOn(testCreatedOn);
+        ipPlanDetail.setIpInterest(testIpInterest);
+        ipPlanDetail.setOneTimeTransactionFee(testOneTimeTransactionFee);
+        ipPlanDetail.setSetupFees(testSetupFees);
+        ipPlanDetail.setTransactionAmt(testTransactionAmt);
+        ipPlanDetail.setExpirationDate(testExpirationDate);
+        ipPlanDetail.setClosedOn(testClosedOn);
+        ipPlanDetail.setBalanceAtClosure(testBalanceAtClosure);
+        ipPlanDetail.setAnnualInterest(testAnnualInterest);
+
+        // Assert
+        assertEquals(testId, ipPlanDetail.getId(), "The id should match the set value");
+        assertEquals(testPlanName, ipPlanDetail.getPlanName(), "The planName should match the set value");
+        assertEquals(testRemainingBalance, ipPlanDetail.getRemainingBalance(), "The remainingBalance should match the set value");
+        assertEquals(testMonthlyPayment, ipPlanDetail.getMonthlyPayment(), "The monthlyPayment should match the set value");
+        assertEquals(testPaymentDueOn, ipPlanDetail.getPaymentDueOn(), "The paymentDueOn should match the set value");
+        assertEquals(testTimeRemaining, ipPlanDetail.getTimeRemaining(), "The timeRemaining should match the set value");
+        assertEquals(testStatus, ipPlanDetail.getStatus(), "The status should match the set value");
+        assertEquals(testCreatedOn, ipPlanDetail.getCreatedOn(), "The createdOn should match the set value");
+        assertEquals(testIpInterest, ipPlanDetail.getIpInterest(), "The ipInterest should match the set value");
+        assertEquals(testOneTimeTransactionFee, ipPlanDetail.getOneTimeTransactionFee(), "The oneTimeTransactionFee should match the set value");
+        assertEquals(testSetupFees, ipPlanDetail.getSetupFees(), "The setupFees should match the set value");
+        assertEquals(testTransactionAmt, ipPlanDetail.getTransactionAmt(), "The transactionAmt should match the set value");
+        assertEquals(testExpirationDate, ipPlanDetail.getExpirationDate(), "The expirationDate should match the set value");
+        assertEquals(testClosedOn, ipPlanDetail.getClosedOn(), "The closedOn should match the set value");
+        assertEquals(testBalanceAtClosure, ipPlanDetail.getBalanceAtClosure(), "The balanceAtClosure should match the set value");
+        assertEquals(testAnnualInterest, ipPlanDetail.getAnnualInterest(), "The annualInterest should match the set value");
+    }
+}

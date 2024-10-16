@@ -1,0 +1,45 @@
+import com.td.mbna.msec.account.domain.CardActivationResponse;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CardActivationResponseTest {
+
+    @Test
+    public void testConstructorAndGetters() {
+        // Arrange
+        boolean expectedStatus = true;
+        String expectedErrorCode = "ERROR123";
+
+        // Act
+        CardActivationResponse response = new CardActivationResponse(expectedStatus, expectedErrorCode);
+
+        // Assert
+        assertEquals(expectedStatus, response.getStatus(), "Status should match expected value");
+        assertEquals(expectedErrorCode, response.getErrorCode(), "Error code should match expected value");
+    }
+
+    @Test
+    public void testSetters() {
+        // Arrange
+        CardActivationResponse response = new CardActivationResponse(false, null);
+
+        // Act
+        response.setStatus(true);
+        response.setErrorCode("NEW_ERROR");
+
+        // Assert
+        assertTrue(response.getStatus(), "Status should be updated to true");
+        assertEquals("NEW_ERROR", response.getErrorCode(), "Error code should be updated to 'NEW_ERROR'");
+    }
+
+    @Test
+    public void testDefaultConstructorAndSetters() {
+        // Arrange
+        CardActivationResponse response = new CardActivationResponse(false, null);
+
+        // Assert default state
+        assertFalse(response.getStatus(), "Initial status should be false");
+        assertNull(response.getErrorCode(), "Initial error code should be null");
+
+       

@@ -1,0 +1,77 @@
+import com.td.mbna.msec.account.domain.AccountTransaction;
+import com.td.mbna.msec.account.domain.AccountTransactions;
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class AccountTransactionsTest {
+
+    @Test
+    public void testBuilderAndGetters() {
+        // Arrange
+        AccountTransaction pendingTransaction = AccountTransaction.builder()
+                .transactionDate(LocalDate.of(2024, 10, 15))
+                .postingDate(LocalDate.of(2024, 10, 16))
+                .description("Pending transaction")
+                .referenceNumber("REF123")
+                .amount(new BigDecimal("50.00"))
+                .primaryCardHolder(true)
+                .build();
+
+        AccountTransaction recentTransaction = AccountTransaction.builder()
+                .transactionDate(LocalDate.of(2024, 10, 14))
+                .postingDate(LocalDate.of(2024, 10, 15))
+                .description("Recent transaction")
+                .referenceNumber("REF456")
+                .amount(new BigDecimal("100.00"))
+                .primaryCardHolder(false)
+                .build();
+
+        // Act
+        AccountTransactions accountTransactions = AccountTransactions.builder()
+                .pendingTransactions(Arrays.asList(pendingTransaction))
+                .recentTransactions(Arrays.asList(recentTransaction))
+                .build();
+
+        // Assert
+        assertNotNull(accountTransactions.getPendingTransactions(), "Pending transactions list should not be null");
+        assertNotNull(accountTransactions.getRecentTransactions(), "Recent transactions list should not be null");
+        assertEquals(1, accountTransactions.getPendingTransactions().size(), "Pending transactions list size should be 1");
+        assertEquals(1, accountTransactions.getRecentTransactions().size(), "Recent transactions list size should be 1");
+        assertEquals(pendingTransaction, accountTransactions.getPendingTransactions().get(0), "Pending transaction should match");
+        assertEquals(recentTransaction, accountTransactions.getRecentTransactions().get(0), "Recent transaction should match");
+    }
+
+    @Test
+    public void testWithNullValues() {
+        // Act
+        AccountTransactions accountTransactions = AccountTransactions.builder()
+                .pendingTransactions(null)
+                .recentTransactions(null)
+                .build();
+
+        // Assert
+        assertNull(accountTransactions.getPendingTransactions(), "Pending transactions should be null");
+        assertNull(accountTransactions.getRecentTransactions(), "Recent transactions should be null");
+    }
+
+    @Test
+    public void testEmptyLists() {
+        // Act
+        AccountTransactions accountTransactions = AccountTransactions.builder()
+                .pendingTransactions(Collections.emptyList())
+                .recentTransactions(Collections.emptyList())
+                .build();
+
+        // Assert
+        assertNotNull(accountTransactions.getPendingTransactions(), "Pending transactions list should not be null");
+        assertNotNull(accountTransactions.getRecentTransactions(), "Recent transactions list should not be null");
+        assertTrue(accountTransactions.getPendingTransactions().isEmpty(), "Pending transactions list should be empty");
+        assertTrue(accountTransactions.getRecentTransactions().isEmpty(), "Recent transactions list should be empty");
+    }
+}

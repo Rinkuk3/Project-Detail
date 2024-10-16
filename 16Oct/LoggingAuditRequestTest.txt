@@ -1,0 +1,54 @@
+package com.td.mbna.msec.auditlogging.model;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class LoggingAuditRequestTest {
+
+    @Test
+    void testDefaultConstructor() {
+        LoggingAuditRequest request = new LoggingAuditRequest();
+        assertNotNull(request);
+    }
+
+    @Test
+    void testSetAndGetEventCode() {
+        LoggingAuditRequest request = new LoggingAuditRequest();
+        String eventCode = "EVENT123";
+        request.setEventCode(eventCode);
+        assertEquals(eventCode, request.getEventCode());
+    }
+
+    @Test
+    void testSetAndGetEventMessage() {
+        LoggingAuditRequest request = new LoggingAuditRequest();
+        String eventMessage = "This is an event message.";
+        request.setEventMessage(eventMessage);
+        assertEquals(eventMessage, request.getEventMessage());
+    }
+
+    @Test
+    void testSetAndGetEventUrl() {
+        LoggingAuditRequest request = new LoggingAuditRequest();
+        String eventUrl = "http://example.com/event";
+        request.setEventUrl(eventUrl);
+        assertEquals(eventUrl, request.getEventUrl());
+    }
+
+    @Test
+    void testSetAndGetLanguage() {
+        LoggingAuditRequest request = new LoggingAuditRequest();
+        String language = "EN";
+        request.setLanguage(language);
+        assertEquals(language, request.getLanguage());
+    }
+
+    @Test
+    void testSetAndGetAccountNumber() {
+        LoggingAuditRequest request = new LoggingAuditRequest();
+        String accountNumber = "123456789";
+        request.setAccountNumber(accountNumber);
+        assertEquals(accountNumber, request.getAccountNumber());
+    }
+}

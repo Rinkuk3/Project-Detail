@@ -1,0 +1,84 @@
+import org.junit.jupiter.api.Test;
+import java.util.Collections;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CurrentAccountTest {
+
+    @Test
+    public void testConstructorAndDefaultValues() {
+        // Arrange
+        CardSummary cardSummary = new CardSummary("1234", Collections.emptyList(), BigDecimal.ZERO, BigDecimal.ZERO);
+        CurrentAccount currentAccount = new CurrentAccount(Collections.emptyList(), "1234567890", cardSummary, true);
+
+        // Act & Assert
+        assertNotNull(currentAccount.getNavigationTabs(), "Navigation tabs should not be null");
+        assertEquals("1234567890", currentAccount.getAccountNumber(), "Account number should match");
+        assertEquals(cardSummary, currentAccount.getCardSummary(), "Card summary should match");
+        assertTrue(currentAccount.isOptedForEmailConfirmation(), "Opted for email confirmation should be true");
+    }
+
+    @Test
+    public void testGettersAndSetters() {
+        // Arrange
+        CurrentAccount currentAccount = new CurrentAccount(null, null, null, false);
+        CardSummary cardSummary = new CardSummary("1234", Collections.emptyList(), BigDecimal.ZERO, BigDecimal.ZERO);
+        List<NavigationTab> navigationTabs = Collections.singletonList(new NavigationTab("Home"));
+
+        // Act
+        currentAccount.setNavigationTabs(navigationTabs);
+        currentAccount.setAccountNumber("9876543210");
+        currentAccount.setCardSummary(cardSummary);
+        currentAccount.setOptedForEmailConfirmation(false);
+
+        // Assert
+        assertEquals(navigationTabs, currentAccount.getNavigationTabs(), "Navigation tabs should match");
+        assertEquals("9876543210", currentAccount.getAccountNumber(), "Account number should match");
+        assertEquals(cardSummary, currentAccount.getCardSummary(), "Card summary should match");
+        assertFalse(currentAccount.isOptedForEmailConfirmation(), "Opted for email confirmation should be false");
+    }
+
+    @Test
+    public void testBuilder() {
+        // Arrange
+        CardSummary cardSummary = new CardSummary("1234", Collections.emptyList(), BigDecimal.ZERO, BigDecimal.ZERO);
+        List<NavigationTab> navigationTabs = Collections.singletonList(new NavigationTab("Settings"));
+
+        // Act
+        CurrentAccount currentAccount = new CurrentAccount.CurrentAccountBuilder()
+                .setNavigationTabs(navigationTabs)
+                .setAccountNumber("9876543210")
+                .setCardSummary(cardSummary)
+                .setOptedForEmailConfirmation(true)
+                .build();
+
+        // Assert
+        assertEquals(navigationTabs, currentAccount.getNavigationTabs(), "Navigation tabs should match");
+        assertEquals("9876543210", currentAccount.getAccountNumber(), "Account number should match");
+        assertEquals(cardSummary, currentAccount.getCardSummary(), "Card summary should match");
+        assertTrue(currentAccount.isOptedForEmailConfirmation(), "Opted for email confirmation should be true");
+    }
+
+    @Test
+    public void testSetNavigationTabsNull() {
+        // Arrange
+        CurrentAccount currentAccount = new CurrentAccount(Collections.emptyList(), "1234567890", null, false);
+        
+        // Act
+        currentAccount.setNavigationTabs(null);
+
+        // Assert
+        assertNull(currentAccount.getNavigationTabs(), "Navigation tabs should be null");
+    }
+
+    @Test
+    public void testSetCardSummaryNull() {
+        // Arrange
+        CurrentAccount currentAccount = new CurrentAccount(Collections.emptyList(), "1234567890", new CardSummary("1234", Collections.emptyList(), BigDecimal.ZERO, BigDecimal.ZERO), false);
+        
+        // Act
+        currentAccount.setCardSummary(null);
+
+        // Assert
+        assertNull(currentAccount.getCardSummary(), "Card summary should be null");
+    }
+}

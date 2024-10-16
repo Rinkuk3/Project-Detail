@@ -1,0 +1,56 @@
+package com.td.mbna.msec.balancetransfer.domain;
+
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class BalanceTransferItemTest {
+
+    @Test
+    void testBuilder() {
+        // Given
+        String expectedTransferFrom = "Credit Card A";
+        String expectedAccountNumber = "1234567890";
+        BigDecimal expectedTransferAmount = new BigDecimal("500.00");
+        BigDecimal expectedOneTimeTransferFee = new BigDecimal("10.00");
+        BigDecimal expectedTransferFeePercentage = new BigDecimal("2.00");
+
+        // When
+        BalanceTransferItem item = BalanceTransferItem.builder()
+                .transferFrom(expectedTransferFrom)
+                .accountNumber(expectedAccountNumber)
+                .transferAmount(expectedTransferAmount)
+                .oneTimeTransferFee(expectedOneTimeTransferFee)
+                .transferFeePercentage(expectedTransferFeePercentage)
+                .build();
+
+        // Then
+        assertEquals(expectedTransferFrom, item.getTransferFrom());
+        assertEquals(expectedAccountNumber, item.getAccountNumber());
+        assertEquals(expectedTransferAmount, item.getTransferAmount());
+        assertEquals(expectedOneTimeTransferFee, item.getOneTimeTransferFee());
+        assertEquals(expectedTransferFeePercentage, item.getTransferFeePercentage());
+    }
+
+    @Test
+    void testSettersAndGetters() {
+        // Given
+        BalanceTransferItem item = new BalanceTransferItem();
+
+        // Setting values
+        item.setTransferFrom("Credit Card B");
+        item.setAccountNumber("0987654321");
+        item.setTransferAmount(new BigDecimal("1000.00"));
+        item.setOneTimeTransferFee(new BigDecimal("15.00"));
+        item.setTransferFeePercentage(new BigDecimal("2.50"));
+
+        // Then
+        assertEquals("Credit Card B", item.getTransferFrom());
+        assertEquals("0987654321", item.getAccountNumber());
+        assertEquals(new BigDecimal("1000.00"), item.getTransferAmount());
+        assertEquals(new BigDecimal("15.00"), item.getOneTimeTransferFee());
+        assertEquals(new BigDecimal("2.50"), item.getTransferFeePercentage());
+    }
+}

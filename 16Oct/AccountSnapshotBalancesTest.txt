@@ -1,0 +1,100 @@
+import com.td.mbna.msec.account.domain.AccountSnapshotBalances;
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class AccountSnapshotBalancesTest {
+
+    @Test
+    public void testBuilderAndGetters() {
+        // Arrange
+        BigDecimal pendingTransactions = BigDecimal.valueOf(100.50);
+        BigDecimal creditLimit = BigDecimal.valueOf(1000.00);
+        BigDecimal lastStatementBalance = BigDecimal.valueOf(200.75);
+        BigDecimal pastDueAmount = BigDecimal.valueOf(50.00);
+        BigDecimal lastPaymentPosted = BigDecimal.valueOf(150.25);
+        LocalDate lastStatementDate = LocalDate.of(2024, 10, 1);
+        LocalDate lastPaymentPostedDate = LocalDate.of(2024, 9, 30);
+        LocalDate nextStatementClosingDate = LocalDate.of(2024, 10, 31);
+
+        // Act
+        AccountSnapshotBalances accountSnapshotBalances = AccountSnapshotBalances.builder()
+                .pendingTransactions(pendingTransactions)
+                .creditLimit(creditLimit)
+                .lastStatementBalance(lastStatementBalance)
+                .pastDueAmount(pastDueAmount)
+                .lastPaymentPosted(lastPaymentPosted)
+                .lastStatementDate(lastStatementDate)
+                .lastPaymentPostedDate(lastPaymentPostedDate)
+                .nextStatementClosingDate(nextStatementClosingDate)
+                .build();
+
+        // Assert
+        assertEquals(pendingTransactions, accountSnapshotBalances.getPendingTransactions(), "Pending transactions should match");
+        assertEquals(creditLimit, accountSnapshotBalances.getCreditLimit(), "Credit limit should match");
+        assertEquals(lastStatementBalance, accountSnapshotBalances.getLastStatementBalance(), "Last statement balance should match");
+        assertEquals(pastDueAmount, accountSnapshotBalances.getPastDueAmount(), "Past due amount should match");
+        assertEquals(lastPaymentPosted, accountSnapshotBalances.getLastPaymentPosted(), "Last payment posted should match");
+        assertEquals(lastStatementDate, accountSnapshotBalances.getLastStatementDate(), "Last statement date should match");
+        assertEquals(lastPaymentPostedDate, accountSnapshotBalances.getLastPaymentPostedDate(), "Last payment posted date should match");
+        assertEquals(nextStatementClosingDate, accountSnapshotBalances.getNextStatementClosingDate(), "Next statement closing date should match");
+    }
+
+    @Test
+    public void testWithNullValues() {
+        // Act
+        AccountSnapshotBalances accountSnapshotBalances = AccountSnapshotBalances.builder()
+                .pendingTransactions(null)
+                .creditLimit(null)
+                .lastStatementBalance(null)
+                .pastDueAmount(null)
+                .lastPaymentPosted(null)
+                .lastStatementDate(null)
+                .lastPaymentPostedDate(null)
+                .nextStatementClosingDate(null)
+                .build();
+
+        // Assert
+        assertNull(accountSnapshotBalances.getPendingTransactions(), "Pending transactions should be null");
+        assertNull(accountSnapshotBalances.getCreditLimit(), "Credit limit should be null");
+        assertNull(accountSnapshotBalances.getLastStatementBalance(), "Last statement balance should be null");
+        assertNull(accountSnapshotBalances.getPastDueAmount(), "Past due amount should be null");
+        assertNull(accountSnapshotBalances.getLastPaymentPosted(), "Last payment posted should be null");
+        assertNull(accountSnapshotBalances.getLastStatementDate(), "Last statement date should be null");
+        assertNull(accountSnapshotBalances.getLastPaymentPostedDate(), "Last payment posted date should be null");
+        assertNull(accountSnapshotBalances.getNextStatementClosingDate(), "Next statement closing date should be null");
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        // Arrange
+        AccountSnapshotBalances accountSnapshotBalances1 = AccountSnapshotBalances.builder()
+                .pendingTransactions(BigDecimal.valueOf(100))
+                .creditLimit(BigDecimal.valueOf(1000))
+                .lastStatementBalance(BigDecimal.valueOf(200))
+                .pastDueAmount(BigDecimal.valueOf(50))
+                .lastPaymentPosted(BigDecimal.valueOf(150))
+                .lastStatementDate(LocalDate.of(2024, 10, 1))
+                .lastPaymentPostedDate(LocalDate.of(2024, 9, 30))
+                .nextStatementClosingDate(LocalDate.of(2024, 10, 31))
+                .build();
+
+        AccountSnapshotBalances accountSnapshotBalances2 = AccountSnapshotBalances.builder()
+                .pendingTransactions(BigDecimal.valueOf(100))
+                .creditLimit(BigDecimal.valueOf(1000))
+                .lastStatementBalance(BigDecimal.valueOf(200))
+                .pastDueAmount(BigDecimal.valueOf(50))
+                .lastPaymentPosted(BigDecimal.valueOf(150))
+                .lastStatementDate(LocalDate.of(2024, 10, 1))
+                .lastPaymentPostedDate(LocalDate.of(2024, 9, 30))
+                .nextStatementClosingDate(LocalDate.of(2024, 10, 31))
+                .build();
+
+        // Act & Assert
+        assertEquals(accountSnapshotBalances1, accountSnapshotBalances2, "AccountSnapshotBalances should be equal");
+        assertEquals(accountSnapshotBalances1.hashCode(), accountSnapshotBalances2.hashCode(), "Hashcodes should match");
+    }
+}

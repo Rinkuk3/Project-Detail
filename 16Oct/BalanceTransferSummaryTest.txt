@@ -1,0 +1,53 @@
+package com.td.mbna.msec.balancetransfer.domain;
+
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class BalanceTransferSummaryTest {
+
+    @Test
+    void testBuilder() {
+        // Using the builder to create an instance
+        BalanceTransferSummary summary = BalanceTransferSummary.builder()
+                .transferAmtTotal(new BigDecimal("1000.00"))
+                .transferFeeTotal(new BigDecimal("50.00"))
+                .transferTotal(new BigDecimal("1050.00"))
+                .remainingCredit(new BigDecimal("9500.00"))
+                .build();
+
+        // Verify the fields
+        assertEquals(new BigDecimal("1000.00"), summary.getTransferAmtTotal());
+        assertEquals(new BigDecimal("50.00"), summary.getTransferFeeTotal());
+        assertEquals(new BigDecimal("1050.00"), summary.getTransferTotal());
+        assertEquals(new BigDecimal("9500.00"), summary.getRemainingCredit());
+    }
+
+    @Test
+    void testSettersAndGetters() {
+        // Given
+        BalanceTransferSummary summary = new BalanceTransferSummary();
+
+        // Test transferAmtTotal
+        BigDecimal transferAmtTotal = new BigDecimal("2000.00");
+        summary.setTransferAmtTotal(transferAmtTotal);
+        assertEquals(transferAmtTotal, summary.getTransferAmtTotal());
+
+        // Test transferFeeTotal
+        BigDecimal transferFeeTotal = new BigDecimal("100.00");
+        summary.setTransferFeeTotal(transferFeeTotal);
+        assertEquals(transferFeeTotal, summary.getTransferFeeTotal());
+
+        // Test transferTotal
+        BigDecimal transferTotal = new BigDecimal("2100.00");
+        summary.setTransferTotal(transferTotal);
+        assertEquals(transferTotal, summary.getTransferTotal());
+
+        // Test remainingCredit
+        BigDecimal remainingCredit = new BigDecimal("8900.00");
+        summary.setRemainingCredit(remainingCredit);
+        assertEquals(remainingCredit, summary.getRemainingCredit());
+    }
+}

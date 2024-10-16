@@ -1,0 +1,53 @@
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class NavigationTabTest {
+
+    @Test
+    public void testEnumValues() {
+        // Arrange
+        NavigationTab[] expectedTabs = NavigationTab.values();
+
+        // Act
+        NavigationTab[] actualTabs = {
+            NavigationTab.SNAPSHOT,
+            NavigationTab.STATEMENTS,
+            NavigationTab.ACCOUNT_SERVICES,
+            NavigationTab.INSTALMENT_PLANS,
+            NavigationTab.OFFER,
+            NavigationTab.REWARDS
+        };
+
+        // Assert
+        assertArrayEquals(expectedTabs, actualTabs, "All enum values should match expected values");
+    }
+
+    @Test
+    public void testEnumCount() {
+        // Assert
+        assertEquals(6, NavigationTab.values().length, "There should be 6 NavigationTab values");
+    }
+
+    @Test
+    public void testEnumNames() {
+        // Arrange
+        String[] expectedNames = {
+            "SNAPSHOT",
+            "STATEMENTS",
+            "ACCOUNT_SERVICES",
+            "INSTALMENT_PLANS",
+            "OFFER",
+            "REWARDS"
+        };
+
+        // Act
+        String[] actualNames = new String[NavigationTab.values().length];
+        for (int i = 0; i < NavigationTab.values().length; i++) {
+            actualNames[i] = NavigationTab.values()[i].name();
+        }
+
+        // Assert
+        assertArrayEquals(expectedNames, actualNames, "Enum names should match the expected names");
+    }
+}

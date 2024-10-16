@@ -1,0 +1,81 @@
+import org.junit.jupiter.api.Test;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CardSummaryTest {
+
+    @Test
+    public void testConstructorAndGetters() {
+        // Arrange
+        String endingIn = "1234";
+        List<CardArtInfo> cardArtInfos = Collections.singletonList(new CardArtInfo("en", "Card Name", "Short Name", "http://cardurl.com", "http://logo.com"));
+        BigDecimal creditAvailable = new BigDecimal("1000.00");
+        BigDecimal currentBalance = new BigDecimal("500.00");
+
+        // Act
+        CardSummary cardSummary = new CardSummary(endingIn, cardArtInfos, creditAvailable, currentBalance);
+
+        // Assert
+        assertEquals(endingIn, cardSummary.getEndingIn(), "Ending In should match");
+        assertEquals(cardArtInfos, cardSummary.getCardArtInfos(), "CardArtInfos should match");
+        assertEquals(creditAvailable, cardSummary.getCreditAvailable(), "Credit Available should match");
+        assertEquals(currentBalance, cardSummary.getCurrentBalance(), "Current Balance should match");
+    }
+
+    @Test
+    public void testSetters() {
+        // Arrange
+        CardSummary cardSummary = new CardSummary("1234", null, BigDecimal.ZERO, BigDecimal.ZERO);
+
+        // Act
+        cardSummary.setEndingIn("5678");
+        cardSummary.setCardArtInfos(Arrays.asList(new CardArtInfo("fr", "Nom de la carte", "Nom court", "http://cardurl.fr", "http://logo.fr")));
+        cardSummary.setCreditAvailable(new BigDecimal("2000.00"));
+        cardSummary.setCurrentBalance(new BigDecimal("1000.00"));
+
+        // Assert
+        assertEquals("5678", cardSummary.getEndingIn(), "Ending In should be updated");
+        assertNotNull(cardSummary.getCardArtInfos(), "CardArtInfos should not be null");
+        assertEquals(2, cardSummary.getCardArtInfos().size(), "CardArtInfos size should match");
+        assertEquals(new BigDecimal("2000.00"), cardSummary.getCreditAvailable(), "Credit Available should be updated");
+        assertEquals(new BigDecimal("1000.00"), cardSummary.getCurrentBalance(), "Current Balance should be updated");
+    }
+
+    @Test
+    public void testBuilder() {
+        // Arrange
+        String endingIn = "9876";
+        List<CardArtInfo> cardArtInfos = Collections.singletonList(new CardArtInfo("es", "Nombre de tarjeta", "Nombre corto", "http://cardurl.es", "http://logo.es"));
+        BigDecimal creditAvailable = new BigDecimal("1500.00");
+        BigDecimal currentBalance = new BigDecimal("750.00");
+
+        // Act
+        CardSummary cardSummary = new CardSummary.CardSummaryBuilder()
+                .setEndingIn(endingIn)
+                .setCardArtInfos(cardArtInfos)
+                .setCreditAvailable(creditAvailable)
+                .setCurrentBalance(currentBalance)
+                .build();
+
+        // Assert
+        assertEquals(endingIn, cardSummary.getEndingIn(), "Ending In should match");
+        assertEquals(cardArtInfos, cardSummary.getCardArtInfos(), "CardArtInfos should match");
+        assertEquals(creditAvailable, cardSummary.getCreditAvailable(), "Credit Available should match");
+        assertEquals(currentBalance, cardSummary.getCurrentBalance(), "Current Balance should match");
+    }
+
+    @Test
+    public void testDefaultValues() {
+        // Act
+        CardSummary cardSummary = new CardSummary(null, null, null, null);
+
+        // Assert
+        assertNull(cardSummary.getEndingIn(), "Ending In should be null by default");
+        assertNull(cardSummary.getCardArtInfos(), "CardArtInfos should be null by default");
+        assertNull(cardSummary.getCreditAvailable(), "Credit Available should be null by default");
+        assertNull(cardSummary.getCurrentBalance(), "Current Balance should be null by default");
+    }
+}

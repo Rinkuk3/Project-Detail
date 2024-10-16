@@ -1,0 +1,134 @@
+import com.td.mbna.msec.account.application.AccountStatementService;
+import com.td.mbna.msec.account.application.impl.AccountStatementServiceImpl;
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.account.domain.IpEligibleTransactionsResponse;
+import com.td.mbna.msec.account.domain.Statement;
+import com.td.mbna.msec.account.statement.StatementDisplayHelper;
+import com.td.mbna.msec.account.statement.StatementDisplayService;
+import com.td.mbna.msec.account.statement.impl.StatementDisplayServiceImpl;
+import com.td.mbna.msec.common.infrastructure.util.MsecbffConstants;
+import com.td.mbna.msec.core.session.SessionProvider;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+public class AccountStatementResourceTest {
+
+    @InjectMocks
+    private AccountStatementResource accountStatementResource;
+
+    @Mock
+    private AccountStatementService accountStatementService;
+
+    @Mock
+    private StatementDisplayService statementDisplayService;
+
+    @Mock
+    private StatementDisplayHelper statementDisplayHelper;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private HttpServletRequest httpServletRequest;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        // Mock HttpServletRequest context
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(httpServletRequest));
+    }
+
+    @Test
+    public void testGetCurrentStatement() {
+        String accountId = "12345";
+        Statement statement = new Statement(); // create a mock statement object
+
+        when(sessionProvider.getAccount(accountId)).thenReturn(new AccountDetails());
+        when(statementDisplayService.getCurrentStatement(any(), any())).thenReturn(statement);
+
+        Map<String, Object> response = accountStatementResource.getCurrentStatement(accountId, httpServletRequest);
+
+        assertEquals(MsecbffConstants.SUCCESS, response.get(MsecbffConstants.STATUS));
+        assertEquals(statement, response.get("statement"));
+    }
+
+    @Test
+    public void testGetStatement() throws ParseException {
+        String accountId = "12345";
+        Statement statement = new Statement(); // create a mock statement object
+
+        when(statementDisplayService.getStatement(accountId, httpServletRequest)).thenReturn(statement);
+
+        Map<String, Object> response = accountStatementResource.getStatement(accountId, httpServletRequest);
+
+        assertEquals(MsecbffConstants.SUCCESS, response.get(MsecbffConstants.STATUS));
+        assertEquals(statement, response.get("statement"));
+    }
+
+    @Test
+    public void testGetStatementByClosingDate() {
+        String accountId = "12345";
+        String closingDate = "2024-10-16"; // replace with a valid date
+        Statement statement = new Statement(); // create a mock statement object
+
+        when(statementDisplayService.getStatementByClosingDates(accountId, closingDate, httpServletRequest)).thenReturn(statement);
+
+        Map<String, Object> response = accountStatementResource.getStatementByClosingDate(accountId, closingDate, httpServletRequest);
+
+        assertEquals(MsecbffConstants.SUCCESS, response.get(MsecbffConstants.STATUS));
+        assertEquals(statement, response.get("statement"));
+    }
+
+    @Test
+    public void testGetStatementByClosingDateNew() throws ParseException {
+        String accountId = "12345";
+        Statement statement = new Statement(); // create a mock statement object
+        when(sessionProvider.getCurrentAccount()).thenReturn(new AccountDetails());
+
+        Map<String, String> closingDateMap = new HashMap<>();
+        closingDateMap.put("2024-10-16", "Statement 1");
+        when(statementDisplayHelper.getStatementClosingDates(any())).thenReturn(closingDateMap);
+        when(statementDisplayService.getStatementByClosingDates(any(), any(), any())).thenReturn(statement);
+        when(statementDisplayService.prepareDropdownValues(statement, any())).thenReturn(new HashMap<>());
+
+        Map<String, Object> response = accountStatementResource.getStatementByClosingDateNew(httpServletRequest);
+
+        assertEquals(MsecbffConstants.SUCCESS, response.get(MsecbffConstants.STATUS));
+        assertNotNull(response.get("closingDate"));
+        assertNotNull(response.get("additionalFields"));
+    }
+
+    @Test
+    public void testGetIpEligibleTransactions() {
+        String accountId = "12345";
+        IpEligibleTransactionsResponse response = new IpEligibleTransactionsResponse(); // create a mock response object
+        AccountDetails accountDetails = new AccountDetails();
+        accountDetails.setAccountId(accountId);
+
+        when(sessionProvider.getCurrentAccount()).thenReturn(accountDetails);
+        when(accountStatementService.getIpEligibleTransactions(any())).thenReturn(response);
+
+        IpEligibleTransactionsResponse actualResponse = accountStatementResource.getIpEligibleTransactions(accountId, httpServletRequest);
+
+        assertEquals(response, actualResponse);
+        verify(sessionProvider).setCurrentAccount(accountId);
+    }
+}

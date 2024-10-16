@@ -1,0 +1,69 @@
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class PlasticCodeRequestTest {
+
+    @Test
+    public void testConstructorAndGetters() {
+        // Arrange
+        String expectedProductCodes = "Code123, Code456";
+        String expectedPoCode = "PO123456";
+
+        // Act
+        PlasticCodeRequest request = new PlasticCodeRequest(expectedProductCodes, expectedPoCode);
+
+        // Assert
+        assertEquals(expectedProductCodes, request.getProductCodes());
+        assertEquals(expectedPoCode, request.getPoCode());
+    }
+
+    @Test
+    public void testSetters() {
+        // Arrange
+        PlasticCodeRequest request = new PlasticCodeRequest(null, null);
+        String productCodes = "Code789, Code101112";
+        String poCode = "PO789101112";
+
+        // Act
+        request.setProductCodes(productCodes);
+        request.setPoCode(poCode);
+
+        // Assert
+        assertEquals(productCodes, request.getProductCodes());
+        assertEquals(poCode, request.getPoCode());
+    }
+
+    @Test
+    public void testFluentSetters() {
+        // Arrange
+        String expectedProductCodes = "CodeABC, CodeDEF";
+        String expectedPoCode = "POABCDEF";
+
+        // Act
+        PlasticCodeRequest request = new PlasticCodeRequest(null, null)
+                .setProductCodes(expectedProductCodes)
+                .setPoCode(expectedPoCode);
+
+        // Assert
+        assertEquals(expectedProductCodes, request.getProductCodes());
+        assertEquals(expectedPoCode, request.getPoCode());
+    }
+
+    @Test
+    public void testBuilder() {
+        // Arrange
+        String expectedProductCodes = "CodeXYZ, CodeLMN";
+        String expectedPoCode = "POLMNXYZ";
+
+        // Act
+        PlasticCodeRequest request = new PlasticCodeRequest.PlasticCodeRequestBuilder()
+                .setProductCodes(expectedProductCodes)
+                .setPoCodes(expectedPoCode)
+                .build();
+
+        // Assert
+        assertEquals(expectedProductCodes, request.getProductCodes());
+        assertEquals(expectedPoCode, request.getPoCode());
+    }
+}

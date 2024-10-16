@@ -1,0 +1,46 @@
+import org.junit.jupiter.api.Test;
+import java.math.BigDecimal;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class IPPlanListResponseTest {
+
+    @Test
+    public void testDefaultConstructor() {
+        // Arrange
+        IPPlanListResponse response = new IPPlanListResponse();
+
+        // Act
+        BigDecimal totalRemainingBalance = response.getTotalRemainingBalance();
+        List<ActiveIpPlanSummary> activePlans = response.getActivePlans();
+        List<InactiveIpPlanSummary> inactivePlans = response.getInactivePlans();
+
+        // Assert
+        assertEquals(BigDecimal.ZERO, totalRemainingBalance, "Default totalRemainingBalance should be BigDecimal.ZERO");
+        assertNotNull(activePlans, "activePlans list should not be null");
+        assertTrue(activePlans.isEmpty(), "activePlans list should be empty by default");
+        
+        assertNotNull(inactivePlans, "inactivePlans list should not be null");
+        assertTrue(inactivePlans.isEmpty(), "inactivePlans list should be empty by default");
+    }
+
+    @Test
+    public void testSettersAndGetters() {
+        // Arrange
+        IPPlanListResponse response = new IPPlanListResponse();
+        BigDecimal testTotalRemainingBalance = BigDecimal.valueOf(100.50);
+        ActiveIpPlanSummary activePlan = new ActiveIpPlanSummary(); // Assuming constructor exists
+        InactiveIpPlanSummary inactivePlan = new InactiveIpPlanSummary(); // Assuming constructor exists
+        
+        // Act
+        response.setTotalRemainingBalance(testTotalRemainingBalance);
+        response.getActivePlans().add(activePlan);
+        response.getInactivePlans().add(inactivePlan);
+
+        // Assert
+        assertEquals(testTotalRemainingBalance, response.getTotalRemainingBalance(), "Total remaining balance should match the set value");
+        assertEquals(1, response.getActivePlans().size(), "Active plans list should contain one plan");
+        assertEquals(1, response.getInactivePlans().size(), "Inactive plans list should contain one plan");
+    }
+}

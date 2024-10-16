@@ -1,0 +1,80 @@
+import com.td.mbna.msec.account.application.CardManagementService;
+import com.td.mbna.msec.account.domain.CardReplacementInfo;
+import com.td.mbna.msec.account.domain.CardReplacementRequest;
+import com.td.mbna.msec.account.domain.CardReplacementResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
+public class CardReplacementResourceTest {
+
+    @InjectMocks
+    private CardReplacementResource cardReplacementResource;
+
+    @Mock
+    private CardManagementService cardManagementService;
+
+    @Mock
+    private HttpServletRequest httpServletRequest;
+
+    @Mock
+    private HttpServletResponse httpServletResponse;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testGetAccountHolderNameList() {
+        CardReplacementInfo expectedInfo = new CardReplacementInfo(); // create a mock CardReplacementInfo object
+
+        when(cardManagementService.getCardReplacementInfo(httpServletRequest, httpServletResponse)).thenReturn(expectedInfo);
+
+        CardReplacementInfo actualInfo = cardReplacementResource.getAccountHolderNameList(httpServletRequest, httpServletResponse);
+
+        assertEquals(expectedInfo, actualInfo);
+    }
+
+    @Test
+    public void testValidateCardReplacement() {
+        CardReplacementRequest request = new CardReplacementRequest(); // create a mock request object
+        CardReplacementResponse expectedResponse = new CardReplacementResponse(); // create a mock response object
+
+        when(cardManagementService.replaceCard(request, true, httpServletRequest, httpServletResponse)).thenReturn(expectedResponse);
+
+        CardReplacementResponse actualResponse = cardReplacementResource.validateCardReplacement(request, httpServletRequest, httpServletResponse);
+
+        assertEquals(expectedResponse, actualResponse);
+    }
+
+    @Test
+    public void testSubmitCardReplacement() {
+        CardReplacementRequest request = new CardReplacementRequest(); // create a mock request object
+        CardReplacementResponse expectedResponse = new CardReplacementResponse(); // create a mock response object
+
+        when(cardManagementService.replaceCard(request, false, httpServletRequest, httpServletResponse)).thenReturn(expectedResponse);
+
+        CardReplacementResponse actualResponse = cardReplacementResource.submitCardReplacement(request, httpServletRequest, httpServletResponse);
+
+        assertEquals(expectedResponse, actualResponse);
+    }
+
+    @Test
+    public void testHandleReplacementCard() {
+        ModelAndView modelAndView = cardReplacementResource.handleReplacementCard();
+
+        assertEquals("redirect:index.html#/account/cardreplacement/entry", modelAndView.getViewName());
+    }
+}

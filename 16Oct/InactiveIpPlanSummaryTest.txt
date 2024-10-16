@@ -1,0 +1,85 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class InactiveIpPlanSummaryTest {
+
+    @Test
+    public void testDefaultConstructor() {
+        // Arrange
+        InactiveIpPlanSummary summary = new InactiveIpPlanSummary();
+
+        // Act & Assert
+        assertNull(summary.getId(), "Default id should be null");
+        assertNull(summary.getPlanName(), "Default planName should be null");
+        assertNull(summary.getCreatedOn(), "Default createdOn should be null");
+        assertNull(summary.getClosedOn(), "Default closedOn should be null");
+    }
+
+    @Test
+    public void testSetId() {
+        // Arrange
+        InactiveIpPlanSummary summary = new InactiveIpPlanSummary();
+        String testId = "12345";
+
+        // Act
+        summary.setId(testId);
+
+        // Assert
+        assertEquals(testId, summary.getId(), "Id should be set correctly");
+    }
+
+    @Test
+    public void testSetPlanName() {
+        // Arrange
+        InactiveIpPlanSummary summary = new InactiveIpPlanSummary();
+        String testPlanName = "Test Plan";
+
+        // Act
+        summary.setPlanName(testPlanName);
+
+        // Assert
+        assertEquals(testPlanName, summary.getPlanName(), "Plan name should be set correctly");
+    }
+
+    @Test
+    public void testSetCreatedOn() {
+        // Arrange
+        InactiveIpPlanSummary summary = new InactiveIpPlanSummary();
+        String testCreatedOn = "2024-01-01";
+
+        // Act
+        summary.setCreatedOn(testCreatedOn);
+
+        // Assert
+        assertEquals(testCreatedOn, summary.getCreatedOn(), "Created on date should be set correctly");
+    }
+
+    @Test
+    public void testSetClosedOn() {
+        // Arrange
+        InactiveIpPlanSummary summary = new InactiveIpPlanSummary();
+        String testClosedOn = "2024-12-31";
+
+        // Act
+        summary.setClosedOn(testClosedOn);
+
+        // Assert
+        assertEquals(testClosedOn, summary.getClosedOn(), "Closed on date should be set correctly");
+    }
+
+    @Test
+    public void testAllSettersAndGetters() {
+        // Arrange
+        InactiveIpPlanSummary summary = new InactiveIpPlanSummary();
+        summary.setId("12345");
+        summary.setPlanName("Test Plan");
+        summary.setCreatedOn("2024-01-01");
+        summary.setClosedOn("2024-12-31");
+
+        // Act & Assert
+        assertEquals("12345", summary.getId(), "Id should match");
+        assertEquals("Test Plan", summary.getPlanName(), "Plan name should match");
+        assertEquals("2024-01-01", summary.getCreatedOn(), "Created on date should match");
+        assertEquals("2024-12-31", summary.getClosedOn(), "Closed on date should match");
+    }
+}

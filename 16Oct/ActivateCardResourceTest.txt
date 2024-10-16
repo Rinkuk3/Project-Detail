@@ -1,0 +1,91 @@
+import com.td.mbna.msec.account.application.CardManagementService;
+import com.td.mbna.msec.account.domain.CardActivationRequest;
+import com.td.mbna.msec.account.domain.CardActivationResponse;
+import com.td.mbna.msec.account.domain.CreditCard;
+import com.td.mbna.msec.core.session.SessionProvider;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.web.servlet.ModelAndView;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+public class ActivateCardResourceTest {
+
+    @InjectMocks
+    private ActivateCardResource activateCardResource;
+
+    @Mock
+    private CardManagementService cardActivationService;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testRetrieveCreditCardByAccountId() {
+        String accountId = "12345";
+        CreditCard expectedCreditCard = new CreditCard(); // create a mock CreditCard object
+
+        when(cardActivationService.retrieveCreditCard(accountId)).thenReturn(expectedCreditCard);
+
+        CreditCard actualCreditCard = activateCardResource.retrieveCreditCard(accountId);
+
+        assertEquals(expectedCreditCard, actualCreditCard);
+    }
+
+    @Test
+    public void testRetrieveCreditCardWithoutAccountId() {
+        CreditCard expectedCreditCard = new CreditCard(); // create a mock CreditCard object
+
+        when(cardActivationService.retrieveCreditCard()).thenReturn(expectedCreditCard);
+
+        CreditCard actualCreditCard = activateCardResource.retrieveCreditCard();
+
+        assertEquals(expectedCreditCard, actualCreditCard);
+    }
+
+    @Test
+    public void testActivateCard() {
+        CardActivationRequest request = new CardActivationRequest(); // create a mock request object
+        CardActivationResponse expectedResponse = new CardActivationResponse(); // create a mock response object
+
+        when(cardActivationService.activateCard(request)).thenReturn(expectedResponse);
+
+        CardActivationResponse actualResponse = activateCardResource.activateCard(request);
+
+        assertEquals(expectedResponse, actualResponse);
+    }
+
+    @Test
+    public void testHandleActivateCardWithAccount() {
+        com.td.mbna.msec.account.domain.AccountDetails account = new com.td.mbna.msec.account.domain.AccountDetails();
+        account.setAccountId("12345");
+
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(account);
+
+        ModelAndView modelAndView = activateCardResource.handleActivateCard();
+
+        assertNotNull(modelAndView);
+        assertEquals("redirect:index.html#/cardactivation/activate", modelAndView.getViewName());
+        verify(sessionProvider).setCurrentAccount(account.getAccountId());
+    }
+
+    @Test
+    public void testHandleActivateCardWithoutAccount() {
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(null);
+
+        ModelAndView modelAndView = activateCardResource.handleActivateCard();
+
+        assertNotNull(modelAndView);
+        assertEquals("redirect:index.html#/cardactivation/activate", modelAndView.getViewName());
+        verify(sessionProvider, never()).setCurrentAccount(anyString());
+    }
+}

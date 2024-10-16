@@ -1,0 +1,93 @@
+import com.td.mbna.msec.account.domain.CardArtInfoUrlParts;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CardArtInfoUrlPartsTest {
+
+    private CardArtInfoUrlParts cardArtInfoUrlParts;
+
+    @BeforeEach
+    public void setUp() {
+        // Initialize the object before each test
+        cardArtInfoUrlParts = new CardArtInfoUrlParts();
+    }
+
+    @Test
+    public void testDefaultConstructor() {
+        // Assert that all fields are initialized to null
+        assertNull(cardArtInfoUrlParts.getServerUrl(), "Server URL should be null");
+        assertNull(cardArtInfoUrlParts.getLanguagePostfix(), "Language Postfix should be null");
+        assertNull(cardArtInfoUrlParts.getImageLocation(), "Image Location should be null");
+        assertNull(cardArtInfoUrlParts.getImageType(), "Image Type should be null");
+        assertNull(cardArtInfoUrlParts.getImageExtension(), "Image Extension should be null");
+    }
+
+    @Test
+    public void testSettersAndGetters() {
+        // Arrange
+        String serverUrl = "http://example.com/";
+        String languagePostfix = "/en";
+        String imageLocation = "images/";
+        String imageType = "card_";
+        String imageExtension = ".png";
+
+        // Act
+        cardArtInfoUrlParts.setServerUrl(serverUrl);
+        cardArtInfoUrlParts.setLanguagePostfix(languagePostfix);
+        cardArtInfoUrlParts.setImageLocation(imageLocation);
+        cardArtInfoUrlParts.setImageType(imageType);
+        cardArtInfoUrlParts.setImageExtension(imageExtension);
+
+        // Assert
+        assertEquals(serverUrl, cardArtInfoUrlParts.getServerUrl(), "Server URL should be set correctly");
+        assertEquals(languagePostfix, cardArtInfoUrlParts.getLanguagePostfix(), "Language Postfix should be set correctly");
+        assertEquals(imageLocation, cardArtInfoUrlParts.getImageLocation(), "Image Location should be set correctly");
+        assertEquals(imageType, cardArtInfoUrlParts.getImageType(), "Image Type should be set correctly");
+        assertEquals(imageExtension, cardArtInfoUrlParts.getImageExtension(), "Image Extension should be set correctly");
+    }
+
+    @Test
+    public void testCreateCardArtInfoUrl() {
+        // Arrange
+        String serverUrl = "http://example.com/";
+        String languagePostfix = "/en";
+        String imageLocation = "images/";
+        String imageType = "card_";
+        String imageExtension = ".png";
+        String pictureId = "12345";
+
+        cardArtInfoUrlParts.setServerUrl(serverUrl);
+        cardArtInfoUrlParts.setLanguagePostfix(languagePostfix);
+        cardArtInfoUrlParts.setImageLocation(imageLocation);
+        cardArtInfoUrlParts.setImageType(imageType);
+        cardArtInfoUrlParts.setImageExtension(imageExtension);
+
+        String expectedUrl = "http://example.com/en/images/card_12345.png";
+
+        // Act
+        String actualUrl = cardArtInfoUrlParts.createCardArtInfoUrl("en", pictureId);
+
+        // Assert
+        assertEquals(expectedUrl, actualUrl, "The generated URL should match the expected URL");
+    }
+
+    @Test
+    public void testCreateCardArtInfoUrlWithDifferentLanguage() {
+        // Arrange
+        cardArtInfoUrlParts.setServerUrl("http://example.com/");
+        cardArtInfoUrlParts.setLanguagePostfix("/fr");
+        cardArtInfoUrlParts.setImageLocation("images/");
+        cardArtInfoUrlParts.setImageType("card_");
+        cardArtInfoUrlParts.setImageExtension(".png");
+
+        String expectedUrl = "http://example.com/fr/images/card_67890.png";
+
+        // Act
+        String actualUrl = cardArtInfoUrlParts.createCardArtInfoUrl("FR", "67890");
+
+        // Assert
+        assertEquals(expectedUrl, actualUrl, "The generated URL should match the expected URL with uppercase language code");
+    }
+}

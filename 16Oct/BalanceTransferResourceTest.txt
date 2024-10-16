@@ -1,0 +1,218 @@
+package com.td.mbna.msec.balancetransfer.resource;
+
+import com.td.mbna.msec.balancetransfer.application.impl.BalanceTransferServiceImpl;
+import com.td.mbna.msec.balancetransfer.domain.*;
+import com.td.mbna.msec.common.KeyValuePair;
+import com.td.mbna.msec.core.session.SessionProvider;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+class BalanceTransferResourceTest {
+
+    @InjectMocks
+    private BalanceTransferResource balanceTransferResource;
+
+    @Mock
+    private BalanceTransferServiceImpl balanceTransferService;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private HttpServletResponse response;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testGetCreditLimitInfoResponse() {
+        CreditLimitInfoResponse expectedResponse = new CreditLimitInfoResponse();
+        when(balanceTransferService.getCreditLimitInfoResponse()).thenReturn(expectedResponse);
+
+        CreditLimitInfoResponse actualResponse = balanceTransferResource.getCreditLimitInfoResponse();
+
+        assertEquals(expectedResponse, actualResponse);
+        verify(balanceTransferService).getCreditLimitInfoResponse();
+    }
+
+    @Test
+    void testGetCreditorList() {
+        List<KeyValuePair> expectedList = Collections.singletonList(new KeyValuePair("key", "value"));
+        when(balanceTransferService.getCreditorList()).thenReturn(expectedList);
+
+        List<KeyValuePair> actualList = balanceTransferResource.getCreditorList();
+
+        assertEquals(expectedList, actualList);
+        verify(balanceTransferService).getCreditorList();
+    }
+
+    @Test
+    void testGetSavedPayees() {
+        List<Payee> expectedPayees = Collections.singletonList(new Payee());
+        when(balanceTransferService.getSavedPayees()).thenReturn(expectedPayees);
+
+        List<Payee> actualPayees = balanceTransferResource.getSavedPayees();
+
+        assertEquals(expectedPayees, actualPayees);
+        verify(balanceTransferService).getSavedPayees();
+    }
+
+    @Test
+    void testGetBalanceTransferInfo() {
+        String offerId = "offer123";
+        BalanceTransferDisclosureInfo expectedInfo = new BalanceTransferDisclosureInfo();
+        when(balanceTransferService.getBalanceTransferInfo(offerId)).thenReturn(expectedInfo);
+
+        BalanceTransferDisclosureInfo actualInfo = balanceTransferResource.getBalanceTransferInfo(offerId);
+
+        assertEquals(expectedInfo, actualInfo);
+        verify(balanceTransferService).getBalanceTransferInfo(offerId);
+    }
+
+    @Test
+    void testVerifyPayee() {
+        BalanceTransferToCreditorPayeeRequest request = new BalanceTransferToCreditorPayeeRequest();
+        BalanceTransferToCreditorPayeeResponse expectedResponse = new BalanceTransferToCreditorPayeeResponse();
+        when(balanceTransferService.addPayee(request, true)).thenReturn(expectedResponse);
+
+        BalanceTransferToCreditorPayeeResponse actualResponse = balanceTransferResource.verifyPayee(request);
+
+        assertEquals(expectedResponse, actualResponse);
+        verify(balanceTransferService).addPayee(request, true);
+    }
+
+    @Test
+    void testAddPayee() {
+        BalanceTransferToCreditorPayeeRequest request = new BalanceTransferToCreditorPayeeRequest();
+        BalanceTransferToCreditorPayeeResponse expectedResponse = new BalanceTransferToCreditorPayeeResponse();
+        when(balanceTransferService.addPayee(request, false)).thenReturn(expectedResponse);
+
+        BalanceTransferToCreditorPayeeResponse actualResponse = balanceTransferResource.addPayee(request);
+
+        assertEquals(expectedResponse, actualResponse);
+        verify(balanceTransferService).addPayee(request, false);
+    }
+
+    @Test
+    void testUpdatePayee() {
+        BalanceTransferToCreditorPayeeRequest request = new BalanceTransferToCreditorPayeeRequest();
+        BalanceTransferToCreditorPayeeResponse expectedResponse = new BalanceTransferToCreditorPayeeResponse();
+        when(balanceTransferService.updatePayee(request, request, response)).thenReturn(expectedResponse);
+
+        BalanceTransferToCreditorPayeeResponse actualResponse = balanceTransferResource.updatePayee(request, request, response);
+
+        assertEquals(expectedResponse, actualResponse);
+        verify(balanceTransferService).updatePayee(request, request, response);
+    }
+
+    @Test
+    void testDeletePayeeWithRequest() {
+        BalanceTransferToCreditorPayeeRequest request = new BalanceTransferToCreditorPayeeRequest();
+        BalanceTransferToCreditorPayeeResponse expectedResponse = new BalanceTransferToCreditorPayeeResponse();
+        when(balanceTransferService.deletePayee(request, request, response)).thenReturn(expectedResponse);
+
+        BalanceTransferToCreditorPayeeResponse actualResponse = balanceTransferResource.deletePayee(request, request, response);
+
+        assertEquals(expectedResponse, actualResponse);
+        verify(balanceTransferService).deletePayee(request, request, response);
+    }
+
+    @Test
+    void testDeletePayeeWithId() {
+        String payeeId = "payee123";
+        BalanceTransferToCreditorPayeeResponse expectedResponse = new BalanceTransferToCreditorPayeeResponse();
+        when(balanceTransferService.deletePayee(payeeId)).thenReturn(expectedResponse);
+
+        BalanceTransferToCreditorPayeeResponse actualResponse = balanceTransferResource.deletePayee(payeeId);
+
+        assertEquals(expectedResponse, actualResponse);
+        verify(balanceTransferService).deletePayee(payeeId);
+    }
+
+    @Test
+    void testGetBalanceTransferSummary() {
+        BalanceTransferRequest request = new BalanceTransferRequest();
+        BalanceTransferSummary expectedSummary = new BalanceTransferSummary();
+        when(balanceTransferService.getBalanceTransferSummary(request)).thenReturn(expectedSummary);
+
+        BalanceTransferSummary actualSummary = balanceTransferResource.getBalanceTransferSummary(request);
+
+        assertEquals(expectedSummary, actualSummary);
+        verify(balanceTransferService).getBalanceTransferSummary(request);
+    }
+
+    @Test
+    void testVerifyBT() {
+        BalanceTransferRequest request = new BalanceTransferRequest();
+        BalanceTransferVerificationResponse expectedResponse = new BalanceTransferVerificationResponse();
+        when(balanceTransferService.balanceTransferVerify(request)).thenReturn(expectedResponse);
+
+        BalanceTransferVerificationResponse actualResponse = balanceTransferResource.verifyBT(request);
+
+        assertEquals(expectedResponse, actualResponse);
+        verify(balanceTransferService).balanceTransferVerify(request);
+    }
+
+    @Test
+    void testSubmit() {
+        BalanceTransferRequest request = new BalanceTransferRequest();
+        BalanceTransferResponse expectedResponse = new BalanceTransferResponse();
+        when(balanceTransferService.balanceTransferSubmit(request)).thenReturn(expectedResponse);
+
+        BalanceTransferResponse actualResponse = balanceTransferResource.submit(request);
+
+        assertEquals(expectedResponse, actualResponse);
+        verify(balanceTransferService).balanceTransferSubmit(request);
+    }
+
+    @Test
+    void testHandleBalanceTransferInitWithOfferId() {
+        String offerId = "offer123";
+        String acctId = "acct456";
+        when(request.getParameter("offerId")).thenReturn(offerId);
+        when(request.getParameter("acctId")).thenReturn(acctId);
+
+        ModelAndView modelAndView = balanceTransferResource.handleBalanceTransferInit(request, response);
+
+        assertNotNull(modelAndView);
+        assertEquals("redirect:index.html#/account/bt/entry?offerID=offer123", modelAndView.getViewName());
+        verify(sessionProvider).setCurrentAccount(acctId);
+    }
+
+    @Test
+    void testHandleBalanceTransferInitWithoutOfferId() {
+        String acctId = "acct456";
+        when(request.getParameter("offerId")).thenReturn(null);
+        when(request.getParameter("acctId")).thenReturn(acctId);
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(acctId);
+        when(balanceTransferService.getBalanceTransferInfo(any())).thenReturn(new BalanceTransferDisclosureInfo());
+
+        ModelAndView modelAndView = balanceTransferResource.handleBalanceTransferInit(request, response);
+
+        assertNotNull(modelAndView);
+        assertTrue(modelAndView.getViewName().startsWith("redirect:index.html#/account/bt/entry?offerID="));
+        verify(sessionProvider).setCurrentAccount(acctId);
+    }
+}

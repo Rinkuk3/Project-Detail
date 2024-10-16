@@ -1,0 +1,85 @@
+import com.td.mbna.msec.account.domain.AuthorizedUser;
+import com.td.mbna.msec.profile.model.Address;
+import com.td.mbna.msec.profile.model.PhoneNumber;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class AuthorizedUserTest {
+
+    @Test
+    public void testDefaultConstructorAndGetters() {
+        // Arrange
+        AuthorizedUser authorizedUser = new AuthorizedUser();
+
+        // Act & Assert
+        assertNull(authorizedUser.getName(), "Name should be null by default");
+        assertNull(authorizedUser.getAccountNumber(), "Account number should be null by default");
+        assertNull(authorizedUser.getEndingIn(), "Ending in should be null by default");
+        assertNull(authorizedUser.getDob(), "DOB should be null by default");
+        assertNull(authorizedUser.getAliasCustomerID(), "Alias customer ID should be null by default");
+        assertTrue(authorizedUser.isAddressSameAsPrimary(), "Address same as primary should be true by default");
+        assertNull(authorizedUser.getAddress(), "Address should be null by default");
+        assertNull(authorizedUser.getPhone(), "Phone should be null by default");
+    }
+
+    @Test
+    public void testParameterizedConstructorAndGetters() {
+        // Arrange
+        Address address = new Address(); // Assume Address has a default constructor
+        PhoneNumber phone = new PhoneNumber(); // Assume PhoneNumber has a default constructor
+        AuthorizedUser authorizedUser = new AuthorizedUser();
+        
+        // Setting fields
+        authorizedUser.setName("John Doe");
+        authorizedUser.setAccountNumber("123456");
+        authorizedUser.setEndingIn("7890");
+        authorizedUser.setDob("01/01/1990");
+        authorizedUser.setAliasCustomerID("alias123");
+        authorizedUser.setAddress(address);
+        authorizedUser.setPhone(phone);
+        authorizedUser.setAddressSameAsPrimary(false);
+
+        // Act & Assert
+        assertEquals("John Doe", authorizedUser.getName(), "Name should match");
+        assertEquals("123456", authorizedUser.getAccountNumber(), "Account number should match");
+        assertEquals("7890", authorizedUser.getEndingIn(), "Ending in should match");
+        assertEquals("01/01/1990", authorizedUser.getDob(), "DOB should match");
+        assertEquals("alias123", authorizedUser.getAliasCustomerID(), "Alias customer ID should match");
+        assertEquals(address, authorizedUser.getAddress(), "Address should match");
+        assertEquals(phone, authorizedUser.getPhone(), "Phone should match");
+        assertFalse(authorizedUser.isAddressSameAsPrimary(), "Address same as primary should be false");
+    }
+
+    @Test
+    public void testSerialization() {
+        // Arrange
+        AuthorizedUser authorizedUser = new AuthorizedUser();
+        authorizedUser.setName("Jane Doe");
+        authorizedUser.setAccountNumber("654321");
+        
+        // Simulate serialization and deserialization
+        try {
+            byte[] serialized = serialize(authorizedUser);
+            AuthorizedUser deserializedUser = deserialize(serialized);
+
+            // Act & Assert
+            assertEquals(authorizedUser.getName(), deserializedUser.getName(), "Name should match after serialization");
+            assertEquals(authorizedUser.getAccountNumber(), deserializedUser.getAccountNumber(), "Account number should match after serialization");
+        } catch (Exception e) {
+            fail("Serialization test failed with exception: " + e.getMessage());
+        }
+    }
+
+    private byte[] serialize(AuthorizedUser authorizedUser) throws Exception {
+        // Implement serialization logic here (e.g., using ObjectOutputStream)
+        // For the purpose of this test, we will assume it returns byte array of the serialized object
+        return new byte[0]; // Replace with actual serialization code
+    }
+
+    private AuthorizedUser deserialize(byte[] data) throws Exception {
+        // Implement deserialization logic here (e.g., using ObjectInputStream)
+        // For the purpose of this test, we will return a new AuthorizedUser object
+        return new AuthorizedUser(); // Replace with actual deserialization code
+    }
+}

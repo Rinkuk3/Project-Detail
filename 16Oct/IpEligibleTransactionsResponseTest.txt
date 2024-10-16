@@ -1,0 +1,66 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class IpEligibleTransactionsResponseTest {
+
+    @Test
+    public void testDefaultConstructor() {
+        // Arrange
+        IpEligibleTransactionsResponse response = new IpEligibleTransactionsResponse();
+
+        // Act
+        List<AccountTransaction> transactions = response.getIpEligibleTransactions();
+
+        // Assert
+        assertNull(transactions, "Default ipEligibleTransactions should be null");
+    }
+
+    @Test
+    public void testSetIpEligibleTransactions() {
+        // Arrange
+        IpEligibleTransactionsResponse response = new IpEligibleTransactionsResponse();
+        List<AccountTransaction> transactions = new ArrayList<>();
+        transactions.add(new AccountTransaction()); // Assuming AccountTransaction has a default constructor
+
+        // Act
+        response.setIpEligibleTransactions(transactions);
+
+        // Assert
+        assertEquals(transactions, response.getIpEligibleTransactions(), "The ipEligibleTransactions should match the set value");
+    }
+
+    @Test
+    public void testSetAndGetMultipleTransactions() {
+        // Arrange
+        IpEligibleTransactionsResponse response = new IpEligibleTransactionsResponse();
+        List<AccountTransaction> transactions = new ArrayList<>();
+        AccountTransaction transaction1 = new AccountTransaction(); // Assuming AccountTransaction has a default constructor
+        AccountTransaction transaction2 = new AccountTransaction(); // Assuming AccountTransaction has a default constructor
+        transactions.add(transaction1);
+        transactions.add(transaction2);
+
+        // Act
+        response.setIpEligibleTransactions(transactions);
+
+        // Assert
+        List<AccountTransaction> retrievedTransactions = response.getIpEligibleTransactions();
+        assertNotNull(retrievedTransactions, "The retrieved transactions should not be null");
+        assertEquals(2, retrievedTransactions.size(), "The size of the retrieved transactions should be 2");
+        assertEquals(transaction1, retrievedTransactions.get(0), "The first transaction should match");
+        assertEquals(transaction2, retrievedTransactions.get(1), "The second transaction should match");
+    }
+
+    @Test
+    public void testSetIpEligibleTransactionsToNull() {
+        // Arrange
+        IpEligibleTransactionsResponse response = new IpEligibleTransactionsResponse();
+
+        // Act
+        response.setIpEligibleTransactions(null);
+
+        // Assert
+        assertNull(response.getIpEligibleTransactions(), "ipEligibleTransactions should be null after setting it to null");
+    }
+}

@@ -1,0 +1,46 @@
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class StatementDeliveryStatusRequestTest {
+
+    @Test
+    public void testSetAndGetAccountNumber() {
+        // Arrange
+        StatementDeliveryStatusRequest request = new StatementDeliveryStatusRequest();
+        String expectedAccountNumber = "123456789";
+
+        // Act
+        request.setAccountNumber(expectedAccountNumber);
+        String actualAccountNumber = request.getAccountNumber();
+
+        // Assert
+        assertEquals(expectedAccountNumber, actualAccountNumber, "The account number should match the expected value.");
+    }
+
+    @Test
+    public void testAccountNumberInitiallyNull() {
+        // Arrange
+        StatementDeliveryStatusRequest request = new StatementDeliveryStatusRequest();
+
+        // Act
+        String actualAccountNumber = request.getAccountNumber();
+
+        // Assert
+        assertNull(actualAccountNumber, "The initial account number should be null.");
+    }
+
+    @Test
+    public void testSetAccountNumberToNull() {
+        // Arrange
+        StatementDeliveryStatusRequest request = new StatementDeliveryStatusRequest();
+        String expectedAccountNumber = null;
+
+        // Act
+        request.setAccountNumber(expectedAccountNumber);
+        String actualAccountNumber = request.getAccountNumber();
+
+        // Assert
+        assertNull(actualAccountNumber, "The account number should be null after setting it to null.");
+    }
+}

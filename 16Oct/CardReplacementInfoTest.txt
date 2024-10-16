@@ -1,0 +1,81 @@
+import com.td.mbna.msec.account.domain.CardReplacementInfo;
+import com.td.mbna.msec.profile.model.Address;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CardReplacementInfoTest {
+
+    private CardReplacementInfo cardReplacementInfo;
+
+    @BeforeEach
+    public void setUp() {
+        // Initialize the object before each test
+        cardReplacementInfo = CardReplacementInfo.builder()
+                .accountHolders(new ArrayList<>())
+                .address(new Address())  // Assuming Address has a default constructor
+                .showChangeAddress(true)
+                .showAU(false)
+                .build();
+    }
+
+    @Test
+    public void testBuilder() {
+        // Arrange
+        List<AccountHolder> accountHolders = new ArrayList<>();
+        Address address = new Address(); // Assuming Address has a default constructor
+        boolean showChangeAddress = true;
+        boolean showAU = false;
+
+        // Act
+        CardReplacementInfo info = CardReplacementInfo.builder()
+                .accountHolders(accountHolders)
+                .address(address)
+                .showChangeAddress(showChangeAddress)
+                .showAU(showAU)
+                .build();
+
+        // Assert
+        assertEquals(accountHolders, info.getAccountHolders(), "Account holders should match");
+        assertEquals(address, info.getAddress(), "Address should match");
+        assertEquals(showChangeAddress, info.isShowChangeAddress(), "Show Change Address should match");
+        assertEquals(showAU, info.isShowAU(), "Show AU should match");
+    }
+
+    @Test
+    public void testGetters() {
+        // Act
+        List<AccountHolder> accountHolders = cardReplacementInfo.getAccountHolders();
+        Address address = cardReplacementInfo.getAddress();
+        boolean showChangeAddress = cardReplacementInfo.isShowChangeAddress();
+        boolean showAU = cardReplacementInfo.isShowAU();
+
+        // Assert
+        assertNotNull(accountHolders, "Account holders should not be null");
+        assertNotNull(address, "Address should not be null");
+        assertTrue(showChangeAddress, "Show Change Address should be true");
+        assertFalse(showAU, "Show AU should be false");
+    }
+
+    @Test
+    public void testDefaultValues() {
+        // Arrange
+        CardReplacementInfo defaultInfo = CardReplacementInfo.builder().build();
+
+        // Act
+        List<AccountHolder> defaultAccountHolders = defaultInfo.getAccountHolders();
+        Address defaultAddress = defaultInfo.getAddress();
+        boolean defaultShowChangeAddress = defaultInfo.isShowChangeAddress();
+        boolean defaultShowAU = defaultInfo.isShowAU();
+
+        // Assert
+        assertNotNull(defaultAccountHolders, "Account holders should not be null");
+        assertNull(defaultAddress, "Address should be null");
+        assertFalse(defaultShowChangeAddress, "Show Change Address should be false by default");
+        assertFalse(defaultShowAU, "Show AU should be false by default");
+    }
+}

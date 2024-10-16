@@ -1,0 +1,48 @@
+import com.td.mbna.msec.account.domain.CardActivationRequest;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CardActivationRequestTest {
+
+    @Test
+    public void testDefaultConstructor() {
+        // Arrange
+        CardActivationRequest request = new CardActivationRequest();
+
+        // Act & Assert
+        assertNull(request.getCardNumber(), "Card number should default to null");
+        assertNull(request.getCvc(), "CVC should default to null");
+        assertEquals(0, request.getExpiryMonth(), "Expiry month should default to 0");
+        assertNull(request.getExpiryYear(), "Expiry year should default to null");
+        assertFalse(request.isPrimaryCardHolder(), "Primary card holder should default to false");
+    }
+
+    @Test
+    public void testSettersAndGetters() {
+        // Arrange
+        CardActivationRequest request = new CardActivationRequest();
+
+        // Act
+        request.setCardNumber("1234567890123456");
+        request.setCvc("123");
+        request.setExpiryMonth(12);
+        request.setExpiryYear("2025");
+        request.setPrimaryCardHolder(true);
+
+        // Assert
+        assertEquals("1234567890123456", request.getCardNumber(), "Card number mismatch");
+        assertEquals("123", request.getCvc(), "CVC mismatch");
+        assertEquals(12, request.getExpiryMonth(), "Expiry month mismatch");
+        assertEquals("2025", request.getExpiryYear(), "Expiry year mismatch");
+        assertTrue(request.isPrimaryCardHolder(), "Expected primary card holder to be true");
+    }
+
+    @Test
+    public void testPrimaryCardHolderSetter() {
+        // Arrange
+        CardActivationRequest request = new CardActivationRequest();
+
+        // Act
+        request.setPrimaryCardHolder(true);
+        assertTrue(request.isPri

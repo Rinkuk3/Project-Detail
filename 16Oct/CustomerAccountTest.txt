@@ -1,0 +1,91 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CustomerAccountTest {
+
+    @Test
+    public void testConstructorAndGetters() {
+        // Arrange
+        Card testCard = new Card(); // Assuming a default constructor is available for Card
+        CustomerAccount customerAccount = new CustomerAccount("123456", "cust123", true, testCard);
+
+        // Act & Assert
+        assertEquals("123456", customerAccount.getAccountNumber(), "Account number should match");
+        assertEquals("cust123", customerAccount.getCustomerId(), "Customer ID should match");
+        assertTrue(customerAccount.isPrimaryAccountHolder(), "Should be a primary account holder");
+        assertEquals(testCard, customerAccount.getCard(), "Card should match");
+    }
+
+    @Test
+    public void testBuilder() {
+        // Arrange
+        Card testCard = new Card(); // Assuming a default constructor is available for Card
+        
+        // Act
+        CustomerAccount customerAccount = new CustomerAccount.CustomerAccountBuilder()
+                .setAccountNumber("654321")
+                .setCustomerId("cust456")
+                .setPrimaryAccountHolder(false)
+                .setCard(testCard)
+                .build();
+
+        // Assert
+        assertEquals("654321", customerAccount.getAccountNumber(), "Account number should match");
+        assertEquals("cust456", customerAccount.getCustomerId(), "Customer ID should match");
+        assertFalse(customerAccount.isPrimaryAccountHolder(), "Should not be a primary account holder");
+        assertEquals(testCard, customerAccount.getCard(), "Card should match");
+    }
+    
+    @Test
+    public void testAccountNumberSetter() {
+        // Arrange
+        Card testCard = new Card();
+        CustomerAccount customerAccount = new CustomerAccount("123456", "cust123", true, testCard);
+        
+        // Act
+        customerAccount = new CustomerAccount("789012", customerAccount.getCustomerId(), customerAccount.isPrimaryAccountHolder(), testCard);
+
+        // Assert
+        assertEquals("789012", customerAccount.getAccountNumber(), "Account number should be updated");
+    }
+    
+    @Test
+    public void testCustomerIdSetter() {
+        // Arrange
+        Card testCard = new Card();
+        CustomerAccount customerAccount = new CustomerAccount("123456", "cust123", true, testCard);
+        
+        // Act
+        customerAccount = new CustomerAccount(customerAccount.getAccountNumber(), "cust789", customerAccount.isPrimaryAccountHolder(), testCard);
+
+        // Assert
+        assertEquals("cust789", customerAccount.getCustomerId(), "Customer ID should be updated");
+    }
+    
+    @Test
+    public void testIsPrimaryAccountHolderSetter() {
+        // Arrange
+        Card testCard = new Card();
+        CustomerAccount customerAccount = new CustomerAccount("123456", "cust123", true, testCard);
+        
+        // Act
+        customerAccount = new CustomerAccount(customerAccount.getAccountNumber(), customerAccount.getCustomerId(), false, testCard);
+
+        // Assert
+        assertFalse(customerAccount.isPrimaryAccountHolder(), "Primary account holder status should be updated");
+    }
+    
+    @Test
+    public void testCardSetter() {
+        // Arrange
+        Card card1 = new Card(); // Assuming a default constructor is available for Card
+        Card card2 = new Card(); // Assuming a different instance or initialized with different values
+        CustomerAccount customerAccount = new CustomerAccount("123456", "cust123", true, card1);
+        
+        // Act
+        customerAccount = new CustomerAccount(customerAccount.getAccountNumber(), customerAccount.getCustomerId(), customerAccount.isPrimaryAccountHolder(), card2);
+
+        // Assert
+        assertEquals(card2, customerAccount.getCard(), "Card should be updated");
+    }
+}
