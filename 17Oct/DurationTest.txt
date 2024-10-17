@@ -1,0 +1,86 @@
+import com.td.mbna.msec.account.domain.mobile.Duration;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class DurationTest {
+
+    private Duration duration;
+
+    @BeforeEach
+    void setUp() {
+        duration = new Duration(30, 60, "2024-12-31");
+    }
+
+    @Test
+    void testConstructor() {
+        // Test constructor initialization
+        Duration duration = new Duration(15, 45, "2025-01-01");
+        assertEquals(15, duration.getExpiryDuration());
+        assertEquals(45, duration.getOfferDuration());
+        assertEquals("2025-01-01", duration.getExpiryDate());
+    }
+
+    @Test
+    void testGetExpiryDuration() {
+        // Test getter for expiryDuration
+        assertEquals(30, duration.getExpiryDuration());
+    }
+
+    @Test
+    void testSetExpiryDuration() {
+        // Test setter for expiryDuration
+        duration.setExpiryDuration(45);
+        assertEquals(45, duration.getExpiryDuration());
+    }
+
+    @Test
+    void testGetOfferDuration() {
+        // Test getter for offerDuration
+        assertEquals(60, duration.getOfferDuration());
+    }
+
+    @Test
+    void testSetOfferDuration() {
+        // Test setter for offerDuration
+        duration.setOfferDuration(90);
+        assertEquals(90, duration.getOfferDuration());
+    }
+
+    @Test
+    void testGetExpiryDate() {
+        // Test getter for expiryDate
+        assertEquals("2024-12-31", duration.getExpiryDate());
+    }
+
+    @Test
+    void testSetExpiryDate() {
+        // Test setter for expiryDate
+        duration.setExpiryDate("2025-01-01");
+        assertEquals("2025-01-01", duration.getExpiryDate());
+    }
+
+    @Test
+    void testToString() {
+        // Test that toString returns a meaningful string
+        String expected = "Duration{expiryDuration=30, offerDuration=60, expiryDate='2024-12-31'}";
+        assertEquals(expected, duration.toString());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        // Create two identical objects
+        Duration duration1 = new Duration(30, 60, "2024-12-31");
+        Duration duration2 = new Duration(30, 60, "2024-12-31");
+
+        // Test equality
+        assertEquals(duration1, duration2);
+        assertEquals(duration1.hashCode(), duration2.hashCode());
+
+        // Modify one of the objects and test inequality
+        duration2.setExpiryDuration(45);
+        assertNotEquals(duration1, duration2);
+        assertNotEquals(duration1.hashCode(), duration2.hashCode());
+    }
+}

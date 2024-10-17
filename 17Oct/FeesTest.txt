@@ -1,0 +1,57 @@
+import com.td.mbna.msec.account.domain.mobile.Fees;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class FeesTest {
+
+    @Test
+    void testConstructorAndGetters() {
+        // Arrange
+        Integer expectedMinAmt = 100;
+        Double expectedPct = 5.5;
+
+        // Act
+        Fees fees = new Fees(expectedMinAmt, expectedPct);
+
+        // Assert
+        assertEquals(expectedMinAmt, fees.getMinAmt());
+        assertEquals(expectedPct, fees.getPct());
+    }
+
+    @Test
+    void testSetMinAmt() {
+        // Arrange
+        Fees fees = new Fees(100, 5.5);
+        Integer newMinAmt = 200;
+
+        // Act
+        fees.setMinAmt(newMinAmt);
+
+        // Assert
+        assertEquals(newMinAmt, fees.getMinAmt());
+    }
+
+    @Test
+    void testSetPct() {
+        // Arrange
+        Fees fees = new Fees(100, 5.5);
+        Double newPct = 10.0;
+
+        // Act
+        fees.setPct(newPct);
+
+        // Assert
+        assertEquals(newPct, fees.getPct());
+    }
+
+    @Test
+    void testDefaultConstructorWithNullValues() {
+        // Act
+        Fees fees = new Fees(null, null);
+
+        // Assert
+        assertNull(fees.getMinAmt());
+        assertNull(fees.getPct());
+    }
+}

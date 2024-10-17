@@ -1,0 +1,50 @@
+import com.td.mbna.msec.account.domain.mobile.StmtDeliveryPref;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class StmtDeliveryPrefTest {
+
+    @Test
+    void testEnumValues() {
+        // Arrange & Act
+        StmtDeliveryPref paperless = StmtDeliveryPref.PPL;
+        StmtDeliveryPref paper = StmtDeliveryPref.PAP;
+        StmtDeliveryPref hybrid = StmtDeliveryPref.HYB;
+
+        // Assert
+        assertEquals("Paperless", paperless.satement());
+        assertEquals("Paper", paper.satement());
+        assertEquals("Hybrid", hybrid.satement());
+    }
+
+    @Test
+    void testEnumToString() {
+        // Arrange & Act
+        String paperless = StmtDeliveryPref.PPL.toString();
+        String paper = StmtDeliveryPref.PAP.toString();
+        String hybrid = StmtDeliveryPref.HYB.toString();
+
+        // Assert
+        assertEquals("PPL", paperless);
+        assertEquals("PAP", paper);
+        assertEquals("HYB", hybrid);
+    }
+
+    @Test
+    void testEnumValueOf() {
+        // Act & Assert
+        assertEquals(StmtDeliveryPref.PPL, StmtDeliveryPref.valueOf("PPL"));
+        assertEquals(StmtDeliveryPref.PAP, StmtDeliveryPref.valueOf("PAP"));
+        assertEquals(StmtDeliveryPref.HYB, StmtDeliveryPref.valueOf("HYB"));
+    }
+
+    @Test
+    void testEnumValuesMethod() {
+        // Act
+        StmtDeliveryPref[] values = StmtDeliveryPref.values();
+
+        // Assert
+        assertArrayEquals(new StmtDeliveryPref[]{StmtDeliveryPref.PPL, StmtDeliveryPref.PAP, StmtDeliveryPref.HYB}, values);
+    }
+}

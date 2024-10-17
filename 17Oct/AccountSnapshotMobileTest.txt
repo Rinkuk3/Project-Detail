@@ -1,0 +1,211 @@
+import com.td.mbna.msec.account.domain.RecentActivity;
+import com.td.mbna.msec.account.domain.mobile.AccountSnapshotMobile;
+import com.td.mbna.msec.account.domain.mobile.MobileImage;
+import com.td.mbna.msec.cardbenefit.model.CardBenefit;
+import com.td.mbna.msec.common.infrastructure.util.UIGeneralUtil;
+import com.td.mbna.msec.offers.domain.OfferRateResponse;
+import com.td.mbna.msec.offersbanner.model.MobileOfferBanner;
+import com.td.mbna.msec.rewards.model.MobileRewards;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class AccountSnapshotMobileTest {
+
+    private AccountSnapshotMobile accountSnapshotMobile;
+
+    @BeforeEach
+    void setUp() {
+        accountSnapshotMobile = new AccountSnapshotMobile();
+    }
+
+    @Test
+    void testGettersAndSetters() {
+        // Test String fields
+        accountSnapshotMobile.setAccountId("12345");
+        assertEquals("12345", accountSnapshotMobile.getAccountId());
+
+        accountSnapshotMobile.setLongName("My Long Account Name");
+        assertEquals("My Long Account Name", accountSnapshotMobile.getLongName());
+
+        accountSnapshotMobile.setShortName("ShortName");
+        assertEquals("ShortName", accountSnapshotMobile.getShortName());
+
+        accountSnapshotMobile.setLast4("1234");
+        assertEquals("1234", accountSnapshotMobile.getLast4());
+
+        // Test MobileImage fields
+        MobileImage cardImage = new MobileImage();
+        accountSnapshotMobile.setCardImage(cardImage);
+        assertEquals(cardImage, accountSnapshotMobile.getCardImage());
+
+        MobileImage logoImage = new MobileImage();
+        accountSnapshotMobile.setLogoImage(logoImage);
+        assertEquals(logoImage, accountSnapshotMobile.getLogoImage());
+
+        // Test int fields
+        accountSnapshotMobile.setCurBalAmt(1000);
+        assertEquals(1000, accountSnapshotMobile.getCurBalAmt());
+
+        accountSnapshotMobile.setMinPmtAmt(50);
+        assertEquals(50, accountSnapshotMobile.getMinPmtAmt());
+
+        accountSnapshotMobile.setCreditAvailAmt(2000);
+        assertEquals(2000, accountSnapshotMobile.getCreditAvailAmt());
+
+        accountSnapshotMobile.setTempAuthAmt(100);
+        assertEquals(100, accountSnapshotMobile.getTempAuthAmt());
+
+        accountSnapshotMobile.setCreditLimitAmt(5000);
+        assertEquals(5000, accountSnapshotMobile.getCreditLimitAmt());
+
+        accountSnapshotMobile.setLastPmtPostedAmt(75);
+        assertEquals(75, accountSnapshotMobile.getLastPmtPostedAmt());
+
+        accountSnapshotMobile.setLastStmtBalAmt(800);
+        assertEquals(800, accountSnapshotMobile.getLastStmtBalAmt());
+
+        accountSnapshotMobile.setPastDueAmt(25);
+        assertEquals(25, accountSnapshotMobile.getPastDueAmt());
+
+        // Test Date fields
+        accountSnapshotMobile.setSnapshotDate("2024-10-15");
+        assertEquals("2024-10-15", accountSnapshotMobile.getSnapshotDate());
+
+        accountSnapshotMobile.setMinPmtDueDate("2024-10-31");
+        assertEquals("2024-10-31", accountSnapshotMobile.getMinPmtDueDate());
+
+        accountSnapshotMobile.setLastPmtPostedDate("2024-09-30");
+        assertEquals("2024-09-30", accountSnapshotMobile.getLastPmtPostedDate());
+
+        accountSnapshotMobile.setLastStmtDate("2024-09-15");
+        assertEquals("2024-09-15", accountSnapshotMobile.getLastStmtDate());
+
+        // Test other object fields
+        RecentActivity recentActivity = new RecentActivity();
+        accountSnapshotMobile.setRecentActivity(recentActivity);
+        assertEquals(recentActivity, accountSnapshotMobile.getRecentActivity());
+
+        MobileRewards rewards = new MobileRewards();
+        accountSnapshotMobile.setRewards(rewards);
+        assertEquals(rewards, accountSnapshotMobile.getRewards());
+
+        List<MobileOfferBanner> offers = new ArrayList<>();
+        accountSnapshotMobile.setOffers(offers);
+        assertEquals(offers, accountSnapshotMobile.getOffers());
+
+        List<MobileOfferBanner> btOffers = new ArrayList<>();
+        accountSnapshotMobile.setBtOffers(btOffers);
+        assertEquals(btOffers, accountSnapshotMobile.getBtOffers());
+
+        OfferRateResponse ipOffer = new OfferRateResponse();
+        accountSnapshotMobile.setIpOffer(ipOffer);
+        assertEquals(ipOffer, accountSnapshotMobile.getIpOffer());
+
+        Map<EFlags, Boolean> eFlags = new HashMap<>();
+        accountSnapshotMobile.setEFlags(eFlags);
+        assertEquals(eFlags, accountSnapshotMobile.getEFlags());
+
+        CardBenefit cardBenefits = new CardBenefit();
+        accountSnapshotMobile.setCardBenefits(cardBenefits);
+        assertEquals(cardBenefits, accountSnapshotMobile.getCardBenefits());
+    }
+
+    @Test
+    void testSetEmail_ValidEmail() {
+        accountSnapshotMobile.setEmail("test@example.com");
+        assertEquals("test@example.com", accountSnapshotMobile.getEmail());
+    }
+
+    @Test
+    void testSetEmail_InvalidEmail() {
+        // Mock the static method call to validate email
+        Mockito.mockStatic(UIGeneralUtil.class);
+        Mockito.when(UIGeneralUtil.validateEmailAddress("invalid-email")).thenReturn(false);
+
+        // Set invalid email
+        accountSnapshotMobile.setEmail("invalid-email");
+        assertNull(accountSnapshotMobile.getEmail());
+
+        // Clear mock
+        Mockito.clearAllCaches();
+    }
+
+    @Test
+    void testSetEmail_NullOrEmptyEmail() {
+        // Test null email
+        accountSnapshotMobile.setEmail(null);
+        assertNull(accountSnapshotMobile.getEmail());
+
+        // Test empty email
+        accountSnapshotMobile.setEmail("");
+        assertNull(accountSnapshotMobile.getEmail());
+    }
+
+    @Test
+    void testOffersListOperations() {
+        List<MobileOfferBanner> offers = accountSnapshotMobile.getOffers();
+        assertNotNull(offers);  // Default should not be null
+
+        // Add and retrieve offers
+        MobileOfferBanner offer = new MobileOfferBanner();
+        offers.add(offer);
+        assertEquals(1, offers.size());
+        assertEquals(offer, offers.get(0));
+    }
+
+    @Test
+    void testBtOffersListOperations() {
+        List<MobileOfferBanner> btOffers = accountSnapshotMobile.getBtOffers();
+        assertNotNull(btOffers);  // Default should not be null
+
+        // Add and retrieve BT offers
+        MobileOfferBanner btOffer = new MobileOfferBanner();
+        btOffers.add(btOffer);
+        assertEquals(1, btOffers.size());
+        assertEquals(btOffer, btOffers.get(0));
+    }
+
+    @Test
+    void testEFlagsOperations() {
+        Map<EFlags, Boolean> eFlags = accountSnapshotMobile.getEFlags();
+        assertNotNull(eFlags);  // Default should not be null
+
+        // Add and retrieve EFlags
+        EFlags flag = EFlags.FLAG1;  // Assuming FLAG1 is an enum value
+        eFlags.put(flag, true);
+        assertTrue(eFlags.get(flag));
+    }
+
+    @Test
+    void testToString() {
+        accountSnapshotMobile.setAccountId("12345");
+        String result = accountSnapshotMobile.toString();
+        assertTrue(result.contains("12345"));
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        AccountSnapshotMobile accountSnapshotMobile1 = new AccountSnapshotMobile();
+        AccountSnapshotMobile accountSnapshotMobile2 = new AccountSnapshotMobile();
+
+        // Set identical properties
+        accountSnapshotMobile1.setAccountId("12345");
+        accountSnapshotMobile2.setAccountId("12345");
+
+        assertEquals(accountSnapshotMobile1, accountSnapshotMobile2);
+        assertEquals(accountSnapshotMobile1.hashCode(), accountSnapshotMobile2.hashCode());
+
+        // Modify one object and check inequality
+        accountSnapshotMobile2.setAccountId("67890");
+        assertNotEquals(accountSnapshotMobile1, accountSnapshotMobile2);
+        assertNotEquals(accountSnapshotMobile1.hashCode(), accountSnapshotMobile2.hashCode());
+    }
+}

@@ -1,0 +1,99 @@
+import com.td.mbna.msec.account.domain.mobile.FormVariable;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class FormVariableTest {
+
+    @Test
+    void testGettersAndSetters() {
+        // Arrange
+        FormVariable formVariable = new FormVariable();
+        String expectedName = "fieldName";
+        String expectedValue = "fieldValue";
+
+        // Act
+        formVariable.setName(expectedName);
+        formVariable.setValue(expectedValue);
+
+        // Assert
+        assertEquals(expectedName, formVariable.getName());
+        assertEquals(expectedValue, formVariable.getValue());
+    }
+
+    @Test
+    void testEqualsAndHashCode_EqualObjects() {
+        // Arrange
+        FormVariable formVariable1 = new FormVariable();
+        formVariable1.setName("fieldName");
+        formVariable1.setValue("fieldValue");
+
+        FormVariable formVariable2 = new FormVariable();
+        formVariable2.setName("fieldName");
+        formVariable2.setValue("fieldValue");
+
+        // Act & Assert
+        assertEquals(formVariable1, formVariable2);
+        assertEquals(formVariable1.hashCode(), formVariable2.hashCode());
+    }
+
+    @Test
+    void testEqualsAndHashCode_DifferentObjects() {
+        // Arrange
+        FormVariable formVariable1 = new FormVariable();
+        formVariable1.setName("fieldName");
+        formVariable1.setValue("fieldValue");
+
+        FormVariable formVariable2 = new FormVariable();
+        formVariable2.setName("otherFieldName");
+        formVariable2.setValue("otherFieldValue");
+
+        // Act & Assert
+        assertNotEquals(formVariable1, formVariable2);
+        assertNotEquals(formVariable1.hashCode(), formVariable2.hashCode());
+    }
+
+    @Test
+    void testEquals_NullAndDifferentClass() {
+        // Arrange
+        FormVariable formVariable = new FormVariable();
+        formVariable.setName("fieldName");
+        formVariable.setValue("fieldValue");
+
+        // Act & Assert
+        assertNotEquals(formVariable, null);
+        assertNotEquals(formVariable, new Object());
+    }
+
+    @Test
+    void testEquals_NullFields() {
+        // Arrange
+        FormVariable formVariable1 = new FormVariable();
+        FormVariable formVariable2 = new FormVariable();
+
+        // Act & Assert
+        assertEquals(formVariable1, formVariable2);
+        assertEquals(formVariable1.hashCode(), formVariable2.hashCode());
+    }
+
+    @Test
+    void testEquals_DifferentNameOrValue() {
+        // Arrange
+        FormVariable formVariable1 = new FormVariable();
+        formVariable1.setName("name1");
+        formVariable1.setValue("value1");
+
+        FormVariable formVariable2 = new FormVariable();
+        formVariable2.setName("name2");
+        formVariable2.setValue("value1");
+
+        FormVariable formVariable3 = new FormVariable();
+        formVariable3.setName("name1");
+        formVariable3.setValue("value2");
+
+        // Act & Assert
+        assertNotEquals(formVariable1, formVariable2);
+        assertNotEquals(formVariable1, formVariable3);
+    }
+
+}

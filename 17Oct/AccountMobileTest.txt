@@ -1,0 +1,137 @@
+import com.td.mbna.msec.account.domain.mobile.AccountMobile;
+import com.td.mbna.msec.cardbenefit.model.CardBenefit;
+import com.td.mbna.msec.offersbanner.model.MobileOfferBanner;
+import com.td.mbna.msec.onboarding.model.mobile.OBFlags;
+import com.td.mbna.msec.rewards.model.MobileRewards;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.io.*;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class AccountMobileTest {
+
+    private AccountMobile accountMobile;
+
+    @BeforeEach
+    void setUp() {
+        accountMobile = new AccountMobile();
+    }
+
+    @Test
+    void testGettersAndSetters() {
+        // Test String fields
+        accountMobile.setAccountId("12345");
+        accountMobile.setLongName("My Account");
+        accountMobile.setShortName("Acc");
+        accountMobile.setLast4("6789");
+        accountMobile.setMinPmtDueDate("2024-12-01");
+        accountMobile.setEmail("email@test.com");
+
+        assertEquals("12345", accountMobile.getAccountId());
+        assertEquals("My Account", accountMobile.getLongName());
+        assertEquals("Acc", accountMobile.getShortName());
+        assertEquals("6789", accountMobile.getLast4());
+        assertEquals("2024-12-01", accountMobile.getMinPmtDueDate());
+        assertEquals("email@test.com", accountMobile.getEmail());
+
+        // Test int fields
+        accountMobile.setCurBalAmt(500);
+        accountMobile.setMinPmtAmt(100);
+        accountMobile.setCreditAvailAmt(1000);
+
+        assertEquals(500, accountMobile.getCurBalAmt());
+        assertEquals(100, accountMobile.getMinPmtAmt());
+        assertEquals(1000, accountMobile.getCreditAvailAmt());
+
+        // Test MobileImage objects
+        MobileImage cardImage = new MobileImage();
+        MobileImage logoImage = new MobileImage();
+        accountMobile.setCardImage(cardImage);
+        accountMobile.setLogoImage(logoImage);
+
+        assertEquals(cardImage, accountMobile.getCardImage());
+        assertEquals(logoImage, accountMobile.getLogoImage());
+
+        // Test List<MobileOfferBanner> fields
+        List<MobileOfferBanner> offers = List.of(new MobileOfferBanner());
+        List<MobileOfferBanner> btOffers = List.of(new MobileOfferBanner());
+        accountMobile.setOffers(offers);
+        accountMobile.setBtOffers(btOffers);
+
+        assertEquals(offers, accountMobile.getOffers());
+        assertEquals(btOffers, accountMobile.getBtOffers());
+
+        // Test Map fields
+        Map<EFlags, Boolean> eFlags = Map.of(EFlags.SOME_FLAG, true);
+        Map<OBFlags, Boolean> obFlags = Map.of(OBFlags.OB_FLAG_1, false);
+        accountMobile.setEFlags(eFlags);
+        accountMobile.setObFlags(obFlags);
+
+        assertEquals(eFlags, accountMobile.getEFlags());
+        assertEquals(obFlags, accountMobile.getObFlags());
+
+        // Test StmtDeliveryPref, MobileRewards, and CardBenefit
+        StmtDeliveryPref stmtDeliveryPref = new StmtDeliveryPref();
+        MobileRewards rewards = new MobileRewards();
+        CardBenefit cardBenefits = new CardBenefit();
+        accountMobile.setStmtDeliveryPref(stmtDeliveryPref);
+        accountMobile.setRewards(rewards);
+        accountMobile.setCardBenefits(cardBenefits);
+
+        assertEquals(stmtDeliveryPref, accountMobile.getStmtDeliveryPref());
+        assertEquals(rewards, accountMobile.getRewards());
+        assertEquals(cardBenefits, accountMobile.getCardBenefits());
+    }
+
+    @Test
+    void testSerialization() throws IOException, ClassNotFoundException {
+        accountMobile.setAccountId("12345");
+
+        // Serialize the object
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+        objectOutputStream.writeObject(accountMobile);
+
+        // Deserialize the object
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+        ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+        AccountMobile deserializedAccountMobile = (AccountMobile) objectInputStream.readObject();
+
+        assertEquals("12345", deserializedAccountMobile.getAccountId());
+    }
+
+    @Test
+    void testToString() {
+        accountMobile.setAccountId("12345");
+        accountMobile.setLongName("My Account");
+
+        String toStringResult = accountMobile.toString();
+
+        assertTrue(toStringResult.contains("accountId=12345"));
+        assertTrue(toStringResult.contains("longName=My Account"));
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        AccountMobile accountMobile1 = new AccountMobile();
+        accountMobile1.setAccountId("12345");
+
+        AccountMobile accountMobile2 = new AccountMobile();
+        accountMobile2.setAccountId("12345");
+
+        AccountMobile accountMobile3 = new AccountMobile();
+        accountMobile3.setAccountId("67890");
+
+        // Test equality
+        assertEquals(accountMobile1, accountMobile2);
+        assertNotEquals(accountMobile1, accountMobile3);
+
+        // Test hashCode
+        assertEquals(accountMobile1.hashCode(), accountMobile2.hashCode());
+        assertNotEquals(accountMobile1.hashCode(), accountMobile3.hashCode());
+    }
+}

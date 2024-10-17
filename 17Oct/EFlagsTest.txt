@@ -1,0 +1,68 @@
+import com.td.mbna.msec.account.domain.mobile.EFlags;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class EFlagsTest {
+
+    @Test
+    void testEnumValues() {
+        // Test all enum values
+        EFlags[] expectedValues = EFlags.values();
+        assertEquals(17, expectedValues.length); // Ensure there are 17 enum constants
+        
+        assertEquals(EFlags.a00, EFlags.valueOf("a00"));
+        assertEquals(EFlags.a01, EFlags.valueOf("a01"));
+        assertEquals(EFlags.a02, EFlags.valueOf("a02"));
+        assertEquals(EFlags.a03, EFlags.valueOf("a03"));
+        assertEquals(EFlags.a04, EFlags.valueOf("a04"));
+        assertEquals(EFlags.a05, EFlags.valueOf("a05"));
+        assertEquals(EFlags.a06, EFlags.valueOf("a06"));
+        assertEquals(EFlags.a07, EFlags.valueOf("a07"));
+        assertEquals(EFlags.a08, EFlags.valueOf("a08"));
+        assertEquals(EFlags.a09, EFlags.valueOf("a09"));
+        assertEquals(EFlags.a10, EFlags.valueOf("a10"));
+        assertEquals(EFlags.a11, EFlags.valueOf("a11"));
+        assertEquals(EFlags.a12, EFlags.valueOf("a12"));
+        assertEquals(EFlags.a13, EFlags.valueOf("a13"));
+        assertEquals(EFlags.a14, EFlags.valueOf("a14"));
+        assertEquals(EFlags.a15, EFlags.valueOf("a15"));
+        assertEquals(EFlags.a16, EFlags.valueOf("a16"));
+    }
+
+    @Test
+    void testFlagMethod() {
+        // Test the flag() method for each enum constant
+        assertEquals("a00", EFlags.a00.flag());
+        assertEquals("a01", EFlags.a01.flag());
+        assertEquals("a02", EFlags.a02.flag());
+        assertEquals("a03", EFlags.a03.flag());
+        assertEquals("a04", EFlags.a04.flag());
+        assertEquals("a05", EFlags.a05.flag());
+        assertEquals("a06", EFlags.a06.flag());
+        assertEquals("a07", EFlags.a07.flag());
+        assertEquals("a08", EFlags.a08.flag());
+        assertEquals("a09", EFlags.a09.flag());
+        assertEquals("a10", EFlags.a10.flag());
+        assertEquals("a11", EFlags.a11.flag());
+        assertEquals("a12", EFlags.a12.flag());
+        assertEquals("a13", EFlags.a13.flag());
+        assertEquals("a14", EFlags.a14.flag());
+        assertEquals("a15", EFlags.a15.flag());
+        assertEquals("a16", EFlags.a16.flag());
+    }
+
+    @Test
+    void testEnumEquality() {
+        // Test equality of enum constants
+        assertSame(EFlags.a00, EFlags.a00);
+        assertNotSame(EFlags.a00, EFlags.a01);
+    }
+
+    @Test
+    void testEnumToString() {
+        // Test that toString returns the correct name of the enum constant
+        assertEquals("a00", EFlags.a00.toString());
+        assertEquals("a16", EFlags.a16.toString());
+    }
+}
