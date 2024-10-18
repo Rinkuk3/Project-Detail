@@ -1,0 +1,154 @@
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Date;
+
+public class AuthorizedUserDetailsTest {
+
+    private AuthorizedUserDetails authorizedUserDetails;
+
+    @BeforeEach
+    public void setUp() {
+        authorizedUserDetails = new AuthorizedUserDetails();
+    }
+
+    @Test
+    public void testAliasCustomerID() {
+        String aliasCustomerID = "ALIAS123";
+        authorizedUserDetails.setAliasCustomerID(aliasCustomerID);
+        assertEquals(aliasCustomerID, authorizedUserDetails.getAliasCustomerID());
+    }
+
+    @Test
+    public void testFirstname() {
+        String firstname = "john";
+        authorizedUserDetails.setFirstname(firstname);
+        assertEquals("JOHN", authorizedUserDetails.getFirstname());
+
+        // Test null case
+        authorizedUserDetails.setFirstname(null);
+        assertEquals("", authorizedUserDetails.getFirstname());
+    }
+
+    @Test
+    public void testMiddleName() {
+        String middleName = "paul";
+        authorizedUserDetails.setMiddleName(middleName);
+        assertEquals("PAUL", authorizedUserDetails.getMiddleName());
+
+        // Test null case
+        authorizedUserDetails.setMiddleName(null);
+        assertEquals("", authorizedUserDetails.getMiddleName());
+    }
+
+    @Test
+    public void testLastname() {
+        String lastname = "doe";
+        authorizedUserDetails.setLastname(lastname);
+        assertEquals("DOE", authorizedUserDetails.getLastname());
+
+        // Test null case
+        authorizedUserDetails.setLastname(null);
+        assertEquals("", authorizedUserDetails.getLastname());
+    }
+
+    @Test
+    public void testSuffix() {
+        String suffix = "Jr.";
+        authorizedUserDetails.setSuffix(suffix);
+        assertEquals(suffix, authorizedUserDetails.getSuffix());
+    }
+
+    @Test
+    public void testFullName() {
+        String fullName = "John Doe";
+        authorizedUserDetails.setFullName(fullName);
+        assertEquals(fullName, authorizedUserDetails.getFullName());
+    }
+
+    @Test
+    public void testDob() {
+        Date dob = new Date();
+        authorizedUserDetails.setDob(dob);
+        assertEquals(dob, authorizedUserDetails.getDob());
+    }
+
+    @Test
+    public void testAddressSameAsPrimary() {
+        authorizedUserDetails.setAddressSameAsPrimary(false);
+        assertFalse(authorizedUserDetails.isAddressSameAsPrimary());
+        authorizedUserDetails.setAddressSameAsPrimary(true);
+        assertTrue(authorizedUserDetails.isAddressSameAsPrimary());
+    }
+
+    @Test
+    public void testAddressLine1() {
+        String addressLine1 = "123 Main St";
+        authorizedUserDetails.setAddressLine1(addressLine1);
+        assertEquals(addressLine1, authorizedUserDetails.getAddressLine1());
+    }
+
+    @Test
+    public void testAddressLine2() {
+        String addressLine2 = "Apt 4B";
+        authorizedUserDetails.setAddressLine2(addressLine2);
+        assertEquals(addressLine2, authorizedUserDetails.getAddressLine2());
+    }
+
+    @Test
+    public void testCity() {
+        String city = "Toronto";
+        authorizedUserDetails.setCity(city);
+        assertEquals(city, authorizedUserDetails.getCity());
+    }
+
+    @Test
+    public void testProvince() {
+        String province = "Ontario";
+        authorizedUserDetails.setProvince(province);
+        assertEquals(province, authorizedUserDetails.getProvince());
+    }
+
+    @Test
+    public void testPostalCode() {
+        String postalCode = "A1B 2C3";
+        authorizedUserDetails.setPostalCode(postalCode);
+        assertEquals(postalCode, authorizedUserDetails.getPostalCode());
+    }
+
+    @Test
+    public void testCountry() {
+        String country = "Canada";
+        authorizedUserDetails.setCountry(country);
+        assertEquals(country, authorizedUserDetails.getCountry());
+    }
+
+    @Test
+    public void testBusinessPhone() {
+        String businessPhone = "123-456-7890";
+        authorizedUserDetails.setBusinessPhone(businessPhone);
+        assertEquals(businessPhone, authorizedUserDetails.getBusinessPhone());
+    }
+
+    @Test
+    public void testBusinessPhoneExtension() {
+        String businessPhoneExtension = "123";
+        authorizedUserDetails.setBusinessPhoneExtension(businessPhoneExtension);
+        assertEquals(businessPhoneExtension, authorizedUserDetails.getBusinessPhoneExtension());
+    }
+
+    @Test
+    public void testHomePhone() {
+        String homePhone = "098-765-4321";
+        authorizedUserDetails.setHomePhone(homePhone);
+        assertEquals(homePhone, authorizedUserDetails.getHomePhone());
+    }
+
+    @Test
+    public void testMobilePhone() {
+        String mobilePhone = "555-555-5555";
+        authorizedUserDetails.setMobilePhone(mobilePhone);
+        assertEquals(mobilePhone, authorizedUserDetails.getMobilePhone());
+    }
+}

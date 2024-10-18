@@ -1,0 +1,54 @@
+package com.td.mbna.msec.creditlimit.model;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+import com.td.mbna.msec.profile.model.Address;
+
+public class CreditLimitIncreaseResponseTest {
+
+    @Test
+    public void testSetAndGetAddress() {
+        Address address = new Address(); // Assuming Address has a no-arg constructor
+        address.setStreet("123 Main St");
+        address.setCity("Toronto");
+        address.setPostalCode("A1B 2C3");
+        
+        CreditLimitIncreaseResponse response = CreditLimitIncreaseResponse.builder()
+                .address(address)
+                .build();
+        
+        assertEquals(address, response.getAddress());
+    }
+
+    @Test
+    public void testBuilder() {
+        Address address = new Address();
+        address.setStreet("456 Maple Ave");
+        address.setCity("Ottawa");
+        address.setPostalCode("D4E 5F6");
+        
+        CreditLimitIncreaseResponse response = CreditLimitIncreaseResponse.builder()
+                .address(address)
+                .build();
+
+        assertNotNull(response);
+        assertEquals(address, response.getAddress());
+    }
+
+    @Test
+    public void testToString() {
+        Address address = new Address();
+        address.setStreet("789 Elm St");
+        address.setCity("Montreal");
+        address.setPostalCode("G7H 8I9");
+        
+        CreditLimitIncreaseResponse response = CreditLimitIncreaseResponse.builder()
+                .address(address)
+                .build();
+
+        String expectedString = "CreditLimitIncreaseResponse(address=" + address + ")";
+        assertEquals(expectedString, response.toString());
+    }
+}

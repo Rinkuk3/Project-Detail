@@ -1,0 +1,146 @@
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+public class CardControlResponseTest {
+
+    @Test
+    public void testGetSetCustomerId() {
+        // Arrange
+        CardControlResponse response = new CardControlResponse();
+        String customerId = "12345";
+
+        // Act
+        response.setCustomerId(customerId);
+
+        // Assert
+        assertEquals(customerId, response.getCustomerId());
+    }
+
+    @Test
+    public void testGetSetEligibility() {
+        // Arrange
+        CardControlResponse response = new CardControlResponse();
+        Boolean eligibility = true;
+
+        // Act
+        response.setEligibility(eligibility);
+
+        // Assert
+        assertEquals(eligibility, response.getEligibility());
+    }
+
+    @Test
+    public void testGetSetActive() {
+        // Arrange
+        CardControlResponse response = new CardControlResponse();
+        Boolean active = false;
+
+        // Act
+        response.setActive(active);
+
+        // Assert
+        assertEquals(active, response.getActive());
+    }
+
+    @Test
+    public void testGetSetStatus() {
+        // Arrange
+        CardControlResponse response = new CardControlResponse();
+        String status = "active";
+
+        // Act
+        response.setStatus(status);
+
+        // Assert
+        assertEquals(status, response.getStatus());
+    }
+
+    @Test
+    public void testGetSetErrorCode() {
+        // Arrange
+        CardControlResponse response = new CardControlResponse();
+        String errorCode = "404";
+
+        // Act
+        response.setErrorCode(errorCode);
+
+        // Assert
+        assertEquals(errorCode, response.getErrorCode());
+    }
+
+    @Test
+    public void testEquals_SameObject() {
+        // Arrange
+        CardControlResponse response = new CardControlResponse();
+        
+        // Act & Assert
+        assertTrue(response.equals(response));
+    }
+
+    @Test
+    public void testEquals_DifferentObject() {
+        // Arrange
+        CardControlResponse response1 = new CardControlResponse();
+        CardControlResponse response2 = new CardControlResponse();
+        
+        // Act & Assert
+        assertTrue(response1.equals(response2));
+    }
+
+    @Test
+    public void testEquals_NullObject() {
+        // Arrange
+        CardControlResponse response = new CardControlResponse();
+        
+        // Act & Assert
+        assertFalse(response.equals(null));
+    }
+
+    @Test
+    public void testEquals_DifferentClass() {
+        // Arrange
+        CardControlResponse response = new CardControlResponse();
+        
+        // Act & Assert
+        assertFalse(response.equals(new Object()));
+    }
+
+    @Test
+    public void testHashCode() {
+        // Arrange
+        CardControlResponse response = new CardControlResponse();
+        response.setCustomerId("12345");
+        response.setEligibility(true);
+        response.setActive(false);
+        response.setStatus("active");
+        response.setErrorCode("404");
+        
+        // Act
+        int hashCode = response.hashCode();
+
+        // Assert
+        assertNotNull(hashCode);
+    }
+
+    @Test
+    public void testToString() {
+        // Arrange
+        CardControlResponse response = new CardControlResponse();
+        response.setCustomerId("12345");
+        response.setEligibility(true);
+        response.setActive(false);
+        response.setStatus("active");
+        response.setErrorCode("404");
+
+        // Act
+        String stringRepresentation = response.toString();
+
+        // Assert
+        assertNotNull(stringRepresentation);
+        assertTrue(stringRepresentation.contains("customerId=12345"));
+        assertTrue(stringRepresentation.contains("eligibility=true"));
+        assertTrue(stringRepresentation.contains("active=false"));
+        assertTrue(stringRepresentation.contains("status=active"));
+        assertTrue(stringRepresentation.contains("errorCode=404"));
+    }
+}

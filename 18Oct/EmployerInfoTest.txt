@@ -1,0 +1,121 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.math.BigDecimal;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+public class EmployerInfoTest {
+    
+    private EmployerInfo employerInfo;
+
+    @BeforeEach
+    public void setUp() {
+        employerInfo = new EmployerInfo();
+    }
+
+    @Test
+    public void testSetAndGetEmployerStatus() {
+        String status = "Employed";
+        employerInfo.setEmployerStatus(status);
+        assertEquals(status, employerInfo.getEmployerStatus());
+    }
+
+    @Test
+    public void testSetAndGetOccupation() {
+        String occupation = "Software Developer";
+        employerInfo.setOccupation(occupation);
+        assertEquals(occupation, employerInfo.getOccupation());
+    }
+
+    @Test
+    public void testSetAndGetJobDescription() {
+        String jobDescription = "Developing applications";
+        employerInfo.setJobDescription(jobDescription);
+        assertEquals(jobDescription, employerInfo.getJobDescription());
+    }
+
+    @Test
+    public void testSetAndGetEmployerName() {
+        String employerName = "Tech Company Inc.";
+        employerInfo.setEmployerName(employerName);
+        assertEquals(employerName, employerInfo.getEmployerName());
+    }
+
+    @Test
+    public void testSetAndGetEmployerAddress() {
+        String employerAddress = "123 Tech Street";
+        employerInfo.setEmployerAddress(employerAddress);
+        assertEquals(employerAddress, employerInfo.getEmployerAddress());
+    }
+
+    @Test
+    public void testSetAndGetEmployerCity() {
+        String employerCity = "Tech City";
+        employerInfo.setEmployerCity(employerCity);
+        assertEquals(employerCity, employerInfo.getEmployerCity());
+    }
+
+    @Test
+    public void testSetAndGetEmployerProvince() {
+        String employerProvince = "Tech Province";
+        employerInfo.setEmployerProvince(employerProvince);
+        assertEquals(employerProvince, employerInfo.getEmployerProvince());
+    }
+
+    @Test
+    public void testSetAndGetEmployerPostalCode() {
+        String employerPostalCode = "A1B 2C3";
+        employerInfo.setEmployerPostalCode(employerPostalCode);
+        assertEquals(employerPostalCode, employerInfo.getEmployerPostalCode());
+    }
+
+    @Test
+    public void testSetAndGetIncome() {
+        BigDecimal income = new BigDecimal("50000.00");
+        employerInfo.setIncome(income);
+        assertEquals(income, employerInfo.getIncome());
+    }
+
+    @Test
+    public void testSetAndGetIncomePeriod() {
+        String incomePeriod = "Annually";
+        employerInfo.setIncomePeriod(incomePeriod);
+        assertEquals(incomePeriod, employerInfo.getIncomePeriod());
+    }
+
+    @Test
+    public void testSetAndGetLengthOfService() {
+        String lengthOfService = "5 years";
+        employerInfo.setLengthOfService(lengthOfService);
+        assertEquals(lengthOfService, employerInfo.getLengthOfService());
+    }
+
+    @Test
+    public void testSetAndGetPosition() {
+        String position = "Senior Developer";
+        employerInfo.setPosition(position);
+        assertEquals(position, employerInfo.getPosition());
+    }
+
+    @Test
+    public void testSetAndGetEmployerPhoneType() {
+        String employerPhoneType = "Mobile";
+        employerInfo.setEmployerPhoneType(employerPhoneType);
+        assertEquals(employerPhoneType, employerInfo.getEmployerPhoneType());
+    }
+
+    @Test
+    public void testSetAndGetEmployerPhone() {
+        String employerPhone = "123-456-7890";
+        employerInfo.setEmployerPhone(employerPhone);
+        assertEquals(employerPhone, employerInfo.getEmployerPhone());
+    }
+
+    @Test
+    public void testSetAndGetNatureOfYourBusiness() {
+        String natureOfYourBusiness = "Software Development";
+        employerInfo.setNatureOfYourBusiness(natureOfYourBusiness);
+        assertEquals(natureOfYourBusiness, employerInfo.getNatureOfYourBusiness());
+    }
+}

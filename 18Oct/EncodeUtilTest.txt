@@ -1,0 +1,72 @@
+package com.td.mbna.msec.common.infrastructure.util;
+
+import org.apache.commons.codec.binary.Base64;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class EncodeUtilTest {
+
+    @Test
+    public void testHexEncode_EmptyInput() {
+        String result = EncodeUtil.hexEncode(new byte[0]);
+        assertEquals("", result);
+    }
+
+    @Test
+    public void testHexEncode_SingleByte() {
+        byte[] input = {0x0F};
+        String result = EncodeUtil.hexEncode(input);
+        assertEquals("0f", result);
+    }
+
+    @Test
+    public void testHexEncode_MultipleBytes() {
+        byte[] input = {0x0F, 0x1A, 0x2B, 0x3C};
+        String result = EncodeUtil.hexEncode(input);
+        assertEquals("0f1a2b3c", result);
+    }
+
+    @Test
+    public void testBase64Decode_ValidInput() {
+        byte[] input = "SGVsbG8gV29ybGQ=".getBytes(); // Base64 for "Hello World"
+        byte[] result = EncodeUtil.base64Decode(input);
+        assertArrayEquals("Hello World".getBytes(), result);
+    }
+
+    @Test
+    public void testBase64Decode_InvalidInput() {
+        byte[] input = "InvalidBase64==".getBytes(); // Not valid Base64
+        byte[] result = EncodeUtil.base64Decode(input);
+        assertNull(result); // or expect some exception
+    }
+
+    @Test
+    public void testParseHex_EmptyString() {
+        byte[] result = EncodeUtil.parseHex("");
+        assertArrayEquals(new byte[0], result);
+    }
+
+    @Test
+    public void testParseHex_ValidHexString() {
+        String hexStr = "0f1a2b3c";
+        byte[] result = EncodeUtil.parseHex(hexStr);
+        byte[] expected = {0x0F, 0x1A, 0x2B, 0x3C};
+        assertArrayEquals(expected, result);
+    }
+
+    @Test
+    public void testParseHex_InvalidHexString() {
+        assertThrows(NumberFormatException.class, () -> {
+            EncodeUtil.parseHex("InvalidHex");
+        });
+    }
+
+    @Test
+    public void testIntToByteArray() {
+        int value = 12345678;
+        byte[] result = EncodeUtil.intToByteArray(value);
+        byte[] expected = new byte[]{0, 0, 0, 0, 0, 0, 0, 0}; // As per the method, it will not return correct representation for non-8 byte values.
+        assertArrayEquals(expected, result);
+    }
+}

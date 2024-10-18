@@ -1,0 +1,40 @@
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class ApiErrorTest {
+
+    @Test
+    public void testApiErrorWithHttpStatus() {
+        // Given
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        // When
+        ApiError apiError = new ApiError(status);
+
+        // Then
+        assertThat(apiError.getStatus()).isEqualTo(status.value());
+        assertThat(apiError.getError()).isEqualTo(status.getReasonPhrase());
+        assertThat(apiError.getMessage()).isNull(); // message should be null for this constructor
+        assertThat(apiError.getPath()).isNull();    // path should be null for this constructor
+        assertThat(apiError.getTimestamp()).isGreaterThan(0); // timestamp should be set
+    }
+
+    @Test
+    public void testApiErrorWithHttpStatusAndPath() {
+        // Given
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        String path = "/api/v1/resource";
+
+        // When
+        ApiError apiError = new ApiError(status, path);
+
+        // Then
+        assertThat(apiError.getStatus()).isEqualTo(status.value());
+        assertThat(apiError.getError()).isEqualTo(status.getReasonPhrase());
+        assertThat(apiError.getMessage()).isEqualTo("Unexpected error"); // message should be set
+        assertThat(apiError.getPath()).isEqualTo(path); // path should be set
+        assertThat(apiError.getTimestamp()).isGreaterThan(0); // timestamp should be set
+    }
+}

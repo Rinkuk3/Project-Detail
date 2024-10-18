@@ -1,0 +1,49 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.math.BigDecimal;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+public class OtherIncomeTest {
+    
+    private OtherIncome otherIncome;
+
+    @BeforeEach
+    public void setUp() {
+        otherIncome = new OtherIncome();
+    }
+
+    @Test
+    public void testSetAndGetOtherIncomeAmount() {
+        BigDecimal amount = new BigDecimal("1500.00");
+        otherIncome.setOtherIncomeAmount(amount);
+        assertEquals(amount, otherIncome.getOtherIncomeAmount());
+    }
+
+    @Test
+    public void testGetOtherIncomeAmount_WhenNull() {
+        assertEquals(BigDecimal.valueOf(0.0), otherIncome.getOtherIncomeAmount());
+    }
+
+    @Test
+    public void testSetAndGetOtherIncomeAmountPeriod() {
+        String period = "Monthly";
+        otherIncome.setOtherIncomeAmountPeriod(period);
+        assertEquals(period, otherIncome.getOtherIncomeAmountPeriod());
+    }
+
+    @Test
+    public void testSetAndGetSourceOfOtherIncome() {
+        String source = "Freelancing";
+        otherIncome.setSourceOfOtherIncome(source);
+        assertEquals(source, otherIncome.getSourceOfOtherIncome());
+    }
+
+    @Test
+    public void testSetAndGetHaveOtherIncome() {
+        String haveIncome = "Yes";
+        otherIncome.setHaveOtherIncome(haveIncome);
+        assertEquals(haveIncome, otherIncome.getHaveOtherIncome());
+    }
+}

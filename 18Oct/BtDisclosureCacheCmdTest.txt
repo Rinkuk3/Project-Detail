@@ -1,0 +1,146 @@
+package com.td.mbna.msec.common;
+
+import com.td.mbna.msec.common.midtier.MidTierServiceHelper;
+import com.td.mbna.msec.midtier.disclosure.payload.getdisclosure.GetDisclosureResponse;
+import com.td.mbna.msec.midtier.disclosure.payload.getdisclosure.RequestPayload;
+import com.td.mbna.msec.midtier.types.common.DisclosureInfoType;
+import com.td.mbna.msec.midtier.types.common.DisclosureInputType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+class BtDisclosureCacheCmdTest {
+
+    private BtDisclosureCacheCmd btDisclosureCacheCmd;
+    private MidTierServiceHelper midTierServiceHelper;
+
+    @BeforeEach
+    void setUp() {
+        midTierServiceHelper = Mockito.mock(MidTierServiceHelper.class);
+        btDisclosureCacheCmd = new BtDisclosureCacheCmd(midTierServiceHelper,
+                "offer123",
+                BigDecimal.valueOf(1.5),
+                BigDecimal.valueOf(50),
+                BigDecimal.valueOf(10),
+                BigDecimal.valueOf(100),
+                BigDecimal.valueOf(0.02),
+                BigDecimal.valueOf(0.01),
+                false,
+                123456789L,
+                12,
+                "ON",
+                "en",
+                "disclosureType",
+                "auditCode");
+    }
+
+    @Test
+    void testIsReadyToCallExecute_WithValidOfferIdAndLanguageId() {
+        assertTrue(btDisclosureCacheCmd.isReadyToCallExecute());
+    }
+
+    @Test
+    void testIsReadyToCallExecute_WithNullOfferId() {
+        btDisclosureCacheCmd.setOfferId(null);
+        assertFalse(btDisclosureCacheCmd.isReadyToCallExecute());
+    }
+
+    @Test
+    void testIsReadyToCallExecute_WithNullLanguageId() {
+        btDisclosureCacheCmd.setLanguageId(null);
+        assertFalse(btDisclosureCacheCmd.isReadyToCallExecute());
+    }
+
+    @Test
+    void testPerformExecute_Success() throws Exception {
+        // Mock response
+        GetDisclosureResponse mockResponse = new GetDisclosureResponse();
+        DisclosureInfoType mockInfo = new DisclosureInfoType();
+        mockResponse.setResponsePayload(new GetDisclosureResponse.ResponsePayload());
+        mockResponse.getResponsePayload().setDisclosureInfo(mockInfo);
+        mockResponse.getResponsePayload().setContent("Some Disclosure Text");
+
+        when(midTierServiceHelper.getDisclosure(any(RequestPayload.class), any(String.class)))
+                .thenReturn(mockResponse);
+
+        // Call performExecute
+        btDisclosureCacheCmd.performExecute();
+
+        // Assertions
+        assertNotNull(btDisclosureCacheCmd.getDisclosureInfo());
+        assertEquals("Some Disclosure Text", btDisclosureCacheCmd.getDisclosureText());
+    }
+
+    @Test
+    void testPerformExecute_NoResponse() throws Exception {
+        when(midTierServiceHelper.getDisclosure(any(RequestPayload.class), any(String.class)))
+                .thenReturn(new GetDisclosureResponse());
+
+        btDisclosureCacheCmd.performExecute();
+
+        // Ensure no exceptions are thrown and the state remains unchanged
+        assertNull(btDisclosureCacheCmd.getDisclosureInfo());
+        assertNull(btDisclosureCacheCmd.getDisclosureText());
+    }
+
+    @Test
+    void testPerformExecute_Failure() {
+        when(midTierServiceHelper.getDisclosure(any(RequestPayload.class), any(String.class)))
+                .thenThrow(new RuntimeException("Service Error"));
+
+        // Execute and expect exception
+        assertThrows(RuntimeException.class, () -> btDisclosureCacheCmd.performExecute());
+    }
+
+    // Test for getter and setter methods
+    @Test
+    void testGettersAndSetters() {
+        btDisclosureCacheCmd.setDisclosureText("Sample Disclosure Text");
+        assertEquals("Sample Disclosure Text", btDisclosureCacheCmd.getDisclosureText());
+
+        btDisclosureCacheCmd.setOfferId("newOfferId");
+        assertEquals("newOfferId", btDisclosureCacheCmd.getOfferId());
+
+        btDisclosureCacheCmd.setTransactionRate(BigDecimal.valueOf(1.8));
+        assertEquals(BigDecimal.valueOf(1.8), btDisclosureCacheCmd.getTransactionRate());
+
+        btDisclosureCacheCmd.setFixedTransactionFee(BigDecimal.valueOf(75));
+        assertEquals(BigDecimal.valueOf(75), btDisclosureCacheCmd.getFixedTransactionFee());
+
+        btDisclosureCacheCmd.setMinimumTransactionFee(BigDecimal.valueOf(15));
+        assertEquals(BigDecimal.valueOf(15), btDisclosureCacheCmd.getMinimumTransactionFee());
+
+        btDisclosureCacheCmd.setMaximumTransactionFee(BigDecimal.valueOf(150));
+        assertEquals(BigDecimal.valueOf(150), btDisclosureCacheCmd.getMaximumTransactionFee());
+
+        btDisclosureCacheCmd.setInterestRate(BigDecimal.valueOf(0.03));
+        assertEquals(BigDecimal.valueOf(0.03), btDisclosureCacheCmd.getInterestRate());
+
+        btDisclosureCacheCmd.setPromoInterestRate(BigDecimal.valueOf(0.02));
+        assertEquals(BigDecimal.valueOf(0.02), btDisclosureCacheCmd.getPromoInterestRate());
+
+        btDisclosureCacheCmd.setIsEarlyExpired(true);
+        assertTrue(btDisclosureCacheCmd.getIsEarlyExpired());
+
+        btDisclosureCacheCmd.setDuration(24);
+        assertEquals(24, btDisclosureCacheCmd.getDuration());
+
+        btDisclosureCacheCmd.setEndDate(987654321L);
+        assertEquals(987654321L, btDisclosureCacheCmd.getEndDate());
+
+        btDisclosureCacheCmd.setCustomerPhysicalProvince("QC");
+        assertEquals("QC", btDisclosureCacheCmd.getCustomerPhysicalProvince());
+
+        btDisclosureCacheCmd.setDisclosureId("newDisclosureId");
+        assertEquals("newDisclosureId", btDisclosureCacheCmd.getDisclosureId());
+
+        btDisclosureCacheCmd.setAuditCode("newAuditCode");
+        assertEquals("newAuditCode", btDisclosureCacheCmd.getAuditCode());
+    }
+}

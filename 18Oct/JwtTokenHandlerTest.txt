@@ -1,0 +1,121 @@
+package com.td.mbna.msec.common;
+
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.jose4j.jwt.MalformedClaimException;
+import org.jose4j.jwt.consumer.InvalidJwtException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import com.td.coreapi.common.security.AccessTokenClaims;
+import com.td.coreapi.common.security.JwtHelper;
+import com.td.coreapi.common.status.ExpiredCertificateException;
+import com.td.coreapi.common.status.ExpiredTokenException;
+import com.td.coreapi.common.status.InactiveCertificateException;
+
+public class JwtTokenHandlerTest {
+
+    @InjectMocks
+    private JwtTokenHandler jwtTokenHandler;
+
+    @Mock
+    private JwtHelper jwtHelper;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testVerify_Success() throws Exception {
+        String jwtToken = "valid.jwt.token";
+        AccessTokenClaims claims = new AccessTokenClaims();
+        
+        // Mocking the successful verification of the JWT token
+        when(jwtHelper.verifyJwt(jwtToken)).thenReturn(claims);
+
+        AccessTokenClaims result = jwtTokenHandler.verify(jwtToken);
+
+        assertEquals(claims, result);
+        verify(jwtHelper, times(1)).verifyJwt(jwtToken);
+    }
+
+    @Test
+    public void testVerify_InvalidJwtException() {
+        String jwtToken = "invalid.jwt.token";
+
+        // Mocking the InvalidJwtException
+        when(jwtHelper.verifyJwt(jwtToken)).thenThrow(new InvalidJwtException("Invalid JWT"));
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
+            jwtTokenHandler.verify(jwtToken);
+        });
+
+        assertEquals("Failed to verify JWT token", exception.getMessage());
+        verify(jwtHelper, times(1)).verifyJwt(jwtToken);
+    }
+
+    @Test
+    public void testVerify_ExpiredTokenException() {
+        String jwtToken = "expired.jwt.token";
+
+        // Mocking the ExpiredTokenException
+        when(jwtHelper.verifyJwt(jwtToken)).thenThrow(new ExpiredTokenException("Token has expired"));
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
+            jwtTokenHandler.verify(jwtToken);
+        });
+
+        assertEquals("Failed to verify JWT token", exception.getMessage());
+        verify(jwtHelper, times(1)).verifyJwt(jwtToken);
+    }
+
+    @Test
+    public void testVerify_MalformedClaimException() {
+        String jwtToken = "malformed.jwt.token";
+
+        // Mocking the MalformedClaimException
+        when(jwtHelper.verifyJwt(jwtToken)).thenThrow(new MalformedClaimException("Malformed claims"));
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
+            jwtTokenHandler.verify(jwtToken);
+        });
+
+        assertEquals("Failed to verify JWT token", exception.getMessage());
+        verify(jwtHelper, times(1)).verifyJwt(jwtToken);
+    }
+
+    @Test
+    public void testVerify_ExpiredCertificateException() {
+        String jwtToken = "expired.certificate.token";
+
+        // Mocking the ExpiredCertificateException
+        when(jwtHelper.verifyJwt(jwtToken)).thenThrow(new ExpiredCertificateException("Expired certificate"));
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
+            jwtTokenHandler.verify(jwtToken);
+        });
+
+        assertEquals("Failed to verify JWT token", exception.getMessage());
+        verify(jwtHelper, times(1)).verifyJwt(jwtToken);
+    }
+
+    @Test
+    public void testVerify_InactiveCertificateException() {
+        String jwtToken = "inactive.certificate.token";
+
+        // Mocking the InactiveCertificateException
+        when(jwtHelper.verifyJwt(jwtToken)).thenThrow(new InactiveCertificateException("Inactive certificate"));
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
+            jwtTokenHandler.verify(jwtToken);
+        });
+
+        assertEquals("Failed to verify JWT token", exception.getMessage());
+        verify(jwtHelper, times(1)).verifyJwt(jwtToken);
+    }
+}

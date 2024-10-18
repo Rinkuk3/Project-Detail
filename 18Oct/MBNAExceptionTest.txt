@@ -1,0 +1,46 @@
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class MBNAExceptionTest {
+
+    @Test
+    public void testMBNAExceptionWithMessage() {
+        // Given
+        String message = "An error occurred";
+
+        // When
+        MBNAException exception = new MBNAException(message);
+
+        // Then
+        assertThat(exception.getMessage()).isEqualTo(message);
+        assertThat(exception.getErrorCode()).isNull();  // errorCode should be null
+    }
+
+    @Test
+    public void testMBNAExceptionWithErrorCodeAndMessage() {
+        // Given
+        String errorCode = "404";
+        String message = "Resource not found";
+
+        // When
+        MBNAException exception = new MBNAException(errorCode, message);
+
+        // Then
+        assertThat(exception.getMessage()).isEqualTo(message);
+        assertThat(exception.getErrorCode()).isEqualTo(errorCode);  // errorCode should be set correctly
+    }
+
+    @Test
+    public void testSetErrorCode() {
+        // Given
+        MBNAException exception = new MBNAException("Some error");
+
+        // When
+        String newErrorCode = "500";
+        exception.setErrorCode(newErrorCode);
+
+        // Then
+        assertThat(exception.getErrorCode()).isEqualTo(newErrorCode);  // errorCode should be updated correctly
+    }
+}

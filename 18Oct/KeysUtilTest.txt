@@ -1,0 +1,141 @@
+package com.td.mbna.msec.common.infrastructure.util;
+
+import com.td.coreapi.common.config.ApiConfig;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import java.io.InputStream;
+import java.util.Properties;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+public class KeysUtilTest {
+
+    @BeforeEach
+    public void setUp() {
+        System.clearProperty(KeysUtil.SYSTEM_PROPERTY_CONFIG_DIR);
+        System.clearProperty(KeysUtil.SYSTEM_PROPERTY_TEST);
+    }
+
+    @Test
+    public void testGetConfigDirectory_Default() {
+        // Test the default case where no system property is set
+        String expectedDir = "";
+        assertEquals(expectedDir, KeysUtil.getConfigDirectory());
+    }
+
+    @Test
+    public void testGetConfigDirectory_WithCustomPath() {
+        // Set a custom config directory
+        System.setProperty(KeysUtil.SYSTEM_PROPERTY_CONFIG_DIR, "/custom/path");
+        String expectedDir = "/custom/path" + KeysUtil.FS;
+        assertEquals(expectedDir, KeysUtil.getConfigDirectory());
+    }
+
+    @Test
+    public void testGetRewardsSsoCipherInitVector_PropertyFound() {
+        // Mock the properties
+        Properties mockProps = new Properties();
+        mockProps.setProperty("mbna.tsys.cipher.iv", "someCipherIv");
+        setStaticProperties(mockProps);
+
+        String result = KeysUtil.getRewardsSsoCipherInitVector();
+        assertEquals("someCipherIv", result);
+    }
+
+    @Test
+    public void testGetRewardsSsoCipherInitVector_PropertyNotFound() {
+        // Mock the properties
+        Properties mockProps = new Properties();
+        setStaticProperties(mockProps);
+
+        String result = KeysUtil.getRewardsSsoCipherInitVector();
+        assertNull(result);
+    }
+
+    @Test
+    public void testGetRewardsSsoKsPassword_PropertyFound() {
+        // Mock the properties
+        Properties mockProps = new Properties();
+        mockProps.setProperty("mbna.tsys.ks.pwd", "someKsPassword");
+        setStaticProperties(mockProps);
+
+        String result = KeysUtil.getRewardsSsoKsPassword();
+        assertEquals("someKsPassword", result);
+    }
+
+    @Test
+    public void testGetRewardsSsoKsPassword_PropertyNotFound() {
+        // Mock the properties
+        Properties mockProps = new Properties();
+        setStaticProperties(mockProps);
+
+        String result = KeysUtil.getRewardsSsoKsPassword();
+        assertNull(result);
+    }
+
+    @Test
+    public void testGetProperty_ValidKey() {
+        // Mock the properties
+        Properties mockProps = new Properties();
+        mockProps.setProperty("test.key", "testValue");
+        setStaticProperties(mockProps);
+
+        String result = KeysUtil.getProperty("test.key");
+        assertEquals("testValue", result);
+    }
+
+    @Test
+    public void testGetProperty_InvalidKey() {
+        // Mock the properties
+        Properties mockProps = new Properties();
+        setStaticProperties(mockProps);
+
+        String result = KeysUtil.getProperty("invalid.key");
+        assertNull(result);
+    }
+
+    @Test
+    public void testGetProperty_WithDefaultValue_KeyFound() {
+        // Mock the properties
+        Properties mockProps = new Properties();
+        mockProps.setProperty("test.key", "testValue");
+        setStaticProperties(mockProps);
+
+        String result = KeysUtil.getProperty("test.key", "defaultValue");
+        assertEquals("testValue", result);
+    }
+
+    @Test
+    public void testGetProperty_WithDefaultValue_KeyNotFound() {
+        // Mock the properties
+        Properties mockProps = new Properties();
+        setStaticProperties(mockProps);
+
+        String result = KeysUtil.getProperty("invalid.key", "defaultValue");
+        assertEquals("defaultValue", result);
+    }
+
+    @Test
+    public void testSetProperty() {
+        // Mock the properties
+        Properties mockProps = new Properties();
+        setStaticProperties(mockProps);
+
+        KeysUtil.setProperty("new.key", "newValue");
+        assertEquals("newValue", KeysUtil.getProperty("new.key"));
+    }
+
+    private void setStaticProperties(Properties props) {
+        try {
+            // Use reflection to set the static UiProps field in KeysUtil
+            java.lang.reflect.Field field = KeysUtil.class.getDeclaredField("UiProps");
+            field.setAccessible(true);
+            field.set(null, props);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+}

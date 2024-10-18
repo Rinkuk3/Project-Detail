@@ -1,0 +1,65 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.td.mbna.msec.profile.model.Address;
+import com.td.mbna.msec.midtier.types.common.DisclosureInfoType;
+
+public class DisclosureTextResponseTest {
+    
+    private DisclosureTextResponse disclosureTextResponse;
+    private Address address;
+    private DisclosureInfoType disclosureInfoType;
+
+    @BeforeEach
+    public void setUp() {
+        disclosureTextResponse = new DisclosureTextResponse();
+        address = new Address(); // Assuming Address has a default constructor
+        disclosureInfoType = new DisclosureInfoType(); // Assuming DisclosureInfoType has a default constructor
+    }
+
+    @Test
+    public void testSetAndGetAllowed() {
+        disclosureTextResponse.setAllowed(true);
+        assertTrue(disclosureTextResponse.isAllowed());
+
+        disclosureTextResponse.setAllowed(false);
+        assertFalse(disclosureTextResponse.isAllowed());
+    }
+
+    @Test
+    public void testSetAndGetDisclosureText() {
+        String text = "This is a disclosure text.";
+        disclosureTextResponse.setDisclosureText(text);
+        assertEquals(text, disclosureTextResponse.getDisclosureText());
+    }
+
+    @Test
+    public void testSetAndGetAddress() {
+        disclosureTextResponse.setAddress(address);
+        assertEquals(address, disclosureTextResponse.getAddress());
+    }
+
+    @Test
+    public void testSetAndGetDisclosureInfoType() {
+        disclosureTextResponse.setDisclosureInfoType(disclosureInfoType);
+        assertEquals(disclosureInfoType, disclosureTextResponse.getDisclosureInfoType());
+    }
+
+    @Test
+    public void testSetAndGetAuFeeApplicable() {
+        disclosureTextResponse.setAuFeeAppplicable(true);
+        assertTrue(disclosureTextResponse.isAuFeeAppplicable());
+
+        disclosureTextResponse.setAuFeeAppplicable(false);
+        assertFalse(disclosureTextResponse.isAuFeeAppplicable());
+    }
+
+    @Test
+    public void testSetAndGetAuFee() {
+        double fee = 25.0;
+        disclosureTextResponse.setAuFee(fee);
+        assertEquals(fee, disclosureTextResponse.getAuFee(), 0.001);
+    }
+}

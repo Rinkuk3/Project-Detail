@@ -1,0 +1,59 @@
+import com.td.mbna.msec.common.TokenHolderService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import static org.mockito.Mockito.*;
+
+public class JwtTokenValidationInterceptorTest {
+
+    private JwtTokenValidationInterceptor interceptor;
+    private TokenHolderService tokenHolderService;
+    private HttpServletRequest request;
+    private HttpServletResponse response;
+
+    @BeforeEach
+    public void setUp() {
+        tokenHolderService = mock(TokenHolderService.class);
+        interceptor = new JwtTokenValidationInterceptor();
+        interceptor.tokenHolderService = tokenHolderService;
+        request = mock(HttpServletRequest.class);
+        response = mock(HttpServletResponse.class);
+    }
+
+    @Test
+    public void preHandle_shouldCallValidateAndSetToken_whenTokenIsValid() throws Exception {
+        // Given
+        when(tokenHolderService.validateAndSetToken()).thenReturn(true);
+
+        // When
+        boolean result = interceptor.preHandle(request, response, new Object());
+
+        // Then
+        verify(tokenHolderService).validateAndSetToken();
+        verifyNoMoreInteractions(response);  // Ensure response methods are not called
+        assertTrue(result);  // The result should be true for a valid token
+    }
+
+    @Test
+    public void preHandle_shouldHandleNotAuthorized_whenTokenValidationFails() throws Exception {
+        // Given
+        doThrow(new RuntimeException("Token validation failed")).when(tokenHolderService).validateAndSetToken();
+
+        // When
+        boolean result = interceptor.preHandle(request, response, new Object());
+
+        // Then
+        verify(tokenHolderService).validateAndSetToken();
+        verify(response).sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        assertFalse(result);  // The result should be false for a failed token validation
+    }
+}

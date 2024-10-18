@@ -1,0 +1,142 @@
+package com.td.mbna.msec.customer.application.impl;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.common.domain.BaseMsecbffResponse;
+import com.td.mbna.msec.customer.domain.CustomerDetails;
+import com.td.mbna.msec.midtier.account.payload.deleteaccount.DeleteAccountResponse;
+import com.td.mbna.msec.midtier.account.payload.deleteaccount.RequestPayload;
+import com.td.mbna.msec.midtier.types.common.DeliveryPreferenceType;
+import com.td.mbna.msec.midtier.util.ExceptionUtil;
+import com.td.mbna.msec.core.session.SessionProvider;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import com.td.mbna.msec.midtier.util.MidTierServiceHelper;
+
+class RemoveAccountServiceImplTest {
+
+    @InjectMocks
+    private RemoveAccountServiceImpl removeAccountService;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private MidTierServiceHelper midTierServiceHelper;
+
+    private CustomerDetails customerDetails;
+    private AccountDetails accountDetails;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+
+        customerDetails = new CustomerDetails();
+        accountDetails = new AccountDetails();
+        accountDetails.setAccountId("123456");
+
+        ArrayList<AccountDetails> accounts = new ArrayList<>();
+        accounts.add(accountDetails);
+        customerDetails.setAccounts(accounts);
+    }
+
+    @Test
+    void testRemoveAccount_lastAccount() {
+        when(sessionProvider.getCustomer()).thenReturn(customerDetails);
+        when(sessionProvider.getAccount(accountDetails.getAccountId())).thenReturn(accountDetails);
+
+        BaseMsecbffResponse response = removeAccountService.removeAccount(accountDetails.getAccountId());
+
+        assertEquals(MsecbffConstants.ERROR, response.getStatus());
+    }
+
+    @Test
+    void testRemoveAccount_success() {
+        AccountDetails accountDetails2 = new AccountDetails();
+        accountDetails2.setAccountId("654321");
+        customerDetails.getAccounts().add(accountDetails2); // Add another account
+
+        when(sessionProvider.getCustomer()).thenReturn(customerDetails);
+        when(sessionProvider.getAccount(accountDetails.getAccountId())).thenReturn(accountDetails);
+        
+        // Mock successful delete account response
+        DeleteAccountResponse deleteAccountResponse = new DeleteAccountResponse();
+        deleteAccountResponse.setStatus("Success");
+        when(midTierServiceHelper.deleteAccount(anyString(), any(), any(), any()))
+                .thenReturn(deleteAccountResponse);
+
+        BaseMsecbffResponse response = removeAccountService.removeAccount(accountDetails.getAccountId());
+
+        assertEquals(MsecbffConstants.SUCCESS, response.getStatus());
+        assertEquals(1, customerDetails.getAccounts().size()); // Ensure the account was removed
+    }
+
+    @Test
+    void testRemoveAccount_accountNotFound() {
+        when(sessionProvider.getCustomer()).thenReturn(customerDetails);
+        when(sessionProvider.getAccount(accountDetails.getAccountId())).thenReturn(null);
+
+        BaseMsecbffResponse response = removeAccountService.removeAccount(accountDetails.getAccountId());
+
+        assertNull(response); // Should be null due to account not found
+    }
+
+    @Test
+    void testRemoveAccountConfirmation_lastAccount() {
+        when(sessionProvider.getCustomer()).thenReturn(customerDetails);
+
+        BaseMsecbffResponse response = removeAccountService.removeAccountConfirmation(accountDetails.getAccountId());
+
+        assertEquals(MsecbffConstants.ERROR, response.getStatus());
+    }
+
+    @Test
+    void testRemoveAccountConfirmation_success() {
+        AccountDetails accountDetails2 = new AccountDetails();
+        accountDetails2.setAccountId("654321");
+        customerDetails.getAccounts().add(accountDetails2); // Add another account
+
+        when(sessionProvider.getCustomer()).thenReturn(customerDetails);
+
+        BaseMsecbffResponse response = removeAccountService.removeAccountConfirmation(accountDetails.getAccountId());
+
+        assertEquals(MsecbffConstants.SUCCESS, response.getStatus());
+    }
+
+    @Test
+    void testRemoveAccountConfirmation_accountNotExist() {
+        when(sessionProvider.getCustomer()).thenReturn(customerDetails);
+
+        BaseMsecbffResponse response = removeAccountService.removeAccountConfirmation("non-existent-account");
+
+        assertEquals(MsecbffConstants.ERROR, response.getStatus());
+    }
+
+    @Test
+    void testRemoveAccount_success_withException() {
+        AccountDetails accountDetails2 = new AccountDetails();
+        accountDetails2.setAccountId("654321");
+        customerDetails.getAccounts().add(accountDetails2); // Add another account
+
+        when(sessionProvider.getCustomer()).thenReturn(customerDetails);
+        when(sessionProvider.getAccount(accountDetails.getAccountId())).thenReturn(accountDetails);
+        
+        // Mock to throw an exception when deleting account
+        when(midTierServiceHelper.deleteAccount(anyString(), any(), any(), any()))
+                .thenThrow(new RuntimeException("Error deleting account"));
+
+        BaseMsecbffResponse response = removeAccountService.removeAccount(accountDetails.getAccountId());
+
+        assertEquals(MsecbffConstants.ERROR, response.getStatus());
+    }
+}

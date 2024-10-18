@@ -1,0 +1,63 @@
+import com.td.mbna.msec.core.service.EligibilityAspect;
+import com.td.mbna.msec.core.service.impl.EligibilityAspectImpl;
+import com.td.mbna.msec.midtier.util.XMLGregorianCalendarConverter;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.GsonHttpMessageConverter;
+import org.springframework.web.servlet.LocaleResolver;
+
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest(classes = MsecBffCommonConfig.class)
+public class MsecBffCommonConfigTest {
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @Test
+    public void testGetLocaleResolver() {
+        LocaleResolver localeResolver = applicationContext.getBean(LocaleResolver.class);
+        assertThat(localeResolver).isNotNull();
+        assertThat(localeResolver).isInstanceOf(AcceptHeaderLocaleResolver.class);
+    }
+
+    @Test
+    public void testGetEligibilityAspect() {
+        EligibilityAspect eligibilityAspect = applicationContext.getBean(EligibilityAspect.class);
+        assertThat(eligibilityAspect).isNotNull();
+        assertThat(eligibilityAspect).isInstanceOf(EligibilityAspectImpl.class);
+    }
+
+    @Test
+    public void testCustomGsonHttpMessageConverter() {
+        GsonHttpMessageConverter gsonHttpMessageConverter = applicationContext.getBean(GsonHttpMessageConverter.class);
+        assertThat(gsonHttpMessageConverter).isNotNull();
+
+        // Verify Gson configuration
+        assertThat(gsonHttpMessageConverter.getGson().toJson(null)).isEqualTo("null");
+        assertThat(gsonHttpMessageConverter.getGson().serializeNulls()).isTrue();
+        
+        // Check for XMLGregorianCalendar serializer
+        boolean hasXmlGregorianCalendarSerializer = 
+            gsonHttpMessageConverter.getGson().getAdapter(XMLGregorianCalendar.class) instanceof XMLGregorianCalendarConverter.Serializer;
+        assertThat(hasXmlGregorianCalendarSerializer).isTrue();
+    }
+
+    @Test
+    public void testConfigureMessageConverters() {
+        List<HttpMessageConverter<?>> converters = applicationContext.getBeansOfType(HttpMessageConverter.class).values().stream().toList();
+        
+        // Check that custom GsonHttpMessageConverter is added
+        boolean hasGsonConverter = converters.stream()
+            .anyMatch(converter -> converter instanceof GsonHttpMessageConverter);
+        
+        assertThat(hasGsonConverter).isTrue();
+    }
+}

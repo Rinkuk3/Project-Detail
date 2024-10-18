@@ -1,0 +1,44 @@
+import com.google.gson.JsonElement;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonPrimitive;
+import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.Type;
+import java.time.LocalDate;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+
+public class GsonLocalDateSerializerTest {
+
+    private final GsonLocalDateSerializer serializer = new GsonLocalDateSerializer();
+
+    @Test
+    public void serialize_shouldReturnJsonPrimitive_whenDateIsNotNull() {
+        // Given
+        LocalDate date = LocalDate.of(2024, 10, 18);
+        JsonSerializationContext context = mock(JsonSerializationContext.class);
+        Type type = LocalDate.class; // The expected type for serialization
+
+        // When
+        JsonElement result = serializer.serialize(date, type, context);
+
+        // Then
+        assertThat(result).isInstanceOf(JsonPrimitive.class);
+        assertThat(result.getAsString()).isEqualTo(date.toString());
+    }
+
+    @Test
+    public void serialize_shouldReturnNull_whenDateIsNull() {
+        // Given
+        LocalDate date = null;
+        JsonSerializationContext context = mock(JsonSerializationContext.class);
+        Type type = LocalDate.class; // The expected type for serialization
+
+        // When
+        JsonElement result = serializer.serialize(date, type, context);
+
+        // Then
+        assertThat(result).isNull();
+    }
+}

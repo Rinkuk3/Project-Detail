@@ -1,0 +1,104 @@
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class BffErrorResponseTest {
+
+    @Test
+    public void testGettersAndSetters() {
+        // Given
+        BffErrorResponse bffErrorResponse = new BffErrorResponse();
+
+        // Create dummy data for testing
+        List<Error> errorMessages = new ArrayList<>();
+        errorMessages.add(new Error("Error 1"));
+        errorMessages.add(new Error("Error 2"));
+
+        List<FieldError> fieldErrors = new ArrayList<>();
+        fieldErrors.add(new FieldError("field1", "Field error 1"));
+        fieldErrors.add(new FieldError("field2", "Field error 2"));
+
+        // When
+        bffErrorResponse.setErrorMsgs(errorMessages);
+        bffErrorResponse.setValidationErrors(fieldErrors);
+
+        // Then
+        assertThat(bffErrorResponse.getErrorMsgs()).isEqualTo(errorMessages);
+        assertThat(bffErrorResponse.getValidationErrors()).isEqualTo(fieldErrors);
+    }
+
+    @Test
+    public void testDefaultConstructor() {
+        // Given
+        BffErrorResponse bffErrorResponse = new BffErrorResponse();
+
+        // When & Then
+        assertThat(bffErrorResponse.getErrorMsgs()).isEmpty();
+        assertThat(bffErrorResponse.getValidationErrors()).isEmpty();
+    }
+
+    @Test
+    public void testSetErrorMsgs() {
+        // Given
+        BffErrorResponse bffErrorResponse = new BffErrorResponse();
+        List<Error> errorMessages = new ArrayList<>();
+        errorMessages.add(new Error("Error 1"));
+
+        // When
+        bffErrorResponse.setErrorMsgs(errorMessages);
+
+        // Then
+        assertThat(bffErrorResponse.getErrorMsgs()).hasSize(1);
+        assertThat(bffErrorResponse.getErrorMsgs().get(0).getMessage()).isEqualTo("Error 1");
+    }
+
+    @Test
+    public void testSetValidationErrors() {
+        // Given
+        BffErrorResponse bffErrorResponse = new BffErrorResponse();
+        List<FieldError> fieldErrors = new ArrayList<>();
+        fieldErrors.add(new FieldError("field1", "Field error 1"));
+
+        // When
+        bffErrorResponse.setValidationErrors(fieldErrors);
+
+        // Then
+        assertThat(bffErrorResponse.getValidationErrors()).hasSize(1);
+        assertThat(bffErrorResponse.getValidationErrors().get(0).getField()).isEqualTo("field1");
+        assertThat(bffErrorResponse.getValidationErrors().get(0).getMessage()).isEqualTo("Field error 1");
+    }
+}
+
+// Assuming you have the Error and FieldError classes defined as follows
+class Error {
+    private String message;
+
+    public Error(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+}
+
+class FieldError {
+    private String field;
+    private String message;
+
+    public FieldError(String field, String message) {
+        this.field = field;
+        this.message = message;
+    }
+
+    public String getField() {
+        return field;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+}

@@ -1,0 +1,122 @@
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class TransactionDetailsTest {
+
+    @Test
+    public void testDefaultConstructor() {
+        // Given
+        TransactionDetails transactionDetails = new TransactionDetails();
+
+        // When
+        BigDecimal amount = transactionDetails.getAmount();
+        String description = transactionDetails.getDescription();
+
+        // Then
+        assertThat(amount).isNull();
+        assertThat(description).isNull();
+    }
+
+    @Test
+    public void testParameterizedConstructorWithAmount() {
+        // Given
+        BigDecimal expectedAmount = BigDecimal.valueOf(100.50);
+
+        // When
+        TransactionDetails transactionDetails = new TransactionDetails(expectedAmount);
+
+        // Then
+        assertThat(transactionDetails.getAmount()).isEqualTo(expectedAmount);
+    }
+
+    @Test
+    public void testFullParameterizedConstructor() {
+        // Given
+        Date transactionDate = new Date();
+        Date postingDate = new Date();
+        String description = "Transaction description";
+        String promotionOfferID = "Promo123";
+        String referenceNumber = "Ref456";
+        BigDecimal amount = BigDecimal.valueOf(150.75);
+        String cardHolderName = "John Doe";
+        String cardHolderNameFr = "Jean Dupont";
+        String last4 = "1234";
+        boolean isPrimaryCardHolder = true;
+
+        // When
+        TransactionDetails transactionDetails = new TransactionDetails(transactionDate, postingDate, description,
+                promotionOfferID, referenceNumber, amount, cardHolderName, cardHolderNameFr, last4, isPrimaryCardHolder);
+
+        // Then
+        assertThat(transactionDetails.getTransactionDate()).isEqualTo(transactionDate);
+        assertThat(transactionDetails.getPostingDate()).isEqualTo(postingDate);
+        assertThat(transactionDetails.getDescription()).isEqualTo(description);
+        assertThat(transactionDetails.getPromotionOfferID()).isEqualTo(promotionOfferID);
+        assertThat(transactionDetails.getReferencNumber()).isEqualTo(referenceNumber);
+        assertThat(transactionDetails.getAmount()).isEqualTo(amount);
+        assertThat(transactionDetails.getCardHolderName()).isEqualTo(cardHolderName);
+        assertThat(transactionDetails.getCardHolderNameFr()).isEqualTo(cardHolderNameFr);
+        assertThat(transactionDetails.getLast4()).isEqualTo(last4);
+        assertThat(transactionDetails.isPrimaryCardHolder()).isEqualTo(isPrimaryCardHolder);
+    }
+
+    @Test
+    public void testGetPromotionOfferIDReturnsDefault() {
+        // Given
+        TransactionDetails transactionDetails = new TransactionDetails();
+
+        // When
+        String promotionOfferID = transactionDetails.getPromotionOfferID();
+
+        // Then
+        assertThat(promotionOfferID).isEqualTo("--");
+    }
+
+    @Test
+    public void testGetPromotionOfferIDReturnsValue() {
+        // Given
+        TransactionDetails transactionDetails = new TransactionDetails();
+        transactionDetails.setPromotionOfferID("Promo123");
+
+        // When
+        String promotionOfferID = transactionDetails.getPromotionOfferID();
+
+        // Then
+        assertThat(promotionOfferID).isEqualTo("Promo123");
+    }
+
+    @Test
+    public void testSettersAndGetters() {
+        // Given
+        TransactionDetails transactionDetails = new TransactionDetails();
+        BigDecimal amount = BigDecimal.valueOf(250.00);
+        String description = "Sample transaction";
+
+        // When
+        transactionDetails.setAmount(amount);
+        transactionDetails.setDescription(description);
+
+        // Then
+        assertThat(transactionDetails.getAmount()).isEqualTo(amount);
+        assertThat(transactionDetails.getDescription()).isEqualTo(description);
+    }
+
+    @Test
+    public void testToString() {
+        // Given
+        TransactionDetails transactionDetails = new TransactionDetails();
+        transactionDetails.setDescription("Test Transaction");
+        transactionDetails.setAmount(BigDecimal.valueOf(500.00));
+
+        // When
+        String result = transactionDetails.toString();
+
+        // Then
+        assertThat(result).contains("Test Transaction");
+        assertThat(result).contains("500.00");
+    }
+}

@@ -1,0 +1,144 @@
+package com.td.mbna.msec.common.infrastructure.util;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.customer.domain.CustomerDetails;
+import com.td.mbna.msec.midtier.types.common.EligIdType;
+import com.td.mbna.msec.midtier.types.eligibility.AcctEligType;
+import com.td.mbna.msec.midtier.types.eligibility.CustEligType;
+import com.td.mbna.msec.midtier.types.eligibility.EligType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.*;
+
+public class EligibilityHelperTest {
+
+    private Map<String, Object> session;
+    private CustEligType custElig;
+    private CustomerDetails customer;
+    private AccountDetails account;
+
+    @BeforeEach
+    public void setUp() {
+        session = new HashMap<>();
+        customer = mock(CustomerDetails.class);
+        account = mock(AccountDetails.class);
+        custElig = mock(CustEligType.class);
+        session.put(EligibilityHelper.SESSION_CUSTOMER_KEY, customer);
+    }
+
+    @Test
+    public void testSetSessionEligibility() {
+        EligibilityHelper.setSessionEligibility(session, custElig);
+        assertEquals(custElig, session.get(EligibilityHelper.SESSION_CUST_ELIGIBILITY));
+    }
+
+    @Test
+    public void testIsAccountAllowed_AccountNotFound() {
+        when(customer.getAccount("invalid")).thenReturn(null);
+        boolean result = EligibilityHelper.isAccountAllowed(session, "invalid", mock(EligIdType.class));
+        assertFalse(result);
+    }
+
+    @Test
+    public void testIsAccountAllowed_CustomerEligibilityNull() {
+        when(customer.getAccount("validAccountId")).thenReturn(account);
+        boolean result = EligibilityHelper.isAccountAllowed(session, "validAccountId", mock(EligIdType.class));
+        assertFalse(result);
+    }
+
+    @Test
+    public void testIsAccountAllowed_AccountEligibilityFound() {
+        when(customer.getAccount("validAccountId")).thenReturn(account);
+        when(session.get(EligibilityHelper.SESSION_CUST_ELIGIBILITY)).thenReturn(custElig);
+
+        List<AcctEligType> acctsElig = new ArrayList<>();
+        AcctEligType acctElig = mock(AcctEligType.class);
+        when(acctElig.getAcctId()).thenReturn("validAccountId");
+        when(acctElig.getAcctElig()).thenReturn(Collections.singletonList(mock(EligType.class)));
+        acctsElig.add(acctElig);
+        when(custElig.getAcctsElig()).thenReturn(acctsElig);
+
+        when(acctElig.getAcctElig()).thenReturn(Collections.singletonList(mock(EligType.class)));
+        boolean result = EligibilityHelper.isAccountAllowed(session, "validAccountId", mock(EligIdType.class));
+        assertTrue(result);
+    }
+
+    @Test
+    public void testIsCustomerAllowed_CustomerEligibilityNull() {
+        boolean result = EligibilityHelper.isCustomerAllowed(session, mock(EligIdType.class));
+        assertFalse(result);
+    }
+
+    @Test
+    public void testIsCustomerAllowed_EligibilityListNull() {
+        when(session.get(EligibilityHelper.SESSION_CUST_ELIGIBILITY)).thenReturn(custElig);
+        when(custElig.getCustElig()).thenReturn(null);
+        boolean result = EligibilityHelper.isCustomerAllowed(session, mock(EligIdType.class));
+        assertFalse(result);
+    }
+
+    @Test
+    public void testIsCustomerAllowed_EligibilityFound() {
+        when(session.get(EligibilityHelper.SESSION_CUST_ELIGIBILITY)).thenReturn(custElig);
+        List<EligType> eligibilityList = new ArrayList<>();
+        EligType eligibility = mock(EligType.class);
+        when(eligibility.getEligId()).thenReturn(mock(EligIdType.class));
+        when(eligibility.isEligValue()).thenReturn(true);
+        eligibilityList.add(eligibility);
+        when(custElig.getCustElig()).thenReturn(eligibilityList);
+
+        boolean result = EligibilityHelper.isCustomerAllowed(session, mock(EligIdType.class));
+        assertTrue(result);
+    }
+
+    @Test
+    public void testSetEligibility() {
+        List<AcctEligType> acctsElig = new ArrayList<>();
+        AcctEligType acctElig = mock(AcctEligType.class);
+        when(acctElig.getAcctId()).thenReturn("validAccountId");
+        acctsElig.add(acctElig);
+        when(account.getAccountId()).thenReturn("validAccountId");
+        when(account.getAccountNumber()).thenReturn("12345");
+
+        EligibilityHelper.setEligibility(account, acctsElig);
+        // You can verify if the eligibility was set correctly in the AccountDetails object.
+    }
+
+    @Test
+    public void testSetAccountEligibility() {
+        List<EligType> eligList = new ArrayList<>();
+        EligType eligibility = mock(EligType.class);
+        when(eligibility.getEligId()).thenReturn(EligIdType.ACCOUNT_SUMMARY);
+        when(eligibility.isEligValue()).thenReturn(true);
+        eligList.add(eligibility);
+
+        EligibilityHelper.setAccountEligibility(account, eligList);
+        // Verify that the correct eligibility field was set in AccountDetails.
+        verify(account).setAllowedAccountSummary(true);
+    }
+
+    @Test
+    public void testGetAccountNumber_OldStubData() {
+        when(account.getAccountId()).thenReturn("12345");
+        String result = EligibilityHelper.getAccountNumer(account);
+        assertEquals("12345", result);
+    }
+
+    @Test
+    public void testGetAccountNumber_NewStubData() {
+        when(account.getAccountId()).thenReturn("123-456");
+        when(account.getAccountNumber()).thenReturn("12345");
+        String result = EligibilityHelper.getAccountNumer(account);
+        assertEquals("12345", result);
+    }
+
+    @Test
+    public void testGetAccountNumber_NullAccount() {
+        String result = EligibilityHelper.getAccountNumer(null);
+        assertNull(result);
+    }
+}

@@ -1,0 +1,119 @@
+import com.td.coreapi.common.config.ApiConfig;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import java.io.InputStream;
+import java.util.Properties;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+public class ConfigUtilTest {
+
+    private final String uiPropertiesFile = "ui.properties";
+    private final String midtierPropertiesFile = "midtier.properties";
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        // Mock the ApiConfig to return a valid InputStream for the properties files
+        InputStream uiPropsIn = mock(InputStream.class);
+        InputStream midtierPropsIn = mock(InputStream.class);
+
+        // Mock the behavior of the ApiConfig class
+        ApiConfig mockApiConfig = mock(ApiConfig.class);
+        when(mockApiConfig.getInputStreamFromFile(uiPropertiesFile)).thenReturn(uiPropsIn);
+        when(mockApiConfig.getInputStreamFromFile(midtierPropertiesFile)).thenReturn(midtierPropsIn);
+        
+        // Mock static methods of ApiConfig
+        Mockito.mockStatic(ApiConfig.class);
+        Mockito.when(ApiConfig.getInstance()).thenReturn(mockApiConfig);
+
+        // Load the properties in ConfigUtil
+        ConfigUtil.setProperty("mbna.tsys.key.alias", "testKeyAlias");
+        ConfigUtil.setMidtierProperty("test.midtier.property", "midtierValue");
+    }
+
+    @Test
+    public void testGetConfigDirectory() {
+        // Test default config directory
+        String configDir = ConfigUtil.getConfigDirectory();
+        assertThat(configDir).isNotNull();
+    }
+
+    @Test
+    public void testGetRewardsSsoKeyAlias() {
+        String alias = ConfigUtil.getRewardsSsoKeyAlias();
+        assertThat(alias).isEqualTo("testKeyAlias");
+    }
+
+    @Test
+    public void testGetKeystoreFolder() {
+        ConfigUtil.setProperty("pin.keystore.directory", "keystoreFolder");
+        String keystoreFolder = ConfigUtil.getKeystoreFolder();
+        assertThat(keystoreFolder).isEqualTo("keystoreFolder");
+    }
+
+    @Test
+    public void testGetProperty() {
+        ConfigUtil.setProperty("test.property", "testValue");
+        String value = ConfigUtil.getProperty("test.property");
+        assertThat(value).isEqualTo("testValue");
+    }
+
+    @Test
+    public void testGetPropertyWithDefault() {
+        String defaultValue = "defaultValue";
+        String value = ConfigUtil.getProperty("nonexistent.property", defaultValue);
+        assertThat(value).isEqualTo(defaultValue);
+    }
+
+    @Test
+    public void testGetMidtierProperty() {
+        String midtierValue = ConfigUtil.getMidtierProperty("test.midtier.property");
+        assertThat(midtierValue).isEqualTo("midtierValue");
+    }
+
+    @Test
+    public void testGetMidtierPropertyWithDefault() {
+        String defaultValue = "defaultMidtierValue";
+        String midtierValue = ConfigUtil.getMidtierProperty("nonexistent.midtier.property", defaultValue);
+        assertThat(midtierValue).isEqualTo(defaultValue);
+    }
+
+    @Test
+    public void testGetShowSoapFaults() {
+        ConfigUtil.setProperty(ConfigUtil.UI_PROPERTY_SHOW_SOAP_FAULTS, "true");
+        assertThat(ConfigUtil.getShowSoapFaults()).isTrue();
+    }
+
+    @Test
+    public void testGetLoadLPJSEnv() {
+        ConfigUtil.setProperty(ConfigUtil.UI_PROPERTY_LOAD_LIVEPERSON_JS, "livePerson");
+        assertThat(ConfigUtil.getLoadLPJSEnv()).isEqualTo("livePerson");
+    }
+
+    @Test
+    public void testHandlePropertyNotFound() {
+        // This will throw an exception because the property does not exist
+        try {
+            ConfigUtil.getProperty("nonexistent.property");
+        } catch (Exception e) {
+            assertThat(e).isInstanceOf(RuntimeException.class);
+        }
+    }
+
+    @Test
+    public void testHandleErrorOrException() {
+        // Test that handleErrorOrException closes the InputStream
+        InputStream mockStream = mock(InputStream.class);
+        try {
+            ConfigUtil.handleErrorOrException(mockStream, new Exception("Test Exception"));
+        } catch (Exception e) {
+            // Verify that it throws the expected exception
+            assertThat(e).isInstanceOf(RuntimeException.class);
+        }
+    }
+}

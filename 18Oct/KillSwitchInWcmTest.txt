@@ -1,0 +1,27 @@
+import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class KillSwitchInWcmTest {
+
+    @Test
+    public void testDefaultConstructor() {
+        // Given
+        KillSwitchInWcm killSwitch = new KillSwitchInWcm();
+
+        // When & Then
+        assertThat(killSwitch.isCard_control()).isFalse(); // Default value for boolean is false
+    }
+
+    @Test
+    public void testCardControlSetterAndGetter() {
+        // Given
+        KillSwitchInWcm killSwitch = new KillSwitchInWcm();
+        boolean expectedCardControlValue = true;
+
+        // When
+        killSwitch.setCard_control(expectedCardControlValue);
+
+        // Then
+        assertThat(killSwitch.isCard_control()).isEqualTo(expectedCardControlValue);
+    }
+}

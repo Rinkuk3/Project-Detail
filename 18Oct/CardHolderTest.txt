@@ -1,0 +1,78 @@
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class CardHolderTest {
+
+    @Test
+    public void testDefaultConstructor() {
+        // Given
+        CardHolder cardHolder = new CardHolder();
+
+        // When & Then
+        assertThat(cardHolder.getFullName()).isNull();
+        assertThat(cardHolder.isActive()).isFalse();
+    }
+
+    @Test
+    public void testParameterizedConstructor() {
+        // Given
+        CardHolderType cardHolderType = new CardHolderType();
+        cardHolderType.setFirstName("John");
+        cardHolderType.setMiddleName("M.");
+        cardHolderType.setLastName("Doe");
+        cardHolderType.setSuffixCd("Jr.");
+        cardHolderType.setCustomerID("C123456");
+        cardHolderType.setPrimaryUser(true);
+        cardHolderType.setLanguageCode("EN");
+        cardHolderType.setLegalNameLastUpdatedTS(System.currentTimeMillis());
+        cardHolderType.setAliasCustomerID("AC123456");
+        cardHolderType.setBirthDate("2000-01-01");
+
+        // When
+        CardHolder cardHolder = new CardHolder(cardHolderType);
+
+        // Then
+        assertThat(cardHolder.getFirstName()).isEqualTo("John");
+        assertThat(cardHolder.getMiddleName()).isEqualTo("M.");
+        assertThat(cardHolder.getLastName()).isEqualTo("Doe");
+        assertThat(cardHolder.getSuffixCd()).isEqualTo("Jr.");
+        assertThat(cardHolder.getCustomerID()).isEqualTo("C123456");
+        assertThat(cardHolder.isPrimaryUser()).isTrue();
+        assertThat(cardHolder.getLanguageCode()).isEqualTo("EN");
+        assertThat(cardHolder.getLegalNameLastUpdatedTS()).isNotNull();
+        assertThat(cardHolder.getAliasCustomerID()).isEqualTo("AC123456");
+        assertThat(cardHolder.getBirthDate()).isEqualTo("2000-01-01");
+    }
+
+    @Test
+    public void testSetFullName() {
+        // Given
+        CardHolder cardHolder = new CardHolder();
+        String fullName = "John M. Doe";
+
+        // When
+        cardHolder.setFullName(fullName);
+
+        // Then
+        assertThat(cardHolder.getFullName()).isEqualTo(fullName);
+    }
+
+    @Test
+    public void testSetActive() {
+        // Given
+        CardHolder cardHolder = new CardHolder();
+
+        // When
+        cardHolder.setActive(true);
+
+        // Then
+        assertThat(cardHolder.isActive()).isTrue();
+
+        // When
+        cardHolder.setActive(false);
+
+        // Then
+        assertThat(cardHolder.isActive()).isFalse();
+    }
+}

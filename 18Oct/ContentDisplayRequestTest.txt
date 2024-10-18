@@ -1,0 +1,39 @@
+package com.td.mbna.msec.content.domain;
+
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+public class ContentDisplayRequestTest {
+
+    @Test
+    public void testGettersAndSetters() {
+        // Arrange
+        ContentDisplayRequest request = new ContentDisplayRequest();
+        
+        // Test ID
+        String testId = "testId";
+        request.setId(testId);
+        assertEquals(testId, request.getId(), "The ID should match the set value.");
+
+        // Test Request Locale
+        String testLocale = "en-US";
+        request.setRequestLocale(testLocale);
+        assertEquals(testLocale, request.getRequestLocale(), "The requestLocale should match the set value.");
+    }
+
+    @Test
+    public void testSerialization() {
+        // Arrange
+        ContentDisplayRequest request = new ContentDisplayRequest();
+        request.setId("testId");
+        request.setRequestLocale("en-US");
+
+        // Serialize and Deserialize
+        byte[] serializedData = SerializationUtils.serialize(request);
+        ContentDisplayRequest deserializedRequest = SerializationUtils.deserialize(serializedData);
+
+        // Assert
+        assertEquals(request.getId(), deserializedRequest.getId(), "The ID should match after serialization.");
+        assertEquals(request.getRequestLocale(), deserializedRequest.getRequestLocale(), "The requestLocale should match after serialization.");
+    }
+}

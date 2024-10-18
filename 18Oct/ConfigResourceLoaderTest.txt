@@ -1,0 +1,63 @@
+import com.td.mbna.msec.common.infrastructure.util.ConfigResourceLoader;
+import com.td.mbna.msec.common.infrastructure.util.ConfigUtil;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class ConfigResourceLoaderTest {
+
+    private ConfigResourceLoader configResourceLoader;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        // Mocking the ConfigUtil to return a valid config directory path
+        String validConfigDir = "src/test/resources/config"; // Example valid directory
+        Mockito.mockStatic(ConfigUtil.class);
+        Mockito.when(ConfigUtil.getConfigDirectory()).thenReturn(validConfigDir);
+
+        // Initialize the ConfigResourceLoader
+        configResourceLoader = new ConfigResourceLoader();
+    }
+
+    @Test
+    public void testConstructorWithValidDirectory() throws Exception {
+        // Verify that the loader is initialized correctly
+        URL[] urls = configResourceLoader.getURLs();
+        assertThat(urls).isNotEmpty();
+        assertThat(urls[0].getFile()).isEqualTo(new File("src/test/resources/config").toURI().toString());
+    }
+
+    @Test
+    public void testConstructorWithInvalidDirectory() throws Exception {
+        // Mocking the ConfigUtil to return an invalid config directory path
+        String invalidConfigDir = "invalid/path/to/config";
+        Mockito.when(ConfigUtil.getConfigDirectory()).thenReturn(invalidConfigDir);
+
+        // Initialize the ConfigResourceLoader with an invalid directory
+        ConfigResourceLoader loader = new ConfigResourceLoader();
+
+        // Verify that the loader is initialized with an empty URL array
+        URL[] urls = loader.getURLs();
+        assertThat(urls).isEmpty();
+    }
+
+    @Test
+    public void testConstructorHandlesException() {
+        // Simulating an exception during URL creation
+        Mockito.mockStatic(ConfigUtil.class);
+        Mockito.when(ConfigUtil.getConfigDirectory()).thenThrow(new RuntimeException("Exception in ConfigUtil"));
+
+        // Initialize the ConfigResourceLoader
+        ConfigResourceLoader loader = new ConfigResourceLoader();
+
+        // Verify that the loader is initialized with an empty URL array
+        URL[] urls = loader.getURLs();
+        assertThat(urls).isEmpty();
+    }
+}

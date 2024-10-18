@@ -1,0 +1,145 @@
+package com.td.mbna.msec.customer.application.impl;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.math.BigDecimal;
+import java.util.Collections;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.common.domain.BaseMsecbffResponse;
+import com.td.mbna.msec.profile.model.CustomerProfile;
+import com.td.mbna.msec.midtier.offers.payload.requestinsurance.RequestInsuranceResponse;
+import com.td.mbna.msec.midtier.offers.payload.requestinsurance.RequestPayload;
+import com.td.mbna.msec.midtier.types.common.CardHolderType;
+import com.td.mbna.msec.midtier.types.common.PhoneNumber;
+import com.td.mbna.msec.midtier.types.common.UnformattedAddress;
+import com.td.mbna.msec.offers.domain.OfferDetails;
+
+class CardSetupConfirmationServiceImplTest {
+
+    @InjectMocks
+    private CardSetupConfirmationServiceImpl cardSetupConfirmationService;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private MidTierServiceHelper midTierServiceHelper;
+
+    private AccountDetails accountDetails;
+    private CustomerProfile customerProfile;
+    private OfferDetails offerDetails;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+
+        // Initialize common objects used in tests
+        customerProfile = new CustomerProfile();
+        customerProfile.setFirstName("John");
+        customerProfile.setLastName("Doe");
+        customerProfile.setLanguagePref("EN");
+        customerProfile.setMailingAddressLine1("123 Main St");
+        customerProfile.setMailingCity("Toronto");
+        customerProfile.setMailingPostalCode("A1B2C3");
+        customerProfile.setMailingProvince("ON");
+
+        offerDetails = new OfferDetails();
+        offerDetails.setAsPromotionOfferType("Offer Type");
+
+        accountDetails = new AccountDetails();
+        accountDetails.setProfile(customerProfile);
+        accountDetails.setBpOffers(Collections.singletonList(offerDetails));
+        accountDetails.setAccountId("123456");
+        accountDetails.setCardNumber("1234-5678-9012-3456");
+        accountDetails.setRoleCD("Role");
+    }
+
+    @Test
+    void testCardSetupConfirmation_accountNull() {
+        when(sessionProvider.getCurrentAccount()).thenReturn(null);
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            cardSetupConfirmationService.cardSetupConfirmation();
+        });
+
+        assertEquals("Current account doesn't exist", exception.getMessage());
+    }
+
+    @Test
+    void testCardSetupConfirmation_success() throws Exception {
+        when(sessionProvider.getCurrentAccount()).thenReturn(accountDetails);
+        when(midTierServiceHelper.requestInsurance(any(RequestPayload.class), anyString()))
+                .thenReturn(new RequestInsuranceResponse()); // Simulate success
+
+        BaseMsecbffResponse response = cardSetupConfirmationService.cardSetupConfirmation();
+
+        assertEquals("SUCCESS", response.getStatus());
+        assertEquals("", response.getErrorCode());
+    }
+
+    @Test
+    void testCardSetupConfirmation_offerRequestFails() throws Exception {
+        when(sessionProvider.getCurrentAccount()).thenReturn(accountDetails);
+        when(midTierServiceHelper.requestInsurance(any(RequestPayload.class), anyString()))
+                .thenReturn(null); // Simulate failure
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            cardSetupConfirmationService.cardSetupConfirmation();
+        });
+
+        assertEquals("Card Confirmation request BPI failed", exception.getMessage());
+    }
+
+    @Test
+    void testCardSetupConfirmation_exceptionThrown() throws Exception {
+        when(sessionProvider.getCurrentAccount()).thenReturn(accountDetails);
+        when(midTierServiceHelper.requestInsurance(any(RequestPayload.class), anyString()))
+                .thenThrow(new RuntimeException("Some error occurred"));
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            cardSetupConfirmationService.cardSetupConfirmation();
+        });
+
+        assertEquals("Some error occurred", exception.getMessage());
+    }
+
+    @Test
+    void testSaveConfirmedBPIOffer_success() throws Exception {
+        RequestInsuranceResponse response = new RequestInsuranceResponse();
+        response.setResponsePayload(new RequestInsuranceResponse.ResponsePayload());
+        response.getResponsePayload().setStatus(true); // Simulate success
+
+        when(sessionProvider.getCurrentAccount()).thenReturn(accountDetails);
+        when(midTierServiceHelper.requestInsurance(any(RequestPayload.class), anyString())).thenReturn(response);
+
+        boolean result = cardSetupConfirmationService.saveConfirmedBPIOffer(accountDetails);
+        assertTrue(result);
+        assertTrue(accountDetails.isBpiOfferAccepted());
+    }
+
+    @Test
+    void testSaveConfirmedBPIOffer_noOffers() throws Exception {
+        accountDetails.setBpOffers(Collections.emptyList()); // No offers
+
+        boolean result = cardSetupConfirmationService.saveConfirmedBPIOffer(accountDetails);
+        assertFalse(result);
+    }
+
+    @Test
+    void testSaveConfirmedBPIOffer_insuranceRequestFails() throws Exception {
+        when(sessionProvider.getCurrentAccount()).thenReturn(accountDetails);
+        when(midTierServiceHelper.requestInsurance(any(RequestPayload.class), anyString()))
+                .thenReturn(new RequestInsuranceResponse()); // Simulate failure
+
+        boolean result = cardSetupConfirmationService.saveConfirmedBPIOffer(accountDetails);
+        assertFalse(result);
+    }
+}

@@ -1,0 +1,68 @@
+import com.td.mbna.msec.common.infrastructure.JwtTokenHeaderInjectionInterceptor;
+import com.td.mbna.msec.common.infrastructure.MSECBffRestTemplateBuilder;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.GsonHttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class MSECBffRestTemplateBuilderTest {
+
+    @Test
+    public void testRestTemplateInitialization() {
+        MSECBffRestTemplateBuilder builder = new MSECBffRestTemplateBuilder();
+        RestTemplate restTemplate = builder.build();
+
+        // Verify that the RestTemplate is initialized
+        assertThat(restTemplate).isNotNull();
+
+        // Verify that message converters are set correctly
+        List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
+        assertThat(messageConverters).isNotEmpty();
+        assertThat(messageConverters).anyMatch(converter -> converter instanceof GsonHttpMessageConverter);
+        assertThat(messageConverters).anyMatch(converter -> converter instanceof StringHttpMessageConverter);
+    }
+
+    @Test
+    public void testAddInterceptor() {
+        MSECBffRestTemplateBuilder builder = new MSECBffRestTemplateBuilder();
+        JwtTokenHeaderInjectionInterceptor interceptor = new JwtTokenHeaderInjectionInterceptor(null);
+        
+        builder.addInterceptor(interceptor);
+        RestTemplate restTemplate = builder.build();
+
+        // Verify that the interceptor has been added
+        List<ClientHttpRequestInterceptor> interceptors = restTemplate.getInterceptors();
+        assertThat(interceptors).isNotNull();
+        assertThat(interceptors).contains(interceptor);
+    }
+
+    @Test
+    public void testAddRestInterceptor() {
+        MSECBffRestTemplateBuilder builder = new MSECBffRestTemplateBuilder();
+        ClientHttpRequestInterceptor bffRestInterceptor = (request, body, execution) -> null; // Dummy interceptor
+
+        builder.addRestInterceptor(bffRestInterceptor);
+        RestTemplate restTemplate = builder.build();
+
+        // Verify that the bffRestInterceptor has been added
+        List<ClientHttpRequestInterceptor> interceptors = restTemplate.getInterceptors();
+        assertThat(interceptors).isNotNull();
+        assertThat(interceptors).contains(bffRestInterceptor);
+    }
+
+    @Test
+    public void testBuild() {
+        MSECBffRestTemplateBuilder builder = new MSECBffRestTemplateBuilder();
+        RestTemplate restTemplate = builder.build();
+
+        // Verify that building returns the initialized RestTemplate
+        assertThat(restTemplate).isNotNull();
+        assertThat(restTemplate.getMessageConverters()).isNotEmpty();
+    }
+}

@@ -1,0 +1,59 @@
+package com.td.mbna.msec.creditlimit.model;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.math.BigDecimal;
+
+import org.junit.jupiter.api.Test;
+
+public class CreditLimitInfoIncreaseTest {
+
+    @Test
+    public void testSetAndGetCreditLimit() {
+        BigDecimal creditLimit = new BigDecimal("5000.00");
+        CreditLimitInfoIncrease creditLimitInfo = CreditLimitInfoIncrease.builder()
+                .creditLimit(creditLimit)
+                .build();
+
+        assertEquals(creditLimit, creditLimitInfo.getCreditLimit());
+    }
+
+    @Test
+    public void testSetAndGetApprovedCreditLimit() {
+        BigDecimal approvedCreditLimit = new BigDecimal("7000.00");
+        CreditLimitInfoIncrease creditLimitInfo = CreditLimitInfoIncrease.builder()
+                .approvedCreditLimit(approvedCreditLimit)
+                .build();
+
+        assertEquals(approvedCreditLimit, creditLimitInfo.getApprovedCreditLimit());
+    }
+
+    @Test
+    public void testBuilder() {
+        BigDecimal creditLimit = new BigDecimal("6000.00");
+        BigDecimal approvedCreditLimit = new BigDecimal("8000.00");
+
+        CreditLimitInfoIncrease creditLimitInfo = CreditLimitInfoIncrease.builder()
+                .creditLimit(creditLimit)
+                .approvedCreditLimit(approvedCreditLimit)
+                .build();
+
+        assertNotNull(creditLimitInfo);
+        assertEquals(creditLimit, creditLimitInfo.getCreditLimit());
+        assertEquals(approvedCreditLimit, creditLimitInfo.getApprovedCreditLimit());
+    }
+
+    @Test
+    public void testToString() {
+        BigDecimal creditLimit = new BigDecimal("3000.00");
+        BigDecimal approvedCreditLimit = new BigDecimal("9000.00");
+
+        CreditLimitInfoIncrease creditLimitInfo = CreditLimitInfoIncrease.builder()
+                .creditLimit(creditLimit)
+                .approvedCreditLimit(approvedCreditLimit)
+                .build();
+
+        String expectedString = "CreditLimitInfoIncrease(creditLimit=" + creditLimit + ", approvedCreditLimit=" + approvedCreditLimit + ")";
+        assertEquals(expectedString, creditLimitInfo.toString());
+    }
+}

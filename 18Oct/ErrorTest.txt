@@ -1,0 +1,58 @@
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class ErrorTest {
+
+    @Test
+    public void testGettersAndSetters() {
+        // Given
+        Error error = new Error();
+        String errorCode = "404";
+        String errorDescription = "Not Found";
+
+        // When
+        error.setErrorCode(errorCode);
+        error.setErrorDescription(errorDescription);
+
+        // Then
+        assertThat(error.getErrorCode()).isEqualTo(errorCode);
+        assertThat(error.getErrorDescription()).isEqualTo(errorDescription);
+    }
+
+    @Test
+    public void testSetErrorCode() {
+        // Given
+        Error error = new Error();
+        String errorCode = "500";
+
+        // When
+        error.setErrorCode(errorCode);
+
+        // Then
+        assertThat(error.getErrorCode()).isEqualTo(errorCode);
+    }
+
+    @Test
+    public void testSetErrorDescription() {
+        // Given
+        Error error = new Error();
+        String errorDescription = "Internal Server Error";
+
+        // When
+        error.setErrorDescription(errorDescription);
+
+        // Then
+        assertThat(error.getErrorDescription()).isEqualTo(errorDescription);
+    }
+
+    @Test
+    public void testDefaultConstructor() {
+        // Given
+        Error error = new Error();
+
+        // When & Then
+        assertThat(error.getErrorCode()).isNull();
+        assertThat(error.getErrorDescription()).isNull();
+    }
+}

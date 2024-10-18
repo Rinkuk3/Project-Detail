@@ -1,0 +1,95 @@
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.td.mbna.msec.midtier.types.common.CardHolderType;
+
+public class SecCardHolderTypeTest {
+    
+    private SecCardHolderType secCardHolder;
+    
+    @BeforeEach
+    public void setUp() {
+        secCardHolder = new SecCardHolderType();
+    }
+
+    @Test
+    public void testDefaultConstructor() {
+        assertNotNull(secCardHolder);
+        assertNull(secCardHolder.getFirstName());
+        assertNull(secCardHolder.getMiddleName());
+        assertNull(secCardHolder.getLastName());
+        assertNull(secCardHolder.getSuffixCd());
+        assertNull(secCardHolder.getCustomerID());
+        assertNull(secCardHolder.getPrimaryUser());
+        assertNull(secCardHolder.getLanguageCode());
+        assertNull(secCardHolder.getLegalNameLastUpdatedTS());
+        assertNull(secCardHolder.getAliasCustomerID());
+        assertNull(secCardHolder.getBirthDate());
+        assertNull(secCardHolder.getFullName());
+    }
+
+    @Test
+    public void testSettersAndGetters() {
+        secCardHolder.setFirstName("John");
+        assertEquals("John", secCardHolder.getFirstName());
+
+        secCardHolder.setMiddleName("M.");
+        assertEquals("M.", secCardHolder.getMiddleName());
+
+        secCardHolder.setLastName("Doe");
+        assertEquals("Doe", secCardHolder.getLastName());
+
+        secCardHolder.setSuffixCd("Jr.");
+        assertEquals("Jr.", secCardHolder.getSuffixCd());
+
+        secCardHolder.setCustomerID("123456");
+        assertEquals("123456", secCardHolder.getCustomerID());
+
+        secCardHolder.setPrimaryUser(true);
+        assertTrue(secCardHolder.getPrimaryUser());
+
+        secCardHolder.setLanguageCode("EN");
+        assertEquals("EN", secCardHolder.getLanguageCode());
+
+        secCardHolder.setLegalNameLastUpdatedTS(1616161616161L);
+        assertEquals(1616161616161L, secCardHolder.getLegalNameLastUpdatedTS());
+
+        secCardHolder.setAliasCustomerID("ALIAS123");
+        assertEquals("ALIAS123", secCardHolder.getAliasCustomerID());
+
+        secCardHolder.setBirthDate("1990-01-01");
+        assertEquals("1990-01-01", secCardHolder.getBirthDate());
+
+        secCardHolder.setFullName("John M. Doe");
+        assertEquals("John M. Doe", secCardHolder.getFullName());
+    }
+
+    @Test
+    public void testConstructorWithCardHolderType() {
+        CardHolderType cardHolder = new CardHolderType();
+        cardHolder.setFirstName("Jane");
+        cardHolder.setMiddleName("A.");
+        cardHolder.setLastName("Smith");
+        cardHolder.setSuffixCd("Sr.");
+        cardHolder.setCustomerID("654321");
+        cardHolder.setPrimaryUser(false);
+        cardHolder.setLanguageCode("FR");
+        cardHolder.setLegalNameLastUpdatedTS(1616161616162L);
+        cardHolder.setAliasCustomerID("ALIAS654");
+        cardHolder.setBirthDate("1985-05-05");
+
+        SecCardHolderType secCardHolderFromType = new SecCardHolderType(cardHolder);
+
+        assertEquals("Jane", secCardHolderFromType.getFirstName());
+        assertEquals("A.", secCardHolderFromType.getMiddleName());
+        assertEquals("Smith", secCardHolderFromType.getLastName());
+        assertEquals("Sr.", secCardHolderFromType.getSuffixCd());
+        assertEquals("654321", secCardHolderFromType.getCustomerID());
+        assertFalse(secCardHolderFromType.getPrimaryUser());
+        assertEquals("FR", secCardHolderFromType.getLanguageCode());
+        assertEquals(1616161616162L, secCardHolderFromType.getLegalNameLastUpdatedTS());
+        assertEquals("ALIAS654", secCardHolderFromType.getAliasCustomerID());
+        assertEquals("1985-05-05", secCardHolderFromType.getBirthDate());
+    }
+}

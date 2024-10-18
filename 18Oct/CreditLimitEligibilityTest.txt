@@ -1,0 +1,30 @@
+package com.td.mbna.msec.creditlimit.model;
+
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+public class CreditLimitEligibilityTest {
+
+    @Test
+    public void testEnumValues() {
+        // Check that the enum constants are defined correctly
+        assertEquals("splash", CreditLimitEligibility.PAGE_KYC_KEY.getValue());
+        assertEquals("cli_short", CreditLimitEligibility.PAGE_CLI_SHORT.getValue());
+        assertEquals("cli_long", CreditLimitEligibility.PAGE_CLI_LONG.getValue());
+    }
+
+    @Test
+    public void testEnumCount() {
+        // Verify that the enum has the expected number of constants
+        CreditLimitEligibility[] values = CreditLimitEligibility.values();
+        assertEquals(3, values.length);
+    }
+
+    @Test
+    public void testEnumNames() {
+        // Verify the names of the enum constants
+        assertEquals("PAGE_KYC_KEY", CreditLimitEligibility.PAGE_KYC_KEY.name());
+        assertEquals("PAGE_CLI_SHORT", CreditLimitEligibility.PAGE_CLI_SHORT.name());
+        assertEquals("PAGE_CLI_LONG", CreditLimitEligibility.PAGE_CLI_LONG.name());
+    }
+}

@@ -1,0 +1,53 @@
+package com.td.mbna.msec.content.domain;
+
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+public class ContentDisplayResponseTest {
+
+    @Test
+    public void testGettersAndSetters() {
+        // Arrange
+        ContentDisplayResponse response = new ContentDisplayResponse();
+
+        // Test Status
+        String testStatus = "success";
+        response.setStatus(testStatus);
+        assertEquals(testStatus, response.getStatus(), "The status should match the set value.");
+
+        // Test Error Code
+        String testErrorCode = "404";
+        response.setErrorCode(testErrorCode);
+        assertEquals(testErrorCode, response.getErrorCode(), "The errorCode should match the set value.");
+
+        // Test Title
+        String testTitle = "Content Not Found";
+        response.setTitle(testTitle);
+        assertEquals(testTitle, response.getTitle(), "The title should match the set value.");
+
+        // Test Content
+        String testContent = "The requested content was not found.";
+        response.setContent(testContent);
+        assertEquals(testContent, response.getContent(), "The content should match the set value.");
+    }
+
+    @Test
+    public void testSerialization() {
+        // Arrange
+        ContentDisplayResponse response = new ContentDisplayResponse();
+        response.setStatus("success");
+        response.setErrorCode("200");
+        response.setTitle("Request Successful");
+        response.setContent("The content has been successfully retrieved.");
+
+        // Serialize and Deserialize
+        byte[] serializedData = SerializationUtils.serialize(response);
+        ContentDisplayResponse deserializedResponse = SerializationUtils.deserialize(serializedData);
+
+        // Assert
+        assertEquals(response.getStatus(), deserializedResponse.getStatus(), "The status should match after serialization.");
+        assertEquals(response.getErrorCode(), deserializedResponse.getErrorCode(), "The errorCode should match after serialization.");
+        assertEquals(response.getTitle(), deserializedResponse.getTitle(), "The title should match after serialization.");
+        assertEquals(response.getContent(), deserializedResponse.getContent(), "The content should match after serialization.");
+    }
+}

@@ -1,0 +1,89 @@
+import com.td.mbna.msec.common.domain.BffErrorResponse;
+import com.td.mbna.msec.common.domain.Error;
+import com.td.mbna.msec.common.domain.FieldError;
+import com.td.mbna.msec.midtier.exceptions.AuthorizationException;
+import com.td.mbna.msec.midtier.exceptions.BusinessException;
+import com.td.mbna.msec.midtier.types.common.FieldErrorType;
+import com.td.mbna.msec.midtier.types.common.ValidationException;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.context.request.WebRequest;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class BffExceptionHandlingControllerAdviceTest {
+
+    private final BffExceptionHandlingControllerAdvice advice = new BffExceptionHandlingControllerAdvice();
+    private final WebRequest webRequest = Mockito.mock(WebRequest.class);
+
+    @Test
+    public void handleValidationException_shouldReturn422() {
+        // Given
+        List<FieldErrorType> fieldErrors = new ArrayList<>();
+        fieldErrors.add(new FieldErrorType("field1", "ErrorCode1", "Error description 1"));
+        ValidationException validationException = new ValidationException(fieldErrors);
+
+        // When
+        ResponseEntity<BffErrorResponse> response = advice.handleExceptions(validationException, webRequest);
+
+        // Then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+        assertThat(response.getBody().getValidationErrors()).hasSize(1);
+        assertThat(response.getBody().getValidationErrors().get(0).getErrorCode()).isEqualTo("ErrorCode1");
+        assertThat(response.getBody().getValidationErrors().get(0).getField()).isEqualTo("field1");
+        assertThat(response.getBody().getValidationErrors().get(0).getErrorDescription()).isEqualTo("Error description 1");
+    }
+
+    @Test
+    public void handleBusinessException_shouldReturn409() {
+        // Given
+        BusinessException businessException = Mockito.mock(BusinessException.class);
+        Error faultInfo = new Error();
+        faultInfo.setErrorCode("BusinessErrorCode");
+        faultInfo.setErrorDescription("Business error description");
+        Mockito.when(businessException.getFaultInfo()).thenReturn(faultInfo);
+
+        // When
+        ResponseEntity<BffErrorResponse> response = advice.handleExceptions(businessException, webRequest);
+
+        // Then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+        assertThat(response.getBody().getErrorMsgs()).hasSize(1);
+        assertThat(response.getBody().getErrorMsgs().get(0).getErrorCode()).isEqualTo("BusinessErrorCode");
+        assertThat(response.getBody().getErrorMsgs().get(0).getErrorDescription()).isEqualTo("Business error description");
+    }
+
+    @Test
+    public void handleBusinessExceptionWithNullFaultInfo_shouldReturnGeneralError() {
+        // Given
+        BusinessException businessException = Mockito.mock(BusinessException.class);
+        Mockito.when(businessException.getFaultInfo()).thenReturn(null);
+
+        // When
+        ResponseEntity<BffErrorResponse> response = advice.handleExceptions(businessException, webRequest);
+
+        // Then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+        assertThat(response.getBody().getErrorMsgs()).hasSize(1);
+        assertThat(response.getBody().getErrorMsgs().get(0).getErrorCode()).isEqualTo("MS601");
+        assertThat(response.getBody().getErrorMsgs().get(0).getErrorDescription()).isEqualTo("MS601");
+    }
+
+    @Test
+    public void handleAuthorizationException_shouldReturn403() {
+        // Given
+        AuthorizationException authorizationException = new AuthorizationException("Unauthorized");
+
+        // When
+        ResponseEntity<BffErrorResponse> response = advice.handleExceptions(authorizationException, webRequest);
+
+        // Then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+        assertThat(response.getBody()).isNull(); // No body for forbidden response
+    }
+}

@@ -1,0 +1,43 @@
+package com.td.mbna.msec.creditlimit.model;
+
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+
+public class CreditLimitDecreaseResponseTest {
+
+    @Test
+    public void testCreditLimitDecreaseResponse() {
+        // Create an instance using the builder
+        BigDecimal expectedCreditLimit = new BigDecimal("5000.00");
+        CreditLimitDecreaseResponse response = CreditLimitDecreaseResponse.builder()
+                .reqCreditLimit(expectedCreditLimit)
+                .build();
+
+        // Verify that the reqCreditLimit is set correctly
+        assertEquals(expectedCreditLimit, response.getReqCreditLimit());
+    }
+
+    @Test
+    public void testDefaultValues() {
+        // Create an instance without setting values
+        CreditLimitDecreaseResponse response = CreditLimitDecreaseResponse.builder().build();
+
+        // Verify that the default value of reqCreditLimit is null
+        assertNull(response.getReqCreditLimit());
+    }
+
+    @Test
+    public void testSetReqCreditLimit() {
+        // Create an instance using the builder
+        CreditLimitDecreaseResponse response = CreditLimitDecreaseResponse.builder().build();
+
+        // Set a new value for reqCreditLimit
+        BigDecimal newCreditLimit = new BigDecimal("3000.00");
+        response.setReqCreditLimit(newCreditLimit);
+
+        // Verify that the value was set correctly
+        assertEquals(newCreditLimit, response.getReqCreditLimit());
+    }
+}

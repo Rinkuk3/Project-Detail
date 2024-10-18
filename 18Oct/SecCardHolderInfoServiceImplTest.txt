@@ -1,0 +1,157 @@
+package com.td.mbna.msec.customer.application.impl;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+import javax.servlet.http.HttpServletResponse;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.common.domain.BaseMsecbffResponse;
+import com.td.mbna.msec.core.service.CheckEligibility;
+import com.td.mbna.msec.profile.model.CustomerProfile;
+import com.td.mbna.msec.customer.domain.SecondCardUserInfo;
+import com.td.mbna.msec.midtier.customerprofile.payload.updatecustomerprofile.UpdateCustomerProfileResponse;
+import com.td.mbna.msec.midtier.types.common.CardHolderType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class SecCardHolderInfoServiceImplTest {
+
+    @InjectMocks
+    private SecCardHolderInfoServiceImpl secCardHolderInfoService;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private HttpServletResponse httpServletResponse;
+
+    @Mock
+    private MidTierServiceHelper midTierServiceHelper;
+
+    private AccountDetails account;
+    private CustomerProfile customerProfile;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        account = new AccountDetails();
+        customerProfile = new CustomerProfile();
+    }
+
+    @Test
+    @CheckEligibility
+    void testInitSecCardHolderInfo_WithNullAccountId() {
+        when(sessionProvider.getSessionAttribute(SessionProvider.SESSION_SECUSER)).thenReturn("12345");
+        when(sessionProvider.getCurrentAccount()).thenReturn(account);
+
+        SecondCardUserInfo result = secCardHolderInfoService.initSecCardHolderInfo(null, httpServletResponse);
+
+        assertNotNull(result);
+        verify(sessionProvider, times(1)).setCurrentAccount(account.getAccountId());
+    }
+
+    @Test
+    @CheckEligibility
+    void testInitSecCardHolderInfo_WithInvalidAccountId() {
+        when(sessionProvider.getSessionAttribute(SessionProvider.SESSION_SECUSER)).thenReturn("12345");
+        when(sessionProvider.getSessionCustomer()).thenReturn(new SessionCustomer(Collections.emptyList()));
+
+        SecondCardUserInfo result = secCardHolderInfoService.initSecCardHolderInfo("invalidId", httpServletResponse);
+
+        assertNotNull(result);
+        verify(httpServletResponse, times(1)).setStatus(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    @CheckEligibility
+    void testInitSecCardHolderInfo_WithInvalidSecondUserId() {
+        when(sessionProvider.getSessionAttribute(SessionProvider.SESSION_SECUSER)).thenReturn("abc");
+        when(sessionProvider.getCurrentAccount()).thenReturn(account);
+        when(sessionProvider.getSessionCustomer()).thenReturn(new SessionCustomer(Collections.singletonList(account)));
+
+        SecondCardUserInfo result = secCardHolderInfoService.initSecCardHolderInfo("accountId", httpServletResponse);
+
+        assertNotNull(result);
+        verify(httpServletResponse, times(1)).setStatus(HttpStatus.NOT_ACCEPTABLE.value());
+    }
+
+    @Test
+    @CheckEligibility
+    void testInitSecCardHolderInfo_WithValidData() {
+        when(sessionProvider.getSessionAttribute(SessionProvider.SESSION_SECUSER)).thenReturn("12345");
+        when(sessionProvider.getCurrentAccount()).thenReturn(account);
+        when(sessionProvider.getSessionCustomer()).thenReturn(new SessionCustomer(Collections.singletonList(account)));
+        when(sessionProvider.getSessionAttribute(SessionProvider.SESSION_AUTH_USERPROFILE)).thenReturn(customerProfile);
+
+        when(account.getAccountNumber()).thenReturn("accountNum");
+        when(account.getAuthorizedUsers()).thenReturn(new ArrayList<>());
+
+        SecondCardUserInfo result = secCardHolderInfoService.initSecCardHolderInfo("accountId", httpServletResponse);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testUpdatePersonalInfo_Success() {
+        SecondCardUserInfo updateRequest = new SecondCardUserInfo();
+        updateRequest.setAccountId("accountId");
+
+        when(sessionProvider.getSessionAttribute(SessionProvider.SESSION_SECUSER)).thenReturn("12345");
+        when(sessionProvider.getSessionCustomer()).thenReturn(new SessionCustomer(Collections.singletonList(account)));
+        when(sessionProvider.getSessionAttribute(SessionProvider.SESSION_AUTH_USERPROFILE)).thenReturn(customerProfile);
+
+        when(midTierServiceHelper.updateCustomerProfile(any(), any())).thenReturn(new UpdateCustomerProfileResponse());
+
+        BaseMsecbffResponse response = secCardHolderInfoService.updatePersonalInfo(updateRequest);
+
+        assertEquals(BaseMsecbffResponse.SUCCESS, response.getStatus());
+    }
+
+    @Test
+    void testUpdatePersonalInfo_Failure() {
+        SecondCardUserInfo updateRequest = new SecondCardUserInfo();
+        updateRequest.setAccountId("accountId");
+
+        when(sessionProvider.getSessionAttribute(SessionProvider.SESSION_SECUSER)).thenReturn("12345");
+        when(sessionProvider.getSessionCustomer()).thenReturn(new SessionCustomer(Collections.singletonList(account)));
+        when(sessionProvider.getSessionAttribute(SessionProvider.SESSION_AUTH_USERPROFILE)).thenReturn(customerProfile);
+
+        when(midTierServiceHelper.updateCustomerProfile(any(), any())).thenReturn(null);
+
+        BaseMsecbffResponse response = secCardHolderInfoService.updatePersonalInfo(updateRequest);
+
+        assertEquals(BaseMsecbffResponse.ERROR, response.getStatus());
+    }
+
+    @Test
+    void testUpdatePersonalInfo_NullUserProfile() {
+        SecondCardUserInfo updateRequest = new SecondCardUserInfo();
+        updateRequest.setAccountId("accountId");
+
+        when(sessionProvider.getSessionAttribute(SessionProvider.SESSION_SECUSER)).thenReturn("12345");
+        when(sessionProvider.getSessionCustomer()).thenReturn(new SessionCustomer(Collections.singletonList(account)));
+        when(sessionProvider.getSessionAttribute(SessionProvider.SESSION_AUTH_USERPROFILE)).thenReturn(null);
+
+        BaseMsecbffResponse response = secCardHolderInfoService.updatePersonalInfo(updateRequest);
+
+        assertEquals(BaseMsecbffResponse.ERROR, response.getStatus());
+    }
+
+    @Test
+    void testIsAuthorized() {
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(account);
+        when(account.isAllowedStandardEForms()).thenReturn(true);
+
+        boolean result = secCardHolderInfoService.isAuthorized();
+
+        assertTrue(result);
+    }
+}

@@ -1,0 +1,95 @@
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.cardbenefit.model.CardBenefit;
+import com.td.mbna.msec.cardbenefit.service.CardBenefitService;
+import com.td.mbna.msec.core.session.SessionProvider;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+public class CardBenefitControllerTest {
+
+    @InjectMocks
+    private CardBenefitController cardBenefitController;
+
+    @Mock
+    private CardBenefitService cardBenefitService;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private HttpServletRequest request;
+
+    private String accountId = "12345";
+    private AccountDetails accountDetails;
+    private CardBenefit cardBenefit;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        accountDetails = new AccountDetails(); // Initialize with necessary data
+        cardBenefit = new CardBenefit(); // Initialize with necessary data
+    }
+
+    @Test
+    public void testGetCardBenefitByAccountId() {
+        // Arrange
+        when(sessionProvider.getAccount(accountId)).thenReturn(accountDetails);
+        when(cardBenefitService.getCardBenefit(accountDetails, request)).thenReturn(cardBenefit);
+
+        // Act
+        CardBenefit result = cardBenefitController.getCardbenefit(accountId, request);
+
+        // Assert
+        assertEquals(cardBenefit, result);
+        verify(sessionProvider).getAccount(accountId);
+        verify(cardBenefitService).getCardBenefit(accountDetails, request);
+    }
+
+    @Test
+    public void testGetCardBenefitByAccountId_NullAccount() {
+        // Arrange
+        when(sessionProvider.getAccount(accountId)).thenReturn(null);
+
+        // Act & Assert
+        assertThrows(NullPointerException.class, () -> {
+            cardBenefitController.getCardbenefit(accountId, request);
+        });
+    }
+
+    @Test
+    public void testGetCardBenefit_NoAccountId() {
+        // Arrange
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(accountDetails);
+        when(cardBenefitService.getCardBenefit(accountDetails, request)).thenReturn(cardBenefit);
+
+        // Act
+        CardBenefit result = cardBenefitController.getCardbenefit(request);
+
+        // Assert
+        assertEquals(cardBenefit, result);
+        verify(sessionProvider).getCurrentOrRequestedAccount();
+        verify(cardBenefitService).getCardBenefit(accountDetails, request);
+    }
+
+    @Test
+    public void testGetCardBenefit_NoAccountId_NullAccount() {
+        // Arrange
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(null);
+
+        // Act & Assert
+        assertThrows(NullPointerException.class, () -> {
+            cardBenefitController.getCardbenefit(request);
+        });
+    }
+}

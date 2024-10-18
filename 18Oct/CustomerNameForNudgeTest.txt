@@ -1,0 +1,51 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+import com.td.mbna.msec.customer.domain.CustomerName;
+import com.td.mbna.msec.nudge.model.Nudge;
+
+public class CustomerNameForNudgeTest {
+
+    @Test
+    public void testBuilder() {
+        CustomerName customerName = new CustomerName("John", "Doe");
+        Nudge nudge = new Nudge(); // Assuming Nudge has a default constructor
+        nudge.setMessage("Test nudge message"); // Example of setting properties if any
+
+        // Build the CustomerNameForNudge object
+        CustomerNameForNudge customerNameForNudge = CustomerNameForNudge.builder()
+                .customerName(customerName)
+                .nudge(nudge)
+                .build();
+
+        // Validate the values
+        assertNotNull(customerNameForNudge);
+        assertEquals(customerName, customerNameForNudge.getCustomerName());
+        assertEquals(nudge, customerNameForNudge.getNudge());
+    }
+
+    @Test
+    public void testGetCustomerName() {
+        CustomerName customerName = new CustomerName("Jane", "Smith");
+        Nudge nudge = new Nudge();
+        CustomerNameForNudge customerNameForNudge = CustomerNameForNudge.builder()
+                .customerName(customerName)
+                .nudge(nudge)
+                .build();
+
+        assertEquals(customerName, customerNameForNudge.getCustomerName());
+    }
+
+    @Test
+    public void testGetNudge() {
+        CustomerName customerName = new CustomerName("Jane", "Smith");
+        Nudge nudge = new Nudge();
+        CustomerNameForNudge customerNameForNudge = CustomerNameForNudge.builder()
+                .customerName(customerName)
+                .nudge(nudge)
+                .build();
+
+        assertEquals(nudge, customerNameForNudge.getNudge());
+    }
+}

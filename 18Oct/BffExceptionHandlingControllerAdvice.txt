@@ -1,0 +1,115 @@
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import com.td.mbna.msec.common.domain.BffErrorResponse;
+import com.td.mbna.msec.common.domain.Error;
+import com.td.mbna.msec.common.domain.FieldError;
+import com.td.mbna.msec.midtier.exceptions.AuthorizationException;
+import com.td.mbna.msec.midtier.exceptions.BusinessException;
+import com.td.mbna.msec.midtier.types.common.FieldErrorType;
+import com.td.mbna.msec.midtier.types.common.ValidationException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.context.request.WebRequest;
+
+import java.util.Collections;
+
+class BffExceptionHandlingControllerAdviceTest {
+
+    private BffExceptionHandlingControllerAdvice controllerAdvice;
+
+    @Mock
+    private WebRequest webRequest;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        controllerAdvice = new BffExceptionHandlingControllerAdvice();
+    }
+
+    @Test
+    void testHandleValidationException() {
+        // Arrange
+        FieldErrorType fieldErrorType = new FieldErrorType();
+        fieldErrorType.setErrorCode("VALIDATION_ERROR");
+        fieldErrorType.setField("fieldName");
+        fieldErrorType.setErrorDescription("Field cannot be empty");
+
+        ValidationException validationException = new ValidationException(Collections.singletonList(fieldErrorType));
+
+        // Act
+        ResponseEntity<BffErrorResponse> response = controllerAdvice.handleExceptions(validationException, webRequest);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
+        BffErrorResponse body = response.getBody();
+        assertNotNull(body);
+        assertEquals(1, body.getValidationErrors().size());
+        FieldError fieldError = body.getValidationErrors().get(0);
+        assertEquals("VALIDATION_ERROR", fieldError.getErrorCode());
+        assertEquals("fieldName", fieldError.getField());
+        assertEquals("Field cannot be empty", fieldError.getErrorDescription());
+    }
+
+    @Test
+    void testHandleBusinessException_WithFaultInfo() {
+        // Arrange
+        com.td.mbna.msec.midtier.types.common.BusinessException faultInfo = new com.td.mbna.msec.midtier.types.common.BusinessException();
+        faultInfo.setErrorCode("BUSINESS_ERROR");
+        faultInfo.setErrorDescription("Business logic error occurred");
+        
+        BusinessException businessException = new BusinessException(faultInfo);
+
+        // Act
+        ResponseEntity<BffErrorResponse> response = controllerAdvice.handleExceptions(businessException, webRequest);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        BffErrorResponse body = response.getBody();
+        assertNotNull(body);
+        assertEquals(1, body.getErrorMsgs().size());
+        Error error = body.getErrorMsgs().get(0);
+        assertEquals("BUSINESS_ERROR", error.getErrorCode());
+        assertEquals("Business logic error occurred", error.getErrorDescription());
+    }
+
+    @Test
+    void testHandleBusinessException_WithoutFaultInfo() {
+        // Arrange
+        BusinessException businessException = new BusinessException(null);
+
+        // Act
+        ResponseEntity<BffErrorResponse> response = controllerAdvice.handleExceptions(businessException, webRequest);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        BffErrorResponse body = response.getBody();
+        assertNotNull(body);
+        assertEquals(1, body.getErrorMsgs().size());
+        Error error = body.getErrorMsgs().get(0);
+        assertEquals("MS601", error.getErrorCode());
+        assertEquals("MS601", error.getErrorDescription());
+    }
+
+    @Test
+    void testHandleAuthorizationException() {
+        // Arrange
+        AuthorizationException authorizationException = new AuthorizationException("Unauthorized access");
+
+        // Act
+        ResponseEntity<BffErrorResponse> response = controllerAdvice.handleExceptions(authorizationException, webRequest);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        assertNull(response.getBody()); // No body expected for this response
+    }
+}

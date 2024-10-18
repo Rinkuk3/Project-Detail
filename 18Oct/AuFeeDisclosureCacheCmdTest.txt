@@ -1,0 +1,118 @@
+package com.td.mbna.msec.common;
+
+import com.td.mbna.msec.common.midtier.MidTierServiceHelper;
+import com.td.mbna.msec.midtier.disclosure.payload.getdisclosure.GetDisclosureResponse;
+import com.td.mbna.msec.midtier.disclosure.payload.getdisclosure.RequestPayload;
+import com.td.mbna.msec.midtier.types.common.DisclosureInfoType;
+import com.td.mbna.msec.midtier.types.common.DisclosureInputType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+class AuFeeDisclosureCacheCmdTest {
+
+    private AuFeeDisclosureCacheCmd auFeeDisclosureCacheCmd;
+    private MidTierServiceHelper midTierServiceHelper;
+
+    @BeforeEach
+    void setUp() {
+        midTierServiceHelper = Mockito.mock(MidTierServiceHelper.class);
+        auFeeDisclosureCacheCmd = new AuFeeDisclosureCacheCmd(midTierServiceHelper, 
+            BigDecimal.valueOf(10.00), BigDecimal.valueOf(20.00), 
+            "someDisclosureId", "someAuditCode", "en");
+    }
+
+    @Test
+    void testIsReadyToCallExecute_WithValidDisclosureIdAndLanguageId() {
+        assertTrue(auFeeDisclosureCacheCmd.isReadyToCallExecute());
+    }
+
+    @Test
+    void testIsReadyToCallExecute_WithNullDisclosureId() {
+        auFeeDisclosureCacheCmd.setDisclosureId(null);
+        assertFalse(auFeeDisclosureCacheCmd.isReadyToCallExecute());
+    }
+
+    @Test
+    void testIsReadyToCallExecute_WithBlankDisclosureId() {
+        auFeeDisclosureCacheCmd.setDisclosureId(" ");
+        assertFalse(auFeeDisclosureCacheCmd.isReadyToCallExecute());
+    }
+
+    @Test
+    void testIsReadyToCallExecute_WithNullLanguageId() {
+        auFeeDisclosureCacheCmd.setLanguageId(null);
+        assertFalse(auFeeDisclosureCacheCmd.isReadyToCallExecute());
+    }
+
+    @Test
+    void testPerformExecute_Success() throws Exception {
+        // Mock response
+        GetDisclosureResponse mockResponse = new GetDisclosureResponse();
+        DisclosureInfoType mockInfo = new DisclosureInfoType();
+        mockResponse.setResponsePayload(new GetDisclosureResponse.ResponsePayload());
+        mockResponse.getResponsePayload().setDisclosureInfo(mockInfo);
+        mockResponse.getResponsePayload().setContent("Some Disclosure Text");
+
+        when(midTierServiceHelper.getDisclosure(any(RequestPayload.class), any(String.class)))
+            .thenReturn(mockResponse);
+
+        // Call performExecute
+        auFeeDisclosureCacheCmd.performExecute();
+
+        // Assertions
+        assertNotNull(auFeeDisclosureCacheCmd.getDisclosureInfo());
+        assertEquals("Some Disclosure Text", auFeeDisclosureCacheCmd.getDisclosureText());
+    }
+
+    @Test
+    void testPerformExecute_NoAuFee() throws Exception {
+        auFeeDisclosureCacheCmd.setAuFee(null); // Set auFee to null
+        when(midTierServiceHelper.getDisclosure(any(RequestPayload.class), any(String.class)))
+            .thenReturn(new GetDisclosureResponse());
+
+        auFeeDisclosureCacheCmd.performExecute();
+
+        // Ensure no exceptions are thrown and the state remains unchanged
+        assertNull(auFeeDisclosureCacheCmd.getDisclosureInfo());
+        assertNull(auFeeDisclosureCacheCmd.getDisclosureText());
+    }
+
+    @Test
+    void testPerformExecute_Failure() {
+        // Mocking exception
+        when(midTierServiceHelper.getDisclosure(any(RequestPayload.class), any(String.class)))
+            .thenThrow(new RuntimeException("Service Error"));
+
+        // Execute and expect exception
+        assertThrows(RuntimeException.class, () -> auFeeDisclosureCacheCmd.performExecute());
+    }
+
+    // Test for getter and setter methods
+    @Test
+    void testGettersAndSetters() {
+        auFeeDisclosureCacheCmd.setDisclosureText("Sample Text");
+        assertEquals("Sample Text", auFeeDisclosureCacheCmd.getDisclosureText());
+
+        auFeeDisclosureCacheCmd.setDisclosureId("newDisclosureId");
+        assertEquals("newDisclosureId", auFeeDisclosureCacheCmd.getDisclosureId());
+
+        auFeeDisclosureCacheCmd.setAuditCode("newAuditCode");
+        assertEquals("newAuditCode", auFeeDisclosureCacheCmd.getAuditCode());
+
+        auFeeDisclosureCacheCmd.setLanguageId("fr");
+        assertEquals("fr", auFeeDisclosureCacheCmd.getLanguageId());
+
+        auFeeDisclosureCacheCmd.setAuFee(BigDecimal.valueOf(15.00));
+        assertEquals(BigDecimal.valueOf(15.00), auFeeDisclosureCacheCmd.getAuFee());
+
+        auFeeDisclosureCacheCmd.setMaxFee(BigDecimal.valueOf(25.00));
+        assertEquals(BigDecimal.valueOf(25.00), auFeeDisclosureCacheCmd.getMaxFee());
+    }
+}

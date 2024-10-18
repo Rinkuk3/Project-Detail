@@ -1,0 +1,125 @@
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.common.domain.BaseMsecbffResponse;
+import com.td.mbna.msec.core.session.SessionProvider;
+import com.td.mbna.msec.customer.domain.CustomerDetails;
+import com.td.mbna.msec.midtier.types.common.AffinityInfoTypeLanguageSpecific;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+
+class SwitchLanguageServiceTest {
+
+    private SwitchLanguageService switchLanguageService;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private CustomerDetails sessionCustomer;
+
+    @Mock
+    private AccountDetails accountDetails;
+
+    @Mock
+    private AffinityInfoTypeLanguageSpecific affinityInfo;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        switchLanguageService = new SwitchLanguageService();
+        switchLanguageService.sessionProvider = sessionProvider;
+    }
+
+    @Test
+    void testSwitchLanguage_WithNullLanguage() {
+        BaseMsecbffResponse response = switchLanguageService.switchLanguage(null);
+        assertEquals("SUCCESS", response.getStatus());
+    }
+
+    @Test
+    void testSwitchLanguage_WithEmptyLanguage() {
+        BaseMsecbffResponse response = switchLanguageService.switchLanguage("");
+        assertEquals("SUCCESS", response.getStatus());
+    }
+
+    @Test
+    void testSwitchLanguage_WithSameLanguage() {
+        when(sessionProvider.getLocale()).thenReturn("en");
+        BaseMsecbffResponse response = switchLanguageService.switchLanguage("en");
+        assertEquals("SUCCESS", response.getStatus());
+    }
+
+    @Test
+    void testSwitchLanguage_WithDifferentLanguage() {
+        when(sessionProvider.getLocale()).thenReturn("en");
+        when(sessionProvider.getSessionCustomer()).thenReturn(sessionCustomer);
+        when(sessionCustomer.getAccounts()).thenReturn(Arrays.asList(accountDetails));
+
+        when(accountDetails.getFrenchAffinityInfo()).thenReturn(affinityInfo);
+        when(accountDetails.getEnglishAffinityInfo()).thenReturn(affinityInfo);
+
+        when(affinityInfo.getLogo()).thenReturn("logo.png");
+        when(affinityInfo.getCardPicture()).thenReturn("card.png");
+        when(affinityInfo.getMobileCardPicture()).thenReturn("mobileCard.png");
+        when(affinityInfo.getShortDesc()).thenReturn("Short Description");
+
+        BaseMsecbffResponse response = switchLanguageService.switchLanguage("fr");
+        
+        verify(sessionProvider).setSessionAttribute(SELECTED_LOCALE, "fr");
+        verify(accountDetails).setLogo("logo.png");
+        verify(accountDetails).setSmlogo("card.png");
+        verify(accountDetails).setMobileSmLogo("mobileCard.png");
+        verify(accountDetails).setCardName("Short Description");
+        assertEquals("fr", sessionProvider.getSessionAttribute(COOKIE_UAP_LANGUAGE));
+        assertEquals("ERROR", response.getStatus());
+    }
+
+    @Test
+    void testSwitchLanguage_WithException() {
+        when(sessionProvider.getLocale()).thenReturn("en");
+        when(sessionProvider.getSessionCustomer()).thenThrow(new RuntimeException("error"));
+
+        BaseMsecbffResponse response = switchLanguageService.switchLanguage("fr");
+
+        assertEquals("ERROR", response.getStatus());
+    }
+
+    @Test
+    void testHandleRequestLocale_WithFrenchParameter() {
+        when(request.getParameter(PARAMETER_LANGUAGE)).thenReturn("fr");
+        switchLanguageService.handleRequestLocale(request);
+        verify(sessionProvider).setSessionAttribute(SELECTED_LOCALE, LOCALE_FR_CA);
+    }
+
+    @Test
+    void testHandleRequestLocale_WithEnglishParameter() {
+        when(request.getParameter(PARAMETER_LANGUAGE)).thenReturn("en");
+        switchLanguageService.handleRequestLocale(request);
+        verify(sessionProvider).setSessionAttribute(SELECTED_LOCALE, LOCALE_EN_CA);
+    }
+
+    @Test
+    void testHandleRequestLocale_WithNullParameter() {
+        when(request.getParameter(PARAMETER_LANGUAGE)).thenReturn(null);
+        switchLanguageService.handleRequestLocale(request);
+        verify(sessionProvider).setSessionAttribute(SELECTED_LOCALE, LOCALE_EN_CA); // Default to English
+    }
+
+    @Test
+    void testHandleRequestLocale_WithEmptyParameter() {
+        when(request.getParameter(PARAMETER_LANGUAGE)).thenReturn("");
+        switchLanguageService.handleRequestLocale(request);
+        verify(sessionProvider).setSessionAttribute(SELECTED_LOCALE, LOCALE_EN_CA); // Default to English
+    }
+}

@@ -1,0 +1,92 @@
+import com.td.mbna.msec.common.infrastructure.MSECBffConfiguration;
+import com.td.mbna.msec.midtier.util.ConfigUtil;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.RestTemplate;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
+import java.io.InputStream;
+import java.util.List;
+import java.util.Properties;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest(classes = MSECBffConfiguration.class)
+public class MSECBffConfigurationTest {
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    private Properties properties;
+
+    @BeforeEach
+    public void setup() throws Exception {
+        // Load the properties file for testing
+        properties = new Properties();
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("msecbff.properties")) {
+            properties.load(input);
+        }
+    }
+
+    @Test
+    public void testRewardsApiEndpointUrl() {
+        String rewardsApiEndpointUrl = applicationContext.getBean("rewardsApiEndpointUrl", String.class);
+        assertThat(rewardsApiEndpointUrl).isEqualTo(properties.getProperty("msecbff.rewards.api.endpoint"));
+    }
+
+    @Test
+    public void testExternalUrlPath() {
+        String externalUrlPath = applicationContext.getBean("externalUrlPath", String.class);
+        assertThat(externalUrlPath).isEqualTo(properties.getProperty("msecbff.external.url.path"));
+    }
+
+    @Test
+    public void testMidtierConnectTimeOut() {
+        String midtierConnectTimeOut = applicationContext.getBean("midtierConnectTimeOut", String.class);
+        assertThat(midtierConnectTimeOut).isEqualTo(properties.getProperty("msecbff.midtier.connect.timeout"));
+    }
+
+    @Test
+    public void testMidtierRequestTimeOut() {
+        String midtierRequestTimeOut = applicationContext.getBean("midtierRequestTimeOut", String.class);
+        assertThat(midtierRequestTimeOut).isEqualTo(properties.getProperty("msecbff.midtier.request.timeout"));
+    }
+
+    @Test
+    public void testRestTemplate() {
+        RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
+        assertThat(restTemplate).isNotNull();
+
+        // Check the request factory
+        ClientHttpRequestFactory requestFactory = restTemplate.getRequestFactory();
+        assertThat(requestFactory).isNotNull();
+
+        // Check message converters
+        List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
+        assertThat(messageConverters).isNotEmpty();
+        assertThat(messageConverters).anyMatch(converter -> converter instanceof HttpMessageConverter);
+    }
+
+    @Test
+    public void testMidtierExecutor() {
+        ThreadPoolTaskExecutor midtierExecutor = applicationContext.getBean("midtierExecutor", ThreadPoolTaskExecutor.class);
+        assertThat(midtierExecutor).isNotNull();
+        assertThat(midtierExecutor.getCorePoolSize()).isEqualTo(8);
+        assertThat(midtierExecutor.getMaxPoolSize()).isEqualTo(64);
+        assertThat(midtierExecutor.getQueueCapacity()).isEqualTo(8);
+    }
+
+    @Test
+    public void testTaskExecutor() {
+        ThreadPoolTaskExecutor taskExecutor = applicationContext.getBean("taskExecutor", ThreadPoolTaskExecutor.class);
+        assertThat(taskExecutor).isNotNull();
+        assertThat(taskExecutor.getCorePoolSize()).isEqualTo(8);
+        assertThat(taskExecutor.getMaxPoolSize()).isEqualTo(64);
+        assertThat(taskExecutor.getQueueCapacity()).isEqualTo(8);
+    }
+}

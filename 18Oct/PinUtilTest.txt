@@ -1,0 +1,202 @@
+package com.td.mbna.msec.common.infrastructure.util;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.core.session.PINSession;
+import com.td.mbna.msec.core.session.SessionProvider;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import javax.crypto.SecretKey;
+import java.security.SecureRandom;
+import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+public class PinUtilTest {
+
+    private PinUtil pinUtil;
+    private SessionProvider sessionProvider;
+    
+    @BeforeEach
+    public void setUp() {
+        sessionProvider = mock(SessionProvider.class);
+        pinUtil = new PinUtil();
+        pinUtil.sessionProvider = sessionProvider; // Inject mocked SessionProvider
+    }
+
+    @Test
+    public void testCheckPinSessionExpired_SessionNotFound() {
+        when(sessionProvider.getSessionAttribute(any())).thenReturn(null);
+        assertTrue(pinUtil.checkPinSessionExpired(30, "testAccountId"));
+    }
+
+    @Test
+    public void testCheckPinSessionExpired_SessionExpired() {
+        PINSession mockSession = mock(PINSession.class);
+        when(sessionProvider.getSessionAttribute(any())).thenReturn(mockSession);
+        when(mockSession.checkPinSessionExpired()).thenReturn(true);
+        
+        assertTrue(pinUtil.checkPinSessionExpired(30, "testAccountId"));
+        verify(mockSession).setPinSessionExpried(false);
+        verify(mockSession).setStartTime(any(Date.class));
+        verify(mockSession).setTimeout(30);
+    }
+
+    @Test
+    public void testCheckPinSessionExpired_SessionNotExpired() {
+        PINSession mockSession = mock(PINSession.class);
+        when(sessionProvider.getSessionAttribute(any())).thenReturn(mockSession);
+        when(mockSession.checkPinSessionExpired()).thenReturn(false);
+        
+        assertFalse(pinUtil.checkPinSessionExpired(30, "testAccountId"));
+        verify(mockSession, never()).setPinSessionExpried(false);
+    }
+
+    @Test
+    public void testIsNameModifiedRecently_NoProfile() {
+        AccountDetails account = new AccountDetails();
+        assertFalse(pinUtil.isNameModifiedRecently(account, 24));
+    }
+
+    @Test
+    public void testIsNameModifiedRecently_NoLastUpdate() {
+        AccountDetails account = mock(AccountDetails.class);
+        when(account.getProfile()).thenReturn(null);
+        assertFalse(pinUtil.isNameModifiedRecently(account, 24));
+    }
+
+    @Test
+    public void testIsNameModifiedRecently_ModifiedRecently() {
+        AccountDetails account = mock(AccountDetails.class);
+        when(account.getProfile()).thenReturn(mockProfileWithLastUpdate(2));
+        assertTrue(pinUtil.isNameModifiedRecently(account, 1));
+    }
+
+    @Test
+    public void testIsNameModifiedRecently_NotModifiedRecently() {
+        AccountDetails account = mock(AccountDetails.class);
+        when(account.getProfile()).thenReturn(mockProfileWithLastUpdate(10));
+        assertFalse(pinUtil.isNameModifiedRecently(account, 1));
+    }
+
+    @Test
+    public void testIsAddressModifiedRecently_NoContactInfo() {
+        AccountDetails account = new AccountDetails();
+        assertFalse(pinUtil.isAddressModifiedRecently(account, 24));
+    }
+
+    @Test
+    public void testIsAddressModifiedRecently_NoMailingAddress() {
+        AccountDetails account = mock(AccountDetails.class);
+        when(account.getContactInfo()).thenReturn(null);
+        assertFalse(pinUtil.isAddressModifiedRecently(account, 24));
+    }
+
+    @Test
+    public void testIsAddressModifiedRecently_ModifiedRecently() {
+        AccountDetails account = mock(AccountDetails.class);
+        when(account.getContactInfo()).thenReturn(mockContactInfoWithLastUpdated(2));
+        assertTrue(pinUtil.isAddressModifiedRecently(account, 1));
+    }
+
+    @Test
+    public void testIsAddressModifiedRecently_NotModifiedRecently() {
+        AccountDetails account = mock(AccountDetails.class);
+        when(account.getContactInfo()).thenReturn(mockContactInfoWithLastUpdated(10));
+        assertFalse(pinUtil.isAddressModifiedRecently(account, 1));
+    }
+
+    @Test
+    public void testGenRandomKey() throws Exception {
+        SecretKey secretKey = pinUtil.genRandomKey();
+        assertNotNull(secretKey);
+        assertEquals(128, secretKey.getEncoded().length * 8); // Ensure the key length is 128 bits
+    }
+
+    @Test
+    public void testGenPinBlock_ValidPin() throws Exception {
+        SecretKey key = mock(SecretKey.class);
+        String pin = "1234";
+        String pinBlock = PinUtil.genPinBlock(pin, key);
+        assertNotNull(pinBlock);
+    }
+
+    @Test
+    public void testGenPinBlock_InvalidPinLength() {
+        SecretKey key = mock(SecretKey.class);
+        Exception exception = assertThrows(Exception.class, () -> {
+            PinUtil.genPinBlock("", key);
+        });
+        assertEquals("AssertionError", exception.getClass().getSimpleName());
+    }
+
+    @Test
+    public void testGetCDV() throws Exception {
+        SecretKey key = mock(SecretKey.class);
+        String cdv = pinUtil.getCDV(key);
+        assertNotNull(cdv);
+    }
+
+    @Test
+    public void testEncryptSingleUseKey() throws Exception {
+        SecretKey singleUseKey = mock(SecretKey.class);
+        String zpkAlias = "testAlias";
+        String keystoreFile = "testFile";
+        String keystorePw = "testPassword";
+        when(KeyStoreUtil.getKeyFromKeyStore(zpkAlias, keystoreFile, keystorePw)).thenReturn(singleUseKey);
+        String result = pinUtil.encryptSingleUseKey(singleUseKey, zpkAlias, keystoreFile, keystorePw);
+        assertNotNull(result);
+    }
+
+    private AccountDetails mockProfileWithLastUpdate(int hoursAgo) {
+        AccountDetails account = mock(AccountDetails.class);
+        when(account.getProfile()).thenReturn(new ProfileMock(hoursAgo));
+        return account;
+    }
+
+    private AccountDetails mockContactInfoWithLastUpdated(int hoursAgo) {
+        AccountDetails account = mock(AccountDetails.class);
+        when(account.getContactInfo()).thenReturn(new ContactInfoMock(hoursAgo));
+        return account;
+    }
+
+    // Mock classes to simulate behavior
+    private class ProfileMock {
+        private final Date lastLegalNameUpdate;
+
+        public ProfileMock(int hoursAgo) {
+            this.lastLegalNameUpdate = new Date(System.currentTimeMillis() - hoursAgo * 3600 * 1000);
+        }
+
+        public Date getLastLegalNameUpdate() {
+            return lastLegalNameUpdate;
+        }
+    }
+
+    private class ContactInfoMock {
+        private final MailingAddressMock mailingAddress;
+
+        public ContactInfoMock(int hoursAgo) {
+            this.mailingAddress = new MailingAddressMock(hoursAgo);
+        }
+
+        public MailingAddressMock getMailingAddress() {
+            return mailingAddress;
+        }
+    }
+
+    private class MailingAddressMock {
+        private final Date lastUpdatedTS;
+
+        public MailingAddressMock(int hoursAgo) {
+            this.lastUpdatedTS = new Date(System.currentTimeMillis() - hoursAgo * 3600 * 1000);
+        }
+
+        public Date getLastUpdatedTS() {
+            return lastUpdatedTS;
+        }
+    }
+}

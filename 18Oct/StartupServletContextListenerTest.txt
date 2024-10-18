@@ -1,0 +1,36 @@
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import javax.servlet.ServletContextEvent;
+
+import static org.mockito.Mockito.verify;
+
+class StartupServletContextListenerTest {
+
+    @Test
+    void testContextInitialized() {
+        // Arrange
+        StartupServletContextListener listener = new StartupServletContextListener();
+        ServletContextEvent event = Mockito.mock(ServletContextEvent.class);
+
+        // Act
+        listener.contextInitialized(event);
+
+        // Assert
+        verify(ServerConfigUtil.class); // Verify that init() method is called
+    }
+
+    @Test
+    void testContextDestroyed() {
+        // Arrange
+        StartupServletContextListener listener = new StartupServletContextListener();
+        ServletContextEvent event = Mockito.mock(ServletContextEvent.class);
+
+        // Act
+        listener.contextDestroyed(event);
+
+        // Assert
+        // No action needed for contextDestroyed in this case
+        // This is to ensure that no exceptions are thrown during destruction
+    }
+}

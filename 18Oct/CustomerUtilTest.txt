@@ -1,0 +1,180 @@
+package com.td.mbna.msec.customer.util;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.common.infrastructure.util.UIGeneralUtil;
+import com.td.mbna.msec.customer.domain.CustomerDetails;
+import com.td.mbna.msec.profile.model.CustomerProfile;
+import com.td.mbna.msec.midtier.types.common.PhoneNumber;
+import com.td.mbna.msec.midtier.types.common.UnformattedAddress;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+class CustomerUtilTest {
+
+    private CustomerDetails customer;
+    private AccountDetails modifiedAccount;
+    private CustomerProfile modifiedProfile;
+    private CustomerProfile accountProfile;
+
+    @BeforeEach
+    void setUp() {
+        // Set up mock data for tests
+        customer = new CustomerDetails();
+        modifiedAccount = mock(AccountDetails.class);
+        modifiedProfile = mock(CustomerProfile.class);
+        accountProfile = mock(CustomerProfile.class);
+
+        // Mock behavior for AccountDetails
+        when(modifiedAccount.getAccountId()).thenReturn("123");
+        when(modifiedAccount.getProfile()).thenReturn(modifiedProfile);
+
+        // Create a list of accounts for the customer
+        List<AccountDetails> accounts = new ArrayList<>();
+        AccountDetails account1 = mock(AccountDetails.class);
+        when(account1.getAccountId()).thenReturn("456");
+        when(account1.getProfile()).thenReturn(accountProfile);
+        when(account1.isPrimaryUser()).thenReturn(true);
+        accounts.add(account1);
+        
+        customer.setAccounts(accounts);
+    }
+
+    @Test
+    void testSyncCustomerDataUsingAccount_withNullAccountId() {
+        when(modifiedAccount.getAccountId()).thenReturn(null);
+        CustomerUtil.syncCustomerDataUsingAccount(customer, modifiedAccount);
+        // No exception should be thrown
+    }
+
+    @Test
+    void testSyncCustomerDataUsingAccount_updatesPrimaryUser() {
+        when(accountProfile.getPhysicalAddressLine1()).thenReturn("123 Main St");
+        when(accountProfile.getPhysicalCity()).thenReturn("Townsville");
+        when(accountProfile.getPhysicalProvince()).thenReturn("ON");
+        when(accountProfile.getPhysicalPostalCode()).thenReturn("A1B2C3");
+        when(modifiedProfile.getPhysicalAddressLine1()).thenReturn("456 Main St");
+        when(modifiedProfile.getPhysicalCity()).thenReturn("Townsville");
+        when(modifiedProfile.getPhysicalProvince()).thenReturn("ON");
+        when(modifiedProfile.getPhysicalPostalCode()).thenReturn("A1B2C3");
+        when(modifiedProfile.isDifferentPhysicalAddress()).thenReturn(true);
+        when(accountProfile.isPrimaryUser()).thenReturn(true);
+
+        CustomerUtil.syncCustomerDataUsingAccount(customer, modifiedAccount);
+
+        // Verify that the profile information was updated
+        assertEquals("456 Main St", accountProfile.getPhysicalAddressLine1());
+    }
+
+    @Test
+    void testSyncCustomerDataUsingAccount_noUpdateIfSameAccount() {
+        when(accountProfile.getPhysicalAddressLine1()).thenReturn("123 Main St");
+        when(modifiedProfile.getPhysicalAddressLine1()).thenReturn("123 Main St");
+        when(modifiedProfile.isDifferentPhysicalAddress()).thenReturn(false);
+
+        CustomerUtil.syncCustomerDataUsingAccount(customer, modifiedAccount);
+
+        // Verify that the profile information was NOT updated
+        verify(accountProfile, never()).setPhysicalAddressLine1(any());
+    }
+
+    @Test
+    void testResetContactInfo_withNullAccount() {
+        CustomerUtil.resetContactInfo(null);
+        // No exception should be thrown
+    }
+
+    @Test
+    void testResetContactInfo_updatesPhoneNumbers() {
+        AccountDetails account = mock(AccountDetails.class);
+        CustomerProfile profile = mock(CustomerProfile.class);
+        UnformattedAddress mailingAddress = new UnformattedAddress();
+        mailingAddress.setAddrLine1("123 Mailing St");
+        when(profile.getMailingAddressLine1()).thenReturn("123 Mailing St");
+        when(account.getProfile()).thenReturn(profile);
+        when(account.getContactInfo()).thenReturn(new com.td.mbna.msec.profile.model.ContactInfo());
+
+        CustomerUtil.resetContactInfo(account);
+
+        // Verify that the contact info was updated
+        assertNotNull(account.getContactInfo().getMailingAddress());
+    }
+
+    @Test
+    void testDuplicateAU_noAuthorizedUsers() {
+        AccountDetails account = mock(AccountDetails.class);
+        when(account.getAuthorizedUsers()).thenReturn(null);
+        assertFalse(CustomerUtil.duplicateAU(account, "John Doe", new Date()));
+    }
+
+    @Test
+    void testDuplicateAU_findsDuplicate() {
+        AccountDetails account = mock(AccountDetails.class);
+        List<CardHolderType> users = new ArrayList<>();
+        CardHolderType user = mock(CardHolderType.class);
+        when(user.getFirstName()).thenReturn("John");
+        when(user.getLastName()).thenReturn("Doe");
+        when(user.getBirthDate()).thenReturn("01/01/1990");
+        users.add(user);
+        when(account.getAuthorizedUsers()).thenReturn(users);
+
+        Date dob = new Date(); // Use a date that matches "01/01/1990"
+
+        assertTrue(CustomerUtil.duplicateAU(account, "John Doe", dob));
+    }
+
+    @Test
+    void testBuildAddress_withNullAccount() {
+        assertNull(CustomerUtil.buildAddress(null));
+    }
+
+    @Test
+    void testBuildAddress_withValidAccount() {
+        AccountDetails account = mock(AccountDetails.class);
+        CustomerProfile profile = mock(CustomerProfile.class);
+        when(profile.getMailingAddressLine1()).thenReturn("123 Mailing St");
+        when(profile.getMailingCity()).thenReturn("Townsville");
+        when(profile.getMailingPostalCode()).thenReturn("A1B2C3");
+        when(profile.getMailingProvince()).thenReturn("ON");
+        when(account.getProfile()).thenReturn(profile);
+
+        Address address = CustomerUtil.buildAddress(account);
+        assertNotNull(address);
+        assertEquals("123 Mailing St", address.getAddressLine1());
+    }
+
+    // Additional tests for methods like formatPostalCodeInContactInfo can be added similarly
+
+    @Test
+    void testFormatPostalCodeInContactInfo_withNullContactInfo() {
+        AccountDetails account = mock(AccountDetails.class);
+        when(account.getContactInfo()).thenReturn(null);
+        CustomerUtil.formatPostalCodeInContactInfo(account);
+        // No exception should be thrown
+    }
+
+    @Test
+    void testFormatPostalCodeInContactInfo_updatesPostalCodes() {
+        AccountDetails account = mock(AccountDetails.class);
+        when(account.getContactInfo()).thenReturn(new com.td.mbna.msec.profile.model.ContactInfo());
+
+        UnformattedAddress mailingAddress = new UnformattedAddress();
+        mailingAddress.setPostalCode("A1B 2C3");
+        when(account.getContactInfo().getMailingAddress()).thenReturn(mailingAddress);
+
+        UnformattedAddress physicalAddress = new UnformattedAddress();
+        physicalAddress.setPostalCode("A1B 2C3");
+        when(account.getContactInfo().getPhysicalAddress()).thenReturn(physicalAddress);
+
+        CustomerUtil.formatPostalCodeInContactInfo(account);
+
+        assertEquals("A1B2C3", mailingAddress.getPostalCode());
+        assertEquals("A1B2C3", physicalAddress.getPostalCode());
+    }
+}

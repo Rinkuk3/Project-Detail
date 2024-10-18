@@ -1,0 +1,110 @@
+package com.td.mbna.msec.creditlimit.model;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.math.BigDecimal;
+
+import org.junit.jupiter.api.Test;
+
+import com.td.mbna.msec.profile.model.Address;
+
+public class CreditLimitInfoResponseTest {
+
+    @Test
+    public void testSetAndGetCurrentBalance() {
+        BigDecimal currentBalance = new BigDecimal("3000.00");
+        CreditLimitInfoResponse creditLimitInfo = CreditLimitInfoResponse.builder()
+                .currentBalance(currentBalance)
+                .build();
+
+        assertEquals(currentBalance, creditLimitInfo.getCurrentBalance());
+    }
+
+    @Test
+    public void testSetAndGetCreditLimit() {
+        BigDecimal creditLimit = new BigDecimal("5000.00");
+        CreditLimitInfoResponse creditLimitInfo = CreditLimitInfoResponse.builder()
+                .creditLimit(creditLimit)
+                .build();
+
+        assertEquals(creditLimit, creditLimitInfo.getCreditLimit());
+    }
+
+    @Test
+    public void testSetAndGetCreditAvailable() {
+        BigDecimal creditAvailable = new BigDecimal("2000.00");
+        CreditLimitInfoResponse creditLimitInfo = CreditLimitInfoResponse.builder()
+                .creditAvailable(creditAvailable)
+                .build();
+
+        assertEquals(creditAvailable, creditLimitInfo.getCreditAvailable());
+    }
+
+    @Test
+    public void testSetAndGetUnbilledAmount() {
+        BigDecimal unbilledAmount = new BigDecimal("1500.00");
+        CreditLimitInfoResponse creditLimitInfo = CreditLimitInfoResponse.builder()
+                .unbilledAmount(unbilledAmount)
+                .build();
+
+        assertEquals(unbilledAmount, creditLimitInfo.getUnbilledAmount());
+    }
+
+    @Test
+    public void testSetAndGetAddress() {
+        Address address = new Address(); // Assuming a default constructor exists
+        CreditLimitInfoResponse creditLimitInfo = CreditLimitInfoResponse.builder()
+                .address(address)
+                .build();
+
+        assertEquals(address, creditLimitInfo.getAddress());
+    }
+
+    @Test
+    public void testBuilder() {
+        BigDecimal currentBalance = new BigDecimal("3000.00");
+        BigDecimal creditLimit = new BigDecimal("5000.00");
+        BigDecimal creditAvailable = new BigDecimal("2000.00");
+        BigDecimal unbilledAmount = new BigDecimal("1500.00");
+        Address address = new Address(); // Assuming a default constructor exists
+
+        CreditLimitInfoResponse creditLimitInfo = CreditLimitInfoResponse.builder()
+                .currentBalance(currentBalance)
+                .creditLimit(creditLimit)
+                .creditAvailable(creditAvailable)
+                .unbilledAmount(unbilledAmount)
+                .address(address)
+                .build();
+
+        assertNotNull(creditLimitInfo);
+        assertEquals(currentBalance, creditLimitInfo.getCurrentBalance());
+        assertEquals(creditLimit, creditLimitInfo.getCreditLimit());
+        assertEquals(creditAvailable, creditLimitInfo.getCreditAvailable());
+        assertEquals(unbilledAmount, creditLimitInfo.getUnbilledAmount());
+        assertEquals(address, creditLimitInfo.getAddress());
+    }
+
+    @Test
+    public void testToString() {
+        BigDecimal currentBalance = new BigDecimal("3000.00");
+        BigDecimal creditLimit = new BigDecimal("5000.00");
+        BigDecimal creditAvailable = new BigDecimal("2000.00");
+        BigDecimal unbilledAmount = new BigDecimal("1500.00");
+        Address address = new Address(); // Assuming a default constructor exists
+
+        CreditLimitInfoResponse creditLimitInfo = CreditLimitInfoResponse.builder()
+                .currentBalance(currentBalance)
+                .creditLimit(creditLimit)
+                .creditAvailable(creditAvailable)
+                .unbilledAmount(unbilledAmount)
+                .address(address)
+                .build();
+
+        String expectedString = "CreditLimitInfoResponse(currentBalance=" + currentBalance +
+                ", creditLimit=" + creditLimit +
+                ", creditAvailable=" + creditAvailable +
+                ", unbilledAmount=" + unbilledAmount +
+                ", address=" + address + ")";
+        assertEquals(expectedString, creditLimitInfo.toString());
+    }
+}

@@ -1,0 +1,65 @@
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+public class AccountIpEligibilityTest {
+
+    private AccountIpEligibility accountIpEligibility;
+
+    @BeforeEach
+    public void setUp() {
+        accountIpEligibility = new AccountIpEligibility();
+    }
+
+    @Test
+    public void testDefaultConstructor() {
+        assertFalse(accountIpEligibility.getHasIpEligibleTrans());
+        assertFalse(accountIpEligibility.getHasEnrolledIp());
+        assertEquals(0, accountIpEligibility.getNumberOfEligibleTransaction());
+        assertEquals(0, accountIpEligibility.getNumberOfActiveEnrolledIp());
+        assertEquals(0, accountIpEligibility.getNumberOfInactiveEnrolledIp());
+    }
+
+    @Test
+    public void testSetAndGetAccountNumber() {
+        String accountNumber = "123456789";
+        accountIpEligibility.setAccountNumber(accountNumber);
+        assertEquals(accountNumber, accountIpEligibility.getAccountNumber());
+    }
+
+    @Test
+    public void testSetAndGetHasIpEligibleTrans() {
+        accountIpEligibility.setHasIpEligibleTrans(true);
+        assertTrue(accountIpEligibility.getHasIpEligibleTrans());
+
+        accountIpEligibility.setHasIpEligibleTrans(false);
+        assertFalse(accountIpEligibility.getHasIpEligibleTrans());
+    }
+
+    @Test
+    public void testSetAndGetHasEnrolledIp() {
+        accountIpEligibility.setHasEnrolledIp(true);
+        assertTrue(accountIpEligibility.getHasEnrolledIp());
+
+        accountIpEligibility.setHasEnrolledIp(false);
+        assertFalse(accountIpEligibility.getHasEnrolledIp());
+    }
+
+    @Test
+    public void testSetAndGetNumberOfEligibleTransaction() {
+        accountIpEligibility.setNumberOfEligibleTransaction(10);
+        assertEquals(10, accountIpEligibility.getNumberOfEligibleTransaction());
+    }
+
+    @Test
+    public void testSetAndGetNumberOfActiveEnrolledIp() {
+        accountIpEligibility.setNumberOfActiveEnrolledIp(5);
+        assertEquals(5, accountIpEligibility.getNumberOfActiveEnrolledIp());
+    }
+
+    @Test
+    public void testSetAndGetNumberOfInactiveEnrolledIp() {
+        accountIpEligibility.setNumberOfInactiveEnrolledIp(3);
+        assertEquals(3, accountIpEligibility.getNumberOfInactiveEnrolledIp());
+    }
+}

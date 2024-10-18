@@ -1,0 +1,92 @@
+package com.td.mbna.msec.common;
+
+import com.td.mbna.msec.common.midtier.MidTierServiceHelper;
+import com.td.mbna.msec.midtier.disclosure.payload.getdisclosure.GetDisclosureResponse;
+import com.td.mbna.msec.midtier.disclosure.payload.getdisclosure.RequestPayload;
+import com.td.mbna.msec.midtier.types.common.DisclosureInfoType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+class AuDisclosureCacheCmdTest {
+
+    private AuDisclosureCacheCmd auDisclosureCacheCmd;
+    private MidTierServiceHelper midTierServiceHelper;
+
+    @BeforeEach
+    void setUp() {
+        midTierServiceHelper = Mockito.mock(MidTierServiceHelper.class);
+        auDisclosureCacheCmd = new AuDisclosureCacheCmd(midTierServiceHelper, "someDisclosureId", "someAuditCode", "en");
+    }
+
+    @Test
+    void testIsReadyToCallExecute_WithValidDisclosureIdAndLanguageId() {
+        assertTrue(auDisclosureCacheCmd.isReadyToCallExecute());
+    }
+
+    @Test
+    void testIsReadyToCallExecute_WithNullDisclosureId() {
+        auDisclosureCacheCmd.setDisclosureId(null);
+        assertFalse(auDisclosureCacheCmd.isReadyToCallExecute());
+    }
+
+    @Test
+    void testIsReadyToCallExecute_WithBlankDisclosureId() {
+        auDisclosureCacheCmd.setDisclosureId(" ");
+        assertFalse(auDisclosureCacheCmd.isReadyToCallExecute());
+    }
+
+    @Test
+    void testIsReadyToCallExecute_WithNullLanguageId() {
+        auDisclosureCacheCmd.setLanguageId(null);
+        assertFalse(auDisclosureCacheCmd.isReadyToCallExecute());
+    }
+
+    @Test
+    void testPerformExecute_Success() throws Exception {
+        // Mock response
+        GetDisclosureResponse mockResponse = new GetDisclosureResponse();
+        DisclosureInfoType mockInfo = new DisclosureInfoType();
+        mockResponse.setResponsePayload(new GetDisclosureResponse.ResponsePayload());
+        mockResponse.getResponsePayload().setDisclosureInfo(mockInfo);
+        mockResponse.getResponsePayload().setContent("Some Disclosure Text");
+
+        when(midTierServiceHelper.getDisclosure(any(RequestPayload.class), any(String.class))).thenReturn(mockResponse);
+
+        // Call performExecute
+        auDisclosureCacheCmd.performExecute();
+
+        // Assertions
+        assertNotNull(auDisclosureCacheCmd.getDisclosureInfo());
+        assertEquals("Some Disclosure Text", auDisclosureCacheCmd.getDisclosureText());
+    }
+
+    @Test
+    void testPerformExecute_Failure() {
+        // Mocking exception
+        when(midTierServiceHelper.getDisclosure(any(RequestPayload.class), any(String.class))).thenThrow(new RuntimeException("Service Error"));
+
+        // Execute and expect exception
+        assertThrows(RuntimeException.class, () -> auDisclosureCacheCmd.performExecute());
+    }
+
+    // Test for getter and setter methods
+    @Test
+    void testGettersAndSetters() {
+        auDisclosureCacheCmd.setDisclosureText("Sample Text");
+        assertEquals("Sample Text", auDisclosureCacheCmd.getDisclosureText());
+
+        auDisclosureCacheCmd.setDisclosureId("newDisclosureId");
+        assertEquals("newDisclosureId", auDisclosureCacheCmd.getDisclosureId());
+
+        auDisclosureCacheCmd.setAuditCode("newAuditCode");
+        assertEquals("newAuditCode", auDisclosureCacheCmd.getAuditCode());
+
+        auDisclosureCacheCmd.setLanguageId("fr");
+        assertEquals("fr", auDisclosureCacheCmd.getLanguageId());
+    }
+}
