@@ -1,0 +1,63 @@
+package com.td.mbna.msec.paymentoption.model;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class PadInfoTest {
+
+    @Test
+    public void testPadInfoSettersAndGetters() {
+        // Arrange
+        PadInfo padInfo = new PadInfo();
+        
+        // Act
+        padInfo.setCardNum("1234567890123456");
+        padInfo.setBankNum("001");
+        padInfo.setBranchNum("123");
+        padInfo.setAccountNum("1234567");
+        padInfo.setPaymentTypeName("B"); // Full balance
+        padInfo.setAgreed(true);
+
+        // Assert
+        assertEquals("1234567890123456", padInfo.getCardNum());
+        assertEquals("001", padInfo.getBankNum());
+        assertEquals("123", padInfo.getBranchNum());
+        assertEquals("1234567", padInfo.getAccountNum());
+        assertEquals("B", padInfo.getPaymentTypeName());
+        assertEquals(true, padInfo.isAgreed());
+    }
+
+    @Test
+    public void testDefaultValues() {
+        // Arrange
+        PadInfo padInfo = new PadInfo();
+
+        // Act & Assert
+        assertEquals(null, padInfo.getCardNum());
+        assertEquals(null, padInfo.getBankNum());
+        assertEquals(null, padInfo.getBranchNum());
+        assertEquals(null, padInfo.getAccountNum());
+        assertEquals(null, padInfo.getPaymentTypeName());
+        assertEquals(false, padInfo.isAgreed());
+    }
+
+    @Test
+    public void testPadInfoConstructor() {
+        // Arrange
+        PadInfo padInfo = new PadInfo();
+        padInfo.setCardNum("9876543210123456");
+        padInfo.setBankNum("002");
+        padInfo.setBranchNum("456");
+        padInfo.setAccountNum("7654321");
+        padInfo.setPaymentTypeName("D"); // Minimum due
+        padInfo.setAgreed(false);
+
+        // Act & Assert
+        assertEquals("9876543210123456", padInfo.getCardNum());
+        assertEquals("002", padInfo.getBankNum());
+        assertEquals("456", padInfo.getBranchNum());
+        assertEquals("7654321", padInfo.getAccountNum());
+        assertEquals("D", padInfo.getPaymentTypeName());
+        assertEquals(false, padInfo.isAgreed());
+    }
+}

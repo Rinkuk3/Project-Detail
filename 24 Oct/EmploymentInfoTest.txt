@@ -1,0 +1,99 @@
+package com.td.mbna.msec.kyc.dto;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class EmploymentInfoTest {
+
+    @Test
+    public void testDefaultConstructor() {
+        EmploymentInfo employmentInfo = new EmploymentInfo();
+
+        // Test default values
+        assertEquals("", employmentInfo.getEmployerStatus());
+        assertEquals("", employmentInfo.getOccupation());
+        assertEquals("", employmentInfo.getDescribeYourBusiness());
+        assertEquals("", employmentInfo.getJobDescription());
+    }
+
+    @Test
+    public void testSetAndGetEmployerStatus() {
+        EmploymentInfo employmentInfo = new EmploymentInfo();
+        employmentInfo.setEmployerStatus("Employed");
+        assertEquals("Employed", employmentInfo.getEmployerStatus());
+    }
+
+    @Test
+    public void testSetAndGetOccupation() {
+        EmploymentInfo employmentInfo = new EmploymentInfo();
+        employmentInfo.setOccupation("Software Developer");
+        assertEquals("Software Developer", employmentInfo.getOccupation());
+    }
+
+    @Test
+    public void testSetAndGetDescribeYourBusiness() {
+        EmploymentInfo employmentInfo = new EmploymentInfo();
+        employmentInfo.setDescribeYourBusiness("Developing software solutions.");
+        assertEquals("Developing software solutions.", employmentInfo.getDescribeYourBusiness());
+    }
+
+    @Test
+    public void testSetAndGetJobDescription() {
+        EmploymentInfo employmentInfo = new EmploymentInfo();
+        employmentInfo.setJobDescription("Responsible for developing applications.");
+        assertEquals("Responsible for developing applications.", employmentInfo.getJobDescription());
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        EmploymentInfo employmentInfo1 = new EmploymentInfo();
+        EmploymentInfo employmentInfo2 = new EmploymentInfo();
+
+        assertEquals(employmentInfo1, employmentInfo2);
+        assertEquals(employmentInfo1.hashCode(), employmentInfo2.hashCode());
+
+        employmentInfo1.setEmployerStatus("Employed");
+        assertNotEquals(employmentInfo1, employmentInfo2);
+
+        employmentInfo2.setEmployerStatus("Employed");
+        assertEquals(employmentInfo1, employmentInfo2);
+        assertEquals(employmentInfo1.hashCode(), employmentInfo2.hashCode());
+
+        employmentInfo1.setOccupation("Software Developer");
+        assertNotEquals(employmentInfo1, employmentInfo2);
+
+        employmentInfo2.setOccupation("Software Developer");
+        assertEquals(employmentInfo1, employmentInfo2);
+        assertEquals(employmentInfo1.hashCode(), employmentInfo2.hashCode());
+
+        employmentInfo1.setDescribeYourBusiness("Developing software solutions.");
+        assertNotEquals(employmentInfo1, employmentInfo2);
+
+        employmentInfo2.setDescribeYourBusiness("Developing software solutions.");
+        assertEquals(employmentInfo1, employmentInfo2);
+        assertEquals(employmentInfo1.hashCode(), employmentInfo2.hashCode());
+
+        employmentInfo1.setJobDescription("Responsible for developing applications.");
+        assertNotEquals(employmentInfo1, employmentInfo2);
+
+        employmentInfo2.setJobDescription("Responsible for developing applications.");
+        assertEquals(employmentInfo1, employmentInfo2);
+        assertEquals(employmentInfo1.hashCode(), employmentInfo2.hashCode());
+    }
+
+    @Test
+    public void testToString() {
+        EmploymentInfo employmentInfo = new EmploymentInfo();
+        employmentInfo.setEmployerStatus("Employed");
+        employmentInfo.setOccupation("Software Developer");
+        employmentInfo.setDescribeYourBusiness("Developing software solutions.");
+        employmentInfo.setJobDescription("Responsible for developing applications.");
+
+        String expectedString = "com.td.mbna.msec.kyc.dto.EmploymentInfo@" +
+                Integer.toHexString(System.identityHashCode(employmentInfo)) +
+                "[employerStatus=Employed,occupation=Software Developer," +
+                "describeYourBusiness=Developing software solutions.,jobDescription=Responsible for developing applications.]";
+        assertEquals(expectedString, employmentInfo.toString());
+    }
+}

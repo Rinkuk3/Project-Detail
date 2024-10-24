@@ -1,0 +1,73 @@
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+public class QuickLinksTest {
+
+    private QuickLinks quickLinks;
+
+    @BeforeEach
+    public void setUp() {
+        // Initialize QuickLinks with test data
+        quickLinks = new QuickLinks(true, false, true, false, "cardActivationMessage");
+    }
+
+    @Test
+    public void testConstructor() {
+        assertTrue(quickLinks.isShowCardActivation());
+        assertEquals(false, quickLinks.isShowPaperless());
+        assertTrue(quickLinks.isShowEmailNotifications());
+        assertEquals(false, quickLinks.isShowAccountServices());
+        assertEquals("cardActivationMessage", quickLinks.getCardActivationMessageId());
+    }
+
+    @Test
+    public void testSetShowCardActivation() {
+        quickLinks.setShowCardActivation(false);
+        assertEquals(false, quickLinks.isShowCardActivation());
+    }
+
+    @Test
+    public void testSetShowPaperless() {
+        quickLinks.setShowPaperless(true);
+        assertTrue(quickLinks.isShowPaperless());
+    }
+
+    @Test
+    public void testSetShowEmailNotifications() {
+        quickLinks.setShowEmailNotifications(false);
+        assertEquals(false, quickLinks.isShowEmailNotifications());
+    }
+
+    @Test
+    public void testSetShowAccountServices() {
+        quickLinks.setShowAccountServices(true);
+        assertTrue(quickLinks.isShowAccountServices());
+    }
+
+    @Test
+    public void testSetCardActivationMessageId() {
+        quickLinks.setCardActivationMessageId("newCardActivationMessage");
+        assertEquals("newCardActivationMessage", quickLinks.getCardActivationMessageId());
+    }
+    
+    @Test
+    public void testBuilder() {
+        // Testing the builder pattern
+        QuickLinks builtQuickLinks = QuickLinks.builder()
+                .showCardActivation(true)
+                .showPaperless(true)
+                .showEmailNotifications(true)
+                .showAccountServices(true)
+                .cardActivationMessageId("builderMessage")
+                .build();
+
+        assertTrue(builtQuickLinks.isShowCardActivation());
+        assertTrue(builtQuickLinks.isShowPaperless());
+        assertTrue(builtQuickLinks.isShowEmailNotifications());
+        assertTrue(builtQuickLinks.isShowAccountServices());
+        assertEquals("builderMessage", builtQuickLinks.getCardActivationMessageId());
+    }
+}

@@ -1,0 +1,53 @@
+package com.td.mbna.msec.paymentoption.model;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class SubmitfPadInfoResponseTest {
+
+    @Test
+    public void testSubmitfPadInfoResponseSettersAndGetters() {
+        // Arrange
+        SubmitfPadInfoResponse response = new SubmitfPadInfoResponse();
+        
+        // Act
+        response.setLast4AccountNum("1234");
+        response.setBankName("Bank of Test");
+        response.setPaymentTypeName("B"); // Full balance
+        response.setDueDayAfter10am(true);
+
+        // Assert
+        assertEquals("1234", response.getLast4AccountNum());
+        assertEquals("Bank of Test", response.getBankName());
+        assertEquals("B", response.getPaymentTypeName());
+        assertEquals(true, response.isDueDayAfter10am());
+    }
+
+    @Test
+    public void testDefaultValues() {
+        // Arrange
+        SubmitfPadInfoResponse response = new SubmitfPadInfoResponse();
+
+        // Act & Assert
+        assertEquals(null, response.getLast4AccountNum());
+        assertEquals(null, response.getBankName());
+        assertEquals(null, response.getPaymentTypeName());
+        assertEquals(false, response.isDueDayAfter10am());
+    }
+
+    @Test
+    public void testSubmitfPadInfoResponseConstructor() {
+        // Arrange
+        SubmitfPadInfoResponse response = new SubmitfPadInfoResponse();
+        response.setLast4AccountNum("5678");
+        response.setBankName("Test Bank");
+        response.setPaymentTypeName("D"); // Minimum due
+        response.setDueDayAfter10am(false);
+
+        // Act & Assert
+        assertEquals("5678", response.getLast4AccountNum());
+        assertEquals("Test Bank", response.getBankName());
+        assertEquals("D", response.getPaymentTypeName());
+        assertEquals(false, response.isDueDayAfter10am());
+    }
+}

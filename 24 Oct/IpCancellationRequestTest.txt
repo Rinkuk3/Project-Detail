@@ -1,0 +1,70 @@
+package com.td.mbna.msec.offers.domain.ip;
+
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class IpCancellationRequestTest {
+
+    @Test
+    public void testGettersAndSetters() {
+        // Given
+        IpCancellationRequest request = new IpCancellationRequest();
+        String testId = "test-id";
+        String testAccountNumber = "123456";
+
+        // When setting values
+        request.setId(testId);
+        request.setAccountNumber(testAccountNumber);
+
+        // Then verify getters return the expected values
+        assertThat(request.getId()).isEqualTo(testId);
+        assertThat(request.getAccountNumber()).isEqualTo(testAccountNumber);
+    }
+
+    @Test
+    public void testEquals() {
+        // Given
+        IpCancellationRequest request1 = new IpCancellationRequest();
+        request1.setId("test-id");
+        request1.setAccountNumber("123456");
+
+        IpCancellationRequest request2 = new IpCancellationRequest();
+        request2.setId("test-id");
+        request2.setAccountNumber("123456");
+
+        IpCancellationRequest request3 = new IpCancellationRequest();
+        request3.setId("different-id");
+        request3.setAccountNumber("123456");
+
+        // Then verify equals method
+        assertThat(request1).isEqualTo(request2); // Same values should be equal
+        assertThat(request1).isNotEqualTo(request3); // Different id should not be equal
+        assertThat(request1).isNotEqualTo(null); // Should not equal null
+        assertThat(request1).isNotEqualTo(new Object()); // Should not equal a different class
+    }
+
+    @Test
+    public void testHashCode() {
+        // Given
+        IpCancellationRequest request1 = new IpCancellationRequest();
+        request1.setId("test-id");
+        request1.setAccountNumber("123456");
+
+        IpCancellationRequest request2 = new IpCancellationRequest();
+        request2.setId("test-id");
+        request2.setAccountNumber("123456");
+
+        // Then verify hashCode is consistent with equals
+        assertThat(request1.hashCode()).isEqualTo(request2.hashCode());
+    }
+
+    @Test
+    public void testToString() {
+        // Given
+        IpCancellationRequest request = new IpCancellationRequest();
+        request.setId("test-id");
+        request.setAccountNumber("123456");
+
+        // Then verify toString output
+        assert

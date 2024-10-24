@@ -1,0 +1,135 @@
+package com.td.mbna.msec.nudge.model;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class NudgeItemInWcmTest {
+
+    @Test
+    public void testGetAndSetName() {
+        NudgeItemInWcm nudgeItem = new NudgeItemInWcm();
+        String expectedName = "Test Nudge";
+        nudgeItem.setName(expectedName);
+        assertEquals(expectedName, nudgeItem.getName());
+    }
+
+    @Test
+    public void testGetAndSetOrder() {
+        NudgeItemInWcm nudgeItem = new NudgeItemInWcm();
+        int expectedOrder = 1;
+        nudgeItem.setOrder(expectedOrder);
+        assertEquals(expectedOrder, nudgeItem.getOrder());
+    }
+
+    @Test
+    public void testGetAndSetDisplay() {
+        NudgeItemInWcm nudgeItem = new NudgeItemInWcm();
+        boolean expectedDisplay = true;
+        nudgeItem.setDisplay(expectedDisplay);
+        assertEquals(expectedDisplay, nudgeItem.isDisplay());
+    }
+
+    @Test
+    public void testGetAndSetDisplayDay() {
+        NudgeItemInWcm nudgeItem = new NudgeItemInWcm();
+        String expectedDay = "Monday";
+        nudgeItem.setDisplayDay(expectedDay);
+        assertEquals(expectedDay, nudgeItem.getDisplayDay());
+    }
+
+    @Test
+    public void testGetAndSetInPages() {
+        NudgeItemInWcm nudgeItem = new NudgeItemInWcm();
+        String expectedInPages = "homepage";
+        nudgeItem.setInPages(expectedInPages);
+        assertEquals(expectedInPages, nudgeItem.getInPages());
+    }
+
+    @Test
+    public void testGetAndSetUcid() {
+        NudgeItemInWcm nudgeItem = new NudgeItemInWcm();
+        String expectedUcid = "ucid123";
+        nudgeItem.setUcid(expectedUcid);
+        assertEquals(expectedUcid, nudgeItem.getUcid());
+    }
+
+    @Test
+    public void testGetAndSetRequiredAccount() {
+        NudgeItemInWcm nudgeItem = new NudgeItemInWcm();
+        String expectedRequiredAccount = "account123";
+        nudgeItem.setReqiredAccount(expectedRequiredAccount);
+        assertEquals(expectedRequiredAccount, nudgeItem.getReqiredAccount());
+    }
+
+    @Test
+    public void testGetAndSetIncludeProductionCode() {
+        NudgeItemInWcm nudgeItem = new NudgeItemInWcm();
+        String expectedIncludeProductionCode = "includeCode";
+        nudgeItem.setIncludeProductionCode(expectedIncludeProductionCode);
+        assertEquals(expectedIncludeProductionCode, nudgeItem.getIncludeProductionCode());
+    }
+
+    @Test
+    public void testGetAndSetExcludeProductionCode() {
+        NudgeItemInWcm nudgeItem = new NudgeItemInWcm();
+        String expectedExcludeProductionCode = "excludeCode";
+        nudgeItem.setExcludeProductionCode(expectedExcludeProductionCode);
+        assertEquals(expectedExcludeProductionCode, nudgeItem.getExcludeProductionCode());
+    }
+
+    @Test
+    public void testGetAndSetExcludeDevices() {
+        NudgeItemInWcm nudgeItem = new NudgeItemInWcm();
+        String expectedExcludeDevices = "device1";
+        nudgeItem.setExcludeDevices(expectedExcludeDevices);
+        assertEquals(expectedExcludeDevices, nudgeItem.getExcludeDevices());
+    }
+
+    @Test
+    public void testGetAndSetUserType() {
+        NudgeItemInWcm nudgeItem = new NudgeItemInWcm();
+        String expectedUserType = "admin";
+        nudgeItem.setUserType(expectedUserType);
+        assertEquals(expectedUserType, nudgeItem.getUserType());
+    }
+
+    @Test
+    public void testGetAndSetImageMobile() {
+        NudgeItemInWcm nudgeItem = new NudgeItemInWcm();
+        String expectedImageMobile = "mobileImage.png";
+        nudgeItem.setImageMobile(expectedImageMobile);
+        assertEquals(expectedImageMobile, nudgeItem.getImageMobile());
+    }
+
+    @Test
+    public void testGetAndSetImageDesktop() {
+        NudgeItemInWcm nudgeItem = new NudgeItemInWcm();
+        String expectedImageDesktop = "desktopImage.png";
+        nudgeItem.setImageDesktop(expectedImageDesktop);
+        assertEquals(expectedImageDesktop, nudgeItem.getImageDesktop());
+    }
+
+    @Test
+    public void testGetAndSetImageAltText() {
+        NudgeItemInWcm nudgeItem = new NudgeItemInWcm();
+        String expectedAltText = "An image alt text";
+        nudgeItem.setImageAltText(expectedAltText);
+        assertEquals(expectedAltText, nudgeItem.getImageAltText());
+    }
+
+    @Test
+    public void testGetAndSetMessage() {
+        NudgeItemInWcm nudgeItem = new NudgeItemInWcm();
+        String[] expectedMessages = {"Message 1", "Message 2"};
+        nudgeItem.setMessage(expectedMessages);
+        assertArrayEquals(expectedMessages, nudgeItem.getMessage());
+    }
+
+    @Test
+    public void testGetAndSetMobileNudge() {
+        NudgeItemInWcm nudgeItem = new NudgeItemInWcm();
+        MobileNudge expectedMobileNudge = new MobileNudge(); // Assuming default constructor exists
+        nudgeItem.setMobileNudge(expectedMobileNudge);
+        assertEquals(expectedMobileNudge, nudgeItem.getMobileNudge());
+    }
+}

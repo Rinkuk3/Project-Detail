@@ -1,0 +1,49 @@
+package com.td.mbna.msec.transfertochequing.domain;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class DepositToChequingPayeeRequestTest {
+
+    @Test
+    void testGetIdAndSetId() {
+        DepositToChequingPayeeRequest request = new DepositToChequingPayeeRequest();
+        request.setId(10);
+        assertEquals(10, request.getId());
+    }
+
+    @Test
+    void testGetTransitNumAndSetTransitNum() {
+        DepositToChequingPayeeRequest request = new DepositToChequingPayeeRequest();
+        request.setTransitNum("123456");
+        assertEquals("123456", request.getTransitNum());
+    }
+
+    @Test
+    void testGetBankIdAndSetBankId() {
+        DepositToChequingPayeeRequest request = new DepositToChequingPayeeRequest();
+        request.setBankId("BANK123");
+        assertEquals("BANK123", request.getBankId());
+    }
+
+    @Test
+    void testGetAccountNumAndSetAccountNum() {
+        DepositToChequingPayeeRequest request = new DepositToChequingPayeeRequest();
+        request.setAccountNum("ACC123456");
+        assertEquals("ACC123456", request.getAccountNum());
+    }
+
+    @Test
+    void testGetNicknameAndSetNickname() {
+        DepositToChequingPayeeRequest request = new DepositToChequingPayeeRequest();
+        request.setNickname("My Chequing Account");
+        assertEquals("My Chequing Account", request.getNickname());
+    }
+
+    @Test
+    void testGetOldNicknameAndSetOldNickname() {
+        DepositToChequingPayeeRequest request = new DepositToChequingPayeeRequest();
+        request.setOldNickname("Old Nickname");
+        assertEquals("Old Nickname", request.getOldNickname());
+    }
+}

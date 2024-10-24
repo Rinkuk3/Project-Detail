@@ -1,0 +1,40 @@
+package com.td.mbna.msec.pin.domain;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class ViewPinTest {
+
+    @Test
+    public void testViewPinBuilder() {
+        // Build the ViewPin object using the builder
+        ViewPin viewPin = ViewPin.builder()
+                .pin("1234")
+                .build();
+
+        // Validate the pin property
+        assertEquals("1234", viewPin.getPin());
+    }
+
+    @Test
+    public void testViewPinDefaultConstructor() {
+        // Create a ViewPin object using the default constructor
+        ViewPin viewPin = new ViewPin();
+
+        // Validate the default value of the pin property
+        assertEquals(null, viewPin.getPin());
+    }
+
+    @Test
+    public void testSetPin() {
+        // Create a ViewPin object using the default constructor
+        ViewPin viewPin = new ViewPin();
+        
+        // Set a value for the pin
+        viewPin.setPin("5678");
+
+        // Validate the pin property
+        assertEquals("5678", viewPin.getPin());
+    }
+}

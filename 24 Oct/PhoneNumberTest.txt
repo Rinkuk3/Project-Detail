@@ -1,0 +1,40 @@
+package com.td.mbna.msec.profile.model;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class PhoneNumberTest {
+
+    @Test
+    void testGettersAndSetters() {
+        PhoneNumber phoneNumber = new PhoneNumber();
+
+        // Test setting and getting home number
+        phoneNumber.setHome("555-1234");
+        assertEquals("555-1234", phoneNumber.getHome());
+
+        // Test setting and getting business number
+        phoneNumber.setBusiness("555-5678");
+        assertEquals("555-5678", phoneNumber.getBusiness());
+
+        // Test setting and getting extension number
+        phoneNumber.setExt("123");
+        assertEquals("123", phoneNumber.getExt());
+
+        // Test setting and getting mobile number
+        phoneNumber.setMobile("555-9876");
+        assertEquals("555-9876", phoneNumber.getMobile());
+    }
+
+    @Test
+    void testDefaultValues() {
+        PhoneNumber phoneNumber = new PhoneNumber();
+
+        // Check that the default values are set correctly
+        assertNull(phoneNumber.getHome());
+        assertNull(phoneNumber.getBusiness());
+        assertNull(phoneNumber.getExt());
+        assertNull(phoneNumber.getMobile());
+    }
+}

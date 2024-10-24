@@ -1,0 +1,116 @@
+package com.td.mbna.msec.kyc.dto;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class PrimaryCardHolderInfoTest {
+
+    private PrimaryCardHolderInfo primaryCardHolderInfo;
+
+    @BeforeEach
+    void setUp() {
+        primaryCardHolderInfo = new PrimaryCardHolderInfo();
+    }
+
+    @Test
+    void testSetAndGetSameAddress() {
+        primaryCardHolderInfo.setSameAddress(true);
+        assertTrue(primaryCardHolderInfo.getSameAddress());
+        
+        primaryCardHolderInfo.setSameAddress(false);
+        assertFalse(primaryCardHolderInfo.getSameAddress());
+        
+        primaryCardHolderInfo.setSameAddress(null);
+        assertNull(primaryCardHolderInfo.getSameAddress());
+    }
+
+    @Test
+    void testSetAndGetAddress() {
+        Address address = new Address(); // Assuming Address class has a no-arg constructor
+        primaryCardHolderInfo.setAddress(address);
+        assertEquals(address, primaryCardHolderInfo.getAddress());
+        
+        primaryCardHolderInfo.setAddress(null);
+        assertNull(primaryCardHolderInfo.getAddress());
+    }
+
+    @Test
+    void testSetAndGetPhone() {
+        Phone phone = new Phone(); // Assuming Phone class has a no-arg constructor
+        primaryCardHolderInfo.setPhone(phone);
+        assertEquals(phone, primaryCardHolderInfo.getPhone());
+        
+        primaryCardHolderInfo.setPhone(null);
+        assertNull(primaryCardHolderInfo.getPhone());
+    }
+
+    @Test
+    void testToString() {
+        String expectedString = "com.td.mbna.msec.kyc.dto.PrimaryCardHolderInfo@" 
+                + Integer.toHexString(System.identityHashCode(primaryCardHolderInfo)) 
+                + "[sameAddress=<null>,address=<null>,phone=<null>]";
+        
+        assertEquals(expectedString, primaryCardHolderInfo.toString());
+
+        primaryCardHolderInfo.setSameAddress(true);
+        primaryCardHolderInfo.setAddress(new Address());
+        primaryCardHolderInfo.setPhone(new Phone());
+
+        String actualString = primaryCardHolderInfo.toString();
+        assertTrue(actualString.contains("sameAddress=true"));
+        assertTrue(actualString.contains("address="));
+        assertTrue(actualString.contains("phone="));
+    }
+
+    @Test
+    void testHashCode() {
+        Address address = new Address();
+        Phone phone = new Phone();
+        
+        primaryCardHolderInfo.setAddress(address);
+        primaryCardHolderInfo.setPhone(phone);
+        
+        int expectedHashCode = 1;
+        expectedHashCode = (expectedHashCode * 31) + (address == null ? 0 : address.hashCode());
+        expectedHashCode = (expectedHashCode * 31) + (primaryCardHolderInfo.getSameAddress() == null ? 0 : primaryCardHolderInfo.getSameAddress().hashCode());
+        expectedHashCode = (expectedHashCode * 31) + (phone == null ? 0 : phone.hashCode());
+        
+        assertEquals(expectedHashCode, primaryCardHolderInfo.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        PrimaryCardHolderInfo anotherPrimaryCardHolderInfo = new PrimaryCardHolderInfo();
+        
+        assertTrue(primaryCardHolderInfo.equals(primaryCardHolderInfo)); // Reflexivity
+
+        assertFalse(primaryCardHolderInfo.equals(null)); // Non-null
+
+        assertFalse(primaryCardHolderInfo.equals("Some String")); // Different type
+
+        // Same values
+        primaryCardHolderInfo.setSameAddress(true);
+        anotherPrimaryCardHolderInfo.setSameAddress(true);
+        assertTrue(primaryCardHolderInfo.equals(anotherPrimaryCardHolderInfo));
+
+        // Different address
+        primaryCardHolderInfo.setAddress(new Address());
+        anotherPrimaryCardHolderInfo.setAddress(null);
+        assertFalse(primaryCardHolderInfo.equals(anotherPrimaryCardHolderInfo));
+
+        // Reset to same address
+        anotherPrimaryCardHolderInfo.setAddress(new Address());
+        assertTrue(primaryCardHolderInfo.equals(anotherPrimaryCardHolderInfo));
+        
+        // Different phone
+        primaryCardHolderInfo.setPhone(new Phone());
+        anotherPrimaryCardHolderInfo.setPhone(null);
+        assertFalse(primaryCardHolderInfo.equals(anotherPrimaryCardHolderInfo));
+
+        // Reset to same phone
+        anotherPrimaryCardHolderInfo.setPhone(new Phone());
+        assertTrue(primaryCardHolderInfo.equals(anotherPrimaryCardHolderInfo));
+    }
+}

@@ -1,0 +1,128 @@
+package com.td.mbna.msec.notification.model;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+public class AccountNotificationAlertsTest {
+
+    private AccountNotificationAlerts accountNotificationAlerts;
+
+    @BeforeEach
+    public void setUp() {
+        accountNotificationAlerts = new AccountNotificationAlerts();
+    }
+
+    @Test
+    public void testGetAndSetAccountID() {
+        String expectedAccountID = "ACC123456";
+        accountNotificationAlerts.setAccountID(expectedAccountID);
+        assertEquals(expectedAccountID, accountNotificationAlerts.getAccountID());
+    }
+
+    @Test
+    public void testGetAndSetCardLongName() {
+        String expectedLongName = "MasterCard Gold";
+        accountNotificationAlerts.setCardLongName(expectedLongName);
+        assertEquals(expectedLongName, accountNotificationAlerts.getCardLongName());
+    }
+
+    @Test
+    public void testGetAndSetCardShortName() {
+        String expectedShortName = "MC Gold";
+        accountNotificationAlerts.setCardShortName(expectedShortName);
+        assertEquals(expectedShortName, accountNotificationAlerts.getCardShortName());
+    }
+
+    @Test
+    public void testGetAndSetLast4Digits() {
+        String expectedLast4Digits = "1234";
+        accountNotificationAlerts.setLast4Digits(expectedLast4Digits);
+        assertEquals(expectedLast4Digits, accountNotificationAlerts.getLast4Digits());
+    }
+
+    @Test
+    public void testGetAndSetOverLimitPref() {
+        String expectedOverLimitPref = "EMAIL";
+        accountNotificationAlerts.setOverLimitPref(expectedOverLimitPref);
+        assertEquals(expectedOverLimitPref, accountNotificationAlerts.getOverLimitPref());
+    }
+
+    @Test
+    public void testGetAndSetThresholdValue() {
+        String expectedThresholdValue = "500";
+        accountNotificationAlerts.setThresholdValue(expectedThresholdValue);
+        assertEquals(expectedThresholdValue, accountNotificationAlerts.getThresholdValue());
+    }
+
+    @Test
+    public void testGetAndSetThresholdPref() {
+        String expectedThresholdPref = "SMS";
+        accountNotificationAlerts.setThresholdPref(expectedThresholdPref);
+        assertEquals(expectedThresholdPref, accountNotificationAlerts.getThresholdPref());
+    }
+
+    @Test
+    public void testGetAndSetEmailAddress() {
+        String expectedEmail = "user@example.com";
+        accountNotificationAlerts.setEmailAddress(expectedEmail);
+        assertEquals(expectedEmail, accountNotificationAlerts.getEmailAddress());
+    }
+
+    @Test
+    public void testGetAndSetMobilePhone() {
+        String expectedMobilePhone = "123-456-7890";
+        accountNotificationAlerts.setMobilePhone(expectedMobilePhone);
+        assertEquals(expectedMobilePhone, accountNotificationAlerts.getMobilePhone());
+    }
+
+    @Test
+    public void testGetAndSetHomePhone() {
+        String expectedHomePhone = "098-765-4321";
+        accountNotificationAlerts.setHomePhone(expectedHomePhone);
+        assertEquals(expectedHomePhone, accountNotificationAlerts.getHomePhone());
+    }
+
+    @Test
+    public void testGetAndSetHomeAddress() {
+        String expectedHomeAddress = "123 Main St, Anytown, USA";
+        accountNotificationAlerts.setHomeAddress(expectedHomeAddress);
+        assertEquals(expectedHomeAddress, accountNotificationAlerts.getHomeAddress());
+    }
+
+    @Test
+    public void testGetAndSetValcanMessage() {
+        String expectedValcanMessage = "Important: Update your info.";
+        accountNotificationAlerts.setValcanMessage(expectedValcanMessage);
+        assertEquals(expectedValcanMessage, accountNotificationAlerts.getValcanMessage());
+    }
+
+    @Test
+    public void testGetAndSetHomephoneMessage() {
+        String expectedHomePhoneMessage = "Home phone is required.";
+        accountNotificationAlerts.setHomephoneMessage(expectedHomePhoneMessage);
+        assertEquals(expectedHomePhoneMessage, accountNotificationAlerts.getHomephoneMessage());
+    }
+
+    @Test
+    public void testGetAndSetNoemailaddrsMessage() {
+        String expectedNoEmailMessage = "Email address is required.";
+        accountNotificationAlerts.setNoemailaddrsMessage(expectedNoEmailMessage);
+        assertEquals(expectedNoEmailMessage, accountNotificationAlerts.getNoemailaddrsMessage());
+    }
+
+    @Test
+    public void testGetAndSetNophonenumMessage() {
+        String expectedNoPhoneMessage = "Phone number is required.";
+        accountNotificationAlerts.setNophonenumMessage(expectedNoPhoneMessage);
+        assertEquals(expectedNoPhoneMessage, accountNotificationAlerts.getNophonenumMessage());
+    }
+
+    @Test
+    public void testGetAndSetAllowedUpdatePersonalInfo() {
+        boolean expectedAllowedUpdate = true;
+        accountNotificationAlerts.setAllowedUpdatePersonalInfo(expectedAllowedUpdate);
+        assertEquals(expectedAllowedUpdate, accountNotificationAlerts.isAllowedUpdatePersonalInfo());
+    }
+}

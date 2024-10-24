@@ -1,0 +1,173 @@
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+import java.util.Arrays;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.td.mbna.msec.balancetransfer.resource.BalanceTransferResource;
+import com.td.mbna.msec.creditlimit.model.CreditLimitInfoResponse;
+import com.td.mbna.msec.transfertochequing.application.impl.TransferToChequingServiceImpl;
+import com.td.mbna.msec.transfertochequing.domain.DepositToChequingPayeeRequest;
+import com.td.mbna.msec.transfertochequing.domain.DepositToChequingPayeeResponse;
+import com.td.mbna.msec.transfertochequing.domain.TransferToChequingInfo;
+import com.td.mbna.msec.transfertochequing.domain.TransferToChequingRequest;
+import com.td.mbna.msec.transfertochequing.domain.TransferToChequingResponse;
+import com.td.mbna.msec.transfertochequing.domain.TransferToChequingVerificationResponse;
+
+public class TransferToChequingResourceTest {
+
+    @InjectMocks
+    private TransferToChequingResource transferToChequingResource;
+
+    @Mock
+    private TransferToChequingServiceImpl transferToChequingService;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private HttpServletResponse response;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testGetCreditLimitInfoResponse() {
+        CreditLimitInfoResponse expectedResponse = new CreditLimitInfoResponse();
+        when(transferToChequingService.getCreditLimitInfoResponse()).thenReturn(expectedResponse);
+
+        CreditLimitInfoResponse actualResponse = transferToChequingResource.getCreditLimitInfoResponse();
+
+        assertSame(expectedResponse, actualResponse);
+        verify(transferToChequingService, times(1)).getCreditLimitInfoResponse();
+    }
+
+    @Test
+    public void testGetOfferDisclosureID() {
+        String offerID = "123";
+        TransferToChequingInfo expectedInfo = new TransferToChequingInfo();
+        when(transferToChequingService.getTransferToChequingInfo(offerID)).thenReturn(expectedInfo);
+
+        TransferToChequingInfo actualInfo = transferToChequingResource.getOfferDisclosureID(offerID);
+
+        assertSame(expectedInfo, actualInfo);
+        verify(transferToChequingService, times(1)).getTransferToChequingInfo(offerID);
+    }
+
+    @Test
+    public void testValidateTransferToChequing() {
+        TransferToChequingRequest request = new TransferToChequingRequest();
+        TransferToChequingVerificationResponse expectedResponse = new TransferToChequingVerificationResponse();
+        when(transferToChequingService.transferToChequingVerify(request)).thenReturn(expectedResponse);
+
+        TransferToChequingVerificationResponse actualResponse = transferToChequingResource.validateTransferToChequing(request);
+
+        assertSame(expectedResponse, actualResponse);
+        verify(transferToChequingService, times(1)).transferToChequingVerify(request);
+    }
+
+    @Test
+    public void testSubmitTransferToChequing() {
+        TransferToChequingRequest request = new TransferToChequingRequest();
+        TransferToChequingResponse expectedResponse = new TransferToChequingResponse();
+        when(transferToChequingService.transferToChequingSubmit(request)).thenReturn(expectedResponse);
+
+        TransferToChequingResponse actualResponse = transferToChequingResource.submitTransferToChequing(request);
+
+        assertSame(expectedResponse, actualResponse);
+        verify(transferToChequingService, times(1)).transferToChequingSubmit(request);
+    }
+
+    @Test
+    public void testGetSavedPayees() {
+        DepositToChequingPayeeResponse payeeResponse = new DepositToChequingPayeeResponse();
+        List<DepositToChequingPayeeResponse> expectedPayees = Arrays.asList(payeeResponse);
+        when(transferToChequingService.getSavedPayees()).thenReturn(expectedPayees);
+
+        List<DepositToChequingPayeeResponse> actualPayees = transferToChequingResource.getSavedPayees();
+
+        assertSame(expectedPayees, actualPayees);
+        verify(transferToChequingService, times(1)).getSavedPayees();
+    }
+
+    @Test
+    public void testVerifyPayee() {
+        DepositToChequingPayeeRequest request = new DepositToChequingPayeeRequest();
+        DepositToChequingPayeeResponse expectedResponse = new DepositToChequingPayeeResponse();
+        when(transferToChequingService.addPayee(request, true)).thenReturn(expectedResponse);
+
+        DepositToChequingPayeeResponse actualResponse = transferToChequingResource.verifyPayee(request, this.request, this.response);
+
+        assertSame(expectedResponse, actualResponse);
+        verify(transferToChequingService, times(1)).addPayee(request, true);
+    }
+
+    @Test
+    public void testAddPayee() {
+        DepositToChequingPayeeRequest request = new DepositToChequingPayeeRequest();
+        DepositToChequingPayeeResponse expectedResponse = new DepositToChequingPayeeResponse();
+        when(transferToChequingService.addPayee(request, false)).thenReturn(expectedResponse);
+
+        DepositToChequingPayeeResponse actualResponse = transferToChequingResource.addPayee(request, this.request, this.response);
+
+        assertSame(expectedResponse, actualResponse);
+        verify(transferToChequingService, times(1)).addPayee(request, false);
+    }
+
+    @Test
+    public void testUpdatePayee() {
+        DepositToChequingPayeeRequest request = new DepositToChequingPayeeRequest();
+        DepositToChequingPayeeResponse expectedResponse = new DepositToChequingPayeeResponse();
+        when(transferToChequingService.updatePayee(request, this.request, this.response)).thenReturn(expectedResponse);
+
+        DepositToChequingPayeeResponse actualResponse = transferToChequingResource.updatePayee(request, this.request, this.response);
+
+        assertSame(expectedResponse, actualResponse);
+        verify(transferToChequingService, times(1)).updatePayee(request, this.request, this.response);
+    }
+
+    @Test
+    public void testDeletePayee() {
+        String payeeId = "payee1";
+        DepositToChequingPayeeResponse expectedResponse = new DepositToChequingPayeeResponse();
+        when(transferToChequingService.deletePayee(payeeId)).thenReturn(expectedResponse);
+
+        DepositToChequingPayeeResponse actualResponse = transferToChequingResource.deletePayee(payeeId);
+
+        assertSame(expectedResponse, actualResponse);
+        verify(transferToChequingService, times(1)).deletePayee(payeeId);
+    }
+
+    @Test
+    public void testHandleTTCInit() {
+        String offerId = "offer123";
+        String acctId = "acct123";
+        
+        when(request.getParameter(PARAMETER_OFFERID)).thenReturn(offerId);
+        when(request.getParameter(PARAMETER_USER_ACCTID)).thenReturn(acctId);
+        
+        ModelAndView modelAndView = transferToChequingResource.handleTTCInit(request, response);
+
+        assertNotNull(modelAndView);
+        assertEquals("redirect:index.html#/account/ttc/entry", modelAndView.getViewName());
+        assertEquals(offerId, modelAndView.getModel().get("offerID"));
+        
+        verify(sessionProvider, times(1)).setCurrentAccount(acctId);
+    }
+}

@@ -1,0 +1,150 @@
+package com.td.mbna.msec.statement.application;
+
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
+import java.util.*;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.common.domain.BaseMsecbffResponse;
+import com.td.mbna.msec.customer.domain.CustomerDetails;
+import com.td.mbna.msec.midtier.statement.payload.updateStatementDeliveryPreferences.UpdateStatementDeliveryPreferencesResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+public class EStatementOptOutServiceImplTest {
+
+    @InjectMocks
+    private EStatementOptOutServiceImpl eStatementOptOutService;
+
+    @Mock
+    private PaperlessOfferService paperlessOfferService;
+
+    @Mock
+    private MidTierServiceHelper midTierServiceHelper;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private HttpServletRequest httpServletRequest;
+
+    private CustomerDetails customerDetails;
+    private List<String> visibleAccountIds;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        customerDetails = mock(CustomerDetails.class);
+        visibleAccountIds = Arrays.asList("account1", "account2", "account3");
+
+        when(sessionProvider.getSessionCustomer()).thenReturn(customerDetails);
+        when(customerDetails.getHybridAccountIDs()).thenReturn(Arrays.asList("account1"));
+    }
+
+    @Test
+    public void testOptOutPreferenceType_HybridAccounts() {
+        AccountDetails hybridAccount = mock(AccountDetails.class);
+        when(hybridAccount.getAccountId()).thenReturn("account1");
+        when(hybridAccount.getCardName()).thenReturn("Card 1");
+        when(hybridAccount.getAcctEnding()).thenReturn("1234");
+        when(hybridAccount.getCardStarting()).thenReturn("1234");
+        when(hybridAccount.getEnrollmentStatus()).thenReturn("enrolled");
+
+        when(customerDetails.getAccount("account1")).thenReturn(hybridAccount);
+        when(customerDetails.getAccount("account2")).thenReturn(null);
+        when(customerDetails.getAccount("account3")).thenReturn(null);
+        when(sessionProvider.getSessionCustomer()).thenReturn(customerDetails);
+
+        // Simulate hybrid account retrieval
+        List<AccountDetails> declinedAccounts = Collections.singletonList(hybridAccount);
+        when(eStatementOptOutService.getDeclinedHybridAccounts(visibleAccountIds)).thenReturn(declinedAccounts);
+        when(eStatementOptOutService.getNonHybridAccounts(visibleAccountIds)).thenReturn(Collections.emptyList());
+
+        UpdateStatementDeliveryPreferencesResponse response = mock(UpdateStatementDeliveryPreferencesResponse.class);
+        when(response.getResponsePayload()).thenReturn(null);
+        when(midTierServiceHelper.updateStatementDeliveryPreferences(any(), isNull())).thenReturn(response);
+
+        BaseMsecbffResponse result = eStatementOptOutService.optOutPreferenceType(visibleAccountIds, httpServletRequest);
+
+        assertEquals("SUCCESS", result.getStatus());
+        verify(midTierServiceHelper).updateStatementDeliveryPreferences(any(), isNull());
+    }
+
+    @Test
+    public void testOptOutPreferenceType_NonHybridAccounts() {
+        when(customerDetails.getHybridAccountIDs()).thenReturn(Collections.emptyList());
+
+        AccountDetails nonHybridAccount = mock(AccountDetails.class);
+        when(nonHybridAccount.getAccountId()).thenReturn("account2");
+
+        when(customerDetails.getAccount("account2")).thenReturn(nonHybridAccount);
+        when(eStatementOptOutService.getDeclinedHybridAccounts(visibleAccountIds)).thenReturn(Collections.emptyList());
+        when(eStatementOptOutService.getNonHybridAccounts(visibleAccountIds)).thenReturn(Collections.singletonList(nonHybridAccount));
+
+        UpdateStatementDeliveryPreferencesResponse response = mock(UpdateStatementDeliveryPreferencesResponse.class);
+        when(response.getResponsePayload()).thenReturn(null);
+        when(midTierServiceHelper.updateStatementDeliveryPreferences(any(), isNull())).thenReturn(response);
+
+        BaseMsecbffResponse result = eStatementOptOutService.optOutPreferenceType(visibleAccountIds, httpServletRequest);
+
+        assertEquals("SUCCESS", result.getStatus());
+        verify(midTierServiceHelper).updateStatementDeliveryPreferences(any(), isNull());
+    }
+
+    @Test
+    public void testGetDeclinedHybridAccounts() {
+        when(customerDetails.getHybridAccountIDs()).thenReturn(Arrays.asList("account1"));
+        when(customerDetails.getAccount("account1")).thenReturn(mock(AccountDetails.class));
+
+        List<AccountDetails> result = eStatementOptOutService.getDeclinedHybridAccounts(visibleAccountIds);
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    public void testGetNonHybridAccounts() {
+        when(customerDetails.getHybridAccountIDs()).thenReturn(Arrays.asList("account1"));
+        when(customerDetails.getAccount("account2")).thenReturn(mock(AccountDetails.class));
+
+        List<AccountDetails> result = eStatementOptOutService.getNonHybridAccounts(visibleAccountIds);
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    public void testUpdateSessionCustomer() {
+        AccountDetails accountDetails = mock(AccountDetails.class);
+        when(accountDetails.getAccountId()).thenReturn("account1");
+        when(accountDetails.getEnrollmentStatus()).thenReturn("enrolled");
+
+        when(customerDetails.getAccount("account1")).thenReturn(accountDetails);
+
+        eStatementOptOutService.updateSessionCustomer(Collections.singletonList(accountDetails));
+
+        verify(sessionProvider).setSessionAttribute(anyString(), any());
+    }
+
+    @Test
+    public void testRemoveAccountIdFromHybridAccountIdList() {
+        eStatementOptOutService.removeAccountIdFromHybridAccountIdList("account1");
+
+        verify(sessionProvider.getSessionCustomer()).getHybridAccountIDs().remove("account1");
+    }
+
+    @Test
+    public void testHandlePSOForMapp() {
+        List<PaperlessAccount> paperlessAccounts = Arrays.asList(mock(PaperlessAccount.class));
+        when(paperlessOfferService.getPaperLessAccounts()).thenReturn(paperlessAccounts);
+        when(paperlessAccounts.get(0).getAccountId()).thenReturn("account1");
+
+        eStatementOptOutService.handlePSOForMapp(httpServletRequest);
+
+        verify(eStatementOptOutService).optOutPreferenceType(Collections.singletonList("account1"), httpServletRequest);
+    }
+
+    // Additional tests for createAuditLogForHybridAccounts and other methods can be added similarly.
+}

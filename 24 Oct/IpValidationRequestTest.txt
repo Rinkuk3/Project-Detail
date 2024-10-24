@@ -1,0 +1,41 @@
+package com.td.mbna.msec.offers.domain;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class IpValidationRequestTest {
+
+    @Test
+    public void testSettersAndGetters() {
+        IpValidationRequest request = new IpValidationRequest();
+
+        String referenceNumber = "REF123";
+        String accountNumber = "ACC456";
+        String ipNickName = "My IP";
+        String offerId = "OFFER789";
+
+        // Set values using setters
+        request.setReferenceNumber(referenceNumber);
+        request.setAccountNumber(accountNumber);
+        request.setIpNickName(ipNickName);
+        request.setOfferId(offerId);
+
+        // Assert that the values are retrieved correctly using getters
+        assertEquals(referenceNumber, request.getReferenceNumber());
+        assertEquals(accountNumber, request.getAccountNumber());
+        assertEquals(ipNickName, request.getIpNickName());
+        assertEquals(offerId, request.getOfferId());
+    }
+
+    @Test
+    public void testDefaultConstructor() {
+        IpValidationRequest request = new IpValidationRequest();
+
+        // Check that fields are initialized to null
+        assertNull(request.getReferenceNumber());
+        assertNull(request.getAccountNumber());
+        assertNull(request.getIpNickName());
+        assertNull(request.getOfferId());
+    }
+}

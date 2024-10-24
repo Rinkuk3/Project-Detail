@@ -1,0 +1,53 @@
+package com.td.mbna.msec.notification.model;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+public class CpfEditProcessResponseTest {
+
+    private CpfEditProcessResponse response;
+
+    @BeforeEach
+    public void setUp() {
+        response = new CpfEditProcessResponse();
+    }
+
+    @Test
+    public void testGetAndSetEditProcess() {
+        String expected = "Process123";
+        response.setEditProcess(expected);
+        assertEquals(expected, response.getEditProcess());
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        CpfEditProcessResponse response1 = new CpfEditProcessResponse();
+        CpfEditProcessResponse response2 = new CpfEditProcessResponse();
+
+        response1.setEditProcess("Process123");
+        response2.setEditProcess("Process123");
+
+        // Test equality
+        assertEquals(response1, response2);
+        assertEquals(response1.hashCode(), response2.hashCode());
+
+        // Test inequality
+        response2.setEditProcess("DifferentProcess");
+        assertNotEquals(response1, response2);
+    }
+
+    @Test
+    public void testToString() {
+        response.setEditProcess("Process123");
+        String expectedString = "CpfEditProcessResponse(editProcess=Process123)";
+        assertEquals(expectedString, response.toString());
+    }
+
+    @Test
+    public void testSerialVersionUID() {
+        // Check if the serialVersionUID matches
+        assertEquals(-4075389475881733081L, CpfEditProcessResponse.serialVersionUID);
+    }
+}

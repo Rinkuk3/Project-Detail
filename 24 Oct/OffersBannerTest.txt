@@ -1,0 +1,70 @@
+package com.td.mbna.msec.offersbanner.model;
+
+import com.td.mbna.msec.interceptor.model.Button;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class OffersBannerTest {
+
+    @Test
+    public void testOffersBanner() {
+        // Given
+        OffersBanner offersBanner = new OffersBanner();
+        String id = "1";
+        String offerId = "OFFER_001";
+        String allInOne = "All in one offer";
+        String icon = "icon.png";
+        String header = "Special Offer";
+        String content = "Get this exclusive offer!";
+        Button button1 = new Button(); // Initialize button1 as needed
+        Button button2 = new Button(); // Initialize button2 as needed
+        MobileOfferBanner mobileBanner = new MobileOfferBanner(); // Initialize as needed
+
+        // When
+        offersBanner.setId(id);
+        offersBanner.setOfferId(offerId);
+        offersBanner.setAllInOne(allInOne);
+        offersBanner.setIcon(icon);
+        offersBanner.setHeader(header);
+        offersBanner.setContent(content);
+        offersBanner.setButtons(Arrays.asList(button1, button2));
+        offersBanner.setLink(button1); // Set one button as a link
+        offersBanner.setMobileBanner(mobileBanner);
+
+        // Then
+        assertThat(offersBanner.getId()).isEqualTo(id);
+        assertThat(offersBanner.getOfferId()).isEqualTo(offerId);
+        assertThat(offersBanner.getAllInOne()).isEqualTo(allInOne);
+        assertThat(offersBanner.getIcon()).isEqualTo(icon);
+        assertThat(offersBanner.getHeader()).isEqualTo(header);
+        assertThat(offersBanner.getContent()).isEqualTo(content);
+        assertThat(offersBanner.getButtons()).containsExactly(button1, button2);
+        assertThat(offersBanner.getLink()).isEqualTo(button1);
+        assertThat(offersBanner.getMobileBanner()).isEqualTo(mobileBanner);
+    }
+
+    @Test
+    public void testOffersBannerConstructor() {
+        // Given
+        Button button = new Button(); // Initialize button as needed
+        MobileOfferBanner mobileBanner = new MobileOfferBanner(); // Initialize as needed
+
+        // When
+        OffersBanner offersBanner = new OffersBanner();
+        offersBanner.setId("1");
+        offersBanner.setOfferId("OFFER_001");
+        offersBanner.setAllInOne("All in one offer");
+        offersBanner.setIcon("icon.png");
+        offersBanner.setHeader("Special Offer");
+        offersBanner.setContent("Get this exclusive offer!");
+        offersBanner.setButtons(Arrays.asList(button));
+        offersBanner.setLink(button);
+        offersBanner.setMobileBanner(mobileBanner);
+
+        // Then
+        assertThat(offersBanner).isNotNull();
+    }
+}

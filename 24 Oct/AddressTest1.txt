@@ -1,0 +1,82 @@
+package com.td.mbna.msec.kyc.dto;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class AddressTest {
+
+    @Test
+    public void testDefaultConstructor() {
+        Address address = new Address();
+        
+        // Test default values
+        assertEquals("", address.getStreet());
+        assertEquals("", address.getLine2());
+        assertEquals("", address.getCity());
+        assertEquals("", address.getProvince());
+        assertEquals("", address.getPostalCode());
+    }
+
+    @Test
+    public void testSetAndGetStreet() {
+        Address address = new Address();
+        address.setStreet("123 Main St");
+        assertEquals("123 Main St", address.getStreet());
+    }
+
+    @Test
+    public void testSetAndGetLine2() {
+        Address address = new Address();
+        address.setLine2("Apt 4B");
+        assertEquals("Apt 4B", address.getLine2());
+    }
+
+    @Test
+    public void testSetAndGetCity() {
+        Address address = new Address();
+        address.setCity("Toronto");
+        assertEquals("Toronto", address.getCity());
+    }
+
+    @Test
+    public void testSetAndGetProvince() {
+        Address address = new Address();
+        address.setProvince("ON");
+        assertEquals("ON", address.getProvince());
+    }
+
+    @Test
+    public void testSetAndGetPostalCode() {
+        Address address = new Address();
+        address.setPostalCode("A1B 2C3");
+        assertEquals("A1B 2C3", address.getPostalCode());
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        Address address1 = new Address();
+        Address address2 = new Address();
+        
+        assertEquals(address1, address2);
+        assertEquals(address1.hashCode(), address2.hashCode());
+
+        address1.setStreet("123 Main St");
+        assertNotEquals(address1, address2);
+        
+        address2.setStreet("123 Main St");
+        assertEquals(address1, address2);
+        assertEquals(address1.hashCode(), address2.hashCode());
+    }
+
+    @Test
+    public void testToString() {
+        Address address = new Address();
+        address.setStreet("123 Main St");
+        address.setCity("Toronto");
+        address.setProvince("ON");
+        address.setPostalCode("A1B 2C3");
+
+        String expectedString = "Address(street=123 Main St, line2=, city=Toronto, province=ON, postalCode=A1B 2C3)";
+        assertEquals(expectedString, address.toString());
+    }
+}

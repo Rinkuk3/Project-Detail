@@ -1,0 +1,40 @@
+package com.td.mbna.msec.offers.domain;
+
+import java.math.BigDecimal;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class IpCalculationRequestTest {
+
+    @Test
+    public void testSettersAndGetters() {
+        IpCalculationRequest request = new IpCalculationRequest();
+        
+        String transRefNumber = "TRANS123";
+        String accountNumber = "ACCOUNT456";
+        BigDecimal amount = BigDecimal.valueOf(1000.00);
+        int duration = 12;
+        BigDecimal interest = BigDecimal.valueOf(100.00);
+        BigDecimal annualInterestRate = BigDecimal.valueOf(5.5);
+        BigDecimal setupFees = BigDecimal.valueOf(50.00);
+
+        // Set values using setters
+        request.setTransRefNumber(transRefNumber);
+        request.setAccountNumber(accountNumber);
+        request.setAmount(amount);
+        request.setDuration(duration);
+        request.setInterest(interest);
+        request.setAnnualInsterestRate(annualInterestRate);
+        request.setSetupFees(setupFees);
+
+        // Assert that the values are retrieved correctly using getters
+        assertEquals(transRefNumber, request.getTransRefNumber());
+        assertEquals(accountNumber, request.getAccountNumber());
+        assertEquals(amount, request.getAmount());
+        assertEquals(duration, request.getDuration());
+        assertEquals(interest, request.getInterest());
+        assertEquals(annualInterestRate, request.getAnnualInsterestRate());
+        assertEquals(setupFees, request.getSetupFees());
+    }
+}

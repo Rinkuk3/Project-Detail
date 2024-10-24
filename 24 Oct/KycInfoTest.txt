@@ -1,0 +1,121 @@
+package com.td.mbna.msec.kyc.dto;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class KycInfoTest {
+
+    @Test
+    public void testDefaultConstructor() {
+        KycInfo kycInfo = new KycInfo();
+        assertNull(kycInfo.getAllEnrolled(), "Default isAllEnrolled should be null");
+        assertNull(kycInfo.getPersonalInformation(), "Default personalInformation should be null");
+        assertTrue(kycInfo.getAccountInformation().isEmpty(), "Default accountInformation should be an empty list");
+    }
+
+    @Test
+    public void testSetAndGetAllEnrolled() {
+        KycInfo kycInfo = new KycInfo();
+        kycInfo.setAllEnrolled(true);
+        assertTrue(kycInfo.getAllEnrolled(), "The isAllEnrolled should be set to true");
+        
+        kycInfo.setAllEnrolled(false);
+        assertFalse(kycInfo.getAllEnrolled(), "The isAllEnrolled should be set to false");
+    }
+
+    @Test
+    public void testSetAndGetPersonalInformation() {
+        KycInfo kycInfo = new KycInfo();
+        PersonalInformation personalInfo = new PersonalInformation(); // Create an instance of PersonalInformation for testing
+        kycInfo.setPersonalInformation(personalInfo);
+        assertEquals(personalInfo, kycInfo.getPersonalInformation(), "The personalInformation should be set and retrieved correctly");
+        
+        kycInfo.setPersonalInformation(null);
+        assertNull(kycInfo.getPersonalInformation(), "The personalInformation should be null after setting it to null");
+    }
+
+    @Test
+    public void testSetAndGetAccountInformation() {
+        KycInfo kycInfo = new KycInfo();
+        List<AccountInformation> accounts = new ArrayList<>();
+        accounts.add(new AccountInformation()); // Create an instance of AccountInformation for testing
+        kycInfo.setAccountInformation(accounts);
+        assertEquals(accounts, kycInfo.getAccountInformation(), "The accountInformation should be set and retrieved correctly");
+        
+        kycInfo.setAccountInformation(null);
+        assertNull(kycInfo.getAccountInformation(), "The accountInformation should be null after setting it to null");
+    }
+
+    @Test
+    public void testToString() {
+        KycInfo kycInfo = new KycInfo();
+        kycInfo.setAllEnrolled(true);
+        PersonalInformation personalInfo = new PersonalInformation(); // Assume this class has a proper toString implementation
+        kycInfo.setPersonalInformation(personalInfo);
+        List<AccountInformation> accounts = new ArrayList<>();
+        accounts.add(new AccountInformation()); // Assume this class has a proper toString implementation
+        kycInfo.setAccountInformation(accounts);
+
+        String expectedString = "com.td.mbna.msec.kyc.dto.KycInfo@" + 
+                Integer.toHexString(System.identityHashCode(kycInfo)) + 
+                "[isAllEnrolled=true,personalInformation=" + personalInfo + 
+                ",accountInformation=" + accounts + "]";
+        assertEquals(expectedString, kycInfo.toString(), "toString() method should return the expected string");
+
+        kycInfo.setAllEnrolled(null);
+        kycInfo.setPersonalInformation(null);
+        kycInfo.setAccountInformation(null);
+        expectedString = "com.td.mbna.msec.kyc.dto.KycInfo@" + 
+                Integer.toHexString(System.identityHashCode(kycInfo)) + 
+                "[isAllEnrolled=<null>,personalInformation=<null>,accountInformation=<null>]";
+        assertEquals(expectedString, kycInfo.toString(), "toString() method should handle null values");
+    }
+
+    @Test
+    public void testHashCode() {
+        KycInfo kycInfo1 = new KycInfo();
+        KycInfo kycInfo2 = new KycInfo();
+        assertEquals(kycInfo1.hashCode(), kycInfo2.hashCode(), "Hash codes should be equal for two default instances");
+
+        kycInfo1.setAllEnrolled(true);
+        kycInfo2.setAllEnrolled(true);
+        assertEquals(kycInfo1.hashCode(), kycInfo2.hashCode(), "Hash codes should be equal when isAllEnrolled is the same");
+        
+        kycInfo2.setAllEnrolled(false);
+        assertNotEquals(kycInfo1.hashCode(), kycInfo2.hashCode(), "Hash codes should be different when isAllEnrolled is different");
+    }
+
+    @Test
+    public void testEquals() {
+        KycInfo kycInfo1 = new KycInfo();
+        KycInfo kycInfo2 = new KycInfo();
+
+        assertEquals(kycInfo1, kycInfo2, "Two default instances should be equal");
+
+        kycInfo1.setAllEnrolled(true);
+        kycInfo2.setAllEnrolled(true);
+        assertEquals(kycInfo1, kycInfo2, "Instances with the same isAllEnrolled should be equal");
+        
+        kycInfo2.setAllEnrolled(false);
+        assertNotEquals(kycInfo1, kycInfo2, "Instances with different isAllEnrolled should not be equal");
+
+        assertNotEquals(kycInfo1, null, "An instance should not be equal to null");
+        assertNotEquals(kycInfo1, new Object(), "An instance should not be equal to an object of a different class");
+    }
+
+    @Test
+    public void testEqualsWithNullFields() {
+        KycInfo kycInfo1 = new KycInfo();
+        KycInfo kycInfo2 = new KycInfo();
+        kycInfo1.setAllEnrolled(null);
+        kycInfo2.setAllEnrolled(null);
+        assertEquals(kycInfo1, kycInfo2, "Instances with null isAllEnrolled should be equal");
+
+        kycInfo2.setPersonalInformation(new PersonalInformation());
+        assertNotEquals(kycInfo1, kycInfo2, "Instances with one null personalInformation and one non-null should not be equal");
+    }
+}

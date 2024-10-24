@@ -1,0 +1,44 @@
+package com.td.mbna.msec.pin.domain;
+
+import com.td.mbna.msec.profile.model.Address;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class RequestPinResponseTest {
+
+    @Test
+    public void testRequestPinResponseBuilder() {
+        // Create an Address object for testing
+        Address testAddress = new Address();
+        testAddress.setStreet("123 Test St");
+        testAddress.setCity("Test City");
+        testAddress.setState("TS");
+        testAddress.setZip("12345");
+
+        // Build the RequestPinResponse object using the builder
+        RequestPinResponse response = RequestPinResponse.builder()
+                .status("SUCCESS")
+                .errorCode("200")
+                .address(testAddress)
+                .showChangeAddress(true)
+                .build();
+
+        // Validate the properties
+        assertEquals("SUCCESS", response.getStatus());
+        assertEquals("200", response.getErrorCode());
+        assertEquals(testAddress, response.getAddress());
+        assertEquals(true, response.isShowChangeAddress());
+    }
+
+    @Test
+    public void testRequestPinResponseDefaultConstructor() {
+        RequestPinResponse response = new RequestPinResponse();
+
+        // Validate default values
+        assertEquals(null, response.getStatus());
+        assertEquals(null, response.getErrorCode());
+        assertEquals(null, response.getAddress());
+        assertEquals(false, response.isShowChangeAddress());
+    }
+}

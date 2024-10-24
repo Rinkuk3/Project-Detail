@@ -1,0 +1,83 @@
+package com.td.mbna.msec.statement.domain;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class StatementItemTest {
+
+    @Test
+    void testGettersAndSetters() {
+        // Arrange
+        StatementItem item = new StatementItem();
+        
+        Date closingDate = new Date();
+        String closingDateFmted = "2024-10-24";
+        String documentId = "doc123";
+        List<InsertItem> insertList = new ArrayList<>();
+        insertList.add(new InsertItem("1", "Insert Title 1", "insertId1"));
+        insertList.add(new InsertItem("2", "Insert Title 2", "insertId2"));
+        String description = "Monthly Statement";
+        String statementFileName = "statement_2024_10.pdf";
+        boolean dmsAvailable = true;
+
+        // Act
+        item.setClosingDate(closingDate);
+        item.setClosingDateFmted(closingDateFmted);
+        item.setDocumentId(documentId);
+        item.setInsertList(insertList);
+        item.setDescription(description);
+        item.setStatementFileName(statementFileName);
+        item.setDmsAvailable(dmsAvailable);
+
+        // Assert
+        assertEquals(closingDate, item.getClosingDate());
+        assertEquals(closingDateFmted, item.getClosingDateFmted());
+        assertEquals(documentId, item.getDocumentId());
+        assertEquals(insertList, item.getInsertList());
+        assertEquals(description, item.getDescription());
+        assertEquals(statementFileName, item.getStatementFileName());
+        assertTrue(item.isDmsAvailable());
+    }
+
+    @Test
+    void testSetterWithNullValues() {
+        // Arrange
+        StatementItem item = new StatementItem();
+
+        // Act
+        item.setClosingDate(null);
+        item.setClosingDateFmted(null);
+        item.setDocumentId(null);
+        item.setInsertList(null);
+        item.setDescription(null);
+        item.setStatementFileName(null);
+        item.setDmsAvailable(false);
+
+        // Assert
+        assertNull(item.getClosingDate());
+        assertNull(item.getClosingDateFmted());
+        assertNull(item.getDocumentId());
+        assertNull(item.getInsertList());
+        assertNull(item.getDescription());
+        assertNull(item.getStatementFileName());
+        assertFalse(item.isDmsAvailable());
+    }
+
+    @Test
+    void testSetInsertListWithEmptyList() {
+        // Arrange
+        StatementItem item = new StatementItem();
+        List<InsertItem> emptyInsertList = new ArrayList<>();
+
+        // Act
+        item.setInsertList(emptyInsertList);
+
+        // Assert
+        assertEquals(emptyInsertList, item.getInsertList());
+    }
+}

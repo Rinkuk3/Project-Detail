@@ -1,0 +1,37 @@
+package com.td.mbna.msec.offers.domain;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class MPDOfferDTOTest {
+
+    @Test
+    void testGettersAndSetters() {
+        MPDOfferDTO mpdOfferDTO = new MPDOfferDTO();
+
+        boolean presentMPDOffer = true;
+        String offerID = "OFFER123";
+        String subProductID = "SUBPRODUCT456";
+
+        // Set values using setters
+        mpdOfferDTO.setPresentMPDOffer(presentMPDOffer);
+        mpdOfferDTO.setOfferID(offerID);
+        mpdOfferDTO.setSubProductID(subProductID);
+
+        // Assert that the values are retrieved correctly using getters
+        assertTrue(mpdOfferDTO.isPresentMPDOffer());
+        assertEquals(offerID, mpdOfferDTO.getOfferID());
+        assertEquals(subProductID, mpdOfferDTO.getSubProductID());
+    }
+
+    @Test
+    void testDefaultValues() {
+        MPDOfferDTO mpdOfferDTO = new MPDOfferDTO();
+
+        // Assert that the initial values are as expected
+        assertFalse(mpdOfferDTO.isPresentMPDOffer());
+        assertNull(mpdOfferDTO.getOfferID());
+        assertNull(mpdOfferDTO.getSubProductID());
+    }
+}

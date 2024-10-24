@@ -1,0 +1,61 @@
+package com.td.mbna.msec.notification.model;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+public class UcpBackRequestTest {
+
+    private UcpBackRequest ucpBackRequest;
+
+    @BeforeEach
+    public void setUp() {
+        ucpBackRequest = new UcpBackRequest();
+        ucpBackRequest.setSsoToken("test-sso-token");
+        ucpBackRequest.setTicketId("test-ticket-id");
+    }
+
+    @Test
+    public void testGetAndSetSsoToken() {
+        ucpBackRequest.setSsoToken("new-sso-token");
+        assertEquals("new-sso-token", ucpBackRequest.getSsoToken());
+    }
+
+    @Test
+    public void testGetAndSetTicketId() {
+        ucpBackRequest.setTicketId("new-ticket-id");
+        assertEquals("new-ticket-id", ucpBackRequest.getTicketId());
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        UcpBackRequest request1 = new UcpBackRequest();
+        request1.setSsoToken("token1");
+        request1.setTicketId("ticket1");
+
+        UcpBackRequest request2 = new UcpBackRequest();
+        request2.setSsoToken("token1");
+        request2.setTicketId("ticket1");
+
+        // Test equality
+        assertEquals(request1, request2);
+        assertEquals(request1.hashCode(), request2.hashCode());
+
+        // Test inequality
+        request2.setSsoToken("token2");
+        assertNotEquals(request1, request2);
+    }
+
+    @Test
+    public void testToString() {
+        String stringRepresentation = ucpBackRequest.toString();
+        assertTrue(stringRepresentation.contains("ssoToken=test-sso-token"));
+        assertTrue(stringRepresentation.contains("ticketId=test-ticket-id"));
+    }
+
+    @Test
+    public void testSerialVersionUID() {
+        assertEquals(1L, UcpBackRequest.serialVersionUID);
+    }
+}

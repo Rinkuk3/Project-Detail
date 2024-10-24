@@ -1,0 +1,38 @@
+package com.td.mbna.msec.offerslanding.model;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class OfferItemsInWcmTest {
+
+    @Test
+    public void testGettersAndSetters() {
+        // Create an instance of OfferItemsInWcm
+        OfferItemsInWcm offerItemsInWcm = new OfferItemsInWcm();
+
+        // Test orderByWcm
+        offerItemsInWcm.setOrderByWcm(true);
+        assertEquals(true, offerItemsInWcm.isOrderByWcm());
+
+        // Test additionalItemsForApi
+        String additionalItems = "additional items";
+        offerItemsInWcm.setAdditionalItemsForApi(additionalItems);
+        assertEquals(additionalItems, offerItemsInWcm.getAdditionalItemsForApi());
+
+        // Test checkItemsForApi
+        String checkItems = "check items";
+        offerItemsInWcm.setCheckItemsForApi(checkItems);
+        assertEquals(checkItems, offerItemsInWcm.getCheckItemsForApi());
+
+        // Test items
+        OfferLandingItem item1 = new OfferLandingItem(); // Assuming OfferLandingItem is a valid class
+        OfferLandingItem item2 = new OfferLandingItem(); // Create more items as needed
+        offerItemsInWcm.setItems(Arrays.asList(item1, item2));
+        assertEquals(2, offerItemsInWcm.getItems().size());
+        assertEquals(item1, offerItemsInWcm.getItems().get(0));
+        assertEquals(item2, offerItemsInWcm.getItems().get(1));
+    }
+}

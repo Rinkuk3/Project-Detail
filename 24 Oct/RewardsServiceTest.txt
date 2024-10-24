@@ -1,0 +1,170 @@
+package com.td.mbna.msec.rewards.service.impl;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import javax.crypto.SecretKey;
+import javax.servlet.http.HttpServletRequest;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.common.WcmContentService;
+import com.td.mbna.msec.common.infrastructure.util.ConfigUtil;
+import com.td.mbna.msec.core.session.SessionProvider;
+import com.td.mbna.msec.midtier.account.payload.getrewardsbalances.GetRewardsBalancesResponse;
+import com.td.mbna.msec.midtier.account.payload.getrewardssaml.GetRewardsSamlResponse;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import com.td.mbna.msec.rewards.model.RewardsBalance;
+import com.td.mbna.msec.rewards.model.RewardsInfo;
+import com.td.mbna.msec.midtier.account.payload.getrewardsbalances.ResponsePayload;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.util.Collections;
+
+public class RewardsServiceTest {
+
+    @InjectMocks
+    private RewardsService rewardsService;
+
+    @Mock
+    private WcmContentService wcmContentService;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private MidTierServiceHelper midTierServiceHelper;
+
+    @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private AccountDetails accountDetails;
+
+    @Mock
+    private GetRewardsBalancesResponse getRewardsBalancesResponse;
+
+    @Mock
+    private ResponsePayload responsePayload;
+
+    @Mock
+    private GetRewardsSamlResponse getRewardsSamlResponse;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testGetRewardsInfo_withValidAccount() {
+        when(request.getAttribute("AUDIT_LOG")).thenReturn(true);
+        when(sessionProvider.getAccount("accountId")).thenReturn(accountDetails);
+        when(wcmContentService.getImgLinkFromWCM(anyString())).thenReturn("http://example.com/image.png");
+        when(midTierServiceHelper.getRewardsSaml(anyString(), any())).thenReturn(getRewardsSamlResponse);
+        when(getRewardsSamlResponse.getResponsePayload()).thenReturn(new ResponsePayload("ssoSamlData"));
+
+        RewardsInfo rewardsInfo = rewardsService.getRewardsInfo("accountId", request);
+
+        assertNotNull(rewardsInfo);
+        assertEquals("http://example.com/image.png", rewardsInfo.getImageUrl());
+        assertEquals("ssoSamlData", rewardsInfo.getSsoSaml());
+        assertEquals("MBNA_TSYS_SAML_URL", rewardsInfo.getSsoUrl());
+    }
+
+    @Test
+    public void testGetRewardsInfo_withNullSsoSaml() {
+        when(request.getAttribute("AUDIT_LOG")).thenReturn(true);
+        when(sessionProvider.getAccount("accountId")).thenReturn(accountDetails);
+        when(wcmContentService.getImgLinkFromWCM(anyString())).thenReturn("http://example.com/image.png");
+        when(midTierServiceHelper.getRewardsSaml(anyString(), any())).thenReturn(getRewardsSamlResponse);
+        when(getRewardsSamlResponse.getResponsePayload()).thenReturn(new ResponsePayload(null));
+
+        RewardsInfo rewardsInfo = rewardsService.getRewardsInfo("accountId", request);
+
+        assertNotNull(rewardsInfo);
+        assertEquals("http://example.com/image.png", rewardsInfo.getImageUrl());
+        assertNull(rewardsInfo.getSsoSaml());
+        assertNotNull(rewardsInfo.getSsoUrl()); // Validate it calls genUrlParam
+    }
+
+    @Test
+    public void testGetRewardsBalance_whenRewardsEligible() {
+        when(sessionProvider.getAccount("accountId")).thenReturn(accountDetails);
+        when(accountDetails.isRewardsCard()).thenReturn(true);
+        when(midTierServiceHelper.getRewardsBalances(anyString(), any())).thenReturn(getRewardsBalancesResponse);
+        when(getRewardsBalancesResponse.getResponsePayload()).thenReturn(responsePayload);
+        when(responsePayload.getAvailableBalanceQty()).thenReturn(100L);
+        when(responsePayload.getLoyaltyUnitOfMeasure()).thenReturn("Points");
+
+        RewardsBalance rewardsBalance = rewardsService.getRewardsBalance("jwt", accountDetails, null);
+
+        assertNotNull(rewardsBalance);
+        assertEquals(100L, rewardsBalance.getBalance());
+        assertEquals("Points", rewardsBalance.getLoyaltyUnitOfMeasure());
+    }
+
+    @Test
+    public void testGetRewardsBalance_whenNotRewardsEligible() {
+        when(sessionProvider.getAccount("accountId")).thenReturn(accountDetails);
+        when(accountDetails.isRewardsCard()).thenReturn(false);
+
+        RewardsBalance rewardsBalance = rewardsService.getRewardsBalance("jwt", accountDetails, null);
+
+        assertNotNull(rewardsBalance);
+        assertNull(rewardsBalance.getBalance());
+        assertNull(rewardsBalance.getLoyaltyUnitOfMeasure());
+    }
+
+    @Test
+    public void testGetRewardsBalance_whenExceptionOccurs() {
+        when(sessionProvider.getAccount("accountId")).thenReturn(accountDetails);
+        when(accountDetails.isRewardsCard()).thenReturn(true);
+        when(midTierServiceHelper.getRewardsBalances(anyString(), any())).thenThrow(new RuntimeException("Error"));
+
+        RewardsBalance rewardsBalance = rewardsService.getRewardsBalance("jwt", accountDetails, null);
+
+        assertNull(rewardsBalance);
+    }
+
+    @Test
+    public void testIsRewardsEligible() {
+        when(accountDetails.isRewardsCard()).thenReturn(true);
+
+        boolean result = rewardsService.isRewardsEligible(accountDetails, "jwt", null);
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void testIsRewardsEligible_whenNotEligible() {
+        when(accountDetails.isRewardsCard()).thenReturn(false);
+
+        boolean result = rewardsService.isRewardsEligible(accountDetails, "jwt", null);
+
+        assertFalse(result);
+    }
+
+    @Test
+    public void testIsAuthorized() {
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(accountDetails);
+        when(accountDetails.isRewardsCard()).thenReturn(true);
+
+        boolean result = rewardsService.isAuthorized();
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void testIsAuthorized_whenNotAuthorized() {
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(accountDetails);
+        when(accountDetails.isRewardsCard()).thenReturn(false);
+
+        boolean result = rewardsService.isAuthorized();
+
+        assertFalse(result);
+    }
+}

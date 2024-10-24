@@ -1,0 +1,24 @@
+package com.td.mbna.msec.offers.domain.common;
+
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class PromotionTermTest {
+
+    @Test
+    public void testPromotionTermConstructorAndGetters() {
+        // Given a sample endDate
+        String endDate = "2024-12-31";
+
+        // When creating a new PromotionTerm instance
+        PromotionTerm promotionTerm = new PromotionTerm(endDate);
+
+        // Then the getter for endDate should return the expected value
+        assertThat(promotionTerm.getEndDate()).isEqualTo(endDate);
+
+        // Also check that the other fields are null (default state)
+        assertThat(promotionTerm.getUntilAgeCode()).isNull();
+        assertThat(promotionTerm.getUntilAgeNumber()).isNull();
+    }
+}

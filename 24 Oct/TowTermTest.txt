@@ -1,0 +1,37 @@
+package com.td.mbna.msec.offers.domain.common;
+
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class TowTermTest {
+
+    @Test
+    public void testTowTermConstructor() {
+        // Given
+        String fixedEndDate = "2024-12-31";
+        String calculationType = "Fixed";
+
+        // When
+        TowTerm towTerm = new TowTerm(fixedEndDate, calculationType);
+
+        // Then
+        assertThat(towTerm.getFixedEndDate()).isEqualTo(fixedEndDate);
+        assertThat(towTerm.getCalculationType()).isEqualTo(calculationType);
+    }
+
+    @Test
+    public void testGetters() {
+        // Given
+        TowTerm towTerm = new TowTerm("2024-12-31", "Fixed");
+
+        // Since untilAgeCode, untilAgeNumber, and openingExpiryDate are not set, they should be null
+        assertThat(towTerm.getUntilAgeCode()).isNull();
+        assertThat(towTerm.getUntilAgeNumber()).isNull();
+        assertThat(towTerm.getOpeningExpiryDate()).isNull();
+        
+        // Check the fixedEndDate and calculationType
+        assertThat(towTerm.getFixedEndDate()).isEqualTo("2024-12-31");
+        assertThat(towTerm.getCalculationType()).isEqualTo("Fixed");
+    }
+}

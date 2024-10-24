@@ -1,0 +1,32 @@
+package com.td.mbna.msec.statement.domain;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class SelectedAccountsTest {
+
+    @Test
+    void testGettersAndSetters() {
+        // Arrange
+        SelectedAccounts selectedAccounts = new SelectedAccounts();
+        String[] expectedAccounts = {"account1", "account2", "account3"};
+
+        // Act
+        selectedAccounts.setSelectedPaperlessAccounts(expectedAccounts);
+
+        // Assert
+        assertArrayEquals(expectedAccounts, selectedAccounts.getSelectedPaperlessAccounts());
+    }
+
+    @Test
+    void testSetterWithNull() {
+        // Arrange
+        SelectedAccounts selectedAccounts = new SelectedAccounts();
+
+        // Act
+        selectedAccounts.setSelectedPaperlessAccounts(null);
+
+        // Assert
+        assertNull(selectedAccounts.getSelectedPaperlessAccounts());
+    }
+}

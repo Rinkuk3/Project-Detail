@@ -1,0 +1,73 @@
+package com.td.mbna.msec.statement.domain;
+
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ClosingBalanceTest {
+
+    @Test
+    void testStatementBalanceGetterSetter() {
+        ClosingBalance closingBalance = new ClosingBalance();
+        
+        // Test initial value
+        assertNull(closingBalance.getStatementBalance());
+
+        // Test setting value
+        BigDecimal expectedBalance = new BigDecimal("100.00");
+        closingBalance.setStatementBalance(expectedBalance);
+        
+        // Test getter
+        assertEquals(expectedBalance, closingBalance.getStatementBalance());
+    }
+
+    @Test
+    void testActivityAvailableGetterSetter() {
+        ClosingBalance closingBalance = new ClosingBalance();
+        
+        // Test initial value
+        assertFalse(closingBalance.isActivityAvailable());
+
+        // Test setting value
+        closingBalance.setActivityAvailable(true);
+        
+        // Test getter
+        assertTrue(closingBalance.isActivityAvailable());
+    }
+
+    @Test
+    void testEquals() {
+        ClosingBalance closingBalance1 = new ClosingBalance();
+        closingBalance1.setStatementBalance(new BigDecimal("100.00"));
+        closingBalance1.setActivityAvailable(true);
+
+        ClosingBalance closingBalance2 = new ClosingBalance();
+        closingBalance2.setStatementBalance(new BigDecimal("100.00"));
+        closingBalance2.setActivityAvailable(true);
+
+        assertEquals(closingBalance1, closingBalance2);
+        assertNotEquals(closingBalance1, new ClosingBalance());
+    }
+
+    @Test
+    void testHashCode() {
+        ClosingBalance closingBalance = new ClosingBalance();
+        closingBalance.setStatementBalance(new BigDecimal("100.00"));
+        closingBalance.setActivityAvailable(true);
+        
+        int expectedHashCode = closingBalance.getStatementBalance().hashCode() * 31 + Boolean.hashCode(closingBalance.isActivityAvailable());
+        assertEquals(expectedHashCode, closingBalance.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        ClosingBalance closingBalance = new ClosingBalance();
+        closingBalance.setStatementBalance(new BigDecimal("100.00"));
+        closingBalance.setActivityAvailable(true);
+
+        String expectedString = "ClosingBalance(statementBalance=100.00, activityAvailable=true)";
+        assertEquals(expectedString, closingBalance.toString());
+    }
+}

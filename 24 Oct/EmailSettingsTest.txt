@@ -1,0 +1,51 @@
+package com.td.mbna.msec.profile.model;
+
+import com.td.mbna.msec.common.infrastructure.util.UIGeneralUtil;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.MockedStatic;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mockStatic;
+
+@ExtendWith(MockitoExtension.class)
+class EmailSettingsTest {
+
+    @Test
+    void testGettersAndSetters() {
+        EmailSettings emailSettings = new EmailSettings();
+
+        // Test setEmailAddress with a valid email
+        String validEmail = "test@example.com";
+        try (MockedStatic<UIGeneralUtil> mockedUtil = mockStatic(UIGeneralUtil.class)) {
+            mockedUtil.when(() -> UIGeneralUtil.validateEmailAddress(anyString())).thenReturn(true);
+            emailSettings.setEmailAddress(validEmail);
+            assertEquals(validEmail, emailSettings.getEmailAddress());
+        }
+
+        // Test setEmailAddress with an invalid email
+        String invalidEmail = "invalid-email";
+        try (MockedStatic<UIGeneralUtil> mockedUtil = mockStatic(UIGeneralUtil.class)) {
+            mockedUtil.when(() -> UIGeneralUtil.validateEmailAddress(anyString())).thenReturn(false);
+            emailSettings.setEmailAddress(invalidEmail);
+            assertNull(emailSettings.getEmailAddress());
+        }
+
+        // Test setEmailAddress with null
+        emailSettings.setEmailAddress(null);
+        assertNull(emailSettings.getEmailAddress());
+
+        // Test setEmailAddress with empty string
+        emailSettings.setEmailAddress("");
+        assertNull(emailSettings.getEmailAddress());
+
+        // Test sendEmail
+        emailSettings.setSendEmail(true);
+        assertTrue(emailSettings.isSendEmail());
+        
+        emailSettings.setSendEmail(false);
+        assertFalse(emailSettings.isSendEmail());
+    }
+}

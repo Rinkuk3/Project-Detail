@@ -1,0 +1,50 @@
+package com.td.mbna.msec.transfertochequing.domain;
+
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class TransferToChequingRequestTest {
+
+    @Test
+    void testGettersAndSetters() {
+        // Arrange
+        TransferToChequingRequest request = new TransferToChequingRequest();
+        String transitNum = "123456";
+        String bankId = "BANK123";
+        String accountNum = "ACC123456";
+        BigDecimal transferAmt = BigDecimal.valueOf(100.00);
+        boolean save = true;
+        boolean agreedToTerms = false;
+        String nickname = "My Chequing Account";
+        String cvv = "123";
+        String expirationDateMonth = "12";
+        String expirationDateYear = "25";
+
+        // Act
+        request.setTransitNum(transitNum);
+        request.setBankId(bankId);
+        request.setAccountNum(accountNum);
+        request.setTransferAmt(transferAmt);
+        request.setSave(save);
+        request.setAgreedToTerms(agreedToTerms);
+        request.setNickname(nickname);
+        request.setCvv(cvv);
+        request.setExpirationDateMonth(expirationDateMonth);
+        request.setExpirationDateYear(expirationDateYear);
+
+        // Assert
+        assertEquals(transitNum, request.getTransitNum());
+        assertEquals(bankId, request.getBankId());
+        assertEquals(accountNum, request.getAccountNum());
+        assertEquals(transferAmt, request.getTransferAmt());
+        assertTrue(request.isSave());
+        assertFalse(request.isAgreedToTerms());
+        assertEquals(nickname, request.getNickname());
+        assertEquals(cvv, request.getCvv());
+        assertEquals(expirationDateMonth, request.getExpirationDateMonth());
+        assertEquals(expirationDateYear, request.getExpirationDateYear());
+    }
+}

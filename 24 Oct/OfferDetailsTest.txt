@@ -1,0 +1,152 @@
+import com.td.mbna.msec.midtier.types.common.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class OfferDetailsTest {
+
+    private OfferDetails offerDetails;
+    private PromotionOfferType promotionOfferType;
+
+    @BeforeEach
+    void setUp() {
+        promotionOfferType = new PromotionOfferType();
+        promotionOfferType.setBtOffer(new BTOfferType());
+        promotionOfferType.setIpOffer(new IPOfferType());
+        promotionOfferType.setCliOffer(new CLIOfferType());
+        promotionOfferType.setPcOffer(new PCOfferType());
+        promotionOfferType.setRoffer(new ROfferType());
+        promotionOfferType.setCaOffer(new CAOfferType());
+        promotionOfferType.setOfferID("offer123");
+        promotionOfferType.setPriority(1);
+        promotionOfferType.setOfferType("test");
+        promotionOfferType.setDisposition("allowed");
+        promotionOfferType.setIsEligible(true);
+        promotionOfferType.setSubProductId("subProd123");
+        promotionOfferType.setSubProductType("typeA");
+        promotionOfferType.setAgreementFeature("agreement");
+
+        offerDetails = new OfferDetails(promotionOfferType);
+    }
+
+    @Test
+    void testDefaultConstructor() {
+        OfferDetails defaultOfferDetails = new OfferDetails();
+        assertNotNull(defaultOfferDetails);
+    }
+
+    @Test
+    void testGetAsPromotionOfferType() throws DatatypeConfigurationException {
+        PromotionOfferType offerType = offerDetails.getAsPromotionOfferType();
+        assertNotNull(offerType);
+        assertEquals(offerDetails.getOfferID(), offerType.getOfferID());
+    }
+
+    @Test
+    void testGetOfferURL() {
+        String expectedUrl = "offer123&returnBack=offersOverview&returnAction=offersOverview";
+        assertEquals(expectedUrl, offerDetails.getOfferURL());
+    }
+
+    @Test
+    void testSetOASURL() {
+        String newUrl = "http://example.com";
+        offerDetails.setOASURL(newUrl);
+        assertEquals(newUrl, offerDetails.getOASURL());
+    }
+
+    @Test
+    void testGettersAndSetters() {
+        offerDetails.setOfferID("offer456");
+        assertEquals("offer456", offerDetails.getOfferID());
+
+        offerDetails.setPriority(2);
+        assertEquals(2, offerDetails.getPriority());
+
+        offerDetails.setType("newType");
+        assertEquals("newType", offerDetails.getType());
+
+        offerDetails.setDisposition("not allowed");
+        assertEquals("not allowed", offerDetails.getDisposition());
+
+        offerDetails.setEligibile(false);
+        assertFalse(offerDetails.isEligibile());
+
+        offerDetails.setDisclosureID("disclosure123");
+        assertEquals("disclosure123", offerDetails.getDisclosureID());
+
+        offerDetails.setSubProductID("subProd456");
+        assertEquals("subProd456", offerDetails.getSubProductID());
+
+        offerDetails.setAgreementFeature("newAgreement");
+        assertEquals("newAgreement", offerDetails.getAgreementFeature());
+    }
+
+    @Test
+    void testGetInterestRate() {
+        BigDecimal rate = new BigDecimal("5.5");
+        offerDetails.getBtOffer().setRate(rate);
+        assertEquals(rate, offerDetails.getInterestRate());
+    }
+
+    @Test
+    void testGetMinimumAmount() {
+        BigDecimal minAmount = new BigDecimal("10.0");
+        offerDetails.getBtOffer().setMinimumFeeAmount(minAmount);
+        assertEquals(minAmount, offerDetails.getMinimumAmount());
+    }
+
+    @Test
+    void testGetExpiryDate() {
+        Date currentDate = new Date();
+        offerDetails.getBtOffer().setExpiryDate(currentDate.getTime());
+        assertEquals(currentDate, offerDetails.getExpiryDate());
+    }
+
+    @Test
+    void testGetDuration() {
+        offerDetails.getBtOffer().setDuration(12);
+        assertEquals(12, offerDetails.getDuration());
+    }
+
+    @Test
+    void testGetExpiryDuration() {
+        Calendar now = Calendar.getInstance();
+        now.add(Calendar.MONTH, 6);
+        offerDetails.getBtOffer().setExpiryDate(now.getTimeInMillis());
+
+        assertEquals(6, offerDetails.getExpiryDuration());
+    }
+
+    @Test
+    void testGetExpiryDurationWithXMLGregorianCalendar() {
+        Calendar now = Calendar.getInstance();
+        now.add(Calendar.MONTH, 6);
+        XMLGregorianCalendar xmlGregorianCalendar = // create mock XMLGregorianCalendar with future date
+        offerDetails.getExpiryDuration(xmlGregorianCalendar);
+        assertEquals(6, offerDetails.getExpiryDuration(xmlGregorianCalendar));
+    }
+
+    @Test
+    void testDumpOffer() {
+        String dump = offerDetails.dumpOffer();
+        assertNotNull(dump);
+        assertTrue(dump.contains("offerID: offer123"));
+    }
+
+    @Test
+    void testToString() {
+        String toStringResult = offerDetails.toString();
+        assertNotNull(toStringResult);
+        assertTrue(toStringResult.contains("offerID=offer123"));
+    }
+
+    // Add tests for edge cases, if any
+}

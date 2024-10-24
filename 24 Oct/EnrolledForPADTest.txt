@@ -1,0 +1,54 @@
+package com.td.mbna.msec.paymentoption.model;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class EnrolledForPADTest {
+
+    @Test
+    public void testEnrolledForPAD() {
+        // Arrange
+        EnrolledForPAD enrolledForPAD = new EnrolledForPAD();
+        enrolledForPAD.setEnrolledPAD(true);
+        enrolledForPAD.setWithin90Days(true);
+        enrolledForPAD.setOnDueDate(false);
+        enrolledForPAD.setLast4AccountNum("1234");
+
+        // Act & Assert
+        assertEquals(true, enrolledForPAD.isEnrolledPAD());
+        assertEquals(true, enrolledForPAD.isWithin90Days());
+        assertEquals(false, enrolledForPAD.isOnDueDate());
+        assertEquals("1234", enrolledForPAD.getLast4AccountNum());
+    }
+
+    @Test
+    public void testDefaultValues() {
+        // Arrange
+        EnrolledForPAD enrolledForPAD = new EnrolledForPAD();
+
+        // Act & Assert
+        assertEquals(false, enrolledForPAD.isEnrolledPAD());
+        assertEquals(false, enrolledForPAD.isWithin90Days());
+        assertEquals(false, enrolledForPAD.isOnDueDate());
+        assertEquals(null, enrolledForPAD.getLast4AccountNum());
+    }
+
+    @Test
+    public void testSettersAndGetters() {
+        // Arrange
+        EnrolledForPAD enrolledForPAD = new EnrolledForPAD();
+
+        // Act
+        enrolledForPAD.setEnrolledPAD(false);
+        enrolledForPAD.setWithin90Days(false);
+        enrolledForPAD.setOnDueDate(true);
+        enrolledForPAD.setLast4AccountNum("5678");
+
+        // Assert
+        assertEquals(false, enrolledForPAD.isEnrolledPAD());
+        assertEquals(false, enrolledForPAD.isWithin90Days());
+        assertEquals(true, enrolledForPAD.isOnDueDate());
+        assertEquals("5678", enrolledForPAD.getLast4AccountNum());
+    }
+}

@@ -1,0 +1,52 @@
+package com.td.mbna.msec.onboarding.model;
+
+import org.junit.jupiter.api.Test;
+
+import java.math.BigInteger;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class LoggingOnboardingPayloadTest {
+
+    @Test
+    public void testGettersAndSetters() {
+        // Create an instance of LoggingOnboardingPayload
+        LoggingOnboardingPayload payload = new LoggingOnboardingPayload();
+
+        // Test accountNumber
+        String accountNumber = "123456789";
+        payload.setAccountNumber(accountNumber);
+        assertEquals(accountNumber, payload.getAccountNumber());
+
+        // Test actionId
+        BigInteger actionId = new BigInteger("987654321");
+        payload.setActionId(actionId);
+        assertEquals(actionId, payload.getActionId());
+
+        // Test visited
+        boolean visited = true;
+        payload.setVisited(visited);
+        assertEquals(visited, payload.isVisited());
+
+        // Test dismissed
+        boolean dismissed = false;
+        payload.setDismissed(dismissed);
+        assertEquals(dismissed, payload.isDismissed());
+    }
+
+    @Test
+    public void testConstructorAndAllArgs() {
+        // Create an instance using the all-args constructor
+        LoggingOnboardingPayload payload = new LoggingOnboardingPayload();
+        payload.setAccountNumber("123456789");
+        payload.setActionId(new BigInteger("987654321"));
+        payload.setVisited(true);
+        payload.setDismissed(false);
+        
+        // Verify all values
+        assertEquals("123456789", payload.getAccountNumber());
+        assertEquals(new BigInteger("987654321"), payload.getActionId());
+        assertEquals(true, payload.isVisited());
+        assertEquals(false, payload.isDismissed());
+    }
+}

@@ -1,0 +1,134 @@
+package com.td.mbna.msec.onboarding.model;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class OnboardingActionItemInFileTest {
+
+    @Test
+    public void testGettersAndSetters() {
+        // Create an instance of OnboardingActionItemInFile
+        OnboardingActionItemInFile actionItemInFile = new OnboardingActionItemInFile();
+
+        // Test actionId
+        long actionId = 12345L;
+        actionItemInFile.setActionId(actionId);
+        assertEquals(actionId, actionItemInFile.getActionId());
+
+        // Test actionItemName
+        String actionItemName = "Test Action Item";
+        actionItemInFile.setActionItemName(actionItemName);
+        assertEquals(actionItemName, actionItemInFile.getActionItemName());
+
+        // Test url
+        String url = "http://example.com";
+        actionItemInFile.setUrl(url);
+        assertEquals(url, actionItemInFile.getUrl());
+
+        // Test externalUrl
+        boolean externalUrl = true;
+        actionItemInFile.setExternalUrl(externalUrl);
+        assertEquals(externalUrl, actionItemInFile.isExternalUrl());
+
+        // Test label
+        String label = "Test Label";
+        actionItemInFile.setLabel(label);
+        assertEquals(label, actionItemInFile.getLabel());
+
+        // Test dataAuditEventcode
+        String dataAuditEventcode = "event123";
+        actionItemInFile.setDataAuditEventcode(dataAuditEventcode);
+        assertEquals(dataAuditEventcode, actionItemInFile.getDataAuditEventcode());
+
+        // Test omnitureView
+        String omnitureView = "view123";
+        actionItemInFile.setOmnitureView(omnitureView);
+        assertEquals(omnitureView, actionItemInFile.getOmnitureView());
+
+        // Test omnitureDismiss
+        String omnitureDismiss = "dismiss123";
+        actionItemInFile.setOmnitureDismiss(omnitureDismiss);
+        assertEquals(omnitureDismiss, actionItemInFile.getOmnitureDismiss());
+
+        // Test businessEventReasonView
+        String businessEventReasonView = "reasonView";
+        actionItemInFile.setBusinessEventReasonView(businessEventReasonView);
+        assertEquals(businessEventReasonView, actionItemInFile.getBusinessEventReasonView());
+
+        // Test businessEventReasonDismiss
+        String businessEventReasonDismiss = "reasonDismiss";
+        actionItemInFile.setBusinessEventReasonDismiss(businessEventReasonDismiss);
+        assertEquals(businessEventReasonDismiss, actionItemInFile.getBusinessEventReasonDismiss());
+
+        // Test MappFlag
+        String mappFlag = "mapFlagValue";
+        actionItemInFile.setMappFlag(mappFlag);
+        assertEquals(mappFlag, actionItemInFile.getMappFlag());
+
+        // Test publish
+        boolean publish = true;
+        actionItemInFile.setPublish(publish);
+        assertEquals(publish, actionItemInFile.isPublish());
+
+        // Test cardRole
+        String cardRole = "Role A";
+        actionItemInFile.setCardRole(cardRole);
+        assertEquals(cardRole, actionItemInFile.getCardRole());
+
+        // Test accountCurrentSetting
+        String accountCurrentSetting = "Current Setting";
+        actionItemInFile.setAccountCurrentSetting(accountCurrentSetting);
+        assertEquals(accountCurrentSetting, actionItemInFile.getAccountCurrentSetting());
+
+        // Test allowedPaperSuppression
+        boolean allowedPaperSuppression = false;
+        actionItemInFile.setAllowedPaperSuppression(allowedPaperSuppression);
+        assertEquals(allowedPaperSuppression, actionItemInFile.isAllowedPaperSuppression());
+
+        // Test allowedBalanceProtection
+        boolean allowedBalanceProtection = true;
+        actionItemInFile.setAllowedBalanceProtection(allowedBalanceProtection);
+        assertEquals(allowedBalanceProtection, actionItemInFile.isAllowedBalanceProtection());
+
+        // Test requiredBpOffer
+        boolean requiredBpOffer = false;
+        actionItemInFile.setRequiredBpOffer(requiredBpOffer);
+        assertEquals(requiredBpOffer, actionItemInFile.isRequiredBpOffer());
+
+        // Test openedDaysOfAccount
+        int openedDaysOfAccount = 30;
+        actionItemInFile.setOpenedDaysOfAccount(openedDaysOfAccount);
+        assertEquals(openedDaysOfAccount, actionItemInFile.getOpenedDaysOfAccount());
+
+        // Test allowedBalanceTransfer
+        boolean allowedBalanceTransfer = true;
+        actionItemInFile.setAllowedBalanceTransfer(allowedBalanceTransfer);
+        assertEquals(allowedBalanceTransfer, actionItemInFile.isAllowedBalanceTransfer());
+
+        // Test requireBtOffer
+        boolean requireBtOffer = false;
+        actionItemInFile.setRequireBtOffer(requireBtOffer);
+        assertEquals(requireBtOffer, actionItemInFile.isRequireBtOffer());
+
+        // Test allowedCardActivation
+        boolean allowedCardActivation = true;
+        actionItemInFile.setAllowedCardActivation(allowedCardActivation);
+        assertEquals(allowedCardActivation, actionItemInFile.isAllowedCardActivation());
+
+        // Test allowedStandardEForms
+        boolean allowedStandardEForms = false;
+        actionItemInFile.setAllowedStandardEForms(allowedStandardEForms);
+        assertEquals(allowedStandardEForms, actionItemInFile.isAllowedStandardEForms());
+
+        // Test allowedToAddAU
+        boolean allowedToAddAU = true;
+        actionItemInFile.setAllowedToAddAU(allowedToAddAU);
+        assertEquals(allowedToAddAU, actionItemInFile.isAllowedToAddAU());
+
+        // Test allowedPaymentEnrolled
+        boolean allowedPaymentEnrolled = false;
+        actionItemInFile.setAllowedPaymentEnrolled(allowedPaymentEnrolled);
+        assertEquals(allowedPaymentEnrolled, actionItemInFile.isAllowedPaymentEnrolled());
+    }
+}

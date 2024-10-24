@@ -1,0 +1,158 @@
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import javax.servlet.http.HttpServletRequest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.common.domain.BaseMsecbffResponse;
+import com.td.mbna.msec.core.service.CheckEligibility;
+import com.td.mbna.msec.customer.domain.CustomerDetails;
+import com.td.mbna.msec.midtier.statement.payload.updateStatementDeliveryPreferences.UpdateStatementDeliveryPreferencesResponse;
+import com.td.mbna.msec.statement.domain.PaperlessUpdateProfileRequest;
+import com.td.mbna.msec.statement.domain.SelectedAccounts;
+
+import java.util.Collections;
+import java.util.HashSet;
+
+public class UpdateStatementDeliveryPreferencesServiceImplTest {
+
+    @InjectMocks
+    private UpdateStatementDeliveryPreferencesServiceImpl updateService;
+
+    @Mock
+    private MultiAccountEstatementService multiAccountEstatementService;
+
+    @Mock
+    private PaperlessOfferService paperlessOfferService;
+
+    @Mock
+    private EStatementDisclosureService eStatementDisclosureService;
+
+    @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private AccountDetails accountDetails;
+
+    @Mock
+    private CustomerDetails customerDetails;
+
+    @Mock
+    private UpdateStatementDeliveryPreferencesResponse updateResponse;
+
+    @Mock
+    private BaseMsecbffResponse baseResponse;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        when(accountDetails.getCardName()).thenReturn("Card Name");
+        when(accountDetails.getAcctEnding()).thenReturn("1234");
+        when(accountDetails.getAccountId()).thenReturn("123456789");
+        when(accountDetails.getEnrollmentStatus()).thenReturn("Enrolled");
+        when(customerDetails.getAccounts()).thenReturn(Collections.singletonList(accountDetails));
+    }
+
+    @Test
+    @CheckEligibility
+    public void testUpdateStatementDeliveryPreferences_Success() {
+        when(updateService.updateStatementDeliveryPreferences(any(), any())).thenReturn(updateResponse);
+        when(updateResponse.getResponsePayload()).thenReturn(new Object());
+
+        BaseMsecbffResponse response = updateService.updateStatementDeliveryPreferences("123456789", request);
+
+        assertEquals("SUCCESS", response.getStatus());
+    }
+
+    @Test
+    @CheckEligibility
+    public void testUpdateStatementDeliveryPreferences_Failure() {
+        when(updateService.updateStatementDeliveryPreferences(any(), any())).thenReturn(updateResponse);
+        when(updateResponse.getResponsePayload()).thenReturn(null);
+
+        BaseMsecbffResponse response = updateService.updateStatementDeliveryPreferences("123456789", request);
+
+        assertEquals("ERROR", response.getStatus());
+    }
+
+    @Test
+    public void testRemoveAccountIdFromHybridAccountIdList() {
+        when(sessionProvider.getSessionCustomer()).thenReturn(customerDetails);
+        when(customerDetails.getHybridAccountIDs()).thenReturn(new HashSet<>(Collections.singletonList("123456789")));
+
+        updateService.removeAccountIdFromHybridAccountIdList("123456789");
+
+        verify(customerDetails.getHybridAccountIDs()).remove("123456789");
+    }
+
+    @Test
+    public void testGetSelectedPaperlessAccounts() {
+        when(sessionProvider.getSessionCustomer()).thenReturn(customerDetails);
+        when(customerDetails.getPaperlessAccountList()).thenReturn(new HashSet<>(Collections.singletonList(accountDetails)));
+        when(accountDetails.getAccountId()).thenReturn("123456789");
+
+        String[] selectedAccounts = updateService.getSelectedPaperlessAccounts();
+
+        assertArrayEquals(new String[]{"123456789"}, selectedAccounts);
+    }
+
+    @Test
+    public void testSetSelectedPaperlessAccounts() {
+        SelectedAccounts selectedAccounts = new SelectedAccounts();
+        selectedAccounts.setSelectedPaperlessAccounts(new String[]{"123456789"});
+
+        updateService.setSelectedPaperlessAccounts(selectedAccounts);
+
+        verify(multiAccountEstatementService).populatePaperlessAccountList(any(), any());
+    }
+
+    @Test
+    public void testIsAuthorized_Allowed() {
+        when(sessionProvider.getCurrentAccount()).thenReturn(accountDetails);
+        when(accountDetails.isAllowedPaperStatements()).thenReturn(true);
+
+        boolean isAuthorized = updateService.isAuthorized();
+
+        assertTrue(isAuthorized);
+    }
+
+    @Test
+    public void testIsAuthorized_NotAllowed() {
+        when(sessionProvider.getCurrentAccount()).thenReturn(accountDetails);
+        when(accountDetails.isAllowedPaperStatements()).thenReturn(false);
+
+        boolean isAuthorized = updateService.isAuthorized();
+
+        assertFalse(isAuthorized);
+    }
+
+    @Test
+    public void testHandlePaperlessFlowFromMobile() {
+        when(paperlessOfferService.getPaperLessAccounts()).thenReturn(Collections.singletonList(new PaperlessAccount()));
+        when(eStatementDisclosureService.getHybridAccounts()).thenReturn(Collections.singletonList(accountDetails));
+
+        String redirectUrl = updateService.handlePaperlessFlowFromMobile();
+
+        assertTrue(redirectUrl.contains("hybridAccountFlow=true"));
+        assertTrue(redirectUrl.contains("multiAccountModal=true"));
+    }
+
+    @Test
+    public void testHandleUpdateAccountFromMobile() {
+        when(request.getParameterValues("selectedAccounts")).thenReturn(new String[]{"123456789"});
+        when(request.getParameter("emailAdress")).thenReturn("test@example.com");
+
+        Map<String, Object> result = updateService.handleUpdateAccountFromMobile(request);
+
+        assertEquals("error", result.get("update_profile"));
+        assertTrue(((HashSet<String>) result.get("failed_accounts")).isEmpty());
+    }
+
+    // Additional tests can be added here to cover any edge cases or other methods if needed.
+}

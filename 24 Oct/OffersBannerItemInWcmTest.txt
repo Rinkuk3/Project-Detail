@@ -1,0 +1,157 @@
+package com.td.mbna.msec.offersbanner.model;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class OffersBannerItemInWcmTest {
+
+    @Test
+    public void testOffersBannerItemInWcm() {
+        // Given
+        OffersBannerItemInWcm offersBannerItemInWcm = new OffersBannerItemInWcm();
+
+        // Sample data
+        String id = "1";
+        String allInOne = "All in one content";
+        String icon = "icon.png";
+        String header = "Offer Header";
+        String content = "Offer Content";
+        Button button1 = new Button(); // Initialize as needed
+        Button button2 = new Button(); // Initialize as needed
+        MobileOfferBanner mobileBanner = new MobileOfferBanner(); // Initialize as needed
+
+        // BFF logic values
+        boolean publish = true;
+        String accountCurrentSetting = "Current Setting";
+        boolean allowedBalanceTransfer = true;
+        boolean allowedCreditLimitIncrease = false;
+        boolean allowedPaperSuppression = true;
+        boolean allowedStandardEForms = true;
+        boolean allowedToAddAU = false;
+        boolean allowedMiniPayment = true;
+        boolean allowedIp = true;
+        String cardRole = "Gold";
+        boolean eligibleForIPOffer = true;
+        boolean emailRequired = false;
+        String excludeAccountStatus = "Active";
+        String excludeProductionCode = "Prod1";
+        String includeProductionCode = "Prod2";
+        boolean keepInSession = true;
+        int maxActivePlans = 3;
+        int openedDaysOfAccount = 30;
+        boolean requireBtDuration = true;
+        boolean requireBtExpiryDate = false;
+        boolean requireBtOffer = true;
+        boolean requiredCliOffer = false;
+        boolean requiredMpdOffers = true;
+        boolean requiredInterestRate = true;
+        boolean skipForPSO = false;
+        boolean skipPaperlessCheckingForPSO = true;
+        boolean checkDuplicateOffer = false;
+        String requiredIpEligibleTrans = "TransactionType";
+        String startDate = "20240101";
+        String expiryDate = "20241231";
+        String supressedBy = "Admin";
+        String ucid = "UC123456";
+        String contractRateBanner = "Contract Rate Banner";
+        String requiredOfferType = "Type1";
+        String disclosure = "Disclosure text";
+
+        // When setting values
+        offersBannerItemInWcm.setId(id);
+        offersBannerItemInWcm.setAllInOne(allInOne);
+        offersBannerItemInWcm.setIcon(icon);
+        offersBannerItemInWcm.setHeader(header);
+        offersBannerItemInWcm.setContent(content);
+        offersBannerItemInWcm.setButtons(Arrays.asList(button1, button2));
+        offersBannerItemInWcm.setLink(button1); // Setting the link to button1
+        offersBannerItemInWcm.setMobileBanner(mobileBanner);
+
+        // BFF logic setting
+        offersBannerItemInWcm.setPublish(publish);
+        offersBannerItemInWcm.setAccountCurrentSetting(accountCurrentSetting);
+        offersBannerItemInWcm.setAllowedBalanceTransfer(allowedBalanceTransfer);
+        offersBannerItemInWcm.setAllowedCreditLimitIncrease(allowedCreditLimitIncrease);
+        offersBannerItemInWcm.setAllowedPaperSuppression(allowedPaperSuppression);
+        offersBannerItemInWcm.setAllowedStandardEForms(allowedStandardEForms);
+        offersBannerItemInWcm.setAllowedToAddAU(allowedToAddAU);
+        offersBannerItemInWcm.setAllowedMiniPayment(allowedMiniPayment);
+        offersBannerItemInWcm.setAllowedIp(allowedIp);
+        offersBannerItemInWcm.setCardRole(cardRole);
+        offersBannerItemInWcm.setEligibleForIPOffer(eligibleForIPOffer);
+        offersBannerItemInWcm.setEmailRequired(emailRequired);
+        offersBannerItemInWcm.setExcludeAccountStatus(excludeAccountStatus);
+        offersBannerItemInWcm.setExcludeProductionCode(excludeProductionCode);
+        offersBannerItemInWcm.setIncludeProductionCode(includeProductionCode);
+        offersBannerItemInWcm.setKeepInSession(keepInSession);
+        offersBannerItemInWcm.setMaxActivePlans(maxActivePlans);
+        offersBannerItemInWcm.setOpenedDaysOfAccount(openedDaysOfAccount);
+        offersBannerItemInWcm.setRequireBtDuration(requireBtDuration);
+        offersBannerItemInWcm.setRequireBtExpiryDate(requireBtExpiryDate);
+        offersBannerItemInWcm.setRequireBtOffer(requireBtOffer);
+        offersBannerItemInWcm.setRequiredCliOffer(requiredCliOffer);
+        offersBannerItemInWcm.setRequiredMpdOffers(requiredMpdOffers);
+        offersBannerItemInWcm.setRequiredInterestRate(requiredInterestRate);
+        offersBannerItemInWcm.setSkipForPSO(skipForPSO);
+        offersBannerItemInWcm.setSkipPaperlessCheckingForPSO(skipPaperlessCheckingForPSO);
+        offersBannerItemInWcm.setCheckDuplicateOffer(checkDuplicateOffer);
+        offersBannerItemInWcm.setRequiredIpEligibleTrans(requiredIpEligibleTrans);
+        offersBannerItemInWcm.setStartDate_yyyyMMdd(startDate);
+        offersBannerItemInWcm.setExpiryDate_yyyyMMdd(expiryDate);
+        offersBannerItemInWcm.setSupressedBy(supressedBy);
+        offersBannerItemInWcm.setUcid(ucid);
+        offersBannerItemInWcm.setContractRateBanner(contractRateBanner);
+        offersBannerItemInWcm.setRequiredOfferType(requiredOfferType);
+        offersBannerItemInWcm.setDisclosure(disclosure);
+
+        // Then
+        assertThat(offersBannerItemInWcm.getId()).isEqualTo(id);
+        assertThat(offersBannerItemInWcm.getAllInOne()).isEqualTo(allInOne);
+        assertThat(offersBannerItemInWcm.getIcon()).isEqualTo(icon);
+        assertThat(offersBannerItemInWcm.getHeader()).isEqualTo(header);
+        assertThat(offersBannerItemInWcm.getContent()).isEqualTo(content);
+        assertThat(offersBannerItemInWcm.getButtons()).containsExactly(button1, button2);
+        assertThat(offersBannerItemInWcm.getLink()).isEqualTo(button1);
+        assertThat(offersBannerItemInWcm.getMobileBanner()).isEqualTo(mobileBanner);
+
+        // Check BFF logic values
+        assertThat(offersBannerItemInWcm.isPublish()).isEqualTo(publish);
+        assertThat(offersBannerItemInWcm.getAccountCurrentSetting()).isEqualTo(accountCurrentSetting);
+        assertThat(offersBannerItemInWcm.isAllowedBalanceTransfer()).isEqualTo(allowedBalanceTransfer);
+        assertThat(offersBannerItemInWcm.isAllowedCreditLimitIncrease()).isEqualTo(allowedCreditLimitIncrease);
+        assertThat(offersBannerItemInWcm.isAllowedPaperSuppression()).isEqualTo(allowedPaperSuppression);
+        assertThat(offersBannerItemInWcm.isAllowedStandardEForms()).isEqualTo(allowedStandardEForms);
+        assertThat(offersBannerItemInWcm.isAllowedToAddAU()).isEqualTo(allowedToAddAU);
+        assertThat(offersBannerItemInWcm.isAllowedMiniPayment()).isEqualTo(allowedMiniPayment);
+        assertThat(offersBannerItemInWcm.isAllowedIp()).isEqualTo(allowedIp);
+        assertThat(offersBannerItemInWcm.getCardRole()).isEqualTo(cardRole);
+        assertThat(offersBannerItemInWcm.isEligibleForIPOffer()).isEqualTo(eligibleForIPOffer);
+        assertThat(offersBannerItemInWcm.isEmailRequired()).isEqualTo(emailRequired);
+        assertThat(offersBannerItemInWcm.getExcludeAccountStatus()).isEqualTo(excludeAccountStatus);
+        assertThat(offersBannerItemInWcm.getExcludeProductionCode()).isEqualTo(excludeProductionCode);
+        assertThat(offersBannerItemInWcm.getIncludeProductionCode()).isEqualTo(includeProductionCode);
+        assertThat(offersBannerItemInWcm.isKeepInSession()).isEqualTo(keepInSession);
+        assertThat(offersBannerItemInWcm.getMaxActivePlans()).isEqualTo(maxActivePlans);
+        assertThat(offersBannerItemInWcm.getOpenedDaysOfAccount()).isEqualTo(openedDaysOfAccount);
+        assertThat(offersBannerItemInWcm.isRequireBtDuration()).isEqualTo(requireBtDuration);
+        assertThat(offersBannerItemInWcm.isRequireBtExpiryDate()).isEqualTo(requireBtExpiryDate);
+        assertThat(offersBannerItemInWcm.isRequireBtOffer()).isEqualTo(requireBtOffer);
+        assertThat(offersBannerItemInWcm.isRequiredCliOffer()).isEqualTo(requiredCliOffer);
+        assertThat(offersBannerItemInWcm.isRequiredMpdOffers()).isEqualTo(requiredMpdOffers);
+        assertThat(offersBannerItemInWcm.isRequiredInterestRate()).isEqualTo(requiredInterestRate);
+        assertThat(offersBannerItemInWcm.isSkipForPSO()).isEqualTo(skipForPSO);
+        assertThat(offersBannerItemInWcm.isSkipPaperlessCheckingForPSO()).isEqualTo(skipPaperlessCheckingForPSO);
+        assertThat(offersBannerItemInWcm.isCheckDuplicateOffer()).isEqualTo(checkDuplicateOffer);
+        assertThat(offersBannerItemInWcm.getRequiredIpEligibleTrans()).isEqualTo(requiredIpEligibleTrans);
+        assertThat(offersBannerItemInWcm.getStartDate_yyyyMMdd()).isEqualTo(startDate);
+        assertThat(offersBannerItemInWcm.getExpiryDate_yyyyMMdd()).isEqualTo(expiryDate);
+        assertThat(offersBannerItemInWcm.getSupressedBy()).isEqualTo(supressedBy);
+        assertThat(offersBannerItemInWcm.getUcid()).isEqualTo(ucid);
+        assertThat(offersBannerItemInWcm.getContractRateBanner()).isEqualTo(contractRateBanner);
+        assertThat(offersBannerItemInWcm.getRequiredOfferType()).isEqualTo(requiredOfferType);
+        assertThat(offersBannerItemInWcm.getDisclosure()).isEqualTo(disclosure);
+    }
+}

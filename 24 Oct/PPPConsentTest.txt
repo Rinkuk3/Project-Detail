@@ -1,0 +1,44 @@
+package com.td.mbna.msec.offers.domain;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class PPPConsentTest {
+
+    @Test
+    public void testGetAndSetCheckBox1() {
+        PPPConsent consent = new PPPConsent();
+        String expectedCheckBox1 = "checked";
+
+        // Set the checkBox1 property
+        consent.setCheckBox1(expectedCheckBox1);
+
+        // Assert that the get method returns the expected value
+        assertEquals(expectedCheckBox1, consent.getCheckBox1());
+    }
+
+    @Test
+    public void testGetAndSetCheckBox2() {
+        PPPConsent consent = new PPPConsent();
+        String expectedCheckBox2 = "unchecked";
+
+        // Set the checkBox2 property
+        consent.setCheckBox2(expectedCheckBox2);
+
+        // Assert that the get method returns the expected value
+        assertEquals(expectedCheckBox2, consent.getCheckBox2());
+    }
+
+    @Test
+    public void testGetAndSetCheckBox3() {
+        PPPConsent consent = new PPPConsent();
+        String expectedCheckBox3 = "checked";
+
+        // Set the checkBox3 property
+        consent.setCheckBox3(expectedCheckBox3);
+
+        // Assert that the get method returns the expected value
+        assertEquals(expectedCheckBox3, consent.getCheckBox3());
+    }
+}

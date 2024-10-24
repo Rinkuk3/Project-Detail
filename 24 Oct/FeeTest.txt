@@ -1,0 +1,32 @@
+package com.td.mbna.msec.offers.domain.common;
+
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class FeeTest {
+
+    @Test
+    public void testFeeConstructorAndGetters() {
+        // Given sample data for Fee
+        String type = "Monthly";
+        String feeClassificationCode = "FC123";
+        String featureClassificationCode = "Feature1";
+        String featureSubClassificationCode = "SubFeatureA";
+        String transactionCategoryCode = "Transaction1";
+        BigDecimal fixedAmount = new BigDecimal("10.00");
+
+        // When creating a new Fee instance
+        Fee fee = new Fee(type, feeClassificationCode, featureClassificationCode, featureSubClassificationCode, transactionCategoryCode, fixedAmount);
+
+        // Then the getters should return the expected values
+        assertThat(fee.getType()).isEqualTo(type);
+        assertThat(fee.getFeeClassificationCode()).isEqualTo(feeClassificationCode);
+        assertThat(fee.getFeatureClassificationCode()).isEqualTo(featureClassificationCode);
+        assertThat(fee.getFeatureSubClassificationCode()).isEqualTo(featureSubClassificationCode);
+        assertThat(fee.getTransactionCategoryCode()).isEqualTo(transactionCategoryCode);
+        assertThat(fee.getFixedAmount()).isEqualTo(fixedAmount);
+    }
+}

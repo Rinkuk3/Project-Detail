@@ -1,0 +1,55 @@
+package com.td.mbna.msec.nudge.model;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class NudgeTest {
+
+    @Test
+    public void testGetAndSetName() {
+        Nudge nudge = new Nudge();
+        String expectedName = "Sample Nudge";
+        nudge.setName(expectedName);
+        assertEquals(expectedName, nudge.getName());
+    }
+
+    @Test
+    public void testGetAndSetImageMobile() {
+        Nudge nudge = new Nudge();
+        String expectedImageMobile = "mobile_image.png";
+        nudge.setImageMobile(expectedImageMobile);
+        assertEquals(expectedImageMobile, nudge.getImageMobile());
+    }
+
+    @Test
+    public void testGetAndSetImageDesktop() {
+        Nudge nudge = new Nudge();
+        String expectedImageDesktop = "desktop_image.png";
+        nudge.setImageDesktop(expectedImageDesktop);
+        assertEquals(expectedImageDesktop, nudge.getImageDesktop());
+    }
+
+    @Test
+    public void testGetAndSetImageAltText() {
+        Nudge nudge = new Nudge();
+        String expectedAltText = "Alt text for image";
+        nudge.setImageAltText(expectedAltText);
+        assertEquals(expectedAltText, nudge.getImageAltText());
+    }
+
+    @Test
+    public void testGetAndSetMessage() {
+        Nudge nudge = new Nudge();
+        String expectedMessage = "This is a nudge message.";
+        nudge.setMessage(expectedMessage);
+        assertEquals(expectedMessage, nudge.getMessage());
+    }
+
+    @Test
+    public void testGetAndSetMobileNudge() {
+        Nudge nudge = new Nudge();
+        MobileNudge expectedMobileNudge = new MobileNudge(); // Assuming MobileNudge has a default constructor
+        nudge.setMobileNudge(expectedMobileNudge);
+        assertEquals(expectedMobileNudge, nudge.getMobileNudge());
+    }
+}

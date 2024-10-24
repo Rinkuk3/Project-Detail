@@ -1,0 +1,63 @@
+package com.td.mbna.msec.notification.model;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+public class AlertPreferenceUpdateResponseTest {
+
+    private AlertPreferenceUpdateResponse response;
+
+    @BeforeEach
+    public void setUp() {
+        response = new AlertPreferenceUpdateResponse();
+    }
+
+    @Test
+    public void testGetAndSetConnectId() {
+        String expectedConnectId = "CONNECT123";
+        response.setConnectId(expectedConnectId);
+        assertEquals(expectedConnectId, response.getConnectId());
+    }
+
+    @Test
+    public void testGetAndSetCustomerAlertPreferenceUpdateResult() {
+        AlertPreferenceUpdateResult expectedResult = new AlertPreferenceUpdateResult();
+        response.setCustomerAlertPreferenceUpdateResult(expectedResult);
+        assertEquals(expectedResult, response.getCustomerAlertPreferenceUpdateResult());
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        AlertPreferenceUpdateResponse response1 = new AlertPreferenceUpdateResponse();
+        AlertPreferenceUpdateResponse response2 = new AlertPreferenceUpdateResponse();
+        
+        response1.setConnectId("CONNECT123");
+        response1.setCustomerAlertPreferenceUpdateResult(new AlertPreferenceUpdateResult());
+        
+        response2.setConnectId("CONNECT123");
+        response2.setCustomerAlertPreferenceUpdateResult(new AlertPreferenceUpdateResult());
+
+        // Test equality
+        assertEquals(response1, response2);
+        assertEquals(response1.hashCode(), response2.hashCode());
+        
+        // Test inequality
+        response2.setConnectId("CONNECT456");
+        assertNotEquals(response1, response2);
+        
+        response2.setConnectId("CONNECT123");
+        response2.setCustomerAlertPreferenceUpdateResult(null);
+        assertNotEquals(response1, response2);
+    }
+
+    @Test
+    public void testToString() {
+        response.setConnectId("CONNECT123");
+        response.setCustomerAlertPreferenceUpdateResult(new AlertPreferenceUpdateResult());
+        
+        String expectedString = "AlertPreferenceUpdateResponse [connectId=CONNECT123, customerAlertPreferenceUpdateResult=" + response.getCustomerAlertPreferenceUpdateResult() + "]";
+        assertEquals(expectedString, response.toString());
+    }
+}

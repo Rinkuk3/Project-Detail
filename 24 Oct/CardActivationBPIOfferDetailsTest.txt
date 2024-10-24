@@ -1,0 +1,70 @@
+package com.td.mbna.msec.offers.domain;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class CardActivationBPIOfferDetailsTest {
+
+    @Test
+    public void testBuilderAndGetters() {
+        // Create an instance using the builder
+        CardActivationBPIOfferDetails offerDetails = CardActivationBPIOfferDetails.builder()
+                .disclosureText("Sample Disclosure Text")
+                .wcmTitle("Sample WCM Title")
+                .wcmText("Sample WCM Text")
+                .build();
+
+        // Assert that the fields are set correctly
+        assertEquals("Sample Disclosure Text", offerDetails.getDisclosureText());
+        assertEquals("Sample WCM Title", offerDetails.getWcmTitle());
+        assertEquals("Sample WCM Text", offerDetails.getWcmText());
+    }
+
+    @Test
+    public void testSetters() {
+        CardActivationBPIOfferDetails offerDetails = new CardActivationBPIOfferDetails();
+
+        // Set values using setters
+        offerDetails.setDisclosureText("New Disclosure Text");
+        offerDetails.setWcmTitle("New WCM Title");
+        offerDetails.setWcmText("New WCM Text");
+
+        // Assert that the fields are set correctly
+        assertEquals("New Disclosure Text", offerDetails.getDisclosureText());
+        assertEquals("New WCM Title", offerDetails.getWcmTitle());
+        assertEquals("New WCM Text", offerDetails.getWcmText());
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        CardActivationBPIOfferDetails offerDetails1 = CardActivationBPIOfferDetails.builder()
+                .disclosureText("Sample Disclosure")
+                .wcmTitle("Sample Title")
+                .wcmText("Sample Text")
+                .build();
+
+        CardActivationBPIOfferDetails offerDetails2 = CardActivationBPIOfferDetails.builder()
+                .disclosureText("Sample Disclosure")
+                .wcmTitle("Sample Title")
+                .wcmText("Sample Text")
+                .build();
+
+        // Assert that the two instances are equal
+        assertEquals(offerDetails1, offerDetails2);
+        assertEquals(offerDetails1.hashCode(), offerDetails2.hashCode());
+    }
+
+    @Test
+    public void testToString() {
+        CardActivationBPIOfferDetails offerDetails = CardActivationBPIOfferDetails.builder()
+                .disclosureText("Sample Disclosure Text")
+                .wcmTitle("Sample WCM Title")
+                .wcmText("Sample WCM Text")
+                .build();
+
+        // Verify the string representation of the object
+        String expectedString = "CardActivationBPIOfferDetails(disclosureText=Sample Disclosure Text, wcmTitle=Sample WCM Title, wcmText=Sample WCM Text)";
+        assertEquals(expectedString, offerDetails.toString());
+    }
+}

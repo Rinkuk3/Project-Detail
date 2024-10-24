@@ -1,0 +1,48 @@
+package com.td.mbna.msec.offers.domain;
+
+import com.td.mbna.msec.offers.domain.ip.IpOfferRate;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class IpOfferRatesResponseTest {
+
+    @Test
+    public void testDefaultConstructor() {
+        IpOfferRatesResponse response = new IpOfferRatesResponse();
+
+        // Check that calculations are initialized as an empty list
+        assertNotNull(response.getCalculations());
+        assertTrue(response.getCalculations().isEmpty());
+    }
+
+    @Test
+    public void testSetCalculations() {
+        IpOfferRatesResponse response = new IpOfferRatesResponse();
+
+        List<IpOfferRate> calculations = new ArrayList<>();
+        calculations.add(new IpOfferRate()); // Add a dummy IpOfferRate for testing
+
+        response.setCalculations(calculations);
+
+        // Verify that the set method works correctly
+        assertEquals(calculations, response.getCalculations());
+        assertFalse(response.getCalculations().isEmpty());
+    }
+
+    @Test
+    public void testGetCalculations() {
+        IpOfferRatesResponse response = new IpOfferRatesResponse();
+
+        List<IpOfferRate> calculations = new ArrayList<>();
+        calculations.add(new IpOfferRate());
+
+        response.setCalculations(calculations);
+
+        // Verify that getCalculations returns the correct list
+        assertEquals(calculations, response.getCalculations());
+    }
+}

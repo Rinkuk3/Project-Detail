@@ -1,0 +1,81 @@
+package com.td.mbna.msec.notification.model;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+public class UpdateCustomerNotificationAlertsRequestTest {
+
+    private UpdateCustomerNotificationAlertsRequest request;
+
+    @BeforeEach
+    public void setUp() {
+        request = new UpdateCustomerNotificationAlertsRequest();
+        request.setAccountID("test-account-id");
+        request.setDisplayOption("OL");
+        request.setConfirmationUrl("http://confirmation.url");
+        request.setCurrentUrl("http://current.url");
+    }
+
+    @Test
+    public void testGetAndSetAccountID() {
+        request.setAccountID("new-account-id");
+        assertEquals("new-account-id", request.getAccountID());
+    }
+
+    @Test
+    public void testGetAndSetDisplayOption() {
+        request.setDisplayOption("TH");
+        assertEquals("TH", request.getDisplayOption());
+    }
+
+    @Test
+    public void testGetAndSetConfirmationUrl() {
+        request.setConfirmationUrl("http://new.confirmation.url");
+        assertEquals("http://new.confirmation.url", request.getConfirmationUrl());
+    }
+
+    @Test
+    public void testGetAndSetCurrentUrl() {
+        request.setCurrentUrl("http://new.current.url");
+        assertEquals("http://new.current.url", request.getCurrentUrl());
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        UpdateCustomerNotificationAlertsRequest request1 = new UpdateCustomerNotificationAlertsRequest();
+        request1.setAccountID("account1");
+        request1.setDisplayOption("OL");
+        request1.setConfirmationUrl("http://confirmation1.url");
+        request1.setCurrentUrl("http://current1.url");
+
+        UpdateCustomerNotificationAlertsRequest request2 = new UpdateCustomerNotificationAlertsRequest();
+        request2.setAccountID("account1");
+        request2.setDisplayOption("OL");
+        request2.setConfirmationUrl("http://confirmation1.url");
+        request2.setCurrentUrl("http://current1.url");
+
+        // Test equality
+        assertEquals(request1, request2);
+        assertEquals(request1.hashCode(), request2.hashCode());
+
+        // Test inequality
+        request2.setAccountID("account2");
+        assertNotEquals(request1, request2);
+    }
+
+    @Test
+    public void testToString() {
+        String stringRepresentation = request.toString();
+        assertTrue(stringRepresentation.contains("accountID=test-account-id"));
+        assertTrue(stringRepresentation.contains("displayOption=OL"));
+        assertTrue(stringRepresentation.contains("confirmationUrl=http://confirmation.url"));
+        assertTrue(stringRepresentation.contains("currentUrl=http://current.url"));
+    }
+
+    @Test
+    public void testSerialVersionUID() {
+        assertEquals(2530184914053722944L, UpdateCustomerNotificationAlertsRequest.serialVersionUID);
+    }
+}

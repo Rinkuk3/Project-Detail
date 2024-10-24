@@ -1,0 +1,39 @@
+package com.td.mbna.msec.rewards.model;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class RewardsBalanceTest {
+
+    @Test
+    public void testDefaultValues() {
+        // Arrange
+        RewardsBalance rewardsBalance = new RewardsBalance();
+
+        // Act & Assert
+        assertEquals(null, rewardsBalance.getBalance());
+        assertEquals(null, rewardsBalance.getLoyaltyUnitOfMeasure());
+        assertEquals(false, rewardsBalance.isAllowedAccountSummary());
+        assertEquals(false, rewardsBalance.isRewardsAvailable());
+        assertEquals(false, rewardsBalance.isRewardsCard());
+    }
+
+    @Test
+    public void testSettersAndGetters() {
+        // Arrange
+        RewardsBalance rewardsBalance = new RewardsBalance();
+        rewardsBalance.setBalance(100L);
+        rewardsBalance.setLoyaltyUnitOfMeasure("Points");
+        rewardsBalance.setAllowedAccountSummary(true);
+        rewardsBalance.setRewardsAvailable(true);
+        rewardsBalance.setRewardsCard(true);
+
+        // Act & Assert
+        assertEquals(Long.valueOf(100), rewardsBalance.getBalance());
+        assertEquals("Points", rewardsBalance.getLoyaltyUnitOfMeasure());
+        assertEquals(true, rewardsBalance.isAllowedAccountSummary());
+        assertEquals(true, rewardsBalance.isRewardsAvailable());
+        assertEquals(true, rewardsBalance.isRewardsCard());
+    }
+}

@@ -1,0 +1,30 @@
+package com.td.mbna.msec.pin.domain;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class ChangePinRequestTest {
+
+    @Test
+    public void testGetAndSetPinNumber() {
+        ChangePinRequest changePinRequest = new ChangePinRequest();
+        String pinNumber = "1234";
+        
+        // Test setPinNumber
+        changePinRequest.setPinNumber(pinNumber);
+        // Test getPinNumber
+        assertEquals(pinNumber, changePinRequest.getPinNumber());
+    }
+
+    @Test
+    public void testGetAndSetRetryPinNumber() {
+        ChangePinRequest changePinRequest = new ChangePinRequest();
+        String retryPinNumber = "1234";
+        
+        // Test setRetryPinNumber
+        changePinRequest.setRetryPinNumber(retryPinNumber);
+        // Test getRetryPinNumber
+        assertEquals(retryPinNumber, changePinRequest.getRetryPinNumber());
+    }
+}

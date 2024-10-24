@@ -1,0 +1,65 @@
+package com.td.mbna.msec.offers.domain;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class OfferConfirmationResponseTest {
+
+    @Test
+    void testBuilderAndGetters() {
+        // Build an instance of OfferConfirmationResponse using the builder
+        OfferConfirmationResponse response = OfferConfirmationResponse.builder()
+                .status("SUCCESS")
+                .errorCode("200")
+                .wcmTitle("Sample Title")
+                .imageDesktop("desktopImage.jpg")
+                .imageMobile("mobileImage.jpg")
+                .wcmText("Sample text for the WCM.")
+                .build();
+
+        // Verify that the fields were set correctly
+        assertEquals("SUCCESS", response.getStatus());
+        assertEquals("200", response.getErrorCode());
+        assertEquals("Sample Title", response.getWcmTitle());
+        assertEquals("desktopImage.jpg", response.getImageDesktop());
+        assertEquals("mobileImage.jpg", response.getImageMobile());
+        assertEquals("Sample text for the WCM.", response.getWcmText());
+    }
+
+    @Test
+    void testSetters() {
+        // Create a new instance
+        OfferConfirmationResponse response = new OfferConfirmationResponse();
+
+        // Set values using setters
+        response.setStatus("FAILURE");
+        response.setErrorCode("400");
+        response.setWcmTitle("Error Title");
+        response.setImageDesktop("errorDesktopImage.jpg");
+        response.setImageMobile("errorMobileImage.jpg");
+        response.setWcmText("Error text for the WCM.");
+
+        // Verify that the values were set correctly
+        assertEquals("FAILURE", response.getStatus());
+        assertEquals("400", response.getErrorCode());
+        assertEquals("Error Title", response.getWcmTitle());
+        assertEquals("errorDesktopImage.jpg", response.getImageDesktop());
+        assertEquals("errorMobileImage.jpg", response.getImageMobile());
+        assertEquals("Error text for the WCM.", response.getWcmText());
+    }
+
+    @Test
+    void testDefaultConstructor() {
+        // Create a new instance using the default constructor
+        OfferConfirmationResponse response = new OfferConfirmationResponse();
+
+        // Verify that all fields are null by default
+        assertNull(response.getStatus());
+        assertNull(response.getErrorCode());
+        assertNull(response.getWcmTitle());
+        assertNull(response.getImageDesktop());
+        assertNull(response.getImageMobile());
+        assertNull(response.getWcmText());
+    }
+}

@@ -1,0 +1,62 @@
+package com.td.mbna.msec.transfertochequing.domain;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class TransferToChequingInfoTest {
+
+    @Test
+    void testBuilder() {
+        // Arrange
+        String disclosureText = "This is a disclosure text";
+
+        // Act
+        TransferToChequingInfo info = TransferToChequingInfo.builder()
+                .offerDisclosureText(disclosureText)
+                .build();
+
+        // Assert
+        assertEquals(disclosureText, info.getOfferDisclosureText());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        // Arrange
+        TransferToChequingInfo info1 = TransferToChequingInfo.builder()
+                .offerDisclosureText("Disclosure Text 1")
+                .build();
+
+        TransferToChequingInfo info2 = TransferToChequingInfo.builder()
+                .offerDisclosureText("Disclosure Text 1")
+                .build();
+
+        TransferToChequingInfo info3 = TransferToChequingInfo.builder()
+                .offerDisclosureText("Disclosure Text 2")
+                .build();
+
+        // Assert Equals
+        assertEquals(info1, info2);
+        assertNotEquals(info1, info3);
+        assertNotEquals(info2, info3);
+
+        // Assert HashCode
+        assertEquals(info1.hashCode(), info2.hashCode());
+        assertNotEquals(info1.hashCode(), info3.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        // Arrange
+        String disclosureText = "Sample Disclosure Text";
+        TransferToChequingInfo info = TransferToChequingInfo.builder()
+                .offerDisclosureText(disclosureText)
+                .build();
+
+        // Act
+        String expectedString = "TransferToChequingInfo(offerDisclosureText=" + disclosureText + ")";
+        
+        // Assert
+        assertEquals(expectedString, info.toString());
+    }
+}

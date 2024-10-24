@@ -1,0 +1,69 @@
+package com.td.mbna.msec.profile.model;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class AddressTest {
+
+    @Test
+    void testBuilder() {
+        Address address = Address.builder()
+                .addressLine1("123 Main St")
+                .addressLine2("Apt 4B")
+                .city("Anytown")
+                .province("ON")
+                .postalCode("A1B 2C3")
+                .country("Canada")
+                .build();
+
+        assertEquals("123 Main St", address.getAddressLine1());
+        assertEquals("Apt 4B", address.getAddressLine2());
+        assertEquals("Anytown", address.getCity());
+        assertEquals("ON", address.getProvince());
+        assertEquals("A1B 2C3", address.getPostalCode());
+        assertEquals("Canada", address.getCountry());
+    }
+
+    @Test
+    void testNoArgsConstructor() {
+        Address address = new Address();
+
+        assertNull(address.getAddressLine1());
+        assertNull(address.getAddressLine2());
+        assertNull(address.getCity());
+        assertNull(address.getProvince());
+        assertNull(address.getPostalCode());
+        assertNull(address.getCountry());
+    }
+
+    @Test
+    void testAllArgsConstructor() {
+        Address address = new Address("123 Main St", "Apt 4B", "Anytown", "ON", "A1B 2C3", "Canada");
+
+        assertEquals("123 Main St", address.getAddressLine1());
+        assertEquals("Apt 4B", address.getAddressLine2());
+        assertEquals("Anytown", address.getCity());
+        assertEquals("ON", address.getProvince());
+        assertEquals("A1B 2C3", address.getPostalCode());
+        assertEquals("Canada", address.getCountry());
+    }
+
+    @Test
+    void testSetters() {
+        Address address = new Address();
+        address.setAddressLine1("123 Main St");
+        address.setAddressLine2("Apt 4B");
+        address.setCity("Anytown");
+        address.setProvince("ON");
+        address.setPostalCode("A1B 2C3");
+        address.setCountry("Canada");
+
+        assertEquals("123 Main St", address.getAddressLine1());
+        assertEquals("Apt 4B", address.getAddressLine2());
+        assertEquals("Anytown", address.getCity());
+        assertEquals("ON", address.getProvince());
+        assertEquals("A1B 2C3", address.getPostalCode());
+        assertEquals("Canada", address.getCountry());
+    }
+}

@@ -1,0 +1,68 @@
+package com.td.mbna.msec.onboarding.controller;
+
+import com.td.mbna.msec.onboarding.model.LoggingOnboardingPayload;
+import com.td.mbna.msec.onboarding.model.OnboardingActionItem;
+import com.td.mbna.msec.onboarding.service.OnboardingActionItemsService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
+public class OnboardingControllerTest {
+
+    @InjectMocks
+    private OnboardingController onboardingController;
+
+    @Mock
+    private OnboardingActionItemsService onboardingActionItemsService;
+
+    @Mock
+    private HttpServletRequest httpServletRequest;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testGetOnboardingItems() {
+        // Arrange
+        String accountNumber = "123456";
+        OnboardingActionItem item1 = new OnboardingActionItem();
+        OnboardingActionItem item2 = new OnboardingActionItem();
+        List<OnboardingActionItem> onboardingItems = Arrays.asList(item1, item2);
+        
+        when(onboardingActionItemsService.getOnboardingActionItemsForAccount(accountNumber))
+                .thenReturn(onboardingItems);
+
+        // Act
+        List<OnboardingActionItem> result = onboardingController.getOnboardingItems(accountNumber);
+
+        // Assert
+        assertEquals(2, result.size());
+        verify(onboardingActionItemsService, times(1)).getOnboardingActionItemsForAccount(accountNumber);
+    }
+
+    @Test
+    public void testUpdateCustomerActionItem() {
+        // Arrange
+        LoggingOnboardingPayload payload = new LoggingOnboardingPayload();
+        when(onboardingActionItemsService.updateCustomerActionItem(payload, httpServletRequest))
+                .thenReturn(payload);
+
+        // Act
+        LoggingOnboardingPayload result = onboardingController.updateCustomerActionItem(payload, httpServletRequest);
+
+        // Assert
+        assertEquals(payload, result);
+        verify(onboardingActionItemsService, times(1)).updateCustomerActionItem(payload, httpServletRequest);
+    }
+}

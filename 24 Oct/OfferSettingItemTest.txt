@@ -1,0 +1,48 @@
+package com.td.mbna.msec.profile.model;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class OfferSettingItemTest {
+
+    @Test
+    void testGettersAndSetters() {
+        OfferSettingItem offerSettingItem = new OfferSettingItem();
+
+        // Check default values
+        assertNull(offerSettingItem.getId());
+        assertNull(offerSettingItem.getTitle());
+        assertNull(offerSettingItem.getDescription());
+        assertNull(offerSettingItem.getDataAnalyticsClick());
+        assertTrue(offerSettingItem.isEnabled()); // Default value is true
+
+        // Set values and verify
+        offerSettingItem.setId("1");
+        assertEquals("1", offerSettingItem.getId());
+
+        offerSettingItem.setTitle("Title1");
+        assertEquals("Title1", offerSettingItem.getTitle());
+
+        offerSettingItem.setDescription("Description1");
+        assertEquals("Description1", offerSettingItem.getDescription());
+
+        offerSettingItem.setDataAnalyticsClick("ClickData");
+        assertEquals("ClickData", offerSettingItem.getDataAnalyticsClick());
+
+        offerSettingItem.setEnabled(false);
+        assertFalse(offerSettingItem.isEnabled());
+    }
+
+    @Test
+    void testDefaultValues() {
+        OfferSettingItem offerSettingItem = new OfferSettingItem();
+
+        // Check that the default values are set correctly
+        assertNull(offerSettingItem.getId());
+        assertNull(offerSettingItem.getTitle());
+        assertNull(offerSettingItem.getDescription());
+        assertNull(offerSettingItem.getDataAnalyticsClick());
+        assertTrue(offerSettingItem.isEnabled()); // Default value should be true
+    }
+}

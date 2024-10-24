@@ -1,0 +1,106 @@
+package com.td.mbna.msec.offers.domain;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+public class IpCreationResponseTest {
+
+    private IpCreationResponse response;
+
+    @BeforeEach
+    public void setUp() {
+        response = new IpCreationResponse();
+    }
+
+    @Test
+    public void testGettersAndSetters() {
+        // Test the moreIpEligibleTransactions field
+        response.setMoreIpEligibleTransactions(true);
+        assertTrue(response.getMoreIpEligibleTransactions());
+
+        response.setMoreIpEligibleTransactions(false);
+        assertFalse(response.getMoreIpEligibleTransactions());
+        
+        // Test the emailAddress field with valid email
+        String validEmail = "test@example.com";
+        response.setEmailAddress(validEmail);
+        assertEquals(validEmail, response.getEmailAddress());
+        
+        // Test the emailAddress field with invalid email
+        String invalidEmail = "invalid-email";
+        response.setEmailAddress(invalidEmail);
+        assertNull(response.getEmailAddress()); // Should be null due to validation
+
+        // Test the emailAddress field with null
+        response.setEmailAddress(null);
+        assertNull(response.getEmailAddress());
+    }
+
+    @Test
+    public void testToString() {
+        response.setMoreIpEligibleTransactions(true);
+        response.setEmailAddress("test@example.com");
+
+        String expectedString = "IpCreationResponse{" +
+                "moreIpEligibleTransactions=true" +
+                ", emailAddress='test@example.com'" +
+                '}';
+
+        assertEquals(expectedString, response.toString());
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        IpCreationResponse response1 = new IpCreationResponse();
+        response1.setMoreIpEligibleTransactions(true);
+        response1.setEmailAddress("test@example.com");
+
+        IpCreationResponse response2 = new IpCreationResponse();
+        response2.setMoreIpEligibleTransactions(true);
+        response2.setEmailAddress("test@example.com");
+
+        assertEquals(response1, response2); // Check equality
+        assertEquals(response1.hashCode(), response2.hashCode()); // Check hash code
+    }
+
+    @Test
+    public void testNotEqual() {
+        IpCreationResponse response1 = new IpCreationResponse();
+        response1.setMoreIpEligibleTransactions(true);
+        
+        IpCreationResponse response2 = new IpCreationResponse();
+        response2.setMoreIpEligibleTransactions(false);
+        
+        assertNotEquals(response1, response2); // Different boolean values should not be equal
+    }
+
+    @Test
+    public void testNullEmailAddressValidation() {
+        response.setEmailAddress(null);
+        assertNull(response.getEmailAddress()); // Email should be null
+
+        response.setEmailAddress(""); // Empty string
+        assertNull(response.getEmailAddress()); // Email should be null
+
+        // Mock UIGeneralUtil to control its behavior
+        UIGeneralUtil utilMock = mock(UIGeneralUtil.class);
+        when(utilMock.validateEmailAddress(anyString())).thenReturn(false);
+
+        // Use reflection or setter to assign mocked utility (depends on your setup)
+        response.setEmailAddress("invalid-email"); // Should set to null
+        assertNull(response.getEmailAddress());
+    }
+
+    @Test
+    public void testEmailAddressWithValidInput() {
+        // Mock UIGeneralUtil to return true for a valid email
+        UIGeneralUtil utilMock = mock(UIGeneralUtil.class);
+        when(utilMock.validateEmailAddress("valid.email@example.com")).thenReturn(true);
+
+        response.setEmailAddress("valid.email@example.com");
+        assertEquals("valid.email@example.com", response.getEmailAddress());
+    }
+}

@@ -1,0 +1,47 @@
+package com.td.mbna.msec.offers.domain;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class MiniPaymentOfferTest {
+
+    @Test
+    void testDefaultConstructor() {
+        MiniPaymentOffer offer = new MiniPaymentOffer();
+
+        // Check that the category is set correctly
+        assertEquals(OfferCategory.MINIMUM_PAYMENT_DEFERRAL, offer.getCategory());
+        // Verify that id and type are null
+        assertNull(offer.getId());
+        assertNull(offer.getType());
+    }
+
+    @Test
+    void testParameterizedConstructor() {
+        String id = "12345";
+        String type = "TypeA";
+
+        MiniPaymentOffer offer = new MiniPaymentOffer(id, type);
+
+        // Verify that the parameters are set correctly
+        assertEquals(id, offer.getId());
+        assertEquals(type, offer.getType());
+        assertEquals(OfferCategory.MINIMUM_PAYMENT_DEFERRAL, offer.getCategory());
+    }
+
+    @Test
+    void testBuilder() {
+        String id = "54321";
+        String type = "TypeB";
+
+        MiniPaymentOffer offer = new MiniPaymentOffer.MiniPaymentOfferBuilder()
+                .setId(id)
+                .setType(type)
+                .build();
+
+        // Verify that the builder sets the parameters correctly
+        assertEquals(id, offer.getId());
+        assertEquals(type, offer.getType());
+        assertEquals(OfferCategory.MINIMUM_PAYMENT_DEFERRAL, offer.getCategory());
+    }
+}

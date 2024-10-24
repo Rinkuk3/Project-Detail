@@ -1,0 +1,74 @@
+package com.td.mbna.msec.statement.domain;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class DownloadFormatOptionTest {
+
+    @Test
+    void testConstructorAndGetters() {
+        // Arrange
+        String expectedKey = "pdf";
+        String expectedValue = "PDF Format";
+        
+        // Act
+        DownloadFormatOption option = new DownloadFormatOption(expectedKey, expectedValue);
+        
+        // Assert
+        assertEquals(expectedKey, option.getKey());
+        assertEquals(expectedValue, option.getValue());
+    }
+
+    @Test
+    void testSetters() {
+        // Arrange
+        DownloadFormatOption option = new DownloadFormatOption("csv", "CSV Format");
+
+        // Act
+        String newKey = "xml";
+        String newValue = "XML Format";
+        option.setKey(newKey);
+        option.setValue(newValue);
+
+        // Assert
+        assertEquals(newKey, option.getKey());
+        assertEquals(newValue, option.getValue());
+    }
+
+    @Test
+    void testEquals() {
+        // Arrange
+        DownloadFormatOption option1 = new DownloadFormatOption("pdf", "PDF Format");
+        DownloadFormatOption option2 = new DownloadFormatOption("pdf", "PDF Format");
+        DownloadFormatOption option3 = new DownloadFormatOption("csv", "CSV Format");
+
+        // Act & Assert
+        assertEquals(option1, option2); // same key and value
+        assertNotEquals(option1, option3); // different key and value
+    }
+
+    @Test
+    void testHashCode() {
+        // Arrange
+        DownloadFormatOption option = new DownloadFormatOption("pdf", "PDF Format");
+        
+        // Act
+        int expectedHashCode = option.getKey().hashCode() * 31 + option.getValue().hashCode();
+        
+        // Assert
+        assertEquals(expectedHashCode, option.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        // Arrange
+        DownloadFormatOption option = new DownloadFormatOption("pdf", "PDF Format");
+
+        // Act
+        String expectedString = "DownloadFormatOption(key=pdf, value=PDF Format");
+        
+        // Assert
+        assertEquals(expectedString, option.toString());
+    }
+}

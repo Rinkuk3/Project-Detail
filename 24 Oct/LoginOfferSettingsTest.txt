@@ -1,0 +1,71 @@
+package com.td.mbna.msec.profile.model;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class LoginOfferSettingsTest {
+
+    @Test
+    void testGettersAndSetters() {
+        // Create an instance of LoginOfferSettings
+        LoginOfferSettings loginOfferSettings = new LoginOfferSettings();
+
+        // Test default values
+        assertTrue(loginOfferSettings.isLabelForAll());
+        assertNull(loginOfferSettings.getPartyID());
+        assertNull(loginOfferSettings.getIndividualItems());
+
+        // Set partyID and verify
+        String partyId = "testPartyID";
+        loginOfferSettings.setPartyID(partyId);
+        assertEquals(partyId, loginOfferSettings.getPartyID());
+
+        // Set individualItems and verify
+        List<OfferSettingItem> items = new ArrayList<>();
+        items.add(new OfferSettingItem());
+        loginOfferSettings.setIndividualItems(items);
+        assertEquals(items, loginOfferSettings.getIndividualItems());
+    }
+
+    @Test
+    void testDefaultValues() {
+        LoginOfferSettings loginOfferSettings = new LoginOfferSettings();
+
+        // Check default values
+        assertTrue(loginOfferSettings.isLabelForAll());
+        assertNull(loginOfferSettings.getPartyID());
+        assertNull(loginOfferSettings.getIndividualItems());
+    }
+
+    @Test
+    void testEquality() {
+        LoginOfferSettings loginOfferSettings1 = new LoginOfferSettings();
+        LoginOfferSettings loginOfferSettings2 = new LoginOfferSettings();
+
+        // Both should be equal since they have default values
+        assertEquals(loginOfferSettings1, loginOfferSettings2);
+
+        // Set different partyID for one object
+        loginOfferSettings1.setPartyID("party1");
+        assertNotEquals(loginOfferSettings1, loginOfferSettings2);
+
+        // Set the same partyID for both objects
+        loginOfferSettings2.setPartyID("party1");
+        assertEquals(loginOfferSettings1, loginOfferSettings2);
+    }
+
+    @Test
+    void testToString() {
+        LoginOfferSettings loginOfferSettings = new LoginOfferSettings();
+        loginOfferSettings.setPartyID("party1");
+        loginOfferSettings.setLabelForAll(true);
+
+        // Expected string representation
+        String expectedString = "LoginOfferSettings(partyID=party1, labelForAll=true, individualItems=null)";
+        assertEquals(expectedString, loginOfferSettings.toString());
+    }
+}

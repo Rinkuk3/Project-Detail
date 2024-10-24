@@ -1,0 +1,49 @@
+package com.td.mbna.msec.notification.model;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+public class AccountAlertSetupTest {
+
+    private AccountAlertSetup accountAlertSetup;
+
+    @BeforeEach
+    public void setUp() {
+        accountAlertSetup = new AccountAlertSetup();
+    }
+
+    @Test
+    public void testGetAndSetAgreementKey() {
+        String expectedAgreementKey = "AGREEMENT123";
+        accountAlertSetup.setAgreementKey(expectedAgreementKey);
+        assertEquals(expectedAgreementKey, accountAlertSetup.getAgreementKey());
+    }
+
+    @Test
+    public void testGetAndSetAccountApplicationCd() {
+        String expectedApplicationCd = "APP_CD_456";
+        accountAlertSetup.setAccountApplicationCd(expectedApplicationCd);
+        assertEquals(expectedApplicationCd, accountAlertSetup.getAccountApplicationCd());
+    }
+
+    @Test
+    public void testGetAndSetAlertSetup() {
+        List<AlertType> expectedAlertSetup = new ArrayList<>();
+        expectedAlertSetup.add(new AlertType("ALERT1"));
+        expectedAlertSetup.add(new AlertType("ALERT2"));
+
+        accountAlertSetup.setAlertSetup(expectedAlertSetup);
+        assertEquals(expectedAlertSetup, accountAlertSetup.getAlertSetup());
+    }
+
+    @Test
+    public void testDefaultAlertSetup() {
+        // Testing default value of alertSetup which should be an empty list
+        assertTrue(accountAlertSetup.getAlertSetup().isEmpty());
+    }
+}

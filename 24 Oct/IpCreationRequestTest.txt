@@ -1,0 +1,91 @@
+package com.td.mbna.msec.offers.domain;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class IpCreationRequestTest {
+
+    @Test
+    public void testSettersAndGetters() {
+        IpCreationRequest request = new IpCreationRequest();
+
+        String referenceNumber = "REF123";
+        String accountNumber = "ACC456";
+        String ipNickName = "My IP";
+        String offerId = "OFFER789";
+        String emailAddress = "test@example.com";
+        String confirmEmailAddress = "test@example.com";
+
+        // Set values using setters
+        request.setReferenceNumber(referenceNumber);
+        request.setAccountNumber(accountNumber);
+        request.setIpNickName(ipNickName);
+        request.setOfferId(offerId);
+        request.setEmailAddress(emailAddress);
+        request.setConfirmEmailAddress(confirmEmailAddress);
+
+        // Assert that the values are retrieved correctly using getters
+        assertEquals(referenceNumber, request.getReferenceNumber());
+        assertEquals(accountNumber, request.getAccountNumber());
+        assertEquals(ipNickName, request.getIpNickName());
+        assertEquals(offerId, request.getOfferId());
+        assertEquals(emailAddress, request.getEmailAddress());
+        assertEquals(confirmEmailAddress, request.getConfirmEmailAddress());
+    }
+
+    @Test
+    public void testToString() {
+        IpCreationRequest request = new IpCreationRequest();
+        request.setReferenceNumber("REF123");
+        request.setAccountNumber("ACC456");
+        request.setIpNickName("My IP");
+        request.setOfferId("OFFER789");
+        request.setEmailAddress("test@example.com");
+        request.setConfirmEmailAddress("test@example.com");
+
+        String expectedString = "IpCreationRequest{" +
+                "referenceNumber='REF123'" +
+                ", accountNumber='ACC456'" +
+                ", ipNickName='My IP'" +
+                ", offerId='OFFER789'" +
+                ", emailAddress='test@example.com'" +
+                ", confirmEmailAddress='test@example.com'" +
+                '}';
+
+        assertEquals(expectedString, request.toString());
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        IpCreationRequest request1 = new IpCreationRequest();
+        request1.setReferenceNumber("REF123");
+        request1.setAccountNumber("ACC456");
+        request1.setIpNickName("My IP");
+        request1.setOfferId("OFFER789");
+        request1.setEmailAddress("test@example.com");
+        request1.setConfirmEmailAddress("test@example.com");
+
+        IpCreationRequest request2 = new IpCreationRequest();
+        request2.setReferenceNumber("REF123");
+        request2.setAccountNumber("ACC456");
+        request2.setIpNickName("My IP");
+        request2.setOfferId("OFFER789");
+        request2.setEmailAddress("test@example.com");
+        request2.setConfirmEmailAddress("test@example.com");
+
+        assertEquals(request1, request2); // Check equality
+        assertEquals(request1.hashCode(), request2.hashCode()); // Check hash code
+    }
+
+    @Test
+    public void testNotEqual() {
+        IpCreationRequest request1 = new IpCreationRequest();
+        request1.setReferenceNumber("REF123");
+        
+        IpCreationRequest request2 = new IpCreationRequest();
+        request2.setReferenceNumber("REF456");
+        
+        assertNotEquals(request1, request2); // Different reference numbers should not be equal
+    }
+}

@@ -1,0 +1,55 @@
+package com.td.mbna.msec.offers.domain.common;
+
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class RateTest {
+
+    @Test
+    public void testRateConstructorWithPromotionTerm() {
+        // Given
+        String type = "Fixed";
+        BigDecimal fixedRate = BigDecimal.valueOf(3.5);
+        PromotionTerm promotionTerm = new PromotionTerm("2024-12-31");
+
+        // When
+        Rate rate = new Rate(type, fixedRate, promotionTerm);
+
+        // Then
+        assertThat(rate.getType()).isEqualTo(type);
+        assertThat(rate.getFixedRate()).isEqualTo(fixedRate);
+        assertThat(rate.getPromotionTerm()).isEqualTo(promotionTerm);
+    }
+
+    @Test
+    public void testRateConstructorWithoutPromotionTerm() {
+        // Given
+        String type = "Variable";
+        BigDecimal fixedRate = BigDecimal.valueOf(2.0);
+
+        // When
+        Rate rate = new Rate(type, fixedRate);
+
+        // Then
+        assertThat(rate.getType()).isEqualTo(type);
+        assertThat(rate.getFixedRate()).isEqualTo(fixedRate);
+        assertThat(rate.getPromotionTerm()).isNull(); // PromotionTerm should be null
+    }
+
+    @Test
+    public void testGetters() {
+        // Given
+        String type = "Promo";
+        BigDecimal fixedRate = BigDecimal.valueOf(1.5);
+        PromotionTerm promotionTerm = new PromotionTerm("2025-01-01");
+        Rate rate = new Rate(type, fixedRate, promotionTerm);
+
+        // When & Then
+        assertThat(rate.getType()).isEqualTo(type);
+        assertThat(rate.getFixedRate()).isEqualTo(fixedRate);
+        assertThat(rate.getPromotionTerm()).isEqualTo(promotionTerm);
+    }
+}

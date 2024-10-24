@@ -1,0 +1,43 @@
+package com.td.mbna.msec.rewards.model;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class MobileRewardsTest {
+
+    @Test
+    public void testConstructorAndGetters() {
+        // Arrange
+        MobileBalance expectedBalance = new MobileBalance(100L, "Dollars");
+
+        // Act
+        MobileRewards mobileRewards = new MobileRewards(expectedBalance);
+
+        // Assert
+        assertEquals(expectedBalance, mobileRewards.getBalance());
+    }
+
+    @Test
+    public void testSetBalance() {
+        // Arrange
+        MobileBalance initialBalance = new MobileBalance(100L, "Dollars");
+        MobileRewards mobileRewards = new MobileRewards(initialBalance);
+        MobileBalance newBalance = new MobileBalance(200L, "Points");
+
+        // Act
+        mobileRewards.setBalance(newBalance);
+
+        // Assert
+        assertEquals(newBalance, mobileRewards.getBalance());
+    }
+
+    @Test
+    public void testGetSerialversionuid() {
+        // Act
+        long serialVersionUID = MobileRewards.getSerialversionuid();
+
+        // Assert
+        assertEquals(1L, serialVersionUID);
+    }
+}

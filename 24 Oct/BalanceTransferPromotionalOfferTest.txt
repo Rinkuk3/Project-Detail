@@ -1,0 +1,97 @@
+package com.td.mbna.msec.offers.domain;
+
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class BalanceTransferPromotionalOfferTest {
+
+    @Test
+    public void testDefaultConstructor() {
+        // Given
+        BalanceTransferPromotionalOffer offer = new BalanceTransferPromotionalOffer();
+
+        // Then
+        assertThat(offer.getCategory()).isEqualTo(OfferCategory.BALANCE_TRANSFER_PROMO);
+        assertThat(offer.getRate()).isNull(); // By default, rate should be null
+        assertThat(offer.getExpiryDate()).isNull(); // By default, expiryDate should be null
+        assertThat(offer.isEarlyExpired()).isFalse(); // Default value for earlyExpired
+        assertThat(offer.getDuration()).isEqualTo(0); // Default value for duration
+        assertThat(offer.getFixedFeeAmount()).isNull(); // By default, fixedFeeAmount should be null
+        assertThat(offer.getMinimumFeeAmount()).isNull(); // By default, minimumFeeAmount should be null
+        assertThat(offer.getMaximumFeeAmount()).isNull(); // By default, maximumFeeAmount should be null
+        assertThat(offer.getFeePercentage()).isNull(); // By default, feePercentage should be null
+        assertThat(offer.getEligibleNegotiatedType()).isNull(); // By default, eligibleNegotiatedType should be null
+    }
+
+    @Test
+    public void testParameterizedConstructor() {
+        // Given
+        String id = "BT789";
+        String type = "Promotional Balance Transfer";
+        BigDecimal rate = BigDecimal.valueOf(4.5);
+        LocalDate expiryDate = LocalDate.of(2024, 12, 31);
+        boolean earlyExpired = true;
+        int duration = 12;
+        BigDecimal fixedFeeAmount = BigDecimal.valueOf(50);
+        BigDecimal minimumFeeAmount = BigDecimal.valueOf(10);
+        BigDecimal maximumFeeAmount = BigDecimal.valueOf(100);
+        BigDecimal feePercentage = BigDecimal.valueOf(1.5);
+        String eligibleNegotiatedType = "TypeA";
+
+        // When
+        BalanceTransferPromotionalOffer offer = new BalanceTransferPromotionalOffer(id, type, rate, expiryDate, earlyExpired, duration, fixedFeeAmount, minimumFeeAmount, maximumFeeAmount, feePercentage, eligibleNegotiatedType);
+
+        // Then
+        assertThat(offer.getId()).isEqualTo(id);
+        assertThat(offer.getType()).isEqualTo(type);
+        assertThat(offer.getRate()).isEqualTo(rate);
+        assertThat(offer.getExpiryDate()).isEqualTo(expiryDate);
+        assertThat(offer.isEarlyExpired()).isEqualTo(earlyExpired);
+        assertThat(offer.getDuration()).isEqualTo(duration);
+        assertThat(offer.getFixedFeeAmount()).isEqualTo(fixedFeeAmount);
+        assertThat(offer.getMinimumFeeAmount()).isEqualTo(minimumFeeAmount);
+        assertThat(offer.getMaximumFeeAmount()).isEqualTo(maximumFeeAmount);
+        assertThat(offer.getFeePercentage()).isEqualTo(feePercentage);
+        assertThat(offer.getEligibleNegotiatedType()).isEqualTo(eligibleNegotiatedType);
+        assertThat(offer.getCategory()).isEqualTo(OfferCategory.BALANCE_TRANSFER_PROMO);
+    }
+
+    @Test
+    public void testBuilder() {
+        // Given
+        BalanceTransferPromotionalOffer.BalanceTransferOfferBuilder builder = new BalanceTransferPromotionalOffer.BalanceTransferOfferBuilder();
+        
+        // When
+        BalanceTransferPromotionalOffer offer = builder
+            .setId("BT123")
+            .setType("Builder Promotional Offer")
+            .setRate(BigDecimal.valueOf(3.0))
+            .setExpiryDate(LocalDate.of(2025, 1, 1))
+            .setEarlyExpired(false)
+            .setDuration(24)
+            .setFixedFeeAmount(BigDecimal.valueOf(75))
+            .setMinimumFeeAmount(BigDecimal.valueOf(15))
+            .setMaximumFeeAmount(BigDecimal.valueOf(150))
+            .setFeePercentage(BigDecimal.valueOf(2.0))
+            .setEligibleNegotiatedType("TypeB")
+            .build();
+
+        // Then
+        assertThat(offer.getId()).isEqualTo("BT123");
+        assertThat(offer.getType()).isEqualTo("Builder Promotional Offer");
+        assertThat(offer.getRate()).isEqualTo(BigDecimal.valueOf(3.0));
+        assertThat(offer.getExpiryDate()).isEqualTo(LocalDate.of(2025, 1, 1));
+        assertThat(offer.isEarlyExpired()).isFalse();
+        assertThat(offer.getDuration()).isEqualTo(24);
+        assertThat(offer.getFixedFeeAmount()).isEqualTo(BigDecimal.valueOf(75));
+        assertThat(offer.getMinimumFeeAmount()).isEqualTo(BigDecimal.valueOf(15));
+        assertThat(offer.getMaximumFeeAmount()).isEqualTo(BigDecimal.valueOf(150));
+        assertThat(offer.getFeePercentage()).isEqualTo(BigDecimal.valueOf(2.0));
+        assertThat(offer.getEligibleNegotiatedType()).isEqualTo("TypeB");
+        assertThat(offer.getCategory()).isEqualTo(OfferCategory.BALANCE_TRANSFER_PROMO);
+    }
+}

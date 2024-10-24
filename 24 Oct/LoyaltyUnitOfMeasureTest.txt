@@ -1,0 +1,90 @@
+package com.td.mbna.msec.rewards.model;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+public class LoyaltyUnitOfMeasureTest {
+
+    @Test
+    public void testGetTdCode() {
+        // Arrange
+        String expectedTdCode = "Dollars";
+
+        // Act
+        String actualTdCode = LoyaltyUnitOfMeasure.DOLLARS.getTdCode();
+
+        // Assert
+        assertEquals(expectedTdCode, actualTdCode);
+    }
+
+    @Test
+    public void testForValueWithValidTdCode() {
+        // Arrange
+        String tdCode = "miles";
+
+        // Act
+        LoyaltyUnitOfMeasure result = LoyaltyUnitOfMeasure.forValue(tdCode);
+
+        // Assert
+        assertEquals(LoyaltyUnitOfMeasure.MILES, result);
+    }
+
+    @Test
+    public void testForValueWithInvalidTdCode() {
+        // Arrange
+        String tdCode = "invalid";
+
+        // Act
+        LoyaltyUnitOfMeasure result = LoyaltyUnitOfMeasure.forValue(tdCode);
+
+        // Assert
+        assertEquals(LoyaltyUnitOfMeasure.UNKNOWN, result);
+    }
+
+    @Test
+    public void testIsPointsWithLoyaltyUnitOfMeasureEnum() {
+        // Act
+        boolean result = LoyaltyUnitOfMeasure.POINTS.isPoints(LoyaltyUnitOfMeasure.POINTS);
+
+        // Assert
+        assertTrue(result);
+    }
+
+    @Test
+    public void testIsPointsWithString() {
+        // Act
+        boolean result = LoyaltyUnitOfMeasure.POINTS.isPoints("points");
+
+        // Assert
+        assertTrue(result);
+    }
+
+    @Test
+    public void testIsPointsWithDifferentString() {
+        // Act
+        boolean result = LoyaltyUnitOfMeasure.POINTS.isPoints("dollars");
+
+        // Assert
+        assertTrue(!result);
+    }
+
+    @Test
+    public void testIsPointsWithNull() {
+        // Act
+        boolean result = LoyaltyUnitOfMeasure.POINTS.isPoints(null);
+
+        // Assert
+        assertTrue(!result);
+    }
+
+    @Test
+    public void testIsPointsWithEmptyString() {
+        // Act
+        boolean result = LoyaltyUnitOfMeasure.POINTS.isPoints("");
+
+        // Assert
+        assertTrue(!result);
+    }
+}
