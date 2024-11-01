@@ -1,0 +1,127 @@
+package com.td.mbna.msec.core.controller;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.td.mbna.msec.core.session.SessionProvider;
+import com.td.mbna.msec.common.infrastructure.util.SwitchLanguageService;
+
+public class TimeOutControllerTest {
+
+    @InjectMocks
+    private TimeOutController timeOutController;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private SwitchLanguageService switchLanguageService;
+
+    @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private HttpServletResponse response;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testTimeOutRedirect_UgoApp() {
+        when(HttpUtil.isUgoApp(request)).thenReturn(true);
+
+        ModelAndView result = timeOutController.timeOutRedirect(request, response);
+
+        verify(response, times(1)).addCookie(any());
+        assertEquals("redirect:/logon.action", result.getViewName());
+    }
+
+    @Test
+    public void testTimeOutRedirect_LanguageParamNull() {
+        when(HttpUtil.isUgoApp(request)).thenReturn(false);
+        when(request.getParameter(TimeOutController.PARAMETER_LANGUAGE)).thenReturn(null);
+        when(sessionProvider.getSessionAttribute(TimeOutController.SELECTED_LOCALE)).thenReturn("en");
+
+        ModelAndView result = timeOutController.timeOutRedirect(request, response);
+
+        assertEquals("timeOut", result.getViewName());
+        assertEquals("en", result.getModel().get("lang"));
+        verify(switchLanguageService, never()).handleRequestLocale(request);
+    }
+
+    @Test
+    public void testTimeOutRedirect_LanguageParamProvided() {
+        when(HttpUtil.isUgoApp(request)).thenReturn(false);
+        when(request.getParameter(TimeOutController.PARAMETER_LANGUAGE)).thenReturn("fr");
+
+        ModelAndView result = timeOutController.timeOutRedirect(request, response);
+
+        verify(switchLanguageService, times(1)).handleRequestLocale(request);
+        assertEquals("timeOut", result.getViewName());
+        assertEquals("fr", result.getModel().get("lang"));
+    }
+
+    @Test
+    public void testTimeOutRedirect_LanguageEmptyAndSessionNull() {
+        when(HttpUtil.isUgoApp(request)).thenReturn(false);
+        when(request.getParameter(TimeOutController.PARAMETER_LANGUAGE)).thenReturn("");
+        when(sessionProvider.getSessionAttribute(TimeOutController.SELECTED_LOCALE)).thenReturn(null);
+        when(HttpUtil.getPreferredLang(request)).thenReturn("en");
+
+        ModelAndView result = timeOutController.timeOutRedirect(request, response);
+
+        assertEquals("timeOut", result.getViewName());
+        assertEquals("en", result.getModel().get("lang"));
+    }
+
+    @Test
+    public void testTimeOutRedirect_ExceptionHandling() {
+        when(HttpUtil.isUgoApp(request)).thenReturn(false);
+        when(request.getParameter(TimeOutController.PARAMETER_LANGUAGE)).thenThrow(new RuntimeException("Test Exception"));
+
+        ModelAndView result = timeOutController.timeOutRedirect(request, response);
+
+        assertEquals("redirect:/error", result.getViewName());
+    }
+
+    @Test
+    public void testGenerateMV() {
+        ModelAndView mav = timeOutController.generateMV("en");
+
+        assertEquals("timeOut", mav.getViewName());
+        assertEquals("0", mav.getModel().get("previousMDMKey"));
+        assertNotNull(mav.getModel().get("serverId"));
+        assertEquals("en", mav.getModel().get("lang"));
+    }
+
+    @Test
+    public void testGetMDMKey_NoSessionCustomer() {
+        when(sessionProvider.getSessionCustomer()).thenReturn(null);
+
+        String result = timeOutController.getMDMKey();
+
+        assertEquals("0", result);
+    }
+
+    @Test
+    public void testGetMDMKey_WithSessionCustomer() {
+        when(sessionProvider.getSessionCustomer()).thenReturn(new SessionCustomer("123"));
+
+        String result = timeOutController.getMDMKey();
+
+        assertEquals("123", result);
+    }
+}

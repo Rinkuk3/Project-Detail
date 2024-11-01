@@ -1,0 +1,215 @@
+package com.td.mbna.msec.core.session;
+
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.customer.domain.CustomerDetails;
+import com.td.mbna.msec.midtier.session.SessionService;
+import com.td.mbna.msec.midtier.types.common.CustomerActionItemType;
+
+public class SessionProviderTest {
+
+    @InjectMocks
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private SessionService sessionService;
+
+    @Mock
+    private HttpServletRequest httpServletRequest;
+
+    private Map<String, Object> sessionMap;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        sessionMap = new HashMap<>();
+        when(sessionService.getSession()).thenReturn(sessionMap);
+        when(sessionService.getHttpServletRequest()).thenReturn(httpServletRequest);
+    }
+
+    @Test
+    public void testGetSessionCustomer() {
+        CustomerDetails customer = new CustomerDetails();
+        sessionMap.put("SESSION_CUSTOMER_KEY", customer);
+        
+        CustomerDetails result = sessionProvider.getSessionCustomer();
+        assertEquals(customer, result);
+    }
+
+    @Test
+    public void testGetCustomer() {
+        CustomerDetails customer = new CustomerDetails();
+        sessionMap.put("SESSION_CUSTOMER_KEY", customer);
+        
+        CustomerDetails result = sessionProvider.getCustomer();
+        assertEquals(customer, result);
+    }
+
+    @Test
+    public void testGetCustomer_ThrowsException() {
+        sessionMap.put("SESSION_CUSTOMER_KEY", null);
+        
+        Exception exception = assertThrows(IllegalStateException.class, () -> {
+            sessionProvider.getCustomer();
+        });
+        assertEquals("Unable to retrieve customer from session", exception.getMessage());
+    }
+
+    @Test
+    public void testSetSessionCustomer() {
+        CustomerDetails customer = new CustomerDetails();
+        sessionProvider.setSessionCustomer(customer);
+        
+        assertEquals(customer, sessionMap.get("SESSION_CUSTOMER_KEY"));
+    }
+
+    @Test
+    public void testGetSessionCustomerId() {
+        CustomerDetails customer = new CustomerDetails();
+        customer.setId("123");
+        sessionMap.put("SESSION_CUSTOMER_KEY", customer);
+        
+        String customerId = sessionProvider.getSessionCustomerId();
+        assertEquals("123", customerId);
+    }
+
+    @Test
+    public void testSetCurrentAccount() {
+        String accountId = "account123";
+        AccountDetails account = new AccountDetails();
+        when(sessionService.getSession()).thenReturn(sessionMap);
+        sessionProvider.setCurrentAccount(accountId);
+        
+        assertEquals(account, sessionMap.get("SESSION_CURRENT_ACCOUNT"));
+    }
+
+    @Test
+    public void testGetCurrentAccount() {
+        AccountDetails account = new AccountDetails();
+        sessionMap.put("SESSION_CURRENT_ACCOUNT", account);
+        
+        AccountDetails result = sessionProvider.getCurrentAccount();
+        assertEquals(account, result);
+    }
+
+    @Test
+    public void testGetAccounts() {
+        CustomerDetails customer = mock(CustomerDetails.class);
+        when(customer.getAccounts()).thenReturn(List.of(new AccountDetails()));
+        sessionMap.put("SESSION_CUSTOMER_KEY", customer);
+        
+        List<AccountDetails> accounts = sessionProvider.getAccounts();
+        assertNotNull(accounts);
+        assertEquals(1, accounts.size());
+    }
+
+    @Test
+    public void testGetLoginId() {
+        sessionMap.put("SESSION_LOGIN_ID", "loginId123");
+        
+        String loginId = sessionProvider.getLoginId();
+        assertEquals("loginId123", loginId);
+    }
+
+    @Test
+    public void testGetBrowserTime() {
+        sessionMap.put("SESSION_USER_BROWSER_TIME", 1000L);
+        
+        Long browserTime = sessionProvider.getBrowserTime();
+        assertEquals(1000L, browserTime);
+    }
+
+    @Test
+    public void testGetCustomerActionItemType() {
+        sessionMap.put("SESSION_CUSTOMER_ACTION_ITEM_TYPES", List.of(CustomerActionItemType.values()));
+        
+        List<CustomerActionItemType> types = sessionProvider.getCustomerActionItemType();
+        assertNotNull(types);
+        assertEquals(CustomerActionItemType.values().length, types.size());
+    }
+
+    @Test
+    public void testSetCustomerActionItemType() {
+        List<CustomerActionItemType> types = List.of(CustomerActionItemType.values());
+        sessionProvider.setCustomerActionItemType(types);
+        
+        assertEquals(types, sessionMap.get("SESSION_CUSTOMER_ACTION_ITEM_TYPES"));
+    }
+
+    @Test
+    public void testHasExceededMaxActivateAttempts() {
+        AccountDetails account = new AccountDetails();
+        account.setAccountId("account1");
+        sessionMap.put("SESSION_ACTIVATE_CC_FAILURE_COUNTaccount1", 5);
+        
+        boolean result = sessionProvider.hasExceededMaxActivateAttempts(account);
+        assertTrue(result);
+    }
+
+    @Test
+    public void testGetDeepLinkingEligibility() {
+        sessionMap.put("SESSION_DL_CUSTOMER_ELIGIBLE", true);
+        
+        Boolean eligibility = sessionProvider.getDeepLinkingEligibility();
+        assertTrue(eligibility);
+    }
+
+    @Test
+    public void testGetHttpServletRequest() {
+        HttpServletRequest request = sessionProvider.getHttpServletRequest();
+        assertEquals(httpServletRequest, request);
+    }
+
+    @Test
+    public void testGetSessionAttribute() {
+        sessionMap.put("testKey", "testValue");
+        
+        Object result = sessionProvider.getSessionAttribute("testKey");
+        assertEquals("testValue", result);
+    }
+
+    @Test
+    public void testSetSessionAttribute() {
+        sessionProvider.setSessionAttribute("testKey", "testValue");
+        
+        assertEquals("testValue", sessionMap.get("testKey"));
+    }
+
+    @Test
+    public void testGetCurrentOrRequestedAccount() {
+        AccountDetails account = new AccountDetails();
+        when(httpServletRequest.getParameter("PARAMETER_USER_ACCTID")).thenReturn("account123");
+        sessionMap.put("SESSION_CUSTOMER_KEY", new CustomerDetails());
+        sessionMap.put("account123", account);
+        
+        AccountDetails result = sessionProvider.getCurrentOrRequestedAccount();
+        assertEquals(account, result);
+    }
+
+    @Test
+    public void testRemoveSessionAttribute() {
+        sessionMap.put("testKey", "testValue");
+        sessionProvider.removeSessionAttribute("testKey");
+        
+        assertNull(sessionMap.get("testKey"));
+    }
+
+    @Test
+    public void testGetSessionMap() {
+        Map<String, Object> result = sessionProvider.getSessionMap();
+        assertEquals(sessionMap, result);
+    }
+}

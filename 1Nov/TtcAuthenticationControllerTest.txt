@@ -1,0 +1,97 @@
+package com.td.mbna.msec.core.controller;
+
+import static com.td.mbna.msec.common.infrastructure.util.MsecbffConstants.UAPPA_OTP_AUTHENTICATED_FORTTC;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.core.session.SessionProvider;
+
+public class TtcAuthenticationControllerTest {
+
+    @InjectMocks
+    private TtcAuthenticationController ttcAuthenticationController;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private HttpServletResponse response;
+
+    @Mock
+    private AccountDetails accountDetails;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testTtcAuthentication_AccountNull() {
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(null);
+        when(sessionProvider.getConnectId()).thenReturn("testConnectId");
+
+        ModelAndView result = ttcAuthenticationController.ttcAuthentication(request, response);
+
+        verify(sessionProvider, times(1)).getCurrentOrRequestedAccount();
+        verify(sessionProvider, times(1)).getConnectId();
+        assertEquals("redirect:/error", result.getViewName());
+    }
+
+    @Test
+    public void testTtcAuthentication_AuthFlagTrue() {
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(accountDetails);
+        when(accountDetails.getAccountId()).thenReturn("12345");
+        when(sessionProvider.getSessionAttribute(UAPPA_OTP_AUTHENTICATED_FORTTC + "12345")).thenReturn(true);
+
+        ModelAndView result = ttcAuthenticationController.ttcAuthentication(request, response);
+
+        verify(sessionProvider, times(1)).getCurrentOrRequestedAccount();
+        verify(accountDetails, times(1)).getAccountId();
+        verify(sessionProvider, times(1)).getSessionAttribute(UAPPA_OTP_AUTHENTICATED_FORTTC + "12345");
+        assertEquals("redirect:index.html#/account/ttc/entry", result.getViewName());
+    }
+
+    @Test
+    public void testTtcAuthentication_AuthFlagFalse() {
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(accountDetails);
+        when(accountDetails.getAccountId()).thenReturn("12345");
+        when(sessionProvider.getSessionAttribute(UAPPA_OTP_AUTHENTICATED_FORTTC + "12345")).thenReturn(false);
+        when(sessionProvider.getConnectId()).thenReturn("testConnectId");
+
+        ModelAndView result = ttcAuthenticationController.ttcAuthentication(request, response);
+
+        verify(sessionProvider, times(1)).getCurrentOrRequestedAccount();
+        verify(accountDetails, times(1)).getAccountId();
+        verify(sessionProvider, times(1)).getSessionAttribute(UAPPA_OTP_AUTHENTICATED_FORTTC + "12345");
+        assertEquals("redirect:/error", result.getViewName());
+    }
+
+    @Test
+    public void testTtcAuthentication_AuthFlagNull() {
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(accountDetails);
+        when(accountDetails.getAccountId()).thenReturn("12345");
+        when(sessionProvider.getSessionAttribute(UAPPA_OTP_AUTHENTICATED_FORTTC + "12345")).thenReturn(null);
+        when(sessionProvider.getConnectId()).thenReturn("testConnectId");
+
+        ModelAndView result = ttcAuthenticationController.ttcAuthentication(request, response);
+
+        verify(sessionProvider, times(1)).getCurrentOrRequestedAccount();
+        verify(accountDetails, times(1)).getAccountId();
+        verify(sessionProvider, times(1)).getSessionAttribute(UAPPA_OTP_AUTHENTICATED_FORTTC + "12345");
+        assertEquals("redirect:/error", result.getViewName());
+    }
+}

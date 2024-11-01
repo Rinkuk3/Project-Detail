@@ -1,0 +1,169 @@
+package com.td.mbna.msec.core.controller;
+
+import com.td.mbna.msec.core.service.OAuthTokenService;
+import com.td.mbna.msec.core.session.SessionProvider;
+import com.td.mbna.msec.core.support.HttpUtil;
+import com.td.mbna.msec.core.support.UapConfig;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.net.URI;
+import java.util.UUID;
+
+import static com.td.mbna.msec.common.infrastructure.util.MsecbffConstants.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+public class StepUpControllerTest {
+
+    @InjectMocks
+    private StepUpController stepUpController;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private OAuthTokenService tokenService;
+
+    @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private HttpServletResponse response;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testStepUpRedirect_WithExistingUuid() {
+        String existingUuid = UUID.randomUUID().toString();
+        when(sessionProvider.getSessionAttribute(UAP_UUID)).thenReturn(existingUuid);
+        when(tokenService.getSAMLforJWT(any())).thenReturn("samlToken");
+        when(tokenService.getChannelID(any())).thenReturn("channelId");
+        when(tokenService.getTsnConsumerAppID()).thenReturn("consumerAppId");
+        when(UapConfig.getInstance().getClientId()).thenReturn("clientId");
+        when(HttpUtil.isUgoApp(request)).thenReturn(false);
+        when(HttpUtil.getSelectedLocale(request)).thenReturn("en");
+
+        ModelAndView modelAndView = stepUpController.stepUpRedirect(request, response);
+
+        assertEquals("stepUp", modelAndView.getViewName());
+        assertEquals("stepUpPinManagementUrl", modelAndView.getModel().get("stepUpPinManagementUrl"));
+        assertEquals("samlToken", modelAndView.getModel().get("ssoToken"));
+        assertEquals("channelId", modelAndView.getModel().get("consumer"));
+        assertEquals(existingUuid, modelAndView.getModel().get("uuid"));
+    }
+
+    @Test
+    public void testStepUpRedirect_WithNewUuid() {
+        when(sessionProvider.getSessionAttribute(UAP_UUID)).thenReturn(null);
+        when(tokenService.getSAMLforJWT(any())).thenReturn("samlToken");
+        when(tokenService.getChannelID(any())).thenReturn("channelId");
+        when(tokenService.getTsnConsumerAppID()).thenReturn("consumerAppId");
+        when(UapConfig.getInstance().getClientId()).thenReturn("clientId");
+        when(HttpUtil.isUgoApp(request)).thenReturn(false);
+        when(HttpUtil.getSelectedLocale(request)).thenReturn("en");
+
+        ModelAndView modelAndView = stepUpController.stepUpRedirect(request, response);
+
+        assertEquals("stepUp", modelAndView.getViewName());
+        assertEquals("stepUpPinManagementUrl", modelAndView.getModel().get("stepUpPinManagementUrl"));
+        assertEquals("samlToken", modelAndView.getModel().get("ssoToken"));
+        assertEquals("channelId", modelAndView.getModel().get("consumer"));
+        assertNotNull(modelAndView.getModel().get("uuid"));
+    }
+
+    @Test
+    public void testStepUpRedirect_WithException() {
+        when(sessionProvider.getSessionAttribute(UAP_UUID)).thenThrow(new RuntimeException("Test exception"));
+
+        ModelAndView modelAndView = stepUpController.stepUpRedirect(request, response);
+
+        assertEquals("redirect:/error", modelAndView.getViewName());
+    }
+
+    @Test
+    public void testGetUuidString_WithExistingUuid() {
+        String existingUuid = UUID.randomUUID().toString();
+        when(sessionProvider.getSessionAttribute(UAP_UUID)).thenReturn(existingUuid);
+
+        String uuidStr = stepUpController.getUuidString();
+
+        assertEquals(existingUuid, uuidStr);
+        verify(sessionProvider, never()).setSessionAttribute(eq(UAP_UUID), any());
+    }
+
+    @Test
+    public void testGetUuidString_WithNewUuid() {
+        when(sessionProvider.getSessionAttribute(UAP_UUID)).thenReturn(null);
+
+        String uuidStr = stepUpController.getUuidString();
+
+        assertNotNull(uuidStr);
+        verify(sessionProvider).setSessionAttribute(UAP_UUID, uuidStr);
+    }
+
+    @Test
+    public void testGetEncodedUapReturnUrl() {
+        when(request.getRequestURL()).thenReturn(new StringBuffer("http://localhost:8080/stepUpPin"));
+
+        String result = stepUpController.getEncodedUapReturnUrl(request);
+
+        assertEquals("http://localhost:8080/stepUpPin.action", result);
+    }
+
+    @Test
+    public void testGenerateMV() {
+        String uuidString = UUID.randomUUID().toString();
+        when(tokenService.getSAMLforJWT(any())).thenReturn("samlToken");
+        when(tokenService.getChannelID(any())).thenReturn("channelId");
+        when(tokenService.getTsnConsumerAppID()).thenReturn("consumerAppId");
+        when(UapConfig.getInstance().getClientId()).thenReturn("clientId");
+        when(HttpUtil.getSelectedLocale(request)).thenReturn("en");
+
+        ModelAndView mav = stepUpController.generateMV(request, uuidString);
+
+        assertEquals("stepUp", mav.getViewName());
+        assertEquals(uuidString, mav.getModel().get("uuid"));
+        assertEquals("samlToken", mav.getModel().get("ssoToken"));
+        assertEquals("clientId", mav.getModel().get("clientId"));
+    }
+
+    @Test
+    public void testGetCancelUrlForStepUpModal() {
+        when(request.getParameter(IS_CARD_ACTIVATION_FLOW)).thenReturn("true");
+
+        String result = stepUpController.getCancelUrlForStepUpModal(request);
+
+        assertEquals(CONTEXT_ROOT + UAP_STEPUP_CANCEL_URL_CARD_ACTIVATION, result);
+    }
+
+    @Test
+    public void testGetActionName_WithStepUpPin() {
+        when(request.getRequestURL()).thenReturn(new StringBuffer("http://localhost:8080/stepUpPin"));
+
+        String actionName = stepUpController.getActionName(request);
+
+        assertEquals(CONTEXT_ROOT + REDIREDT_URL_PIN, actionName);
+    }
+
+    @Test
+    public void testGetActionName_WithoutStepUpPin() {
+        when(request.getRequestURL()).thenReturn(new StringBuffer("http://localhost:8080/otherPath"));
+
+        String actionName = stepUpController.getActionName(request);
+
+        assertEquals(CONTEXT_ROOT + REDIREDT_URL_TTC, actionName);
+    }
+}

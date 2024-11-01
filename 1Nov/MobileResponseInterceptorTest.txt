@@ -1,0 +1,60 @@
+package com.td.mbna.msec.core.interceptor;
+
+import static org.mockito.Mockito.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+public class MobileResponseInterceptorTest {
+
+    @InjectMocks
+    private MobileResponseInterceptor mobileResponseInterceptor;
+
+    @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private HttpServletResponse response;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testPreHandle_UgoAppRequest() {
+        // Arrange
+        when(HttpUtil.isUgoApp(request)).thenReturn(true);
+        when(request.getRequestURL()).thenReturn(new StringBuffer("http://example.com/test"));
+
+        // Act
+        boolean result = mobileResponseInterceptor.preHandle(request, response, new Object());
+
+        // Assert
+        verify(response).setDateHeader("Expires", -1);
+        verify(response).setHeader("Pragma", "no-cache");
+        verify(response).setHeader("Cache-Control", "no-cache, max-age=0, no-store, must-revalidate");
+        assertTrue(result); // The method should return true
+    }
+
+    @Test
+    public void testPreHandle_NonUgoAppRequest() {
+        // Arrange
+        when(HttpUtil.isUgoApp(request)).thenReturn(false);
+
+        // Act
+        boolean result = mobileResponseInterceptor.preHandle(request, response, new Object());
+
+        // Assert
+        verify(response, never()).setDateHeader("Expires", -1);
+        verify(response, never()).setHeader("Pragma", "no-cache");
+        verify(response, never()).setHeader("Cache-Control", "no-cache, max-age=0, no-store, must-revalidate");
+        assertTrue(result); // The method should still return true
+    }
+}

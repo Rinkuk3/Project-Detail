@@ -1,0 +1,62 @@
+package com.td.mbna.msec.core.interceptor;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.ModelAndViewDefiningException;
+
+import com.td.mbna.msec.core.support.HttpUtil;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+
+public class BrowserIdentificationInterceptorTest {
+
+    @InjectMocks
+    private BrowserIdentificationInterceptor browserIdentificationInterceptor;
+
+    @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private HttpServletResponse response;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testPreHandle_ValidBrowser() throws Exception {
+        // Arrange
+        when(HttpUtil.isInvalidBrowser(request)).thenReturn(false);
+        
+        // Act
+        boolean result = browserIdentificationInterceptor.preHandle(request, response, new Object());
+
+        // Assert
+        assertTrue(result);
+        verify(request).setAttribute(anyString(), any());
+    }
+
+    @Test
+    public void testPreHandle_InvalidBrowser() {
+        // Arrange
+        when(HttpUtil.isInvalidBrowser(request)).thenReturn(true);
+        
+        // Act & Assert
+        ModelAndViewDefiningException exception = org.junit.jupiter.api.Assertions.assertThrows(ModelAndViewDefiningException.class, () -> {
+            browserIdentificationInterceptor.preHandle(request, response, new Object());
+        });
+
+        ModelAndView modelAndView = exception.getModelAndView();
+        assertTrue(modelAndView.getViewName().equals("unsupportedBrowser"));
+    }
+}

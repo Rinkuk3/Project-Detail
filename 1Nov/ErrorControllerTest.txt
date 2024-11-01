@@ -1,0 +1,96 @@
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import javax.servlet.http.HttpServletRequest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.td.mbna.msec.common.infrastructure.util.ServerConfigUtil;
+import com.td.mbna.msec.common.infrastructure.util.SwitchLanguageService;
+import com.td.mbna.msec.core.session.SessionProvider;
+import com.td.mbna.msec.core.session.SessionCustomer;
+import com.td.mbna.msec.core.support.HttpUtil;
+
+public class ErrorControllerTest {
+
+    @InjectMocks
+    private ErrorController errorController;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private SwitchLanguageService switchLanguageService;
+
+    @Mock
+    private HttpServletRequest request;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testErrorHandle_NoLangId() {
+        when(request.getParameter("lang")).thenReturn(null);
+        when(sessionProvider.getSessionAttribute("selectedLocale")).thenReturn(null);
+        when(HttpUtil.getPreferredLang(request)).thenReturn("en");
+
+        ModelAndView mav = errorController.errorHandle(request);
+
+        assertEquals("error", mav.getViewName());
+        assertEquals("0", mav.getModel().get("previousMDMKey"));
+        assertEquals("en", mav.getModel().get("lang"));
+        assertEquals("english", mav.getModel().get("locale"));
+    }
+
+    @Test
+    public void testErrorHandle_WithLangId() {
+        when(request.getParameter("lang")).thenReturn("fr");
+        doNothing().when(switchLanguageService).handleRequestLocale(request);
+        when(sessionProvider.getSessionAttribute("selectedLocale")).thenReturn(null);
+        when(HttpUtil.getPreferredLang(request)).thenReturn("en");
+
+        ModelAndView mav = errorController.errorHandle(request);
+
+        assertEquals("error", mav.getViewName());
+        assertEquals("0", mav.getModel().get("previousMDMKey"));
+        assertEquals("fr", mav.getModel().get("lang"));
+        assertEquals("french", mav.getModel().get("locale"));
+    }
+
+    @Test
+    public void testErrorHandle_WithSessionCustomer() {
+        SessionCustomer customer = mock(SessionCustomer.class);
+        when(customer.getId()).thenReturn("12345");
+        when(sessionProvider.getSessionCustomer()).thenReturn(customer);
+        when(request.getParameter("lang")).thenReturn(null);
+        when(sessionProvider.getSessionAttribute("selectedLocale")).thenReturn(null);
+        when(HttpUtil.getPreferredLang(request)).thenReturn("en");
+
+        ModelAndView mav = errorController.errorHandle(request);
+
+        assertEquals("error", mav.getViewName());
+        assertEquals("12345", mav.getModel().get("previousMDMKey"));
+        assertEquals("en", mav.getModel().get("lang"));
+        assertEquals("english", mav.getModel().get("locale"));
+    }
+
+    @Test
+    public void testErrorHandle_EmptyLangId() {
+        when(request.getParameter("lang")).thenReturn("");
+        when(sessionProvider.getSessionAttribute("selectedLocale")).thenReturn(null);
+        when(HttpUtil.getPreferredLang(request)).thenReturn("es");
+
+        ModelAndView mav = errorController.errorHandle(request);
+
+        assertEquals("error", mav.getViewName());
+        assertEquals("0", mav.getModel().get("previousMDMKey"));
+        assertEquals("es", mav.getModel().get("lang"));
+        assertEquals("english", mav.getModel().get("locale"));
+    }
+}

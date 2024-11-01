@@ -1,0 +1,182 @@
+package com.td.mbna.msec.core.controller;
+
+import com.td.coreapi.common.config.ApiConfig;
+import com.td.mbna.msec.core.session.SessionProvider;
+import com.td.mbna.msec.core.support.HttpUtil;
+import com.td.mbna.msec.core.support.UapConfig;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.td.mbna.msec.common.infrastructure.util.MsecbffConstants.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class LoginControllerTest {
+
+    @InjectMocks
+    private LoginController loginController;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private HttpServletResponse response;
+
+    @Mock
+    private HttpSession session;
+
+    @BeforeEach
+    void setUp() {
+        when(request.getSession()).thenReturn(session);
+    }
+
+    @Test
+    void testLogon_WithValidLocale() {
+        // Arrange
+        when(request.getParameter(PARAMETER_LANGUAGE)).thenReturn("en");
+        String viewName = "success";
+        when(loginController.execute(request)).thenReturn(viewName);
+
+        // Act
+        ModelAndView mav = loginController.logon(request, response);
+
+        // Assert
+        assertEquals("success", mav.getViewName());
+        assertEquals("en", mav.getModel().get(PARAMETER_LANGUAGE));
+        verify(response, times(2)).addCookie(any());
+    }
+
+    @Test
+    void testLogon_WithoutLocale() {
+        // Arrange
+        when(request.getParameter(PARAMETER_LANGUAGE)).thenReturn(null);
+        when(loginController.execute(request)).thenReturn("success");
+        when(HttpUtil.getPreferredLang(request)).thenReturn("fr");
+
+        // Act
+        ModelAndView mav = loginController.logon(request, response);
+
+        // Assert
+        assertEquals("success", mav.getViewName());
+        assertEquals("fr", mav.getModel().get(PARAMETER_LANGUAGE));
+    }
+
+    @Test
+    void testLogon_WithErrorView() {
+        // Arrange
+        when(request.getParameter(PARAMETER_LANGUAGE)).thenReturn("en");
+        when(loginController.execute(request)).thenReturn(ERROR);
+
+        // Act
+        ModelAndView mav = loginController.logon(request, response);
+
+        // Assert
+        assertEquals("redirect:/error", mav.getViewName());
+        assertEquals("en", mav.getModel().get(PARAMETER_LANGUAGE));
+    }
+
+    @Test
+    void testExecute_WithValidSession() {
+        // Arrange
+        when(sessionProvider.getSessionMap()).thenReturn(new HashMap<>());
+        when(request.getParameter(CUST_INTERFACE_TARGET)).thenReturn("target");
+        when(request.getParameter(CUST_INTERFACE_TARGET)).thenReturn("target");
+
+        // Act
+        String result = loginController.execute(request);
+
+        // Assert
+        assertEquals("loginSkipUap", result);
+        verify(session).invalidate();
+    }
+
+    @Test
+    void testExecute_WithNullSession() {
+        // Arrange
+        when(sessionProvider.getSessionMap()).thenReturn(null);
+        when(request.getParameter(CUST_INTERFACE_TARGET)).thenReturn(null);
+
+        // Act
+        String result = loginController.execute(request);
+
+        // Assert
+        assertEquals("loginSkipUap", result);
+        verify(session).invalidate();
+    }
+
+    @Test
+    void testGenerateMV() throws IOException {
+        // Arrange
+        when(request.getParameter(UGO_APP)).thenReturn("true");
+        when(ApiConfig.getInstance().getInputStreamFromFile("TDRestServices.properties")).thenReturn(null);
+        when(UapConfig.getInstance().getClientId()).thenReturn("clientId");
+
+        // Act
+        ModelAndView mav = loginController.generateMV("someView", request, "en");
+
+        // Assert
+        assertEquals("someView", mav.getViewName());
+        assertEquals("clientId", mav.getModel().get("clientId"));
+    }
+
+    @Test
+    void testHandleDL_WithValidTarget() {
+        // Arrange
+        when(request.getParameter(DL_TARGET)).thenReturn("validTarget");
+        Map<String, Object> dlMap = new HashMap<>();
+        dlMap.put("validTarget", "someValue");
+        loginController.setDlMap(dlMap); // You might need to add a setter for this.
+
+        // Act
+        loginController.handleDL(request, response);
+
+        // Assert
+        verify(response).addCookie(any());
+    }
+
+    @Test
+    void testHandleDL_WithInvalidTarget() {
+        // Arrange
+        when(request.getParameter(DL_TARGET)).thenReturn("invalidTarget");
+        Map<String, Object> dlMap = new HashMap<>();
+        dlMap.put("validTarget", "someValue");
+        loginController.setDlMap(dlMap); // You might need to add a setter for this.
+
+        // Act
+        loginController.handleDL(request, response);
+
+        // Assert
+        verify(response).removeCookie(response, DL_TARGET);
+    }
+
+    @Test
+    void testInvalidateMBNASession() {
+        // Arrange
+        when(sessionProvider.getSessionMap()).thenReturn(new HashMap<>());
+
+        // Act
+        boolean result = loginController.invalidateMBNASession(request);
+
+        // Assert
+        assertTrue(result);
+        verify(sessionProvider).getSessionMap();
+    }
+}

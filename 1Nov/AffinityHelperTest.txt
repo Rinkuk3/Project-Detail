@@ -1,0 +1,135 @@
+package com.td.mbna.msec.core.support;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.midtier.types.common.AffinityInfoType;
+import com.td.mbna.msec.midtier.types.common.AffinityInfoTypeLanguageSpecific;
+import com.td.mbna.msec.midtier.types.common.AffinitySpecType;
+import com.td.mbna.msec.common.infrastructure.util.TextProviderImpl;
+
+public class AffinityHelperTest {
+
+    @InjectMocks
+    private AffinityHelper affinityHelper;
+
+    @Mock
+    private TextProviderImpl textProvider;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testMapAffinityInfo_NullAffinity() {
+        AccountDetails currentAccount = new AccountDetails();
+        String language = "en-CA";
+
+        affinityHelper.mapAffinityInfo(null, currentAccount, language);
+
+        assertNotNull(currentAccount.getEnglishAffinityInfo());
+        assertNotNull(currentAccount.getFrenchAffinityInfo());
+        assertEquals("card.default.shortName", currentAccount.getEnglishAffinityInfo().getShortDesc());
+        assertEquals("card.default.longName", currentAccount.getEnglishAffinityInfo().getLongDesc());
+    }
+
+    @Test
+    public void testMapAffinityInfo_FailedAffinity() {
+        AffinityInfoType affinity = new AffinityInfoType();
+        affinity.setFailed(true);
+        AccountDetails currentAccount = new AccountDetails();
+        String language = "en-CA";
+
+        when(textProvider.getText("card.default.shortName")).thenReturn("Default Short Name");
+        when(textProvider.getText("card.default.longName")).thenReturn("Default Long Name");
+
+        affinityHelper.mapAffinityInfo(affinity, currentAccount, language);
+
+        assertNotNull(currentAccount.getEnglishAffinityInfo());
+        assertEquals("Default Short Name", currentAccount.getEnglishAffinityInfo().getShortDesc());
+        assertEquals("Default Long Name", currentAccount.getEnglishAffinityInfo().getLongDesc());
+    }
+
+    @Test
+    public void testMapAffinityInfo_Success() {
+        AffinityInfoType affinity = new AffinityInfoType();
+        AffinityInfoTypeLanguageSpecific langSpecific = new AffinityInfoTypeLanguageSpecific();
+        affinity.setEnglishInfo(langSpecific);
+        AccountDetails currentAccount = new AccountDetails();
+        String language = "en-CA";
+
+        when(textProvider.getText("card.default.shortName")).thenReturn("Default Short Name");
+        when(textProvider.getText("card.default.longName")).thenReturn("Default Long Name");
+
+        affinityHelper.mapAffinityInfo(affinity, currentAccount, language);
+
+        assertNotNull(currentAccount.getEnglishAffinityInfo());
+        assertEquals("Default Short Name", currentAccount.getEnglishAffinityInfo().getShortDesc());
+        assertEquals("Default Long Name", currentAccount.getEnglishAffinityInfo().getLongDesc());
+    }
+
+    @Test
+    public void testMapAffinityCode() {
+        AffinitySpecType affinitySpec = new AffinitySpecType();
+        affinitySpec.setTsysProductCode("V");
+        affinitySpec.setClientProductCode("123");
+        affinitySpec.setMiscInfo("XYZ");
+        AccountDetails currentAccount = new AccountDetails();
+
+        affinityHelper.mapAffinityCode(affinitySpec, currentAccount);
+
+        assertEquals("V-123-XYZ", currentAccount.getAffinityCode());
+        assertEquals("V", currentAccount.getProductCode());
+    }
+
+    @Test
+    public void testMapAffinityCode_NullAffinitySpec() {
+        AccountDetails currentAccount = new AccountDetails();
+
+        affinityHelper.mapAffinityCode(null, currentAccount);
+
+        assertNull(currentAccount.getAffinityCode());
+        assertNull(currentAccount.getProductCode());
+    }
+
+    @Test
+    public void testFormatWithWCMUrl_ValidUrl() {
+        String inputUrl = "null/path/to/resource";
+        String expectedUrl = WCM_HOST_URL_MIDTIER + "/path/to/resource";
+        
+        String result = affinityHelper.formatWithWCMUrl(inputUrl);
+        
+        assertEquals(expectedUrl, result);
+    }
+
+    @Test
+    public void testFormatWithWCMUrl_NullInput() {
+        String result = affinityHelper.formatWithWCMUrl(null);
+        
+        assertNull(result);
+    }
+
+    @Test
+    public void testFormatWithWCMUrl_EmptyString() {
+        String result = affinityHelper.formatWithWCMUrl("");
+        
+        assertEquals("", result);
+    }
+
+    @Test
+    public void testFormatWithWCMUrl_NonNullString() {
+        String inputUrl = "http://example.com/resource";
+        
+        String result = affinityHelper.formatWithWCMUrl(inputUrl);
+        
+        assertEquals(inputUrl, result);
+    }
+}

@@ -1,0 +1,237 @@
+package com.td.mbna.msec.customer.resource;
+
+import com.td.mbna.msec.common.domain.BaseMsecbffResponse;
+import com.td.mbna.msec.customer.application.*;
+import com.td.mbna.msec.customer.domain.*;
+import com.td.mbna.msec.core.session.SessionProvider;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+class CustomerResourceTest {
+
+    @InjectMocks
+    private CustomerResource customerResource;
+
+    @Mock
+    private CustomerApplicationService customerService;
+
+    @Mock
+    private AddAuthorizedUserService addAuthorizedUserService;
+
+    @Mock
+    private RemoveAccountService removeAccountService;
+
+    @Mock
+    private SecCardHolderInfoService secCardHolderInfoService;
+
+    @Mock
+    private CardSetupConfirmationService cardSetupConfirmationService;
+
+    @Mock
+    private SessionProvider sessionProvider;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testGetIpEligibility() {
+        // Arrange
+        List<AccountIpEligibility> expectedEligibilityList = Collections.singletonList(new AccountIpEligibility());
+        when(customerService.getIpEligibilityList()).thenReturn(expectedEligibilityList);
+
+        // Act
+        List<AccountIpEligibility> eligibilityList = customerResource.getIpEligibility();
+
+        // Assert
+        assertEquals(expectedEligibilityList, eligibilityList);
+        verify(customerService).getIpEligibilityList();
+    }
+
+    @Test
+    void testGetCustomerProfile() {
+        // Arrange
+        CustomerNameForNudge expectedProfile = new CustomerNameForNudge();
+        when(customerService.getCustomerProfile()).thenReturn(expectedProfile);
+
+        // Act
+        CustomerNameForNudge profile = customerResource.getCustomerProfile();
+
+        // Assert
+        assertEquals(expectedProfile, profile);
+        verify(customerService).getCustomerProfile();
+    }
+
+    @Test
+    void testGetDisclosureText() {
+        // Arrange
+        String accountId = "12345";
+        AddAuInfo expectedInfo = new AddAuInfo();
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        when(addAuthorizedUserService.getAddAuInfo(accountId, request)).thenReturn(expectedInfo);
+
+        // Act
+        AddAuInfo info = customerResource.getDisclosureText(accountId, request);
+
+        // Assert
+        assertEquals(expectedInfo, info);
+        verify(addAuthorizedUserService).getAddAuInfo(accountId, request);
+    }
+
+    @Test
+    void testVerifyAddAuthorizedUser() {
+        // Arrange
+        AuthorizedUserData userData = new AuthorizedUserData();
+        AddAuResponse expectedResponse = new AddAuResponse();
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        when(addAuthorizedUserService.addAuthorizedUser(userData, true, request)).thenReturn(expectedResponse);
+
+        // Act
+        AddAuResponse response = customerResource.verify(userData, request);
+
+        // Assert
+        assertEquals(expectedResponse, response);
+        verify(addAuthorizedUserService).addAuthorizedUser(userData, true, request);
+    }
+
+    @Test
+    void testAddAuthorizedUser() {
+        // Arrange
+        AuthorizedUserData userData = new AuthorizedUserData();
+        AddAuResponse expectedResponse = new AddAuResponse();
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        when(addAuthorizedUserService.addAuthorizedUser(userData, false, request)).thenReturn(expectedResponse);
+
+        // Act
+        AddAuResponse response = customerResource.addAuthorizedUser(userData, request);
+
+        // Assert
+        assertEquals(expectedResponse, response);
+        verify(addAuthorizedUserService).addAuthorizedUser(userData, false, request);
+    }
+
+    @Test
+    void testRemoveAccountConfirmation() {
+        // Arrange
+        String accountId = "12345";
+        BaseMsecbffResponse expectedResponse = new BaseMsecbffResponse();
+        when(removeAccountService.removeAccountConfirmation(accountId)).thenReturn(expectedResponse);
+
+        // Act
+        BaseMsecbffResponse response = customerResource.removeAccountConfirmation(accountId);
+
+        // Assert
+        assertEquals(expectedResponse, response);
+        verify(removeAccountService).removeAccountConfirmation(accountId);
+    }
+
+    @Test
+    void testRemoveAccount() {
+        // Arrange
+        Map<String, Object> accountIdMap = new HashMap<>();
+        accountIdMap.put("accountID", "12345");
+        BaseMsecbffResponse expectedResponse = new BaseMsecbffResponse();
+        when(removeAccountService.removeAccount("12345")).thenReturn(expectedResponse);
+
+        // Act
+        BaseMsecbffResponse response = customerResource.removeAccount(accountIdMap);
+
+        // Assert
+        assertEquals(expectedResponse, response);
+        verify(removeAccountService).removeAccount("12345");
+    }
+
+    @Test
+    void testInitSecCardHolderInfo() {
+        // Arrange
+        String accountId = "12345";
+        SecondCardUserInfo expectedInfo = new SecondCardUserInfo();
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        when(secCardHolderInfoService.initSecCardHolderInfo(accountId, response)).thenReturn(expectedInfo);
+
+        // Act
+        SecondCardUserInfo info = customerResource.initSecCardHolderInfo(accountId, response);
+
+        // Assert
+        assertEquals(expectedInfo, info);
+        verify(secCardHolderInfoService).initSecCardHolderInfo(accountId, response);
+    }
+
+    @Test
+    void testUpdatePersonalInfo() {
+        // Arrange
+        SecondCardUserInfo userInfo = new SecondCardUserInfo();
+        BaseMsecbffResponse expectedResponse = new BaseMsecbffResponse();
+        when(secCardHolderInfoService.updatePersonalInfo(userInfo)).thenReturn(expectedResponse);
+
+        // Act
+        BaseMsecbffResponse response = customerResource.updatePersonalInfo(userInfo);
+
+        // Assert
+        assertEquals(expectedResponse, response);
+        verify(secCardHolderInfoService).updatePersonalInfo(userInfo);
+    }
+
+    @Test
+    void testCardSetupConfirmation() {
+        // Arrange
+        BaseMsecbffResponse expectedResponse = new BaseMsecbffResponse();
+        when(cardSetupConfirmationService.cardSetupConfirmation()).thenReturn(expectedResponse);
+
+        // Act
+        BaseMsecbffResponse response = customerResource.cardSetupConfirmation();
+
+        // Assert
+        assertEquals(expectedResponse, response);
+        verify(cardSetupConfirmationService).cardSetupConfirmation();
+    }
+
+    @Test
+    void testHandleAddAuthorizedUser() {
+        // Arrange
+        com.td.mbna.msec.account.domain.AccountDetails account = new com.td.mbna.msec.account.domain.AccountDetails();
+        account.setAccountId("12345");
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(account);
+
+        // Act
+        ModelAndView modelAndView = customerResource.handleAddAuthorizedUser();
+
+        // Assert
+        assertNotNull(modelAndView);
+        assertEquals("redirect:index.html#/account/addau/entry", modelAndView.getViewName());
+        verify(sessionProvider).setCurrentAccount("12345");
+    }
+
+    @Test
+    void testHandleAddAuthorizedUserWithNullAccount() {
+        // Arrange
+        when(sessionProvider.getCurrentOrRequestedAccount()).thenReturn(null);
+
+        // Act
+        ModelAndView modelAndView = customerResource.handleAddAuthorizedUser();
+
+        // Assert
+        assertNotNull(modelAndView);
+        assertEquals("redirect:index.html#/account/addau/entry", modelAndView.getViewName());
+        verify(sessionProvider, never()).setCurrentAccount(anyString());
+    }
+}
