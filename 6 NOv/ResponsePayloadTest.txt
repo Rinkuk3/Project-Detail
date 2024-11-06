@@ -1,0 +1,97 @@
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.math.BigDecimal;
+import java.util.Arrays;
+
+class ResponsePayloadTest {
+
+    private ResponsePayload responsePayload;
+
+    @BeforeEach
+    void setUp() {
+        // Initialize the responsePayload object before each test
+        responsePayload = new ResponsePayload();
+    }
+
+    @Test
+    void testDefaultConstructor() {
+        // Verify that the constructor correctly initializes the fields
+        assertNotNull(responsePayload.getActivePlans());
+        assertNotNull(responsePayload.getInactivePlans());
+        assertEquals(BigDecimal.ZERO, responsePayload.getTotalRemainingBalance());
+        assertTrue(responsePayload.getActivePlans().isEmpty());
+        assertTrue(responsePayload.getInactivePlans().isEmpty());
+    }
+
+    @Test
+    void testSetTotalRemainingBalance() {
+        // Set a value and verify it was correctly set
+        BigDecimal newBalance = new BigDecimal("100.50");
+        responsePayload.setTotalRemainingBalance(newBalance);
+        assertEquals(newBalance, responsePayload.getTotalRemainingBalance());
+    }
+
+    @Test
+    void testSetActivePlans() {
+        // Set a value and verify it was correctly set
+        IpPlanDetail activePlan = new IpPlanDetail("activePlan1", "activeDetails");
+        responsePayload.setActivePlans(Arrays.asList(activePlan));
+        assertFalse(responsePayload.getActivePlans().isEmpty());
+        assertEquals(1, responsePayload.getActivePlans().size());
+        assertEquals(activePlan, responsePayload.getActivePlans().get(0));
+    }
+
+    @Test
+    void testSetInactivePlans() {
+        // Set a value and verify it was correctly set
+        IpPlanDetail inactivePlan = new IpPlanDetail("inactivePlan1", "inactiveDetails");
+        responsePayload.setInactivePlans(Arrays.asList(inactivePlan));
+        assertFalse(responsePayload.getInactivePlans().isEmpty());
+        assertEquals(1, responsePayload.getInactivePlans().size());
+        assertEquals(inactivePlan, responsePayload.getInactivePlans().get(0));
+    }
+
+    @Test
+    void testGetTotalRemainingBalance() {
+        // Set and get total remaining balance, verify it works
+        BigDecimal newBalance = new BigDecimal("200.75");
+        responsePayload.setTotalRemainingBalance(newBalance);
+        assertEquals(newBalance, responsePayload.getTotalRemainingBalance());
+    }
+
+    @Test
+    void testGetActivePlans() {
+        // Add some active plans and verify the getter works
+        IpPlanDetail activePlan = new IpPlanDetail("activePlan2", "activeDetails2");
+        responsePayload.setActivePlans(Arrays.asList(activePlan));
+        assertEquals(1, responsePayload.getActivePlans().size());
+        assertEquals(activePlan, responsePayload.getActivePlans().get(0));
+    }
+
+    @Test
+    void testGetInactivePlans() {
+        // Add some inactive plans and verify the getter works
+        IpPlanDetail inactivePlan = new IpPlanDetail("inactivePlan2", "inactiveDetails2");
+        responsePayload.setInactivePlans(Arrays.asList(inactivePlan));
+        assertEquals(1, responsePayload.getInactivePlans().size());
+        assertEquals(inactivePlan, responsePayload.getInactivePlans().get(0));
+    }
+
+    @Test
+    void testSetAndGetPlans() {
+        // Test all properties together to ensure they are set correctly
+        IpPlanDetail activePlan = new IpPlanDetail("activePlan3", "activeDetails3");
+        IpPlanDetail inactivePlan = new IpPlanDetail("inactivePlan3", "inactiveDetails3");
+
+        responsePayload.setActivePlans(Arrays.asList(activePlan));
+        responsePayload.setInactivePlans(Arrays.asList(inactivePlan));
+
+        assertEquals(1, responsePayload.getActivePlans().size());
+        assertEquals(1, responsePayload.getInactivePlans().size());
+        assertEquals(activePlan, responsePayload.getActivePlans().get(0));
+        assertEquals(inactivePlan, responsePayload.getInactivePlans().get(0));
+    }
+
+    // You can also create more advanced tests if necessary, such as boundary tests for empty lists, etc.
+}

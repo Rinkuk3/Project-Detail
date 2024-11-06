@@ -1,0 +1,82 @@
+package com.td.mbna.msec.midtier.account.payload.deleteaccount;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class DeleteAccountRequestTest {
+
+    private DeleteAccountRequest deleteAccountRequest;
+
+    @BeforeEach
+    public void setUp() {
+        deleteAccountRequest = new DeleteAccountRequest();
+    }
+
+    @Test
+    public void testGetRequestPayload() {
+        // Test default state (null requestPayload)
+        assertNull(deleteAccountRequest.getRequestPayload(), "Default requestPayload should be null");
+
+        // Set a value and test it
+        RequestPayload payload = new RequestPayload();
+        deleteAccountRequest.setRequestPayload(payload);
+        assertEquals(payload, deleteAccountRequest.getRequestPayload(), "Request payload should match the set value");
+    }
+
+    @Test
+    public void testSetRequestPayload() {
+        RequestPayload payload = new RequestPayload();
+        deleteAccountRequest.setRequestPayload(payload);
+        assertEquals(payload, deleteAccountRequest.getRequestPayload(), "Request payload should match the set value");
+    }
+
+    @Test
+    public void testGetAdditionalProperties() {
+        // Ensure the additional properties map is initialized and empty by default
+        assertNotNull(deleteAccountRequest.getAdditionalProperties(), "Additional properties map should not be null");
+        assertTrue(deleteAccountRequest.getAdditionalProperties().isEmpty(), "Additional properties map should be empty initially");
+    }
+
+    @Test
+    public void testSetAdditionalProperty() {
+        String key = "exampleKey";
+        String value = "exampleValue";
+        deleteAccountRequest.setAdditionalProperty(key, value);
+
+        assertEquals(1, deleteAccountRequest.getAdditionalProperties().size(), "Additional properties map should contain one entry");
+        assertEquals(value, deleteAccountRequest.getAdditionalProperties().get(key), "The value of the additional property should match the set value");
+    }
+
+    @Test
+    public void testToString() {
+        // Test the toString method for coverage
+        String result = deleteAccountRequest.toString();
+        assertNotNull(result, "toString() should return a non-null value");
+        assertTrue(result.contains("DeleteAccountRequest"), "toString() should contain the class name");
+    }
+
+    @Test
+    public void testHashCode() {
+        // Test hashCode method for coverage
+        int hashCode = deleteAccountRequest.hashCode();
+        assertNotEquals(0, hashCode, "hashCode should not be zero");
+    }
+
+    @Test
+    public void testEquals() {
+        // Create a new instance and test equals
+        DeleteAccountRequest anotherDeleteAccountRequest = new DeleteAccountRequest();
+        assertTrue(deleteAccountRequest.equals(anotherDeleteAccountRequest), "Two equal DeleteAccountRequest instances should be equal");
+
+        // Set different values and test equals
+        deleteAccountRequest.setRequestPayload(new RequestPayload());
+        anotherDeleteAccountRequest.setRequestPayload(new RequestPayload());
+        assertTrue(deleteAccountRequest.equals(anotherDeleteAccountRequest), "Two instances with the same values should be equal");
+
+        // Test equality with a different type
+        String nonRequest = "NonRequest";
+        assertFalse(deleteAccountRequest.equals(nonRequest), "DeleteAccountRequest should not be equal to an object of a different type");
+    }
+}

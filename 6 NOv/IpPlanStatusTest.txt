@@ -1,0 +1,76 @@
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+class IpPlanStatusTest {
+
+    @Test
+    void testEnumValues() {
+        // Test if all the enum constants are present and match the expected names.
+        assertEquals(4, IpPlanStatus.values().length); // Ensure there are 4 values in the enum.
+        assertEquals("Active", IpPlanStatus.Active.name());
+        assertEquals("Inactive", IpPlanStatus.Inactive.name());
+        assertEquals("RecentlyClosed", IpPlanStatus.RecentlyClosed.name());
+        assertEquals("CloseIneligible", IpPlanStatus.CloseIneligible.name());
+    }
+
+    @Test
+    void testEnumFromString() {
+        // Test if we can get the correct enum value from a string.
+        assertEquals(IpPlanStatus.Active, IpPlanStatus.valueOf("Active"));
+        assertEquals(IpPlanStatus.Inactive, IpPlanStatus.valueOf("Inactive"));
+        assertEquals(IpPlanStatus.RecentlyClosed, IpPlanStatus.valueOf("RecentlyClosed"));
+        assertEquals(IpPlanStatus.CloseIneligible, IpPlanStatus.valueOf("CloseIneligible"));
+    }
+
+    @Test
+    void testEnumEquality() {
+        // Ensure the enums are equal to themselves.
+        assertSame(IpPlanStatus.Active, IpPlanStatus.Active);
+        assertSame(IpPlanStatus.Inactive, IpPlanStatus.Inactive);
+        assertSame(IpPlanStatus.RecentlyClosed, IpPlanStatus.RecentlyClosed);
+        assertSame(IpPlanStatus.CloseIneligible, IpPlanStatus.CloseIneligible);
+        
+        // Ensure different enums are not equal.
+        assertNotSame(IpPlanStatus.Active, IpPlanStatus.Inactive);
+        assertNotSame(IpPlanStatus.RecentlyClosed, IpPlanStatus.CloseIneligible);
+    }
+
+    @Test
+    void testEnumOrdinal() {
+        // Check the ordinal value of each enum.
+        assertEquals(0, IpPlanStatus.Active.ordinal());
+        assertEquals(1, IpPlanStatus.Inactive.ordinal());
+        assertEquals(2, IpPlanStatus.RecentlyClosed.ordinal());
+        assertEquals(3, IpPlanStatus.CloseIneligible.ordinal());
+    }
+
+    @Test
+    void testSerialization() throws Exception {
+        // Test that the enum can be serialized and deserialized correctly.
+        IpPlanStatus status = IpPlanStatus.Active;
+        
+        // Serialize the enum to a byte array
+        byte[] serializedData = serialize(status);
+        
+        // Deserialize it back into an enum object
+        IpPlanStatus deserializedStatus = deserialize(serializedData);
+        
+        // Verify that the original and deserialized objects are the same
+        assertEquals(status, deserializedStatus);
+    }
+
+    // Helper methods for serialization and deserialization
+    private byte[] serialize(Object obj) throws Exception {
+        java.io.ByteArrayOutputStream byteArrayOutputStream = new java.io.ByteArrayOutputStream();
+        java.io.ObjectOutputStream objectOutputStream = new java.io.ObjectOutputStream(byteArrayOutputStream);
+        objectOutputStream.writeObject(obj);
+        objectOutputStream.flush();
+        return byteArrayOutputStream.toByteArray();
+    }
+
+    private IpPlanStatus deserialize(byte[] data) throws Exception {
+        java.io.ByteArrayInputStream byteArrayInputStream = new java.io.ByteArrayInputStream(data);
+        java.io.ObjectInputStream objectInputStream = new java.io.ObjectInputStream(byteArrayInputStream);
+        return (IpPlanStatus) objectInputStream.readObject();
+    }
+}

@@ -1,0 +1,108 @@
+Here’s a unit test class for `OfferConfirmationServiceImpl` to achieve 100% code coverage, focusing on each branch and method:
+
+```java
+package com.td.mbna.msec.offers.application.impl;
+
+import com.td.mbna.msec.account.domain.AccountDetails;
+import com.td.mbna.msec.common.infrastructure.util.MsecbffConstants;
+import com.td.mbna.msec.midtier.offers.payload.requestinsurance.RequestInsuranceResponse;
+import com.td.mbna.msec.midtier.offers.payload.requestinsurance.RequestPayload;
+import com.td.mbna.msec.midtier.offers.payload.requestproductchange.RequestProductChangeResponse;
+import com.td.mbna.msec.offers.domain.ConfirmOfferRequest;
+import com.td.mbna.msec.offers.domain.OfferConfirmationResponse;
+import com.td.mbna.msec.offers.domain.OfferDetails;
+import com.td.mbna.msec.profile.model.CustomerProfile;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import javax.servlet.http.HttpServletRequest;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+public class OfferConfirmationServiceImplTest {
+
+    @InjectMocks
+    private OfferConfirmationServiceImpl offerConfirmationService;
+
+    @Mock
+    private HttpServletRequest mockHttpServletRequest;
+
+    @Mock
+    private AccountDetails mockAccountDetails;
+
+    @Mock
+    private ConfirmOfferRequest mockConfirmOfferRequest;
+
+    @Mock
+    private OfferDetails mockOfferDetails;
+
+    @Mock
+    private RequestProductChangeResponse mockRequestProductChangeResponse;
+
+    @Mock
+    private RequestInsuranceResponse mockRequestInsuranceResponse;
+
+    @BeforeEach
+    public void setUp() {
+        // Initialize any additional setup if needed
+    }
+
+    @Test
+    public void testConfirmOffer_ProductUpgrade_Success() {
+        when(mockConfirmOfferRequest.getOfferType()).thenReturn("pc");
+        when(mockAccountDetails.getOfferById(anyString(), anyList())).thenReturn(mockOfferDetails);
+        when(mockAccountDetails.getMarketingOffers()).thenReturn(anyList());
+        when(mockOfferDetails.getPcOffer()).thenReturn("SomePcOffer");
+
+        String result = offerConfirmationService.confirmOffer(mockConfirmOfferRequest, mockHttpServletRequest);
+        assertEquals(MsecbffConstants.SUCCESS, result);
+    }
+
+    @Test
+    public void testConfirmOffer_BalanceProtectionInsurance_Success() {
+        when(mockConfirmOfferRequest.getOfferType()).thenReturn("bpi");
+        when(mockAccountDetails.getBpOffers()).thenReturn(List.of(mockOfferDetails));
+        when(mockAccountDetails.isAllowedBalanceProtection()).thenReturn(true);
+
+        String result = offerConfirmationService.confirmOffer(mockConfirmOfferRequest, mockHttpServletRequest);
+        assertEquals(MsecbffConstants.SUCCESS, result);
+    }
+
+    @Test
+    public void testConfirmOffer_RuntimeExceptionHandling() {
+        when(mockAccountDetails.getOfferById(anyString(), anyList())).thenThrow(new RuntimeException("Simulated Exception"));
+        
+        Exception exception = assertThrows(RuntimeException.class, () -> 
+            offerConfirmationService.confirmOffer(mockConfirmOfferRequest, mockHttpServletRequest)
+        );
+        
+        assertEquals("Simulated Exception", exception.getMessage());
+    }
+
+    @Test
+    public void testConfirmProductUpgrade_Success() {
+        when(mockRequestProductChangeResponse.getResponsePayload().getStatus()).thenReturn(true);
+        when(mockAccountDetails.getProductUpgradeOffers()).thenReturn(new ArrayList<>());
+        
+        String result = offerConfirmationService.confirmProductUpgrade(mockAccountDetails, mockOfferDetails);
+        assertEquals(MsecbffConstants.SUCCESS, result);
+    }
+
+    @Test
+    public void testConfirmBalanceProtectionInsurance_Success() throws Exception {
+        CustomerProfile mockCustomerProfile = mock(CustomerProfile.class);
+        when(mockAccountDetails.getProfile()).thenReturn(mockCustomerProfile);
+        when(mockAccountDetails.getBpOffers()).thenReturn(new ArrayList<>());
+
+        String result = offerConfirmationService.confirmBalanceProtectionInsurance(mockAccountDetails, mockOfferDetails);
+        assertEquals(MsecbffConstants.SUCCESS, result);
+    }
+}

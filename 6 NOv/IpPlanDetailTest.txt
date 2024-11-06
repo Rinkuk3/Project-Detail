@@ -1,0 +1,114 @@
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import java.math.BigDecimal;
+
+class IpPlanDetailTest {
+
+    @Test
+    void testGettersAndSetters() {
+        IpPlanDetail ipPlanDetail = new IpPlanDetail();
+        
+        // Set values using setters
+        ipPlanDetail.setId("123");
+        ipPlanDetail.setPlanName("Test Plan");
+        ipPlanDetail.setCreatedOn("2024-01-01");
+        ipPlanDetail.setClosedOn("2024-12-31");
+        ipPlanDetail.setTimeRemaining(10);
+        ipPlanDetail.setMonthlyPayment(new BigDecimal("100.00"));
+        ipPlanDetail.setRemainingBalance(new BigDecimal("500.00"));
+        ipPlanDetail.setStatus(IpPlanStatus.Active);
+        ipPlanDetail.setExpirationDate("2024-12-31");
+        ipPlanDetail.setBalanceAtClosure(new BigDecimal("0.00"));
+        ipPlanDetail.setOneTimeTransactionFee(new BigDecimal("5.00"));
+        ipPlanDetail.setIpInterest(new BigDecimal("50.00"));
+        ipPlanDetail.setTransactionAmt(new BigDecimal("500.00"));
+        ipPlanDetail.setAnnualInterest(new BigDecimal("10.00"));
+        ipPlanDetail.setPaymentDueOn("2024-02-01");
+        ipPlanDetail.setEventId("EVT123");
+        ipPlanDetail.setIpPaymentOptionFeatureDt("2024-01-01");
+        ipPlanDetail.setStatementDataDt("2024-01-01");
+        ipPlanDetail.setPostedTime(100);
+        ipPlanDetail.setTxLevelProcessingFeatureId("TX123");
+        
+        // Assert values using getters
+        assertEquals("123", ipPlanDetail.getId());
+        assertEquals("Test Plan", ipPlanDetail.getPlanName());
+        assertEquals("2024-01-01", ipPlanDetail.getCreatedOn());
+        assertEquals("2024-12-31", ipPlanDetail.getClosedOn());
+        assertEquals(10, ipPlanDetail.getTimeRemaining());
+        assertEquals(new BigDecimal("100.00"), ipPlanDetail.getMonthlyPayment());
+        assertEquals(new BigDecimal("500.00"), ipPlanDetail.getRemainingBalance());
+        assertEquals(IpPlanStatus.Active, ipPlanDetail.getStatus());
+        assertEquals("2024-12-31", ipPlanDetail.getExpirationDate());
+        assertEquals(new BigDecimal("0.00"), ipPlanDetail.getBalanceAtClosure());
+        assertEquals(new BigDecimal("5.00"), ipPlanDetail.getOneTimeTransactionFee());
+        assertEquals(new BigDecimal("50.00"), ipPlanDetail.getIpInterest());
+        assertEquals(new BigDecimal("500.00"), ipPlanDetail.getTransactionAmt());
+        assertEquals(new BigDecimal("10.00"), ipPlanDetail.getAnnualInterest());
+        assertEquals("2024-02-01", ipPlanDetail.getPaymentDueOn());
+        assertEquals("EVT123", ipPlanDetail.getEventId());
+        assertEquals("2024-01-01", ipPlanDetail.getIpPaymentOptionFeatureDt());
+        assertEquals("2024-01-01", ipPlanDetail.getStatementDataDt());
+        assertEquals(100, ipPlanDetail.getPostedTime());
+        assertEquals("TX123", ipPlanDetail.getTxLevelProcessingFeatureId());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        IpPlanDetail ipPlanDetail1 = new IpPlanDetail();
+        IpPlanDetail ipPlanDetail2 = new IpPlanDetail();
+        
+        // Set same values for both instances
+        ipPlanDetail1.setId("123");
+        ipPlanDetail1.setPlanName("Test Plan");
+        ipPlanDetail2.setId("123");
+        ipPlanDetail2.setPlanName("Test Plan");
+        
+        // Test equality
+        assertEquals(ipPlanDetail1, ipPlanDetail2); // They should be equal as the values are the same
+        assertEquals(ipPlanDetail1.hashCode(), ipPlanDetail2.hashCode()); // hashCode should be the same
+        
+        // Test equality with different values
+        ipPlanDetail2.setId("124");
+        assertNotEquals(ipPlanDetail1, ipPlanDetail2); // They should not be equal
+        assertNotEquals(ipPlanDetail1.hashCode(), ipPlanDetail2.hashCode()); // hashCode should not be the same
+    }
+
+    @Test
+    void testToString() {
+        IpPlanDetail ipPlanDetail = new IpPlanDetail();
+        ipPlanDetail.setId("123");
+        ipPlanDetail.setPlanName("Test Plan");
+        
+        // Assert the toString method produces the correct output
+        String expectedToString = "IpPlanDetail{id='123', planName='Test Plan', createdOn='null', closedOn='null', timeRemaining=null, monthlyPayment=null, remainingBalance=null, status=null, expirationDate='null', balanceAtClosure=null, oneTimeTransactionFee=null, ipInterest=0, transactionAmt=null, annualInterest=null, paymentDueOn='null', eventId='null', ipPaymentOptionFeatureDt='null', statementDataDt='null', postedTime=null, txLevelProcessingFeatureId='null'}";
+        assertEquals(expectedToString, ipPlanDetail.toString());
+    }
+
+    @Test
+    void testNullFields() {
+        IpPlanDetail ipPlanDetail = new IpPlanDetail();
+        
+        // Check behavior when fields are null
+        assertNull(ipPlanDetail.getId());
+        assertNull(ipPlanDetail.getPlanName());
+        assertNull(ipPlanDetail.getCreatedOn());
+        assertNull(ipPlanDetail.getClosedOn());
+        assertNull(ipPlanDetail.getTimeRemaining());
+        assertNull(ipPlanDetail.getMonthlyPayment());
+        assertNull(ipPlanDetail.getRemainingBalance());
+        assertNull(ipPlanDetail.getStatus());
+        assertNull(ipPlanDetail.getExpirationDate());
+        assertNull(ipPlanDetail.getBalanceAtClosure());
+        assertNull(ipPlanDetail.getOneTimeTransactionFee());
+        assertEquals(BigDecimal.ZERO, ipPlanDetail.getIpInterest()); // Default value
+        assertNull(ipPlanDetail.getTransactionAmt());
+        assertNull(ipPlanDetail.getAnnualInterest());
+        assertNull(ipPlanDetail.getPaymentDueOn());
+        assertNull(ipPlanDetail.getEventId());
+        assertNull(ipPlanDetail.getIpPaymentOptionFeatureDt());
+        assertNull(ipPlanDetail.getStatementDataDt());
+        assertNull(ipPlanDetail.getPostedTime());
+        assertNull(ipPlanDetail.getTxLevelProcessingFeatureId());
+    }
+}

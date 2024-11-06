@@ -1,0 +1,82 @@
+package com.td.mbna.msec.midtier.account.payload.getrewardssaml;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class GetRewardsSamlResponseTest {
+
+    private GetRewardsSamlResponse getRewardsSamlResponse;
+
+    @BeforeEach
+    public void setUp() {
+        getRewardsSamlResponse = new GetRewardsSamlResponse();
+    }
+
+    @Test
+    public void testGetResponsePayload() {
+        ResponsePayload responsePayload = getRewardsSamlResponse.getResponsePayload();
+        assertNotNull(responsePayload, "Response payload should not be null");
+    }
+
+    @Test
+    public void testSetResponsePayload() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        getRewardsSamlResponse.setResponsePayload(responsePayload);
+        assertEquals(responsePayload, getRewardsSamlResponse.getResponsePayload(), "Response payload should match the set value");
+    }
+
+    @Test
+    public void testToString() {
+        String expectedToString = getRewardsSamlResponse.getClass().getName() + '@' + Integer.toHexString(System.identityHashCode(getRewardsSamlResponse)) + "[status=<null>,errorMsgs=<null>,responsePayload=<null>]";
+        assertTrue(getRewardsSamlResponse.toString().contains(expectedToString), "toString output should match the expected format");
+    }
+
+    @Test
+    public void testHashCode() {
+        int expectedHashCode = getRewardsSamlResponse.hashCode();
+        assertEquals(expectedHashCode, getRewardsSamlResponse.hashCode(), "hashCode should be consistent");
+    }
+
+    @Test
+    public void testEquals_SameObject() {
+        assertTrue(getRewardsSamlResponse.equals(getRewardsSamlResponse), "Object should be equal to itself");
+    }
+
+    @Test
+    public void testEquals_DifferentObject() {
+        GetRewardsSamlResponse otherResponse = new GetRewardsSamlResponse();
+        assertTrue(getRewardsSamlResponse.equals(otherResponse), "Two different instances with the same values should be equal");
+    }
+
+    @Test
+    public void testEquals_Null() {
+        assertFalse(getRewardsSamlResponse.equals(null), "Object should not be equal to null");
+    }
+
+    @Test
+    public void testEquals_DifferentClass() {
+        assertFalse(getRewardsSamlResponse.equals(new Object()), "Object should not be equal to an instance of a different class");
+    }
+
+    @Test
+    public void testEquals_DifferentValues() {
+        GetRewardsSamlResponse otherResponse = new GetRewardsSamlResponse();
+        otherResponse.setResponsePayload(new ResponsePayload());  // setting different values for comparison
+        assertFalse(getRewardsSamlResponse.equals(otherResponse), "Objects with different values should not be equal");
+    }
+
+    @Test
+    public void testSetStatus() {
+        String status = "Active";
+        getRewardsSamlResponse.setStatus(status);
+        assertEquals(status, getRewardsSamlResponse.getStatus(), "Status should match the set value");
+    }
+
+    @Test
+    public void testSetErrorMessages() {
+        String errorMessages = "Some error occurred";
+        getRewardsSamlResponse.setErrorMessages(errorMessages);
+        assertEquals(errorMessages, getRewardsSamlResponse.getErrorMessages(), "Error messages should match the set value");
+    }
+}
