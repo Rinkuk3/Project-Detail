@@ -1,0 +1,40 @@
+package com.td.mbna.msec.midtier.account.payload.getaccountsnapshot;
+
+import com.td.mbna.msec.midtier.types.common.AcctSnapshotType;
+import com.td.mbna.msec.midtier.types.common.StmtActivityType;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ResponsePayloadTest {
+
+    @Test
+    void testGettersAndSetters() {
+        ResponsePayload responsePayload = new ResponsePayload();
+
+        // Test accountSnapshot
+        assertNull(responsePayload.getAccountSnapshot(), "AccountSnapshot should initially be null.");
+        AcctSnapshotType mockAcctSnapshot = new AcctSnapshotType();
+        responsePayload.setAccountSnapshot(mockAcctSnapshot);
+        assertSame(mockAcctSnapshot, responsePayload.getAccountSnapshot(), "AccountSnapshot should be set correctly.");
+
+        // Test statementActivities
+        assertNull(responsePayload.getStatementActivities(), "StatementActivities should initially be null.");
+        List<StmtActivityType> mockStmtActivities = new ArrayList<>();
+        StmtActivityType mockActivity = new StmtActivityType();
+        mockStmtActivities.add(mockActivity);
+        responsePayload.setStatementActivities(mockStmtActivities);
+        assertEquals(mockStmtActivities, responsePayload.getStatementActivities(), "StatementActivities should be set correctly.");
+        assertSame(mockActivity, responsePayload.getStatementActivities().get(0), "StatementActivities should contain the correct activity.");
+
+        // Test numActivitiesExceedsMax
+        assertNull(responsePayload.getNumActivitiesExceedsMax(), "NumActivitiesExceedsMax should initially be null.");
+        responsePayload.setNumActivitiesExceedsMax(true);
+        assertTrue(responsePayload.getNumActivitiesExceedsMax(), "NumActivitiesExceedsMax should be set to true.");
+        responsePayload.setNumActivitiesExceedsMax(false);
+        assertFalse(responsePayload.getNumActivitiesExceedsMax(), "NumActivitiesExceedsMax should be set to false.");
+    }
+}

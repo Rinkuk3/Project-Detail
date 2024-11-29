@@ -1,0 +1,110 @@
+package com.td.mbna.msec.midtier.auditlog.payload.response;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class SimpleBaseMsecResponseTest {
+
+    @Test
+    void testSetAndGetStatus() {
+        // Arrange
+        SimpleBaseMsecResponse response = new SimpleBaseMsecResponse();
+        String status = "success";
+
+        // Act
+        response.setStatus(status);
+
+        // Assert
+        assertEquals(status, response.getStatus());
+    }
+
+    @Test
+    void testSetAndGetErrorMsgs() {
+        // Arrange
+        SimpleBaseMsecResponse response = new SimpleBaseMsecResponse();
+        List<String> errorMsgs = new ArrayList<>();
+        errorMsgs.add("Error 1");
+
+        // Act
+        response.setErrorMsgs(errorMsgs);
+
+        // Assert
+        assertEquals(errorMsgs, response.getErrorMsgs());
+    }
+
+    @Test
+    void testSetAndGetResponsePayload() {
+        // Arrange
+        SimpleBaseMsecResponse response = new SimpleBaseMsecResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setBtAmt(1000);
+
+        // Act
+        response.setResponsePayload(responsePayload);
+
+        // Assert
+        assertEquals(responsePayload, response.getResponsePayload());
+    }
+
+    @Test
+    void testToString() {
+        // Arrange
+        SimpleBaseMsecResponse response = new SimpleBaseMsecResponse();
+        response.setStatus("success");
+        response.setErrorMsgs(new ArrayList<String>());
+        response.setResponsePayload(new ResponsePayload());
+
+        // Act
+        String result = response.toString();
+
+        // Assert
+        assertTrue(result.contains("status"));
+        assertTrue(result.contains("errorMsgs"));
+        assertTrue(result.contains("responsePayload"));
+    }
+
+    @Test
+    void testHashCode() {
+        // Arrange
+        SimpleBaseMsecResponse response = new SimpleBaseMsecResponse();
+        response.setStatus("success");
+        response.setErrorMsgs(new ArrayList<String>());
+        response.setResponsePayload(new ResponsePayload());
+
+        // Act
+        int result = response.hashCode();
+
+        // Assert
+        assertNotNull(result);
+    }
+
+    @Test
+    void testEquals() {
+        // Arrange
+        SimpleBaseMsecResponse response1 = new SimpleBaseMsecResponse();
+        SimpleBaseMsecResponse response2 = new SimpleBaseMsecResponse();
+        
+        response1.setStatus("success");
+        response2.setStatus("success");
+        
+        // Act & Assert
+        assertTrue(response1.equals(response2));
+    }
+
+    @Test
+    void testNotEquals() {
+        // Arrange
+        SimpleBaseMsecResponse response1 = new SimpleBaseMsecResponse();
+        SimpleBaseMsecResponse response2 = new SimpleBaseMsecResponse();
+        
+        response1.setStatus("success");
+        response2.setStatus("failure");
+
+        // Act & Assert
+        assertFalse(response1.equals(response2));
+    }
+}

@@ -1,0 +1,23 @@
+package com.td.mbna.msec.midtier.auditlog.payload.request;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class CreateAuditLogRequestTest {
+
+    @Test
+    void testGetAndSetRequestPayload() {
+        // Arrange
+        CreateAuditLogRequest createAuditLogRequest = new CreateAuditLogRequest();
+        RequestPayload payload = new RequestPayload();
+
+        // Act
+        createAuditLogRequest.setRequestPayload(payload);
+        RequestPayload result = createAuditLogRequest.getRequestPayload();
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(payload, result);
+    }
+}

@@ -1,0 +1,61 @@
+package com.td.mbna.msec.midtier.account.payload.getaccountsnapshot;
+
+import com.td.mbna.msec.midtier.types.common.CardHolderInfo;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class GetAccountSnapshotRequestTest {
+
+    @Test
+    void testGettersAndSetters() {
+        GetAccountSnapshotRequest request = new GetAccountSnapshotRequest();
+
+        // Test initial state of cardHolderInfos
+        assertNotNull(request.getCardHolderInfos());
+        assertTrue(request.getCardHolderInfos().isEmpty());
+
+        // Test setting and getting cardHolderInfos
+        List<CardHolderInfo> cardHolderInfos = new ArrayList<>();
+        CardHolderInfo cardHolderInfo1 = new CardHolderInfo();
+        CardHolderInfo cardHolderInfo2 = new CardHolderInfo();
+        cardHolderInfos.add(cardHolderInfo1);
+        cardHolderInfos.add(cardHolderInfo2);
+
+        request.setCardHolderInfos(cardHolderInfos);
+
+        List<CardHolderInfo> retrievedCardHolderInfos = request.getCardHolderInfos();
+        assertNotNull(retrievedCardHolderInfos);
+        assertEquals(2, retrievedCardHolderInfos.size());
+        assertSame(cardHolderInfo1, retrievedCardHolderInfos.get(0));
+        assertSame(cardHolderInfo2, retrievedCardHolderInfos.get(1));
+    }
+
+    @Test
+    void testSetNullCardHolderInfos() {
+        GetAccountSnapshotRequest request = new GetAccountSnapshotRequest();
+
+        // Set cardHolderInfos to null
+        request.setCardHolderInfos(null);
+
+        // Verify that getCardHolderInfos does not return null
+        assertNotNull(request.getCardHolderInfos());
+        assertTrue(request.getCardHolderInfos().isEmpty());
+    }
+
+    @Test
+    void testCardHolderInfosModification() {
+        GetAccountSnapshotRequest request = new GetAccountSnapshotRequest();
+
+        // Add a CardHolderInfo to the list retrieved from the getter
+        CardHolderInfo cardHolderInfo = new CardHolderInfo();
+        request.getCardHolderInfos().add(cardHolderInfo);
+
+        // Verify the list reflects the modification
+        assertEquals(1, request.getCardHolderInfos().size());
+        assertSame(cardHolderInfo, request.getCardHolderInfos().get(0));
+    }
+}

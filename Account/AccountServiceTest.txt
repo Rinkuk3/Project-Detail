@@ -1,0 +1,111 @@
+package com.td.mbna.msec.midtier.account;
+
+import com.td.mbna.msec.midtier.account.payload.deleteaccount.DeleteAccountRequest;
+import com.td.mbna.msec.midtier.account.payload.deleteaccount.DeleteAccountResponse;
+import com.td.mbna.msec.midtier.account.payload.getaccountsnapshot.GetAccountSnapshotRequest;
+import com.td.mbna.msec.midtier.account.payload.getaccountsnapshot.GetAccountSnapshotResponse;
+import com.td.mbna.msec.midtier.account.payload.getrewardsbalances.GetRewardsBalancesRequest;
+import com.td.mbna.msec.midtier.account.payload.getrewardsbalances.GetRewardsBalancesResponse;
+import com.td.mbna.msec.midtier.account.payload.getrewardssaml.GetRewardsSamlRequest;
+import com.td.mbna.msec.midtier.account.payload.getrewardssaml.GetRewardsSamlResponse;
+import com.td.mbna.msec.midtier.account.payload.retrieveipplanlist.RetrieveIpPlanListRequest;
+import com.td.mbna.msec.midtier.account.payload.retrieveipplanlist.RetrieveIpPlanListResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+class AccountServiceTest {
+
+    @InjectMocks
+    private AccountServiceImpl accountService;
+
+    @Mock
+    private GetRewardsBalancesOperation getRewardsBalancesOperation;
+
+    @Mock
+    private GetRewardsSamlOperation getRewardsSamlOperation;
+
+    @Mock
+    private DeleteAccountOperation deleteAccountOperation;
+
+    @Mock
+    private GetAccountSnapshotOperation getAccountSnapshotOperation;
+
+    @Mock
+    private RetrieveIpPlanListOperation retrieveIpPlanListOperation;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testDeleteAccount() {
+        DeleteAccountRequest request = new DeleteAccountRequest();
+        DeleteAccountResponse expectedResponse = new DeleteAccountResponse();
+
+        when(deleteAccountOperation.invokeService(request)).thenReturn(expectedResponse);
+
+        DeleteAccountResponse actualResponse = accountService.deleteAccount(request);
+
+        assertEquals(expectedResponse, actualResponse);
+        verify(deleteAccountOperation).invokeService(request);
+    }
+
+    @Test
+    void testGetAccountSnapshot() {
+        GetAccountSnapshotRequest request = new GetAccountSnapshotRequest();
+        GetAccountSnapshotResponse expectedResponse = new GetAccountSnapshotResponse();
+
+        when(getAccountSnapshotOperation.invokeService(request)).thenReturn(expectedResponse);
+
+        GetAccountSnapshotResponse actualResponse = accountService.getAccountSnapshot(request);
+
+        assertEquals(expectedResponse, actualResponse);
+        verify(getAccountSnapshotOperation).invokeService(request);
+    }
+
+    @Test
+    void testRetrieveIpPlanList() {
+        RetrieveIpPlanListRequest request = new RetrieveIpPlanListRequest();
+        RetrieveIpPlanListResponse expectedResponse = new RetrieveIpPlanListResponse();
+
+        when(retrieveIpPlanListOperation.invokeService(request)).thenReturn(expectedResponse);
+
+        RetrieveIpPlanListResponse actualResponse = accountService.retrieveIpPlanList(request);
+
+        assertEquals(expectedResponse, actualResponse);
+        verify(retrieveIpPlanListOperation).invokeService(request);
+    }
+
+    @Test
+    void testGetRewardsBalances() {
+        GetRewardsBalancesRequest request = new GetRewardsBalancesRequest();
+        GetRewardsBalancesResponse expectedResponse = new GetRewardsBalancesResponse();
+
+        when(getRewardsBalancesOperation.invokeService(request)).thenReturn(expectedResponse);
+
+        GetRewardsBalancesResponse actualResponse = accountService.getRewardsBalances(request);
+
+        assertEquals(expectedResponse, actualResponse);
+        verify(getRewardsBalancesOperation).invokeService(request);
+    }
+
+    @Test
+    void testGetRewardsSaml() {
+        GetRewardsSamlRequest request = new GetRewardsSamlRequest();
+        GetRewardsSamlResponse expectedResponse = new GetRewardsSamlResponse();
+
+        when(getRewardsSamlOperation.invokeService(request)).thenReturn(expectedResponse);
+
+        GetRewardsSamlResponse actualResponse = accountService.getRewardsSaml(request);
+
+        assertEquals(expectedResponse, actualResponse);
+        verify(getRewardsSamlOperation).invokeService(request);
+    }
+}

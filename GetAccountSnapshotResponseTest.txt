@@ -1,0 +1,32 @@
+package com.td.mbna.msec.midtier.account.payload.getaccountsnapshot;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class GetAccountSnapshotResponseTest {
+
+    @Test
+    void testGettersAndSetters() {
+        GetAccountSnapshotResponse response = new GetAccountSnapshotResponse();
+
+        // Verify initial state of responsePayload
+        assertNull(response.getResponsePayload());
+
+        // Create a ResponsePayload mock object and set it
+        ResponsePayload mockPayload = new ResponsePayload();
+        response.setResponsePayload(mockPayload);
+
+        // Verify the getter returns the correct value
+        assertSame(mockPayload, response.getResponsePayload());
+    }
+
+    @Test
+    void testSetNullResponsePayload() {
+        GetAccountSnapshotResponse response = new GetAccountSnapshotResponse();
+
+        // Set responsePayload to null and verify
+        response.setResponsePayload(null);
+        assertNull(response.getResponsePayload());
+    }
+}

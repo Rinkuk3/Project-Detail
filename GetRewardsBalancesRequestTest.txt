@@ -1,0 +1,18 @@
+package com.td.mbna.msec.midtier.account.payload.getrewardsbalances;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class GetRewardsBalancesRequestTest {
+
+    @Test
+    void testClassInitialization() {
+        // Create an instance of GetRewardsBalancesRequest
+        GetRewardsBalancesRequest request = new GetRewardsBalancesRequest();
+
+        // Assert that the instance is created and is of the correct type
+        assertNotNull(request, "The GetRewardsBalancesRequest instance should be created.");
+        assertTrue(request instanceof GetRewardsBalancesRequest, "The object should be an instance of GetRewardsBalancesRequest.");
+    }
+}

@@ -1,0 +1,108 @@
+package com.td.mbna.msec.midtier.auditlog.payload.request;
+
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestPayloadTest {
+
+    @Test
+    void testGetAndSetStatus() {
+        // Arrange
+        RequestPayload payload = new RequestPayload();
+        String status = "SUCCESS";
+
+        // Act
+        payload.setStatus(status);
+        String result = payload.getStatus();
+
+        // Assert
+        assertEquals(status, result);
+    }
+
+    @Test
+    void testGetAndSetBtAmt() {
+        // Arrange
+        RequestPayload payload = new RequestPayload();
+        BigDecimal btAmt = new BigDecimal("1000.00");
+
+        // Act
+        payload.setBtAmt(btAmt);
+        BigDecimal result = payload.getBtAmt();
+
+        // Assert
+        assertEquals(btAmt, result);
+    }
+
+    @Test
+    void testToString() {
+        // Arrange
+        RequestPayload payload = new RequestPayload();
+        payload.setStatus("SUCCESS");
+        payload.setBtAmt(new BigDecimal("1000.00"));
+
+        // Act
+        String result = payload.toString();
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.contains("SUCCESS"));
+        assertTrue(result.contains("1000.00"));
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        // Arrange
+        RequestPayload payload1 = new RequestPayload();
+        payload1.setStatus("SUCCESS");
+        payload1.setBtAmt(new BigDecimal("1000.00"));
+
+        RequestPayload payload2 = new RequestPayload();
+        payload2.setStatus("SUCCESS");
+        payload2.setBtAmt(new BigDecimal("1000.00"));
+
+        RequestPayload payload3 = new RequestPayload();
+        payload3.setStatus("FAILED");
+        payload3.setBtAmt(new BigDecimal("500.00"));
+
+        // Act & Assert
+        assertEquals(payload1, payload2);
+        assertNotEquals(payload1, payload3);
+        assertEquals(payload1.hashCode(), payload2.hashCode());
+        assertNotEquals(payload1.hashCode(), payload3.hashCode());
+    }
+
+    @Test
+    void testEqualsWithNullAndDifferentObject() {
+        // Arrange
+        RequestPayload payload = new RequestPayload();
+
+        // Act & Assert
+        assertNotEquals(payload, null);
+        assertNotEquals(payload, "SomeString");
+    }
+
+    @Test
+    void testEqualsWithSameInstance() {
+        // Arrange
+        RequestPayload payload = new RequestPayload();
+
+        // Act & Assert
+        assertEquals(payload, payload);
+    }
+
+    @Test
+    void testToStringHandlesNullValues() {
+        // Arrange
+        RequestPayload payload = new RequestPayload();
+
+        // Act
+        String result = payload.toString();
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.contains("<null>"));
+    }
+}

@@ -1,0 +1,148 @@
+package com.td.mbna.msec.midtier.auditlog;
+
+import com.td.mbna.msec.midtier.auditlog.payload.request.CreateAuditLogRequest;
+import com.td.mbna.msec.midtier.auditlog.payload.response.CreateAuditLogResponse;
+import com.td.mbna.msec.midtier.persistance.mybatis.DBMybatisService;
+import com.td.mbna.msec.midtier.util.ConfigUtil;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+
+import java.util.Date;
+
+import static org.mockito.Mockito.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class AuditLogServiceTest {
+
+    @InjectMocks
+    private AuditLogServiceImpl auditLogServiceImpl;
+
+    @Mock
+    private ConfigUtil configUtil;
+
+    @Mock
+    private DBMybatisService dbMybatisService;
+
+    @Mock
+    private MbnaLogger mbnaLogger;
+
+    @Mock
+    private CreateAuditLogRequest createAuditLogRequest;
+
+    @Mock
+    private CreateAuditLogRequest.RequestPayload requestPayload;
+
+    @Mock
+    private CreateAuditLogRequest.AuditInfo auditInfo;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testCreateAuditLogRequest_AuditInactive() {
+        // Arrange
+        when(configUtil.auditActive()).thenReturn(false);
+
+        // Act
+        CreateAuditLogResponse response = auditLogServiceImpl.createAuditLogRequest(createAuditLogRequest);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals("", response.getStatus());
+        verifyNoInteractions(dbMybatisService);  // Ensure no DB interaction occurred
+    }
+
+    @Test
+    void testCreateAuditLogRequest_AuditActive_StatusNull() {
+        // Arrange
+        when(configUtil.auditActive()).thenReturn(true);
+        when(createAuditLogRequest.getRequestPayload()).thenReturn(null);
+        when(createAuditLogRequest.getAuditInfo()).thenReturn(auditInfo);
+
+        // Act
+        CreateAuditLogResponse response = auditLogServiceImpl.createAuditLogRequest(createAuditLogRequest);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals("", response.getStatus());
+        verifyNoInteractions(dbMybatisService);  // No DB interaction should occur
+    }
+
+    @Test
+    void testCreateAuditLogRequest_AuditActive_StatusNotNull() {
+        // Arrange
+        when(configUtil.auditActive()).thenReturn(true);
+        when(createAuditLogRequest.getRequestPayload()).thenReturn(requestPayload);
+        when(requestPayload.getStatus()).thenReturn("success");
+        when(createAuditLogRequest.getAuditInfo()).thenReturn(auditInfo);
+
+        // Act
+        CreateAuditLogResponse response = auditLogServiceImpl.createAuditLogRequest(createAuditLogRequest);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals("success", response.getStatus());
+        verifyNoInteractions(dbMybatisService);  // No DB interaction should occur
+    }
+
+    @Test
+    void testCreateAuditLogRequest_AuditInfoNull() {
+        // Arrange
+        when(configUtil.auditActive()).thenReturn(true);
+        when(createAuditLogRequest.getRequestPayload()).thenReturn(requestPayload);
+        when(requestPayload.getStatus()).thenReturn("success");
+        when(createAuditLogRequest.getAuditInfo()).thenReturn(null);
+
+        // Act
+        CreateAuditLogResponse response = auditLogServiceImpl.createAuditLogRequest(createAuditLogRequest);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals("success", response.getStatus());
+        verify(mbnaLogger).info(anyString(), anyString());  // Check that logger is called
+        verifyNoInteractions(dbMybatisService);  // No DB interaction should occur
+    }
+
+    @Test
+    void testCreateAuditLogRequest_LogLastLoginTrue() {
+        // Arrange
+        when(configUtil.auditActive()).thenReturn(true);
+        when(createAuditLogRequest.getRequestPayload()).thenReturn(requestPayload);
+        when(requestPayload.getStatus()).thenReturn("success");
+        when(createAuditLogRequest.getAuditInfo()).thenReturn(auditInfo);
+        when(auditInfo.getLogLastLogin()).thenReturn(true);
+        when(createAuditLogRequest.getCustId()).thenReturn("cust123");
+
+        // Act
+        CreateAuditLogResponse response = auditLogServiceImpl.createAuditLogRequest(createAuditLogRequest);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals("success", response.getStatus());
+        verify(dbMybatisService).logLastLogin(eq("cust123"), any(Date()));  // Ensure logLastLogin is called
+    }
+
+    @Test
+    void testCreateAuditLogRequest_LogLastLoginFalse() {
+        // Arrange
+        when(configUtil.auditActive()).thenReturn(true);
+        when(createAuditLogRequest.getRequestPayload()).thenReturn(requestPayload);
+        when(requestPayload.getStatus()).thenReturn("success");
+        when(createAuditLogRequest.getAuditInfo()).thenReturn(auditInfo);
+        when(auditInfo.getLogLastLogin()).thenReturn(false);
+        when(auditInfo.getAuditStartTime()).thenReturn(1000L);
+
+        // Act
+        CreateAuditLogResponse response = auditLogServiceImpl.createAuditLogRequest(createAuditLogRequest);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals("success", response.getStatus());
+        verify(dbMybatisService, times(0)).logLastLogin(anyString(), any(Date()));  // Ensure logLastLogin is not called
+    }
+}

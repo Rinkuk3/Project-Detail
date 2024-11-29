@@ -1,0 +1,135 @@
+package com.td.mbna.msec.midtier.account;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springmodules.validation.valang.ValangValidator;
+
+import com.td.mbna.msec.midtier.account.payload.getaccountsnapshot.GetAccountSnapshotRequest;
+import com.td.mbna.msec.midtier.account.payload.getaccountsnapshot.GetAccountSnapshotResponse;
+import com.td.mbna.msec.midtier.account.payload.getaccountsnapshot.ResponsePayload;
+import com.td.mbna.msec.midtier.mbcca.MbnaCCA;
+import com.td.mbna.msec.midtier.types.common.CardHolderInfo;
+import com.td.mbna.msec.midtier.types.common.StmtActivityType;
+import com.td.mbna.msec.midtier.util.MidtierUtilHelper;
+
+class GetAccountSnapshotOperationTest {
+
+    @InjectMocks
+    private GetAccountSnapshotOperation getAccountSnapshotOperation;
+
+    @Mock
+    private ValangValidator getAccountSnapshotRequestValidator;
+
+    @Mock
+    private MbnaCCA mbnaCCA;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        getAccountSnapshotOperation.init();
+    }
+
+    @Test
+    void testInvokeService_Success() {
+        // Arrange
+        GetAccountSnapshotRequest request = new GetAccountSnapshotRequest();
+        List<CardHolderInfo> cardHolderInfos = new ArrayList<>();
+        CardHolderInfo cardHolderInfo = new CardHolderInfo();
+        cardHolderInfo.setCardNumber("1234");
+        cardHolderInfo.setCardHolderName("John Doe");
+        cardHolderInfos.add(cardHolderInfo);
+        request.setCardHolderInfos(cardHolderInfos);
+
+        GetAccountSnapshotResponse response = new GetAccountSnapshotResponse();
+        ResponsePayload payload = new ResponsePayload();
+        List<StmtActivityType> stmtActivities = new ArrayList<>();
+        StmtActivityType stmtActivity = new StmtActivityType();
+        stmtActivity.setAcctId("1234");
+        stmtActivities.add(stmtActivity);
+        payload.setStatementActivities(stmtActivities);
+        response.setResponsePayload(payload);
+
+        when(mbnaCCA.retrieveTransaction(any(GetAccountSnapshotRequest.class), anyString())).thenReturn(response);
+
+        // Act
+        GetAccountSnapshotResponse actualResponse = getAccountSnapshotOperation.invokeService(request, "mockToken");
+
+        // Assert
+        assertNotNull(actualResponse);
+        assertEquals("John Doe", actualResponse.getResponsePayload().getStatementActivities().get(0).getCardHolderName());
+        verify(mbnaCCA, times(1)).retrieveTransaction(any(GetAccountSnapshotRequest.class), anyString());
+    }
+
+    @Test
+    void testInvokeService_NoPayload() {
+        // Arrange
+        GetAccountSnapshotRequest request = new GetAccountSnapshotRequest();
+        GetAccountSnapshotResponse response = new GetAccountSnapshotResponse();
+        response.setResponsePayload(null);
+
+        when(mbnaCCA.retrieveTransaction(any(GetAccountSnapshotRequest.class), anyString())).thenReturn(response);
+
+        // Act
+        GetAccountSnapshotResponse actualResponse = getAccountSnapshotOperation.invokeService(request, "mockToken");
+
+        // Assert
+        assertNotNull(actualResponse);
+        assertNull(actualResponse.getResponsePayload());
+        verify(mbnaCCA, times(1)).retrieveTransaction(any(GetAccountSnapshotRequest.class), anyString());
+    }
+
+    @Test
+    void testInvokeService_Exception() {
+        // Arrange
+        GetAccountSnapshotRequest request = new GetAccountSnapshotRequest();
+        when(mbnaCCA.retrieveTransaction(any(GetAccountSnapshotRequest.class), anyString()))
+                .thenThrow(new RuntimeException("Mock Exception"));
+
+        // Act & Assert
+        Exception exception = assertThrows(RuntimeException.class,
+                () -> getAccountSnapshotOperation.invokeService(request, "mockToken"));
+        assertTrue(exception.getMessage().contains("Mock Exception"));
+        verify(mbnaCCA, times(1)).retrieveTransaction(any(GetAccountSnapshotRequest.class), anyString());
+    }
+
+    @Test
+    void testRequiresDisclosureConsent() {
+        assertFalse(getAccountSnapshotOperation.requiresDisclosureConsent());
+    }
+
+    @Test
+    void testGetConsentDisclosureFailedMsgCode() {
+        assertNull(getAccountSnapshotOperation.getConsentDisclosureFailedMsgCode());
+    }
+
+    @Test
+    void testGenerateAutoComment() {
+        assertFalse(getAccountSnapshotOperation.generateAutoComment());
+    }
+
+    @Test
+    void testCreateAutoComment() {
+        assertNull(getAccountSnapshotOperation.createAutoComment(null, null));
+    }
+
+    @Test
+    void testGetEmailInfoBean() {
+        assertNull(getAccountSnapshotOperation.getEmailInfoBean(null, null));
+    }
+
+    @Test
+    void testGetValidator() {
+        assertNotNull(getAccountSnapshotOperation.getValidator());
+    }
+}

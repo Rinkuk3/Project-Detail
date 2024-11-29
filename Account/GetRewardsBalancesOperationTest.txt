@@ -1,0 +1,96 @@
+package com.td.mbna.msec.midtier.account;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import com.td.mbna.msec.midtier.account.payload.getrewardsbalances.GetRewardsBalancesRequest;
+import com.td.mbna.msec.midtier.account.payload.getrewardsbalances.GetRewardsBalancesResponse;
+import com.td.mbna.msec.midtier.rewards.MbnaRewards;
+
+class GetRewardsBalancesOperationTest {
+
+    @InjectMocks
+    private GetRewardsBalancesOperation getRewardsBalancesOperation;
+
+    @Mock
+    private MbnaRewards mbnaRewards;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testInvokeService_Success() {
+        // Arrange
+        GetRewardsBalancesRequest request = new GetRewardsBalancesRequest();
+        GetRewardsBalancesResponse expectedResponse = new GetRewardsBalancesResponse();
+        when(mbnaRewards.getRewardsBalances(any(GetRewardsBalancesRequest.class), anyString()))
+                .thenReturn(expectedResponse);
+
+        // Act
+        GetRewardsBalancesResponse actualResponse = getRewardsBalancesOperation.invokeService(request, "mockToken");
+
+        // Assert
+        assertNotNull(actualResponse);
+        assertEquals(expectedResponse, actualResponse);
+        verify(mbnaRewards, times(1)).getRewardsBalances(any(GetRewardsBalancesRequest.class), anyString());
+    }
+
+    @Test
+    void testInvokeService_Exception() {
+        // Arrange
+        GetRewardsBalancesRequest request = new GetRewardsBalancesRequest();
+        when(mbnaRewards.getRewardsBalances(any(GetRewardsBalancesRequest.class), anyString()))
+                .thenThrow(new RuntimeException("Mock Exception"));
+
+        // Act
+        GetRewardsBalancesResponse actualResponse = getRewardsBalancesOperation.invokeService(request, "mockToken");
+
+        // Assert
+        assertNotNull(actualResponse);
+        verify(mbnaRewards, times(1)).getRewardsBalances(any(GetRewardsBalancesRequest.class), anyString());
+    }
+
+    @Test
+    void testRequiresDisclosureConsent() {
+        // Act & Assert
+        assertFalse(getRewardsBalancesOperation.requiresDisclosureConsent());
+    }
+
+    @Test
+    void testGetConsentDisclosureFailedMsgCode() {
+        // Act & Assert
+        assertNull(getRewardsBalancesOperation.getConsentDisclosureFailedMsgCode());
+    }
+
+    @Test
+    void testGenerateAutoComment() {
+        // Act & Assert
+        assertFalse(getRewardsBalancesOperation.generateAutoComment());
+    }
+
+    @Test
+    void testCreateAutoComment() {
+        // Act & Assert
+        assertNull(getRewardsBalancesOperation.createAutoComment(null, null));
+    }
+
+    @Test
+    void testGetEmailInfoBean() {
+        // Act & Assert
+        assertNull(getRewardsBalancesOperation.getEmailInfoBean(null, null));
+    }
+
+    @Test
+    void testGetValidator() {
+        // Act & Assert
+        assertNull(getRewardsBalancesOperation.getValidator());
+    }
+}

@@ -1,0 +1,61 @@
+package com.td.mbna.msec.midtier.account.payload.retrieveipplanlist;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class IpPlanStatusTest {
+
+    @Test
+    public void testEnumValues() {
+        // Verify all the enum constants are available
+        assertEquals(4, IpPlanStatus.values().length);
+        assertEquals("Active", IpPlanStatus.Active.name());
+        assertEquals("Inactive", IpPlanStatus.Inactive.name());
+        assertEquals("RecentlyClosed", IpPlanStatus.RecentlyClosed.name());
+        assertEquals("CloseIneligible", IpPlanStatus.CloseIneligible.name());
+    }
+
+    @Test
+    public void testEnumValueOf() {
+        // Test the valueOf method with valid values
+        assertEquals(IpPlanStatus.Active, IpPlanStatus.valueOf("Active"));
+        assertEquals(IpPlanStatus.Inactive, IpPlanStatus.valueOf("Inactive"));
+        assertEquals(IpPlanStatus.RecentlyClosed, IpPlanStatus.valueOf("RecentlyClosed"));
+        assertEquals(IpPlanStatus.CloseIneligible, IpPlanStatus.valueOf("CloseIneligible"));
+    }
+
+    @Test
+    public void testInvalidEnumValueOf() {
+        // Test the valueOf method with an invalid value
+        assertThrows(IllegalArgumentException.class, () -> {
+            IpPlanStatus.valueOf("NonExistentStatus");
+        });
+    }
+
+    @Test
+    public void testEnumOrdinal() {
+        // Verify the ordinal values of the enum constants
+        assertEquals(0, IpPlanStatus.Active.ordinal());
+        assertEquals(1, IpPlanStatus.Inactive.ordinal());
+        assertEquals(2, IpPlanStatus.RecentlyClosed.ordinal());
+        assertEquals(3, IpPlanStatus.CloseIneligible.ordinal());
+    }
+
+    @Test
+    public void testEnumComparison() {
+        // Verify comparison of enum constants using == and equals
+        assertTrue(IpPlanStatus.Active == IpPlanStatus.Active);
+        assertTrue(IpPlanStatus.Active.equals(IpPlanStatus.Active));
+        assertFalse(IpPlanStatus.Active == IpPlanStatus.Inactive);
+        assertFalse(IpPlanStatus.Active.equals(IpPlanStatus.Inactive));
+    }
+
+    @Test
+    public void testEnumToString() {
+        // Ensure that the toString method returns the correct name for each enum constant
+        assertEquals("Active", IpPlanStatus.Active.toString());
+        assertEquals("Inactive", IpPlanStatus.Inactive.toString());
+        assertEquals("RecentlyClosed", IpPlanStatus.RecentlyClosed.toString());
+        assertEquals("CloseIneligible", IpPlanStatus.CloseIneligible.toString());
+    }
+}

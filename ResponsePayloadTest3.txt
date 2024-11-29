@@ -1,0 +1,79 @@
+package com.td.mbna.msec.midtier.account.payload.retrieveipplanlist;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class ResponsePayloadTest {
+
+    private ResponsePayload responsePayload;
+
+    @BeforeEach
+    public void setUp() {
+        // Initialize the ResponsePayload object before each test
+        responsePayload = new ResponsePayload();
+    }
+
+    @Test
+    public void testConstructor_DefaultValues() {
+        // Verify that the constructor initializes the values correctly
+        assertEquals(BigDecimal.ZERO, responsePayload.getTotalRemainingBalance(), "Total remaining balance should be BigDecimal.ZERO");
+        assertNotNull(responsePayload.getActivePlans(), "Active plans should not be null");
+        assertTrue(responsePayload.getActivePlans().isEmpty(), "Active plans should be empty");
+        assertNotNull(responsePayload.getInactivePlans(), "Inactive plans should not be null");
+        assertTrue(responsePayload.getInactivePlans().isEmpty(), "Inactive plans should be empty");
+    }
+
+    @Test
+    public void testGettersAndSetters() {
+        // Verify that the getters and setters work as expected
+
+        // Test setting and getting totalRemainingBalance
+        BigDecimal totalBalance = new BigDecimal("100.50");
+        responsePayload.setTotalRemainingBalance(totalBalance);
+        assertEquals(totalBalance, responsePayload.getTotalRemainingBalance(), "Total remaining balance should match the value set");
+
+        // Test setting and getting activePlans
+        List<IpPlanDetail> activePlans = new ArrayList<>();
+        IpPlanDetail activePlan = new IpPlanDetail(); // Assuming IpPlanDetail has a default constructor
+        activePlans.add(activePlan);
+        responsePayload.setActivePlans(activePlans);
+        assertEquals(activePlans, responsePayload.getActivePlans(), "Active plans should match the list set");
+
+        // Test setting and getting inactivePlans
+        List<IpPlanDetail> inactivePlans = new ArrayList<>();
+        IpPlanDetail inactivePlan = new IpPlanDetail(); // Assuming IpPlanDetail has a default constructor
+        inactivePlans.add(inactivePlan);
+        responsePayload.setInactivePlans(inactivePlans);
+        assertEquals(inactivePlans, responsePayload.getInactivePlans(), "Inactive plans should match the list set");
+    }
+
+    @Test
+    public void testSetActivePlans() {
+        // Test the setter for active plans with a new list
+        List<IpPlanDetail> newActivePlans = new ArrayList<>();
+        responsePayload.setActivePlans(newActivePlans);
+        assertEquals(newActivePlans, responsePayload.getActivePlans(), "Active plans should be updated to the new list");
+    }
+
+    @Test
+    public void testSetInactivePlans() {
+        // Test the setter for inactive plans with a new list
+        List<IpPlanDetail> newInactivePlans = new ArrayList<>();
+        responsePayload.setInactivePlans(newInactivePlans);
+        assertEquals(newInactivePlans, responsePayload.getInactivePlans(), "Inactive plans should be updated to the new list");
+    }
+
+    @Test
+    public void testSetTotalRemainingBalance() {
+        // Test the setter for totalRemainingBalance with a new value
+        BigDecimal newTotalBalance = new BigDecimal("500.75");
+        responsePayload.setTotalRemainingBalance(newTotalBalance);
+        assertEquals(newTotalBalance, responsePayload.getTotalRemainingBalance(), "Total remaining balance should be updated to the new value");
+    }
+
+}

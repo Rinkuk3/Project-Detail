@@ -1,0 +1,75 @@
+package com.td.mbna.msec.midtier.account.payload.getrewardssaml;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class GetRewardsSamlResponseTest {
+
+    @Test
+    void testConstructor() {
+        // Instantiate GetRewardsSamlResponse
+        GetRewardsSamlResponse response = new GetRewardsSamlResponse();
+        
+        // Verify the responsePayload is initialized
+        assertNotNull(response.getResponsePayload(), "Response payload should be initialized.");
+    }
+
+    @Test
+    void testGettersAndSetters() {
+        GetRewardsSamlResponse response = new GetRewardsSamlResponse();
+        
+        // Test setter and getter for responsePayload
+        ResponsePayload payload = new ResponsePayload();
+        response.setResponsePayload(payload);
+        
+        assertEquals(payload, response.getResponsePayload(), "Getter and setter for responsePayload should work correctly.");
+    }
+
+    @Test
+    void testToString() {
+        GetRewardsSamlResponse response = new GetRewardsSamlResponse();
+        
+        // Set values to the response to verify toString
+        response.setStatus("success");
+        response.setErrorMessages("No error");
+        
+        // Verify that toString method works without exceptions
+        String result = response.toString();
+        assertNotNull(result, "toString should return a non-null string.");
+        assertTrue(result.contains("status"), "toString should include 'status'.");
+        assertTrue(result.contains("responsePayload"), "toString should include 'responsePayload'.");
+    }
+
+    @Test
+    void testHashCode() {
+        GetRewardsSamlResponse response1 = new GetRewardsSamlResponse();
+        response1.setStatus("success");
+        
+        GetRewardsSamlResponse response2 = new GetRewardsSamlResponse();
+        response2.setStatus("success");
+        
+        // Verify that two equal objects have the same hash code
+        assertEquals(response1.hashCode(), response2.hashCode(), "HashCode should be equal for identical objects.");
+    }
+
+    @Test
+    void testEquals() {
+        GetRewardsSamlResponse response1 = new GetRewardsSamlResponse();
+        response1.setStatus("success");
+        
+        GetRewardsSamlResponse response2 = new GetRewardsSamlResponse();
+        response2.setStatus("success");
+        
+        // Verify that two equal objects are considered equal
+        assertTrue(response1.equals(response2), "Equals method should return true for identical objects.");
+        
+        // Modify one object and verify they are no longer equal
+        response2.setStatus("failure");
+        assertFalse(response1.equals(response2), "Equals method should return false for different objects.");
+        
+        // Verify equality with self and null
+        assertTrue(response1.equals(response1), "Equals should return true for the same object.");
+        assertFalse(response1.equals(null), "Equals should return false for null comparison.");
+    }
+}

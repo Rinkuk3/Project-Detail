@@ -1,0 +1,131 @@
+package com.td.mbna.msec.midtier.account;
+
+import com.td.mbna.msec.midtier.account.payload.deleteaccount.DeleteAccountRequest;
+import com.td.mbna.msec.midtier.account.payload.deleteaccount.DeleteAccountResponse;
+import com.td.mbna.msec.midtier.enrollment.MbnaEnrollment;
+import com.td.mbna.msec.midtier.framework.MsecVlangValidator;
+import com.td.mbna.msec.midtier.mbcca.MbnaCCA;
+import com.td.mbna.msec.midtier.service.EmailInfo;
+import com.td.mbna.msec.midtier.types.common.BaseRequest;
+import com.td.mbna.msec.midtier.types.common.BaseResponse;
+import com.td.mbna.msec.midtier.types.common.DeliveryPreferenceType;
+import com.td.mbna.msec.midtier.util.services.AuditingService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springmodules.validation.valang.ValangValidator;
+
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class DeleteAccountOperationTest {
+
+    @InjectMocks
+    private DeleteAccountOperation deleteAccountOperation;
+
+    @Mock
+    private ValangValidator deleteAccountRequestValidator;
+
+    @Mock
+    private MbnaCCA mbnaCCA;
+
+    @Mock
+    private MbnaEnrollment mbnaEnrollment;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testInvokeService_PrimaryUserWithOnlinePreference() {
+        DeleteAccountRequest request = mock(DeleteAccountRequest.class);
+        DeleteAccountResponse expectedResponse = new DeleteAccountResponse();
+
+        // Mock request properties
+        when(request.getIsPrimaryUser()).thenReturn(true);
+        when(request.getAcctNum()).thenReturn("12345");
+        when(request.isMultiCard()).thenReturn(false);
+        when(request.getRequestPayload().getAcctDeliveryPreference()).thenReturn(DeliveryPreferenceType.ONLINE);
+        when(request.getRequestPayload().getConnectId()).thenReturn("connectId");
+
+        // Mock dependent calls
+        when(mbnaEnrollment.unEnroll("connectId", "12345", "token")).thenReturn(expectedResponse);
+
+        // Test method
+        DeleteAccountResponse actualResponse = deleteAccountOperation.invokeService(request, "token");
+
+        // Verify behavior
+        verify(mbnaCCA).updateElectronicBilling("12345", false, null, true, "token");
+        verify(mbnaEnrollment).unEnroll("connectId", "12345", "token");
+
+        assertEquals(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void testInvokeService_NonPrimaryUser() {
+        DeleteAccountRequest request = mock(DeleteAccountRequest.class);
+        DeleteAccountResponse expectedResponse = new DeleteAccountResponse();
+
+        // Mock request properties
+        when(request.getIsPrimaryUser()).thenReturn(false);
+        when(request.getAcctNum()).thenReturn("12345");
+        when(request.getRequestPayload().getConnectId()).thenReturn("connectId");
+
+        // Mock dependent calls
+        when(mbnaEnrollment.unEnroll("connectId", "12345", "token")).thenReturn(expectedResponse);
+
+        // Test method
+        DeleteAccountResponse actualResponse = deleteAccountOperation.invokeService(request, "token");
+
+        // Verify behavior
+        verify(mbnaCCA, never()).updateElectronicBilling(anyString(), anyBoolean(), any(), anyBoolean(), anyString());
+        verify(mbnaEnrollment).unEnroll("connectId", "12345", "token");
+
+        assertEquals(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void testRequiresDisclosureConsent() {
+        assertFalse(deleteAccountOperation.requiresDisclosureConsent());
+    }
+
+    @Test
+    void testGetConsentDisclosureFailedMsgCode() {
+        assertNull(deleteAccountOperation.getConsentDisclosureFailedMsgCode());
+    }
+
+    @Test
+    void testGenerateAutoComment() {
+        assertFalse(deleteAccountOperation.generateAutoComment());
+    }
+
+    @Test
+    void testCreateAutoComment() {
+        List<String> comments = deleteAccountOperation.createAutoComment(mock(BaseRequest.class), mock(BaseResponse.class));
+        assertNull(comments);
+    }
+
+    @Test
+    void testGetEmailInfoBean() {
+        EmailInfo emailInfo = deleteAccountOperation.getEmailInfoBean(mock(BaseRequest.class), mock(BaseResponse.class));
+        assertNull(emailInfo);
+    }
+
+    @Test
+    void testGetValidator() {
+        MsecVlangValidator validator = mock(MsecVlangValidator.class);
+        ValangValidator valangValidator = mock(ValangValidator.class);
+
+        deleteAccountOperation = new DeleteAccountOperation();
+        deleteAccountOperation.msecDeleteAccountRequestValidator = validator;
+
+        assertEquals(validator, deleteAccountOperation.getValidator());
+    }
+}
