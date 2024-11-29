@@ -1,76 +1,115 @@
-import com.td.mbna.msec.midtier.types.common.DeliveryPreferenceType;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
+import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
-class RequestPayloadTest {
+public class RequestPayloadTest {
 
-    private RequestPayload requestPayload;
+    @Test
+    public void testGettersAndSetters() {
+        // Arrange
+        RequestPayload payload = new RequestPayload();
+        BigDecimal lastPaymentAmount = BigDecimal.valueOf(100.50);
 
-    @BeforeEach
-    void setUp() {
-        requestPayload = new RequestPayload();
+        // Act
+        payload.setConnectionId("123456");
+        payload.setCardNumber("4111111111111111");
+        payload.setCardholderName("John Doe");
+        payload.setCvc("123");
+        payload.setCardExpiryDt("12/24");
+        payload.setMotherMaidenName("Jane Smith");
+        payload.setDateOfBirth("1990-01-01");
+        payload.setTelephoneNo("1234567890");
+        payload.setLastPaymentAmount(lastPaymentAmount);
+
+        // Assert
+        assertThat(payload.getConnectionId()).isEqualTo("123456");
+        assertThat(payload.getCardNumber()).isEqualTo("4111111111111111");
+        assertThat(payload.getCardholderName()).isEqualTo("John Doe");
+        assertThat(payload.getCvc()).isEqualTo("123");
+        assertThat(payload.getCardExpiryDt()).isEqualTo("12/24");
+        assertThat(payload.getMotherMaidenName()).isEqualTo("Jane Smith");
+        assertThat(payload.getDateOfBirth()).isEqualTo("1990-01-01");
+        assertThat(payload.getTelephoneNo()).isEqualTo("1234567890");
+        assertThat(payload.getLastPaymentAmount()).isEqualTo(lastPaymentAmount);
     }
 
     @Test
-    void testSetAndGetConnectId() {
-        // Test setting and getting 'connectId'
-        String connectId = "CONNECT123";
-        requestPayload.setConnectId(connectId);
-        assertEquals(connectId, requestPayload.getConnectId());
+    public void testToString() {
+        // Arrange
+        RequestPayload payload = new RequestPayload();
+        payload.setConnectionId("123456");
+        payload.setCardNumber("4111111111111111");
+        payload.setCardholderName("John Doe");
+        payload.setCvc("123");
+        payload.setCardExpiryDt("12/24");
+        payload.setMotherMaidenName("Jane Smith");
+        payload.setDateOfBirth("1990-01-01");
+        payload.setTelephoneNo("1234567890");
+        payload.setLastPaymentAmount(BigDecimal.valueOf(100.50));
+
+        // Act
+        String result = payload.toString();
+
+        // Assert
+        assertThat(result).contains("connectionId=123456", "cardNumber=4111111111111111", "cardholderName=John Doe",
+                "cvc=123", "cardExpiryDt=12/24", "motherMaidenName=Jane Smith", "dateOfBirth=1990-01-01",
+                "telephoneNo=1234567890", "lastPaymentAmount=100.50");
     }
 
     @Test
-    void testSetAndGetAcctDeliveryPreference() {
-        // Test setting and getting 'acctDeliveryPreference'
-        DeliveryPreferenceType preference = DeliveryPreferenceType.EMAIL;  // Assuming EMAIL is a valid value in the enum
-        requestPayload.setAcctDeliveryPreference(preference);
-        assertEquals(preference, requestPayload.getAcctDeliveryPreference());
+    public void testEqualsAndHashCode() {
+        // Arrange
+        BigDecimal lastPaymentAmount = BigDecimal.valueOf(100.50);
+
+        RequestPayload payload1 = new RequestPayload();
+        payload1.setConnectionId("123456");
+        payload1.setCardNumber("4111111111111111");
+        payload1.setCardholderName("John Doe");
+        payload1.setCvc("123");
+        payload1.setCardExpiryDt("12/24");
+        payload1.setMotherMaidenName("Jane Smith");
+        payload1.setDateOfBirth("1990-01-01");
+        payload1.setTelephoneNo("1234567890");
+        payload1.setLastPaymentAmount(lastPaymentAmount);
+
+        RequestPayload payload2 = new RequestPayload();
+        payload2.setConnectionId("123456");
+        payload2.setCardNumber("4111111111111111");
+        payload2.setCardholderName("John Doe");
+        payload2.setCvc("123");
+        payload2.setCardExpiryDt("12/24");
+        payload2.setMotherMaidenName("Jane Smith");
+        payload2.setDateOfBirth("1990-01-01");
+        payload2.setTelephoneNo("1234567890");
+        payload2.setLastPaymentAmount(lastPaymentAmount);
+
+        RequestPayload payload3 = new RequestPayload();
+        payload3.setConnectionId("789012");
+
+        // Act & Assert
+        assertThat(payload1).isEqualTo(payload2); // Same values
+        assertThat(payload1.hashCode()).isEqualTo(payload2.hashCode()); // Same hash code
+        assertThat(payload1).isNotEqualTo(payload3); // Different values
+        assertThat(payload1).isNotEqualTo(null); // Not equal to null
+        assertThat(payload1).isNotEqualTo(new Object()); // Not equal to different type
     }
 
     @Test
-    void testSetAndGetAdditionalProperties() {
-        // Test setting and getting values in 'additionalProperties'
-        String key1 = "key1";
-        String value1 = "value1";
-        requestPayload.setAdditionalProperty(key1, value1);
-        
-        Map<String, Object> additionalProperties = requestPayload.getAdditionalProperties();
-        assertTrue(additionalProperties.containsKey(key1));
-        assertEquals(value1, additionalProperties.get(key1));
+    public void testDefaultConstructor() {
+        // Act
+        RequestPayload payload = new RequestPayload();
 
-        // Test adding another property
-        String key2 = "key2";
-        Integer value2 = 100;
-        requestPayload.setAdditionalProperty(key2, value2);
-        
-        additionalProperties = requestPayload.getAdditionalProperties();
-        assertTrue(additionalProperties.containsKey(key2));
-        assertEquals(value2, additionalProperties.get(key2));
-    }
-
-    @Test
-    void testSetAndGetAdditionalPropertiesWithNullValues() {
-        // Test setting and getting null value in 'additionalProperties'
-        String key = "key3";
-        requestPayload.setAdditionalProperty(key, null);
-        
-        Map<String, Object> additionalProperties = requestPayload.getAdditionalProperties();
-        assertTrue(additionalProperties.containsKey(key));
-        assertNull(additionalProperties.get(key));
-    }
-
-    @Test
-    void testToString() {
-        // Test the 'toString' method to check the string representation of the object
-        requestPayload.setConnectId("CONNECT123");
-        requestPayload.setAcctDeliveryPreference(DeliveryPreferenceType.PAPER);  // Assuming PAPER is a valid enum value
-        requestPayload.setAdditionalProperty("key1", "value1");
-
-        String expectedString = "RequestPayload{connectId='CONNECT123', acctDeliveryPreference=PAPER, additionalProperties={key1=value1}}";
-        assertEquals(expectedString, requestPayload.toString());
+        // Assert
+        assertThat(payload.getConnectionId()).isNull();
+        assertThat(payload.getCardNumber()).isNull();
+        assertThat(payload.getCardholderName()).isNull();
+        assertThat(payload.getCvc()).isNull();
+        assertThat(payload.getCardExpiryDt()).isNull();
+        assertThat(payload.getMotherMaidenName()).isNull();
+        assertThat(payload.getDateOfBirth()).isNull();
+        assertThat(payload.getTelephoneNo()).isNull();
+        assertThat(payload.getLastPaymentAmount()).isNull();
     }
 }
