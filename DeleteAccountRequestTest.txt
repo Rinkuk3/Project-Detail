@@ -1,0 +1,118 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class DeleteAccountRequestTest {
+
+    private DeleteAccountRequest deleteAccountRequest;
+    private RequestPayload requestPayload;
+
+    @BeforeEach
+    void setUp() {
+        deleteAccountRequest = new DeleteAccountRequest();
+        requestPayload = new RequestPayload(); // Assuming this is a valid RequestPayload object.
+    }
+
+    @Test
+    void testSetAndGetRequestPayload() {
+        // Test the setter and getter for requestPayload
+        deleteAccountRequest.setRequestPayload(requestPayload);
+        assertEquals(requestPayload, deleteAccountRequest.getRequestPayload());
+    }
+
+    @Test
+    void testSetAndGetAdditionalProperties() {
+        // Test setting and getting additional properties
+        String key = "key1";
+        String value = "value1";
+        deleteAccountRequest.setAdditionalProperty(key, value);
+
+        assertTrue(deleteAccountRequest.getAdditionalProperties().containsKey(key));
+        assertEquals(value, deleteAccountRequest.getAdditionalProperties().get(key));
+    }
+
+    @Test
+    void testSetAndGetAdditionalPropertiesWithNullValues() {
+        // Test setting a null value for additional properties
+        String key = "key2";
+        deleteAccountRequest.setAdditionalProperty(key, null);
+
+        assertTrue(deleteAccountRequest.getAdditionalProperties().containsKey(key));
+        assertNull(deleteAccountRequest.getAdditionalProperties().get(key));
+    }
+
+    @Test
+    void testToString() {
+        // Test the toString method
+        deleteAccountRequest.setRequestPayload(requestPayload);
+        deleteAccountRequest.setAdditionalProperty("key1", "value1");
+
+        String expectedString = "com.td.mbna.msec.midtier.account.payload.deleteaccount.DeleteAccountRequest@" 
+            + Integer.toHexString(System.identityHashCode(deleteAccountRequest)) 
+            + "[sessionInfo=<null>,custId=<null>,aliasCustId=<null>,acctNum=<null>,acctType=<null>,languagePref=<null>,auditInfo=<null>,isPrimaryUser=<null>,reserved1=<null>,custInterface=<null>,requestPayload=" 
+            + requestPayload + "]";
+        
+        assertEquals(expectedString, deleteAccountRequest.toString());
+    }
+
+    @Test
+    void testEquals() {
+        // Test equality method
+        deleteAccountRequest.setRequestPayload(requestPayload);
+        deleteAccountRequest.setAdditionalProperty("key1", "value1");
+
+        DeleteAccountRequest anotherRequest = new DeleteAccountRequest();
+        anotherRequest.setRequestPayload(requestPayload);
+        anotherRequest.setAdditionalProperty("key1", "value1");
+
+        assertEquals(deleteAccountRequest, anotherRequest);
+    }
+
+    @Test
+    void testEqualsDifferentObjects() {
+        // Test equality with different objects
+        deleteAccountRequest.setRequestPayload(requestPayload);
+
+        DeleteAccountRequest anotherRequest = new DeleteAccountRequest();
+        anotherRequest.setRequestPayload(new RequestPayload()); // different RequestPayload
+
+        assertNotEquals(deleteAccountRequest, anotherRequest);
+    }
+
+    @Test
+    void testHashCode() {
+        // Test hashCode method
+        deleteAccountRequest.setRequestPayload(requestPayload);
+        deleteAccountRequest.setAdditionalProperty("key1", "value1");
+
+        DeleteAccountRequest anotherRequest = new DeleteAccountRequest();
+        anotherRequest.setRequestPayload(requestPayload);
+        anotherRequest.setAdditionalProperty("key1", "value1");
+
+        assertEquals(deleteAccountRequest.hashCode(), anotherRequest.hashCode());
+    }
+
+    @Test
+    void testHashCodeDifferentObjects() {
+        // Test hashCode for different objects
+        deleteAccountRequest.setRequestPayload(requestPayload);
+
+        DeleteAccountRequest anotherRequest = new DeleteAccountRequest();
+        anotherRequest.setRequestPayload(new RequestPayload()); // different RequestPayload
+
+        assertNotEquals(deleteAccountRequest.hashCode(), anotherRequest.hashCode());
+    }
+
+    @Test
+    void testNullEquality() {
+        // Test equality with null
+        assertNotEquals(deleteAccountRequest, null);
+    }
+
+    @Test
+    void testSameObjectEquality() {
+        // Test equality with the same object
+        assertEquals(deleteAccountRequest, deleteAccountRequest);
+    }
+}

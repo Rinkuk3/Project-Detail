@@ -1,0 +1,50 @@
+import com.td.mbna.msec.midtier.account.payload.addaccount.RequestPayload;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class VerifyCardRequestTest {
+
+    private VerifyCardRequest verifyCardRequest;
+    private RequestPayload mockRequestPayload;
+
+    @BeforeEach
+    void setUp() {
+        verifyCardRequest = new VerifyCardRequest();
+        mockRequestPayload = mock(RequestPayload.class);
+    }
+
+    @Test
+    void testDefaultValues() {
+        assertNull(verifyCardRequest.getRequestPayload());
+    }
+
+    @Test
+    void testSetterAndGetterForRequestPayload() {
+        // Test setting a valid RequestPayload
+        verifyCardRequest.setRequestPayload(mockRequestPayload);
+        assertEquals(mockRequestPayload, verifyCardRequest.getRequestPayload());
+
+        // Test setting null value for RequestPayload
+        verifyCardRequest.setRequestPayload(null);
+        assertNull(verifyCardRequest.getRequestPayload());
+    }
+
+    @Test
+    void testToString() {
+        verifyCardRequest.setRequestPayload(mockRequestPayload);
+        
+        // Assuming RequestPayload's toString() returns a string representation of the object
+        String expectedString = "VerifyCardRequest(super=BaseRequest(), requestPayload=" + mockRequestPayload.toString() + ")";
+        
+        assertEquals(expectedString, verifyCardRequest.toString());
+    }
+
+    @Test
+    void testSerialVersionUID() {
+        // Ensure that the serialVersionUID is set correctly
+        assertEquals(-8017989369062932504L, VerifyCardRequest.serialVersionUID);
+    }
+}

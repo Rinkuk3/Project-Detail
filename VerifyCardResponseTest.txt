@@ -1,0 +1,64 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class VerifyCardResponseTest {
+
+    private VerifyCardResponse verifyCardResponse;
+
+    @BeforeEach
+    void setUp() {
+        verifyCardResponse = new VerifyCardResponse();
+    }
+
+    @Test
+    void testDefaultValues() {
+        assertNull(verifyCardResponse.getSuccess());
+        assertNull(verifyCardResponse.getErrorCode());
+        assertNull(verifyCardResponse.getLpa());
+    }
+
+    @Test
+    void testSetterAndGetterForSuccess() {
+        verifyCardResponse.setSuccess(true);
+        assertTrue(verifyCardResponse.getSuccess());
+
+        verifyCardResponse.setSuccess(false);
+        assertFalse(verifyCardResponse.getSuccess());
+
+        verifyCardResponse.setSuccess(null);
+        assertNull(verifyCardResponse.getSuccess());
+    }
+
+    @Test
+    void testSetterAndGetterForErrorCode() {
+        verifyCardResponse.setErrorCode("ERROR_001");
+        assertEquals("ERROR_001", verifyCardResponse.getErrorCode());
+
+        verifyCardResponse.setErrorCode(null);
+        assertNull(verifyCardResponse.getErrorCode());
+    }
+
+    @Test
+    void testSetterAndGetterForLpa() {
+        verifyCardResponse.setLpa(true);
+        assertTrue(verifyCardResponse.getLpa());
+
+        verifyCardResponse.setLpa(false);
+        assertFalse(verifyCardResponse.getLpa());
+
+        verifyCardResponse.setLpa(null);
+        assertNull(verifyCardResponse.getLpa());
+    }
+
+    @Test
+    void testToString() {
+        verifyCardResponse.setSuccess(true);
+        verifyCardResponse.setErrorCode("NO_ERROR");
+        verifyCardResponse.setLpa(true);
+
+        String expectedString = "VerifyCardResponse(super=BaseResponse(), success=true, errorCode=NO_ERROR, lpa=true)";
+        assertEquals(expectedString, verifyCardResponse.toString());
+    }
+}

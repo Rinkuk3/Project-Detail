@@ -1,0 +1,76 @@
+import com.td.mbna.msec.midtier.types.common.DeliveryPreferenceType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestPayloadTest {
+
+    private RequestPayload requestPayload;
+
+    @BeforeEach
+    void setUp() {
+        requestPayload = new RequestPayload();
+    }
+
+    @Test
+    void testSetAndGetConnectId() {
+        // Test setting and getting 'connectId'
+        String connectId = "CONNECT123";
+        requestPayload.setConnectId(connectId);
+        assertEquals(connectId, requestPayload.getConnectId());
+    }
+
+    @Test
+    void testSetAndGetAcctDeliveryPreference() {
+        // Test setting and getting 'acctDeliveryPreference'
+        DeliveryPreferenceType preference = DeliveryPreferenceType.EMAIL;  // Assuming EMAIL is a valid value in the enum
+        requestPayload.setAcctDeliveryPreference(preference);
+        assertEquals(preference, requestPayload.getAcctDeliveryPreference());
+    }
+
+    @Test
+    void testSetAndGetAdditionalProperties() {
+        // Test setting and getting values in 'additionalProperties'
+        String key1 = "key1";
+        String value1 = "value1";
+        requestPayload.setAdditionalProperty(key1, value1);
+        
+        Map<String, Object> additionalProperties = requestPayload.getAdditionalProperties();
+        assertTrue(additionalProperties.containsKey(key1));
+        assertEquals(value1, additionalProperties.get(key1));
+
+        // Test adding another property
+        String key2 = "key2";
+        Integer value2 = 100;
+        requestPayload.setAdditionalProperty(key2, value2);
+        
+        additionalProperties = requestPayload.getAdditionalProperties();
+        assertTrue(additionalProperties.containsKey(key2));
+        assertEquals(value2, additionalProperties.get(key2));
+    }
+
+    @Test
+    void testSetAndGetAdditionalPropertiesWithNullValues() {
+        // Test setting and getting null value in 'additionalProperties'
+        String key = "key3";
+        requestPayload.setAdditionalProperty(key, null);
+        
+        Map<String, Object> additionalProperties = requestPayload.getAdditionalProperties();
+        assertTrue(additionalProperties.containsKey(key));
+        assertNull(additionalProperties.get(key));
+    }
+
+    @Test
+    void testToString() {
+        // Test the 'toString' method to check the string representation of the object
+        requestPayload.setConnectId("CONNECT123");
+        requestPayload.setAcctDeliveryPreference(DeliveryPreferenceType.PAPER);  // Assuming PAPER is a valid enum value
+        requestPayload.setAdditionalProperty("key1", "value1");
+
+        String expectedString = "RequestPayload{connectId='CONNECT123', acctDeliveryPreference=PAPER, additionalProperties={key1=value1}}";
+        assertEquals(expectedString, requestPayload.toString());
+    }
+}
