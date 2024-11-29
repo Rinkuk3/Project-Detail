@@ -1,7 +1,0 @@
-com\td\mbna\msec\midtier\auditlog\AuditLogService.class
-com\td\mbna\msec\midtier\auditlog\payload\response\SimpleBaseMsecResponse.class
-com\td\mbna\msec\midtier\auditlog\payload\request\CreateAuditLogRequest.class
-com\td\mbna\msec\midtier\auditlog\payload\response\BaseMsecResponse.class
-com\td\mbna\msec\midtier\auditlog\payload\response\ResponsePayload.class
-com\td\mbna\msec\midtier\auditlog\payload\response\CreateAuditLogResponse.class
-com\td\mbna\msec\midtier\auditlog\payload\request\RequestPayload.class
