@@ -1,0 +1,87 @@
+package com.td.mbna.msec.midtier.autopay.payload.updatepad;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class UpdatePadRequestTest {
+
+    private UpdatePadRequest updatePadRequest;
+    private RequestPayload requestPayload;
+
+    @BeforeEach
+    void setUp() {
+        // Initialize the UpdatePadRequest and RequestPayload objects before each test
+        updatePadRequest = new UpdatePadRequest();
+        requestPayload = new RequestPayload();
+        requestPayload.setArrangementId("arrangement123");
+    }
+
+    @Test
+    void testSetAndGetRequestPayload() {
+        // Act
+        updatePadRequest.setRequestPayload(requestPayload);
+        
+        // Assert
+        assertEquals(requestPayload, updatePadRequest.getRequestPayload());
+    }
+
+    @Test
+    void testToString() {
+        // Arrange
+        updatePadRequest.setRequestPayload(requestPayload);
+        String expectedString = "UpdatePadRequest@" + Integer.toHexString(System.identityHashCode(updatePadRequest)) + 
+            "[sessionInfo=<null>,custId=<null>,aliasCustId=<null>,acctNum=<null>,acctType=<null>,languagePref=<null>,auditInfo=<null>,isPrimaryUser=<null>,reserved1=<null>,custInterface=<null>,requestPayload=" + requestPayload + "]";
+        
+        // Act
+        String actualString = updatePadRequest.toString();
+        
+        // Assert
+        assertTrue(actualString.contains("UpdatePadRequest"));
+        assertTrue(actualString.contains("requestPayload=" + requestPayload));
+    }
+
+    @Test
+    void testHashCode() {
+        // Arrange
+        updatePadRequest.setRequestPayload(requestPayload);
+        
+        // Act
+        int hashCode = updatePadRequest.hashCode();
+        
+        // Assert
+        assertNotNull(hashCode);
+    }
+
+    @Test
+    void testEquals() {
+        // Arrange
+        UpdatePadRequest anotherUpdatePadRequest = new UpdatePadRequest();
+        anotherUpdatePadRequest.setRequestPayload(requestPayload);
+        
+        // Act
+        boolean areEqual = updatePadRequest.equals(anotherUpdatePadRequest);
+        
+        // Assert
+        assertTrue(areEqual);
+    }
+
+    @Test
+    void testEqualsWithDifferentObject() {
+        // Act
+        boolean areEqual = updatePadRequest.equals(new Object());
+        
+        // Assert
+        assertFalse(areEqual);
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        // Act
+        boolean areEqual = updatePadRequest.equals(null);
+        
+        // Assert
+        assertFalse(areEqual);
+    }
+}

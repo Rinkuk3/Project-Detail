@@ -1,0 +1,28 @@
+package com.td.mbna.msec.midtier.auditlog.payload.request;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+
+class CreateAuditLogRequestTest {
+
+    @Test
+    void testGetterAndSetter() {
+        // Create an instance of CreateAuditLogRequest
+        CreateAuditLogRequest createAuditLogRequest = new CreateAuditLogRequest();
+        
+        // Create an instance of RequestPayload (you can mock or create a simple implementation)
+        RequestPayload requestPayload = new RequestPayload();
+        
+        // Define a test value for the RequestPayload (you can set some properties if needed)
+        requestPayload.setSomeProperty("Test Value"); // Assume `setSomeProperty` exists in `RequestPayload`
+
+        // Set the requestPayload using the setter method
+        createAuditLogRequest.setRequestPayload(requestPayload);
+
+        // Get the requestPayload using the getter method
+        RequestPayload actualRequestPayload = createAuditLogRequest.getRequestPayload();
+
+        // Assert that the expected value matches the actual value
+        assertEquals(requestPayload, actualRequestPayload, "The requestPayload should be correctly set and retrieved.");
+    }
+}

@@ -1,0 +1,58 @@
+package com.td.mbna.msec.midtier.autopay.payload.retrievepad;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RetrievePadResponseTest {
+
+    @Test
+    void testRetrievePadResponseInstantiation() {
+        // Arrange & Act
+        RetrievePadResponse retrievePadResponse = new RetrievePadResponse();
+        
+        // Assert that the object is instantiated properly
+        assertNotNull(retrievePadResponse);
+    }
+
+    @Test
+    void testGetResponsePayload() {
+        // Arrange
+        RetrievePadResponse retrievePadResponse = new RetrievePadResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setBankAccount("12345");
+        
+        // Act
+        retrievePadResponse.setResponsePayload(responsePayload);
+        
+        // Assert
+        assertEquals(responsePayload, retrievePadResponse.getResponsePayload());
+    }
+
+    @Test
+    void testSetResponsePayload() {
+        // Arrange
+        RetrievePadResponse retrievePadResponse = new RetrievePadResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setBankAccount("12345");
+        
+        // Act
+        retrievePadResponse.setResponsePayload(responsePayload);
+        
+        // Assert
+        assertNotNull(retrievePadResponse.getResponsePayload());
+        assertEquals("12345", retrievePadResponse.getResponsePayload().getBankAccount());
+    }
+
+    @Test
+    void testSetNullResponsePayload() {
+        // Arrange
+        RetrievePadResponse retrievePadResponse = new RetrievePadResponse();
+        
+        // Act
+        retrievePadResponse.setResponsePayload(null);
+        
+        // Assert
+        assertNull(retrievePadResponse.getResponsePayload());
+    }
+}

@@ -1,0 +1,26 @@
+package com.td.mbna.msec.midtier.autopay.payload.deletepad;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
+class RequestPayloadTest {
+
+    @Test
+    void testGetterAndSetter() {
+        // Create an instance of RequestPayload
+        RequestPayload requestPayload = new RequestPayload();
+        
+        // Define a test arrangementId value
+        String expectedArrangementId = "123456";
+
+        // Set the arrangementId using the setter method
+        requestPayload.setArrangementId(expectedArrangementId);
+
+        // Get the arrangementId using the getter method
+        String actualArrangementId = requestPayload.getArrangementId();
+
+        // Assert that the expected value matches the actual value
+        assertEquals(expectedArrangementId, actualArrangementId, "The arrangementId should be correctly set and retrieved.");
+    }
+}

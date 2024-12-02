@@ -1,0 +1,67 @@
+package com.td.mbna.msec.midtier.autopay.payload.validatebankaccount;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ValidateBankAccountResponseTest {
+
+    private ValidateBankAccountResponse validateBankAccountResponse;
+    private ResponsePayload responsePayload;
+
+    @BeforeEach
+    void setUp() {
+        // Initialize the ValidateBankAccountResponse object and ResponsePayload before each test
+        validateBankAccountResponse = new ValidateBankAccountResponse();
+        responsePayload = new ResponsePayload();
+        responsePayload.setValidAccount(true);  // Set the response payload with sample data
+    }
+
+    @Test
+    void testConstructor() {
+        // Test if the constructor initializes the responsePayload correctly
+        assertNotNull(validateBankAccountResponse.getResponsePayload(), "ResponsePayload should be initialized");
+    }
+
+    @Test
+    void testSetAndGetResponsePayload() {
+        // Test getter and setter for responsePayload
+        validateBankAccountResponse.setResponsePayload(responsePayload);
+        assertEquals(responsePayload, validateBankAccountResponse.getResponsePayload(), "The responsePayload should match the one set");
+    }
+
+    @Test
+    void testSerialization() {
+        // Test if serialization works correctly (optional, depends on project requirements)
+        assertDoesNotThrow(() -> {
+            // Serialize the object and then deserialize it
+            byte[] serializedBytes = SerializationUtils.serialize(validateBankAccountResponse);
+            ValidateBankAccountResponse deserializedObject = SerializationUtils.deserialize(serializedBytes);
+            assertNotNull(deserializedObject.getResponsePayload(), "Deserialized object should not have null responsePayload");
+        }, "Serialization and deserialization should work without exception");
+    }
+
+    @Test
+    void testHashCode() {
+        // Test the hashCode method
+        int hashCode = validateBankAccountResponse.hashCode();
+        assertNotNull(hashCode, "HashCode should not be null");
+
+        // Ensure consistency of hashCode
+        assertEquals(hashCode, validateBankAccountResponse.hashCode(), "Hash code should be consistent");
+    }
+
+    @Test
+    void testEquals() {
+        // Test the equals method
+        ValidateBankAccountResponse sameResponse = new ValidateBankAccountResponse();
+        sameResponse.setResponsePayload(responsePayload);
+
+        assertTrue(validateBankAccountResponse.equals(sameResponse), "Objects with same content should be equal");
+
+        ValidateBankAccountResponse differentResponse = new ValidateBankAccountResponse();
+        differentResponse.setResponsePayload(new ResponsePayload());  // Different payload
+        assertFalse(validateBankAccountResponse.equals(differentResponse), "Objects with different content should not be equal");
+    }
+}

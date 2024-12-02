@@ -1,0 +1,79 @@
+package com.td.mbna.msec.midtier.autopay.payload.checkpadenrolled;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class CheckPadEnrolledRequestTest {
+
+    private CheckPadEnrolledRequest checkPadEnrolledRequest;
+
+    @BeforeEach
+    void setUp() {
+        checkPadEnrolledRequest = new CheckPadEnrolledRequest();
+    }
+
+    @Test
+    void testGetAndSetRequestPayload() {
+        RequestPayload requestPayload = new RequestPayload();
+        checkPadEnrolledRequest.setRequestPayload(requestPayload);
+        assertEquals(requestPayload, checkPadEnrolledRequest.getRequestPayload());
+    }
+
+    @Test
+    void testToString() {
+        RequestPayload requestPayload = new RequestPayload();
+        checkPadEnrolledRequest.setRequestPayload(requestPayload);
+        
+        String expectedString = "com.td.mbna.msec.midtier.autopay.payload.checkpadenrolled.CheckPadEnrolledRequest@" + 
+                Integer.toHexString(System.identityHashCode(checkPadEnrolledRequest)) + 
+                "[sessionInfo=<null>,custId=<null>,aliasCustId=<null>,acctNum=<null>,acctType=<null>,languagePref=<null>,auditInfo=<null>,isPrimaryUser=<null>,reserved1=<null>,custInterface=<null>,requestPayload=" + requestPayload + "]";
+        
+        assertEquals(expectedString, checkPadEnrolledRequest.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        CheckPadEnrolledRequest anotherRequest = new CheckPadEnrolledRequest();
+        RequestPayload requestPayload = new RequestPayload();
+        
+        checkPadEnrolledRequest.setRequestPayload(requestPayload);
+        anotherRequest.setRequestPayload(requestPayload);
+        
+        assertEquals(checkPadEnrolledRequest.hashCode(), anotherRequest.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        CheckPadEnrolledRequest anotherRequest = new CheckPadEnrolledRequest();
+        RequestPayload requestPayload = new RequestPayload();
+        
+        checkPadEnrolledRequest.setRequestPayload(requestPayload);
+        anotherRequest.setRequestPayload(requestPayload);
+        
+        assertTrue(checkPadEnrolledRequest.equals(anotherRequest));
+    }
+
+    @Test
+    void testEqualsWithNullRequestPayload() {
+        CheckPadEnrolledRequest anotherRequest = new CheckPadEnrolledRequest();
+        
+        checkPadEnrolledRequest.setRequestPayload(null);
+        anotherRequest.setRequestPayload(null);
+        
+        assertTrue(checkPadEnrolledRequest.equals(anotherRequest));
+    }
+
+    @Test
+    void testEqualsWithDifferentRequestPayload() {
+        CheckPadEnrolledRequest anotherRequest = new CheckPadEnrolledRequest();
+        RequestPayload requestPayload = new RequestPayload();
+        RequestPayload differentRequestPayload = new RequestPayload();
+        
+        checkPadEnrolledRequest.setRequestPayload(requestPayload);
+        anotherRequest.setRequestPayload(differentRequestPayload);
+        
+        assertFalse(checkPadEnrolledRequest.equals(anotherRequest));
+    }
+}

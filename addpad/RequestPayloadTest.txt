@@ -1,0 +1,87 @@
+package com.td.mbna.msec.midtier.autopay.payload.addpad;
+
+import com.td.mbna.msec.midtier.types.common.DisclosureInfoType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestPayloadTest {
+
+    private RequestPayload requestPayload;
+
+    @BeforeEach
+    void setUp() {
+        requestPayload = new RequestPayload();
+    }
+
+    @Test
+    void testGetAndSetCardNum() {
+        requestPayload.setCardNum("1234567890123456");
+        assertEquals("1234567890123456", requestPayload.getCardNum());
+    }
+
+    @Test
+    void testGetAndSetAccountNum() {
+        requestPayload.setAccountNum("ACC123456");
+        assertEquals("ACC123456", requestPayload.getAccountNum());
+    }
+
+    @Test
+    void testGetAndSetBankNum() {
+        requestPayload.setBankNum("001");
+        assertEquals("001", requestPayload.getBankNum());
+    }
+
+    @Test
+    void testGetAndSetBranchNum() {
+        requestPayload.setBranchNum("12345");
+        assertEquals("12345", requestPayload.getBranchNum());
+    }
+
+    @Test
+    void testGetAndSetBankAccount() {
+        requestPayload.setBankAccount("987654321");
+        assertEquals("987654321", requestPayload.getBankAccount());
+    }
+
+    @Test
+    void testGetAndSetTimePeriodCd() {
+        requestPayload.setTimePeriodCd("MONTHLY");
+        assertEquals("MONTHLY", requestPayload.getTimePeriodCd());
+    }
+
+    @Test
+    void testGetAndSetCreditCardAgreementCycleDateNum() {
+        requestPayload.setCreditCardAgreementCycleDateNum("20231101");
+        assertEquals("20231101", requestPayload.getCreditCardAgreementCycleDateNum());
+    }
+
+    @Test
+    void testGetAndSetPaymentTypeName() {
+        requestPayload.setPaymentTypeName("FullPayment");
+        assertEquals("FullPayment", requestPayload.getPaymentTypeName());
+    }
+
+    @Test
+    void testGetAndSetChequingAgreementHolderFullName() {
+        requestPayload.setChequingAgreementHolderFullName("John Doe");
+        assertEquals("John Doe", requestPayload.getChequingAgreementHolderFullName());
+    }
+
+    @Test
+    void testGetAndSetConfirmed() {
+        requestPayload.setConfirmed(true);
+        assertTrue(requestPayload.getConfirmed());
+
+        requestPayload.setConfirmed(false);
+        assertFalse(requestPayload.getConfirmed());
+    }
+
+    @Test
+    void testGetAndSetDisclosureInfo() {
+        DisclosureInfoType disclosureInfo = new DisclosureInfoType();
+        requestPayload.setDisclosureInfo(disclosureInfo);
+        assertEquals(disclosureInfo, requestPayload.getDisclosureInfo());
+    }
+}

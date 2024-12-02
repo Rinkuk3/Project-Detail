@@ -1,0 +1,120 @@
+package com.td.mbna.msec.midtier.auditlog;
+
+import com.td.mbna.msec.midtier.auditlog.payload.request.CreateAuditLogRequest;
+import com.td.mbna.msec.midtier.auditlog.payload.request.AuditInfo;
+import com.td.mbna.msec.midtier.auditlog.payload.response.CreateAuditLogResponse;
+import com.td.mbna.msec.midtier.persistance.mybatis.DBMybatisService;
+import com.td.mbna.msec.midtier.util.ConfigUtil;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.MockitoAnnotations;
+
+import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
+class AuditLogServiceTest {
+
+    private AuditLogServiceImpl auditLogService;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        auditLogService = new AuditLogServiceImpl();
+    }
+
+    @Test
+    void testCreateAuditLogRequest_AuditInactive() {
+        // Mock ConfigUtil.auditActive() to return false
+        try (MockedStatic<ConfigUtil> configUtilMock = mockStatic(ConfigUtil.class)) {
+            configUtilMock.when(ConfigUtil::auditActive).thenReturn(false);
+
+            CreateAuditLogRequest request = new CreateAuditLogRequest();
+            CreateAuditLogResponse response = auditLogService.createAuditLogRequest(request);
+
+            assertEquals("", response.getStatus());
+        }
+    }
+
+    @Test
+    void testCreateAuditLogRequest_AuditInfoNull() {
+        // Mock ConfigUtil.auditActive() to return true
+        try (MockedStatic<ConfigUtil> configUtilMock = mockStatic(ConfigUtil.class)) {
+            configUtilMock.when(ConfigUtil::auditActive).thenReturn(true);
+
+            CreateAuditLogRequest request = new CreateAuditLogRequest();
+            request.setAuditInfo(null);
+
+            CreateAuditLogResponse response = auditLogService.createAuditLogRequest(request);
+
+            assertEquals("", response.getStatus());
+        }
+    }
+
+    @Test
+    void testCreateAuditLogRequest_LogLastLogin() {
+        // Mock ConfigUtil.auditActive() to return true
+        try (MockedStatic<ConfigUtil> configUtilMock = mockStatic(ConfigUtil.class);
+             MockedStatic<DBMybatisService> dbMybatisServiceMock = mockStatic(DBMybatisService.class)) {
+
+            configUtilMock.when(ConfigUtil::auditActive).thenReturn(true);
+
+            AuditInfo auditInfo = new AuditInfo();
+            auditInfo.setLogLastLogin(true);
+
+            CreateAuditLogRequest request = new CreateAuditLogRequest();
+            request.setCustId("12345");
+            request.setAuditInfo(auditInfo);
+
+            CreateAuditLogResponse response = auditLogService.createAuditLogRequest(request);
+
+            dbMybatisServiceMock.verify(() -> DBMybatisService.logLastLogin(eq("12345"), any(Date.class)), times(1));
+            assertEquals("", response.getStatus());
+        }
+    }
+
+    @Test
+    void testCreateAuditLogRequest_ProcessingTime() {
+        // Mock ConfigUtil.auditActive() to return true
+        try (MockedStatic<ConfigUtil> configUtilMock = mockStatic(ConfigUtil.class)) {
+            configUtilMock.when(ConfigUtil::auditActive).thenReturn(true);
+
+            AuditInfo auditInfo = new AuditInfo();
+            auditInfo.setLogLastLogin(false);
+            auditInfo.setAuditStartTime(System.currentTimeMillis() - 500);
+
+            CreateAuditLogRequest request = new CreateAuditLogRequest();
+            request.setAuditInfo(auditInfo);
+
+            CreateAuditLogResponse response = auditLogService.createAuditLogRequest(request);
+
+            assertEquals("", response.getStatus());
+        }
+    }
+
+    @Test
+    void testCreateAuditLogRequest_WithStatus() {
+        // Mock ConfigUtil.auditActive() to return true
+        try (MockedStatic<ConfigUtil> configUtilMock = mockStatic(ConfigUtil.class)) {
+            configUtilMock.when(ConfigUtil::auditActive).thenReturn(true);
+
+            AuditInfo auditInfo = new AuditInfo();
+            auditInfo.setLogLastLogin(false);
+
+            CreateAuditLogRequest.RequestPayload requestPayload = new CreateAuditLogRequest.RequestPayload();
+            requestPayload.setStatus("SUCCESS");
+
+            CreateAuditLogRequest request = new CreateAuditLogRequest();
+            request.setAuditInfo(auditInfo);
+            request.setRequestPayload(requestPayload);
+
+            CreateAuditLogResponse response = auditLogService.createAuditLogRequest(request);
+
+            assertEquals("SUCCESS", response.getStatus());
+        }
+    }
+}

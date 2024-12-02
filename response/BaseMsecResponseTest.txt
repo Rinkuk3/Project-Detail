@@ -1,0 +1,62 @@
+package com.td.mbna.msec.midtier.auditlog.payload.response;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+
+class BaseMsecResponseTest {
+
+    @Test
+    void testStatusGetterSetter() {
+        // Create an instance of BaseMsecResponseImpl
+        BaseMsecResponseImpl response = new BaseMsecResponseImpl();
+
+        // Set the status
+        response.setStatus("Success");
+
+        // Verify the status using the getter
+        assertEquals("Success", response.getStatus(), "The status should be 'Success'");
+    }
+
+    @Test
+    void testErrorMsgsGetterSetter() {
+        // Create an instance of BaseMsecResponseImpl
+        BaseMsecResponseImpl response = new BaseMsecResponseImpl();
+
+        // Set the error messages
+        response.setErrorMsgs(Arrays.asList("Error 1", "Error 2"));
+
+        // Verify the error messages using the getter
+        assertEquals(2, response.getErrorMsgs().size(), "There should be two error messages.");
+        assertEquals("Error 1", response.getErrorMsgs().get(0), "The first error message should be 'Error 1'");
+        assertEquals("Error 2", response.getErrorMsgs().get(1), "The second error message should be 'Error 2'");
+    }
+
+    @Test
+    void testResponsePayloadGetterSetter() {
+        // Create an instance of BaseMsecResponseImpl
+        BaseMsecResponseImpl response = new BaseMsecResponseImpl();
+
+        // Create a mock response payload
+        ResponsePayload payload = new ResponsePayload();
+        payload.setSomeProperty("Sample Property");
+
+        // Set the response payload
+        response.setResponsePayload(payload);
+
+        // Verify the response payload using the getter
+        assertEquals(payload, response.getResponsePayload(), "The response payload should match the one set.");
+    }
+
+    @Test
+    void testEmptyErrorMsgs() {
+        // Create an instance of BaseMsecResponseImpl
+        BaseMsecResponseImpl response = new BaseMsecResponseImpl();
+
+        // Set empty error messages
+        response.setErrorMsgs(Arrays.asList());
+
+        // Verify the error messages is empty
+        assertTrue(response.getErrorMsgs().isEmpty(), "The error messages list should be empty.");
+    }
+}

@@ -1,0 +1,132 @@
+package com.td.mbna.msec.midtier.autopay.payload.checkpadenrolled;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ResponsePayloadTest {
+
+    private ResponsePayload responsePayload;
+
+    @BeforeEach
+    void setUp() {
+        responsePayload = new ResponsePayload();
+    }
+
+    @Test
+    void testIsEnrolledForPad() {
+        // Setup
+        boolean expectedEnrolledForPad = true;
+        responsePayload.setEnrolledForPad(expectedEnrolledForPad);
+        
+        // Assertion
+        assertTrue(responsePayload.isEnrolledForPad());
+    }
+
+    @Test
+    void testSetEnrolledForPad() {
+        // Setup
+        boolean expectedEnrolledForPad = false;
+        
+        // Execution
+        responsePayload.setEnrolledForPad(expectedEnrolledForPad);
+        
+        // Assertion
+        assertFalse(responsePayload.isEnrolledForPad());
+    }
+
+    @Test
+    void testIsWithin90Days() {
+        // Setup
+        boolean expectedWithin90Days = true;
+        responsePayload.setWithin90Days(expectedWithin90Days);
+        
+        // Assertion
+        assertTrue(responsePayload.isWithin90Days());
+    }
+
+    @Test
+    void testSetWithin90Days() {
+        // Setup
+        boolean expectedWithin90Days = false;
+        
+        // Execution
+        responsePayload.setWithin90Days(expectedWithin90Days);
+        
+        // Assertion
+        assertFalse(responsePayload.isWithin90Days());
+    }
+
+    @Test
+    void testGetArrangementId() {
+        // Setup
+        String expectedArrangementId = "arrangement123";
+        responsePayload.setArrangementId(expectedArrangementId);
+        
+        // Assertion
+        assertEquals(expectedArrangementId, responsePayload.getArrangementId());
+    }
+
+    @Test
+    void testSetArrangementId() {
+        // Setup
+        String expectedArrangementId = "arrangement456";
+        
+        // Execution
+        responsePayload.setArrangementId(expectedArrangementId);
+        
+        // Assertion
+        assertEquals(expectedArrangementId, responsePayload.getArrangementId());
+    }
+
+    @Test
+    void testGetStatusCd() {
+        // Setup
+        String expectedStatusCd = "ACTIVE";
+        responsePayload.setStatusCd(expectedStatusCd);
+        
+        // Assertion
+        assertEquals(expectedStatusCd, responsePayload.getStatusCd());
+    }
+
+    @Test
+    void testSetStatusCd() {
+        // Setup
+        String expectedStatusCd = "INACTIVE";
+        
+        // Execution
+        responsePayload.setStatusCd(expectedStatusCd);
+        
+        // Assertion
+        assertEquals(expectedStatusCd, responsePayload.getStatusCd());
+    }
+
+    @Test
+    void testGetAccountNum() {
+        // Setup
+        String expectedAccountNum = "987654321";
+        responsePayload.setAccountNum(expectedAccountNum);
+        
+        // Assertion
+        assertEquals(expectedAccountNum, responsePayload.getAccountNum());
+    }
+
+    @Test
+    void testSetAccountNum() {
+        // Setup
+        String expectedAccountNum = "123456789";
+        
+        // Execution
+        responsePayload.setAccountNum(expectedAccountNum);
+        
+        // Assertion
+        assertEquals(expectedAccountNum, responsePayload.getAccountNum());
+    }
+
+    @Test
+    void testConstructor() {
+        // Ensure the object is instantiated correctly
+        assertNotNull(responsePayload);
+    }
+}

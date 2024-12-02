@@ -1,0 +1,95 @@
+package com.td.mbna.msec.midtier.auditlog.payload.request;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.math.BigDecimal;
+
+class RequestPayloadTest {
+
+    @Test
+    void testGetterAndSetter() {
+        // Create an instance of RequestPayload
+        RequestPayload requestPayload = new RequestPayload();
+
+        // Set values using setter methods
+        requestPayload.setStatus("Active");
+        requestPayload.setBtAmt(new BigDecimal("100.50"));
+
+        // Get values using getter methods
+        assertEquals("Active", requestPayload.getStatus(), "The status should be 'Active'");
+        assertEquals(new BigDecimal("100.50"), requestPayload.getBtAmt(), "The btAmt should be 100.50");
+    }
+
+    @Test
+    void testToString() {
+        // Create an instance of RequestPayload
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setStatus("Active");
+        requestPayload.setBtAmt(new BigDecimal("100.50"));
+
+        // Expected toString format
+        String expectedString = "com.td.mbna.msec.midtier.auditlog.payload.request.RequestPayload@" 
+                                + Integer.toHexString(requestPayload.hashCode()) + "[status=Active,btAmt=100.50]";
+
+        // Check if toString method returns the expected string
+        assertEquals(expectedString, requestPayload.toString(), "The toString method should return the correct string format.");
+    }
+
+    @Test
+    void testHashCode() {
+        // Create two RequestPayload instances with identical values
+        RequestPayload requestPayload1 = new RequestPayload();
+        requestPayload1.setStatus("Active");
+        requestPayload1.setBtAmt(new BigDecimal("100.50"));
+
+        RequestPayload requestPayload2 = new RequestPayload();
+        requestPayload2.setStatus("Active");
+        requestPayload2.setBtAmt(new BigDecimal("100.50"));
+
+        // Assert that hashCodes are the same for identical objects
+        assertEquals(requestPayload1.hashCode(), requestPayload2.hashCode(), "Hash codes should be equal for identical objects.");
+    }
+
+    @Test
+    void testEquals() {
+        // Create two RequestPayload instances with identical values
+        RequestPayload requestPayload1 = new RequestPayload();
+        requestPayload1.setStatus("Active");
+        requestPayload1.setBtAmt(new BigDecimal("100.50"));
+
+        RequestPayload requestPayload2 = new RequestPayload();
+        requestPayload2.setStatus("Active");
+        requestPayload2.setBtAmt(new BigDecimal("100.50"));
+
+        // Assert that they are equal
+        assertTrue(requestPayload1.equals(requestPayload2), "The objects should be equal.");
+
+        // Modify one of the objects
+        requestPayload2.setStatus("Inactive");
+
+        // Assert that they are not equal after modification
+        assertFalse(requestPayload1.equals(requestPayload2), "The objects should not be equal after modifying one.");
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        // Create an instance of RequestPayload
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setStatus("Active");
+        requestPayload.setBtAmt(new BigDecimal("100.50"));
+
+        // Assert that the object is not equal to null
+        assertFalse(requestPayload.equals(null), "The object should not be equal to null.");
+    }
+
+    @Test
+    void testEqualsWithDifferentClass() {
+        // Create an instance of RequestPayload
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setStatus("Active");
+        requestPayload.setBtAmt(new BigDecimal("100.50"));
+
+        // Assert that the object is not equal to an object of a different class
+        assertFalse(requestPayload.equals(new Object()), "The object should not be equal to an instance of a different class.");
+    }
+}

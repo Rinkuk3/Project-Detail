@@ -1,0 +1,43 @@
+package com.td.mbna.msec.midtier.autopay.payload.retrievepad;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestPayloadTest {
+
+    @Test
+    void testGetArrangementId() {
+        // Create an instance of RequestPayload
+        RequestPayload requestPayload = new RequestPayload();
+        
+        // Set the arrangementId
+        requestPayload.setArrangementId("12345");
+        
+        // Verify that the getArrangementId method returns the correct value
+        assertEquals("12345", requestPayload.getArrangementId());
+    }
+
+    @Test
+    void testSetArrangementId() {
+        // Create an instance of RequestPayload
+        RequestPayload requestPayload = new RequestPayload();
+        
+        // Set the arrangementId
+        requestPayload.setArrangementId("98765");
+        
+        // Verify that the arrangementId is set correctly
+        assertEquals("98765", requestPayload.getArrangementId());
+    }
+
+    @Test
+    void testSetArrangementIdNull() {
+        // Create an instance of RequestPayload
+        RequestPayload requestPayload = new RequestPayload();
+        
+        // Set the arrangementId to null
+        requestPayload.setArrangementId(null);
+        
+        // Verify that the arrangementId is set to null correctly
+        assertNull(requestPayload.getArrangementId());
+    }
+}

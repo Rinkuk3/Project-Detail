@@ -1,0 +1,118 @@
+package com.td.mbna.msec.midtier.autopay;
+
+import com.td.mbna.msec.midtier.autopay.payload.validatebankaccount.ValidateBankAccountRequest;
+import com.td.mbna.msec.midtier.autopay.payload.validatebankaccount.ValidateBankAccountResponse;
+import com.td.mbna.msec.midtier.mbnaap.MbnaAP;
+import com.td.mbna.msec.midtier.service.EmailInfo;
+import com.td.mbna.msec.midtier.types.common.BaseRequest;
+import com.td.mbna.msec.midtier.types.common.BaseResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springmodules.validation.valang.ValangValidator;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class ValidateBankAccountOperationTest {
+
+    @InjectMocks
+    private ValidateBankAccountOperation validateBankAccountOperation;
+
+    @Mock
+    private MbnaAP mbnaAP;
+
+    @Mock
+    private ValangValidator addPadRequestValidator;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        validateBankAccountOperation.init();
+    }
+
+    @Test
+    void testInvokeService_Success() {
+        // Arrange
+        ValidateBankAccountRequest request = new ValidateBankAccountRequest();
+        ValidateBankAccountResponse expectedResponse = new ValidateBankAccountResponse();
+        String token = "test-token";
+
+        when(mbnaAP.validateBankAccount(request, token)).thenReturn(expectedResponse);
+
+        // Act
+        ValidateBankAccountResponse actualResponse = validateBankAccountOperation.invokeService(request, token);
+
+        // Assert
+        assertNotNull(actualResponse);
+        assertEquals(expectedResponse, actualResponse);
+        verify(mbnaAP, times(1)).validateBankAccount(request, token);
+    }
+
+    @Test
+    void testInvokeService_Exception() {
+        // Arrange
+        ValidateBankAccountRequest request = new ValidateBankAccountRequest();
+        String token = "test-token";
+        when(mbnaAP.validateBankAccount(request, token)).thenThrow(new RuntimeException("Test exception"));
+
+        // Act & Assert
+        Exception exception = assertThrows(RuntimeException.class, () -> 
+                validateBankAccountOperation.invokeService(request, token));
+        assertTrue(exception.getMessage().contains("Test exception"));
+        verify(mbnaAP, times(1)).validateBankAccount(request, token);
+    }
+
+    @Test
+    void testRequiresDisclosureConsent() {
+        // Act
+        boolean result = validateBankAccountOperation.requiresDisclosureConsent();
+
+        // Assert
+        assertFalse(result);
+    }
+
+    @Test
+    void testGetConsentDisclosureFailedMsgCode() {
+        // Act
+        String result = validateBankAccountOperation.getConsentDisclosureFailedMsgCode();
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testGenerateAutoComment() {
+        // Act
+        boolean result = validateBankAccountOperation.generateAutoComment();
+
+        // Assert
+        assertFalse(result);
+    }
+
+    @Test
+    void testCreateAutoComment() {
+        // Act
+        List<String> result = validateBankAccountOperation.createAutoComment(mock(BaseRequest.class), mock(BaseResponse.class));
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testGetEmailInfoBean() {
+        // Act
+        EmailInfo result = validateBankAccountOperation.getEmailInfoBean(mock(BaseRequest.class), mock(BaseResponse.class));
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testGetValidator() {
+        // Act
+        assertNotNull(validateBankAccountOperation.getValidator());
+    }
+}

@@ -1,0 +1,171 @@
+package com.td.mbna.msec.midtier.autopay;
+
+import com.td.api.mbpad.response.retrievebranch.Branch;
+import com.td.api.mbpad.response.retrievebranch.FinancialInstitutionName;
+import com.td.api.mbpad.response.retrievebranch.RetrieveBranchResponse;
+import com.td.mbna.msec.midtier.autopay.payload.addpad.AddPadRequest;
+import com.td.mbna.msec.midtier.autopay.payload.addpad.AddPadResponse;
+import com.td.mbna.msec.midtier.autopay.payload.addpad.AddPadRequestPayload;
+import com.td.mbna.msec.midtier.mbnaap.MbnaAP;
+import com.td.mbna.msec.midtier.types.common.SessionInfo;
+import com.td.mbna.msec.midtier.util.ExceptionUtil;
+import com.td.mbna.msec.midtier.util.services.MidtierUtilHelper;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.MockitoAnnotations;
+
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class AddPadOperationTest {
+
+    private AddPadOperation addPadOperation;
+
+    private MbnaAP mbnaAP;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        mbnaAP = mock(MbnaAP.class);
+        addPadOperation = new AddPadOperation();
+        addPadOperation.mbnaAP = mbnaAP;
+    }
+
+    @Test
+    void testInvokeService_NullRequest_ThrowsException() {
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            addPadOperation.invokeService(null, "token");
+        });
+        assertTrue(exception.getMessage().contains("MS601"));
+    }
+
+    @Test
+    void testInvokeService_ConfirmedNull_ReturnsEmptyResponse() {
+        AddPadRequest request = createRequest(false);
+        request.getRequestPayload().setConfirmed(null);
+
+        AddPadResponse response = addPadOperation.invokeService(request, "token");
+
+        assertNotNull(response);
+    }
+
+    @Test
+    void testInvokeService_NotConfirmed_ReturnsEmptyResponse() {
+        AddPadRequest request = createRequest(false);
+
+        AddPadResponse response = addPadOperation.invokeService(request, "token");
+
+        assertNotNull(response);
+    }
+
+    @Test
+    void testInvokeService_ConfirmedAndBranchFound_SetsBankNames() {
+        AddPadRequest request = createRequest(true);
+        AddPadResponse mockResponse = new AddPadResponse();
+        AddPadResponse.ResponsePayload mockResponsePayload = new AddPadResponse.ResponsePayload();
+        mockResponse.setResponsePayload(mockResponsePayload);
+
+        RetrieveBranchResponse retrieveBranchResponse = createRetrieveBranchResponse();
+
+        when(mbnaAP.addPad(request, "token")).thenReturn(mockResponse);
+        when(mbnaAP.retrieveBranch("001", "002", "token")).thenReturn(retrieveBranchResponse);
+
+        AddPadResponse response = addPadOperation.invokeService(request, "token");
+
+        assertNotNull(response);
+        assertEquals("BankNameEN", response.getResponsePayload().getBankNameEn());
+        assertEquals("BankNameFR", response.getResponsePayload().getBankNameFr());
+    }
+
+    @Test
+    void testInvokeService_ConfirmedButNoBranchFound_ReturnsResponse() {
+        AddPadRequest request = createRequest(true);
+        AddPadResponse mockResponse = new AddPadResponse();
+
+        when(mbnaAP.addPad(request, "token")).thenReturn(mockResponse);
+        when(mbnaAP.retrieveBranch("001", "002", "token")).thenReturn(new RetrieveBranchResponse());
+
+        AddPadResponse response = addPadOperation.invokeService(request, "token");
+
+        assertNotNull(response);
+        assertNull(response.getResponsePayload());
+    }
+
+    @Test
+    void testInvokeService_ThrowsException() {
+        AddPadRequest request = createRequest(true);
+        when(mbnaAP.addPad(request, "token")).thenThrow(new RuntimeException("Test Exception"));
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            addPadOperation.invokeService(request, "token");
+        });
+
+        assertTrue(exception.getMessage().contains("MS601"));
+    }
+
+    @Test
+    void testRequiresDisclosureConsent_ReturnsTrue() {
+        assertTrue(addPadOperation.requiresDisclosureConsent());
+    }
+
+    @Test
+    void testConsentDisclosureFailedMsgCode_ReturnsNull() {
+        assertNull(addPadOperation.getConsentDisclosureFailedMsgCode());
+    }
+
+    @Test
+    void testGenerateAutoComment_ReturnsFalse() {
+        assertFalse(addPadOperation.generateAutoComment());
+    }
+
+    @Test
+    void testCreateAutoComment_ReturnsNull() {
+        assertNull(addPadOperation.createAutoComment(null, null));
+    }
+
+    @Test
+    void testGetEmailInfoBean_ReturnsNull() {
+        assertNull(addPadOperation.getEmailInfoBean(null, null));
+    }
+
+    @Test
+    void testGetValidator_ReturnsNull() {
+        assertNull(addPadOperation.getValidator());
+    }
+
+    // Helper methods
+    private AddPadRequest createRequest(boolean confirmed) {
+        AddPadRequest request = new AddPadRequest();
+        AddPadRequestPayload payload = new AddPadRequestPayload();
+        payload.setBankNum("001");
+        payload.setBranchNum("002");
+        payload.setConfirmed(confirmed);
+
+        SessionInfo sessionInfo = new SessionInfo();
+        request.setRequestPayload(payload);
+        request.setSessionInfo(sessionInfo);
+
+        return request;
+    }
+
+    private RetrieveBranchResponse createRetrieveBranchResponse() {
+        RetrieveBranchResponse retrieveBranchResponse = new RetrieveBranchResponse();
+        Branch branch = new Branch();
+        FinancialInstitutionName enName = new FinancialInstitutionName();
+        enName.setLanguageCd("EN");
+        enName.setText("BankNameEN");
+
+        FinancialInstitutionName frName = new FinancialInstitutionName();
+        frName.setLanguageCd("FR");
+        frName.setText("BankNameFR");
+
+        branch.setFinancialInstitutionName(List.of(enName, frName));
+        retrieveBranchResponse.setBranch(Collections.singletonList(branch));
+
+        return retrieveBranchResponse;
+    }
+}

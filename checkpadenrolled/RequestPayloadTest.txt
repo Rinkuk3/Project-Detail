@@ -1,0 +1,44 @@
+package com.td.mbna.msec.midtier.autopay.payload.checkpadenrolled;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestPayloadTest {
+
+    private RequestPayload requestPayload;
+
+    @BeforeEach
+    void setUp() {
+        requestPayload = new RequestPayload();
+    }
+
+    @Test
+    void testGetCardNum() {
+        // Setup
+        String expectedCardNum = "1234567890";
+        requestPayload.setCardNum(expectedCardNum);
+        
+        // Assertion
+        assertEquals(expectedCardNum, requestPayload.getCardNum());
+    }
+
+    @Test
+    void testSetCardNum() {
+        // Setup
+        String expectedCardNum = "9876543210";
+        
+        // Execution
+        requestPayload.setCardNum(expectedCardNum);
+        
+        // Assertion
+        assertEquals(expectedCardNum, requestPayload.getCardNum());
+    }
+
+    @Test
+    void testConstructor() {
+        // Ensure that the object is instantiated correctly
+        assertNotNull(requestPayload);
+    }
+}

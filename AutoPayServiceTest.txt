@@ -1,0 +1,171 @@
+package com.td.mbna.msec.midtier.autopay;
+
+import com.td.mbna.msec.midtier.autopay.payload.addpad.AddPadRequest;
+import com.td.mbna.msec.midtier.autopay.payload.addpad.AddPadResponse;
+import com.td.mbna.msec.midtier.autopay.payload.checkpadenrolled.CheckPadEnrolledRequest;
+import com.td.mbna.msec.midtier.autopay.payload.checkpadenrolled.CheckPadEnrolledResponse;
+import com.td.mbna.msec.midtier.autopay.payload.retrievepad.RetrievePadRequest;
+import com.td.mbna.msec.midtier.autopay.payload.retrievepad.RetrievePadResponse;
+import com.td.mbna.msec.midtier.autopay.payload.validatebankaccount.ValidateBankAccountRequest;
+import com.td.mbna.msec.midtier.autopay.payload.validatebankaccount.ValidateBankAccountResponse;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
+
+class AutoPayServiceTest {
+
+    @InjectMocks
+    private AutoPayServiceImpl autoPayService;
+
+    @Mock
+    private CheckPadEnrolledOperation checkPadEnrolledOperation;
+
+    @Mock
+    private RetrievePadOperation retrievePadOperation;
+
+    @Mock
+    private AddPadOperation addPadOperation;
+
+    @Mock
+    private ValidateBankAccountOperation validateBankAccountOperation;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testCheckPadEnrolled_Success() {
+        // Arrange
+        CheckPadEnrolledRequest request = mock(CheckPadEnrolledRequest.class);
+        CheckPadEnrolledResponse expectedResponse = new CheckPadEnrolledResponse();
+        String token = "test-token";
+
+        when(checkPadEnrolledOperation.invokeService(request, token)).thenReturn(expectedResponse);
+
+        // Act
+        CheckPadEnrolledResponse actualResponse = autoPayService.checkPadEnrolled(request, token);
+
+        // Assert
+        assertEquals(expectedResponse, actualResponse);
+        verify(checkPadEnrolledOperation, times(1)).invokeService(request, token);
+    }
+
+    @Test
+    void testRetrievePad_Success() {
+        // Arrange
+        RetrievePadRequest request = mock(RetrievePadRequest.class);
+        RetrievePadResponse expectedResponse = new RetrievePadResponse();
+        String token = "test-token";
+
+        when(retrievePadOperation.invokeService(request, token)).thenReturn(expectedResponse);
+
+        // Act
+        RetrievePadResponse actualResponse = autoPayService.retrievePad(request, token);
+
+        // Assert
+        assertEquals(expectedResponse, actualResponse);
+        verify(retrievePadOperation, times(1)).invokeService(request, token);
+    }
+
+    @Test
+    void testValidateBankAccount_Success() {
+        // Arrange
+        ValidateBankAccountRequest request = mock(ValidateBankAccountRequest.class);
+        ValidateBankAccountResponse expectedResponse = new ValidateBankAccountResponse();
+        String token = "test-token";
+
+        when(validateBankAccountOperation.invokeService(request, token)).thenReturn(expectedResponse);
+
+        // Act
+        ValidateBankAccountResponse actualResponse = autoPayService.validateBankAccount(request, token);
+
+        // Assert
+        assertEquals(expectedResponse, actualResponse);
+        verify(validateBankAccountOperation, times(1)).invokeService(request, token);
+    }
+
+    @Test
+    void testAddPad_Success() {
+        // Arrange
+        AddPadRequest request = mock(AddPadRequest.class);
+        AddPadResponse expectedResponse = new AddPadResponse();
+        String token = "test-token";
+
+        when(addPadOperation.invokeService(request, token)).thenReturn(expectedResponse);
+
+        // Act
+        AddPadResponse actualResponse = autoPayService.addPad(request, token);
+
+        // Assert
+        assertEquals(expectedResponse, actualResponse);
+        verify(addPadOperation, times(1)).invokeService(request, token);
+    }
+
+    @Test
+    void testCheckPadEnrolled_Exception() {
+        // Arrange
+        CheckPadEnrolledRequest request = mock(CheckPadEnrolledRequest.class);
+        String token = "test-token";
+
+        when(checkPadEnrolledOperation.invokeService(request, token)).thenThrow(new RuntimeException("Test exception"));
+
+        // Act & Assert
+        Exception exception = assertThrows(RuntimeException.class, () ->
+                autoPayService.checkPadEnrolled(request, token));
+        assertEquals("Test exception", exception.getMessage());
+        verify(checkPadEnrolledOperation, times(1)).invokeService(request, token);
+    }
+
+    @Test
+    void testRetrievePad_Exception() {
+        // Arrange
+        RetrievePadRequest request = mock(RetrievePadRequest.class);
+        String token = "test-token";
+
+        when(retrievePadOperation.invokeService(request, token)).thenThrow(new RuntimeException("Test exception"));
+
+        // Act & Assert
+        Exception exception = assertThrows(RuntimeException.class, () ->
+                autoPayService.retrievePad(request, token));
+        assertEquals("Test exception", exception.getMessage());
+        verify(retrievePadOperation, times(1)).invokeService(request, token);
+    }
+
+    @Test
+    void testValidateBankAccount_Exception() {
+        // Arrange
+        ValidateBankAccountRequest request = mock(ValidateBankAccountRequest.class);
+        String token = "test-token";
+
+        when(validateBankAccountOperation.invokeService(request, token)).thenThrow(new RuntimeException("Test exception"));
+
+        // Act & Assert
+        Exception exception = assertThrows(RuntimeException.class, () ->
+                autoPayService.validateBankAccount(request, token));
+        assertEquals("Test exception", exception.getMessage());
+        verify(validateBankAccountOperation, times(1)).invokeService(request, token);
+    }
+
+    @Test
+    void testAddPad_Exception() {
+        // Arrange
+        AddPadRequest request = mock(AddPadRequest.class);
+        String token = "test-token";
+
+        when(addPadOperation.invokeService(request, token)).thenThrow(new RuntimeException("Test exception"));
+
+        // Act & Assert
+        Exception exception = assertThrows(RuntimeException.class, () ->
+                autoPayService.addPad(request, token));
+        assertEquals("Test exception", exception.getMessage());
+        verify(addPadOperation, times(1)).invokeService(request, token);
+    }
+}
