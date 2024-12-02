@@ -1,0 +1,139 @@
+package com.td.mbna.msec.midtier.account;
+
+import com.td.api.enrollment.retrieve.ProductCustomer;
+import com.td.api.enrollment.retrieve.Relationship;
+import com.td.api.mbcca.response.RetrieveCreditCardAgreementPartyResponse;
+import com.td.api.mbna.msec.midtier.mbnaparty.MbnaParty;
+import com.td.api.mbna.msec.midtier.mbnaparty.payload.PartyResponse;
+import com.td.api.ofm.common.TCCAAPIAgreementPartyFeature;
+import com.td.api.ofm.response.TSvcRetrieveCreditCardAgreementPartyFeatureListRs;
+import com.td.mbna.msec.midtier.account.payload.addaccount.VerifyCardDetailsResponse;
+import com.td.mbna.msec.midtier.account.payload.addaccount.VerifyCardRequest;
+import com.td.mbna.msec.midtier.account.payload.addaccount.VerifyCardResponse;
+import com.td.mbna.msec.midtier.cardservice.payload.validatecpi.ValidateCPIResponse;
+import com.td.mbna.msec.midtier.enrollment.facade.TdEnrollmentFacade;
+import com.td.mbna.msec.midtier.exceptions.BusinessException;
+import com.td.mbna.msec.midtier.mbcca.MbnaCCA;
+import com.td.mbna.msec.midtier.mbnaad.MbnaAd;
+import com.td.mbna.msec.midtier.session.SessionMidProvider;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class AddAccountOperationTest {
+
+    @InjectMocks
+    private AddAccountOperation addAccountOperation;
+
+    @Mock
+    private MbnaParty mbnaParty;
+
+    @Mock
+    private MbnaCCA mbnaCCA;
+
+    @Mock
+    private TdEnrollmentFacade tdEnrollmentFacade;
+
+    @Mock
+    private MbnaOfmFacade mbnaOfmFacade;
+
+    @Mock
+    private MbnaAd mbnaAd;
+
+    @Mock
+    private SessionMidProvider sessionProvider;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testVerifyCreditCard_Success() throws BusinessException {
+        // Arrange
+        VerifyCardRequest request = new VerifyCardRequest();
+        // Set up mock responses and objects
+        PartyResponse partyResponse = new PartyResponse();
+        when(mbnaParty.verifyCreditCardDetails(any(), any())).thenReturn(partyResponse);
+
+        VerifyCardResponse expectedResponse = new VerifyCardResponse();
+        expectedResponse.setSuccess(true);
+        // Act
+        VerifyCardResponse actualResponse = addAccountOperation.verifyCreditCard(request, "dummyToken");
+
+        // Assert
+        assertTrue(actualResponse.isSuccess());
+        verify(mbnaParty, times(1)).verifyCreditCardDetails(any(), any());
+    }
+
+    @Test
+    void testVerifyCreditCard_Failure_InvalidCard() throws BusinessException {
+        // Arrange
+        VerifyCardRequest request = new VerifyCardRequest();
+        when(mbnaParty.verifyCreditCardDetails(any(), any())).thenThrow(new BusinessException("Invalid card details"));
+
+        // Act
+        VerifyCardResponse actualResponse = addAccountOperation.verifyCreditCard(request, "dummyToken");
+
+        // Assert
+        assertFalse(actualResponse.isSuccess());
+        verify(mbnaParty, times(1)).verifyCreditCardDetails(any(), any());
+    }
+
+    @Test
+    void testVerifyCreditCardDetails_Success() {
+        // Arrange
+        VerifyCardRequest request = new VerifyCardRequest();
+        // Mock sessionProvider and other dependencies
+        ValidateCPIResponse cpiResponse = new ValidateCPIResponse();
+        cpiResponse.setResponsePayload(new ValidateCPIResponse.Payload());
+        when(mbnaAd.cardCVCVerification(any(), any(), any(), any(), any())).thenReturn(cpiResponse);
+
+        // Act
+        VerifyCardDetailsResponse actualResponse = addAccountOperation.verifyCreditCardDetails(request, new String[]{"dummyToken"});
+
+        // Assert
+        assertTrue(actualResponse.isSuccess());
+        verify(mbnaAd, times(1)).cardCVCVerification(any(), any(), any(), any(), any());
+    }
+
+    @Test
+    void testVerifyCreditCardDetails_Failure() {
+        // Arrange
+        VerifyCardRequest request = new VerifyCardRequest();
+        ValidateCPIResponse cpiResponse = new ValidateCPIResponse();
+        cpiResponse.setResponsePayload(null); // Simulate failure
+        when(mbnaAd.cardCVCVerification(any(), any(), any(), any(), any())).thenReturn(cpiResponse);
+
+        // Act
+        VerifyCardDetailsResponse actualResponse = addAccountOperation.verifyCreditCardDetails(request, new String[]{"dummyToken"});
+
+        // Assert
+        assertFalse(actualResponse.isSuccess());
+        verify(mbnaAd, times(1)).cardCVCVerification(any(), any(), any(), any(), any());
+    }
+
+    @Test
+    void testVerifyCreditCard_ExceptionHandling() throws BusinessException {
+        // Arrange
+        VerifyCardRequest request = new VerifyCardRequest();
+        when(mbnaParty.verifyCreditCardDetails(any(), any())).thenThrow(new BusinessException("Error occurred"));
+
+        // Act
+        VerifyCardResponse response = addAccountOperation.verifyCreditCard(request, "dummyToken");
+
+        // Assert
+        assertFalse(response.isSuccess());
+        assertEquals("MS804", response.getErrorCode());
+        verify(mbnaParty, times(1)).verifyCreditCardDetails(any(), any());
+    }
+}
