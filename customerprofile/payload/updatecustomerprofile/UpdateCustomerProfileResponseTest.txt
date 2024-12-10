@@ -1,0 +1,67 @@
+package com.td.mbna.msec.midtier.customerprofile.payload.updatecustomerprofile;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class UpdateCustomerProfileResponseTest {
+
+    private UpdateCustomerProfileResponse response;
+
+    @BeforeEach
+    void setUp() {
+        response = new UpdateCustomerProfileResponse();
+    }
+
+    @Test
+    public void testGetterAndSetterResponsePayload() {
+        ResponsePayload payload = new ResponsePayload();
+        payload.setField("value");
+
+        response.setResponsePayload(payload);
+        assertThat(response.getResponsePayload()).isEqualTo(payload);
+    }
+
+    @Test
+    public void testHashCode() {
+        response.setStatus("Success");
+        response.setErrorMessages("Error");
+        response.setResponsePayload(new ResponsePayload());
+
+        int hashCode = response.hashCode();
+        assertThat(hashCode).isNotZero();
+    }
+
+    @Test
+    public void testEqualsSameObject() {
+        assertThat(response.equals(response)).isTrue();
+    }
+
+    @Test
+    public void testEqualsDifferentObject() {
+        UpdateCustomerProfileResponse other = new UpdateCustomerProfileResponse();
+        other.setStatus("DifferentStatus");
+        other.setErrorMessages("Error");
+        other.setResponsePayload(new ResponsePayload());
+
+        assertThat(response.equals(other)).isFalse();
+    }
+
+    @Test
+    public void testEqualsWhenNullFields() {
+        UpdateCustomerProfileResponse other = new UpdateCustomerProfileResponse();
+        assertThat(response.equals(other)).isTrue();
+    }
+
+    @Test
+    public void testToString() {
+        response.setStatus("Success");
+        response.setErrorMessages("Some error");
+        response.setResponsePayload(new ResponsePayload());
+
+        String result = response.toString();
+        assertThat(result).contains("Success");
+        assertThat(result).contains("Some error");
+    }
+}
