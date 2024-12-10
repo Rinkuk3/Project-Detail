@@ -1,0 +1,80 @@
+package com.td.mbna.msec.midtier.cardlock.payload;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class CardLockResponseTest {
+
+    @Test
+    void testGetSetResponsePayload() {
+        CardLockResponse cardLockResponse = new CardLockResponse();
+
+        // Initially, the responsePayload should be null
+        assertNull(cardLockResponse.getResponsePayload(), "Initial responsePayload should be null");
+
+        // Set a new ResponsePayload
+        ResponsePayload payload = new ResponsePayload(); // Assume ResponsePayload is a valid class
+        cardLockResponse.setResponsePayload(payload);
+
+        // Verify the getter returns the correct object
+        assertNotNull(cardLockResponse.getResponsePayload(), "responsePayload should not be null after being set");
+        assertEquals(payload, cardLockResponse.getResponsePayload(), "Getter should return the set ResponsePayload");
+    }
+
+    @Test
+    void testEquals() {
+        CardLockResponse response1 = new CardLockResponse();
+        CardLockResponse response2 = new CardLockResponse();
+
+        // Both are default instances
+        assertEquals(response1, response2, "Two default instances should be equal");
+
+        // Set different ResponsePayloads
+        ResponsePayload payload1 = new ResponsePayload();
+        ResponsePayload payload2 = new ResponsePayload();
+        response1.setResponsePayload(payload1);
+        response2.setResponsePayload(payload2);
+
+        // Same payload instance
+        response2.setResponsePayload(payload1);
+        assertEquals(response1, response2, "Instances with the same payload should be equal");
+
+        // Different payload instances
+        response2.setResponsePayload(payload2);
+        assertNotEquals(response1, response2, "Instances with different payloads should not be equal");
+    }
+
+    @Test
+    void testHashCode() {
+        CardLockResponse response1 = new CardLockResponse();
+        CardLockResponse response2 = new CardLockResponse();
+
+        // Hash codes should match for default instances
+        assertEquals(response1.hashCode(), response2.hashCode(), "Hash codes should match for default instances");
+
+        // Set a ResponsePayload
+        ResponsePayload payload = new ResponsePayload();
+        response1.setResponsePayload(payload);
+        assertNotEquals(response1.hashCode(), response2.hashCode(), "Hash codes should differ for instances with different payloads");
+
+        // Set same ResponsePayload
+        response2.setResponsePayload(payload);
+        assertEquals(response1.hashCode(), response2.hashCode(), "Hash codes should match for instances with the same payload");
+    }
+
+    @Test
+    void testToString() {
+        CardLockResponse cardLockResponse = new CardLockResponse();
+
+        // Verify toString output contains default fields
+        String toStringOutput = cardLockResponse.toString();
+        assertTrue(toStringOutput.contains("responsePayload=null"), "toString should indicate null responsePayload initially");
+
+        // Set a ResponsePayload and verify toString
+        ResponsePayload payload = new ResponsePayload();
+        cardLockResponse.setResponsePayload(payload);
+        toStringOutput = cardLockResponse.toString();
+        assertTrue(toStringOutput.contains("responsePayload="), "toString should include responsePayload after being set");
+    }
+}

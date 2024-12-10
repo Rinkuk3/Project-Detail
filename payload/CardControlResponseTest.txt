@@ -1,0 +1,28 @@
+package com.td.mbna.msec.midtier.cardlock.payload;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class CardControlResponseTest {
+
+    @Test
+    void testGetSetCardAuthorizationStatus() {
+        CardControlResponse response = new CardControlResponse();
+
+        // Initially, the cardAuthorizationStatus should be null
+        assertNull(response.getCardAuthorizationStatus(), "Initial cardAuthorizationStatus should be null");
+
+        // Set a new CardAuthorizationStatus
+        CardAuthorizationStatus status = new CardAuthorizationStatus();
+        status.setActive(true);
+        response.setCardAuthorizationStatus(status);
+
+        // Verify the getter returns the correct object
+        assertNotNull(response.getCardAuthorizationStatus(), "cardAuthorizationStatus should not be null after being set");
+        assertEquals(status, response.getCardAuthorizationStatus(), "Getter should return the set CardAuthorizationStatus");
+
+        // Verify the active status of the nested object
+        assertTrue(response.getCardAuthorizationStatus().getActive(), "The active status should be true");
+    }
+}

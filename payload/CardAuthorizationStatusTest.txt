@@ -1,0 +1,64 @@
+package com.td.mbna.msec.midtier.cardlock.payload;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class CardAuthorizationStatusTest {
+
+    @Test
+    void testGetSetActive() {
+        CardAuthorizationStatus status = new CardAuthorizationStatus();
+        assertNull(status.getActive(), "Initial 'active' value should be null");
+
+        status.setActive(true);
+        assertTrue(status.getActive(), "'active' value should be true");
+
+        status.setActive(false);
+        assertFalse(status.getActive(), "'active' value should be false");
+    }
+
+    @Test
+    void testEquals() {
+        CardAuthorizationStatus status1 = new CardAuthorizationStatus();
+        CardAuthorizationStatus status2 = new CardAuthorizationStatus();
+
+        // Both are null
+        assertEquals(status1, status2, "Two default instances should be equal");
+
+        status1.setActive(true);
+        assertNotEquals(status1, status2, "Instances with different 'active' values should not be equal");
+
+        status2.setActive(true);
+        assertEquals(status1, status2, "Instances with same 'active' value should be equal");
+
+        // Check inequality with other object
+        assertNotEquals(status1, "SomeString", "Instance should not be equal to a string");
+        assertNotEquals(status1, null, "Instance should not be equal to null");
+    }
+
+    @Test
+    void testHashCode() {
+        CardAuthorizationStatus status1 = new CardAuthorizationStatus();
+        CardAuthorizationStatus status2 = new CardAuthorizationStatus();
+
+        assertEquals(status1.hashCode(), status2.hashCode(), "Hash codes should match for default instances");
+
+        status1.setActive(true);
+        assertNotEquals(status1.hashCode(), status2.hashCode(), "Hash codes should differ for different 'active' values");
+
+        status2.setActive(true);
+        assertEquals(status1.hashCode(), status2.hashCode(), "Hash codes should match for same 'active' values");
+    }
+
+    @Test
+    void testToString() {
+        CardAuthorizationStatus status = new CardAuthorizationStatus();
+
+        // Test default toString
+        assertTrue(status.toString().contains("active=null"), "toString() should reflect 'active=null' initially");
+
+        status.setActive(true);
+        assertTrue(status.toString().contains("active=true"), "toString() should reflect 'active=true' when set");
+    }
+}

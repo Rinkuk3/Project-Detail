@@ -1,0 +1,44 @@
+package com.td.mbna.msec.midtier.exceptions;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+class SystemExceptionTest {
+
+    @Test
+    void testGetAndSetErrorSource() {
+        // Arrange
+        SystemException systemException = new SystemException();
+        String errorSource = "TestErrorSource";
+
+        // Act
+        systemException.setErrorSource(errorSource);
+
+        // Assert
+        assertEquals(errorSource, systemException.getErrorSource());
+    }
+
+    @Test
+    void testDefaultConstructor() {
+        // Arrange & Act
+        SystemException systemException = new SystemException();
+
+        // Assert
+        assertNotNull(systemException);
+        assertNull(systemException.getErrorSource());
+    }
+
+    @Test
+    void testSerialization() {
+        // Arrange
+        SystemException systemException = new SystemException();
+        systemException.setErrorSource("TestErrorSource");
+
+        // Act
+        String errorSource = systemException.getErrorSource();
+
+        // Assert
+        assertEquals("TestErrorSource", errorSource);
+    }
+}

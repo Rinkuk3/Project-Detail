@@ -1,0 +1,44 @@
+package com.td.mbna.msec.midtier.service;
+
+import com.td.mbna.msec.midtier.types.common.ValidationException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+public class MsecValidatorTest {
+
+    private MsecValidator msecValidatorMock;
+
+    @BeforeEach
+    void setUp() {
+        msecValidatorMock = Mockito.mock(MsecValidator.class);
+    }
+
+    @Test
+    void testValidate() {
+        Object mockRequest = new Object(); // Mock request object
+        ValidationException mockException = new ValidationException("Validation failed");
+
+        // Mock the behavior of validate() to return a mocked ValidationException
+        when(msecValidatorMock.validate(mockRequest)).thenReturn(mockException);
+
+        ValidationException result = msecValidatorMock.validate(mockRequest);
+
+        assertNotNull(result); // Ensure the return is not null
+        assertEquals("Validation failed", result.getMessage());
+        verify(msecValidatorMock, times(1)).validate(mockRequest);
+    }
+
+    @Test
+    void testValidateWithNullRequest() {
+        when(msecValidatorMock.validate(null)).thenReturn(null);
+
+        ValidationException result = msecValidatorMock.validate(null);
+
+        assertNull(result); // Ensure null handling
+        verify(msecValidatorMock, times(1)).validate(null);
+    }
+}

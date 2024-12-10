@@ -1,0 +1,59 @@
+package com.td.mbna.msec.midtier.exceptions;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+class AuthorizationExceptionTest {
+
+    @Test
+    void testDefaultConstructor() {
+        // Arrange & Act
+        AuthorizationException exception = new AuthorizationException();
+
+        // Assert
+        assertNotNull(exception);
+        assertNull(exception.getMessage());
+    }
+
+    @Test
+    void testConstructorWithMessage() {
+        // Arrange
+        String message = "Unauthorized Access";
+
+        // Act
+        AuthorizationException exception = new AuthorizationException(message);
+
+        // Assert
+        assertNotNull(exception);
+        assertEquals(message, exception.getMessage());
+    }
+
+    @Test
+    void testConstructorWithMessageAndCause() {
+        // Arrange
+        String message = "Unauthorized Access";
+        Throwable cause = new RuntimeException("Underlying cause");
+
+        // Act
+        AuthorizationException exception = new AuthorizationException(message, cause);
+
+        // Assert
+        assertNotNull(exception);
+        assertEquals(message, exception.getMessage());
+        assertEquals(cause, exception.getCause());
+    }
+
+    @Test
+    void testConstructorWithCause() {
+        // Arrange
+        Throwable cause = new RuntimeException("Underlying cause");
+
+        // Act
+        AuthorizationException exception = new AuthorizationException(cause);
+
+        // Assert
+        assertNotNull(exception);
+        assertEquals(cause, exception.getCause());
+    }
+}
