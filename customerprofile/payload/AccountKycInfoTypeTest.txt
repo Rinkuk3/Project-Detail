@@ -1,0 +1,96 @@
+package com.td.mbna.msec.midtier.customerprofile.payload;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class AccountKycInfoTypeTest {
+
+    private AccountKycInfoType accountKycInfoType;
+
+    @BeforeEach
+    void setUp() {
+        accountKycInfoType = new AccountKycInfoType();
+    }
+
+    @Test
+    public void testGetterAndSetterKycAcct() {
+        CustAcctType custAcctType = new CustAcctType();
+        custAcctType.setAcctType("Saving");
+
+        accountKycInfoType.setKycAcct(custAcctType);
+        assertThat(accountKycInfoType.getKycAcct()).isEqualTo(custAcctType);
+    }
+
+    @Test
+    public void testGetterAndSetterKycCustAcctInfo() {
+        CustomerAcctInfoType customerAcctInfoType = new CustomerAcctInfoType();
+        customerAcctInfoType.setAccountNumber("123456");
+
+        accountKycInfoType.setKycCustAcctInfo(customerAcctInfoType);
+        assertThat(accountKycInfoType.getKycCustAcctInfo()).isEqualTo(customerAcctInfoType);
+    }
+
+    @Test
+    public void testGetterAndSetterKycAuthorizeUsers() {
+        List<AccountKycAuInfoType> userList = new ArrayList<>();
+        AccountKycAuInfoType user = new AccountKycAuInfoType();
+        user.setKycAliasCustomerID("001");
+
+        userList.add(user);
+
+        accountKycInfoType.setKycAuthorizeUsers(userList);
+        assertThat(accountKycInfoType.getKycAuthorizeUsers()).isEqualTo(userList);
+    }
+
+    @Test
+    public void testHashCode() {
+        accountKycInfoType.setKycAcct(new CustAcctType());
+        accountKycInfoType.setKycCustAcctInfo(new CustomerAcctInfoType());
+        List<AccountKycAuInfoType> userList = new ArrayList<>();
+        userList.add(new AccountKycAuInfoType());
+        accountKycInfoType.setKycAuthorizeUsers(userList);
+
+        int hashCode = accountKycInfoType.hashCode();
+        assertThat(hashCode).isNotZero();
+    }
+
+    @Test
+    public void testEqualsSameObject() {
+        assertThat(accountKycInfoType.equals(accountKycInfoType)).isTrue();
+    }
+
+    @Test
+    public void testEqualsDifferentObject() {
+        AccountKycInfoType other = new AccountKycInfoType();
+        other.setKycAcct(new CustAcctType());
+        other.setKycCustAcctInfo(new CustomerAcctInfoType());
+        other.setKycAuthorizeUsers(new ArrayList<>());
+
+        assertThat(accountKycInfoType.equals(other)).isFalse();
+    }
+
+    @Test
+    public void testEqualsWhenNullFields() {
+        AccountKycInfoType other = new AccountKycInfoType();
+        assertThat(accountKycInfoType.equals(other)).isTrue();
+    }
+
+    @Test
+    public void testToString() {
+        accountKycInfoType.setKycAcct(new CustAcctType());
+        accountKycInfoType.setKycCustAcctInfo(new CustomerAcctInfoType());
+        List<AccountKycAuInfoType> userList = new ArrayList<>();
+        userList.add(new AccountKycAuInfoType());
+        accountKycInfoType.setKycAuthorizeUsers(userList);
+
+        String result = accountKycInfoType.toString();
+        assertThat(result).contains("Saving");
+        assertThat(result).contains("123456");
+        assertThat(result).contains("001");
+    }
+}

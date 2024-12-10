@@ -1,0 +1,103 @@
+package com.td.mbna.msec.midtier.cardreplacement.payload.replacecard;
+
+import com.td.mbna.msec.midtier.types.common.EmailNotificationInfoType;
+import com.td.mbna.msec.midtier.types.common.UnformattedAddress;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestPayloadTest {
+
+    @Test
+    void testGettersAndSetters() {
+        RequestPayload payload = new RequestPayload();
+
+        String aliasCustID = "alias123";
+        String requestedAccountHolderName = "John Doe";
+        String reasonForRequest = "Damaged card";
+        Boolean confirmed = true;
+        EmailNotificationInfoType emailNotificationInfo = new EmailNotificationInfoType();
+        UnformattedAddress address = new UnformattedAddress();
+        String cardNumber = "1234567890123456";
+        String partyKey = "partyKey123";
+
+        payload.setAliasCustID(aliasCustID);
+        payload.setRequestedAccountHolderName(requestedAccountHolderName);
+        payload.setReasonForRequest(reasonForRequest);
+        payload.setConfirmed(confirmed);
+        payload.setEmailNotificationInfo(emailNotificationInfo);
+        payload.setAddress(address);
+        payload.setCardNumber(cardNumber);
+        payload.setPartyKey(partyKey);
+
+        assertEquals(aliasCustID, payload.getAliasCustID());
+        assertEquals(requestedAccountHolderName, payload.getRequestedAccountHolderName());
+        assertEquals(reasonForRequest, payload.getReasonForRequest());
+        assertEquals(confirmed, payload.getConfirmed());
+        assertEquals(emailNotificationInfo, payload.getEmailNotificationInfo());
+        assertEquals(address, payload.getAddress());
+        assertEquals(cardNumber, payload.getCardNumber());
+        assertEquals(partyKey, payload.getPartyKey());
+    }
+
+    @Test
+    void testToString() {
+        RequestPayload payload = new RequestPayload();
+        payload.setAliasCustID("alias123");
+        payload.setRequestedAccountHolderName("John Doe");
+        payload.setReasonForRequest("Damaged card");
+        payload.setConfirmed(true);
+
+        String toStringResult = payload.toString();
+        assertTrue(toStringResult.contains("alias123"));
+        assertTrue(toStringResult.contains("John Doe"));
+        assertTrue(toStringResult.contains("Damaged card"));
+        assertTrue(toStringResult.contains("true"));
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        RequestPayload payload1 = new RequestPayload();
+        RequestPayload payload2 = new RequestPayload();
+
+        payload1.setAliasCustID("alias123");
+        payload1.setRequestedAccountHolderName("John Doe");
+        payload1.setReasonForRequest("Damaged card");
+        payload1.setConfirmed(true);
+        payload1.setCardNumber("1234567890123456");
+
+        payload2.setAliasCustID("alias123");
+        payload2.setRequestedAccountHolderName("John Doe");
+        payload2.setReasonForRequest("Damaged card");
+        payload2.setConfirmed(true);
+        payload2.setCardNumber("1234567890123456");
+
+        assertEquals(payload1, payload2);
+        assertEquals(payload1.hashCode(), payload2.hashCode());
+
+        payload2.setAliasCustID("differentAlias");
+        assertNotEquals(payload1, payload2);
+        assertNotEquals(payload1.hashCode(), payload2.hashCode());
+    }
+
+    @Test
+    void testNotEqualsDifferentClass() {
+        RequestPayload payload = new RequestPayload();
+        Object other = new Object();
+        assertNotEquals(payload, other);
+    }
+
+    @Test
+    void testNotEqualsNull() {
+        RequestPayload payload = new RequestPayload();
+        assertNotEquals(payload, null);
+    }
+
+    @Test
+    void testHashCodeConsistency() {
+        RequestPayload payload = new RequestPayload();
+        payload.setAliasCustID("alias123");
+        int initialHashCode = payload.hashCode();
+        assertEquals(initialHashCode, payload.hashCode());
+    }
+}

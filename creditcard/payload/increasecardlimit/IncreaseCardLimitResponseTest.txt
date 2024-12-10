@@ -1,0 +1,95 @@
+package com.td.mbna.msec.midtier.creditcard.payload.increasecardlimit;
+
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+public class IncreaseCardLimitResponseTest {
+
+    @Test
+    void testGetterAndSetterMethods() {
+        IncreaseCardLimitResponse response = new IncreaseCardLimitResponse();
+        ResponsePayload payload = new ResponsePayload();
+        
+        response.setResponsePayload(payload);
+        response.setStatus("SUCCESS");
+        response.setErrorMessages("No Errors");
+
+        assertEquals(payload, response.getResponsePayload());
+        assertEquals("SUCCESS", response.getStatus());
+        assertEquals("No Errors", response.getErrorMessages());
+    }
+
+    @Test
+    void testGetResponsePayloadLazyInitialization() {
+        IncreaseCardLimitResponse response = new IncreaseCardLimitResponse();
+
+        // Check lazy initialization when responsePayload is null
+        assertNotNull(response.getResponsePayload());
+        assertTrue(response.getResponsePayload() instanceof ResponsePayload);
+    }
+
+    @Test
+    void testToString() {
+        IncreaseCardLimitResponse response = new IncreaseCardLimitResponse();
+        response.setStatus("SUCCESS");
+        response.setErrorMessages("No Errors");
+
+        String expectedString = 
+            "com.td.mbna.msec.midtier.creditcard.payload.increasecardlimit.IncreaseCardLimitResponse@" +
+            Integer.toHexString(System.identityHashCode(response)) +
+            "[status=SUCCESS,errorMsgs=No Errors,responsePayload=<null>]";
+
+        assertEquals(expectedString, response.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        IncreaseCardLimitResponse response1 = new IncreaseCardLimitResponse();
+        response1.setStatus("SUCCESS");
+        response1.setErrorMessages("No Errors");
+
+        IncreaseCardLimitResponse response2 = new IncreaseCardLimitResponse();
+        response2.setStatus("SUCCESS");
+        response2.setErrorMessages("No Errors");
+
+        // Check if the same state produces the same hash code
+        assertEquals(response1.hashCode(), response2.hashCode());
+
+        // Change one field and ensure hash codes differ
+        response2.setErrorMessages("Different Error");
+        assertNotEquals(response1.hashCode(), response2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        IncreaseCardLimitResponse response1 = new IncreaseCardLimitResponse();
+        response1.setStatus("SUCCESS");
+        response1.setErrorMessages("No Errors");
+
+        IncreaseCardLimitResponse response2 = new IncreaseCardLimitResponse();
+        response2.setStatus("SUCCESS");
+        response2.setErrorMessages("No Errors");
+
+        // Verify equality with same fields
+        assertTrue(response1.equals(response2));
+
+        // Change one field and ensure inequality
+        response2.setErrorMessages("Different Errors");
+        assertFalse(response1.equals(response2));
+
+        // Test null
+        assertFalse(response1.equals(null));
+
+        // Test different object type
+        assertFalse(response1.equals(new Object()));
+    }
+
+    @Test
+    void testResponsePayloadEdgeCases() {
+        IncreaseCardLimitResponse response = new IncreaseCardLimitResponse();
+        response.setResponsePayload(null);
+
+        // Ensure response payload works correctly when explicitly set to null
+        assertNull(response.getResponsePayload());
+    }
+}

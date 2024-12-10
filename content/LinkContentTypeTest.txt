@@ -1,0 +1,134 @@
+package com.td.mbna.msec.midtier.content.payload;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+/**
+ * Unit test class for LinkContentType.
+ */
+public class LinkContentTypeTest {
+
+    private LinkContentType linkContentType;
+
+    @BeforeEach
+    public void setUp() {
+        linkContentType = new LinkContentType();
+    }
+
+    @Test
+    public void testGetterAndSetter_Link() {
+        linkContentType.setLink("https://example.com");
+        assertEquals("https://example.com", linkContentType.getLink());
+    }
+
+    @Test
+    public void testGetterAndSetter_AltText() {
+        linkContentType.setAltText("Example Alt Text");
+        assertEquals("Example Alt Text", linkContentType.getAltText());
+    }
+
+    @Test
+    public void testToString_NullValues() {
+        String result = linkContentType.toString();
+        assertNotNull(result);
+        assertTrue(result.contains("link"));
+        assertTrue(result.contains("<null>"));
+        assertTrue(result.contains("altText"));
+        assertTrue(result.contains("<null>"));
+    }
+
+    @Test
+    public void testToString_WithLinkAndAltText() {
+        linkContentType.setLink("https://example.com");
+        linkContentType.setAltText("Example Alt Text");
+
+        String result = linkContentType.toString();
+        assertNotNull(result);
+        assertTrue(result.contains("link"));
+        assertTrue(result.contains("https://example.com"));
+        assertTrue(result.contains("altText"));
+        assertTrue(result.contains("Example Alt Text"));
+    }
+
+    @Test
+    public void testHashCode_NullValues() {
+        int hashCode = linkContentType.hashCode();
+        assertEquals(1, hashCode);
+    }
+
+    @Test
+    public void testHashCode_WithLinkOnly() {
+        linkContentType.setLink("https://example.com");
+        int hashCode = linkContentType.hashCode();
+        assertNotEquals(1, hashCode);
+    }
+
+    @Test
+    public void testHashCode_WithAltTextOnly() {
+        linkContentType.setAltText("AltText");
+        int hashCode = linkContentType.hashCode();
+        assertNotEquals(1, hashCode);
+    }
+
+    @Test
+    public void testHashCode_WithBothLinkAndAltText() {
+        linkContentType.setLink("https://example.com");
+        linkContentType.setAltText("AltText");
+        int hashCode = linkContentType.hashCode();
+        assertNotEquals(1, hashCode);
+    }
+
+    @Test
+    public void testEquals_SameObject() {
+        assertTrue(linkContentType.equals(linkContentType));
+    }
+
+    @Test
+    public void testEquals_Null() {
+        assertFalse(linkContentType.equals(null));
+    }
+
+    @Test
+    public void testEquals_DifferentType() {
+        assertFalse(linkContentType.equals("Some String"));
+    }
+
+    @Test
+    public void testEquals_EqualObjects() {
+        LinkContentType other = new LinkContentType();
+        other.setLink("https://example.com");
+        other.setAltText("AltText");
+
+        linkContentType.setLink("https://example.com");
+        linkContentType.setAltText("AltText");
+
+        assertTrue(linkContentType.equals(other));
+    }
+
+    @Test
+    public void testEquals_DifferentLink() {
+        LinkContentType other = new LinkContentType();
+        other.setLink("https://otherexample.com");
+        other.setAltText("AltText");
+
+        linkContentType.setLink("https://example.com");
+        linkContentType.setAltText("AltText");
+
+        assertFalse(linkContentType.equals(other));
+    }
+
+    @Test
+    public void testEquals_DifferentAltText() {
+        LinkContentType other = new LinkContentType();
+        other.setLink("https://example.com");
+        other.setAltText("OtherAltText");
+
+        linkContentType.setLink("https://example.com");
+        linkContentType.setAltText("AltText");
+
+        assertFalse(linkContentType.equals(other));
+    }
+}

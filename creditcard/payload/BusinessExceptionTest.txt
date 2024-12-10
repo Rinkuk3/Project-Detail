@@ -1,0 +1,77 @@
+package com.td.mbna.msec.midtier.creditcard.payload;
+
+import com.td.mbna.msec.midtier.types.common.BusinessException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class BusinessExceptionTest {
+
+    private BusinessException businessException;
+    private BusinessException faultInfo;
+
+    @BeforeEach
+    void setUp() {
+        businessException = new BusinessException();
+        faultInfo = new BusinessException();
+        faultInfo.setFaultInfo(null); // Ensure a controlled test scenario
+    }
+
+    @Test
+    void testSetAndGetFaultInfo() {
+        businessException.setFaultInfo(faultInfo);
+        assertThat(businessException.getFaultInfo()).isEqualTo(faultInfo);
+    }
+
+    @Test
+    void testToString() {
+        businessException.setFaultInfo(faultInfo);
+
+        String expectedString = "com.td.mbna.msec.midtier.creditcard.payload.BusinessException@" +
+                Integer.toHexString(System.identityHashCode(businessException)) +
+                "[faultInfo=" + faultInfo + "]";
+
+        assertThat(businessException.toString()).isEqualTo(expectedString);
+    }
+
+    @Test
+    void testHashCode() {
+        businessException.setFaultInfo(faultInfo);
+        assertThat(businessException.hashCode()).isEqualTo(faultInfo.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        BusinessException anotherBusinessException = new BusinessException();
+        anotherBusinessException.setFaultInfo(faultInfo);
+
+        // Should match because faultInfo matches
+        assertThat(businessException).isEqualTo(anotherBusinessException);
+
+        // Change fault info and expect them not to match
+        anotherBusinessException.setFaultInfo(new BusinessException());
+        assertThat(businessException).isNotEqualTo(anotherBusinessException);
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        assertThat(businessException).isNotEqualTo(null);
+    }
+
+    @Test
+    void testEqualsWhenFaultInfoIsNull() {
+        businessException.setFaultInfo(null);
+
+        BusinessException anotherBusinessException = new BusinessException();
+        anotherBusinessException.setFaultInfo(null);
+
+        assertThat(businessException).isEqualTo(anotherBusinessException);
+    }
+
+    @Test
+    void testHashCodeWhenFaultInfoIsNull() {
+        businessException.setFaultInfo(null);
+        assertThat(businessException.hashCode()).isEqualTo(1); // Ensure a consistent fallback value
+    }
+}

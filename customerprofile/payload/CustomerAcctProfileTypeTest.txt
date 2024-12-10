@@ -1,0 +1,73 @@
+package com.td.mbna.msec.midtier.customerprofile.payload;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class CustomerAcctProfileTypeTest {
+
+    private CustomerAcctProfileType customerAcctProfileType;
+
+    @BeforeEach
+    void setUp() {
+        customerAcctProfileType = new CustomerAcctProfileType();
+    }
+
+    @Test
+    public void testGetterAndSetterCustInfo() {
+        CustomerInfoType customerInfoType = new CustomerInfoType();
+        customerInfoType.setCustomerId("123");
+
+        customerAcctProfileType.setCustInfo(customerInfoType);
+        assertThat(customerAcctProfileType.getCustInfo()).isEqualTo(customerInfoType);
+    }
+
+    @Test
+    public void testGetterAndSetterAcctInfo() {
+        CustomerAcctInfoType customerAcctInfoType = new CustomerAcctInfoType();
+        customerAcctInfoType.setAccountNumber("123456");
+
+        customerAcctProfileType.setAcctInfo(customerAcctInfoType);
+        assertThat(customerAcctProfileType.getAcctInfo()).isEqualTo(customerAcctInfoType);
+    }
+
+    @Test
+    public void testHashCode() {
+        customerAcctProfileType.setCustInfo(new CustomerInfoType());
+        customerAcctProfileType.setAcctInfo(new CustomerAcctInfoType());
+
+        int hashCode = customerAcctProfileType.hashCode();
+        assertThat(hashCode).isNotZero();
+    }
+
+    @Test
+    public void testEqualsSameObject() {
+        assertThat(customerAcctProfileType.equals(customerAcctProfileType)).isTrue();
+    }
+
+    @Test
+    public void testEqualsDifferentObject() {
+        CustomerAcctProfileType other = new CustomerAcctProfileType();
+        other.setCustInfo(new CustomerInfoType());
+        other.setAcctInfo(new CustomerAcctInfoType());
+
+        assertThat(customerAcctProfileType.equals(other)).isFalse();
+    }
+
+    @Test
+    public void testEqualsWhenNullFields() {
+        CustomerAcctProfileType other = new CustomerAcctProfileType();
+        assertThat(customerAcctProfileType.equals(other)).isTrue();
+    }
+
+    @Test
+    public void testToString() {
+        customerAcctProfileType.setCustInfo(new CustomerInfoType());
+        customerAcctProfileType.setAcctInfo(new CustomerAcctInfoType());
+
+        String result = customerAcctProfileType.toString();
+        assertThat(result).contains("custInfo");
+        assertThat(result).contains("acctInfo");
+    }
+}

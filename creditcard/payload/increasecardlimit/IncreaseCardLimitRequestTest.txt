@@ -1,0 +1,105 @@
+package com.td.mbna.msec.midtier.creditcard.payload.increasecardlimit;
+
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+public class IncreaseCardLimitRequestTest {
+
+    @Test
+    void testGetterAndSetterMethods() {
+        IncreaseCardLimitRequest request = new IncreaseCardLimitRequest();
+        RequestPayload payload = new RequestPayload();
+        
+        // Set values via setter
+        request.setRequestPayload(payload);
+        request.setSessionInfo("session123");
+        request.setCustId("cust123");
+        request.setAliasCustId("alias123");
+        request.setAcctNum("acct123");
+        request.setAcctType("typeA");
+        request.setLanguagePref("EN");
+        request.setAuditInfo("audit123");
+        request.setIsPrimaryUser(true);
+        request.setReserved1("reserved123");
+        request.setCustInterface("interface123");
+
+        // Verify getters
+        assertEquals(payload, request.getRequestPayload());
+        assertEquals("session123", request.getSessionInfo());
+        assertEquals("cust123", request.getCustId());
+        assertEquals("alias123", request.getAliasCustId());
+        assertEquals("acct123", request.getAcctNum());
+        assertEquals("typeA", request.getAcctType());
+        assertEquals("EN", request.getLanguagePref());
+        assertEquals("audit123", request.getAuditInfo());
+        assertTrue(request.getIsPrimaryUser());
+        assertEquals("reserved123", request.getReserved1());
+        assertEquals("interface123", request.getCustInterface());
+    }
+
+    @Test
+    void testToString() {
+        IncreaseCardLimitRequest request = new IncreaseCardLimitRequest();
+        request.setSessionInfo("session123");
+        request.setCustId("cust123");
+
+        String expectedString = 
+            "com.td.mbna.msec.midtier.creditcard.payload.increasecardlimit.IncreaseCardLimitRequest@" +
+            Integer.toHexString(System.identityHashCode(request)) +
+            "[sessionInfo=session123,custId=cust123,aliasCustId=<null>,acctNum=<null>,acctType=<null>,languagePref=<null>,auditInfo=<null>,isPrimaryUser=<null>,reserved1=<null>,custInterface=<null>,requestPayload=<null>]";
+
+        assertEquals(expectedString, request.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        IncreaseCardLimitRequest request1 = new IncreaseCardLimitRequest();
+        request1.setSessionInfo("session123");
+        request1.setCustId("cust123");
+
+        IncreaseCardLimitRequest request2 = new IncreaseCardLimitRequest();
+        request2.setSessionInfo("session123");
+        request2.setCustId("cust123");
+
+        assertEquals(request1.hashCode(), request2.hashCode());
+
+        request2.setCustId("differentCust");
+        assertNotEquals(request1.hashCode(), request2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        IncreaseCardLimitRequest request1 = new IncreaseCardLimitRequest();
+        request1.setSessionInfo("session123");
+        request1.setCustId("cust123");
+
+        IncreaseCardLimitRequest request2 = new IncreaseCardLimitRequest();
+        request2.setSessionInfo("session123");
+        request2.setCustId("cust123");
+
+        // Check equality
+        assertTrue(request1.equals(request2));
+
+        // Modify one field and verify inequality
+        request2.setCustId("differentCust");
+        assertFalse(request1.equals(request2));
+
+        // Test against null
+        assertFalse(request1.equals(null));
+
+        // Test against different class
+        assertFalse(request1.equals(new Object()));
+    }
+
+    @Test
+    void testRequestPayload() {
+        IncreaseCardLimitRequest request = new IncreaseCardLimitRequest();
+        RequestPayload payload = new RequestPayload();
+        
+        request.setRequestPayload(payload);
+        assertEquals(payload, request.getRequestPayload());
+        
+        request.setRequestPayload(null);
+        assertNull(request.getRequestPayload());
+    }
+}

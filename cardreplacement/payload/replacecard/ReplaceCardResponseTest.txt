@@ -1,0 +1,74 @@
+package com.td.mbna.msec.midtier.cardreplacement.payload.replacecard;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ReplaceCardResponseTest {
+
+    @Test
+    void testGettersAndSetters() {
+        ReplaceCardResponse response = new ReplaceCardResponse();
+        ResponsePayload payload = new ResponsePayload();
+
+        response.setResponsePayload(payload);
+        assertEquals(payload, response.getResponsePayload());
+    }
+
+    @Test
+    void testToString() {
+        ReplaceCardResponse response = new ReplaceCardResponse();
+        response.setStatus("Success");
+        response.setErrorMessages("No error");
+        ResponsePayload payload = new ResponsePayload();
+        response.setResponsePayload(payload);
+
+        String toString = response.toString();
+        assertTrue(toString.contains("Success"));
+        assertTrue(toString.contains("No error"));
+        assertTrue(toString.contains(payload.toString()));
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        ReplaceCardResponse response1 = new ReplaceCardResponse();
+        ReplaceCardResponse response2 = new ReplaceCardResponse();
+
+        response1.setStatus("Success");
+        response1.setErrorMessages("No error");
+        ResponsePayload payload = new ResponsePayload();
+        response1.setResponsePayload(payload);
+
+        response2.setStatus("Success");
+        response2.setErrorMessages("No error");
+        response2.setResponsePayload(payload);
+
+        assertEquals(response1, response2);
+        assertEquals(response1.hashCode(), response2.hashCode());
+
+        response2.setStatus("Failure");
+        assertNotEquals(response1, response2);
+        assertNotEquals(response1.hashCode(), response2.hashCode());
+    }
+
+    @Test
+    void testNotEqualsDifferentClass() {
+        ReplaceCardResponse response = new ReplaceCardResponse();
+        Object other = new Object();
+        assertNotEquals(response, other);
+    }
+
+    @Test
+    void testNotEqualsNull() {
+        ReplaceCardResponse response = new ReplaceCardResponse();
+        assertNotEquals(response, null);
+    }
+
+    @Test
+    void testHashCodeConsistency() {
+        ReplaceCardResponse response = new ReplaceCardResponse();
+        response.setStatus("Success");
+        int initialHashCode = response.hashCode();
+        assertEquals(initialHashCode, response.hashCode());
+    }
+}

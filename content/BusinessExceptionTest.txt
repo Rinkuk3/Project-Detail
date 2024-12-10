@@ -1,0 +1,122 @@
+package com.td.mbna.msec.midtier.content.payload;
+
+import com.td.mbna.msec.midtier.types.common.BusinessException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+/**
+ * Unit test class for BusinessException.
+ */
+public class BusinessExceptionTest {
+
+    private BusinessException businessException;
+
+    @BeforeEach
+    public void setUp() {
+        businessException = new BusinessException();
+    }
+
+    @Test
+    public void testGetterAndSetter() {
+        // Create a mock for faultInfo
+        com.td.mbna.msec.midtier.types.common.BusinessException mockFaultInfo = mock(com.td.mbna.msec.midtier.types.common.BusinessException.class);
+
+        // Test setter
+        businessException.setFaultInfo(mockFaultInfo);
+
+        // Test getter
+        assertEquals(mockFaultInfo, businessException.getFaultInfo());
+    }
+
+    @Test
+    public void testToString_NullFaultInfo() {
+        // Test toString with null faultInfo
+        String result = businessException.toString();
+        assertNotNull(result);
+        assertTrue(result.contains("faultInfo"));
+        assertTrue(result.contains("<null>"));
+    }
+
+    @Test
+    public void testToString_WithFaultInfo() {
+        // Create a mock for faultInfo
+        com.td.mbna.msec.midtier.types.common.BusinessException mockFaultInfo = mock(com.td.mbna.msec.midtier.types.common.BusinessException.class);
+        when(mockFaultInfo.toString()).thenReturn("mockFaultInfo");
+
+        businessException.setFaultInfo(mockFaultInfo);
+
+        String result = businessException.toString();
+        assertNotNull(result);
+        assertTrue(result.contains("mockFaultInfo"));
+    }
+
+    @Test
+    public void testHashCode_NullFaultInfo() {
+        // Test hashCode with null faultInfo
+        int hashCode = businessException.hashCode();
+        assertEquals(1, hashCode);
+    }
+
+    @Test
+    public void testHashCode_WithFaultInfo() {
+        // Create a mock for faultInfo
+        com.td.mbna.msec.midtier.types.common.BusinessException mockFaultInfo = mock(com.td.mbna.msec.midtier.types.common.BusinessException.class);
+        when(mockFaultInfo.hashCode()).thenReturn(123);
+
+        businessException.setFaultInfo(mockFaultInfo);
+
+        int hashCode = businessException.hashCode();
+        assertEquals(123, hashCode);
+    }
+
+    @Test
+    public void testEquals_SameObject() {
+        // Test equals with the same object
+        assertTrue(businessException.equals(businessException));
+    }
+
+    @Test
+    public void testEquals_Null() {
+        // Test equals with null
+        assertFalse(businessException.equals(null));
+    }
+
+    @Test
+    public void testEquals_DifferentType() {
+        // Test equals with an object of a different type
+        assertFalse(businessException.equals("RandomString"));
+    }
+
+    @Test
+    public void testEquals_EmptyFaultInfo() {
+        BusinessException other = new BusinessException();
+        assertTrue(businessException.equals(other));
+    }
+
+    @Test
+    public void testEquals_SameFaultInfo() {
+        com.td.mbna.msec.midtier.types.common.BusinessException mockFaultInfo = mock(com.td.mbna.msec.midtier.types.common.BusinessException.class);
+        businessException.setFaultInfo(mockFaultInfo);
+
+        BusinessException other = new BusinessException();
+        other.setFaultInfo(mockFaultInfo);
+
+        assertTrue(businessException.equals(other));
+    }
+
+    @Test
+    public void testEquals_DifferentFaultInfo() {
+        com.td.mbna.msec.midtier.types.common.BusinessException mockFaultInfo1 = mock(com.td.mbna.msec.midtier.types.common.BusinessException.class);
+        com.td.mbna.msec.midtier.types.common.BusinessException mockFaultInfo2 = mock(com.td.mbna.msec.midtier.types.common.BusinessException.class);
+
+        businessException.setFaultInfo(mockFaultInfo1);
+
+        BusinessException other = new BusinessException();
+        other.setFaultInfo(mockFaultInfo2);
+
+        assertFalse(businessException.equals(other));
+    }
+}

@@ -1,0 +1,151 @@
+package com.td.mbna.msec.midtier.cardservice.payload.validatecpi;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestPayloadTest {
+
+    @Test
+    void testGetterAndSetter() {
+        // Create an instance of RequestPayload
+        RequestPayload payload = new RequestPayload();
+
+        // Set values
+        payload.setCustId("cust123");
+        payload.setAcctId("acct456");
+        payload.setCardNum("1234567890123456");
+        payload.setCvc("123");
+        payload.setExpiryMonth(12);
+        payload.setExpiryYear("2025");
+        payload.setRealExpiryMonth("11");
+        payload.setRealExpiryYear("2024");
+        payload.setEmail("test@example.com");
+        payload.setEmailRequired(true);
+
+        // Verify the values
+        assertEquals("cust123", payload.getCustId());
+        assertEquals("acct456", payload.getAcctId());
+        assertEquals("1234567890123456", payload.getCardNum());
+        assertEquals("123", payload.getCvc());
+        assertEquals(12, payload.getExpiryMonth());
+        assertEquals("2025", payload.getExpiryYear());
+        assertEquals("11", payload.getRealExpiryMonth());
+        assertEquals("2024", payload.getRealExpiryYear());
+        assertEquals("test@example.com", payload.getEmail());
+        assertTrue(payload.getEmailRequired());
+    }
+
+    @Test
+    void testToString() {
+        RequestPayload payload = new RequestPayload();
+        payload.setCustId("cust123");
+        payload.setAcctId("acct456");
+        payload.setCardNum("1234567890123456");
+        payload.setCvc("123");
+        payload.setExpiryMonth(12);
+        payload.setExpiryYear("2025");
+        payload.setRealExpiryMonth("11");
+        payload.setRealExpiryYear("2024");
+        payload.setEmail("test@example.com");
+        payload.setEmailRequired(true);
+
+        String toStringOutput = payload.toString();
+        assertNotNull(toStringOutput);
+        assertTrue(toStringOutput.contains("custId=cust123"));
+        assertTrue(toStringOutput.contains("acctId=acct456"));
+        assertTrue(toStringOutput.contains("cardNum=1234567890123456"));
+        assertTrue(toStringOutput.contains("emailRequired=true"));
+    }
+
+    @Test
+    void testHashCode() {
+        RequestPayload payload1 = new RequestPayload();
+        RequestPayload payload2 = new RequestPayload();
+
+        payload1.setCustId("cust123");
+        payload2.setCustId("cust123");
+
+        // Same hash code for identical values
+        assertEquals(payload1.hashCode(), payload2.hashCode());
+
+        // Different hash code when a field is changed
+        payload2.setCustId("cust999");
+        assertNotEquals(payload1.hashCode(), payload2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        RequestPayload payload1 = new RequestPayload();
+        RequestPayload payload2 = new RequestPayload();
+
+        // Test equality with default (null) values
+        assertTrue(payload1.equals(payload2));
+
+        // Test equality with identical values
+        payload1.setCustId("cust123");
+        payload2.setCustId("cust123");
+        assertTrue(payload1.equals(payload2));
+
+        // Test inequality with different values
+        payload2.setCustId("cust999");
+        assertFalse(payload1.equals(payload2));
+
+        // Test equality with same reference
+        assertTrue(payload1.equals(payload1));
+
+        // Test inequality with null
+        assertFalse(payload1.equals(null));
+
+        // Test inequality with different class
+        assertFalse(payload1.equals("NotAPayload"));
+    }
+
+    @Test
+    void testEqualsWithNullValues() {
+        RequestPayload payload1 = new RequestPayload();
+        RequestPayload payload2 = new RequestPayload();
+
+        // One object has null values; should be equal
+        payload1.setCustId("cust123");
+        assertFalse(payload1.equals(payload2));
+
+        payload2.setCustId("cust123");
+        assertTrue(payload1.equals(payload2));
+    }
+
+    @Test
+    void testEmailRequiredNull() {
+        RequestPayload payload = new RequestPayload();
+        payload.setEmailRequired(null);
+
+        assertNull(payload.getEmailRequired());
+    }
+
+    @Test
+    void testEdgeCases() {
+        RequestPayload payload = new RequestPayload();
+
+        // Empty fields
+        payload.setCustId("");
+        payload.setAcctId("");
+        payload.setCardNum("");
+        payload.setEmail("");
+
+        assertEquals("", payload.getCustId());
+        assertEquals("", payload.getAcctId());
+        assertEquals("", payload.getCardNum());
+        assertEquals("", payload.getEmail());
+
+        // Null fields
+        payload.setCustId(null);
+        payload.setAcctId(null);
+        payload.setCardNum(null);
+        payload.setEmail(null);
+
+        assertNull(payload.getCustId());
+        assertNull(payload.getAcctId());
+        assertNull(payload.getCardNum());
+        assertNull(payload.getEmail());
+    }
+}

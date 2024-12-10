@@ -1,0 +1,134 @@
+package com.td.mbna.msec.midtier.customerprofile.payload;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class CustomerAcctLogonInfoTypeTest {
+
+    private CustomerAcctLogonInfoType customerAcctLogonInfoType;
+
+    @BeforeEach
+    void setUp() {
+        customerAcctLogonInfoType = new CustomerAcctLogonInfoType();
+    }
+
+    @Test
+    public void testGetterAndSetterCustInfo() {
+        CustomerInfoType customerInfoType = new CustomerInfoType();
+        customerInfoType.setCustomerId("123");
+
+        customerAcctLogonInfoType.setCustInfo(customerInfoType);
+        assertThat(customerAcctLogonInfoType.getCustInfo()).isEqualTo(customerInfoType);
+    }
+
+    @Test
+    public void testGetterAndSetterAcctInfo() {
+        CustomerAcctInfoType acctInfoType = new CustomerAcctInfoType();
+        acctInfoType.setAccountNumber("123456");
+
+        customerAcctLogonInfoType.setAcctInfo(acctInfoType);
+        assertThat(customerAcctLogonInfoType.getAcctInfo()).isEqualTo(acctInfoType);
+    }
+
+    @Test
+    public void testGetterAndSetterCardHolder() {
+        CardHolderType cardHolderType = new CardHolderType();
+        cardHolderType.setCardHolderId("1");
+
+        customerAcctLogonInfoType.setCardHolder(cardHolderType);
+        assertThat(customerAcctLogonInfoType.getCardHolder()).isEqualTo(cardHolderType);
+    }
+
+    @Test
+    public void testGetterAndSetterPrimaryCardHolder() {
+        CardHolderType primaryCardHolderType = new CardHolderType();
+        primaryCardHolderType.setCardHolderId("2");
+
+        customerAcctLogonInfoType.setPrimaryCardHolder(primaryCardHolderType);
+        assertThat(customerAcctLogonInfoType.getPrimaryCardHolder()).isEqualTo(primaryCardHolderType);
+    }
+
+    @Test
+    public void testGetterAndSetterOtherCardHolders() {
+        List<CardHolderType> cardHolderList = new ArrayList<>();
+        CardHolderType cardHolderType = new CardHolderType();
+        cardHolderType.setCardHolderId("3");
+        cardHolderList.add(cardHolderType);
+
+        customerAcctLogonInfoType.setOtherCardHolders(cardHolderList);
+        assertThat(customerAcctLogonInfoType.getOtherCardHolders()).isEqualTo(cardHolderList);
+    }
+
+    @Test
+    public void testGetterAndSetterPrimaryUserContact() {
+        AcctContactInfoType contactInfoType = new AcctContactInfoType();
+        contactInfoType.setContactId("contact123");
+
+        customerAcctLogonInfoType.setPrimaryUserContact(contactInfoType);
+        assertThat(customerAcctLogonInfoType.getPrimaryUserContact()).isEqualTo(contactInfoType);
+    }
+
+    @Test
+    public void testHashCode() {
+        customerAcctLogonInfoType.setCustInfo(new CustomerInfoType());
+        customerAcctLogonInfoType.setAcctInfo(new CustomerAcctInfoType());
+        customerAcctLogonInfoType.setCardHolder(new CardHolderType());
+        customerAcctLogonInfoType.setPrimaryCardHolder(new CardHolderType());
+        List<CardHolderType> cardHolderList = new ArrayList<>();
+        cardHolderList.add(new CardHolderType());
+        customerAcctLogonInfoType.setOtherCardHolders(cardHolderList);
+        customerAcctLogonInfoType.setPrimaryUserContact(new AcctContactInfoType());
+
+        int hashCode = customerAcctLogonInfoType.hashCode();
+        assertThat(hashCode).isNotZero();
+    }
+
+    @Test
+    public void testEqualsSameObject() {
+        assertThat(customerAcctLogonInfoType.equals(customerAcctLogonInfoType)).isTrue();
+    }
+
+    @Test
+    public void testEqualsDifferentObject() {
+        CustomerAcctLogonInfoType other = new CustomerAcctLogonInfoType();
+        other.setCustInfo(new CustomerInfoType());
+        other.setAcctInfo(new CustomerAcctInfoType());
+        other.setCardHolder(new CardHolderType());
+        other.setPrimaryCardHolder(new CardHolderType());
+        other.setPrimaryUserContact(new AcctContactInfoType());
+        other.setOtherCardHolders(new ArrayList<>());
+
+        assertThat(customerAcctLogonInfoType.equals(other)).isFalse();
+    }
+
+    @Test
+    public void testEqualsWhenNullFields() {
+        CustomerAcctLogonInfoType other = new CustomerAcctLogonInfoType();
+        assertThat(customerAcctLogonInfoType.equals(other)).isTrue();
+    }
+
+    @Test
+    public void testToString() {
+        customerAcctLogonInfoType.setCustInfo(new CustomerInfoType());
+        customerAcctLogonInfoType.setAcctInfo(new CustomerAcctInfoType());
+        customerAcctLogonInfoType.setCardHolder(new CardHolderType());
+        customerAcctLogonInfoType.setPrimaryCardHolder(new CardHolderType());
+        List<CardHolderType> cardHolderList = new ArrayList<>();
+        cardHolderList.add(new CardHolderType());
+        customerAcctLogonInfoType.setOtherCardHolders(cardHolderList);
+        customerAcctLogonInfoType.setPrimaryUserContact(new AcctContactInfoType());
+
+        String result = customerAcctLogonInfoType.toString();
+        assertThat(result).contains("custInfo");
+        assertThat(result).contains("acctInfo");
+        assertThat(result).contains("cardHolder");
+        assertThat(result).contains("primaryCardHolder");
+        assertThat(result).contains("otherCardHolders");
+        assertThat(result).contains("primaryUserContact");
+    }
+}

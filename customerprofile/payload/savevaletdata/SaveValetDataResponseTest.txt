@@ -1,0 +1,36 @@
+package com.td.mbna.msec.midtier.customerprofile.payload.savevaletdata;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class SaveValetDataResponseTest {
+
+    private SaveValetDataResponse saveValetDataResponse;
+
+    @BeforeEach
+    void setUp() {
+        saveValetDataResponse = new SaveValetDataResponse();
+    }
+
+    @Test
+    public void testGetterWhenResponsePayloadIsNull() {
+        assertThat(saveValetDataResponse.getResponsePayload()).isNotNull();
+    }
+
+    @Test
+    public void testSetterAndGetter() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setTicketId("ticket123");
+
+        saveValetDataResponse.setResponsePayload(responsePayload);
+        assertThat(saveValetDataResponse.getResponsePayload()).isEqualTo(responsePayload);
+    }
+
+    @Test
+    public void testSetterWithNull() {
+        saveValetDataResponse.setResponsePayload(null);
+        assertThat(saveValetDataResponse.getResponsePayload()).isNotNull();
+    }
+}

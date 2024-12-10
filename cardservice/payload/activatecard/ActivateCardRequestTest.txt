@@ -1,0 +1,72 @@
+package com.td.mbna.msec.midtier.cardservice.payload.activatecard;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class ActivateCardRequestTest {
+
+    @Test
+    void testGetAndSetRequestPayload() {
+        ActivateCardRequest request = new ActivateCardRequest();
+        RequestPayload payload = new RequestPayload();
+
+        request.setRequestPayload(payload);
+        assertEquals(payload, request.getRequestPayload());
+    }
+
+    @Test
+    void testToString() {
+        ActivateCardRequest request = new ActivateCardRequest();
+        RequestPayload payload = new RequestPayload();
+        request.setRequestPayload(payload);
+        String toStringOutput = request.toString();
+
+        assertNotNull(toStringOutput);
+        assertTrue(toStringOutput.contains("ActivateCardRequest"));
+        assertTrue(toStringOutput.contains("requestPayload"));
+    }
+
+    @Test
+    void testHashCode() {
+        ActivateCardRequest request1 = new ActivateCardRequest();
+        ActivateCardRequest request2 = new ActivateCardRequest();
+
+        RequestPayload payload = new RequestPayload();
+        request1.setRequestPayload(payload);
+        request2.setRequestPayload(payload);
+
+        assertEquals(request1.hashCode(), request2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        ActivateCardRequest request1 = new ActivateCardRequest();
+        ActivateCardRequest request2 = new ActivateCardRequest();
+
+        RequestPayload payload = new RequestPayload();
+        request1.setRequestPayload(payload);
+        request2.setRequestPayload(payload);
+
+        assertTrue(request1.equals(request2));
+        assertTrue(request2.equals(request1));
+        assertFalse(request1.equals(null));
+        assertFalse(request1.equals(new Object()));
+
+        request2.setRequestPayload(null);
+        assertFalse(request1.equals(request2));
+    }
+
+    @Test
+    void testEqualsWithDifferentValues() {
+        ActivateCardRequest request1 = new ActivateCardRequest();
+        ActivateCardRequest request2 = new ActivateCardRequest();
+
+        RequestPayload payload1 = new RequestPayload();
+        RequestPayload payload2 = new RequestPayload();
+
+        request1.setRequestPayload(payload1);
+        request2.setRequestPayload(payload2);
+
+        assertFalse(request1.equals(request2));
+    }
+}

@@ -1,0 +1,104 @@
+package com.td.mbna.msec.midtier.customerprofile.payload.retrievecapd;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class RequestPayloadTest {
+
+    private RequestPayload requestPayload;
+
+    @BeforeEach
+    void setUp() {
+        requestPayload = new RequestPayload();
+    }
+
+    @Test
+    public void testCustIdGetterAndSetter() {
+        requestPayload.setCustId("cust123");
+        assertThat(requestPayload.getCustId()).isEqualTo("cust123");
+    }
+
+    @Test
+    public void testAcctIdsGetterAndSetter() {
+        List<String> acctIds = new ArrayList<>();
+        acctIds.add("acct1");
+        acctIds.add("acct2");
+
+        requestPayload.setAcctIds(acctIds);
+        assertThat(requestPayload.getAcctIds()).containsExactly("acct1", "acct2");
+    }
+
+    @Test
+    public void testLazyInitializationOfAcctIds() {
+        assertThat(requestPayload.getAcctIds()).isNotNull();
+        assertThat(requestPayload.getAcctIds()).isEmpty();
+    }
+
+    @Test
+    public void testEqualsSameObject() {
+        requestPayload.setCustId("cust123");
+        requestPayload.setAcctIds(List.of("acct1", "acct2"));
+
+        RequestPayload sameObject = requestPayload;
+        assertThat(requestPayload).isEqualTo(sameObject);
+    }
+
+    @Test
+    public void testEqualsDifferentObjectsWithSameState() {
+        requestPayload.setCustId("cust123");
+        requestPayload.setAcctIds(List.of("acct1", "acct2"));
+
+        RequestPayload other = new RequestPayload();
+        other.setCustId("cust123");
+        other.setAcctIds(List.of("acct1", "acct2"));
+
+        assertThat(requestPayload).isEqualTo(other);
+    }
+
+    @Test
+    public void testEqualsDifferentState() {
+        requestPayload.setCustId("cust123");
+        requestPayload.setAcctIds(List.of("acct1", "acct2"));
+
+        RequestPayload other = new RequestPayload();
+        other.setCustId("cust321");
+        other.setAcctIds(List.of("acct3", "acct4"));
+
+        assertThat(requestPayload).isNotEqualTo(other);
+    }
+
+    @Test
+    public void testHashCodeConsistency() {
+        requestPayload.setCustId("cust123");
+        requestPayload.setAcctIds(List.of("acct1", "acct2"));
+
+        int hashCode1 = requestPayload.hashCode();
+        int hashCode2 = requestPayload.hashCode();
+
+        assertThat(hashCode1).isEqualTo(hashCode2);
+    }
+
+    @Test
+    public void testToString() {
+        requestPayload.setCustId("cust123");
+        requestPayload.setAcctIds(List.of("acct1", "acct2"));
+
+        String expectedString = "RequestPayload [custId=cust123, acctIds=[acct1, acct2]]";
+        assertThat(requestPayload.toString()).isEqualTo(expectedString);
+    }
+
+    @Test
+    public void testNullEdgeCases() {
+        requestPayload.setCustId(null);
+        requestPayload.setAcctIds(null);
+
+        assertThat(requestPayload.getCustId()).isNull();
+        assertThat(requestPayload.getAcctIds()).isEmpty();
+        assertThat(requestPayload.toString()).isEqualTo("RequestPayload [custId=null, acctIds=[]]");
+    }
+}

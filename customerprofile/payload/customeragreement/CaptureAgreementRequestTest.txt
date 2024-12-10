@@ -1,0 +1,37 @@
+package com.td.mbna.msec.midtier.customerprofile.payload.customeragreement;
+
+import com.td.mbna.msec.midtier.types.common.BaseRequest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class CaptureAgreementRequestTest {
+
+    private CaptureAgreementRequest captureAgreementRequest;
+
+    @BeforeEach
+    void setUp() {
+        captureAgreementRequest = new CaptureAgreementRequest();
+    }
+
+    /**
+     * Test getter and setter behavior for RequestPayload.
+     */
+    @Test
+    public void testGetterAndSetter() {
+        RequestPayload requestPayload = new RequestPayload();
+        captureAgreementRequest.setRequestPayload(requestPayload);
+
+        assertThat(captureAgreementRequest.getRequestPayload()).isEqualTo(requestPayload);
+    }
+
+    /**
+     * Test that setting `null` in the request payload works as expected.
+     */
+    @Test
+    public void testNullRequestPayload() {
+        captureAgreementRequest.setRequestPayload(null);
+
+        assertThat(captureAgreementRequest.getRequestPayload()).isNull();
+    }
+}

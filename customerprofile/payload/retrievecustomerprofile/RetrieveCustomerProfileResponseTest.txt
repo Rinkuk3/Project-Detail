@@ -1,0 +1,120 @@
+package com.td.mbna.msec.midtier.customerprofile.payload.retrievecustomerprofile;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class RetrieveCustomerProfileResponseTest {
+
+    private RetrieveCustomerProfileResponse response;
+
+    @BeforeEach
+    void setUp() {
+        response = new RetrieveCustomerProfileResponse();
+    }
+
+    // Test Getter and Setter for status
+    @Test
+    public void testStatusGetterSetter() {
+        response.setStatus("success");
+        assertThat(response.getStatus()).isEqualTo("success");
+    }
+
+    // Test Getter and Setter for errorMessages
+    @Test
+    public void testErrorMessagesGetterSetter() {
+        response.setErrorMessages("No errors");
+        assertThat(response.getErrorMessages()).isEqualTo("No errors");
+    }
+
+    // Test Getter and Setter for responsePayload
+    @Test
+    public void testResponsePayloadGetterSetter() {
+        ResponsePayload payload = new ResponsePayload();
+        payload.setResponseCode("200");
+        response.setResponsePayload(payload);
+        assertThat(response.getResponsePayload()).isEqualTo(payload);
+    }
+
+    // Test equals() - Compare with itself
+    @Test
+    public void testEqualsWithItself() {
+        response.setStatus("success");
+        response.setErrorMessages("No errors");
+        ResponsePayload payload = new ResponsePayload();
+        payload.setResponseCode("200");
+        response.setResponsePayload(payload);
+
+        assertThat(response.equals(response)).isTrue();
+    }
+
+    // Test equals() - Compare two identical objects
+    @Test
+    public void testEqualsWithIdenticalFields() {
+        RetrieveCustomerProfileResponse otherResponse = new RetrieveCustomerProfileResponse();
+        otherResponse.setStatus("success");
+        otherResponse.setErrorMessages("No errors");
+
+        ResponsePayload payload = new ResponsePayload();
+        payload.setResponseCode("200");
+        otherResponse.setResponsePayload(payload);
+
+        response.setStatus("success");
+        response.setErrorMessages("No errors");
+        response.setResponsePayload(payload);
+
+        assertThat(response.equals(otherResponse)).isTrue();
+    }
+
+    // Test equals() - Compare two objects with different fields
+    @Test
+    public void testEqualsWithDifferentFields() {
+        RetrieveCustomerProfileResponse otherResponse = new RetrieveCustomerProfileResponse();
+        otherResponse.setStatus("error");
+        otherResponse.setErrorMessages("Some errors");
+
+        assertThat(response.equals(otherResponse)).isFalse();
+    }
+
+    // Test hashCode consistency
+    @Test
+    public void testHashCodeConsistency() {
+        response.setStatus("success");
+        response.setErrorMessages("No errors");
+
+        ResponsePayload payload = new ResponsePayload();
+        payload.setResponseCode("200");
+        response.setResponsePayload(payload);
+
+        int expectedHashCode = response.hashCode();
+        assertThat(response.hashCode()).isEqualTo(expectedHashCode);
+    }
+
+    // Test toString() logic with all fields populated
+    @Test
+    public void testToStringWithFieldsPopulated() {
+        response.setStatus("success");
+        response.setErrorMessages("No errors");
+
+        ResponsePayload payload = new ResponsePayload();
+        payload.setResponseCode("200");
+        response.setResponsePayload(payload);
+
+        String expectedString = "RetrieveCustomerProfileResponse@" +
+                Integer.toHexString(System.identityHashCode(response)) +
+                "[status=success,errorMsgs=No errors,responsePayload=ResponsePayload{responseCode=200}]";
+
+        assertThat(response.toString()).isEqualTo(expectedString);
+    }
+
+    // Test toString() logic when fields are null
+    @Test
+    public void testToStringWithNullFields() {
+        String expectedString = "RetrieveCustomerProfileResponse@" +
+                Integer.toHexString(System.identityHashCode(response)) +
+                "[status=<null>,errorMsgs=<null>,responsePayload=<null>]";
+
+        assertThat(response.toString()).isEqualTo(expectedString);
+    }
+}

@@ -1,0 +1,100 @@
+package com.td.mbna.msec.midtier.cardreplacement.payload.replacecard;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ReplaceCardRequestTest {
+
+    @Test
+    void testGettersAndSetters() {
+        ReplaceCardRequest request = new ReplaceCardRequest();
+        RequestPayload payload = new RequestPayload();
+
+        request.setRequestPayload(payload);
+        assertEquals(payload, request.getRequestPayload());
+    }
+
+    @Test
+    void testToString() {
+        ReplaceCardRequest request = new ReplaceCardRequest();
+        request.setSessionInfo("session123");
+        request.setCustId("customer456");
+        request.setAliasCustId("alias789");
+        request.setAcctNum("account101112");
+        request.setAcctType("type131415");
+        request.setLanguagePref("EN");
+        request.setAuditInfo("auditInfo161718");
+        request.setIsPrimaryUser(true);
+        request.setReserved1("reserved192021");
+        request.setCustInterface("interface222324");
+
+        String toString = request.toString();
+        assertTrue(toString.contains("session123"));
+        assertTrue(toString.contains("customer456"));
+        assertTrue(toString.contains("alias789"));
+        assertTrue(toString.contains("account101112"));
+        assertTrue(toString.contains("type131415"));
+        assertTrue(toString.contains("EN"));
+        assertTrue(toString.contains("auditInfo161718"));
+        assertTrue(toString.contains("true"));
+        assertTrue(toString.contains("reserved192021"));
+        assertTrue(toString.contains("interface222324"));
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        ReplaceCardRequest request1 = new ReplaceCardRequest();
+        ReplaceCardRequest request2 = new ReplaceCardRequest();
+
+        request1.setSessionInfo("session123");
+        request1.setCustId("customer456");
+        request1.setAliasCustId("alias789");
+        request1.setAcctNum("account101112");
+        request1.setAcctType("type131415");
+        request1.setLanguagePref("EN");
+        request1.setAuditInfo("auditInfo161718");
+        request1.setIsPrimaryUser(true);
+        request1.setReserved1("reserved192021");
+        request1.setCustInterface("interface222324");
+
+        request2.setSessionInfo("session123");
+        request2.setCustId("customer456");
+        request2.setAliasCustId("alias789");
+        request2.setAcctNum("account101112");
+        request2.setAcctType("type131415");
+        request2.setLanguagePref("EN");
+        request2.setAuditInfo("auditInfo161718");
+        request2.setIsPrimaryUser(true);
+        request2.setReserved1("reserved192021");
+        request2.setCustInterface("interface222324");
+
+        assertEquals(request1, request2);
+        assertEquals(request1.hashCode(), request2.hashCode());
+
+        request2.setCustId("differentCustId");
+        assertNotEquals(request1, request2);
+        assertNotEquals(request1.hashCode(), request2.hashCode());
+    }
+
+    @Test
+    void testNotEqualsDifferentClass() {
+        ReplaceCardRequest request = new ReplaceCardRequest();
+        Object other = new Object();
+        assertNotEquals(request, other);
+    }
+
+    @Test
+    void testNotEqualsNull() {
+        ReplaceCardRequest request = new ReplaceCardRequest();
+        assertNotEquals(request, null);
+    }
+
+    @Test
+    void testHashCodeConsistency() {
+        ReplaceCardRequest request = new ReplaceCardRequest();
+        request.setSessionInfo("session123");
+        int initialHashCode = request.hashCode();
+        assertEquals(initialHashCode, request.hashCode());
+    }
+}

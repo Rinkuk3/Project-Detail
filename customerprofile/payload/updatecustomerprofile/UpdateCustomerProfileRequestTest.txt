@@ -1,0 +1,83 @@
+package com.td.mbna.msec.midtier.customerprofile.payload.updatecustomerprofile;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class UpdateCustomerProfileRequestTest {
+
+    private UpdateCustomerProfileRequest request;
+
+    @BeforeEach
+    void setUp() {
+        request = new UpdateCustomerProfileRequest();
+    }
+
+    @Test
+    public void testGetterAndSetterRequestPayload() {
+        RequestPayload payload = new RequestPayload();
+        payload.setSomeField("value");
+
+        request.setRequestPayload(payload);
+        assertThat(request.getRequestPayload()).isEqualTo(payload);
+    }
+
+    @Test
+    public void testGetterWithLazyInitializationOfRequestPayload() {
+        assertThat(request.getRequestPayload()).isNotNull();
+    }
+
+    @Test
+    public void testHashCode() {
+        request.setSessionInfo("Session");
+        request.setAuditInfo("Audit");
+        request.setAliasCustId("Alias");
+        request.setCustInterface("Interface");
+        request.setLanguagePref("EN");
+        request.setAcctNum("12345");
+        request.setRequestPayload(new RequestPayload());
+        request.setCustId("CUST123");
+        request.setAcctType("TypeA");
+        request.setReserved1("Reserved");
+        request.setIsPrimaryUser(true);
+
+        int hashCode = request.hashCode();
+        assertThat(hashCode).isNotZero();
+    }
+
+    @Test
+    public void testEqualsSameObject() {
+        assertThat(request.equals(request)).isTrue();
+    }
+
+    @Test
+    public void testEqualsDifferentObject() {
+        UpdateCustomerProfileRequest other = new UpdateCustomerProfileRequest();
+        other.setSessionInfo("DifferentSession");
+        other.setAuditInfo("DifferentAudit");
+        
+        assertThat(request.equals(other)).isFalse();
+    }
+
+    @Test
+    public void testEqualsWhenNullFields() {
+        UpdateCustomerProfileRequest other = new UpdateCustomerProfileRequest();
+        assertThat(request.equals(other)).isTrue();
+    }
+
+    @Test
+    public void testToString() {
+        request.setSessionInfo("Session");
+        request.setCustId("CustId");
+        request.setAcctNum("123456");
+        request.setRequestPayload(new RequestPayload());
+
+        String result = request.toString();
+        assertThat(result).contains("Session");
+        assertThat(result).contains("CustId");
+        assertThat(result).contains("123456");
+    }
+}

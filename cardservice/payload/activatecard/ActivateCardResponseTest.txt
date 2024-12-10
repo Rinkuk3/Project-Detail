@@ -1,0 +1,101 @@
+package com.td.mbna.msec.midtier.cardservice.payload.activatecard;
+
+import com.td.mbna.msec.midtier.cardservice.payload.activatecard.ResponsePayload;
+import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ActivateCardResponseTest {
+
+    @Test
+    void testGetAndSetResponsePayload() {
+        ActivateCardResponse response = new ActivateCardResponse();
+        ResponsePayload payload = new ResponsePayload();
+        response.setResponsePayload(payload);
+        assertEquals(payload, response.getResponsePayload());
+    }
+
+    @Test
+    void testGetResponsePayloadWhenNull() {
+        ActivateCardResponse response = new ActivateCardResponse();
+        assertNotNull(response.getResponsePayload());
+        assertTrue(response.getResponsePayload() instanceof ResponsePayload);
+    }
+
+    @Test
+    void testToString() {
+        ActivateCardResponse response = new ActivateCardResponse();
+        response.setStatus("Success");
+        response.setErrorMessages(Collections.singletonList("Error"));
+        ResponsePayload payload = new ResponsePayload();
+        response.setResponsePayload(payload);
+
+        String toStringOutput = response.toString();
+        assertTrue(toStringOutput.contains("Success"));
+        assertTrue(toStringOutput.contains("Error"));
+        assertTrue(toStringOutput.contains(payload.toString()));
+    }
+
+    @Test
+    void testHashCode() {
+        ActivateCardResponse response1 = new ActivateCardResponse();
+        response1.setStatus("Success");
+        response1.setErrorMessages(Collections.singletonList("Error"));
+        ResponsePayload payload = new ResponsePayload();
+        response1.setResponsePayload(payload);
+
+        ActivateCardResponse response2 = new ActivateCardResponse();
+        response2.setStatus("Success");
+        response2.setErrorMessages(Collections.singletonList("Error"));
+        response2.setResponsePayload(payload);
+
+        assertEquals(response1.hashCode(), response2.hashCode());
+    }
+
+    @Test
+    void testEqualsWithSameObject() {
+        ActivateCardResponse response = new ActivateCardResponse();
+        assertTrue(response.equals(response));
+    }
+
+    @Test
+    void testEqualsWithDifferentObject() {
+        ActivateCardResponse response = new ActivateCardResponse();
+        Object other = new Object();
+        assertFalse(response.equals(other));
+    }
+
+    @Test
+    void testEqualsWithEqualObjects() {
+        ActivateCardResponse response1 = new ActivateCardResponse();
+        response1.setStatus("Success");
+        response1.setErrorMessages(Collections.singletonList("Error"));
+        ResponsePayload payload = new ResponsePayload();
+        response1.setResponsePayload(payload);
+
+        ActivateCardResponse response2 = new ActivateCardResponse();
+        response2.setStatus("Success");
+        response2.setErrorMessages(Collections.singletonList("Error"));
+        response2.setResponsePayload(payload);
+
+        assertTrue(response1.equals(response2));
+    }
+
+    @Test
+    void testEqualsWithDifferentObjects() {
+        ActivateCardResponse response1 = new ActivateCardResponse();
+        response1.setStatus("Success");
+        response1.setErrorMessages(Collections.singletonList("Error"));
+        ResponsePayload payload = new ResponsePayload();
+        response1.setResponsePayload(payload);
+
+        ActivateCardResponse response2 = new ActivateCardResponse();
+        response2.setStatus("Failure");
+        response2.setErrorMessages(Collections.singletonList("Another Error"));
+        response2.setResponsePayload(new ResponsePayload());
+
+        assertFalse(response1.equals(response2));
+    }
+}

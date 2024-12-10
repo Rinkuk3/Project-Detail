@@ -1,0 +1,110 @@
+package com.td.mbna.msec.midtier.cardservice.payload.validatecpi;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ResponsePayloadTest {
+
+    @Test
+    void testGetterAndSetter() {
+        // Create an instance of ResponsePayload
+        ResponsePayload payload = new ResponsePayload();
+
+        // Set the status
+        payload.setStatus(true);
+
+        // Verify the value
+        assertTrue(payload.isStatus());
+
+        // Set the status to null and verify
+        payload.setStatus(null);
+        assertNull(payload.isStatus());
+    }
+
+    @Test
+    void testToString() {
+        // Create an instance of ResponsePayload and set a value
+        ResponsePayload payload = new ResponsePayload();
+        payload.setStatus(true);
+
+        // Verify the toString output
+        String toStringOutput = payload.toString();
+        assertNotNull(toStringOutput);
+        assertTrue(toStringOutput.contains("status=true"));
+
+        // Test with null status
+        payload.setStatus(null);
+        toStringOutput = payload.toString();
+        assertTrue(toStringOutput.contains("status=<null>"));
+    }
+
+    @Test
+    void testHashCode() {
+        // Create two instances of ResponsePayload
+        ResponsePayload payload1 = new ResponsePayload();
+        ResponsePayload payload2 = new ResponsePayload();
+
+        // Both have null status, so hashCode should be the same
+        assertEquals(payload1.hashCode(), payload2.hashCode());
+
+        // Set the same status for both and verify hashCode
+        payload1.setStatus(true);
+        payload2.setStatus(true);
+        assertEquals(payload1.hashCode(), payload2.hashCode());
+
+        // Change the status of one and verify hashCode
+        payload2.setStatus(false);
+        assertNotEquals(payload1.hashCode(), payload2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        // Create two instances of ResponsePayload
+        ResponsePayload payload1 = new ResponsePayload();
+        ResponsePayload payload2 = new ResponsePayload();
+
+        // Both have null status, so they should be equal
+        assertEquals(payload1, payload2);
+
+        // Set the same status for both and verify equality
+        payload1.setStatus(true);
+        payload2.setStatus(true);
+        assertEquals(payload1, payload2);
+
+        // Change the status of one and verify inequality
+        payload2.setStatus(false);
+        assertNotEquals(payload1, payload2);
+
+        // Test with same reference
+        assertEquals(payload1, payload1);
+
+        // Test with null and other object type
+        assertNotEquals(payload1, null);
+        assertNotEquals(payload1, "Some String");
+    }
+
+    @Test
+    void testEqualsWithNullValues() {
+        ResponsePayload payload1 = new ResponsePayload();
+        ResponsePayload payload2 = new ResponsePayload();
+
+        // Set one instance's status to null and verify equality
+        payload1.setStatus(null);
+        assertTrue(payload1.equals(payload2));
+
+        // Set the other instance's status to a value and verify inequality
+        payload2.setStatus(true);
+        assertFalse(payload1.equals(payload2));
+    }
+
+    @Test
+    void testEdgeCases() {
+        // Create an instance with empty fields
+        ResponsePayload payload = new ResponsePayload();
+
+        // Test with null status
+        payload.setStatus(null);
+        assertNull(payload.isStatus());
+    }
+}

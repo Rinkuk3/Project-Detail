@@ -1,0 +1,119 @@
+package com.td.mbna.msec.midtier.creditcard.payload.increasecardlimit;
+
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+
+public class ResponsePayloadTest {
+
+    @Test
+    void testGettersAndSetters() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        
+        // Test setters and getters for each field
+        responsePayload.setStatus(true);
+        assertTrue(responsePayload.getStatus());
+
+        responsePayload.setConfirmationNumber("CONF123");
+        assertEquals("CONF123", responsePayload.getConfirmationNumber());
+
+        responsePayload.setEmailSent(true);
+        assertTrue(responsePayload.getEmailSent());
+
+        responsePayload.setCreditLimitPrevAmtCurrency("USD");
+        assertEquals("USD", responsePayload.getCreditLimitPrevAmtCurrency());
+
+        responsePayload.setCreditLimitPrevAmt(new BigDecimal("5000"));
+        assertEquals(new BigDecimal("5000"), responsePayload.getCreditLimitPrevAmt());
+
+        responsePayload.setCreditLimitNewAmtCurrency("EUR");
+        assertEquals("EUR", responsePayload.getCreditLimitNewAmtCurrency());
+
+        responsePayload.setCreditLimitNewAmt(new BigDecimal("10000"));
+        assertEquals(new BigDecimal("10000"), responsePayload.getCreditLimitNewAmt());
+
+        responsePayload.setTempLimitIndicator("LIMIT1");
+        assertEquals("LIMIT1", responsePayload.getTempLimitIndicator());
+
+        responsePayload.setCashLimitPrevAmtCurrency("GBP");
+        assertEquals("GBP", responsePayload.getCashLimitPrevAmtCurrency());
+
+        responsePayload.setCashLimitPrevAmt(new BigDecimal("3000"));
+        assertEquals(new BigDecimal("3000"), responsePayload.getCashLimitPrevAmt());
+
+        responsePayload.setCashLimitNewAmtCurrency("JPY");
+        assertEquals("JPY", responsePayload.getCashLimitNewAmtCurrency());
+
+        responsePayload.setCashLimitNewAmt(new BigDecimal("4000"));
+        assertEquals(new BigDecimal("4000"), responsePayload.getCashLimitNewAmt());
+    }
+
+    @Test
+    void testToString() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatus(true);
+        responsePayload.setConfirmationNumber("CONF123");
+
+        String expectedString = "com.td.mbna.msec.midtier.creditcard.payload.increasecardlimit.ResponsePayload@" +
+            Integer.toHexString(System.identityHashCode(responsePayload)) +
+            "[status=true,confirmationNumber=CONF123,emailSent=<null>,creditLimitPrevAmtCurrency=<null>,creditLimitPrevAmt=<null>,creditLimitNewAmtCurrency=<null>,creditLimitNewAmt=<null>,tempLimitIndicator=<null>,cashLimitPrevAmtCurrency=<null>,cashLimitPrevAmt=<null>,cashLimitNewAmtCurrency=<null>,cashLimitNewAmt=<null>]";
+
+        assertEquals(expectedString, responsePayload.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        ResponsePayload responsePayload1 = new ResponsePayload();
+        responsePayload1.setConfirmationNumber("CONF123");
+        responsePayload1.setStatus(true);
+
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        responsePayload2.setConfirmationNumber("CONF123");
+        responsePayload2.setStatus(true);
+
+        assertEquals(responsePayload1.hashCode(), responsePayload2.hashCode());
+
+        responsePayload2.setStatus(false);
+        assertNotEquals(responsePayload1.hashCode(), responsePayload2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        ResponsePayload responsePayload1 = new ResponsePayload();
+        responsePayload1.setStatus(true);
+        responsePayload1.setConfirmationNumber("CONF123");
+
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        responsePayload2.setStatus(true);
+        responsePayload2.setConfirmationNumber("CONF123");
+
+        // Verify equality with identical fields
+        assertTrue(responsePayload1.equals(responsePayload2));
+
+        // Modify a field and check inequality
+        responsePayload2.setConfirmationNumber("DIFF");
+        assertFalse(responsePayload1.equals(responsePayload2));
+
+        // Test null comparison
+        assertFalse(responsePayload1.equals(null));
+
+        // Compare against unrelated objects
+        assertFalse(responsePayload1.equals(new Object()));
+    }
+
+    @Test
+    void testEdgeCasesForEqualsAndHashCode() {
+        ResponsePayload responsePayload1 = new ResponsePayload();
+        responsePayload1.setCashLimitPrevAmtCurrency(null);
+        responsePayload1.setCashLimitPrevAmt(null);
+
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        responsePayload2.setCashLimitPrevAmtCurrency(null);
+        responsePayload2.setCashLimitPrevAmt(null);
+
+        // Ensure edge cases with null don't cause issues
+        assertTrue(responsePayload1.equals(responsePayload2));
+        assertEquals(responsePayload1.hashCode(), responsePayload2.hashCode());
+    }
+}

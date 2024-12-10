@@ -1,0 +1,162 @@
+package com.td.mbna.msec.midtier.creditcard;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import com.td.mbna.msec.midtier.creditcard.payload.decreasecardlimit.DecreaseCardLimitRequest;
+import com.td.mbna.msec.midtier.creditcard.payload.decreasecardlimit.DecreaseCardLimitResponse;
+import com.td.mbna.msec.midtier.mbcca.MbnaCCA;
+import com.td.mbna.msec.midtier.util.services.MidtierUtilHelper;
+import com.springmodules.validation.valang.ValangValidator;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class DecreaseCardLimitOperationTest {
+
+    @InjectMocks
+    private DecreaseCardLimitOperation decreaseCardLimitOperation;
+
+    @Mock
+    private ValangValidator decreaseCardLimitRequestValidator;
+
+    @Mock
+    private MbnaCCA mbnaCCA;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        // Triggering the PostConstruct init() manually
+        decreaseCardLimitOperation.init();
+    }
+
+    /**
+     * Test the main `invokeService()` method for a successful request.
+     */
+    @Test
+    public void testInvokeService_SuccessfulRequest() {
+        DecreaseCardLimitRequest request = mock(DecreaseCardLimitRequest.class);
+        when(request.getRequestPayload().getConfirmed()).thenReturn(true);
+        when(request.getRequestPayload().getCreditLimit()).thenReturn(5000);
+        when(request.getRequestPayload().getCurrentCreditLimit()).thenReturn(10000);
+        when(request.isMultiCard()).thenReturn(false);
+        when(request.getAcctNum()).thenReturn("123456789");
+        when(mbnaCCA.decreaseCreditLmt(
+            anyString(), 
+            anyBoolean(), 
+            anyString(), 
+            anyMap(), 
+            anyString()
+        )).thenReturn(new DecreaseCardLimitResponse());
+
+        DecreaseCardLimitResponse response = decreaseCardLimitOperation.invokeService(request, "token123");
+
+        assertNotNull(response);
+        verify(mbnaCCA, times(1)).decreaseCreditLmt(
+            anyString(), 
+            anyBoolean(), 
+            anyString(), 
+            anyMap(), 
+            anyString()
+        );
+    }
+
+    /**
+     * Test the `invokeService()` when confirmed is null.
+     */
+    @Test
+    public void testInvokeService_ConfirmedIsNull() {
+        DecreaseCardLimitRequest request = mock(DecreaseCardLimitRequest.class);
+        when(request.getRequestPayload().getConfirmed()).thenReturn(false);
+
+        DecreaseCardLimitResponse response = decreaseCardLimitOperation.invokeService(request, "token123");
+
+        assertNotNull(response);
+        verify(mbnaCCA, never()).decreaseCreditLmt(
+            anyString(), 
+            anyBoolean(), 
+            anyString(), 
+            anyMap(), 
+            anyString()
+        );
+    }
+
+    /**
+     * Test exception handling within `invokeService()`.
+     */
+    @Test
+    public void testInvokeService_ExceptionHandling() {
+        DecreaseCardLimitRequest request = mock(DecreaseCardLimitRequest.class);
+        when(request.getRequestPayload().getConfirmed()).thenReturn(true);
+
+        when(mbnaCCA.decreaseCreditLmt(
+            anyString(), 
+            anyBoolean(), 
+            anyString(), 
+            anyMap(), 
+            anyString()
+        )).thenThrow(RuntimeException.class);
+
+        Exception exception = assertThrows(Exception.class, () -> {
+            decreaseCardLimitOperation.invokeService(request, "token123");
+        });
+
+        assertNotNull(exception);
+    }
+
+    /**
+     * Test `requiresDisclosureConsent()` returns false.
+     */
+    @Test
+    public void testRequiresDisclosureConsent() {
+        boolean response = decreaseCardLimitOperation.requiresDisclosureConsent();
+        assertFalse(response);
+    }
+
+    /**
+     * Test `getConsentDisclosureFailedMsgCode()` returns null.
+     */
+    @Test
+    public void testGetConsentDisclosureFailedMsgCode() {
+        String response = decreaseCardLimitOperation.getConsentDisclosureFailedMsgCode();
+        assertNull(response);
+    }
+
+    /**
+     * Test `generateAutoComment()` functionality.
+     */
+    @Test
+    public void testGenerateAutoComment() {
+        var request = mock(DecreaseCardLimitRequest.class);
+        when(request.getRequestPayload().getConfirmed()).thenReturn(true);
+
+        var comments = decreaseCardLimitOperation.createAutoComment(request, mock(DecreaseCardLimitResponse.class));
+
+        assertNotNull(comments);
+        assertFalse(comments.isEmpty());
+    }
+
+    /**
+     * Test `getEmailInfoBean()` returns null when conditions are unmet.
+     */
+    @Test
+    public void testGetEmailInfoBean_NoNotificationInfo() {
+        var request = mock(DecreaseCardLimitRequest.class);
+        when(request.getRequestPayload().getConfirmed()).thenReturn(false);
+
+        var response = decreaseCardLimitOperation.getEmailInfoBean(request, mock(DecreaseCardLimitResponse.class));
+
+        assertNull(response);
+    }
+
+    @Test
+    public void testGetValidator() {
+        var response = decreaseCardLimitOperation.getValidator();
+        assertNotNull(response);
+    }
+}

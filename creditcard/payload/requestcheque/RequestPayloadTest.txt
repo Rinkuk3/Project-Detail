@@ -1,0 +1,150 @@
+package com.td.mbna.msec.midtier.creditcard.payload.requestcheque;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class RequestPayloadTest {
+
+    private RequestPayload requestPayload;
+    private SimpleAddress mockSimpleAddress;
+    private EmailNotificationInfoType mockEmailNotificationInfo;
+
+    @BeforeEach
+    void setUp() {
+        // Initialize the test class
+        requestPayload = new RequestPayload();
+
+        // Mocked simple address object
+        mockSimpleAddress = new SimpleAddress();
+        mockSimpleAddress.setAddressLine1("123 Elm Street");
+        mockSimpleAddress.setCity("Metropolis");
+        mockSimpleAddress.setState("NY");
+        mockSimpleAddress.setZipCode("12345");
+
+        // Mocked email notification info
+        mockEmailNotificationInfo = new EmailNotificationInfoType();
+        mockEmailNotificationInfo.setEmailType("transaction");
+    }
+
+    @Test
+    void testSetAndGetCustId() {
+        requestPayload.setCustId("123456");
+        assertThat(requestPayload.getCustId()).isEqualTo("123456");
+    }
+
+    @Test
+    void testSetAndGetAcctId() {
+        requestPayload.setAcctId("ACC123");
+        assertThat(requestPayload.getAcctId()).isEqualTo("ACC123");
+    }
+
+    @Test
+    void testSetAndGetEmailRequired() {
+        requestPayload.setEmailRequired(true);
+        assertThat(requestPayload.getEmailRequired()).isTrue();
+    }
+
+    @Test
+    void testSetAndGetEmailNotificationInfo() {
+        requestPayload.setEmailNotificationInfo(mockEmailNotificationInfo);
+        assertThat(requestPayload.getEmailNotificationInfo()).isEqualTo(mockEmailNotificationInfo);
+    }
+
+    @Test
+    void testSetAndGetMailingAddress() {
+        requestPayload.setMailingAddress(mockSimpleAddress);
+        assertThat(requestPayload.getMailingAddress()).isEqualTo(mockSimpleAddress);
+    }
+
+    @Test
+    void testToString() {
+        requestPayload.setCustId("123456");
+        requestPayload.setAcctId("ACC123");
+        requestPayload.setEmailRequired(true);
+        requestPayload.setEmailNotificationInfo(mockEmailNotificationInfo);
+        requestPayload.setMailingAddress(mockSimpleAddress);
+
+        String expectedString = "com.td.mbna.msec.midtier.creditcard.payload.requestcheque.RequestPayload@" +
+                Integer.toHexString(System.identityHashCode(requestPayload)) +
+                "[custId=123456,acctId=ACC123,emailRequired=true,emailNotificationInfo=" + mockEmailNotificationInfo +
+                ",mailingAddress=" + mockSimpleAddress + "]";
+
+        assertThat(requestPayload.toString()).isEqualTo(expectedString);
+    }
+
+    @Test
+    void testHashCode() {
+        requestPayload.setCustId("123456");
+        requestPayload.setAcctId("ACC123");
+        requestPayload.setEmailRequired(true);
+        requestPayload.setEmailNotificationInfo(mockEmailNotificationInfo);
+        requestPayload.setMailingAddress(mockSimpleAddress);
+
+        int hashCode = requestPayload.hashCode();
+        assertThat(hashCode).isNotZero();
+    }
+
+    @Test
+    void testEquals() {
+        RequestPayload otherPayload = new RequestPayload();
+        otherPayload.setCustId("123456");
+        otherPayload.setAcctId("ACC123");
+        otherPayload.setEmailRequired(true);
+        otherPayload.setEmailNotificationInfo(mockEmailNotificationInfo);
+        otherPayload.setMailingAddress(mockSimpleAddress);
+
+        assertThat(requestPayload).isEqualTo(otherPayload);
+
+        otherPayload.setAcctId("DifferentAcct");
+        assertThat(requestPayload).isNotEqualTo(otherPayload);
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        assertThat(requestPayload).isNotEqualTo(null);
+    }
+
+    @Test
+    void testEqualsWhenFieldsAreNull() {
+        RequestPayload otherPayload = new RequestPayload();
+        assertThat(requestPayload).isEqualTo(otherPayload);
+    }
+
+    @Test
+    void testHashCodeWhenFieldsAreNull() {
+        int hashCode = requestPayload.hashCode();
+        assertThat(hashCode).isNotZero();
+    }
+
+    @Test
+    void testSetAndGetMailingAddressNull() {
+        requestPayload.setMailingAddress(null);
+        assertThat(requestPayload.getMailingAddress()).isNull();
+    }
+
+    @Test
+    void testSetAndGetEmailNotificationInfoNull() {
+        requestPayload.setEmailNotificationInfo(null);
+        assertThat(requestPayload.getEmailNotificationInfo()).isNull();
+    }
+
+    @Test
+    void testSetAndGetEmailRequiredFalse() {
+        requestPayload.setEmailRequired(false);
+        assertThat(requestPayload.getEmailRequired()).isFalse();
+    }
+
+    @Test
+    void testSetAndGetCustIdEmptyString() {
+        requestPayload.setCustId("");
+        assertThat(requestPayload.getCustId()).isEmpty();
+    }
+
+    @Test
+    void testSetAndGetAcctIdEmptyString() {
+        requestPayload.setAcctId("");
+        assertThat(requestPayload.getAcctId()).isEmpty();
+    }
+
+}

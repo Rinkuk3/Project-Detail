@@ -1,0 +1,78 @@
+package com.td.mbna.msec.midtier.customerprofile.payload.getuserinfoandaccounts;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Objects;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class GetUserInfoAndAccountsRequestTest {
+
+    private GetUserInfoAndAccountsRequest request;
+
+    @BeforeEach
+    void setUp() {
+        request = new GetUserInfoAndAccountsRequest();
+    }
+
+    @Test
+    public void testDefaultInitialization() {
+        assertThat(request.getRequestPayload()).isNotNull();
+    }
+
+    @Test
+    public void testSetAndGetRequestPayload() {
+        RequestPayload payload = new RequestPayload();
+        request.setRequestPayload(payload);
+
+        assertThat(request.getRequestPayload()).isEqualTo(payload);
+    }
+
+    @Test
+    public void testToStringLogic() {
+        request.setRequestPayload(new RequestPayload());
+        String result = request.toString();
+        assertThat(result).contains("sessionInfo");
+        assertThat(result).contains("custId");
+        assertThat(result).contains("aliasCustId");
+    }
+
+    @Test
+    public void testHashCodeEdgeCases() {
+        request.setRequestPayload(null);
+        int hash1 = request.hashCode();
+        request.setRequestPayload(new RequestPayload());
+        int hash2 = request.hashCode();
+
+        assertThat(hash1).isNotEqualTo(hash2);
+    }
+
+    @Test
+    public void testEqualsSameValues() {
+        GetUserInfoAndAccountsRequest request2 = new GetUserInfoAndAccountsRequest();
+        request.setRequestPayload(new RequestPayload());
+        request2.setRequestPayload(new RequestPayload());
+
+        assertThat(request).isEqualTo(request2);
+    }
+
+    @Test
+    public void testEqualsDifferentValues() {
+        GetUserInfoAndAccountsRequest request2 = new GetUserInfoAndAccountsRequest();
+        request.setRequestPayload(new RequestPayload());
+        request2.setRequestPayload(null);
+
+        assertThat(request).isNotEqualTo(request2);
+    }
+
+    @Test
+    public void testEqualsWithNullFields() {
+        request.setRequestPayload(null);
+
+        GetUserInfoAndAccountsRequest request2 = new GetUserInfoAndAccountsRequest();
+        request2.setRequestPayload(null);
+
+        assertThat(request).isEqualTo(request2);
+    }
+}

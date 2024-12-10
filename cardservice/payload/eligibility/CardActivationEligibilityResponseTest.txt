@@ -1,0 +1,115 @@
+package com.td.mbna.msec.midtier.cardservice.payload.eligibility;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class CardActivationEligibilityResponseTest {
+
+    @Test
+    void testGetterAndSetter() {
+        // Create instance of the response class
+        CardActivationEligibilityResponse response = new CardActivationEligibilityResponse();
+
+        // Set response payload
+        ResponsePayload payload = new ResponsePayload();
+        payload.setSomeField("testField");
+
+        response.setResponsePayload(payload);
+
+        // Verify if getter retrieves the payload correctly
+        assertNotNull(response.getResponsePayload());
+        assertEquals("testField", response.getResponsePayload().getSomeField());
+    }
+
+    @Test
+    void testGetterWithNull() {
+        // Test if the getter returns null without setting anything
+        CardActivationEligibilityResponse response = new CardActivationEligibilityResponse();
+        assertNull(response.getResponsePayload());
+    }
+
+    @Test
+    void testToStringWithNull() {
+        // Test the toString method when response payload is null
+        CardActivationEligibilityResponse response = new CardActivationEligibilityResponse();
+        String expectedOutput = "com.td.mbna.msec.midtier.cardservice.payload.eligibility.CardActivationEligibilityResponse@" +
+                Integer.toHexString(System.identityHashCode(response)) + "[responsePayload=<null>]";
+        assertEquals(expectedOutput, response.toString());
+    }
+
+    @Test
+    void testToStringWithPayload() {
+        // Test the toString method when payload is not null
+        CardActivationEligibilityResponse response = new CardActivationEligibilityResponse();
+        ResponsePayload payload = new ResponsePayload();
+        payload.setSomeField("testField");
+        response.setResponsePayload(payload);
+
+        String expectedOutput = "com.td.mbna.msec.midtier.cardservice.payload.eligibility.CardActivationEligibilityResponse@" +
+                Integer.toHexString(System.identityHashCode(response)) + "[responsePayload=" + payload + "]";
+        assertEquals(expectedOutput, response.toString());
+    }
+
+    @Test
+    void testHashCodeWithNull() {
+        // Test hashCode behavior when the payload is null
+        CardActivationEligibilityResponse response = new CardActivationEligibilityResponse();
+        assertEquals(1, response.hashCode());
+    }
+
+    @Test
+    void testHashCodeWithPayload() {
+        // Test hashCode with response payload
+        CardActivationEligibilityResponse response = new CardActivationEligibilityResponse();
+        ResponsePayload payload = new ResponsePayload();
+        payload.setSomeField("testField");
+        response.setResponsePayload(payload);
+
+        assertNotEquals(1, response.hashCode());
+    }
+
+    @Test
+    void testEqualsSameInstance() {
+        // Test equality when compared to itself
+        CardActivationEligibilityResponse response = new CardActivationEligibilityResponse();
+        assertTrue(response.equals(response));
+    }
+
+    @Test
+    void testEqualsWithDifferentInstance() {
+        // Test equality when compared with a different instance
+        CardActivationEligibilityResponse response1 = new CardActivationEligibilityResponse();
+        CardActivationEligibilityResponse response2 = new CardActivationEligibilityResponse();
+
+        assertTrue(response1.equals(response2));
+    }
+
+    @Test
+    void testEqualsWhenPayloadsAreDifferent() {
+        // Test equality when payloads are different
+        CardActivationEligibilityResponse response1 = new CardActivationEligibilityResponse();
+        CardActivationEligibilityResponse response2 = new CardActivationEligibilityResponse();
+        ResponsePayload payload1 = new ResponsePayload();
+        payload1.setSomeField("testField1");
+        ResponsePayload payload2 = new ResponsePayload();
+        payload2.setSomeField("testField2");
+
+        response1.setResponsePayload(payload1);
+        response2.setResponsePayload(payload2);
+
+        assertFalse(response1.equals(response2));
+    }
+
+    @Test
+    void testEqualsWhenOnePayloadIsNull() {
+        // Test equality when one response payload is null and the other isn't
+        CardActivationEligibilityResponse response1 = new CardActivationEligibilityResponse();
+        CardActivationEligibilityResponse response2 = new CardActivationEligibilityResponse();
+        ResponsePayload payload = new ResponsePayload();
+        payload.setSomeField("testField");
+
+        response1.setResponsePayload(payload);
+
+        assertFalse(response1.equals(response2));
+    }
+}

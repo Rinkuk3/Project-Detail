@@ -1,0 +1,134 @@
+package com.td.mbna.msec.midtier.customerprofile.payload.getkycacctsinfo;
+
+import com.td.mbna.msec.midtier.types.common.BaseResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class GetKycAcctsInfoResponseTest {
+
+    private GetKycAcctsInfoResponse response;
+
+    @BeforeEach
+    void setUp() {
+        // Create fresh instance before each test
+        response = new GetKycAcctsInfoResponse();
+    }
+
+    /**
+     * Test default initialization.
+     */
+    @Test
+    public void testDefaultInitialization() {
+        assertThat(response).isNotNull();
+        assertThat(response.getResponsePayload()).isNull();
+        assertThat(response.getStatus()).isNull();
+        assertThat(response.getErrorMessages()).isNull();
+    }
+
+    /**
+     * Test setting and getting the ResponsePayload field.
+     */
+    @Test
+    public void testSetAndGetResponsePayload() {
+        ResponsePayload payload = new ResponsePayload();
+        response.setResponsePayload(payload);
+
+        assertThat(response.getResponsePayload()).isEqualTo(payload);
+    }
+
+    /**
+     * Test setting and getting the Status field.
+     */
+    @Test
+    public void testSetAndGetStatus() {
+        String status = "SUCCESS";
+        response.setStatus(status);
+
+        assertThat(response.getStatus()).isEqualTo(status);
+    }
+
+    /**
+     * Test setting and getting the errorMessages field.
+     */
+    @Test
+    public void testSetAndGetErrorMessages() {
+        String errorMsg = "ERROR";
+        response.setErrorMessages(errorMsg);
+
+        assertThat(response.getErrorMessages()).isEqualTo(errorMsg);
+    }
+
+    /**
+     * Test hashCode computation.
+     */
+    @Test
+    public void testHashCode() {
+        response.setErrorMessages("ERROR");
+        response.setStatus("SUCCESS");
+        response.setResponsePayload(new ResponsePayload());
+
+        int hashCode = response.hashCode();
+        assertThat(hashCode).isNotZero();
+    }
+
+    /**
+     * Test equals when comparing objects with identical fields.
+     */
+    @Test
+    public void testEqualsWithSameValues() {
+        response.setErrorMessages("ERROR");
+        response.setStatus("SUCCESS");
+        response.setResponsePayload(new ResponsePayload());
+
+        GetKycAcctsInfoResponse other = new GetKycAcctsInfoResponse();
+        other.setErrorMessages("ERROR");
+        other.setStatus("SUCCESS");
+        other.setResponsePayload(new ResponsePayload());
+
+        assertThat(response).isEqualTo(other);
+    }
+
+    /**
+     * Test equals with different objects.
+     */
+    @Test
+    public void testEqualsWithDifferentValues() {
+        response.setErrorMessages("ERROR");
+        response.setStatus("SUCCESS");
+        response.setResponsePayload(new ResponsePayload());
+
+        GetKycAcctsInfoResponse other = new GetKycAcctsInfoResponse();
+        other.setErrorMessages("DIFFERENT_ERROR");
+        other.setStatus("FAILURE");
+        other.setResponsePayload(new ResponsePayload());
+
+        assertThat(response).isNotEqualTo(other);
+    }
+
+    /**
+     * Test the toString() method logic.
+     */
+    @Test
+    public void testToString() {
+        response.setErrorMessages("ERROR");
+        response.setStatus("SUCCESS");
+        response.setResponsePayload(new ResponsePayload());
+
+        String toStringOutput = response.toString();
+        assertThat(toStringOutput).contains("status=SUCCESS");
+        assertThat(toStringOutput).contains("errorMsgs=ERROR");
+        assertThat(toStringOutput).contains("responsePayload");
+    }
+
+    /**
+     * Test edge cases for null fields in equals logic.
+     */
+    @Test
+    public void testEqualsNullFields() {
+        GetKycAcctsInfoResponse other = new GetKycAcctsInfoResponse();
+
+        assertThat(response).isNotEqualTo(other);
+    }
+}

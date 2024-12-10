@@ -1,0 +1,89 @@
+package com.td.mbna.msec.midtier.customerprofile.payload.retrieveenrollment;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class RequestPayloadTest {
+
+    private RequestPayload payload;
+
+    @BeforeEach
+    void setUp() {
+        payload = new RequestPayload();
+    }
+
+    // Test getter and setter for connectId
+    @Test
+    public void testGetterAndSetter() {
+        payload.setConnectId("connect123");
+        assertThat(payload.getConnectId()).isEqualTo("connect123");
+    }
+
+    // Test equals() method for equality with identical values
+    @Test
+    public void testEqualsWithIdenticalValues() {
+        RequestPayload otherPayload = new RequestPayload();
+        otherPayload.setConnectId("connect123");
+
+        payload.setConnectId("connect123");
+
+        assertThat(payload.equals(otherPayload)).isTrue();
+    }
+
+    // Test equals() method with itself
+    @Test
+    public void testEqualsWithItself() {
+        payload.setConnectId("connect123");
+        assertThat(payload.equals(payload)).isTrue();
+    }
+
+    // Test equals() method when compared with different value
+    @Test
+    public void testEqualsWithDifferentValues() {
+        RequestPayload otherPayload = new RequestPayload();
+        otherPayload.setConnectId("different");
+
+        payload.setConnectId("connect123");
+
+        assertThat(payload.equals(otherPayload)).isFalse();
+    }
+
+    // Test hashCode consistency
+    @Test
+    public void testHashCodeConsistency() {
+        payload.setConnectId("connect123");
+        assertThat(payload.hashCode()).isEqualTo(payload.hashCode());
+    }
+
+    // Test hashCode changes with different connectId
+    @Test
+    public void testHashCodeWithDifferentValues() {
+        payload.setConnectId("connect123");
+        int firstHashCode = payload.hashCode();
+
+        payload.setConnectId("different");
+        int secondHashCode = payload.hashCode();
+
+        assertThat(firstHashCode).isNotEqualTo(secondHashCode);
+    }
+
+    // Test toString() method
+    @Test
+    public void testToString() {
+        payload.setConnectId("connect123");
+
+        String expectedString = "RequestPayload(connectId=connect123)";
+        assertThat(payload.toString()).isEqualTo(expectedString);
+    }
+
+    // Test toString() method with null value
+    @Test
+    public void testToStringWithNull() {
+        payload.setConnectId(null);
+
+        String expectedString = "RequestPayload(connectId=null)";
+        assertThat(payload.toString()).isEqualTo(expectedString);
+    }
+}

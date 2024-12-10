@@ -1,0 +1,98 @@
+package com.td.mbna.msec.midtier.creditcard.payload.requestcheque;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class RequestChequeResponseTest {
+
+    private RequestChequeResponse requestChequeResponse;
+    private ResponsePayload mockResponsePayload;
+
+    @BeforeEach
+    void setUp() {
+        // Initialize the test class and mock payload
+        requestChequeResponse = new RequestChequeResponse();
+        mockResponsePayload = new ResponsePayload();
+        mockResponsePayload.setResponseType("testResponse");
+    }
+
+    @Test
+    void testSetAndGetResponsePayload() {
+        requestChequeResponse.setResponsePayload(mockResponsePayload);
+        assertThat(requestChequeResponse.getResponsePayload()).isEqualTo(mockResponsePayload);
+    }
+
+    @Test
+    void testToString() {
+        requestChequeResponse.setResponsePayload(mockResponsePayload);
+        requestChequeResponse.setStatus("Success");
+        requestChequeResponse.setErrorMessages("No Errors");
+
+        String expectedString = "com.td.mbna.msec.midtier.creditcard.payload.requestcheque.RequestChequeResponse@" +
+                Integer.toHexString(System.identityHashCode(requestChequeResponse)) +
+                "[status=Success,errorMsgs=No Errors,responsePayload=" + mockResponsePayload + "]";
+
+        assertThat(requestChequeResponse.toString()).isEqualTo(expectedString);
+    }
+
+    @Test
+    void testHashCode() {
+        requestChequeResponse.setResponsePayload(mockResponsePayload);
+        requestChequeResponse.setStatus("Success");
+        requestChequeResponse.setErrorMessages("No Errors");
+
+        int hashCode = requestChequeResponse.hashCode();
+        assertThat(hashCode).isNotZero();
+    }
+
+    @Test
+    void testEquals() {
+        RequestChequeResponse anotherResponse = new RequestChequeResponse();
+        anotherResponse.setResponsePayload(mockResponsePayload);
+        anotherResponse.setStatus("Success");
+        anotherResponse.setErrorMessages("No Errors");
+
+        assertThat(requestChequeResponse).isEqualTo(anotherResponse);
+
+        anotherResponse.setErrorMessages("Error");
+        assertThat(requestChequeResponse).isNotEqualTo(anotherResponse);
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        RequestChequeResponse nullResponse = null;
+        assertThat(requestChequeResponse).isNotEqualTo(nullResponse);
+    }
+
+    @Test
+    void testSetAndGetStatus() {
+        requestChequeResponse.setStatus("Success");
+        assertThat(requestChequeResponse.getStatus()).isEqualTo("Success");
+    }
+
+    @Test
+    void testSetAndGetErrorMessages() {
+        requestChequeResponse.setErrorMessages("No Errors");
+        assertThat(requestChequeResponse.getErrorMessages()).isEqualTo("No Errors");
+    }
+
+    @Test
+    void testSetAndGetResponsePayloadNull() {
+        requestChequeResponse.setResponsePayload(null);
+        assertThat(requestChequeResponse.getResponsePayload()).isNull();
+    }
+
+    @Test
+    void testSetAndGetStatusEmptyString() {
+        requestChequeResponse.setStatus("");
+        assertThat(requestChequeResponse.getStatus()).isEqualTo("");
+    }
+
+    @Test
+    void testSetAndGetErrorMessagesEmptyString() {
+        requestChequeResponse.setErrorMessages("");
+        assertThat(requestChequeResponse.getErrorMessages()).isEqualTo("");
+    }
+
+}

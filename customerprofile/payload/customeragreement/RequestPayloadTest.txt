@@ -1,0 +1,50 @@
+package com.td.mbna.msec.midtier.customerprofile.payload.customeragreement;
+
+import com.td.mbna.msec.midtier.types.common.DisclosureInfoType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class RequestPayloadTest {
+
+    private RequestPayload requestPayload;
+
+    @BeforeEach
+    void setUp() {
+        // Initialize a new RequestPayload instance before each test
+        requestPayload = new RequestPayload();
+    }
+
+    /**
+     * Test default initialization of the class instance.
+     */
+    @Test
+    public void testDefaultInitialization() {
+        assertThat(requestPayload).isNotNull();
+        assertThat(requestPayload.getDisclosureInfo()).isNull();
+        assertThat(requestPayload.getAccountNo()).isNull();
+    }
+
+    /**
+     * Test setting and getting the disclosure info.
+     */
+    @Test
+    public void testSetAndGetDisclosureInfo() {
+        DisclosureInfoType disclosureInfoType = new DisclosureInfoType();
+        requestPayload.setDisclosureInfo(disclosureInfoType);
+
+        assertThat(requestPayload.getDisclosureInfo()).isEqualTo(disclosureInfoType);
+    }
+
+    /**
+     * Test setting and getting the account number.
+     */
+    @Test
+    public void testSetAndGetAccountNo() {
+        String accountNo = "123456789";
+        requestPayload.setAccountNo(accountNo);
+
+        assertThat(requestPayload.getAccountNo()).isEqualTo(accountNo);
+    }
+}

@@ -1,0 +1,134 @@
+package com.td.mbna.msec.midtier.cardservice;
+
+import com.td.mbna.msec.midtier.cardservice.payload.activatecard.ActivateCardRequest;
+import com.td.mbna.msec.midtier.util.services.MidtierUtilHelper;
+import com.td.schemas.tdct.srm.card.service.v1.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import javax.xml.bind.JAXBElement;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class CardActivationBaseOperationsTest {
+
+    private CardActivationBaseOperations cardActivationBaseOperations;
+
+    @BeforeEach
+    void setUp() {
+        cardActivationBaseOperations = new CardActivationBaseOperations();
+    }
+
+    @Test
+    void testFindLastReasonValidResponse() {
+        TRetrieveCardAccountInfoRs response = mock(TRetrieveCardAccountInfoRs.class);
+        TSvcRetrieveCardAccountInfoRs abstractResponse = mock(TSvcRetrieveCardAccountInfoRs.class);
+        InqCustCardInfoResponseType customerCardInfo = mock(InqCustCardInfoResponseType.class);
+        ICCcardInfoResponseDataType cardInfoData = mock(ICCcardInfoResponseDataType.class);
+        TCardRequestReason lastRequestReason = mock(TCardRequestReason.class);
+        
+        when(response.getAbstractBusinessSvcMsg()).thenReturn(mock(JAXBElement.class));
+        when(response.getAbstractBusinessSvcMsg().getValue()).thenReturn(abstractResponse);
+        when(abstractResponse.getCustomerCardInfo()).thenReturn(customerCardInfo);
+        when(customerCardInfo.getCardInfo()).thenReturn(List.of(cardInfoData));
+        when(cardInfoData.getCardRequestInfo()).thenReturn(mock(JAXBElement.class));
+        when(cardInfoData.getCardRequestInfo().getValue()).thenReturn(mock(TCardRequestInfoType.class));
+        when(cardInfoData.getCardRequestInfo().getValue().getLastRequestReason()).thenReturn(mock(JAXBElement.class));
+        when(cardInfoData.getCardRequestInfo().getValue().getLastRequestReason().getValue()).thenReturn(lastRequestReason);
+        when(lastRequestReason.value()).thenReturn("NEW");
+
+        ActivationUtil.LastRequestReason reason = cardActivationBaseOperations.findLastReason(response);
+        assertEquals(ActivationUtil.LastRequestReason.NEW, reason);
+    }
+
+    @Test
+    void testFindLastReasonNoCardInfo() {
+        TRetrieveCardAccountInfoRs response = mock(TRetrieveCardAccountInfoRs.class);
+        TSvcRetrieveCardAccountInfoRs abstractResponse = mock(TSvcRetrieveCardAccountInfoRs.class);
+
+        when(response.getAbstractBusinessSvcMsg()).thenReturn(mock(JAXBElement.class));
+        when(response.getAbstractBusinessSvcMsg().getValue()).thenReturn(abstractResponse);
+        when(abstractResponse.getCustomerCardInfo()).thenReturn(null);
+
+        Exception exception = assertThrows(RuntimeException.class, () ->
+            cardActivationBaseOperations.findLastReason(response)
+        );
+        assertTrue(exception.getMessage().contains("LastRequestReason wasn't returned from service."));
+    }
+
+    @Test
+    void testRetrieveCreditCardInfo() {
+        ActivateCardRequest request = mock(ActivateCardRequest.class);
+
+        when(request.getRequestPayload()).thenReturn(mock(ActivateCardRequest.RequestPayload.class));
+        when(request.getRequestPayload().getCardNum()).thenReturn("1234567890");
+        when(request.getAliasCustId()).thenReturn("1001");
+        when(request.getIsPrimaryUser()).thenReturn(false);
+
+        Exception exception = assertThrows(RuntimeException.class, () ->
+            cardActivationBaseOperations.retrieveCreditCardInfo(request)
+        );
+        assertTrue(exception.getMessage().contains("MS601"));
+    }
+
+    @Test
+    void testIsCardActivatedTrue() throws Exception {
+        TRetrieveCardAccountInfoRs response = mock(TRetrieveCardAccountInfoRs.class);
+        TSvcRetrieveCardAccountInfoRs abstractResponse = mock(TSvcRetrieveCardAccountInfoRs.class);
+        InqCustCardInfoResponseType customerCardInfo = mock(InqCustCardInfoResponseType.class);
+        ICCcardInfoResponseDataType cardInfoData = mock(ICCcardInfoResponseDataType.class);
+        ICCcardInfoResponseDataType.ReceiptVerification receiptVerification = mock(ICCcardInfoResponseDataType.ReceiptVerification.class);
+
+        when(response.getAbstractBusinessSvcMsg()).thenReturn(mock(JAXBElement.class));
+        when(response.getAbstractBusinessSvcMsg().getValue()).thenReturn(abstractResponse);
+        when(abstractResponse.getCustomerCardInfo()).thenReturn(customerCardInfo);
+        when(customerCardInfo.getCardInfo()).thenReturn(List.of(cardInfoData));
+        when(cardInfoData.getReceiptVerification()).thenReturn(mock(JAXBElement.class));
+        when(cardInfoData.getReceiptVerification().getValue()).thenReturn(receiptVerification);
+        when(receiptVerification.getReceiptIndicated()).thenReturn(mock(TReceiptIndicatedType.class));
+        when(receiptVerification.getReceiptIndicated().getValue()).thenReturn("Y");
+
+        boolean isActivated = cardActivationBaseOperations.isCardActivated(response);
+        assertTrue(isActivated);
+    }
+
+    @Test
+    void testIsCardActivatedFalse() throws Exception {
+        TRetrieveCardAccountInfoRs response = mock(TRetrieveCardAccountInfoRs.class);
+        TSvcRetrieveCardAccountInfoRs abstractResponse = mock(TSvcRetrieveCardAccountInfoRs.class);
+        InqCustCardInfoResponseType customerCardInfo = mock(InqCustCardInfoResponseType.class);
+        ICCcardInfoResponseDataType cardInfoData = mock(ICCcardInfoResponseDataType.class);
+        ICCcardInfoResponseDataType.ReceiptVerification receiptVerification = mock(ICCcardInfoResponseDataType.ReceiptVerification.class);
+
+        when(response.getAbstractBusinessSvcMsg()).thenReturn(mock(JAXBElement.class));
+        when(response.getAbstractBusinessSvcMsg().getValue()).thenReturn(abstractResponse);
+        when(abstractResponse.getCustomerCardInfo()).thenReturn(customerCardInfo);
+        when(customerCardInfo.getCardInfo()).thenReturn(List.of(cardInfoData));
+        when(cardInfoData.getReceiptVerification()).thenReturn(mock(JAXBElement.class));
+        when(cardInfoData.getReceiptVerification().getValue()).thenReturn(receiptVerification);
+        when(receiptVerification.getReceiptIndicated()).thenReturn(mock(TReceiptIndicatedType.class));
+        when(receiptVerification.getReceiptIndicated().getValue()).thenReturn("N");
+
+        boolean isActivated = cardActivationBaseOperations.isCardActivated(response);
+        assertFalse(isActivated);
+    }
+
+    @Test
+    void testIsCardActivatedNoCardInfo() {
+        TRetrieveCardAccountInfoRs response = mock(TRetrieveCardAccountInfoRs.class);
+        TSvcRetrieveCardAccountInfoRs abstractResponse = mock(TSvcRetrieveCardAccountInfoRs.class);
+
+        when(response.getAbstractBusinessSvcMsg()).thenReturn(mock(JAXBElement.class));
+        when(response.getAbstractBusinessSvcMsg().getValue()).thenReturn(abstractResponse);
+        when(abstractResponse.getCustomerCardInfo()).thenReturn(null);
+
+        Exception exception = assertThrows(Exception.class, () ->
+            cardActivationBaseOperations.isCardActivated(response)
+        );
+        assertTrue(exception.getMessage().contains("Card Activation flag wasn't returned from service."));
+    }
+}

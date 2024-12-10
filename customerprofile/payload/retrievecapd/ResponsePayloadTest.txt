@@ -1,0 +1,142 @@
+package com.td.mbna.msec.midtier.customerprofile.payload.retrievecapd;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class ResponsePayloadTest {
+
+    private ResponsePayload responsePayload;
+    private CapdAccount account1;
+    private CapdAccount account2;
+
+    @BeforeEach
+    void setUp() {
+        responsePayload = new ResponsePayload();
+        account1 = new CapdAccount();
+        account1.setaccountId("123");
+        account1.setOverLimitPref("yes");
+
+        account2 = new CapdAccount();
+        account2.setaccountId("456");
+        account2.setOverLimitPref("no");
+    }
+
+    @Test
+    public void testPartyIdGetterAndSetter() {
+        responsePayload.setPartyId("party123");
+        assertThat(responsePayload.getPartyId()).isEqualTo("party123");
+    }
+
+    @Test
+    public void testCapdAccountsGetterAndSetter() {
+        List<CapdAccount> accounts = new ArrayList<>();
+        accounts.add(account1);
+        accounts.add(account2);
+
+        responsePayload.setCapdAccounts(accounts);
+        assertThat(responsePayload.getCapdAccounts()).containsExactly(account1, account2);
+    }
+
+    @Test
+    public void testGetCapdAccountByIdWhenAccountFound() {
+        List<CapdAccount> accounts = new ArrayList<>();
+        accounts.add(account1);
+        accounts.add(account2);
+
+        responsePayload.setCapdAccounts(accounts);
+        assertThat(responsePayload.getCapdAccountById("123")).isEqualTo(account1);
+    }
+
+    @Test
+    public void testGetCapdAccountByIdWhenAccountNotFound() {
+        List<CapdAccount> accounts = new ArrayList<>();
+        accounts.add(account1);
+        accounts.add(account2);
+
+        responsePayload.setCapdAccounts(accounts);
+        assertThat(responsePayload.getCapdAccountById("999")).isNull();
+    }
+
+    @Test
+    public void testGetCapdAccountByIdWhenAccountsEmpty() {
+        responsePayload.setCapdAccounts(new ArrayList<>());
+        assertThat(responsePayload.getCapdAccountById("123")).isNull();
+    }
+
+    @Test
+    public void testGetCapdAccountByIdWhenAccountsNull() {
+        responsePayload.setCapdAccounts(null);
+        assertThat(responsePayload.getCapdAccountById("123")).isNull();
+    }
+
+    @Test
+    public void testToString() {
+        List<CapdAccount> accounts = new ArrayList<>();
+        accounts.add(account1);
+        accounts.add(account2);
+
+        responsePayload.setPartyId("party123");
+        responsePayload.setCapdAccounts(accounts);
+
+        String expectedString = "ResponsePayload [partyId=party123, capdAccounts=" + accounts + "]";
+        assertThat(responsePayload.toString()).isEqualTo(expectedString);
+    }
+
+    @Test
+    public void testEqualsSameObject() {
+        responsePayload.setPartyId("party123");
+        responsePayload.setCapdAccounts(List.of(account1));
+
+        ResponsePayload same = responsePayload;
+        assertThat(responsePayload).isEqualTo(same);
+    }
+
+    @Test
+    public void testEqualsDifferentObjectsSameState() {
+        responsePayload.setPartyId("party123");
+        responsePayload.setCapdAccounts(List.of(account1));
+
+        ResponsePayload other = new ResponsePayload();
+        other.setPartyId("party123");
+        other.setCapdAccounts(List.of(account1));
+
+        assertThat(responsePayload).isEqualTo(other);
+    }
+
+    @Test
+    public void testEqualsDifferentState() {
+        responsePayload.setPartyId("party123");
+        responsePayload.setCapdAccounts(List.of(account1));
+
+        ResponsePayload other = new ResponsePayload();
+        other.setPartyId("party321");
+        other.setCapdAccounts(List.of(account2));
+
+        assertThat(responsePayload).isNotEqualTo(other);
+    }
+
+    @Test
+    public void testHashCodeConsistency() {
+        responsePayload.setPartyId("party123");
+        responsePayload.setCapdAccounts(List.of(account1));
+
+        int hashCode1 = responsePayload.hashCode();
+        int hashCode2 = responsePayload.hashCode();
+
+        assertThat(hashCode1).isEqualTo(hashCode2);
+    }
+
+    @Test
+    public void testHashCodeEdgeCase() {
+        responsePayload.setPartyId(null);
+        responsePayload.setCapdAccounts(null);
+
+        int hashCode = responsePayload.hashCode();
+        assertThat(hashCode).isEqualTo(1); // Default hashCode should fallback.
+    }
+}

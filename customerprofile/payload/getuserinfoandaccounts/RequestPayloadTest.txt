@@ -1,0 +1,117 @@
+package com.td.mbna.msec.midtier.customerprofile.payload.getuserinfoandaccounts;
+
+import com.td.mbna.msec.midtier.types.common.CustAcctType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class RequestPayloadTest {
+
+    private RequestPayload requestPayload;
+
+    @BeforeEach
+    void setUp() {
+        requestPayload = new RequestPayload();
+    }
+
+    @Test
+    public void testCustomerIdGetterAndSetter() {
+        requestPayload.setCustomerId("12345");
+        assertThat(requestPayload.getCustomerId()).isEqualTo("12345");
+    }
+
+    @Test
+    public void testEnrolledAcctsGetterAndSetter() {
+        List<CustAcctType> accounts = new ArrayList<>();
+        accounts.add(new CustAcctType());
+        requestPayload.setEnrolledAccts(accounts);
+        assertThat(requestPayload.getEnrolledAccts()).isEqualTo(accounts);
+    }
+
+    @Test
+    public void testEmptyEnrolledAccts() {
+        requestPayload.setEnrolledAccts(new ArrayList<>());
+        assertThat(requestPayload.getEnrolledAccts()).isEmpty();
+    }
+
+    @Test
+    public void testNullEnrolledAccts() {
+        requestPayload.setEnrolledAccts(null);
+        assertThat(requestPayload.getEnrolledAccts()).isNull();
+    }
+
+    @Test
+    public void testEqualsWithSameValues() {
+        RequestPayload anotherRequestPayload = new RequestPayload();
+        anotherRequestPayload.setCustomerId("12345");
+
+        List<CustAcctType> accounts = new ArrayList<>();
+        accounts.add(new CustAcctType());
+        anotherRequestPayload.setEnrolledAccts(accounts);
+
+        requestPayload.setCustomerId("12345");
+        requestPayload.setEnrolledAccts(accounts);
+
+        assertThat(requestPayload).isEqualTo(anotherRequestPayload);
+    }
+
+    @Test
+    public void testEqualsWithDifferentCustomerId() {
+        RequestPayload anotherRequestPayload = new RequestPayload();
+        anotherRequestPayload.setCustomerId("54321");
+        anotherRequestPayload.setEnrolledAccts(requestPayload.getEnrolledAccts());
+
+        requestPayload.setCustomerId("12345");
+
+        assertThat(requestPayload).isNotEqualTo(anotherRequestPayload);
+    }
+
+    @Test
+    public void testEqualsWithDifferentEnrolledAccts() {
+        List<CustAcctType> differentAccounts = new ArrayList<>();
+        differentAccounts.add(new CustAcctType());
+        
+        requestPayload.setCustomerId("12345");
+        requestPayload.setEnrolledAccts(differentAccounts);
+
+        RequestPayload anotherRequestPayload = new RequestPayload();
+        anotherRequestPayload.setCustomerId("12345");
+        anotherRequestPayload.setEnrolledAccts(null);
+
+        assertThat(requestPayload).isNotEqualTo(anotherRequestPayload);
+    }
+
+    @Test
+    public void testHashCodeWithSameValues() {
+        List<CustAcctType> accounts = new ArrayList<>();
+        accounts.add(new CustAcctType());
+
+        requestPayload.setCustomerId("12345");
+        requestPayload.setEnrolledAccts(accounts);
+
+        RequestPayload anotherRequestPayload = new RequestPayload();
+        anotherRequestPayload.setCustomerId("12345");
+        anotherRequestPayload.setEnrolledAccts(accounts);
+
+        assertThat(requestPayload.hashCode()).isEqualTo(anotherRequestPayload.hashCode());
+    }
+
+    @Test
+    public void testHashCodeWithDifferentValues() {
+        List<CustAcctType> accounts = new ArrayList<>();
+        accounts.add(new CustAcctType());
+        requestPayload.setCustomerId("12345");
+        requestPayload.setEnrolledAccts(accounts);
+
+        RequestPayload anotherRequestPayload = new RequestPayload();
+        anotherRequestPayload.setCustomerId("54321");
+        anotherRequestPayload.setEnrolledAccts(null);
+
+        assertThat(requestPayload.hashCode()).isNotEqualTo(anotherRequestPayload.hashCode());
+    }
+
+}

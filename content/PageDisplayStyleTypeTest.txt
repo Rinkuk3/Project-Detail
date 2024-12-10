@@ -1,0 +1,50 @@
+package com.td.mbna.msec.midtier.content.payload;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ * Unit test class for PageDisplayStyleType enum.
+ */
+public class PageDisplayStyleTypeTest {
+
+    @Test
+    public void testToString_Regular() {
+        assertEquals("REGULAR", PageDisplayStyleType.REGULAR.toString());
+    }
+
+    @Test
+    public void testToString_Popup() {
+        assertEquals("POPUP", PageDisplayStyleType.POPUP.toString());
+    }
+
+    @Test
+    public void testValue_Regular() {
+        assertEquals("REGULAR", PageDisplayStyleType.REGULAR.value());
+    }
+
+    @Test
+    public void testValue_Popup() {
+        assertEquals("POPUP", PageDisplayStyleType.POPUP.value());
+    }
+
+    @Test
+    public void testFromValue_ValidRegular() {
+        assertEquals(PageDisplayStyleType.REGULAR, PageDisplayStyleType.fromValue("REGULAR"));
+    }
+
+    @Test
+    public void testFromValue_ValidPopup() {
+        assertEquals(PageDisplayStyleType.POPUP, PageDisplayStyleType.fromValue("POPUP"));
+    }
+
+    @Test
+    public void testFromValue_Invalid() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            PageDisplayStyleType.fromValue("INVALID");
+        });
+        assertEquals("INVALID", exception.getMessage());
+    }
+
+}

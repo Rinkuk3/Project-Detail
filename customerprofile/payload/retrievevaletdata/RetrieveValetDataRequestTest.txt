@@ -1,0 +1,38 @@
+package com.td.mbna.msec.midtier.customerprofile.payload.retrievevaletdata;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class RetrieveValetDataRequestTest {
+
+    private RetrieveValetDataRequest retrieveValetDataRequest;
+
+    @BeforeEach
+    void setUp() {
+        retrieveValetDataRequest = new RetrieveValetDataRequest();
+    }
+
+    @Test
+    public void testGetterRequestPayload() {
+        RequestPayload payload = new RequestPayload();
+        payload.setTicketId("ticket123");
+        retrieveValetDataRequest.setRequestPayload(payload);
+        assertThat(retrieveValetDataRequest.getRequestPayload()).isEqualTo(payload);
+    }
+
+    @Test
+    public void testSetterRequestPayload() {
+        RequestPayload payload = new RequestPayload();
+        payload.setTicketId("ticket456");
+        retrieveValetDataRequest.setRequestPayload(payload);
+        assertThat(retrieveValetDataRequest.getRequestPayload().getTicketId()).isEqualTo("ticket456");
+    }
+
+    @Test
+    public void testSetterWithNull() {
+        retrieveValetDataRequest.setRequestPayload(null);
+        assertThat(retrieveValetDataRequest.getRequestPayload()).isNull();
+    }
+}

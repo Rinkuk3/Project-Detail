@@ -1,0 +1,62 @@
+package com.td.mbna.msec.midtier.customerprofile.payload.savevaletdata;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class RequestPayloadTest {
+
+    private RequestPayload requestPayload;
+
+    @BeforeEach
+    void setUp() {
+        requestPayload = new RequestPayload();
+    }
+
+    @Test
+    public void testGetterAndSetter() {
+        requestPayload.setObjectData("testData");
+        assertThat(requestPayload.getObjectData()).isEqualTo("testData");
+    }
+
+    @Test
+    public void testHashCodeWhenObjectDataIsNull() {
+        requestPayload.setObjectData(null);
+        assertThat(requestPayload.hashCode()).isEqualTo(1);
+    }
+
+    @Test
+    public void testHashCodeWhenObjectDataIsNotNull() {
+        requestPayload.setObjectData("testData");
+        assertThat(requestPayload.hashCode()).isNotEqualTo(1);
+    }
+
+    @Test
+    public void testEqualsSameObject() {
+        RequestPayload other = requestPayload;
+        assertThat(requestPayload.equals(other)).isTrue();
+    }
+
+    @Test
+    public void testEqualsWithDifferentObjectData() {
+        requestPayload.setObjectData("testData1");
+        RequestPayload other = new RequestPayload();
+        other.setObjectData("testData2");
+        assertThat(requestPayload.equals(other)).isFalse();
+    }
+
+    @Test
+    public void testEqualsWhenObjectDataIsNull() {
+        requestPayload.setObjectData(null);
+        RequestPayload other = new RequestPayload();
+        other.setObjectData(null);
+        assertThat(requestPayload.equals(other)).isTrue();
+    }
+
+    @Test
+    public void testToString() {
+        requestPayload.setObjectData("testData");
+        assertThat(requestPayload.toString()).isEqualTo("RequestPayload [objectData=testData]");
+    }
+}

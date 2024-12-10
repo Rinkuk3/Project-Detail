@@ -1,0 +1,159 @@
+package com.td.mbna.msec.midtier.customerprofile.payload.addauthorizeduser;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class RequestPayloadTest {
+
+    @Test
+    public void testGetterAndSetter() {
+        RequestPayload payload = new RequestPayload();
+
+        // Test each getter and setter
+        payload.setUserName(new UserNameType());
+        assertNotNull(payload.getUserName());
+
+        payload.setAddressSameAsPrimary(true);
+        assertEquals(true, payload.getAddressSameAsPrimary());
+
+        payload.setAuthorizedUserAddress(new UnformattedAddress());
+        assertNotNull(payload.getAuthorizedUserAddress());
+
+        payload.setPrimaryUserAddress(new UnformattedAddress());
+        assertNotNull(payload.getPrimaryUserAddress());
+
+        payload.setDateOfBirth(123456789L);
+        assertEquals(123456789L, payload.getDateOfBirth());
+
+        payload.setBusinessPhone("123-456-7890");
+        assertEquals("123-456-7890", payload.getBusinessPhone());
+
+        payload.setHomePhone("098-765-4321");
+        assertEquals("098-765-4321", payload.getHomePhone());
+
+        payload.setMobilePhone("555-555-5555");
+        assertEquals("555-555-5555", payload.getMobilePhone());
+
+        payload.setRelationToPrimaryUser("Sister");
+        assertEquals("Sister", payload.getRelationToPrimaryUser());
+
+        payload.setConfirmed(true);
+        assertEquals(true, payload.getConfirmed());
+
+        payload.setDisclosureInfo(new DisclosureInfoType());
+        assertNotNull(payload.getDisclosureInfo());
+
+        payload.setEmailNotificationInfo(new EmailNotificationInfoType());
+        assertNotNull(payload.getEmailNotificationInfo());
+    }
+
+    @Test
+    public void testToString() {
+        RequestPayload payload = new RequestPayload();
+        payload.setUserName(new UserNameType());
+        payload.setAddressSameAsPrimary(true);
+        payload.setAuthorizedUserAddress(new UnformattedAddress());
+        payload.setPrimaryUserAddress(new UnformattedAddress());
+        payload.setDateOfBirth(123456789L);
+        payload.setBusinessPhone("123-456-7890");
+        payload.setHomePhone("098-765-4321");
+        payload.setMobilePhone("555-555-5555");
+        payload.setRelationToPrimaryUser("Sister");
+        payload.setConfirmed(true);
+        payload.setDisclosureInfo(new DisclosureInfoType());
+        payload.setEmailNotificationInfo(new EmailNotificationInfoType());
+
+        String result = payload.toString();
+        assertNotNull(result);
+        assertTrue(result.contains("userName"));
+        assertTrue(result.contains("addressSameAsPrimary"));
+        assertTrue(result.contains("authorizedUserAddress"));
+        assertTrue(result.contains("primaryUserAddress"));
+        assertTrue(result.contains("dateOfBirth"));
+        assertTrue(result.contains("businessPhone"));
+        assertTrue(result.contains("homePhone"));
+        assertTrue(result.contains("mobilePhone"));
+        assertTrue(result.contains("relationToPrimaryUser"));
+    }
+
+    @Test
+    public void testHashCode_NullValues() {
+        RequestPayload payload = new RequestPayload();
+        int hashCode = payload.hashCode();
+        assertEquals(1, hashCode);
+    }
+
+    @Test
+    public void testHashCode_WithAllFieldsSet() {
+        RequestPayload payload = new RequestPayload();
+        payload.setUserName(new UserNameType());
+        payload.setAddressSameAsPrimary(true);
+        payload.setAuthorizedUserAddress(new UnformattedAddress());
+        payload.setPrimaryUserAddress(new UnformattedAddress());
+        payload.setDateOfBirth(123456789L);
+        payload.setBusinessPhone("123-456-7890");
+        payload.setHomePhone("098-765-4321");
+        payload.setMobilePhone("555-555-5555");
+        payload.setRelationToPrimaryUser("Sister");
+        payload.setConfirmed(true);
+        payload.setDisclosureInfo(new DisclosureInfoType());
+        payload.setEmailNotificationInfo(new EmailNotificationInfoType());
+
+        int hashCode = payload.hashCode();
+        assertNotNull(hashCode);
+    }
+
+    @Test
+    public void testEquals_IdenticalObjects() {
+        RequestPayload payload1 = new RequestPayload();
+        RequestPayload payload2 = new RequestPayload();
+
+        payload1.setUserName(new UserNameType());
+        payload1.setAddressSameAsPrimary(true);
+        payload1.setAuthorizedUserAddress(new UnformattedAddress());
+        payload1.setPrimaryUserAddress(new UnformattedAddress());
+        payload1.setDateOfBirth(123456789L);
+        payload1.setBusinessPhone("123-456-7890");
+
+        payload2.setUserName(new UserNameType());
+        payload2.setAddressSameAsPrimary(true);
+        payload2.setAuthorizedUserAddress(new UnformattedAddress());
+        payload2.setPrimaryUserAddress(new UnformattedAddress());
+        payload2.setDateOfBirth(123456789L);
+        payload2.setBusinessPhone("123-456-7890");
+
+        assertTrue(payload1.equals(payload2));
+    }
+
+    @Test
+    public void testEquals_DifferentObjects() {
+        RequestPayload payload1 = new RequestPayload();
+        RequestPayload payload2 = new RequestPayload();
+
+        payload1.setBusinessPhone("123-456-7890");
+        payload2.setBusinessPhone("987-654-3210");
+
+        assertFalse(payload1.equals(payload2));
+    }
+
+    @Test
+    public void testEquals_WithNull() {
+        RequestPayload payload = new RequestPayload();
+        assertFalse(payload.equals(null));
+    }
+
+    @Test
+    public void testEquals_DifferentClass() {
+        RequestPayload payload = new RequestPayload();
+        assertFalse(payload.equals("String"));
+    }
+
+    @Test
+    public void testEquals_EmptyFields() {
+        RequestPayload payload1 = new RequestPayload();
+        RequestPayload payload2 = new RequestPayload();
+
+        assertTrue(payload1.equals(payload2));
+    }
+}

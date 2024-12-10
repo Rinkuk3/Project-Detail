@@ -1,0 +1,105 @@
+package com.td.mbna.msec.midtier.cardservice.payload.activatecard;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ResponsePayloadTest {
+
+    @Test
+    void testSettersAndGetters() {
+        ResponsePayload responsePayload = new ResponsePayload();
+
+        responsePayload.setStatus(true);
+        assertTrue(responsePayload.getStatus());
+
+        responsePayload.setReturnCode("200");
+        assertEquals("200", responsePayload.getReturnCode());
+    }
+
+    @Test
+    void testToString() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatus(true);
+        responsePayload.setReturnCode("200");
+
+        String toStringOutput = responsePayload.toString();
+        assertNotNull(toStringOutput);
+        assertTrue(toStringOutput.contains("status=true"));
+        assertTrue(toStringOutput.contains("returnCode=200"));
+    }
+
+    @Test
+    void testEquals_SameFields() {
+        ResponsePayload payload1 = new ResponsePayload();
+        payload1.setStatus(true);
+        payload1.setReturnCode("200");
+
+        ResponsePayload payload2 = new ResponsePayload();
+        payload2.setStatus(true);
+        payload2.setReturnCode("200");
+
+        assertTrue(payload1.equals(payload2));
+    }
+
+    @Test
+    void testEquals_DifferentFields() {
+        ResponsePayload payload1 = new ResponsePayload();
+        payload1.setStatus(true);
+        payload1.setReturnCode("200");
+
+        ResponsePayload payload2 = new ResponsePayload();
+        payload2.setStatus(false);
+        payload2.setReturnCode("500");
+
+        assertFalse(payload1.equals(payload2));
+    }
+
+    @Test
+    void testEquals_NullChecks() {
+        ResponsePayload payload1 = new ResponsePayload();
+        payload1.setStatus(null);
+        payload1.setReturnCode(null);
+
+        ResponsePayload payload2 = new ResponsePayload();
+        payload2.setStatus(null);
+        payload2.setReturnCode(null);
+
+        assertTrue(payload1.equals(payload2));
+    }
+
+    @Test
+    void testHashCode_SameFields() {
+        ResponsePayload payload1 = new ResponsePayload();
+        payload1.setStatus(true);
+        payload1.setReturnCode("200");
+
+        ResponsePayload payload2 = new ResponsePayload();
+        payload2.setStatus(true);
+        payload2.setReturnCode("200");
+
+        assertEquals(payload1.hashCode(), payload2.hashCode());
+    }
+
+    @Test
+    void testHashCode_DifferentFields() {
+        ResponsePayload payload1 = new ResponsePayload();
+        payload1.setStatus(true);
+        payload1.setReturnCode("200");
+
+        ResponsePayload payload2 = new ResponsePayload();
+        payload2.setStatus(false);
+        payload2.setReturnCode("500");
+
+        assertNotEquals(payload1.hashCode(), payload2.hashCode());
+    }
+
+    @Test
+    void testHashCode_NullFields() {
+        ResponsePayload payload = new ResponsePayload();
+        payload.setStatus(null);
+        payload.setReturnCode(null);
+
+        assertNotNull(payload.hashCode());
+    }
+}

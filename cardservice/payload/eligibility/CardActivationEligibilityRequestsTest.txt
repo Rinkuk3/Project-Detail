@@ -1,0 +1,68 @@
+package com.td.mbna.msec.midtier.cardservice.payload.eligibility;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+class CardActivationEligibilityRequestsTest {
+
+    @Test
+    void testSetterAndGetter() {
+        CardActivationEligibilityRequests requests = new CardActivationEligibilityRequests();
+        
+        List<CardActivationEligibilityRequest> list = new ArrayList<>();
+        CardActivationEligibilityRequest request1 = new CardActivationEligibilityRequest();
+        request1.setRequestPayload(new RequestPayload());
+        list.add(request1);
+
+        // Set the list using setter
+        requests.setCardActivationEligibilityRequests(list);
+
+        // Verify that getter returns the list correctly
+        assertEquals(list, requests.getCardActivationEligibilityRequests());
+    }
+
+    @Test
+    void testGetterWithNull() {
+        CardActivationEligibilityRequests requests = new CardActivationEligibilityRequests();
+
+        // Ensure that the getter returns null if no setter has been invoked
+        assertNull(requests.getCardActivationEligibilityRequests());
+    }
+
+    @Test
+    void testSetterWithEmptyList() {
+        CardActivationEligibilityRequests requests = new CardActivationEligibilityRequests();
+
+        // Set an empty list
+        requests.setCardActivationEligibilityRequests(new ArrayList<>());
+
+        // Verify that the list is empty
+        assertNotNull(requests.getCardActivationEligibilityRequests());
+        assertTrue(requests.getCardActivationEligibilityRequests().isEmpty());
+    }
+
+    @Test
+    void testSetterAndGetterWithMultipleEntries() {
+        CardActivationEligibilityRequests requests = new CardActivationEligibilityRequests();
+        List<CardActivationEligibilityRequest> list = new ArrayList<>();
+
+        CardActivationEligibilityRequest request1 = new CardActivationEligibilityRequest();
+        request1.setRequestPayload(new RequestPayload());
+        CardActivationEligibilityRequest request2 = new CardActivationEligibilityRequest();
+        request2.setRequestPayload(new RequestPayload());
+
+        list.add(request1);
+        list.add(request2);
+
+        // Set the list with multiple entries
+        requests.setCardActivationEligibilityRequests(list);
+
+        // Ensure the getter fetches the list with entries
+        assertEquals(2, requests.getCardActivationEligibilityRequests().size());
+        assertEquals(request1, requests.getCardActivationEligibilityRequests().get(0));
+        assertEquals(request2, requests.getCardActivationEligibilityRequests().get(1));
+    }
+}

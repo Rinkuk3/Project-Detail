@@ -1,0 +1,119 @@
+package com.td.mbna.msec.midtier.cardservice.payload.eligibility;
+
+import org.junit.jupiter.api.Test;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestPayloadTest {
+
+    @Test
+    void testGetterAndSetter() {
+        // Create instance of RequestPayload
+        RequestPayload requestPayload = new RequestPayload();
+
+        // Create and set up authorized users list
+        AuthorizedUser user1 = new AuthorizedUser();
+        user1.setCustomerId("customer1");
+        user1.setCardNumber("123456");
+
+        AuthorizedUser user2 = new AuthorizedUser();
+        user2.setCustomerId("customer2");
+        user2.setCardNumber("654321");
+
+        List<AuthorizedUser> userList = new ArrayList<>();
+        userList.add(user1);
+        userList.add(user2);
+
+        requestPayload.setAuthorizedUsers(userList);
+
+        // Verify getter logic
+        assertNotNull(requestPayload.getAuthorizedUsers());
+        assertEquals(2, requestPayload.getAuthorizedUsers().size());
+        assertEquals("customer1", requestPayload.getAuthorizedUsers().get(0).getCustomerId());
+        assertEquals("123456", requestPayload.getAuthorizedUsers().get(0).getCardNumber());
+        assertEquals("customer2", requestPayload.getAuthorizedUsers().get(1).getCustomerId());
+        assertEquals("654321", requestPayload.getAuthorizedUsers().get(1).getCardNumber());
+    }
+
+    @Test
+    void testEmptyAuthorizedUserList() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setAuthorizedUsers(new ArrayList<>());
+
+        assertNotNull(requestPayload.getAuthorizedUsers());
+        assertTrue(requestPayload.getAuthorizedUsers().isEmpty());
+    }
+
+    @Test
+    void testNullListHandling() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setAuthorizedUsers(null);
+
+        assertNull(requestPayload.getAuthorizedUsers());
+    }
+
+    @Test
+    void testEqualsWithSameObject() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setAuthorizedUsers(new ArrayList<>());
+
+        assertTrue(requestPayload.equals(requestPayload));
+    }
+
+    @Test
+    void testEqualsWithDifferentObject() {
+        RequestPayload requestPayload1 = new RequestPayload();
+        RequestPayload requestPayload2 = new RequestPayload();
+
+        List<AuthorizedUser> userList1 = new ArrayList<>();
+        AuthorizedUser user1 = new AuthorizedUser();
+        user1.setCustomerId("customer1");
+        user1.setCardNumber("123");
+
+        List<AuthorizedUser> userList2 = new ArrayList<>();
+        AuthorizedUser user2 = new AuthorizedUser();
+        user2.setCustomerId("customer2");
+        user2.setCardNumber("456");
+
+        userList1.add(user1);
+        userList2.add(user2);
+
+        requestPayload1.setAuthorizedUsers(userList1);
+        requestPayload2.setAuthorizedUsers(userList2);
+
+        assertFalse(requestPayload1.equals(requestPayload2));
+    }
+
+    @Test
+    void testHashCodeConsistency() {
+        RequestPayload requestPayload = new RequestPayload();
+        List<AuthorizedUser> userList = new ArrayList<>();
+        AuthorizedUser user1 = new AuthorizedUser();
+        user1.setCustomerId("customer1");
+        user1.setCardNumber("123");
+        userList.add(user1);
+
+        requestPayload.setAuthorizedUsers(userList);
+
+        int expectedHashCode = requestPayload.hashCode();
+        assertEquals(expectedHashCode, requestPayload.hashCode());
+    }
+
+    @Test
+    void testHashCodeWhenEmptyList() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setAuthorizedUsers(new ArrayList<>());
+        
+        assertEquals(1, requestPayload.hashCode());
+    }
+
+    @Test
+    void testHashCodeWithNullList() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setAuthorizedUsers(null);
+
+        assertEquals(1, requestPayload.hashCode());
+    }
+}

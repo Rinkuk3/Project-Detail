@@ -1,0 +1,137 @@
+package com.td.mbna.msec.midtier.customerprofile.payload.addauthorizeduser;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class AddAuthorizedUserResponseTest {
+
+    @Test
+    public void testGetterAndSetter() {
+        AddAuthorizedUserResponse response = new AddAuthorizedUserResponse();
+
+        // Test setting and getting responsePayload
+        ResponsePayload payload = new ResponsePayload();
+        response.setResponsePayload(payload);
+        assertEquals(payload, response.getResponsePayload());
+
+        // Test setting and getting status
+        response.setStatus("Success");
+        assertEquals("Success", response.getStatus());
+
+        // Test setting and getting errorMessages
+        response.setErrorMessages("No error");
+        assertEquals("No error", response.getErrorMessages());
+    }
+
+    @Test
+    public void testToString() {
+        AddAuthorizedUserResponse response = new AddAuthorizedUserResponse();
+        response.setStatus("Success");
+        response.setErrorMessages("Error occurred");
+        response.setResponsePayload(new ResponsePayload());
+
+        String result = response.toString();
+        assertNotNull(result);
+        assertTrue(result.contains("status=Success"));
+        assertTrue(result.contains("errorMsgs=Error occurred"));
+        assertTrue(result.contains("responsePayload="));
+    }
+
+    @Test
+    public void testHashCode() {
+        AddAuthorizedUserResponse response = new AddAuthorizedUserResponse();
+        response.setErrorMessages("error");
+        response.setResponsePayload(new ResponsePayload());
+        response.setStatus("Success");
+
+        int hashCode = response.hashCode();
+        assertNotNull(hashCode);
+    }
+
+    @Test
+    public void testEquals_IdenticalObjects() {
+        AddAuthorizedUserResponse response1 = new AddAuthorizedUserResponse();
+        AddAuthorizedUserResponse response2 = new AddAuthorizedUserResponse();
+
+        response1.setStatus("Success");
+        response1.setErrorMessages("No error");
+        response1.setResponsePayload(new ResponsePayload());
+
+        response2.setStatus("Success");
+        response2.setErrorMessages("No error");
+        response2.setResponsePayload(new ResponsePayload());
+
+        assertTrue(response1.equals(response2));
+    }
+
+    @Test
+    public void testEquals_DifferentStatus() {
+        AddAuthorizedUserResponse response1 = new AddAuthorizedUserResponse();
+        AddAuthorizedUserResponse response2 = new AddAuthorizedUserResponse();
+
+        response1.setStatus("Success");
+        response1.setErrorMessages("No error");
+        response1.setResponsePayload(new ResponsePayload());
+
+        response2.setStatus("Failure");
+        response2.setErrorMessages("No error");
+        response2.setResponsePayload(new ResponsePayload());
+
+        assertFalse(response1.equals(response2));
+    }
+
+    @Test
+    public void testEquals_Null() {
+        AddAuthorizedUserResponse response = new AddAuthorizedUserResponse();
+        assertFalse(response.equals(null));
+    }
+
+    @Test
+    public void testEquals_DifferentClass() {
+        AddAuthorizedUserResponse response = new AddAuthorizedUserResponse();
+        assertFalse(response.equals("RandomClass"));
+    }
+
+    @Test
+    public void testEquals_DifferentErrorMessages() {
+        AddAuthorizedUserResponse response1 = new AddAuthorizedUserResponse();
+        AddAuthorizedUserResponse response2 = new AddAuthorizedUserResponse();
+
+        response1.setStatus("Success");
+        response1.setErrorMessages("error1");
+        response1.setResponsePayload(new ResponsePayload());
+
+        response2.setStatus("Success");
+        response2.setErrorMessages("error2");
+        response2.setResponsePayload(new ResponsePayload());
+
+        assertFalse(response1.equals(response2));
+    }
+
+    @Test
+    public void testEquals_DifferentResponsePayload() {
+        AddAuthorizedUserResponse response1 = new AddAuthorizedUserResponse();
+        AddAuthorizedUserResponse response2 = new AddAuthorizedUserResponse();
+
+        response1.setStatus("Success");
+        response1.setErrorMessages("No error");
+        response1.setResponsePayload(new ResponsePayload());
+
+        response2.setStatus("Success");
+        response2.setErrorMessages("No error");
+        response2.setResponsePayload(null);
+
+        assertFalse(response1.equals(response2));
+    }
+
+    @Test
+    public void testHashCode_WhenFieldsAreNull() {
+        AddAuthorizedUserResponse response = new AddAuthorizedUserResponse();
+        response.setStatus(null);
+        response.setErrorMessages(null);
+        response.setResponsePayload(null);
+
+        int hashCode = response.hashCode();
+        assertEquals(1, hashCode);
+    }
+}

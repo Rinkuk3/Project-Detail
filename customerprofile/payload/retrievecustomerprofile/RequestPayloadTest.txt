@@ -1,0 +1,126 @@
+package com.td.mbna.msec.midtier.customerprofile.payload.retrievecustomerprofile;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class RequestPayloadTest {
+
+    private RequestPayload requestPayload;
+
+    @BeforeEach
+    void setUp() {
+        requestPayload = new RequestPayload();
+    }
+
+    // Test Getter and Setter for custId
+    @Test
+    public void testCustIdGetterSetter() {
+        requestPayload.setCustId("12345");
+        assertThat(requestPayload.getCustId()).isEqualTo("12345");
+    }
+
+    // Test Getter and Setter for acctNum
+    @Test
+    public void testAcctNumGetterSetter() {
+        requestPayload.setAcctNum("67890");
+        assertThat(requestPayload.getAcctNum()).isEqualTo("67890");
+    }
+
+    // Test Getter and Setter for authorizedUser
+    @Test
+    public void testAuthorizedUserGetterSetter() {
+        requestPayload.setAuthorizedUser(true);
+        assertThat(requestPayload.getAuthorizedUser()).isTrue();
+    }
+
+    // Test Getter and Setter for callContext
+    @Test
+    public void testCallContextGetterSetter() {
+        requestPayload.setCallContext("testContext");
+        assertThat(requestPayload.getCallContext()).isEqualTo("testContext");
+    }
+
+    // Test equals() - with itself
+    @Test
+    public void testEqualsWithItself() {
+        requestPayload.setCustId("12345");
+        requestPayload.setAcctNum("67890");
+        requestPayload.setAuthorizedUser(true);
+        requestPayload.setCallContext("testContext");
+
+        RequestPayload sameObject = requestPayload;
+
+        assertThat(requestPayload.equals(sameObject)).isTrue();
+    }
+
+    // Test equals() with identical fields
+    @Test
+    public void testEqualsWithIdenticalFields() {
+        requestPayload.setCustId("12345");
+        requestPayload.setAcctNum("67890");
+        requestPayload.setAuthorizedUser(true);
+        requestPayload.setCallContext("testContext");
+
+        RequestPayload other = new RequestPayload();
+        other.setCustId("12345");
+        other.setAcctNum("67890");
+        other.setAuthorizedUser(true);
+        other.setCallContext("testContext");
+
+        assertThat(requestPayload.equals(other)).isTrue();
+    }
+
+    // Test equals() with different fields
+    @Test
+    public void testEqualsWithDifferentFields() {
+        requestPayload.setCustId("12345");
+        requestPayload.setAcctNum("67890");
+        requestPayload.setAuthorizedUser(true);
+        requestPayload.setCallContext("testContext");
+
+        RequestPayload other = new RequestPayload();
+        other.setCustId("54321");
+        other.setAcctNum("98765");
+        other.setAuthorizedUser(false);
+        other.setCallContext("otherContext");
+
+        assertThat(requestPayload.equals(other)).isFalse();
+    }
+
+    // Test hashCode() consistency
+    @Test
+    public void testHashCodeConsistency() {
+        requestPayload.setCustId("12345");
+        requestPayload.setAcctNum("67890");
+        requestPayload.setAuthorizedUser(true);
+        requestPayload.setCallContext("testContext");
+
+        int expectedHashCode = requestPayload.hashCode();
+        assertThat(requestPayload.hashCode()).isEqualTo(expectedHashCode);
+    }
+
+    // Test toString() method
+    @Test
+    public void testToString() {
+        requestPayload.setCustId("12345");
+        requestPayload.setAcctNum("67890");
+        requestPayload.setAuthorizedUser(true);
+        requestPayload.setCallContext("testContext");
+
+        String expectedString = "RequestPayload@" + Integer.toHexString(System.identityHashCode(requestPayload)) +
+                "[custId=12345,acctNum=67890,authorizedUser=true,callContext=testContext]";
+        
+        assertThat(requestPayload.toString()).isEqualTo(expectedString);
+    }
+
+    // Test toString() with null fields
+    @Test
+    public void testToStringWithNullFields() {
+        String expectedString = "RequestPayload@" + Integer.toHexString(System.identityHashCode(requestPayload)) +
+                "[custId=<null>,acctNum=<null>,authorizedUser=<null>,callContext=<null>]";
+
+        assertThat(requestPayload.toString()).isEqualTo(expectedString);
+    }
+}

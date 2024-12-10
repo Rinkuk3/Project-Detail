@@ -1,0 +1,34 @@
+package com.td.mbna.msec.midtier.customerprofile.payload.retrievecapd;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class RetrieveCapdRequestTest {
+
+    private RetrieveCapdRequest retrieveCapdRequest;
+    private RequestPayload requestPayload;
+
+    @BeforeEach
+    void setUp() {
+        retrieveCapdRequest = new RetrieveCapdRequest();
+        requestPayload = new RequestPayload();
+        requestPayload.setCustId("123");
+        requestPayload.setAcctIds(null);
+    }
+
+    @Test
+    public void testSetRequestPayload() {
+        // Set the payload
+        retrieveCapdRequest.setRequestPayload(requestPayload);
+
+        // Ensure the getter works as expected
+        assertThat(retrieveCapdRequest.getRequestPayload()).isEqualTo(requestPayload);
+    }
+
+    @Test
+    public void testGetRequestPayloadBeforeSetting() {
+        // Ensure null if not set
+        assertThat(retrieveCapdRequest.getRequestPayload()).isNull();
+    }
+}

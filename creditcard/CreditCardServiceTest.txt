@@ -1,0 +1,96 @@
+package com.td.mbna.msec.midtier.creditcard;
+
+import com.td.mbna.msec.midtier.creditcard.payload.decreasecardlimit.DecreaseCardLimitRequest;
+import com.td.mbna.msec.midtier.creditcard.payload.decreasecardlimit.DecreaseCardLimitResponse;
+import com.td.mbna.msec.midtier.creditcard.payload.increasecardlimit.IncreaseCardLimitRequest;
+import com.td.mbna.msec.midtier.creditcard.payload.increasecardlimit.IncreaseCardLimitResponse;
+import com.td.mbna.msec.midtier.creditcard.payload.requestcheque.RequestChequeRequest;
+import com.td.mbna.msec.midtier.creditcard.payload.requestcheque.RequestChequeResponse;
+import com.td.mbna.msec.midtier.util.perf.ProfileLog;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+public class CreditCardServiceImplTest {
+
+    @InjectMocks
+    private CreditCardServiceImpl creditCardService;
+
+    @Mock
+    private DecreaseCardLimitOperation decreaseCardLimitOperation;
+
+    @Mock
+    private IncreaseCardLimitOperation increaseCardLimitOperation;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    /**
+     * Test the `requestCheque` method.
+     */
+    @Test
+    public void testRequestCheque() {
+        // Mock RequestChequeRequest
+        RequestChequeRequest requestChequeRequest = new RequestChequeRequest();
+
+        // Call the method
+        RequestChequeResponse response = creditCardService.requestCheque(requestChequeRequest);
+
+        // Expect response to be null as per the service implementation
+        assertNull(response);
+    }
+
+    /**
+     * Test the `increaseCardLimit` method with mocked dependencies.
+     */
+    @Test
+    public void testIncreaseCardLimit() {
+        IncreaseCardLimitRequest request = new IncreaseCardLimitRequest();
+        String[] token = {"token"};
+
+        // Mocking the response from the increaseCardLimitOperation
+        IncreaseCardLimitResponse expectedResponse = new IncreaseCardLimitResponse();
+        when(increaseCardLimitOperation.invokeService(request, token)).thenReturn(expectedResponse);
+
+        // Call service
+        IncreaseCardLimitResponse actualResponse = creditCardService.increaseCardLimit(request, token);
+
+        // Validate response
+        assertNotNull(actualResponse);
+        assertEquals(expectedResponse, actualResponse);
+
+        // Verify interaction with mock
+        verify(increaseCardLimitOperation, times(1)).invokeService(request, token);
+    }
+
+    /**
+     * Test the `decreaseCardLimit` method with mocked dependencies.
+     */
+    @Test
+    public void testDecreaseCardLimit() {
+        DecreaseCardLimitRequest request = new DecreaseCardLimitRequest();
+        String[] token = {"token"};
+
+        // Mocking the response from the decreaseCardLimitOperation
+        DecreaseCardLimitResponse expectedResponse = new DecreaseCardLimitResponse();
+        when(decreaseCardLimitOperation.invokeService(request, token)).thenReturn(expectedResponse);
+
+        // Call service
+        DecreaseCardLimitResponse actualResponse = creditCardService.decreaseCardLimit(request, token);
+
+        // Validate response
+        assertNotNull(actualResponse);
+        assertEquals(expectedResponse, actualResponse);
+
+        // Verify interaction with mock
+        verify(decreaseCardLimitOperation, times(1)).invokeService(request, token);
+    }
+}

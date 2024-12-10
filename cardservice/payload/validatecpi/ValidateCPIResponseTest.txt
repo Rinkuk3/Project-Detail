@@ -1,0 +1,125 @@
+package com.td.mbna.msec.midtier.cardservice.payload.validatecpi;
+
+import com.td.mbna.msec.midtier.types.common.BaseResponse;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ValidateCPIResponseTest {
+
+    @Test
+    void testGetterAndSetter() {
+        // Create an instance of ValidateCPIResponse
+        ValidateCPIResponse response = new ValidateCPIResponse();
+
+        // Create a ResponsePayload object and set it
+        ResponsePayload payload = new ResponsePayload();
+        payload.setStatus(true);
+        response.setResponsePayload(payload);
+
+        // Verify the getter
+        assertNotNull(response.getResponsePayload());
+        assertTrue(response.getResponsePayload().isStatus());
+    }
+
+    @Test
+    void testToString() {
+        // Create an instance of ValidateCPIResponse and set values
+        ValidateCPIResponse response = new ValidateCPIResponse();
+        response.setStatus(true);
+        response.setErrorMessages("No errors");
+
+        ResponsePayload payload = new ResponsePayload();
+        payload.setStatus(true);
+        response.setResponsePayload(payload);
+
+        // Verify the toString output
+        String toStringOutput = response.toString();
+        assertNotNull(toStringOutput);
+        assertTrue(toStringOutput.contains("true"));
+        assertTrue(toStringOutput.contains("No errors"));
+        assertTrue(toStringOutput.contains("ResponsePayload"));
+    }
+
+    @Test
+    void testHashCode() {
+        // Create two instances of ValidateCPIResponse
+        ValidateCPIResponse response1 = new ValidateCPIResponse();
+        ValidateCPIResponse response2 = new ValidateCPIResponse();
+
+        // Both have default values, so hashCode should be the same
+        assertEquals(response1.hashCode(), response2.hashCode());
+
+        // Set the same values for both and verify hashCode
+        response1.setStatus(true);
+        response2.setStatus(true);
+        assertEquals(response1.hashCode(), response2.hashCode());
+
+        // Change one value and verify hashCode
+        response1.setErrorMessages("Error");
+        assertNotEquals(response1.hashCode(), response2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        // Create two instances of ValidateCPIResponse
+        ValidateCPIResponse response1 = new ValidateCPIResponse();
+        ValidateCPIResponse response2 = new ValidateCPIResponse();
+
+        // Both have default values, so they should be equal
+        assertEquals(response1, response2);
+
+        // Set the same values for both and verify equality
+        response1.setStatus(true);
+        response2.setStatus(true);
+        assertEquals(response1, response2);
+
+        // Change one value and verify inequality
+        response1.setErrorMessages("Error");
+        assertNotEquals(response1, response2);
+
+        // Test with same reference
+        assertEquals(response1, response1);
+
+        // Test with null and other object type
+        assertNotEquals(response1, null);
+        assertNotEquals(response1, "Some String");
+    }
+
+    @Test
+    void testEqualsWithPayload() {
+        // Create two instances of ValidateCPIResponse
+        ValidateCPIResponse response1 = new ValidateCPIResponse();
+        ValidateCPIResponse response2 = new ValidateCPIResponse();
+
+        // Set ResponsePayload for both
+        ResponsePayload payload1 = new ResponsePayload();
+        payload1.setStatus(true);
+        response1.setResponsePayload(payload1);
+
+        ResponsePayload payload2 = new ResponsePayload();
+        payload2.setStatus(true);
+        response2.setResponsePayload(payload2);
+
+        // Verify equality
+        assertEquals(response1, response2);
+
+        // Change the payload of one and verify inequality
+        payload2.setStatus(false);
+        assertNotEquals(response1, response2);
+    }
+
+    @Test
+    void testEdgeCases() {
+        // Create an instance with empty fields
+        ValidateCPIResponse response = new ValidateCPIResponse();
+
+        // Test null responsePayload
+        response.setResponsePayload(null);
+        assertNull(response.getResponsePayload());
+
+        // Verify default fields
+        assertNull(response.getStatus());
+        assertNull(response.getErrorMessages());
+    }
+}

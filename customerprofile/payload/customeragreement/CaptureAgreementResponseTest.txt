@@ -1,0 +1,34 @@
+package com.td.mbna.msec.midtier.customerprofile.payload.customeragreement;
+
+import com.td.mbna.msec.midtier.types.common.BaseResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class CaptureAgreementResponseTest {
+
+    private CaptureAgreementResponse captureAgreementResponse;
+
+    @BeforeEach
+    void setUp() {
+        // Initialize an instance of the response
+        captureAgreementResponse = new CaptureAgreementResponse();
+    }
+
+    /**
+     * Test if the object initializes correctly.
+     */
+    @Test
+    public void testInitialization() {
+        assertThat(captureAgreementResponse).isNotNull();
+    }
+
+    /**
+     * Test inheritance from BaseResponse.
+     */
+    @Test
+    public void testInheritance() {
+        assertThat(captureAgreementResponse).isInstanceOf(BaseResponse.class);
+    }
+}

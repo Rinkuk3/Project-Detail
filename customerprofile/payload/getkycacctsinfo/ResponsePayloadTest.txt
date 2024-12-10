@@ -1,0 +1,117 @@
+package com.td.mbna.msec.midtier.customerprofile.payload.getkycacctsinfo;
+
+import com.td.mbna.msec.midtier.customerprofile.payload.AccountKycInfoType;
+import com.td.mbna.msec.midtier.customerprofile.payload.CustomerInfoType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class ResponsePayloadTest {
+
+    private ResponsePayload responsePayload;
+
+    @BeforeEach
+    void setUp() {
+        responsePayload = new ResponsePayload();
+    }
+
+    @Test
+    public void testDefaultInitialization() {
+        assertThat(responsePayload.getKycCustInfo()).isNull();
+        assertThat(responsePayload.getKycAcctsInfo()).isEmpty();
+    }
+
+    @Test
+    public void testSetAndGetKycCustInfo() {
+        CustomerInfoType customerInfo = new CustomerInfoType();
+        responsePayload.setKycCustInfo(customerInfo);
+
+        assertThat(responsePayload.getKycCustInfo()).isEqualTo(customerInfo);
+    }
+
+    @Test
+    public void testSetAndGetKycAcctsInfo() {
+        AccountKycInfoType acctInfo = new AccountKycInfoType();
+        responsePayload.setKycAcctsInfo(Collections.singletonList(acctInfo));
+
+        assertThat(responsePayload.getKycAcctsInfo()).containsExactly(acctInfo);
+    }
+
+    @Test
+    public void testToStringLogic() {
+        CustomerInfoType customerInfo = new CustomerInfoType();
+        AccountKycInfoType acctInfo = new AccountKycInfoType();
+
+        responsePayload.setKycCustInfo(customerInfo);
+        responsePayload.setKycAcctsInfo(Collections.singletonList(acctInfo));
+
+        String result = responsePayload.toString();
+
+        assertThat(result).contains("kycCustInfo");
+        assertThat(result).contains("kycAcctsInfo");
+        assertThat(result).contains(customerInfo.toString());
+        assertThat(result).contains(acctInfo.toString());
+    }
+
+    @Test
+    public void testHashCodeEdgeCases() {
+        responsePayload.setKycCustInfo(null);
+        responsePayload.setKycAcctsInfo(null);
+        int hashEmpty = responsePayload.hashCode();
+        assertThat(hashEmpty).isNotZero();
+
+        CustomerInfoType customerInfo = new CustomerInfoType();
+        responsePayload.setKycCustInfo(customerInfo);
+
+        int hashNonEmpty = responsePayload.hashCode();
+        assertThat(hashNonEmpty).isNotZero();
+    }
+
+    @Test
+    public void testEqualsSameValues() {
+        CustomerInfoType customerInfo = new CustomerInfoType();
+        AccountKycInfoType acctInfo = new AccountKycInfoType();
+
+        ResponsePayload other = new ResponsePayload();
+        other.setKycCustInfo(customerInfo);
+        other.setKycAcctsInfo(Collections.singletonList(acctInfo));
+
+        responsePayload.setKycCustInfo(customerInfo);
+        responsePayload.setKycAcctsInfo(Collections.singletonList(acctInfo));
+
+        assertThat(responsePayload).isEqualTo(other);
+    }
+
+    @Test
+    public void testEqualsDifferentValues() {
+        CustomerInfoType customerInfo1 = new CustomerInfoType();
+        CustomerInfoType customerInfo2 = new CustomerInfoType();
+        AccountKycInfoType acctInfo1 = new AccountKycInfoType();
+        AccountKycInfoType acctInfo2 = new AccountKycInfoType();
+
+        ResponsePayload other = new ResponsePayload();
+        other.setKycCustInfo(customerInfo2);
+        other.setKycAcctsInfo(Collections.singletonList(acctInfo2));
+
+        responsePayload.setKycCustInfo(customerInfo1);
+        responsePayload.setKycAcctsInfo(Collections.singletonList(acctInfo1));
+
+        assertThat(responsePayload).isNotEqualTo(other);
+    }
+
+    @Test
+    public void testEqualsWithNullValues() {
+        responsePayload.setKycCustInfo(null);
+        responsePayload.setKycAcctsInfo(null);
+
+        ResponsePayload other = new ResponsePayload();
+        other.setKycCustInfo(null);
+        other.setKycAcctsInfo(null);
+
+        assertThat(responsePayload).isEqualTo(other);
+    }
+}

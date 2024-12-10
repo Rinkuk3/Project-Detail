@@ -1,0 +1,117 @@
+package com.td.mbna.msec.midtier.content.payload.getpagecontent;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+
+public class GetPageContentResponseTest {
+
+    @Test
+    public void testGetterSetter() {
+        // Test getter and setter
+        GetPageContentResponse response = new GetPageContentResponse();
+        ResponsePayload payload = new ResponsePayload();
+        response.setResponsePayload(payload);
+
+        // Verify getter
+        assertNotNull(response.getResponsePayload());
+    }
+
+    @Test
+    public void testToString_AllNull() {
+        // Test toString() when status, errorMessages, and responsePayload are null
+        GetPageContentResponse response = new GetPageContentResponse();
+        String expectedString = "com.td.mbna.msec.midtier.content.payload.getpagecontent.GetPageContentResponse@" +
+                Integer.toHexString(System.identityHashCode(response)) +
+                "[status=<null>,errorMsgs=<null>,responsePayload=<null>]";
+        assertEquals(expectedString, response.toString());
+    }
+
+    @Test
+    public void testToString_WithFields() {
+        // Test toString() with some fields populated
+        GetPageContentResponse response = new GetPageContentResponse();
+        response.setStatus("status123");
+        response.setErrorMessages("Error occurred");
+        ResponsePayload payload = new ResponsePayload();
+        payload.setLinkContent(List.of(new LinkContentType()));
+        response.setResponsePayload(payload);
+
+        String expectedString = "com.td.mbna.msec.midtier.content.payload.getpagecontent.GetPageContentResponse@" +
+                Integer.toHexString(System.identityHashCode(response)) +
+                "[status=status123,errorMsgs=Error occurred,responsePayload=ResponsePayload{linkContent=[com.td.mbna.msec.midtier.content.payload.LinkContentType@...]}]";
+        assertEquals(expectedString, response.toString());
+    }
+
+    @Test
+    public void testHashCode_Empty() {
+        // Test hashCode() when fields are null
+        GetPageContentResponse response = new GetPageContentResponse();
+        assertEquals(1, response.hashCode());
+    }
+
+    @Test
+    public void testHashCode_WithFields() {
+        // Test hashCode() when fields are populated
+        GetPageContentResponse response = new GetPageContentResponse();
+        response.setStatus("status123");
+        response.setErrorMessages("Error occurred");
+
+        ResponsePayload payload = new ResponsePayload();
+        response.setResponsePayload(payload);
+
+        assertNotEquals(1, response.hashCode());
+    }
+
+    @Test
+    public void testEquals_SameObject() {
+        // Test equals() comparing object with itself
+        GetPageContentResponse response = new GetPageContentResponse();
+        assertTrue(response.equals(response));
+    }
+
+    @Test
+    public void testEquals_EqualFields() {
+        // Test equality with identical fields
+        GetPageContentResponse response1 = new GetPageContentResponse();
+        GetPageContentResponse response2 = new GetPageContentResponse();
+        response1.setStatus("status123");
+        response2.setStatus("status123");
+        response1.setErrorMessages("Error occurred");
+        response2.setErrorMessages("Error occurred");
+
+        ResponsePayload payload1 = new ResponsePayload();
+        ResponsePayload payload2 = new ResponsePayload();
+
+        response1.setResponsePayload(payload1);
+        response2.setResponsePayload(payload2);
+
+        assertTrue(response1.equals(response2));
+    }
+
+    @Test
+    public void testEquals_DifferentFields() {
+        // Test inequality when fields differ
+        GetPageContentResponse response1 = new GetPageContentResponse();
+        GetPageContentResponse response2 = new GetPageContentResponse();
+
+        response1.setStatus("status123");
+        response2.setStatus("status456");
+
+        assertFalse(response1.equals(response2));
+    }
+
+    @Test
+    public void testEquals_NullComparison() {
+        // Test equals() with null comparison
+        GetPageContentResponse response = new GetPageContentResponse();
+        assertFalse(response.equals(null));
+    }
+
+    @Test
+    public void testEquals_DifferentType() {
+        // Test comparison with different type
+        GetPageContentResponse response = new GetPageContentResponse();
+        assertFalse(response.equals("String"));
+    }
+}

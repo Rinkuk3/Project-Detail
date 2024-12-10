@@ -1,0 +1,115 @@
+package com.td.mbna.msec.midtier.customerprofile.payload.retrieveenrollment;
+
+import com.td.mbna.msec.midtier.types.common.BaseResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class RetrieveEnrollmentResponseTest {
+
+    private RetrieveEnrollmentResponse response;
+
+    @BeforeEach
+    void setUp() {
+        response = new RetrieveEnrollmentResponse();
+    }
+
+    // Test Getter logic for responsePayload
+    @Test
+    public void testGetterResponsePayloadInitialization() {
+        // Verify the lazy initialization logic
+        assertThat(response.getResponsePayload()).isNotNull();
+    }
+
+    // Test setting responsePayload
+    @Test
+    public void testSetterAndGetterForResponsePayload() {
+        ResponsePayload payload = new ResponsePayload();
+        response.setResponsePayload(payload);
+
+        assertThat(response.getResponsePayload()).isEqualTo(payload);
+    }
+
+    // Test toString() with null fields
+    @Test
+    public void testToStringWithNullFields() {
+        String result = response.toString();
+        assertThat(result).contains("<null>");
+    }
+
+    // Test toString() with initialized fields
+    @Test
+    public void testToStringWithInitializedFields() {
+        response.setResponsePayload(new ResponsePayload());
+        response.setStatus("Success");
+        response.setErrorMessages("Error");
+
+        String result = response.toString();
+        assertThat(result).contains("status=Success");
+        assertThat(result).contains("errorMsgs=Error");
+        assertThat(result).contains("responsePayload");
+    }
+
+    // Test hashCode() logic for null and populated fields
+    @Test
+    public void testHashCodeWhenFieldsAreNull() {
+        int hashCode = response.hashCode();
+        assertThat(hashCode).isNotZero();
+    }
+
+    @Test
+    public void testHashCodeWhenFieldsChange() {
+        response.setResponsePayload(new ResponsePayload());
+        int hash1 = response.hashCode();
+
+        response.setResponsePayload(null);
+        int hash2 = response.hashCode();
+
+        assertThat(hash1).isNotEqualTo(hash2);
+    }
+
+    // Test equals() logic
+    @Test
+    public void testEqualsWithItself() {
+        assertThat(response).isEqualTo(response);
+    }
+
+    @Test
+    public void testEqualsWhenOtherIsNull() {
+        assertThat(response).isNotEqualTo(null);
+    }
+
+    @Test
+    public void testEqualsWithDifferentType() {
+        assertThat(response).isNotEqualTo(new Object());
+    }
+
+    @Test
+    public void testEqualsWhenFieldsAre Same() {
+        RetrieveEnrollmentResponse otherResponse = new RetrieveEnrollmentResponse();
+        otherResponse.setResponsePayload(response.getResponsePayload());
+        otherResponse.setStatus("Success");
+        otherResponse.setErrorMessages("Error");
+
+        assertThat(response).isEqualTo(otherResponse);
+    }
+
+    @Test
+    public void testEqualsWhenFields Differ() {
+        RetrieveEnrollmentResponse otherResponse = new RetrieveEnrollmentResponse();
+        otherResponse.setResponsePayload(new ResponsePayload());
+        otherResponse.setStatus("Error");
+
+        assertThat(response).isNotEqualTo(otherResponse);
+    }
+
+    @Test
+    public void testAllEdgeCasesForToStringLogic() {
+        response.setResponsePayload(null);
+        response.setStatus(null);
+        response.setErrorMessages(null);
+
+        assertThat(response.toString()).contains("<null>");
+    }
+}
