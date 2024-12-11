@@ -1,0 +1,183 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class EmailNotificationInfoTypeTest {
+
+    private EmailNotificationInfoType emailNotificationInfo;
+
+    @BeforeEach
+    void setUp() {
+        emailNotificationInfo = new EmailNotificationInfoType();
+    }
+
+    @Test
+    void testGetAndSetPrimaryUserEmailAddress() {
+        String email = "test@example.com";
+        emailNotificationInfo.setPrimaryUserEmailAddress(email);
+        assertEquals(email, emailNotificationInfo.getPrimaryUserEmailAddress());
+    }
+
+    @Test
+    void testGetAndSetPrimaryUserLanguage() {
+        String language = "English";
+        emailNotificationInfo.setPrimaryUserLanguage(language);
+        assertEquals(language, emailNotificationInfo.getPrimaryUserLanguage());
+    }
+
+    @Test
+    void testGetAndSetPrimaryUserFirstName() {
+        String firstName = "John";
+        emailNotificationInfo.setPrimaryUserFirstName(firstName);
+        assertEquals(firstName, emailNotificationInfo.getPrimaryUserFirstName());
+    }
+
+    @Test
+    void testGetAndSetPrimaryUserMiddleName() {
+        String middleName = "Michael";
+        emailNotificationInfo.setPrimaryUserMiddleName(middleName);
+        assertEquals(middleName, emailNotificationInfo.getPrimaryUserMiddleName());
+    }
+
+    @Test
+    void testGetAndSetPrimaryUserLastName() {
+        String lastName = "Doe";
+        emailNotificationInfo.setPrimaryUserLastName(lastName);
+        assertEquals(lastName, emailNotificationInfo.getPrimaryUserLastName());
+    }
+
+    @Test
+    void testGetAndSetPrimaryCustId() {
+        String custId = "12345";
+        emailNotificationInfo.setPrimaryCustId(custId);
+        assertEquals(custId, emailNotificationInfo.getPrimaryCustId());
+    }
+
+    @Test
+    void testGetAndSetCardName() {
+        String cardName = "Visa";
+        emailNotificationInfo.setCardName(cardName);
+        assertEquals(cardName, emailNotificationInfo.getCardName());
+    }
+
+    @Test
+    void testGetAndSetCardEnding() {
+        String cardEnding = "1234";
+        emailNotificationInfo.setCardEnding(cardEnding);
+        assertEquals(cardEnding, emailNotificationInfo.getCardEnding());
+    }
+
+    @Test
+    void testGetAndSetCurrentUserFirstName() {
+        String firstName = "Jane";
+        emailNotificationInfo.setCurrentUserFirstName(firstName);
+        assertEquals(firstName, emailNotificationInfo.getCurrentUserFirstName());
+    }
+
+    @Test
+    void testGetAndSetCurrentUserLastName() {
+        String lastName = "Smith";
+        emailNotificationInfo.setCurrentUserLastName(lastName);
+        assertEquals(lastName, emailNotificationInfo.getCurrentUserLastName());
+    }
+
+    @Test
+    void testGetAndSetPrimaryUserCardEnding() {
+        String cardEnding = "5678";
+        emailNotificationInfo.setPrimaryUserCardEnding(cardEnding);
+        assertEquals(cardEnding, emailNotificationInfo.getPrimaryUserCardEnding());
+    }
+
+    @Test
+    void testGetAndSetOldEmailAddressChange() {
+        String oldEmail = "old@example.com";
+        emailNotificationInfo.setOldEmailAddressChange(oldEmail);
+        assertEquals(oldEmail, emailNotificationInfo.getOldEmailAddressChange());
+    }
+
+    @Test
+    void testGetAndSetSendEmail() {
+        Boolean sendEmail = true;
+        emailNotificationInfo.setSendEmail(sendEmail);
+        assertEquals(sendEmail, emailNotificationInfo.getSendEmail());
+    }
+
+    @Test
+    void testToString() {
+        emailNotificationInfo.setPrimaryUserEmailAddress("test@example.com");
+        emailNotificationInfo.setPrimaryUserLanguage("English");
+        emailNotificationInfo.setPrimaryUserFirstName("John");
+        emailNotificationInfo.setPrimaryUserMiddleName("Michael");
+        emailNotificationInfo.setPrimaryUserLastName("Doe");
+        emailNotificationInfo.setPrimaryCustId("12345");
+        emailNotificationInfo.setCardName("Visa");
+        emailNotificationInfo.setCardEnding("1234");
+        emailNotificationInfo.setCurrentUserFirstName("Jane");
+        emailNotificationInfo.setCurrentUserLastName("Smith");
+        emailNotificationInfo.setPrimaryUserCardEnding("5678");
+        emailNotificationInfo.setOldEmailAddressChange("old@example.com");
+        emailNotificationInfo.setSendEmail(true);
+
+        String result = emailNotificationInfo.toString();
+        assertNotNull(result);
+        assertTrue(result.contains("primaryUserEmailAddress=test@example.com"));
+        assertTrue(result.contains("primaryUserLanguage=English"));
+        assertTrue(result.contains("primaryUserFirstName=John"));
+        assertTrue(result.contains("primaryUserMiddleName=Michael"));
+        assertTrue(result.contains("primaryUserLastName=Doe"));
+        assertTrue(result.contains("primaryCustId=12345"));
+        assertTrue(result.contains("cardName=Visa"));
+        assertTrue(result.contains("cardEnding=1234"));
+        assertTrue(result.contains("currentUserFirstName=Jane"));
+        assertTrue(result.contains("currentUserLastName=Smith"));
+        assertTrue(result.contains("primaryUserCardEnding=5678"));
+        assertTrue(result.contains("oldEmailAddressChange=old@example.com"));
+        assertTrue(result.contains("sendEmail=true"));
+    }
+
+    @Test
+    void testHashCode() {
+        emailNotificationInfo.setPrimaryUserEmailAddress("test@example.com");
+        emailNotificationInfo.setPrimaryUserLanguage("English");
+        emailNotificationInfo.setPrimaryUserFirstName("John");
+        emailNotificationInfo.setPrimaryUserMiddleName("Michael");
+        emailNotificationInfo.setPrimaryUserLastName("Doe");
+
+        int hashCode1 = emailNotificationInfo.hashCode();
+        
+        EmailNotificationInfoType emailNotificationInfo2 = new EmailNotificationInfoType();
+        emailNotificationInfo2.setPrimaryUserEmailAddress("test@example.com");
+        emailNotificationInfo2.setPrimaryUserLanguage("English");
+        emailNotificationInfo2.setPrimaryUserFirstName("John");
+        emailNotificationInfo2.setPrimaryUserMiddleName("Michael");
+        emailNotificationInfo2.setPrimaryUserLastName("Doe");
+        
+        int hashCode2 = emailNotificationInfo2.hashCode();
+        
+        assertEquals(hashCode1, hashCode2);
+    }
+
+    @Test
+    void testEquals() {
+        emailNotificationInfo.setPrimaryUserEmailAddress("test@example.com");
+        emailNotificationInfo.setPrimaryUserLanguage("English");
+        emailNotificationInfo.setPrimaryUserFirstName("John");
+        emailNotificationInfo.setPrimaryUserMiddleName("Michael");
+        emailNotificationInfo.setPrimaryUserLastName("Doe");
+
+        EmailNotificationInfoType emailNotificationInfo2 = new EmailNotificationInfoType();
+        emailNotificationInfo2.setPrimaryUserEmailAddress("test@example.com");
+        emailNotificationInfo2.setPrimaryUserLanguage("English");
+        emailNotificationInfo2.setPrimaryUserFirstName("John");
+        emailNotificationInfo2.setPrimaryUserMiddleName("Michael");
+        emailNotificationInfo2.setPrimaryUserLastName("Doe");
+
+        assertTrue(emailNotificationInfo.equals(emailNotificationInfo2));
+
+        emailNotificationInfo2.setPrimaryUserFirstName("Jane");
+        assertFalse(emailNotificationInfo.equals(emailNotificationInfo2));
+    }
+}

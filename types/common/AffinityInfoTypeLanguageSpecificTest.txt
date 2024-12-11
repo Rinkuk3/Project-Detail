@@ -1,0 +1,101 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class AffinityInfoTypeLanguageSpecificTest {
+
+    @Test
+    void testGetSetCardPicture() {
+        AffinityInfoTypeLanguageSpecific obj = new AffinityInfoTypeLanguageSpecific();
+        String cardPicture = "card_picture_url";
+        obj.setCardPicture(cardPicture);
+        assertEquals(cardPicture, obj.getCardPicture());
+    }
+
+    @Test
+    void testGetSetMobileCardPicture() {
+        AffinityInfoTypeLanguageSpecific obj = new AffinityInfoTypeLanguageSpecific();
+        String mobileCardPicture = "mobile_card_picture_url";
+        obj.setMobileCardPicture(mobileCardPicture);
+        assertEquals(mobileCardPicture, obj.getMobileCardPicture());
+    }
+
+    @Test
+    void testGetSetLogo() {
+        AffinityInfoTypeLanguageSpecific obj = new AffinityInfoTypeLanguageSpecific();
+        String logo = "logo_url";
+        obj.setLogo(logo);
+        assertEquals(logo, obj.getLogo());
+    }
+
+    @Test
+    void testGetSetShortDesc() {
+        AffinityInfoTypeLanguageSpecific obj = new AffinityInfoTypeLanguageSpecific();
+        String shortDesc = "Short description";
+        obj.setShortDesc(shortDesc);
+        assertEquals(shortDesc, obj.getShortDesc());
+    }
+
+    @Test
+    void testGetSetLongDesc() {
+        AffinityInfoTypeLanguageSpecific obj = new AffinityInfoTypeLanguageSpecific();
+        String longDesc = "Long description";
+        obj.setLongDesc(longDesc);
+        assertEquals(longDesc, obj.getLongDesc());
+    }
+
+    @Test
+    void testGetSetCptDescription() {
+        AffinityInfoTypeLanguageSpecific obj = new AffinityInfoTypeLanguageSpecific();
+        String cptDescription = "CPT description";
+        obj.setCptDescription(cptDescription);
+        assertEquals(cptDescription, obj.getCptDescription());
+    }
+
+    @Test
+    void testToString() {
+        AffinityInfoTypeLanguageSpecific obj = new AffinityInfoTypeLanguageSpecific();
+        obj.setCardPicture("card_picture_url");
+        obj.setMobileCardPicture("mobile_card_picture_url");
+        obj.setLogo("logo_url");
+        obj.setShortDesc("Short description");
+        obj.setLongDesc("Long description");
+        obj.setCptDescription("CPT description");
+
+        String toString = obj.toString();
+        assertTrue(toString.contains("card_picture_url"));
+        assertTrue(toString.contains("mobile_card_picture_url"));
+        assertTrue(toString.contains("logo_url"));
+        assertTrue(toString.contains("Short description"));
+        assertTrue(toString.contains("Long description"));
+        assertTrue(toString.contains("CPT description"));
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        AffinityInfoTypeLanguageSpecific obj1 = new AffinityInfoTypeLanguageSpecific();
+        AffinityInfoTypeLanguageSpecific obj2 = new AffinityInfoTypeLanguageSpecific();
+
+        obj1.setCardPicture("card_picture_url");
+        obj1.setMobileCardPicture("mobile_card_picture_url");
+        obj1.setLogo("logo_url");
+        obj1.setShortDesc("Short description");
+        obj1.setLongDesc("Long description");
+        obj1.setCptDescription("CPT description");
+
+        obj2.setCardPicture("card_picture_url");
+        obj2.setMobileCardPicture("mobile_card_picture_url");
+        obj2.setLogo("logo_url");
+        obj2.setShortDesc("Short description");
+        obj2.setLongDesc("Long description");
+        obj2.setCptDescription("CPT description");
+
+        assertEquals(obj1, obj2);
+        assertEquals(obj1.hashCode(), obj2.hashCode());
+
+        obj2.setCptDescription("Different description");
+        assertNotEquals(obj1, obj2);
+        assertNotEquals(obj1.hashCode(), obj2.hashCode());
+    }
+}

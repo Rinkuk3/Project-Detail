@@ -1,0 +1,65 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class AffinitySpecTypeTest {
+
+    @Test
+    void testGetSetTsysProductCode() {
+        AffinitySpecType obj = new AffinitySpecType();
+        String tsysProductCode = "TSYS123";
+        obj.setTsysProductCode(tsysProductCode);
+        assertEquals(tsysProductCode, obj.getTsysProductCode());
+    }
+
+    @Test
+    void testGetSetClientProductCode() {
+        AffinitySpecType obj = new AffinitySpecType();
+        String clientProductCode = "CLIENT456";
+        obj.setClientProductCode(clientProductCode);
+        assertEquals(clientProductCode, obj.getClientProductCode());
+    }
+
+    @Test
+    void testGetSetMiscInfo() {
+        AffinitySpecType obj = new AffinitySpecType();
+        String miscInfo = "Miscellaneous Information";
+        obj.setMiscInfo(miscInfo);
+        assertEquals(miscInfo, obj.getMiscInfo());
+    }
+
+    @Test
+    void testToString() {
+        AffinitySpecType obj = new AffinitySpecType();
+        obj.setTsysProductCode("TSYS123");
+        obj.setClientProductCode("CLIENT456");
+        obj.setMiscInfo("Miscellaneous Information");
+
+        String toString = obj.toString();
+        assertTrue(toString.contains("TSYS123"));
+        assertTrue(toString.contains("CLIENT456"));
+        assertTrue(toString.contains("Miscellaneous Information"));
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        AffinitySpecType obj1 = new AffinitySpecType();
+        AffinitySpecType obj2 = new AffinitySpecType();
+
+        obj1.setTsysProductCode("TSYS123");
+        obj1.setClientProductCode("CLIENT456");
+        obj1.setMiscInfo("Miscellaneous Information");
+
+        obj2.setTsysProductCode("TSYS123");
+        obj2.setClientProductCode("CLIENT456");
+        obj2.setMiscInfo("Miscellaneous Information");
+
+        assertEquals(obj1, obj2);
+        assertEquals(obj1.hashCode(), obj2.hashCode());
+
+        obj2.setMiscInfo("Different Information");
+        assertNotEquals(obj1, obj2);
+        assertNotEquals(obj1.hashCode(), obj2.hashCode());
+    }
+}

@@ -1,0 +1,37 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class PrimaryCardMemberInfoTest {
+
+    private PrimaryCardMemberInfo primaryCardMemberInfo;
+
+    @BeforeEach
+    void setUp() {
+        primaryCardMemberInfo = new PrimaryCardMemberInfo();
+    }
+
+    @Test
+    void testSettersAndGetters() {
+        primaryCardMemberInfo.setFirstName("John");
+        primaryCardMemberInfo.setMiddleName("A");
+        primaryCardMemberInfo.setLastName("Doe");
+
+        assertEquals("John", primaryCardMemberInfo.getFirstName());
+        assertEquals("A", primaryCardMemberInfo.getMiddleName());
+        assertEquals("Doe", primaryCardMemberInfo.getLastName());
+    }
+
+    @Test
+    void testToString() {
+        primaryCardMemberInfo.setFirstName("John");
+        primaryCardMemberInfo.setMiddleName("A");
+        primaryCardMemberInfo.setLastName("Doe");
+
+        String expectedToString = "PrimaryCardMemberInfo [firstName=John, middleName=A, lastName=Doe]";
+        assertEquals(expectedToString, primaryCardMemberInfo.toString());
+    }
+}

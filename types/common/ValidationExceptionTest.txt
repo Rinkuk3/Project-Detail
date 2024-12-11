@@ -1,0 +1,73 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ValidationExceptionTest {
+
+    private ValidationException validationException;
+    private FieldErrorType fieldErrorType;
+
+    @BeforeEach
+    void setUp() {
+        validationException = new ValidationException();
+        fieldErrorType = new FieldErrorType(); // Assume FieldErrorType has a constructor or default values
+        fieldErrorType.setField("testField");
+        fieldErrorType.setMessage("Test error message");
+    }
+
+    @Test
+    void testGetAndSetFieldError() {
+        validationException.setFieldError(new ArrayList<>());
+        validationException.getFieldError().add(fieldErrorType);
+
+        assertEquals(1, validationException.getFieldError().size());
+        assertEquals("testField", validationException.getFieldError().get(0).getField());
+        assertEquals("Test error message", validationException.getFieldError().get(0).getMessage());
+    }
+
+    @Test
+    void testToString() {
+        validationException.setFieldError(new ArrayList<>());
+        validationException.getFieldError().add(fieldErrorType);
+
+        String expectedToString = "com.td.mbna.msec.midtier.types.common.ValidationException@" +
+                                  Integer.toHexString(System.identityHashCode(validationException)) +
+                                  "[fieldError=" + validationException.getFieldError() + "]";
+        
+        assertTrue(validationException.toString().contains("fieldError"));
+    }
+
+    @Test
+    void testHashCode() {
+        ValidationException validationException1 = new ValidationException();
+        ValidationException validationException2 = new ValidationException();
+
+        validationException1.setFieldError(new ArrayList<>());
+        validationException2.setFieldError(new ArrayList<>());
+
+        validationException1.getFieldError().add(fieldErrorType);
+        validationException2.getFieldError().add(fieldErrorType);
+
+        assertEquals(validationException1.hashCode(), validationException2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        ValidationException validationException1 = new ValidationException();
+        ValidationException validationException2 = new ValidationException();
+
+        validationException1.setFieldError(new ArrayList<>());
+        validationException2.setFieldError(new ArrayList<>());
+
+        validationException1.getFieldError().add(fieldErrorType);
+        validationException2.getFieldError().add(fieldErrorType);
+
+        assertTrue(validationException1.equals(validationException2));
+
+        validationException2.getFieldError().add(new FieldErrorType());
+        assertFalse(validationException1.equals(validationException2));
+    }
+}

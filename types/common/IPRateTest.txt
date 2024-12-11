@@ -1,0 +1,95 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class IPRateTest {
+
+    private IPRate ipRate;
+
+    @BeforeEach
+    void setUp() {
+        ipRate = new IPRate();
+    }
+
+    @Test
+    void testSetAndGetUntilAgeCd() {
+        ipRate.setUntilAgeCd("AGE_65");
+        assertEquals("AGE_65", ipRate.getUntilAgeCd());
+    }
+
+    @Test
+    void testSetAndGetUntilAgeNum() {
+        ipRate.setUntilAgeNum("65");
+        assertEquals("65", ipRate.getUntilAgeNum());
+    }
+
+    @Test
+    void testSetAndGetFixedEndDt() {
+        ipRate.setFixedEndDt("2025-12-31");
+        assertEquals("2025-12-31", ipRate.getFixedEndDt());
+    }
+
+    @Test
+    void testSetAndGetFixedRate() {
+        ipRate.setFixedRate(BigDecimal.valueOf(5.25));
+        assertEquals(BigDecimal.valueOf(5.25), ipRate.getFixedRate());
+    }
+
+    @Test
+    void testToString() {
+        ipRate.setUntilAgeCd("AGE_65");
+        ipRate.setUntilAgeNum("65");
+        ipRate.setFixedEndDt("2025-12-31");
+        ipRate.setFixedRate(BigDecimal.valueOf(5.25));
+
+        String result = ipRate.toString();
+        assertTrue(result.contains("untilAgeCd"));
+        assertTrue(result.contains("untilAgeNum"));
+        assertTrue(result.contains("fixedEndDt"));
+        assertTrue(result.contains("fixedRate"));
+    }
+
+    @Test
+    void testHashCode() {
+        ipRate.setUntilAgeCd("AGE_65");
+        ipRate.setUntilAgeNum("65");
+        ipRate.setFixedEndDt("2025-12-31");
+        ipRate.setFixedRate(BigDecimal.valueOf(5.25));
+
+        int hashCode = ipRate.hashCode();
+        assertNotNull(hashCode);
+    }
+
+    @Test
+    void testEquals() {
+        IPRate ipRate2 = new IPRate();
+        ipRate.setUntilAgeCd("AGE_65");
+        ipRate.setUntilAgeNum("65");
+        ipRate.setFixedEndDt("2025-12-31");
+        ipRate.setFixedRate(BigDecimal.valueOf(5.25));
+
+        ipRate2.setUntilAgeCd("AGE_65");
+        ipRate2.setUntilAgeNum("65");
+        ipRate2.setFixedEndDt("2025-12-31");
+        ipRate2.setFixedRate(BigDecimal.valueOf(5.25));
+
+        assertTrue(ipRate.equals(ipRate2));
+    }
+
+    @Test
+    void testNotEquals() {
+        IPRate ipRate2 = new IPRate();
+        ipRate.setUntilAgeCd("AGE_65");
+        ipRate.setUntilAgeNum("65");
+        ipRate.setFixedEndDt("2025-12-31");
+        ipRate.setFixedRate(BigDecimal.valueOf(5.25));
+
+        ipRate2.setUntilAgeCd("AGE_70");  // Different untilAgeCd
+        assertFalse(ipRate.equals(ipRate2));
+    }
+}

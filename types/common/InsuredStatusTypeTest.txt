@@ -1,0 +1,40 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class InsuredStatusTypeTest {
+
+    @Test
+    void testToString() {
+        assertEquals("NOT_INSURED", InsuredStatusType.NOT_INSURED.toString());
+        assertEquals("OTHER", InsuredStatusType.OTHER.toString());
+    }
+
+    @Test
+    void testValue() {
+        assertEquals("NOT_INSURED", InsuredStatusType.NOT_INSURED.value());
+        assertEquals("OTHER", InsuredStatusType.OTHER.value());
+    }
+
+    @Test
+    void testFromValue() {
+        assertEquals(InsuredStatusType.NOT_INSURED, InsuredStatusType.fromValue("NOT_INSURED"));
+        assertEquals(InsuredStatusType.OTHER, InsuredStatusType.fromValue("OTHER"));
+    }
+
+    @Test
+    void testFromValueWithInvalidValue() {
+        assertThrows(IllegalArgumentException.class, () -> InsuredStatusType.fromValue("INVALID"));
+    }
+
+    @Test
+    void testEnumValues() {
+        InsuredStatusType[] values = InsuredStatusType.values();
+        assertNotNull(values);
+        assertEquals(2, values.length);
+        assertTrue(values[0] == InsuredStatusType.NOT_INSURED);
+        assertTrue(values[1] == InsuredStatusType.OTHER);
+    }
+}

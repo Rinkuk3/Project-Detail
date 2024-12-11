@@ -1,0 +1,80 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class TtcDestinationsInfoTypeTest {
+
+    private TtcDestinationsInfoType ttcDestinationsInfo;
+
+    @BeforeEach
+    void setUp() {
+        ttcDestinationsInfo = new TtcDestinationsInfoType();
+    }
+
+    @Test
+    void testGetAndSetTtcDestinationId() {
+        ttcDestinationsInfo.setTtcDestinationId(123);
+        assertEquals(123, ttcDestinationsInfo.getTtcDestinationId());
+    }
+
+    @Test
+    void testGetAndSetNickname() {
+        ttcDestinationsInfo.setNickname("nickname123");
+        assertEquals("nickname123", ttcDestinationsInfo.getNickname());
+    }
+
+    @Test
+    void testGetAndSetAccountEnding() {
+        ttcDestinationsInfo.setAccountEnding("1234");
+        assertEquals("1234", ttcDestinationsInfo.getAccountEnding());
+    }
+
+    @Test
+    void testToString() {
+        ttcDestinationsInfo.setTtcDestinationId(123);
+        ttcDestinationsInfo.setNickname("nickname123");
+        ttcDestinationsInfo.setAccountEnding("1234");
+
+        String expectedToString = "com.td.mbna.msec.midtier.types.common.TtcDestinationsInfoType@" +
+                                  Integer.toHexString(System.identityHashCode(ttcDestinationsInfo)) + 
+                                  "[ttcDestinationId=123,nickname=nickname123,accountEnding=1234]";
+
+        assertTrue(ttcDestinationsInfo.toString().contains("ttcDestinationId"));
+    }
+
+    @Test
+    void testHashCode() {
+        TtcDestinationsInfoType ttcDestinationsInfo1 = new TtcDestinationsInfoType();
+        ttcDestinationsInfo1.setTtcDestinationId(123);
+        ttcDestinationsInfo1.setNickname("nickname123");
+        ttcDestinationsInfo1.setAccountEnding("1234");
+
+        TtcDestinationsInfoType ttcDestinationsInfo2 = new TtcDestinationsInfoType();
+        ttcDestinationsInfo2.setTtcDestinationId(123);
+        ttcDestinationsInfo2.setNickname("nickname123");
+        ttcDestinationsInfo2.setAccountEnding("1234");
+
+        assertEquals(ttcDestinationsInfo1.hashCode(), ttcDestinationsInfo2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        TtcDestinationsInfoType ttcDestinationsInfo1 = new TtcDestinationsInfoType();
+        ttcDestinationsInfo1.setTtcDestinationId(123);
+        ttcDestinationsInfo1.setNickname("nickname123");
+        ttcDestinationsInfo1.setAccountEnding("1234");
+
+        TtcDestinationsInfoType ttcDestinationsInfo2 = new TtcDestinationsInfoType();
+        ttcDestinationsInfo2.setTtcDestinationId(123);
+        ttcDestinationsInfo2.setNickname("nickname123");
+        ttcDestinationsInfo2.setAccountEnding("1234");
+
+        assertTrue(ttcDestinationsInfo1.equals(ttcDestinationsInfo2));
+
+        ttcDestinationsInfo2.setTtcDestinationId(456);
+        assertFalse(ttcDestinationsInfo1.equals(ttcDestinationsInfo2));
+    }
+}

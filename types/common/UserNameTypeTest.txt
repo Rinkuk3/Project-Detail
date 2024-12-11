@@ -1,0 +1,103 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class UserNameTypeTest {
+
+    private UserNameType userName;
+
+    @BeforeEach
+    void setUp() {
+        userName = new UserNameType();
+    }
+
+    @Test
+    void testGetAndSetFirstName() {
+        userName.setFirstName("John");
+        assertEquals("John", userName.getFirstName());
+    }
+
+    @Test
+    void testGetAndSetLastName() {
+        userName.setLastName("Doe");
+        assertEquals("Doe", userName.getLastName());
+    }
+
+    @Test
+    void testGetAndSetMiddleName() {
+        userName.setMiddleName("Michael");
+        assertEquals("Michael", userName.getMiddleName());
+    }
+
+    @Test
+    void testGetAndSetSuffix() {
+        userName.setSuffix("Jr.");
+        assertEquals("Jr.", userName.getSuffix());
+    }
+
+    @Test
+    void testGetAndSetSuffixText() {
+        userName.setSuffixText("Junior");
+        assertEquals("Junior", userName.getSuffixText());
+    }
+
+    @Test
+    void testToString() {
+        userName.setFirstName("John");
+        userName.setLastName("Doe");
+        userName.setMiddleName("Michael");
+        userName.setSuffix("Jr.");
+        userName.setSuffixText("Junior");
+
+        String expectedToString = "com.td.mbna.msec.midtier.types.common.UserNameType@" +
+                                  Integer.toHexString(System.identityHashCode(userName)) + 
+                                  "[firstName=John,lastName=Doe,middleName=Michael,suffix=Jr.,suffixText=Junior]";
+
+        assertTrue(userName.toString().contains("firstName"));
+        assertTrue(userName.toString().contains("lastName"));
+    }
+
+    @Test
+    void testHashCode() {
+        UserNameType user1 = new UserNameType();
+        user1.setFirstName("John");
+        user1.setLastName("Doe");
+        user1.setMiddleName("Michael");
+        user1.setSuffix("Jr.");
+        user1.setSuffixText("Junior");
+
+        UserNameType user2 = new UserNameType();
+        user2.setFirstName("John");
+        user2.setLastName("Doe");
+        user2.setMiddleName("Michael");
+        user2.setSuffix("Jr.");
+        user2.setSuffixText("Junior");
+
+        assertEquals(user1.hashCode(), user2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        UserNameType user1 = new UserNameType();
+        user1.setFirstName("John");
+        user1.setLastName("Doe");
+        user1.setMiddleName("Michael");
+        user1.setSuffix("Jr.");
+        user1.setSuffixText("Junior");
+
+        UserNameType user2 = new UserNameType();
+        user2.setFirstName("John");
+        user2.setLastName("Doe");
+        user2.setMiddleName("Michael");
+        user2.setSuffix("Jr.");
+        user2.setSuffixText("Junior");
+
+        assertTrue(user1.equals(user2));
+
+        user2.setFirstName("Jane");
+        assertFalse(user1.equals(user2));
+    }
+}

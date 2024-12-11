@@ -1,0 +1,121 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class FieldErrorTypeTest {
+
+    @Test
+    void testGettersAndSetters() {
+        FieldErrorType fieldErrorType = new FieldErrorType();
+
+        fieldErrorType.setErrorCode("E123");
+        fieldErrorType.setSeverity("High");
+        fieldErrorType.setErrorDescription("Test error");
+        fieldErrorType.setSoapFaultDescription("Test fault description");
+        fieldErrorType.setField("TestField");
+
+        assertEquals("E123", fieldErrorType.getErrorCode());
+        assertEquals("High", fieldErrorType.getSeverity());
+        assertEquals("Test error", fieldErrorType.getErrorDescription());
+        assertEquals("Test fault description", fieldErrorType.getSoapFaultDescription());
+        assertEquals("TestField", fieldErrorType.getField());
+    }
+
+    @Test
+    void testToString() {
+        FieldErrorType fieldErrorType = new FieldErrorType();
+        fieldErrorType.setErrorCode("E123");
+        fieldErrorType.setSeverity("High");
+        fieldErrorType.setErrorDescription("Test error");
+        fieldErrorType.setSoapFaultDescription("Test fault description");
+        fieldErrorType.setField("TestField");
+
+        String expectedString = "com.td.mbna.msec.midtier.types.common.FieldErrorType@" +
+                                Integer.toHexString(System.identityHashCode(fieldErrorType)) +
+                                "[errorCode=E123,severity=High,errorDescription=Test error,soapFaultDescription=Test fault description,field=TestField]";
+        
+        assertTrue(fieldErrorType.toString().contains("errorCode=E123"));
+        assertTrue(fieldErrorType.toString().contains("severity=High"));
+        assertTrue(fieldErrorType.toString().contains("errorDescription=Test error"));
+        assertTrue(fieldErrorType.toString().contains("soapFaultDescription=Test fault description"));
+        assertTrue(fieldErrorType.toString().contains("field=TestField"));
+    }
+
+    @Test
+    void testHashCode() {
+        FieldErrorType fieldErrorType1 = new FieldErrorType();
+        fieldErrorType1.setErrorCode("E123");
+        fieldErrorType1.setSeverity("High");
+        fieldErrorType1.setErrorDescription("Test error");
+        fieldErrorType1.setSoapFaultDescription("Test fault description");
+        fieldErrorType1.setField("TestField");
+
+        FieldErrorType fieldErrorType2 = new FieldErrorType();
+        fieldErrorType2.setErrorCode("E123");
+        fieldErrorType2.setSeverity("High");
+        fieldErrorType2.setErrorDescription("Test error");
+        fieldErrorType2.setSoapFaultDescription("Test fault description");
+        fieldErrorType2.setField("TestField");
+
+        assertEquals(fieldErrorType1.hashCode(), fieldErrorType2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        FieldErrorType fieldErrorType1 = new FieldErrorType();
+        fieldErrorType1.setErrorCode("E123");
+        fieldErrorType1.setSeverity("High");
+        fieldErrorType1.setErrorDescription("Test error");
+        fieldErrorType1.setSoapFaultDescription("Test fault description");
+        fieldErrorType1.setField("TestField");
+
+        FieldErrorType fieldErrorType2 = new FieldErrorType();
+        fieldErrorType2.setErrorCode("E123");
+        fieldErrorType2.setSeverity("High");
+        fieldErrorType2.setErrorDescription("Test error");
+        fieldErrorType2.setSoapFaultDescription("Test fault description");
+        fieldErrorType2.setField("TestField");
+
+        assertTrue(fieldErrorType1.equals(fieldErrorType2));
+    }
+
+    @Test
+    void testEqualsDifferentObjects() {
+        FieldErrorType fieldErrorType1 = new FieldErrorType();
+        fieldErrorType1.setErrorCode("E123");
+
+        FieldErrorType fieldErrorType2 = new FieldErrorType();
+        fieldErrorType2.setErrorCode("E124");
+
+        assertFalse(fieldErrorType1.equals(fieldErrorType2));
+    }
+
+    @Test
+    void testEqualsNull() {
+        FieldErrorType fieldErrorType = new FieldErrorType();
+        assertFalse(fieldErrorType.equals(null));
+    }
+
+    @Test
+    void testEqualsSameObject() {
+        FieldErrorType fieldErrorType = new FieldErrorType();
+        assertTrue(fieldErrorType.equals(fieldErrorType));
+    }
+
+    @Test
+    void testEqualsDifferentClass() {
+        FieldErrorType fieldErrorType = new FieldErrorType();
+        String someOtherClass = "some string";
+        assertFalse(fieldErrorType.equals(someOtherClass));
+    }
+
+    @Test
+    void testSeverityEnum() {
+        assertEquals(FieldErrorType.Severity.INFO, FieldErrorType.Severity.fromValue("INFO"));
+        assertEquals(FieldErrorType.Severity.WARN, FieldErrorType.Severity.fromValue("WARN"));
+        assertEquals(FieldErrorType.Severity.ERROR, FieldErrorType.Severity.fromValue("ERROR"));
+
+        assertThrows(IllegalArgumentException.class, () -> FieldErrorType.Severity.fromValue("INVALID"));
+    }
+}

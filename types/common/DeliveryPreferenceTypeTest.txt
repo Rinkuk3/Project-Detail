@@ -1,0 +1,56 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class DeliveryPreferenceTypeTest {
+
+    @Test
+    void testOnlineToString() {
+        DeliveryPreferenceType preference = DeliveryPreferenceType.ONLINE;
+        assertEquals("Online", preference.toString());
+    }
+
+    @Test
+    void testPaperToString() {
+        DeliveryPreferenceType preference = DeliveryPreferenceType.PAPER;
+        assertEquals("Paper", preference.toString());
+    }
+
+    @Test
+    void testOnlineValue() {
+        DeliveryPreferenceType preference = DeliveryPreferenceType.ONLINE;
+        assertEquals("Online", preference.value());
+    }
+
+    @Test
+    void testPaperValue() {
+        DeliveryPreferenceType preference = DeliveryPreferenceType.PAPER;
+        assertEquals("Paper", preference.value());
+    }
+
+    @Test
+    void testFromValueOnline() {
+        DeliveryPreferenceType preference = DeliveryPreferenceType.fromValue("Online");
+        assertEquals(DeliveryPreferenceType.ONLINE, preference);
+    }
+
+    @Test
+    void testFromValuePaper() {
+        DeliveryPreferenceType preference = DeliveryPreferenceType.fromValue("Paper");
+        assertEquals(DeliveryPreferenceType.PAPER, preference);
+    }
+
+    @Test
+    void testFromValueInvalid() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            DeliveryPreferenceType.fromValue("Invalid");
+        });
+    }
+
+    @Test
+    void testFromValueEnumName() {
+        DeliveryPreferenceType preference = DeliveryPreferenceType.fromValue("PAPER");
+        assertEquals(DeliveryPreferenceType.PAPER, preference);
+    }
+}
