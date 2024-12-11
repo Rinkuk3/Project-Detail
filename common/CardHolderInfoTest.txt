@@ -1,0 +1,22 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class CardHolderInfoTest {
+
+    @Test
+    void testGetSetCardNumber() {
+        CardHolderInfo cardHolderInfo = new CardHolderInfo();
+        cardHolderInfo.setCardNumber("1234567890123456");
+        assertEquals("1234567890123456", cardHolderInfo.getCardNumber());
+    }
+
+    @Test
+    void testGetSetCardHolderName() {
+        CardHolderInfo cardHolderInfo = new CardHolderInfo();
+        cardHolderInfo.setCardHolderName("John Doe");
+        assertEquals("John Doe", cardHolderInfo.getCardHolderName());
+    }
+}

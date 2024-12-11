@@ -1,0 +1,56 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class DelinquencyStatusTypeTest {
+
+    @Test
+    void testNotDelinquentToString() {
+        DelinquencyStatusType status = DelinquencyStatusType.NOT_DELINQUENT;
+        assertEquals("Not Delinquent", status.toString());
+    }
+
+    @Test
+    void testDelinquentToString() {
+        DelinquencyStatusType status = DelinquencyStatusType.DELINQUENT;
+        assertEquals("Delinquent", status.toString());
+    }
+
+    @Test
+    void testNotDelinquentValue() {
+        DelinquencyStatusType status = DelinquencyStatusType.NOT_DELINQUENT;
+        assertEquals("Not Delinquent", status.value());
+    }
+
+    @Test
+    void testDelinquentValue() {
+        DelinquencyStatusType status = DelinquencyStatusType.DELINQUENT;
+        assertEquals("Delinquent", status.value());
+    }
+
+    @Test
+    void testFromValueNotDelinquent() {
+        DelinquencyStatusType status = DelinquencyStatusType.fromValue("Not Delinquent");
+        assertEquals(DelinquencyStatusType.NOT_DELINQUENT, status);
+    }
+
+    @Test
+    void testFromValueDelinquent() {
+        DelinquencyStatusType status = DelinquencyStatusType.fromValue("Delinquent");
+        assertEquals(DelinquencyStatusType.DELINQUENT, status);
+    }
+
+    @Test
+    void testFromValueInvalid() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            DelinquencyStatusType.fromValue("Invalid");
+        });
+    }
+
+    @Test
+    void testFromValueEnumName() {
+        DelinquencyStatusType status = DelinquencyStatusType.fromValue("DELINQUENT");
+        assertEquals(DelinquencyStatusType.DELINQUENT, status);
+    }
+}

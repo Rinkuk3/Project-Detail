@@ -1,0 +1,147 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class AuditInfoTest {
+
+    @Test
+    void testGetSetConnectId() {
+        AuditInfo auditInfo = new AuditInfo();
+        auditInfo.setConnectId("CONNECT123");
+        assertEquals("CONNECT123", auditInfo.getConnectId());
+    }
+
+    @Test
+    void testGetSetTransactionCode() {
+        AuditInfo auditInfo = new AuditInfo();
+        auditInfo.setTransactionCode("TXN1234");
+        assertEquals("TXN1234", auditInfo.getTransactionCode());
+    }
+
+    @Test
+    void testGetSetTransactionStatus() {
+        AuditInfo auditInfo = new AuditInfo();
+        auditInfo.setTransactionStatus("SUCCESS");
+        assertEquals("SUCCESS", auditInfo.getTransactionStatus());
+    }
+
+    @Test
+    void testGetSetPaaSequence() {
+        AuditInfo auditInfo = new AuditInfo();
+        auditInfo.setPaaSequence("PAA123");
+        assertEquals("PAA123", auditInfo.getPaaSequence());
+    }
+
+    @Test
+    void testGetSetGroupAffinityCode() {
+        AuditInfo auditInfo = new AuditInfo();
+        auditInfo.setGroupAffinityCode("AFF123");
+        assertEquals("AFF123", auditInfo.getGroupAffinityCode());
+    }
+
+    @Test
+    void testGetSetAccountStatusCode() {
+        AuditInfo auditInfo = new AuditInfo();
+        auditInfo.setAccountStatusCode("STATUS123");
+        assertEquals("STATUS123", auditInfo.getAccountStatusCode());
+    }
+
+    @Test
+    void testGetSetAccountDelinquencyCode() {
+        AuditInfo auditInfo = new AuditInfo();
+        auditInfo.setAccountDelinquencyCode("DELINQ123");
+        assertEquals("DELINQ123", auditInfo.getAccountDelinquencyCode());
+    }
+
+    @Test
+    void testGetSetOperatingSystem() {
+        AuditInfo auditInfo = new AuditInfo();
+        auditInfo.setOperatingSystem("Windows");
+        assertEquals("Windows", auditInfo.getOperatingSystem());
+    }
+
+    @Test
+    void testGetSetBrowser() {
+        AuditInfo auditInfo = new AuditInfo();
+        auditInfo.setBrowser("Chrome");
+        assertEquals("Chrome", auditInfo.getBrowser());
+    }
+
+    @Test
+    void testGetSetUrl() {
+        AuditInfo auditInfo = new AuditInfo();
+        auditInfo.setUrl("http://example.com");
+        assertEquals("http://example.com", auditInfo.getUrl());
+    }
+
+    @Test
+    void testGetSetServerID() {
+        AuditInfo auditInfo = new AuditInfo();
+        auditInfo.setServerID("SERVER123");
+        assertEquals("SERVER123", auditInfo.getServerID());
+    }
+
+    @Test
+    void testGetSetLogLastLogin() {
+        AuditInfo auditInfo = new AuditInfo();
+        auditInfo.setLogLastLogin(true);
+        assertTrue(auditInfo.getLogLastLogin());
+    }
+
+    @Test
+    void testGetSetDescription() {
+        AuditInfo auditInfo = new AuditInfo();
+        auditInfo.setDescription("Test description");
+        assertEquals("Test description", auditInfo.getDescription());
+    }
+
+    @Test
+    void testGetSetCardEnding() {
+        AuditInfo auditInfo = new AuditInfo();
+        auditInfo.setCardEnding("1234");
+        assertEquals("1234", auditInfo.getCardEnding());
+    }
+
+    @Test
+    void testGetSetCardStarting() {
+        AuditInfo auditInfo = new AuditInfo();
+        auditInfo.setCardStarting("5678");
+        assertEquals("5678", auditInfo.getCardStarting());
+    }
+
+    @Test
+    void testGetSetAuditStartTime() {
+        AuditInfo auditInfo = new AuditInfo();
+        auditInfo.setAuditStartTime(123456789L);
+        assertEquals(123456789L, auditInfo.getAuditStartTime());
+    }
+
+    @Test
+    void testGetSetBrowserTime() {
+        AuditInfo auditInfo = new AuditInfo();
+        auditInfo.setBrowserTime(987654321L);
+        assertEquals(987654321L, auditInfo.getBrowserTime());
+    }
+
+    @Test
+    void testGetSetBrowserLanguage() {
+        AuditInfo auditInfo = new AuditInfo();
+        auditInfo.setBrowserLanguage("en-US");
+        assertEquals("en-US", auditInfo.getBrowserLanguage());
+    }
+
+    @Test
+    void testGetSetCardHolderRole() {
+        AuditInfo auditInfo = new AuditInfo();
+        auditInfo.setCardHolderRole("PRIMARY");
+        assertEquals("PRIMARY", auditInfo.getCardHolderRole());
+    }
+
+    @Test
+    void testGetSetBusinessEventReason() {
+        AuditInfo auditInfo = new AuditInfo();
+        auditInfo.setBusinessEventReason("EVENT123");
+        assertEquals("EVENT123", auditInfo.getBusinessEventReason());
+    }
+}

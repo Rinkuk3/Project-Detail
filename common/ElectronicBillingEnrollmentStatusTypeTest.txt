@@ -1,0 +1,31 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ElectronicBillingEnrollmentStatusTypeTest {
+
+    @Test
+    void testToString() {
+        assertEquals("ENROLLED", ElectronicBillingEnrollmentStatusType.ENROLLED.toString());
+        assertEquals("OTHERS", ElectronicBillingEnrollmentStatusType.OTHERS.toString());
+    }
+
+    @Test
+    void testValue() {
+        assertEquals("ENROLLED", ElectronicBillingEnrollmentStatusType.ENROLLED.value());
+        assertEquals("OTHERS", ElectronicBillingEnrollmentStatusType.OTHERS.value());
+    }
+
+    @Test
+    void testFromValue() {
+        assertEquals(ElectronicBillingEnrollmentStatusType.ENROLLED, ElectronicBillingEnrollmentStatusType.fromValue("ENROLLED"));
+        assertEquals(ElectronicBillingEnrollmentStatusType.OTHERS, ElectronicBillingEnrollmentStatusType.fromValue("OTHERS"));
+    }
+
+    @Test
+    void testFromValueThrowsExceptionForInvalidValue() {
+        assertThrows(IllegalArgumentException.class, () -> ElectronicBillingEnrollmentStatusType.fromValue("INVALID"));
+    }
+}

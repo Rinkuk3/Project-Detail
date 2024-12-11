@@ -1,0 +1,99 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class PromotionOfferTypeTest {
+
+    private PromotionOfferType promotionOfferType;
+
+    @BeforeEach
+    void setUp() {
+        promotionOfferType = new PromotionOfferType();
+    }
+
+    @Test
+    void testSettersAndGetters() {
+        promotionOfferType.setOfferID("12345");
+        promotionOfferType.setOfferType("Discount");
+        promotionOfferType.setOfferDescription("10% Off");
+        promotionOfferType.setAgreementFeature("Agreement Feature");
+        promotionOfferType.setSubProductId("SP123");
+        promotionOfferType.setSubProductType("ProductType");
+        promotionOfferType.setSubProductDescription("Product Description");
+        promotionOfferType.setDisposition("Active");
+        promotionOfferType.setIsEligible(true);
+        promotionOfferType.setPriority(1);
+        
+        assertEquals("12345", promotionOfferType.getOfferID());
+        assertEquals("Discount", promotionOfferType.getOfferType());
+        assertEquals("10% Off", promotionOfferType.getOfferDescription());
+        assertEquals("Agreement Feature", promotionOfferType.getAgreementFeature());
+        assertEquals("SP123", promotionOfferType.getSubProductId());
+        assertEquals("ProductType", promotionOfferType.getSubProductType());
+        assertEquals("Product Description", promotionOfferType.getSubProductDescription());
+        assertEquals("Active", promotionOfferType.getDisposition());
+        assertTrue(promotionOfferType.getIsEligible());
+        assertEquals(Integer.valueOf(1), promotionOfferType.getPriority());
+    }
+
+    @Test
+    void testNullIsEligible() {
+        promotionOfferType.setIsEligible(null);
+        assertTrue(promotionOfferType.getIsEligible());  // Default to true if null
+    }
+
+    @Test
+    void testNullPriority() {
+        promotionOfferType.setPriority(null);
+        assertEquals(Integer.valueOf(0), promotionOfferType.getPriority());  // Default to 0 if null
+    }
+
+    @Test
+    void testToString() {
+        promotionOfferType.setOfferID("12345");
+        promotionOfferType.setOfferType("Discount");
+        promotionOfferType.setOfferDescription("10% Off");
+        promotionOfferType.setAgreementFeature("Agreement Feature");
+        promotionOfferType.setSubProductId("SP123");
+        promotionOfferType.setSubProductType("ProductType");
+        promotionOfferType.setSubProductDescription("Product Description");
+        promotionOfferType.setDisposition("Active");
+        promotionOfferType.setIsEligible(true);
+        promotionOfferType.setPriority(1);
+
+        String expectedToString = "PromotionOfferType@" + Integer.toHexString(System.identityHashCode(promotionOfferType)) + "[offerID=12345,offerType=Discount,offerDescription=10% Off,agreementFeature=Agreement Feature,subProductId=SP123,subProductType=ProductType,subProductDescription=Product Description,disposition=Active,isEligible=true,priority=1,cliOffer=<null>,btOffer=<null>,ipOffer=<null>,pcOffer=<null>,caOffer=<null>,roffer=<null>]";
+        assertEquals(expectedToString, promotionOfferType.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        promotionOfferType.setOfferID("12345");
+        promotionOfferType.setOfferType("Discount");
+        promotionOfferType.setOfferDescription("10% Off");
+
+        int expectedHashCode = promotionOfferType.getOfferID().hashCode() * 31 + promotionOfferType.getOfferType().hashCode() * 31 + promotionOfferType.getOfferDescription().hashCode();
+        assertEquals(expectedHashCode, promotionOfferType.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        PromotionOfferType offer1 = new PromotionOfferType();
+        PromotionOfferType offer2 = new PromotionOfferType();
+
+        offer1.setOfferID("12345");
+        offer1.setOfferType("Discount");
+        offer1.setOfferDescription("10% Off");
+
+        offer2.setOfferID("12345");
+        offer2.setOfferType("Discount");
+        offer2.setOfferDescription("10% Off");
+
+        assertTrue(offer1.equals(offer2));
+
+        offer2.setOfferID("54321");
+        assertFalse(offer1.equals(offer2));
+    }
+}

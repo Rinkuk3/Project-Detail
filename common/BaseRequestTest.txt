@@ -1,0 +1,125 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class BaseRequestTest {
+
+    @Test
+    void testGetSetCustId() {
+        BaseRequest baseRequest = new BaseRequest();
+        baseRequest.setCustId("CUST123");
+        assertEquals("CUST123", baseRequest.getCustId());
+    }
+
+    @Test
+    void testGetSetAliasCustId() {
+        BaseRequest baseRequest = new BaseRequest();
+        baseRequest.setAliasCustId("ALIAS123");
+        assertEquals("ALIAS123", baseRequest.getAliasCustId());
+    }
+
+    @Test
+    void testGetSetAcctNum() {
+        BaseRequest baseRequest = new BaseRequest();
+        baseRequest.setAcctNum("ACCT123");
+        assertEquals("ACCT123", baseRequest.getAcctNum());
+    }
+
+    @Test
+    void testGetSetAcctType() {
+        BaseRequest baseRequest = new BaseRequest();
+        baseRequest.setAcctType("TYPE123");
+        assertEquals("TYPE123", baseRequest.getAcctType());
+    }
+
+    @Test
+    void testGetSetLanguagePref() {
+        BaseRequest baseRequest = new BaseRequest();
+        baseRequest.setLanguagePref("EN");
+        assertEquals("EN", baseRequest.getLanguagePref());
+    }
+
+    @Test
+    void testGetSetAuditInfo() {
+        BaseRequest baseRequest = new BaseRequest();
+        AuditInfo auditInfo = new AuditInfo();
+        baseRequest.setAuditInfo(auditInfo);
+        assertEquals(auditInfo, baseRequest.getAuditInfo());
+    }
+
+    @Test
+    void testGetSetIsPrimaryUser() {
+        BaseRequest baseRequest = new BaseRequest();
+        baseRequest.setIsPrimaryUser(true);
+        assertTrue(baseRequest.getIsPrimaryUser());
+    }
+
+    @Test
+    void testGetSetReserved1() {
+        BaseRequest baseRequest = new BaseRequest();
+        baseRequest.setReserved1("RESERVED");
+        assertEquals("RESERVED", baseRequest.getReserved1());
+    }
+
+    @Test
+    void testGetSetCustInterface() {
+        BaseRequest baseRequest = new BaseRequest();
+        baseRequest.setCustInterface("WEB");
+        assertEquals("WEB", baseRequest.getCustInterface());
+    }
+
+    @Test
+    void testGetSetIsMultiCard() {
+        BaseRequest baseRequest = new BaseRequest();
+        baseRequest.setMultiCard(true);
+        assertTrue(baseRequest.isMultiCard());
+    }
+
+    @Test
+    void testGetSetCardNum() {
+        BaseRequest baseRequest = new BaseRequest();
+        baseRequest.setCardNum("1234567890");
+        assertEquals("1234567890", baseRequest.getCardNum());
+    }
+
+    @Test
+    void testToString() {
+        BaseRequest baseRequest = new BaseRequest();
+        baseRequest.setCustId("CUST123");
+        baseRequest.setAliasCustId("ALIAS123");
+        baseRequest.setAcctNum("ACCT123");
+        baseRequest.setAcctType("TYPE123");
+        baseRequest.setLanguagePref("EN");
+        baseRequest.setReserved1("RESERVED");
+        baseRequest.setCustInterface("WEB");
+        baseRequest.setIsPrimaryUser(true);
+        baseRequest.setCardNum("1234567890");
+        baseRequest.setMultiCard(false);
+
+        String toStringResult = baseRequest.toString();
+        assertNotNull(toStringResult);
+        assertTrue(toStringResult.contains("CUST123"));
+        assertTrue(toStringResult.contains("ALIAS123"));
+        assertTrue(toStringResult.contains("ACCT123"));
+        assertTrue(toStringResult.contains("TYPE123"));
+        assertTrue(toStringResult.contains("EN"));
+        assertTrue(toStringResult.contains("RESERVED"));
+        assertTrue(toStringResult.contains("WEB"));
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        BaseRequest baseRequest1 = new BaseRequest();
+        BaseRequest baseRequest2 = new BaseRequest();
+
+        baseRequest1.setCustId("CUST123");
+        baseRequest2.setCustId("CUST123");
+
+        assertEquals(baseRequest1, baseRequest2);
+        assertEquals(baseRequest1.hashCode(), baseRequest2.hashCode());
+
+        baseRequest2.setCustId("CUST124");
+        assertNotEquals(baseRequest1, baseRequest2);
+    }
+}

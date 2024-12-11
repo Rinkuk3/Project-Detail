@@ -1,0 +1,83 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import java.util.List;
+
+class AccountOffersTypeTest {
+
+    @Test
+    void testGetSetAcctNum() {
+        AccountOffersType accountOffers = new AccountOffersType();
+        accountOffers.setAcctNum("987654321");
+        assertEquals("987654321", accountOffers.getAcctNum());
+    }
+
+    @Test
+    void testGetSetPromotionOffer() {
+        AccountOffersType accountOffers = new AccountOffersType();
+        List<PromotionOfferType> promotionOffers = new ArrayList<>();
+        PromotionOfferType promo = new PromotionOfferType();
+        promotionOffers.add(promo);
+
+        accountOffers.setPromotionOffer(promotionOffers);
+        assertEquals(promotionOffers, accountOffers.getPromotionOffer());
+    }
+
+    @Test
+    void testToString() {
+        AccountOffersType accountOffers = new AccountOffersType();
+        accountOffers.setAcctNum("123456789");
+        List<PromotionOfferType> promotionOffers = new ArrayList<>();
+        PromotionOfferType promo = new PromotionOfferType();
+        promotionOffers.add(promo);
+        accountOffers.setPromotionOffer(promotionOffers);
+
+        String expected = AccountOffersType.class.getName() + '@' +
+                          Integer.toHexString(System.identityHashCode(accountOffers)) +
+                          "[acctNum=123456789,promotionOffer=" + promotionOffers + "]";
+        assertEquals(expected, accountOffers.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        AccountOffersType accountOffers1 = new AccountOffersType();
+        accountOffers1.setAcctNum("123456789");
+        List<PromotionOfferType> promotionOffers1 = new ArrayList<>();
+        PromotionOfferType promo1 = new PromotionOfferType();
+        promotionOffers1.add(promo1);
+        accountOffers1.setPromotionOffer(promotionOffers1);
+
+        AccountOffersType accountOffers2 = new AccountOffersType();
+        accountOffers2.setAcctNum("123456789");
+        List<PromotionOfferType> promotionOffers2 = new ArrayList<>();
+        PromotionOfferType promo2 = new PromotionOfferType();
+        promotionOffers2.add(promo2);
+        accountOffers2.setPromotionOffer(promotionOffers2);
+
+        assertEquals(accountOffers1.hashCode(), accountOffers2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        AccountOffersType accountOffers1 = new AccountOffersType();
+        accountOffers1.setAcctNum("123456789");
+        List<PromotionOfferType> promotionOffers1 = new ArrayList<>();
+        PromotionOfferType promo1 = new PromotionOfferType();
+        promotionOffers1.add(promo1);
+        accountOffers1.setPromotionOffer(promotionOffers1);
+
+        AccountOffersType accountOffers2 = new AccountOffersType();
+        accountOffers2.setAcctNum("123456789");
+        List<PromotionOfferType> promotionOffers2 = new ArrayList<>();
+        PromotionOfferType promo2 = new PromotionOfferType();
+        promotionOffers2.add(promo2);
+        accountOffers2.setPromotionOffer(promotionOffers2);
+
+        assertTrue(accountOffers1.equals(accountOffers2));
+        assertTrue(accountOffers1.equals(accountOffers1));
+        assertFalse(accountOffers1.equals(null));
+        assertFalse(accountOffers1.equals(new Object()));
+    }
+}

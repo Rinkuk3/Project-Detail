@@ -1,0 +1,91 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class TrackableRequestTest {
+
+    private TrackableRequest trackableRequest;
+
+    @BeforeEach
+    void setUp() {
+        trackableRequest = new TrackableRequest();
+    }
+
+    @Test
+    void testGetSessionInfo() {
+        assertNotNull(trackableRequest.getSessionInfo());
+        assertNull(trackableRequest.getSessionInfo().getSessionId()); // Assuming sessionInfo has a default value
+    }
+
+    @Test
+    void testSetSessionInfo() {
+        TrackingInfoType trackingInfo = new TrackingInfoType();
+        trackingInfo.setSessionId("12345");
+        trackableRequest.setSessionInfo(trackingInfo);
+
+        assertEquals("12345", trackableRequest.getSessionInfo().getSessionId());
+    }
+
+    @Test
+    void testToString() {
+        TrackingInfoType trackingInfo = new TrackingInfoType();
+        trackingInfo.setSessionId("12345");
+        trackableRequest.setSessionInfo(trackingInfo);
+
+        String expectedToString = "com.td.mbna.msec.midtier.types.common.TrackableRequest@" +
+                Integer.toHexString(System.identityHashCode(trackableRequest)) +
+                "[sessionInfo=com.td.mbna.msec.midtier.types.common.TrackingInfoType@"
+                + Integer.toHexString(System.identityHashCode(trackingInfo)) +
+                "[sessionId=12345]]";
+        
+        assertTrue(trackableRequest.toString().contains("sessionInfo"));
+    }
+
+    @Test
+    void testHashCode() {
+        TrackingInfoType trackingInfo1 = new TrackingInfoType();
+        trackingInfo1.setSessionId("12345");
+
+        TrackingInfoType trackingInfo2 = new TrackingInfoType();
+        trackingInfo2.setSessionId("12345");
+
+        trackableRequest.setSessionInfo(trackingInfo1);
+
+        TrackableRequest trackableRequest2 = new TrackableRequest();
+        trackableRequest2.setSessionInfo(trackingInfo2);
+
+        assertEquals(trackableRequest.hashCode(), trackableRequest2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        TrackableRequest trackableRequest1 = new TrackableRequest();
+        TrackableRequest trackableRequest2 = new TrackableRequest();
+
+        assertTrue(trackableRequest1.equals(trackableRequest2));
+
+        TrackingInfoType trackingInfo1 = new TrackingInfoType();
+        trackingInfo1.setSessionId("12345");
+        trackableRequest1.setSessionInfo(trackingInfo1);
+
+        TrackingInfoType trackingInfo2 = new TrackingInfoType();
+        trackingInfo2.setSessionId("12345");
+        trackableRequest2.setSessionInfo(trackingInfo2);
+
+        assertTrue(trackableRequest1.equals(trackableRequest2));
+
+        trackingInfo2.setSessionId("54321");
+        trackableRequest2.setSessionInfo(trackingInfo2);
+
+        assertFalse(trackableRequest1.equals(trackableRequest2));
+
+        trackableRequest2.setSessionInfo(null);
+        assertFalse(trackableRequest1.equals(trackableRequest2));
+
+        trackableRequest1.setSessionInfo(null);
+        assertTrue(trackableRequest1.equals(trackableRequest2));
+    }
+}

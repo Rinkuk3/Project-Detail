@@ -1,0 +1,138 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+
+class CardHolderTypeTest {
+
+    @Test
+    void testGetSetFirstName() {
+        CardHolderType cardHolder = new CardHolderType();
+        cardHolder.setFirstName("John");
+        assertEquals("John", cardHolder.getFirstName());
+    }
+
+    @Test
+    void testGetSetMiddleName() {
+        CardHolderType cardHolder = new CardHolderType();
+        cardHolder.setMiddleName("M");
+        assertEquals("M", cardHolder.getMiddleName());
+    }
+
+    @Test
+    void testGetSetLastName() {
+        CardHolderType cardHolder = new CardHolderType();
+        cardHolder.setLastName("Doe");
+        assertEquals("Doe", cardHolder.getLastName());
+    }
+
+    @Test
+    void testGetSetSuffixCd() {
+        CardHolderType cardHolder = new CardHolderType();
+        cardHolder.setSuffixCd("Jr");
+        assertEquals("Jr", cardHolder.getSuffixCd());
+    }
+
+    @Test
+    void testGetSetCustomerID() {
+        CardHolderType cardHolder = new CardHolderType();
+        cardHolder.setCustomerID("12345");
+        assertEquals("12345", cardHolder.getCustomerID());
+    }
+
+    @Test
+    void testGetSetPrimaryUser() {
+        CardHolderType cardHolder = new CardHolderType();
+        cardHolder.setPrimaryUser(true);
+        assertTrue(cardHolder.isPrimaryUser());
+    }
+
+    @Test
+    void testGetSetLanguageCode() {
+        CardHolderType cardHolder = new CardHolderType();
+        cardHolder.setLanguageCode("EN");
+        assertEquals("EN", cardHolder.getLanguageCode());
+    }
+
+    @Test
+    void testGetSetAliasCustomerID() {
+        CardHolderType cardHolder = new CardHolderType();
+        cardHolder.setAliasCustomerID("A123");
+        assertEquals("A123", cardHolder.getAliasCustomerID());
+    }
+
+    @Test
+    void testGetSetBirthDate() {
+        CardHolderType cardHolder = new CardHolderType();
+        cardHolder.setBirthDate("1990-01-01");
+        assertEquals("1990-01-01", cardHolder.getBirthDate());
+    }
+
+    @Test
+    void testGetSetCardHolderName() {
+        CardHolderType cardHolder = new CardHolderType();
+        cardHolder.setCardHolderName("John Doe");
+        assertEquals("John Doe", cardHolder.getCardHolderName());
+    }
+
+    @Test
+    void testGetSetCardNumber() {
+        CardHolderType cardHolder = new CardHolderType();
+        cardHolder.setCardNumber("9876543210987654");
+        assertEquals("9876543210987654", cardHolder.getCardNumber());
+    }
+
+    @Test
+    void testGetSetTransferFromCardNumber() {
+        CardHolderType cardHolder = new CardHolderType();
+        cardHolder.setTransferFromCardNumber("1234567890123456");
+        assertEquals("1234567890123456", cardHolder.getTransferFromCardNumber());
+    }
+
+    @Test
+    void testGetSetHistoricalCardNumbers() {
+        CardHolderType cardHolder = new CardHolderType();
+        cardHolder.setHistoricalCardNumbers(Arrays.asList("1111111111111111", "2222222222222222"));
+        assertEquals(Arrays.asList("1111111111111111", "2222222222222222"), cardHolder.getHistoricalCardNumbers());
+    }
+
+    @Test
+    void testGetSetLegalNameLastUpdatedTS() {
+        CardHolderType cardHolder = new CardHolderType();
+        cardHolder.setLegalNameLastUpdatedTS(123456789L);
+        assertEquals(123456789L, cardHolder.getLegalNameLastUpdatedTS());
+    }
+
+    @Test
+    void testToString() {
+        CardHolderType cardHolder = new CardHolderType();
+        cardHolder.setFirstName("John");
+        cardHolder.setLastName("Doe");
+        cardHolder.setCardNumber("9876543210987654");
+        cardHolder.setCardHolderName("John Doe");
+
+        String expected = "com.td.mbna.msec.midtier.types.common.CardHolderType@" + Integer.toHexString(System.identityHashCode(cardHolder)) + "[firstName=John,middleName=<null>,lastName=Doe,suffixCd=<null>,customerID=<null>,primaryUser=<null>,languageCode=<null>,legalNameLastUpdatedTS=<null>,aliasCustomerID=<null>,birthDate=<null>,cardHolderName=John Doe,cardNumber=9876543210987654,transferFromCardNumber=<null>,historicalCardNumbers=<null>]";
+        assertEquals(expected, cardHolder.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        CardHolderType cardHolder1 = new CardHolderType();
+        cardHolder1.setCardNumber("9876543210987654");
+        CardHolderType cardHolder2 = new CardHolderType();
+        cardHolder2.setCardNumber("9876543210987654");
+
+        assertEquals(cardHolder1.hashCode(), cardHolder2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        CardHolderType cardHolder1 = new CardHolderType();
+        cardHolder1.setCardNumber("9876543210987654");
+        CardHolderType cardHolder2 = new CardHolderType();
+        cardHolder2.setCardNumber("9876543210987654");
+
+        assertTrue(cardHolder1.equals(cardHolder2));
+    }
+}

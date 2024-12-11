@@ -1,0 +1,69 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class AcctSnapshotStatusTypeTest {
+
+    @Test
+    void testGetSetAccountStatusCode() {
+        AcctSnapshotStatusType snapshotStatus = new AcctSnapshotStatusType();
+        snapshotStatus.setAccountStatusCode("ACTIVE");
+        assertEquals("ACTIVE", snapshotStatus.getAccountStatusCode());
+    }
+
+    @Test
+    void testGetSetAccountStatusReason() {
+        AcctSnapshotStatusType snapshotStatus = new AcctSnapshotStatusType();
+        snapshotStatus.setAccountStatusReason("Customer Request");
+        assertEquals("Customer Request", snapshotStatus.getAccountStatusReason());
+    }
+
+    @Test
+    void testToString() {
+        AcctSnapshotStatusType snapshotStatus = new AcctSnapshotStatusType();
+        snapshotStatus.setAccountStatusCode("ACTIVE");
+        snapshotStatus.setAccountStatusReason("Customer Request");
+
+        String expected = AcctSnapshotStatusType.class.getName() + '@' +
+                          Integer.toHexString(System.identityHashCode(snapshotStatus)) +
+                          "[accountStatusCode=ACTIVE,accountStatusReason=Customer Request]";
+        assertEquals(expected, snapshotStatus.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        AcctSnapshotStatusType snapshotStatus1 = new AcctSnapshotStatusType();
+        AcctSnapshotStatusType snapshotStatus2 = new AcctSnapshotStatusType();
+
+        snapshotStatus1.setAccountStatusCode("ACTIVE");
+        snapshotStatus1.setAccountStatusReason("Customer Request");
+
+        snapshotStatus2.setAccountStatusCode("ACTIVE");
+        snapshotStatus2.setAccountStatusReason("Customer Request");
+
+        assertEquals(snapshotStatus1.hashCode(), snapshotStatus2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        AcctSnapshotStatusType snapshotStatus1 = new AcctSnapshotStatusType();
+        AcctSnapshotStatusType snapshotStatus2 = new AcctSnapshotStatusType();
+        AcctSnapshotStatusType snapshotStatus3 = new AcctSnapshotStatusType();
+
+        snapshotStatus1.setAccountStatusCode("ACTIVE");
+        snapshotStatus1.setAccountStatusReason("Customer Request");
+
+        snapshotStatus2.setAccountStatusCode("ACTIVE");
+        snapshotStatus2.setAccountStatusReason("Customer Request");
+
+        snapshotStatus3.setAccountStatusCode("INACTIVE");
+        snapshotStatus3.setAccountStatusReason("Fraud");
+
+        assertTrue(snapshotStatus1.equals(snapshotStatus2));
+        assertFalse(snapshotStatus1.equals(snapshotStatus3));
+        assertTrue(snapshotStatus1.equals(snapshotStatus1));
+        assertFalse(snapshotStatus1.equals(null));
+        assertFalse(snapshotStatus1.equals(new Object()));
+    }
+}

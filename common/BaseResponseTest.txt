@@ -1,0 +1,44 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+
+class BaseResponseTest {
+
+    @Test
+    void testGetSetStatus() {
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setStatus("SUCCESS");
+        assertEquals("SUCCESS", baseResponse.getStatus());
+    }
+
+    @Test
+    void testGetSetErrorMsgs() {
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setErrorMsgs(Arrays.asList("Error 1", "Error 2"));
+        assertEquals(2, baseResponse.getErrorMsgs().size());
+        assertEquals("Error 1", baseResponse.getErrorMsgs().get(0));
+        assertEquals("Error 2", baseResponse.getErrorMsgs().get(1));
+    }
+
+    @Test
+    void testGetSetErrorMessages() {
+        BaseResponse baseResponse = new BaseResponse();
+        List<Error> errorList = Arrays.asList(new Error("Error1"), new Error("Error2"));
+        baseResponse.setErrorMessages(errorList);
+        assertEquals(2, baseResponse.getErrorMessages().size());
+        assertEquals("Error1", baseResponse.getErrorMessages().get(0).getMessage());
+        assertEquals("Error2", baseResponse.getErrorMessages().get(1).getMessage());
+    }
+
+    @Test
+    void testGetSetValidationErrors() {
+        BaseResponse baseResponse = new BaseResponse();
+        List<FieldErrorType> validationErrors = Arrays.asList(new FieldErrorType("field1", "error1"), new FieldErrorType("field2", "error2"));
+        baseResponse.setValidationErrors(validationErrors);
+        assertEquals(2, baseResponse.getValidationErrors().size());
+        assertEquals("field1", baseResponse.getValidationErrors().get(0).getField());
+        assertEquals("error1", baseResponse.getValidationErrors().get(0).getErrorMessage());
+    }
+}

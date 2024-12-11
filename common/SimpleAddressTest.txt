@@ -1,0 +1,93 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class SimpleAddressTest {
+
+    private SimpleAddress simpleAddress;
+
+    @BeforeEach
+    void setUp() {
+        simpleAddress = new SimpleAddress();
+    }
+
+    @Test
+    void testSettersAndGetters() {
+        simpleAddress.setStreetAddress("123 Main St");
+        simpleAddress.setCity("Toronto");
+        simpleAddress.setProvince("ON");
+        simpleAddress.setPostalCode("M1M1M1");
+
+        assertEquals("123 Main St", simpleAddress.getStreetAddress());
+        assertEquals("Toronto", simpleAddress.getCity());
+        assertEquals("ON", simpleAddress.getProvince());
+        assertEquals("M1M1M1", simpleAddress.getPostalCode());
+    }
+
+    @Test
+    void testNullValues() {
+        simpleAddress.setStreetAddress(null);
+        simpleAddress.setCity(null);
+        simpleAddress.setProvince(null);
+        simpleAddress.setPostalCode(null);
+
+        assertNull(simpleAddress.getStreetAddress());
+        assertNull(simpleAddress.getCity());
+        assertNull(simpleAddress.getProvince());
+        assertNull(simpleAddress.getPostalCode());
+    }
+
+    @Test
+    void testToString() {
+        simpleAddress.setStreetAddress("123 Main St");
+        simpleAddress.setCity("Toronto");
+        simpleAddress.setProvince("ON");
+        simpleAddress.setPostalCode("M1M1M1");
+
+        String expectedToString = "SimpleAddress@" + Integer.toHexString(System.identityHashCode(simpleAddress)) + 
+                                  "[streetAddress=123 Main St,city=Toronto,province=ON,postalCode=M1M1M1]";
+        assertEquals(expectedToString, simpleAddress.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        simpleAddress.setStreetAddress("123 Main St");
+        simpleAddress.setCity("Toronto");
+        simpleAddress.setProvince("ON");
+        simpleAddress.setPostalCode("M1M1M1");
+
+        int expectedHashCode = "ON".hashCode() * 31 + "123 Main St".hashCode() * 31 + 
+                               "Toronto".hashCode() * 31 + "M1M1M1".hashCode();
+        assertEquals(expectedHashCode, simpleAddress.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        SimpleAddress address1 = new SimpleAddress();
+        SimpleAddress address2 = new SimpleAddress();
+
+        address1.setStreetAddress("123 Main St");
+        address1.setCity("Toronto");
+        address1.setProvince("ON");
+        address1.setPostalCode("M1M1M1");
+
+        address2.setStreetAddress("123 Main St");
+        address2.setCity("Toronto");
+        address2.setProvince("ON");
+        address2.setPostalCode("M1M1M1");
+
+        assertTrue(address1.equals(address2));
+
+        address2.setPostalCode("M1M1M2");
+        assertFalse(address1.equals(address2));
+
+        address1.setStreetAddress(null);
+        assertFalse(address1.equals(address2));
+
+        address2.setStreetAddress(null);
+        assertTrue(address1.equals(address2));
+    }
+}

@@ -1,0 +1,106 @@
+package com.td.mbna.msec.midtier.types.common;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class CardNumHistoryTypeTest {
+
+    @Test
+    void testGetSetCard() {
+        CardNumHistoryType cardHistory = new CardNumHistoryType();
+        cardHistory.setCard("1234567890");
+        assertEquals("1234567890", cardHistory.getCard());
+    }
+
+    @Test
+    void testGetSetCardHolderName() {
+        CardNumHistoryType cardHistory = new CardNumHistoryType();
+        cardHistory.setCardHolderName("John Doe");
+        assertEquals("John Doe", cardHistory.getCardHolderName());
+    }
+
+    @Test
+    void testGetSetStatus() {
+        CardNumHistoryType cardHistory = new CardNumHistoryType();
+        cardHistory.setStatus("Active");
+        assertEquals("Active", cardHistory.getStatus());
+    }
+
+    @Test
+    void testGetSetStartDate() {
+        CardNumHistoryType cardHistory = new CardNumHistoryType();
+        cardHistory.setStartDate(1623456789000L);
+        assertEquals(1623456789000L, cardHistory.getStartDate());
+    }
+
+    @Test
+    void testGetSetEndDate() {
+        CardNumHistoryType cardHistory = new CardNumHistoryType();
+        cardHistory.setEndDate(1624061589000L);
+        assertEquals(1624061589000L, cardHistory.getEndDate());
+    }
+
+    @Test
+    void testToString() {
+        CardNumHistoryType cardHistory = new CardNumHistoryType();
+        cardHistory.setCard("1234567890");
+        cardHistory.setStatus("Active");
+        cardHistory.setStartDate(1623456789000L);
+        cardHistory.setEndDate(1624061589000L);
+        cardHistory.setCardHolderName("John Doe");
+
+        String expected = "com.td.mbna.msec.midtier.types.common.CardNumHistoryType@" + Integer.toHexString(System.identityHashCode(cardHistory)) + "[card=1234567890,status=Active,startDate=1623456789000,endDate=1624061589000,cardHolderName=John Doe]";
+        assertEquals(expected, cardHistory.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        CardNumHistoryType cardHistory1 = new CardNumHistoryType();
+        cardHistory1.setCard("1234567890");
+        cardHistory1.setStartDate(1623456789000L);
+        cardHistory1.setEndDate(1624061589000L);
+        cardHistory1.setStatus("Active");
+
+        CardNumHistoryType cardHistory2 = new CardNumHistoryType();
+        cardHistory2.setCard("1234567890");
+        cardHistory2.setStartDate(1623456789000L);
+        cardHistory2.setEndDate(1624061589000L);
+        cardHistory2.setStatus("Active");
+
+        assertEquals(cardHistory1.hashCode(), cardHistory2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        CardNumHistoryType cardHistory1 = new CardNumHistoryType();
+        cardHistory1.setCard("1234567890");
+        cardHistory1.setStartDate(1623456789000L);
+        cardHistory1.setEndDate(1624061589000L);
+        cardHistory1.setStatus("Active");
+
+        CardNumHistoryType cardHistory2 = new CardNumHistoryType();
+        cardHistory2.setCard("1234567890");
+        cardHistory2.setStartDate(1623456789000L);
+        cardHistory2.setEndDate(1624061589000L);
+        cardHistory2.setStatus("Active");
+
+        assertTrue(cardHistory1.equals(cardHistory2));
+    }
+
+    @Test
+    void testEqualsNotEqual() {
+        CardNumHistoryType cardHistory1 = new CardNumHistoryType();
+        cardHistory1.setCard("1234567890");
+        cardHistory1.setStartDate(1623456789000L);
+        cardHistory1.setEndDate(1624061589000L);
+        cardHistory1.setStatus("Active");
+
+        CardNumHistoryType cardHistory2 = new CardNumHistoryType();
+        cardHistory2.setCard("9876543210");
+        cardHistory2.setStartDate(1623456789000L);
+        cardHistory2.setEndDate(1624061589000L);
+        cardHistory2.setStatus("Inactive");
+
+        assertFalse(cardHistory1.equals(cardHistory2));
+    }
+}
