@@ -1,0 +1,131 @@
+package com.td.mbna.msec.midtier.customerprofile;
+
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import com.mbnaweb.xsd.msgs.customerprofile.CustomerAcctProfileType;
+import com.mbnaweb.xsd.msgs.customerprofile.CustomerAcctType;
+import com.mbnaweb.xsd.msgs.customerprofile.CustomerInfoType;
+import com.mbnaweb.xsd.msgs.customerprofile.CustomerProfileType;
+import com.mbnaweb.xsd.msgs.customerprofile.RetrieveCustomerProfileRequest;
+import com.mbnaweb.xsd.msgs.customerprofile.RetrieveCustomerProfileResponse;
+import com.mbnaweb.xsd.types.common.CardHolderType;
+import com.td.mbna.msec.midtier.customerprofile.payload.retrievecustomerprofile.RetrieveCustomerProfileRequest as JsonRequest;
+import com.td.mbna.msec.midtier.customerprofile.payload.retrievecustomerprofile.RetrieveCustomerProfileResponse as JsonResponse;
+import com.td.mbna.msec.midtier.tdwsservices.RcpFilter;
+import com.td.mbna.msec.midtier.util.ParallelServiceCaller;
+import com.td.mbna.msec.midtier.util.ods.OdsHelper;
+import com.td.mbna.msec.midtier.util.services.JAXBJsonConverter;
+import com.td.mbna.msec.midtier.util.services.MidtierUtilHelper;
+
+class RetrieveCustomerProfileOperationTest {
+
+    @InjectMocks
+    private RetrieveCustomerProfileOperation operation;
+
+    @Mock
+    private OdsHelper odsHelper;
+
+    @Mock
+    private ParallelServiceCaller parallelServiceCaller;
+
+    @Mock
+    private JAXBJsonConverter jaxbJsonConverter;
+
+    @BeforeEach
+    void setup() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testDoRetrieveCustomerProfileViaOdsPrimaryUser() throws Exception {
+        RetrieveCustomerProfileRequest request = mock(RetrieveCustomerProfileRequest.class);
+        RetrieveCustomerProfileRequest.RequestPayload payload = mock(RetrieveCustomerProfileRequest.RequestPayload.class);
+
+        when(request.getRequestPayload()).thenReturn(payload);
+        when(payload.isAuthorizedUser()).thenReturn(false);
+        when(payload.getAcctNum()).thenReturn("1234567890");
+        when(payload.getCustId()).thenReturn("CUST1234");
+
+        CustomerProfileType customerProfile = mock(CustomerProfileType.class);
+        CustomerAcctType account = mock(CustomerAcctType.class);
+        CustomerAcctProfileType profileType = mock(CustomerAcctProfileType.class);
+
+        List<CustomerAcctType> accounts = new ArrayList<>();
+        accounts.add(account);
+        when(customerProfile.getAccounts()).thenReturn(accounts);
+        when(account.getPchAcctProfile()).thenReturn(profileType);
+        CustomerInfoType customerInfo = mock(CustomerInfoType.class);
+        when(profileType.getCustInfo()).thenReturn(customerInfo);
+        when(customerInfo.getCustId()).thenReturn("CUST1234");
+
+        when(odsHelper.getAcctPchFullProfile("1234567890", RcpFilter.ALL)).thenReturn(customerProfile);
+
+        RetrieveCustomerProfileResponse response = RetrieveCustomerProfileOperation.doRetrieveCustomerProfileViaOds(request, null);
+
+        assertNotNull(response);
+    }
+
+    @Test
+    void testDoRetrieveCustomerProfileViaOdsAuthorizedUser() throws Exception {
+        RetrieveCustomerProfileRequest request = mock(RetrieveCustomerProfileRequest.class);
+        RetrieveCustomerProfileRequest.RequestPayload payload = mock(RetrieveCustomerProfileRequest.RequestPayload.class);
+
+        when(request.getRequestPayload()).thenReturn(payload);
+        when(payload.isAuthorizedUser()).thenReturn(true);
+        when(payload.getAcctNum()).thenReturn("1234567890");
+        when(payload.getCustId()).thenReturn("CUST1234");
+
+        CustomerAcctProfileType accountProfile = mock(CustomerAcctProfileType.class);
+        when(odsHelper.getCustAcctProfile("CUST1234", "1234567890", RcpFilter.ALL_BUT_RELATIONSHIPS)).thenReturn(accountProfile);
+
+        RetrieveCustomerProfileResponse response = RetrieveCustomerProfileOperation.doRetrieveCustomerProfileViaOds(request, null);
+
+        assertNotNull(response);
+    }
+
+    @Test
+    void testInvokeService() {
+        JsonRequest jsonRequest = mock(JsonRequest.class);
+        RetrieveCustomerProfileRequest jaxbRequest = mock(RetrieveCustomerProfileRequest.class);
+        RetrieveCustomerProfileResponse jaxbResponse = mock(RetrieveCustomerProfileResponse.class);
+        JsonResponse jsonResponse = mock(JsonResponse.class);
+
+        try {
+            when(jaxbJsonConverter.convertJsonToJAXBInterface(jsonRequest, RetrieveCustomerProfileRequest.class)).thenReturn(jaxbRequest);
+            when(jaxbJsonConverter.convertoJAXBToJsonInterface(jaxbResponse, JsonResponse.class)).thenReturn(jsonResponse);
+            when(odsHelper.getCustAcctProfile(anyString(), anyString(), any(RcpFilter.class))).thenReturn(mock(CustomerAcctProfileType.class));
+
+            JsonResponse result = operation.invokeService(jsonRequest);
+            assertNotNull(result);
+        } catch (Exception e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
+    }
+
+    @Test
+    void testInvokeServiceThrowsException() {
+        JsonRequest jsonRequest = mock(JsonRequest.class);
+
+        try {
+            when(jaxbJsonConverter.convertJsonToJAXBInterface(jsonRequest, RetrieveCustomerProfileRequest.class)).thenThrow(new RuntimeException("Conversion Error"));
+
+            Exception exception = assertThrows(RuntimeException.class, () -> {
+                operation.invokeService(jsonRequest);
+            });
+
+            assertTrue(exception.getMessage().contains("Conversion Error"));
+        } catch (Exception e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
+    }
+}

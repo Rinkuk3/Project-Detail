@@ -1,0 +1,107 @@
+package com.td.mbna.msec.midtier.customerprofile;
+
+import com.td.mbna.msec.midtier.customerprofile.payload.retrieveenrollment.RetrieveEnrollmentRequest;
+import com.td.mbna.msec.midtier.customerprofile.payload.retrieveenrollment.RetrieveEnrollmentResponse;
+import com.td.mbna.msec.midtier.enrollment.MbnaEnrollment;
+import com.td.mbna.msec.midtier.util.ExceptionUtil;
+import com.td.mbna.msec.midtier.util.services.MidtierUtilHelper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class RetrieveEnrollmentOperationTest {
+
+    @InjectMocks
+    private RetrieveEnrollmentOperation retrieveEnrollmentOperation;
+
+    @Mock
+    private MbnaEnrollment mbnaEnrollment;
+
+    private RetrieveEnrollmentRequest request;
+    private RetrieveEnrollmentResponse response;
+
+    @BeforeEach
+    void setUp() {
+        request = new RetrieveEnrollmentRequest();
+        RetrieveEnrollmentRequest.RequestPayload payload = new RetrieveEnrollmentRequest.RequestPayload();
+        payload.setConnectId("12345");
+        request.setRequestPayload(payload);
+
+        response = new RetrieveEnrollmentResponse();
+        RetrieveEnrollmentResponse.ResponsePayload responsePayload = new RetrieveEnrollmentResponse.ResponsePayload();
+        responsePayload.setEnrollmentStatus("ENROLLED");
+        response.setResponsePayload(responsePayload);
+    }
+
+    @Test
+    void testDoRetrieveEnrollment_Success() {
+        String token = "valid-token";
+
+        when(mbnaEnrollment.retrieveEnrollment(request.getRequestPayload().getConnectId(), token)).thenReturn(response);
+
+        RetrieveEnrollmentResponse result = retrieveEnrollmentOperation.doRetrieveEnrollment(request, token);
+
+        assertNotNull(result);
+        assertEquals("ENROLLED", result.getResponsePayload().getEnrollmentStatus());
+        verify(mbnaEnrollment, times(1)).retrieveEnrollment(request.getRequestPayload().getConnectId(), token);
+    }
+
+    @Test
+    void testDoRetrieveEnrollment_Exception() {
+        String token = "valid-token";
+
+        when(mbnaEnrollment.retrieveEnrollment(request.getRequestPayload().getConnectId(), token)).thenThrow(new RuntimeException("Service error"));
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            retrieveEnrollmentOperation.doRetrieveEnrollment(request, token);
+        });
+
+        assertTrue(exception.getMessage().contains("Service error"));
+        verify(mbnaEnrollment, times(1)).retrieveEnrollment(request.getRequestPayload().getConnectId(), token);
+    }
+
+    @Test
+    void testInvokeService_Success() {
+        String token = "valid-token";
+
+        when(mbnaEnrollment.retrieveEnrollment(request.getRequestPayload().getConnectId(), token)).thenReturn(response);
+
+        RetrieveEnrollmentResponse result = retrieveEnrollmentOperation.invokeService(request, token);
+
+        assertNotNull(result);
+        assertEquals("ENROLLED", result.getResponsePayload().getEnrollmentStatus());
+        verify(mbnaEnrollment, times(1)).retrieveEnrollment(request.getRequestPayload().getConnectId(), token);
+    }
+
+    @Test
+    void testInvokeService_Exception() {
+        String token = "valid-token";
+
+        when(mbnaEnrollment.retrieveEnrollment(request.getRequestPayload().getConnectId(), token)).thenThrow(new RuntimeException("Service error"));
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            retrieveEnrollmentOperation.invokeService(request, token);
+        });
+
+        assertTrue(exception.getMessage().contains("Service error"));
+        verify(mbnaEnrollment, times(1)).retrieveEnrollment(request.getRequestPayload().getConnectId(), token);
+    }
+
+    @Test
+    void testRequiresDisclosureConsent() {
+        assertFalse(retrieveEnrollmentOperation.requiresDisclosureConsent());
+    }
+
+    @Test
+    void testGenerateAutoComment() {
+        assertFalse(retrieveEnrollmentOperation.generateAutoComment());
+    }
+}

@@ -1,0 +1,132 @@
+package com.td.mbna.msec.midtier.customerprofile;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springmodules.validation.valang.ValangValidator;
+
+import com.mbnaweb.xsd.msgs.customerprofile.GetKycAcctsInfoRequest;
+import com.mbnaweb.xsd.msgs.customerprofile.GetKycAcctsInfoResponse;
+import com.mbnaweb.xsd.types.common.CardHolderType;
+import com.mbnaweb.xsd.types.common.CustAcctType;
+import com.td.mbna.msec.midtier.framework.MsecVlangValidator;
+import com.td.mbna.msec.midtier.types.common.ValidationException;
+import com.td.mbna.msec.midtier.util.CustomerProfileUtil;
+import com.td.mbna.msec.midtier.util.ParallelServiceCaller;
+import com.td.mbna.msec.midtier.util.ods.OdsHelper;
+
+class GetKycAcctsInfoOperationTest {
+
+    @InjectMocks
+    private GetKycAcctsInfoOperation getKycAcctsInfoOperation;
+
+    @Mock
+    private ValangValidator getKycAcctsInfo_CustAcctType_Validator;
+
+    @Mock
+    private MsecVlangValidator msecGetKycAcctsInfoCustAcctTypeValidator;
+
+    @Mock
+    private ParallelServiceCaller parallelServiceCaller;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        getKycAcctsInfoOperation.init();
+    }
+
+    @Test
+    void testInvokeService_Success() throws Exception {
+        // Mock input request
+        com.td.mbna.msec.midtier.customerprofile.payload.getkycacctsinfo.GetKycAcctsInfoRequest request =
+                new com.td.mbna.msec.midtier.customerprofile.payload.getkycacctsinfo.GetKycAcctsInfoRequest();
+
+        GetKycAcctsInfoRequest jaxbRequest = new GetKycAcctsInfoRequest();
+        GetKycAcctsInfoRequest.RequestPayload reqPayload = new GetKycAcctsInfoRequest.RequestPayload();
+
+        List<CustAcctType> custAcctList = new ArrayList<>();
+        CustAcctType custAcct = new CustAcctType();
+        custAcct.setAcctNum("1234567890");
+        custAcctList.add(custAcct);
+        reqPayload.setKycNeededAccts(custAcctList);
+        jaxbRequest.setRequestPayload(reqPayload);
+
+        // Mock behavior
+        when(msecGetKycAcctsInfoCustAcctTypeValidator.validate(any(CustAcctType.class))).thenReturn(null);
+        doNothing().when(parallelServiceCaller).scheduleCall(anyString(), any());
+        doNothing().when(parallelServiceCaller).sync();
+        when(OdsHelper.getCustomerProfile(anyString(), any())).thenReturn(CustomerProfileUtil.mockCustomerProfile());
+
+        // Invoke the service
+        com.td.mbna.msec.midtier.customerprofile.payload.getkycacctsinfo.GetKycAcctsInfoResponse response =
+                getKycAcctsInfoOperation.invokeService(request);
+
+        // Validate response
+        assertNotNull(response);
+        assertNotNull(response.getResponsePayload());
+        assertNotNull(response.getResponsePayload().getKycAcctsInfo());
+    }
+
+    @Test
+    void testInvokeService_ValidationException() {
+        // Mock input request
+        com.td.mbna.msec.midtier.customerprofile.payload.getkycacctsinfo.GetKycAcctsInfoRequest request =
+                new com.td.mbna.msec.midtier.customerprofile.payload.getkycacctsinfo.GetKycAcctsInfoRequest();
+
+        GetKycAcctsInfoRequest jaxbRequest = new GetKycAcctsInfoRequest();
+        GetKycAcctsInfoRequest.RequestPayload reqPayload = new GetKycAcctsInfoRequest.RequestPayload();
+
+        List<CustAcctType> custAcctList = new ArrayList<>();
+        CustAcctType custAcct = new CustAcctType();
+        custAcct.setAcctNum("1234567890");
+        custAcctList.add(custAcct);
+        reqPayload.setKycNeededAccts(custAcctList);
+        jaxbRequest.setRequestPayload(reqPayload);
+
+        // Mock behavior
+        ValidationException validationException = new ValidationException("Validation failed");
+        when(msecGetKycAcctsInfoCustAcctTypeValidator.validate(any(CustAcctType.class))).thenReturn(validationException);
+
+        // Invoke the service and assert exception
+        Exception exception = assertThrows(ValidationException.class, () -> {
+            getKycAcctsInfoOperation.invokeService(request);
+        });
+
+        assertEquals("Validation failed", exception.getMessage());
+    }
+
+    @Test
+    void testInvokeService_ErrorHandling() throws Exception {
+        // Mock input request
+        com.td.mbna.msec.midtier.customerprofile.payload.getkycacctsinfo.GetKycAcctsInfoRequest request =
+                new com.td.mbna.msec.midtier.customerprofile.payload.getkycacctsinfo.GetKycAcctsInfoRequest();
+
+        GetKycAcctsInfoRequest jaxbRequest = new GetKycAcctsInfoRequest();
+        GetKycAcctsInfoRequest.RequestPayload reqPayload = new GetKycAcctsInfoRequest.RequestPayload();
+
+        List<CustAcctType> custAcctList = new ArrayList<>();
+        CustAcctType custAcct = new CustAcctType();
+        custAcct.setAcctNum("1234567890");
+        custAcctList.add(custAcct);
+        reqPayload.setKycNeededAccts(custAcctList);
+        jaxbRequest.setRequestPayload(reqPayload);
+
+        // Mock behavior
+        when(OdsHelper.getCustomerProfile(anyString(), any())).thenThrow(new RuntimeException("Service error"));
+
+        // Invoke the service and assert exception
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            getKycAcctsInfoOperation.invokeService(request);
+        });
+
+        assertEquals("Service error", exception.getMessage());
+    }
+}
