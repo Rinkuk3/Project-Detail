@@ -1,0 +1,83 @@
+package com.td.api.mbalert.request.addalertevent;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class DoNotDisturbFeatureLocatorTest {
+
+    @Test
+    void testDoNotDisturbFeatureLocator() {
+        // Create an instance of DoNotDisturbFeatureLocator
+        DoNotDisturbFeatureLocator featureLocator = new DoNotDisturbFeatureLocator();
+
+        // Test the default values of the fields
+        assertNull(featureLocator.getLocatorSubtypeCd());
+        assertNull(featureLocator.getFromTimePeriodTm());
+        assertNull(featureLocator.getToTimePeriodTm());
+        assertNull(featureLocator.getTimeZoneCd());
+
+        // Test setting and getting the 'locatorSubtypeCd' field
+        String locatorSubtypeCd = "TIME_ZONE";
+        featureLocator.setLocatorSubtypeCd(locatorSubtypeCd);
+        assertEquals(locatorSubtypeCd, featureLocator.getLocatorSubtypeCd());
+
+        // Test setting and getting the 'fromTimePeriodTm' field
+        String fromTimePeriodTm = "08:00";
+        featureLocator.setFromTimePeriodTm(fromTimePeriodTm);
+        assertEquals(fromTimePeriodTm, featureLocator.getFromTimePeriodTm());
+
+        // Test setting and getting the 'toTimePeriodTm' field
+        String toTimePeriodTm = "18:00";
+        featureLocator.setToTimePeriodTm(toTimePeriodTm);
+        assertEquals(toTimePeriodTm, featureLocator.getToTimePeriodTm());
+
+        // Test setting and getting the 'timeZoneCd' field
+        String timeZoneCd = "EST";
+        featureLocator.setTimeZoneCd(timeZoneCd);
+        assertEquals(timeZoneCd, featureLocator.getTimeZoneCd());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        // Create two instances of DoNotDisturbFeatureLocator with the same properties
+        DoNotDisturbFeatureLocator featureLocator1 = new DoNotDisturbFeatureLocator();
+        featureLocator1.setLocatorSubtypeCd("TIME_ZONE");
+        featureLocator1.setFromTimePeriodTm("08:00");
+        featureLocator1.setToTimePeriodTm("18:00");
+        featureLocator1.setTimeZoneCd("EST");
+
+        DoNotDisturbFeatureLocator featureLocator2 = new DoNotDisturbFeatureLocator();
+        featureLocator2.setLocatorSubtypeCd("TIME_ZONE");
+        featureLocator2.setFromTimePeriodTm("08:00");
+        featureLocator2.setToTimePeriodTm("18:00");
+        featureLocator2.setTimeZoneCd("EST");
+
+        // Test equality
+        assertTrue(featureLocator1.equals(featureLocator2));
+
+        // Test hashCode
+        assertEquals(featureLocator1.hashCode(), featureLocator2.hashCode());
+
+        // Modify one object and test inequality
+        featureLocator2.setLocatorSubtypeCd("OTHER_TIMEZONE");
+        assertFalse(featureLocator1.equals(featureLocator2));
+    }
+
+    @Test
+    void testToString() {
+        // Create an instance of DoNotDisturbFeatureLocator
+        DoNotDisturbFeatureLocator featureLocator = new DoNotDisturbFeatureLocator();
+        featureLocator.setLocatorSubtypeCd("TIME_ZONE");
+        featureLocator.setFromTimePeriodTm("08:00");
+        featureLocator.setToTimePeriodTm("18:00");
+        featureLocator.setTimeZoneCd("EST");
+
+        // Test the toString() method
+        String toStringResult = featureLocator.toString();
+        assertTrue(toStringResult.contains("locatorSubtypeCd"));
+        assertTrue(toStringResult.contains("fromTimePeriodTm"));
+        assertTrue(toStringResult.contains("toTimePeriodTm"));
+        assertTrue(toStringResult.contains("timeZoneCd"));
+    }
+}

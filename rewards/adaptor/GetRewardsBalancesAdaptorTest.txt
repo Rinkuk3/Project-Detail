@@ -1,0 +1,89 @@
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import com.td.api.rewards.response.getrewardsbalances.*;
+import com.td.mbna.msec.midtier.account.payload.getrewardsbalances.GetRewardsBalancesResponse;
+
+import java.util.Arrays;
+
+public class GetRewardsBalancesAdaptorTest {
+
+    private GetRewardsBalancesAdaptor adaptor;
+
+    @BeforeEach
+    public void setUp() {
+        adaptor = new GetRewardsBalancesAdaptor();
+    }
+
+    @Test
+    public void testGetResponseWithRewardsBalancesResponse() {
+        // Mocking RewardsBalancesResponse
+        RewardsBalancesResponse rbr = mock(RewardsBalancesResponse.class);
+        RewardsBalanceDTO rewardsBalanceDTO = mock(RewardsBalanceDTO.class);
+        when(rbr.getRewardsBalance()).thenReturn(new RewardsBalanceList());
+        when(rbr.getRewardsBalance().getAvailable()).thenReturn(rewardsBalanceDTO);
+        when(rewardsBalanceDTO.getValue()).thenReturn(100.0);
+        when(rewardsBalanceDTO.getRewardscurrency()).thenReturn("USD");
+
+        GetRewardsBalancesResponse response = adaptor.getResponse(rbr);
+        
+        assertNotNull(response);
+        assertEquals(100.0, response.getResponsePayload().getAvailableBalanceQty());
+        assertEquals("USD", response.getResponsePayload().getLoyaltyUnitOfMeasure());
+    }
+
+    @Test
+    public void testGetResponseWithNullRewardsBalancesResponse() {
+        RewardsBalancesResponse rbr = mock(RewardsBalancesResponse.class);
+        when(rbr.getRewardsBalance()).thenReturn(null);
+
+        GetRewardsBalancesResponse response = adaptor.getResponse(rbr);
+
+        assertNotNull(response);
+        assertNull(response.getResponsePayload().getAvailableBalanceQty());
+        assertNull(response.getResponsePayload().getLoyaltyUnitOfMeasure());
+    }
+
+    @Test
+    public void testGetResponseWithRewardsBalanceList() {
+        // Mocking RewardsBalanceList
+        RewardsBalanceList rbl = mock(RewardsBalanceList.class);
+        RewardsBalanceItem rewardsBalanceItem = mock(RewardsBalanceItem.class);
+        when(rbl.getAvailableBalance()).thenReturn(Arrays.asList(rewardsBalanceItem));
+        when(rewardsBalanceItem.getAvailableBalanceQty()).thenReturn(200.0);
+        when(rewardsBalanceItem.getLoyaltyUnitOfMeasureCd()).thenReturn("EUR");
+
+        GetRewardsBalancesResponse response = adaptor.getResponse(rbl);
+
+        assertNotNull(response);
+        assertEquals(200.0, response.getResponsePayload().getAvailableBalanceQty());
+        assertEquals("EUR", response.getResponsePayload().getLoyaltyUnitOfMeasure());
+    }
+
+    @Test
+    public void testGetResponseWithEmptyRewardsBalanceList() {
+        RewardsBalanceList rbl = mock(RewardsBalanceList.class);
+        when(rbl.getAvailableBalance()).thenReturn(Arrays.asList());
+
+        GetRewardsBalancesResponse response = adaptor.getResponse(rbl);
+
+        assertNotNull(response);
+        assertNull(response.getResponsePayload().getAvailableBalanceQty());
+        assertNull(response.getResponsePayload().getLoyaltyUnitOfMeasure());
+    }
+
+    @Test
+    public void testGetResponseWithNullRewardsBalanceList() {
+        RewardsBalanceList rbl = mock(RewardsBalanceList.class);
+        when(rbl.getAvailableBalance()).thenReturn(null);
+
+        GetRewardsBalancesResponse response = adaptor.getResponse(rbl);
+
+        assertNotNull(response);
+        assertNull(response.getResponsePayload().getAvailableBalanceQty());
+        assertNull(response.getResponsePayload().getLoyaltyUnitOfMeasure());
+    }
+
+}

@@ -1,0 +1,109 @@
+import com.td.mbna.msec.midtier.transfer.payload.deposittochequing.DepositToChequingResponse;
+import com.td.mbna.msec.midtier.transfer.payload.deposittochequing.ResponsePayload;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import com.td.mbna.msec.midtier.util.services.MSECConstants;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+class DepositToChequingSrvTest {
+
+    @InjectMocks
+    private DepositToChequingSrv depositToChequingSrv;
+
+    @Mock
+    private RestTemplate restTemplate;
+
+    @Mock
+    private MbnaLogger logger;
+
+    @Mock
+    private ResponseEntity<DepositToChequingResponse> responseEntity;
+
+    private String connectId = "connectId";
+    private String cardNumber = "123456789";
+    private String partyKey = "partyKey123";
+    private String token = "authToken";
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    void testDepositToChequingSuccess() {
+        // Mock the ResponseEntity
+        DepositToChequingResponse depositResponse = new DepositToChequingResponse();
+        ResponsePayload payload = new ResponsePayload();
+        payload.setStatus(true);
+        depositResponse.setResponsePayload(payload);
+
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(DepositToChequingResponse.class)))
+                .thenReturn(responseEntity);
+        when(responseEntity.getBody()).thenReturn(depositResponse);
+        when(responseEntity.getStatusCode()).thenReturn(HttpStatus.OK);
+
+        // Call the method to test
+        DepositToChequingResponse response = depositToChequingSrv.depositToChequing(connectId, cardNumber, partyKey, token);
+
+        // Assertions
+        assertNotNull(response);
+        assertTrue(response.getResponsePayload().getStatus());
+    }
+
+    @Test
+    void testDepositToChequingFailure() {
+        // Mock the ResponseEntity for failure scenario (empty response body)
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(DepositToChequingResponse.class)))
+                .thenReturn(responseEntity);
+        when(responseEntity.getBody()).thenReturn(null);
+
+        // Call the method to test
+        DepositToChequingResponse response = depositToChequingSrv.depositToChequing(connectId, cardNumber, partyKey, token);
+
+        // Assertions
+        assertNull(response);
+    }
+
+    @Test
+    void testDepositToChequingException() {
+        // Mock exception scenario
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(DepositToChequingResponse.class)))
+                .thenThrow(new RuntimeException("Test exception"));
+
+        // Call the method to test
+        DepositToChequingResponse response = depositToChequingSrv.depositToChequing(connectId, cardNumber, partyKey, token);
+
+        // Assertions
+        assertNull(response);
+    }
+
+    @Test
+    void testLogMessages() {
+        // Simulate a successful call and verify logger usage
+        DepositToChequingResponse depositResponse = new DepositToChequingResponse();
+        ResponsePayload payload = new ResponsePayload();
+        payload.setStatus(true);
+        depositResponse.setResponsePayload(payload);
+
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(DepositToChequingResponse.class)))
+                .thenReturn(responseEntity);
+        when(responseEntity.getBody()).thenReturn(depositResponse);
+        when(responseEntity.getStatusCode()).thenReturn(HttpStatus.OK);
+
+        // Call the method to test
+        DepositToChequingResponse response = depositToChequingSrv.depositToChequing(connectId, cardNumber, partyKey, token);
+
+        // Verify that the debug and error logs were called
+        verify(logger, times(1)).debug(anyString());
+        verify(logger, never()).error(anyString(), anyString(), any(Exception.class));
+    }
+}

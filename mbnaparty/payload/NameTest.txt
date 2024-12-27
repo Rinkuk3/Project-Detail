@@ -1,0 +1,89 @@
+package com.td.api.mbna.msec.midtier.mbnaparty.payload;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Date;
+
+public class NameTest {
+
+    private Name name;
+
+    @BeforeEach
+    public void setUp() {
+        name = new Name();
+    }
+
+    @Test
+    public void testGetSetTypeCd() {
+        name.setTypeCd("Primary");
+        assertEquals("Primary", name.getTypeCd());
+    }
+
+    @Test
+    public void testGetSetLastName() {
+        name.setLastName("Doe");
+        assertEquals("Doe", name.getLastName());
+    }
+
+    @Test
+    public void testGetSetFirstName() {
+        name.setFirstName("John");
+        assertEquals("John", name.getFirstName());
+    }
+
+    @Test
+    public void testGetSetTitlePrefix() {
+        name.setTitlePrefix("Mr.");
+        assertEquals("Mr.", name.getTitlePrefix());
+    }
+
+    @Test
+    public void testGetSetStartDttm() {
+        Date startDate = new Date();
+        name.setStartDttm(startDate);
+        assertEquals(startDate, name.getStartDttm());
+    }
+
+    @Test
+    public void testToString() {
+        name.setTypeCd("Primary");
+        name.setLastName("Doe");
+        name.setFirstName("John");
+        name.setTitlePrefix("Mr.");
+        name.setStartDttm(new Date());
+
+        String str = name.toString();
+        assertTrue(str.contains("typeCd"));
+        assertTrue(str.contains("lastName"));
+        assertTrue(str.contains("firstName"));
+        assertTrue(str.contains("titlePrefix"));
+        assertTrue(str.contains("startDttm"));
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        Name name1 = new Name();
+        Name name2 = new Name();
+
+        name1.setTypeCd("Primary");
+        name1.setLastName("Doe");
+        name1.setFirstName("John");
+        name1.setTitlePrefix("Mr.");
+        name1.setStartDttm(new Date());
+
+        name2.setTypeCd("Primary");
+        name2.setLastName("Doe");
+        name2.setFirstName("John");
+        name2.setTitlePrefix("Mr.");
+        name2.setStartDttm(name1.getStartDttm());
+
+        assertEquals(name1, name2);
+        assertEquals(name1.hashCode(), name2.hashCode());
+
+        name2.setFirstName("Jane");
+        assertNotEquals(name1, name2);
+    }
+}

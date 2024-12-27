@@ -1,0 +1,144 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.td.api.mbcca.shared.Cccyamt;
+import java.util.ArrayList;
+import java.util.List;
+
+class AnnualFeeTest {
+
+    private AnnualFee annualFee;
+    private Cccyamt lastAssessedCccyamt;
+    private Cccyamt overrideCccyamt;
+    private List<CardReceiptVerificationNextAnnualFee> cardReceiptVerificationNextAnnualFee;
+
+    @BeforeEach
+    void setUp() {
+        annualFee = new AnnualFee();
+        lastAssessedCccyamt = new Cccyamt(); // Assuming Cccyamt has a default constructor
+        overrideCccyamt = new Cccyamt(); // Assuming Cccyamt has a default constructor
+        cardReceiptVerificationNextAnnualFee = new ArrayList<>();
+    }
+
+    @Test
+    void testGetSetLastAssessedCccyamt() {
+        annualFee.setLastAssessedCccyamt(lastAssessedCccyamt);
+        assertEquals(lastAssessedCccyamt, annualFee.getLastAssessedCccyamt());
+    }
+
+    @Test
+    void testGetSetOverrideCccyamt() {
+        annualFee.setOverrideCccyamt(overrideCccyamt);
+        assertEquals(overrideCccyamt, annualFee.getOverrideCccyamt());
+    }
+
+    @Test
+    void testGetSetNextAssessmentDt() {
+        String nextAssessmentDt = "2025-12-31";
+        annualFee.setNextAssessmentDt(nextAssessmentDt);
+        assertEquals(nextAssessmentDt, annualFee.getNextAssessmentDt());
+    }
+
+    @Test
+    void testGetSetRenewalMonthNum() {
+        String renewalMonthNum = "12";
+        annualFee.setRenewalMonthNum(renewalMonthNum);
+        assertEquals(renewalMonthNum, annualFee.getRenewalMonthNum());
+    }
+
+    @Test
+    void testGetSetLastAssessedDt() {
+        String lastAssessedDt = "2024-12-31";
+        annualFee.setLastAssessedDt(lastAssessedDt);
+        assertEquals(lastAssessedDt, annualFee.getLastAssessedDt());
+    }
+
+    @Test
+    void testGetSetLastUpdateDt() {
+        String lastUpdateDt = "2024-12-15";
+        annualFee.setLastUpdateDt(lastUpdateDt);
+        assertEquals(lastUpdateDt, annualFee.getLastUpdateDt());
+    }
+
+    @Test
+    void testGetSetCardReceiptVerificationNextAnnualFee() {
+        annualFee.setCardReceiptVerificationNextAnnualFee(cardReceiptVerificationNextAnnualFee);
+        assertEquals(cardReceiptVerificationNextAnnualFee, annualFee.getCardReceiptVerificationNextAnnualFee());
+    }
+
+    @Test
+    void testToString() {
+        annualFee.setLastAssessedCccyamt(lastAssessedCccyamt);
+        annualFee.setOverrideCccyamt(overrideCccyamt);
+        annualFee.setNextAssessmentDt("2025-12-31");
+        annualFee.setRenewalMonthNum("12");
+        annualFee.setLastAssessedDt("2024-12-31");
+        annualFee.setLastUpdateDt("2024-12-15");
+        annualFee.setCardReceiptVerificationNextAnnualFee(cardReceiptVerificationNextAnnualFee);
+
+        String result = annualFee.toString();
+        assertTrue(result.contains("lastAssessedCccyamt"));
+        assertTrue(result.contains("overrideCccyamt"));
+        assertTrue(result.contains("nextAssessmentDt"));
+        assertTrue(result.contains("renewalMonthNum"));
+        assertTrue(result.contains("lastAssessedDt"));
+        assertTrue(result.contains("lastUpdateDt"));
+        assertTrue(result.contains("cardReceiptVerificationNextAnnualFee"));
+    }
+
+    @Test
+    void testHashCode() {
+        annualFee.setLastAssessedCccyamt(lastAssessedCccyamt);
+        annualFee.setOverrideCccyamt(overrideCccyamt);
+        annualFee.setNextAssessmentDt("2025-12-31");
+        annualFee.setRenewalMonthNum("12");
+        annualFee.setLastAssessedDt("2024-12-31");
+        annualFee.setLastUpdateDt("2024-12-15");
+        annualFee.setCardReceiptVerificationNextAnnualFee(cardReceiptVerificationNextAnnualFee);
+
+        int hashCode = annualFee.hashCode();
+        assertNotNull(hashCode);
+    }
+
+    @Test
+    void testEquals() {
+        AnnualFee otherAnnualFee = new AnnualFee();
+        otherAnnualFee.setLastAssessedCccyamt(lastAssessedCccyamt);
+        otherAnnualFee.setOverrideCccyamt(overrideCccyamt);
+        otherAnnualFee.setNextAssessmentDt("2025-12-31");
+        otherAnnualFee.setRenewalMonthNum("12");
+        otherAnnualFee.setLastAssessedDt("2024-12-31");
+        otherAnnualFee.setLastUpdateDt("2024-12-15");
+        otherAnnualFee.setCardReceiptVerificationNextAnnualFee(cardReceiptVerificationNextAnnualFee);
+
+        annualFee.setLastAssessedCccyamt(lastAssessedCccyamt);
+        annualFee.setOverrideCccyamt(overrideCccyamt);
+        annualFee.setNextAssessmentDt("2025-12-31");
+        annualFee.setRenewalMonthNum("12");
+        annualFee.setLastAssessedDt("2024-12-31");
+        annualFee.setLastUpdateDt("2024-12-15");
+        annualFee.setCardReceiptVerificationNextAnnualFee(cardReceiptVerificationNextAnnualFee);
+
+        assertTrue(annualFee.equals(otherAnnualFee));
+    }
+
+    @Test
+    void testEquals_withNull() {
+        assertFalse(annualFee.equals(null));
+    }
+
+    @Test
+    void testEquals_withDifferentType() {
+        assertFalse(annualFee.equals("string"));
+    }
+
+    @Test
+    void testEquals_withDifferentValues() {
+        AnnualFee otherAnnualFee = new AnnualFee();
+        otherAnnualFee.setLastAssessedCccyamt(new Cccyamt()); // Different object
+
+        assertFalse(annualFee.equals(otherAnnualFee));
+    }
+}

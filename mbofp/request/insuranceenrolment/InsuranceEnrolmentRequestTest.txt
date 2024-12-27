@@ -1,0 +1,62 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.mockito.Mockito;
+
+class InsuranceEnrolmentRequestTest {
+
+    private InsuranceEnrolmentRequest insuranceEnrolmentRequest;
+
+    @BeforeEach
+    void setUp() {
+        insuranceEnrolmentRequest = new InsuranceEnrolmentRequest();
+    }
+
+    @Test
+    void testGetAndSetInsuranceEnrolmentEvent() {
+        InsuranceEnrolmentEvent insuranceEnrolmentEvent = Mockito.mock(InsuranceEnrolmentEvent.class);
+        insuranceEnrolmentRequest.setInsuranceEnrolmentEvent(insuranceEnrolmentEvent);
+        assertEquals(insuranceEnrolmentEvent, insuranceEnrolmentRequest.getInsuranceEnrolmentEvent());
+    }
+
+    @Test
+    void testToString() {
+        InsuranceEnrolmentEvent insuranceEnrolmentEvent = Mockito.mock(InsuranceEnrolmentEvent.class);
+        insuranceEnrolmentRequest.setInsuranceEnrolmentEvent(insuranceEnrolmentEvent);
+
+        String expected = "com.td.api.mbofp.request.insuranceenrolment.InsuranceEnrolmentRequest@" + 
+                          Integer.toHexString(insuranceEnrolmentRequest.hashCode()) + 
+                          "[insuranceEnrolmentEvent=" + insuranceEnrolmentEvent + "]";
+
+        assertEquals(expected, insuranceEnrolmentRequest.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        InsuranceEnrolmentEvent insuranceEnrolmentEvent = Mockito.mock(InsuranceEnrolmentEvent.class);
+        insuranceEnrolmentRequest.setInsuranceEnrolmentEvent(insuranceEnrolmentEvent);
+
+        int expectedHashCode = 1;
+        expectedHashCode = 31 * expectedHashCode + (insuranceEnrolmentEvent == null ? 0 : insuranceEnrolmentEvent.hashCode());
+
+        assertEquals(expectedHashCode, insuranceEnrolmentRequest.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        InsuranceEnrolmentEvent insuranceEnrolmentEvent = Mockito.mock(InsuranceEnrolmentEvent.class);
+
+        insuranceEnrolmentRequest.setInsuranceEnrolmentEvent(insuranceEnrolmentEvent);
+
+        InsuranceEnrolmentRequest otherRequest = new InsuranceEnrolmentRequest();
+        otherRequest.setInsuranceEnrolmentEvent(insuranceEnrolmentEvent);
+
+        assertTrue(insuranceEnrolmentRequest.equals(otherRequest));
+
+        otherRequest.setInsuranceEnrolmentEvent(null);
+        assertFalse(insuranceEnrolmentRequest.equals(otherRequest));
+
+        assertFalse(insuranceEnrolmentRequest.equals(null));
+        assertFalse(insuranceEnrolmentRequest.equals(new Object()));
+    }
+}

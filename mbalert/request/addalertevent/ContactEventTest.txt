@@ -1,0 +1,85 @@
+package com.td.api.mbalert.request.addalertevent;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ContactEventTest {
+
+    @Test
+    void testContactEvent() {
+        // Create an instance of ContactEvent
+        ContactEvent contactEvent = new ContactEvent();
+
+        // Test the default values of the fields
+        assertNull(contactEvent.getKey());
+        assertNull(contactEvent.getAltKey());
+        assertNull(contactEvent.getReasonCd());
+
+        // Test setting and getting the 'key' field
+        String key = "eventKey";
+        contactEvent.setKey(key);
+        assertEquals(key, contactEvent.getKey());
+
+        // Test setting and getting the 'reasonCd' field
+        String reasonCd = "eventReason";
+        contactEvent.setReasonCd(reasonCd);
+        assertEquals(reasonCd, contactEvent.getReasonCd());
+
+        // Test setting and getting the 'altKey' field
+        AltKey altKey = new AltKey();
+        altKey.setPartyKey("partyKey");
+        altKey.setPartyKeyTypeCd("partyTypeCd");
+        altKey.setPartyTypeCd("partyTypeCdValue");
+        contactEvent.setAltKey(altKey);
+        assertEquals(altKey, contactEvent.getAltKey());
+        assertEquals("partyKey", contactEvent.getAltKey().getPartyKey());
+        assertEquals("partyTypeCd", contactEvent.getAltKey().getPartyKeyTypeCd());
+        assertEquals("partyTypeCdValue", contactEvent.getAltKey().getPartyTypeCd());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        // Create two instances of ContactEvent with the same properties
+        ContactEvent contactEvent1 = new ContactEvent();
+        contactEvent1.setKey("key1");
+        AltKey altKey1 = new AltKey();
+        altKey1.setPartyKey("partyKey1");
+        contactEvent1.setAltKey(altKey1);
+        contactEvent1.setReasonCd("reason1");
+
+        ContactEvent contactEvent2 = new ContactEvent();
+        contactEvent2.setKey("key1");
+        AltKey altKey2 = new AltKey();
+        altKey2.setPartyKey("partyKey1");
+        contactEvent2.setAltKey(altKey2);
+        contactEvent2.setReasonCd("reason1");
+
+        // Test equality
+        assertTrue(contactEvent1.equals(contactEvent2));
+
+        // Test hashCode
+        assertEquals(contactEvent1.hashCode(), contactEvent2.hashCode());
+
+        // Modify one object and test inequality
+        contactEvent2.setReasonCd("reason2");
+        assertFalse(contactEvent1.equals(contactEvent2));
+    }
+
+    @Test
+    void testToString() {
+        // Create an instance of ContactEvent
+        ContactEvent contactEvent = new ContactEvent();
+        contactEvent.setKey("key1");
+        AltKey altKey = new AltKey();
+        altKey.setPartyKey("partyKey1");
+        contactEvent.setAltKey(altKey);
+        contactEvent.setReasonCd("reason1");
+
+        // Test the toString() method
+        String toStringResult = contactEvent.toString();
+        assertTrue(toStringResult.contains("key"));
+        assertTrue(toStringResult.contains("partyKey1"));
+        assertTrue(toStringResult.contains("reason1"));
+    }
+}

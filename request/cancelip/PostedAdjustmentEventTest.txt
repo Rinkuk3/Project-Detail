@@ -1,0 +1,85 @@
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import java.util.Arrays;
+
+class PostedAdjustmentEventTest {
+
+    @Test
+    void testGetAndSetPostedEventId() {
+        PostedAdjustmentEvent event = new PostedAdjustmentEvent();
+        event.setPostedEventId("event123");
+        assertEquals("event123", event.getPostedEventId());
+    }
+
+    @Test
+    void testGetAndSetPostedEventAltkey() {
+        PostedAdjustmentEvent event = new PostedAdjustmentEvent();
+        PostedEventAltkey altkey = new PostedEventAltkey(); // Assuming a default constructor exists
+        event.setPostedEventAltkey(altkey);
+        assertEquals(altkey, event.getPostedEventAltkey());
+    }
+
+    @Test
+    void testGetAndSetAdjustmentEvent() {
+        PostedAdjustmentEvent event = new PostedAdjustmentEvent();
+        AdjustmentEvent adjustment = new AdjustmentEvent(); // Assuming a default constructor exists
+        event.setAdjustmentEvent(Arrays.asList(adjustment));
+        assertTrue(event.getAdjustmentEvent().contains(adjustment));
+    }
+
+    @Test
+    void testToString() {
+        PostedAdjustmentEvent event = new PostedAdjustmentEvent();
+        event.setPostedEventId("event123");
+        event.setPostedEventAltkey(new PostedEventAltkey());
+        AdjustmentEvent adjustment = new AdjustmentEvent();
+        event.setAdjustmentEvent(Arrays.asList(adjustment));
+
+        String result = event.toString();
+        assertTrue(result.contains("postedEventId=event123"));
+        assertTrue(result.contains("postedEventAltkey=" + event.getPostedEventAltkey()));
+        assertTrue(result.contains("adjustmentEvent=" + event.getAdjustmentEvent()));
+    }
+
+    @Test
+    void testHashCode() {
+        PostedAdjustmentEvent event1 = new PostedAdjustmentEvent();
+        event1.setPostedEventId("event123");
+        event1.setPostedEventAltkey(new PostedEventAltkey());
+        AdjustmentEvent adjustment = new AdjustmentEvent();
+        event1.setAdjustmentEvent(Arrays.asList(adjustment));
+
+        PostedAdjustmentEvent event2 = new PostedAdjustmentEvent();
+        event2.setPostedEventId("event123");
+        event2.setPostedEventAltkey(new PostedEventAltkey());
+        event2.setAdjustmentEvent(Arrays.asList(adjustment));
+
+        assertEquals(event1.hashCode(), event2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        PostedAdjustmentEvent event1 = new PostedAdjustmentEvent();
+        event1.setPostedEventId("event123");
+        event1.setPostedEventAltkey(new PostedEventAltkey());
+        AdjustmentEvent adjustment = new AdjustmentEvent();
+        event1.setAdjustmentEvent(Arrays.asList(adjustment));
+
+        PostedAdjustmentEvent event2 = new PostedAdjustmentEvent();
+        event2.setPostedEventId("event123");
+        event2.setPostedEventAltkey(new PostedEventAltkey());
+        event2.setAdjustmentEvent(Arrays.asList(adjustment));
+
+        assertTrue(event1.equals(event2));
+
+        event2.setPostedEventId("event124");
+        assertFalse(event1.equals(event2));
+
+        event2.setPostedEventId("event123");
+        event2.setPostedEventAltkey(new PostedEventAltkey());
+        assertTrue(event1.equals(event2));
+
+        event2.setAdjustmentEvent(Arrays.asList(new AdjustmentEvent())); // Different adjustment event
+        assertFalse(event1.equals(event2));
+    }
+}

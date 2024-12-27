@@ -1,0 +1,82 @@
+package com.td.api.ofm.request;
+
+import com.td.api.ofm.common.TCCAEVAPIInsuranceEnrolmentEventAddInfo;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class TSvcAddCreditCardAgreementInsuranceEnrolmentEventRqTest {
+
+    private TSvcAddCreditCardAgreementInsuranceEnrolmentEventRq request;
+    private TCCAEVAPIInsuranceEnrolmentEventAddInfo insuranceEnrolmentEvent;
+
+    @BeforeEach
+    public void setUp() {
+        request = new TSvcAddCreditCardAgreementInsuranceEnrolmentEventRq();
+        insuranceEnrolmentEvent = new TCCAEVAPIInsuranceEnrolmentEventAddInfo(); // Assuming you can mock or create a default object here
+    }
+
+    @Test
+    public void testGetInsuranceEnrolmentEvent() {
+        request.setInsuranceEnrolmentEvent(insuranceEnrolmentEvent);
+        assertEquals(insuranceEnrolmentEvent, request.getInsuranceEnrolmentEvent());
+    }
+
+    @Test
+    public void testSetInsuranceEnrolmentEvent() {
+        request.setInsuranceEnrolmentEvent(insuranceEnrolmentEvent);
+        assertNotNull(request.getInsuranceEnrolmentEvent());
+        assertEquals(insuranceEnrolmentEvent, request.getInsuranceEnrolmentEvent());
+    }
+
+    @Test
+    public void testToString() {
+        request.setInsuranceEnrolmentEvent(insuranceEnrolmentEvent);
+        String expectedString = TSvcAddCreditCardAgreementInsuranceEnrolmentEventRq.class.getName() + '@' + Integer.toHexString(System.identityHashCode(request)) + "[insuranceEnrolmentEvent=" + insuranceEnrolmentEvent + "]";
+        assertEquals(expectedString, request.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        TSvcAddCreditCardAgreementInsuranceEnrolmentEventRq anotherRequest = new TSvcAddCreditCardAgreementInsuranceEnrolmentEventRq();
+        request.setInsuranceEnrolmentEvent(insuranceEnrolmentEvent);
+        anotherRequest.setInsuranceEnrolmentEvent(insuranceEnrolmentEvent);
+
+        assertEquals(request.hashCode(), anotherRequest.hashCode());
+    }
+
+    @Test
+    public void testEquals_SameObject() {
+        assertTrue(request.equals(request));
+    }
+
+    @Test
+    public void testEquals_DifferentClass() {
+        assertFalse(request.equals(new Object()));
+    }
+
+    @Test
+    public void testEquals_NullObject() {
+        assertFalse(request.equals(null));
+    }
+
+    @Test
+    public void testEquals_DifferentInsuranceEnrolmentEvent() {
+        TCCAEVAPIInsuranceEnrolmentEventAddInfo differentInsuranceEnrolmentEvent = new TCCAEVAPIInsuranceEnrolmentEventAddInfo();
+        request.setInsuranceEnrolmentEvent(insuranceEnrolmentEvent);
+        TSvcAddCreditCardAgreementInsuranceEnrolmentEventRq differentRequest = new TSvcAddCreditCardAgreementInsuranceEnrolmentEventRq();
+        differentRequest.setInsuranceEnrolmentEvent(differentInsuranceEnrolmentEvent);
+
+        assertFalse(request.equals(differentRequest));
+    }
+
+    @Test
+    public void testEquals_SameInsuranceEnrolmentEvent() {
+        request.setInsuranceEnrolmentEvent(insuranceEnrolmentEvent);
+        TSvcAddCreditCardAgreementInsuranceEnrolmentEventRq sameRequest = new TSvcAddCreditCardAgreementInsuranceEnrolmentEventRq();
+        sameRequest.setInsuranceEnrolmentEvent(insuranceEnrolmentEvent);
+
+        assertTrue(request.equals(sameRequest));
+    }
+}

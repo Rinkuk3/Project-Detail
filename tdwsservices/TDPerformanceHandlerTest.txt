@@ -1,0 +1,73 @@
+package com.td.mbna.msec.midtier.tdwsservices;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import javax.xml.ws.handler.soap.SOAPMessageContext;
+import javax.xml.ws.handler.MessageContext;
+import javax.xml.ws.handler.soap.SOAPHandler;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.mockito.Mockito.*;
+
+public class TDPerformanceHandlerTest {
+
+    private TDPerformanceHandler performanceHandler;
+
+    @Mock
+    private SOAPMessageContext soapMessageContext;
+
+    @Mock
+    private MessageContext messageContext;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+        performanceHandler = new TDPerformanceHandler();
+    }
+
+    @Test
+    public void testGetHeaders() {
+        Set<QName> headers = performanceHandler.getHeaders();
+        // Ensure it returns null as the method implementation is null.
+        assert headers == null;
+    }
+
+    @Test
+    public void testHandleMessage() {
+        // Test the handleMessage method
+        boolean result = performanceHandler.handleMessage(soapMessageContext);
+        assert result; // It should return true as per the current implementation
+    }
+
+    @Test
+    public void testHandleFault() {
+        // Test the handleFault method
+        boolean result = performanceHandler.handleFault(soapMessageContext);
+        assert result; // It should return true as per the current implementation
+    }
+
+    @Test
+    public void testClose() {
+        // Test the close method
+        performanceHandler.close(messageContext);
+        // Nothing to assert since close does nothing in this implementation
+        // This test is just to ensure no exceptions are thrown during the call
+    }
+
+    @Test
+    public void testConstructor() {
+        // Ensure that an instance of TDPerformanceHandler can be created.
+        TDPerformanceHandler newHandler = new TDPerformanceHandler();
+        assert newHandler != null;
+    }
+
+    @Test
+    public void testLoggerInitialization() {
+        // This is to ensure the logger is initialized properly.
+        assert performanceHandler.logger != null;
+    }
+}

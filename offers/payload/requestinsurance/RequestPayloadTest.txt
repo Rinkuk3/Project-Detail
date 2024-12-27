@@ -1,0 +1,148 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestPayloadTest {
+
+    @Test
+    void testSetGetAccountNo() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setAccountNo("12345");
+        
+        assertEquals("12345", requestPayload.getAccountNo());
+    }
+
+    @Test
+    void testSetGetCardNumber() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setCardNumber("54321");
+        
+        assertEquals("54321", requestPayload.getCardNumber());
+    }
+
+    @Test
+    void testSetGetSubproductId() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setSubproductId("sub123");
+        
+        assertEquals("sub123", requestPayload.getSubproductId());
+    }
+
+    @Test
+    void testSetGetCardHolder() {
+        RequestPayload requestPayload = new RequestPayload();
+        CardHolderType cardHolder = new CardHolderType();
+        requestPayload.setCardHolder(cardHolder);
+        
+        assertEquals(cardHolder, requestPayload.getCardHolder());
+    }
+
+    @Test
+    void testSetGetPrimaryPhoneNumber() {
+        RequestPayload requestPayload = new RequestPayload();
+        PhoneNumber phoneNumber = new PhoneNumber();
+        requestPayload.setPrimaryPhoneNumber(phoneNumber);
+        
+        assertEquals(phoneNumber, requestPayload.getPrimaryPhoneNumber());
+    }
+
+    @Test
+    void testSetGetAddress() {
+        RequestPayload requestPayload = new RequestPayload();
+        UnformattedAddress address = new UnformattedAddress();
+        requestPayload.setAddress(address);
+        
+        assertEquals(address, requestPayload.getAddress());
+    }
+
+    @Test
+    void testSetGetCallId() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setCallId("call123");
+        
+        assertEquals("call123", requestPayload.getCallId());
+    }
+
+    @Test
+    void testSetGetAssociatedId() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setAssociatedId("assoc123");
+        
+        assertEquals("assoc123", requestPayload.getAssociatedId());
+    }
+
+    @Test
+    void testSetGetRoleCD() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setRoleCD("role123");
+        
+        assertEquals("role123", requestPayload.getRoleCD());
+    }
+
+    @Test
+    void testSetGetDisclosureInfo() {
+        RequestPayload requestPayload = new RequestPayload();
+        DisclosureInfoType disclosureInfo = new DisclosureInfoType();
+        requestPayload.setDisclosureInfo(disclosureInfo);
+        
+        assertEquals(disclosureInfo, requestPayload.getDisclosureInfo());
+    }
+
+    @Test
+    void testSetGetSelectedOffer() {
+        RequestPayload requestPayload = new RequestPayload();
+        PromotionOfferType offerType = new PromotionOfferType();
+        requestPayload.setSelectedOffer(offerType);
+        
+        assertEquals(offerType, requestPayload.getSelectedOffer());
+    }
+
+    @Test
+    void testToString() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setAccountNo("12345");
+        requestPayload.setCardNumber("54321");
+        requestPayload.setSubproductId("sub123");
+        requestPayload.setCallId("call123");
+        requestPayload.setAssociatedId("assoc123");
+        requestPayload.setRoleCD("role123");
+        
+        String expectedString = "RequestPayload@" + Integer.toHexString(System.identityHashCode(requestPayload)) + "[" +
+                "accountNo=12345," +
+                "cardNumber=54321," +
+                "subproductId=sub123," +
+                "callId=call123," +
+                "associatedId=assoc123," +
+                "roleCD=role123" +
+                "]";
+        
+        assertEquals(expectedString, requestPayload.toString());
+    }
+
+    @Test
+    void testEquals() {
+        RequestPayload requestPayload1 = new RequestPayload();
+        RequestPayload requestPayload2 = new RequestPayload();
+        
+        requestPayload1.setAccountNo("12345");
+        requestPayload2.setAccountNo("12345");
+
+        assertEquals(requestPayload1, requestPayload2);
+
+        requestPayload2.setAccountNo("54321");
+        assertNotEquals(requestPayload1, requestPayload2);
+    }
+
+    @Test
+    void testHashCode() {
+        RequestPayload requestPayload1 = new RequestPayload();
+        RequestPayload requestPayload2 = new RequestPayload();
+
+        requestPayload1.setAccountNo("12345");
+        requestPayload2.setAccountNo("12345");
+
+        assertEquals(requestPayload1.hashCode(), requestPayload2.hashCode());
+
+        requestPayload2.setAccountNo("54321");
+        assertNotEquals(requestPayload1.hashCode(), requestPayload2.hashCode());
+    }
+}

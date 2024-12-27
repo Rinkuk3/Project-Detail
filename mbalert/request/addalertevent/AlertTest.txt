@@ -1,0 +1,149 @@
+package com.td.api.mbalert.request.addalertevent;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class AlertTest {
+
+    @Test
+    void testAlert() {
+        Alert alert = new Alert();
+
+        // Test default values
+        assertNull(alert.getParty());
+        assertNull(alert.getReceiver());
+        assertNull(alert.getSender());
+        assertNull(alert.getAlertTypeCd());
+        assertNull(alert.getAlertCategoryTypeCd());
+        assertTrue(alert.getContact().isEmpty());
+        assertTrue(alert.getCondition().isEmpty());
+        assertTrue(alert.getDocument().isEmpty());
+        assertNull(alert.getLanguageCd());
+        assertTrue(alert.getEventToEvent().isEmpty());
+        assertNull(alert.getBatchJobId());
+        assertNull(alert.getDraftId());
+        assertTrue(alert.getTemplate().isEmpty());
+        assertNull(alert.getAltrExtension());
+        assertNull(alert.getEffectiveDateTime());
+        assertTrue(alert.getDeliveryChannelType().isEmpty());
+
+        // Test setter and getter for party
+        Party party = new Party();
+        alert.setParty(party);
+        assertEquals(party, alert.getParty());
+
+        // Test setter and getter for receiver
+        Receiver receiver = new Receiver();
+        alert.setReceiver(receiver);
+        assertEquals(receiver, alert.getReceiver());
+
+        // Test setter and getter for sender
+        Sender sender = new Sender();
+        alert.setSender(sender);
+        assertEquals(sender, alert.getSender());
+
+        // Test setter and getter for alertTypeCd
+        alert.setAlertTypeCd("ALERT_TYPE_1");
+        assertEquals("ALERT_TYPE_1", alert.getAlertTypeCd());
+
+        // Test setter and getter for alertCategoryTypeCd
+        alert.setAlertCategoryTypeCd("CATEGORY_TYPE_1");
+        assertEquals("CATEGORY_TYPE_1", alert.getAlertCategoryTypeCd());
+
+        // Test setter and getter for contact list
+        Contact contact1 = new Contact();
+        alert.setContact(Arrays.asList(contact1));
+        assertEquals(1, alert.getContact().size());
+        assertEquals(contact1, alert.getContact().get(0));
+
+        // Test setter and getter for condition list
+        Condition condition1 = new Condition();
+        alert.setCondition(Arrays.asList(condition1));
+        assertEquals(1, alert.getCondition().size());
+        assertEquals(condition1, alert.getCondition().get(0));
+
+        // Test setter and getter for document list
+        Document document1 = new Document();
+        alert.setDocument(Arrays.asList(document1));
+        assertEquals(1, alert.getDocument().size());
+        assertEquals(document1, alert.getDocument().get(0));
+
+        // Test setter and getter for languageCd
+        alert.setLanguageCd("EN");
+        assertEquals("EN", alert.getLanguageCd());
+
+        // Test setter and getter for eventToEvent list
+        EventToEvent event1 = new EventToEvent();
+        alert.setEventToEvent(Arrays.asList(event1));
+        assertEquals(1, alert.getEventToEvent().size());
+        assertEquals(event1, alert.getEventToEvent().get(0));
+
+        // Test setter and getter for batchJobId
+        alert.setBatchJobId("BATCH_123");
+        assertEquals("BATCH_123", alert.getBatchJobId());
+
+        // Test setter and getter for draftId
+        alert.setDraftId("DRAFT_123");
+        assertEquals("DRAFT_123", alert.getDraftId());
+
+        // Test setter and getter for template list
+        Template template1 = new Template();
+        alert.setTemplate(Arrays.asList(template1));
+        assertEquals(1, alert.getTemplate().size());
+        assertEquals(template1, alert.getTemplate().get(0));
+
+        // Test setter and getter for altrExtension
+        AltrExtension_TemplateItem altrExtension = new AltrExtension_TemplateItem();
+        alert.setAltrExtension(altrExtension);
+        assertEquals(altrExtension, alert.getAltrExtension());
+
+        // Test setter and getter for effectiveDateTime
+        EffectiveDateTime effectiveDateTime = new EffectiveDateTime();
+        alert.setEffectiveDateTime(effectiveDateTime);
+        assertEquals(effectiveDateTime, alert.getEffectiveDateTime());
+
+        // Test setter and getter for deliveryChannelType list
+        DeliveryChannelType deliveryChannelType1 = new DeliveryChannelType();
+        alert.setDeliveryChannelType(Arrays.asList(deliveryChannelType1));
+        assertEquals(1, alert.getDeliveryChannelType().size());
+        assertEquals(deliveryChannelType1, alert.getDeliveryChannelType().get(0));
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        Alert alert1 = new Alert();
+        alert1.setAlertTypeCd("ALERT_TYPE_1");
+        alert1.setAlertCategoryTypeCd("CATEGORY_TYPE_1");
+
+        Alert alert2 = new Alert();
+        alert2.setAlertTypeCd("ALERT_TYPE_1");
+        alert2.setAlertCategoryTypeCd("CATEGORY_TYPE_1");
+
+        Alert alert3 = new Alert();
+        alert3.setAlertTypeCd("ALERT_TYPE_2");
+        alert3.setAlertCategoryTypeCd("CATEGORY_TYPE_2");
+
+        // Test equality method
+        assertTrue(alert1.equals(alert2));
+        assertFalse(alert1.equals(alert3));
+
+        // Test hashCode method
+        assertEquals(alert1.hashCode(), alert2.hashCode());
+        assertNotEquals(alert1.hashCode(), alert3.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        Alert alert = new Alert();
+        alert.setAlertTypeCd("ALERT_TYPE_1");
+        alert.setAlertCategoryTypeCd("CATEGORY_TYPE_1");
+
+        String toStringResult = alert.toString();
+
+        assertTrue(toStringResult.contains("alertTypeCd=ALERT_TYPE_1"));
+        assertTrue(toStringResult.contains("alertCategoryTypeCd=CATEGORY_TYPE_1"));
+    }
+}

@@ -1,0 +1,41 @@
+package com.td.api.dms.request;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class AttributesTest {
+
+    @Test
+    void testEnumValues() {
+        // Test that all enum values are correct
+        assertEquals(Attributes.AccountNumber, Attributes.valueOf("AccountNumber"));
+        assertEquals(Attributes.FormNumber, Attributes.valueOf("FormNumber"));
+        assertEquals(Attributes.StatementDate, Attributes.valueOf("StatementDate"));
+        assertEquals(Attributes.LoadDate, Attributes.valueOf("LoadDate"));
+    }
+
+    @Test
+    void testEnumSize() {
+        // Test the size of the enum
+        assertEquals(4, Attributes.values().length);
+    }
+
+    @Test
+    void testEnumToString() {
+        // Test the toString() method of the enum
+        assertEquals("AccountNumber", Attributes.AccountNumber.toString());
+        assertEquals("FormNumber", Attributes.FormNumber.toString());
+        assertEquals("StatementDate", Attributes.StatementDate.toString());
+        assertEquals("LoadDate", Attributes.LoadDate.toString());
+    }
+
+    @Test
+    void testEnumOrdinal() {
+        // Test the ordinal() method of the enum
+        assertEquals(0, Attributes.AccountNumber.ordinal());
+        assertEquals(1, Attributes.FormNumber.ordinal());
+        assertEquals(2, Attributes.StatementDate.ordinal());
+        assertEquals(3, Attributes.LoadDate.ordinal());
+    }
+}

@@ -1,0 +1,67 @@
+package com.td.api.mbalert.request.addalertevent;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class EffectiveDateTimeTest {
+
+    @Test
+    void testEffectiveDateTime() {
+        // Create an instance of EffectiveDateTime
+        EffectiveDateTime effectiveDateTime = new EffectiveDateTime();
+
+        // Test the default values of the fields
+        assertNull(effectiveDateTime.getEffectiveDttm());
+        assertNull(effectiveDateTime.getTimeZoneCd());
+
+        // Test setting and getting the 'effectiveDttm' field
+        Date effectiveDate = new Date();
+        effectiveDateTime.setEffectiveDttm(effectiveDate);
+        assertEquals(effectiveDate, effectiveDateTime.getEffectiveDttm());
+
+        // Test setting and getting the 'timeZoneCd' field
+        String timeZoneCd = "EST";
+        effectiveDateTime.setTimeZoneCd(timeZoneCd);
+        assertEquals(timeZoneCd, effectiveDateTime.getTimeZoneCd());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        // Create two instances of EffectiveDateTime with the same properties
+        EffectiveDateTime effectiveDateTime1 = new EffectiveDateTime();
+        Date date = new Date();
+        effectiveDateTime1.setEffectiveDttm(date);
+        effectiveDateTime1.setTimeZoneCd("EST");
+
+        EffectiveDateTime effectiveDateTime2 = new EffectiveDateTime();
+        effectiveDateTime2.setEffectiveDttm(date);
+        effectiveDateTime2.setTimeZoneCd("EST");
+
+        // Test equality
+        assertTrue(effectiveDateTime1.equals(effectiveDateTime2));
+
+        // Test hashCode
+        assertEquals(effectiveDateTime1.hashCode(), effectiveDateTime2.hashCode());
+
+        // Modify one object and test inequality
+        effectiveDateTime2.setTimeZoneCd("PST");
+        assertFalse(effectiveDateTime1.equals(effectiveDateTime2));
+    }
+
+    @Test
+    void testToString() {
+        // Create an instance of EffectiveDateTime
+        EffectiveDateTime effectiveDateTime = new EffectiveDateTime();
+        Date date = new Date();
+        effectiveDateTime.setEffectiveDttm(date);
+        effectiveDateTime.setTimeZoneCd("EST");
+
+        // Test the toString() method
+        String toStringResult = effectiveDateTime.toString();
+        assertTrue(toStringResult.contains("effectiveDttm"));
+        assertTrue(toStringResult.contains("timeZoneCd"));
+    }
+}

@@ -1,0 +1,188 @@
+import com.td.mbna.msec.midtier.cardservice.payload.validatecpi.ResponsePayload;
+import com.td.mbna.msec.midtier.cardservice.payload.validatecpi.ValidateCPIResponse;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import com.td.mbna.msec.midtier.util.services.MSECConstants;
+import com.td.mbna.msec.midtier.util.services.TDRestServiceUtil;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.*;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class CardVerificationSrvTest {
+
+    @Mock
+    private RestTemplate restTemplate;
+
+    @InjectMocks
+    private CardVerificationSrv cardVerificationSrv;
+
+    @Test
+    void testCardVerification_Success() {
+        // Arrange
+        String connectId = "connectId";
+        String cardNumber = "1234567890";
+        String cvv = "123";
+        String expiryYear = "2025";
+        String expiryMonth = "12";
+        String token = "token";
+
+        ValidateCPIResponse mockResponse = new ValidateCPIResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatus(true);
+        mockResponse.setResponsePayload(responsePayload);
+        
+        ResponseEntity<Object> mockResponseEntity = new ResponseEntity<>(HttpStatus.OK);
+
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(Object.class)))
+                .thenReturn(mockResponseEntity);
+
+        // Act
+        ValidateCPIResponse result = cardVerificationSrv.cardVerification(connectId, cardNumber, cvv, expiryYear, expiryMonth, token);
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.getResponsePayload().getStatus());
+    }
+
+    @Test
+    void testCardVerification_Failure() {
+        // Arrange
+        String connectId = "connectId";
+        String cardNumber = "1234567890";
+        String cvv = "123";
+        String expiryYear = "2025";
+        String expiryMonth = "12";
+        String token = "token";
+
+        ValidateCPIResponse mockResponse = new ValidateCPIResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatus(false);
+        mockResponse.setResponsePayload(responsePayload);
+        
+        ResponseEntity<Object> mockResponseEntity = new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(Object.class)))
+                .thenReturn(mockResponseEntity);
+
+        // Act
+        ValidateCPIResponse result = cardVerificationSrv.cardVerification(connectId, cardNumber, cvv, expiryYear, expiryMonth, token);
+
+        // Assert
+        assertNotNull(result);
+        assertFalse(result.getResponsePayload().getStatus());
+    }
+
+    @Test
+    void testCardVerification_Exception() {
+        // Arrange
+        String connectId = "connectId";
+        String cardNumber = "1234567890";
+        String cvv = "123";
+        String expiryYear = "2025";
+        String expiryMonth = "12";
+        String token = "token";
+
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(Object.class)))
+                .thenThrow(new RuntimeException("Error"));
+
+        // Act
+        ValidateCPIResponse result = cardVerificationSrv.cardVerification(connectId, cardNumber, cvv, expiryYear, expiryMonth, token);
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testCardCVCVerification_Success() {
+        // Arrange
+        String connectId = "connectId";
+        String cardNumber = "1234567890";
+        String cvv = "123";
+        String expiryYearMonth = "202512";
+        String token = "token";
+
+        ValidateCPIResponse mockResponse = new ValidateCPIResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatus(true);
+        mockResponse.setResponsePayload(responsePayload);
+        
+        ResponseEntity<Object> mockResponseEntity = new ResponseEntity<>(HttpStatus.OK);
+
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(Object.class)))
+                .thenReturn(mockResponseEntity);
+
+        // Act
+        ValidateCPIResponse result = cardVerificationSrv.cardCVCVerification(connectId, cardNumber, cvv, expiryYearMonth, token);
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.getResponsePayload().getStatus());
+    }
+
+    @Test
+    void testCardCVCVerification_ClientError() {
+        // Arrange
+        String connectId = "connectId";
+        String cardNumber = "1234567890";
+        String cvv = "123";
+        String expiryYearMonth = "202512";
+        String token = "token";
+
+        ResponseEntity<Object> mockResponseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(Object.class)))
+                .thenReturn(mockResponseEntity);
+
+        // Act
+        ValidateCPIResponse result = cardVerificationSrv.cardCVCVerification(connectId, cardNumber, cvv, expiryYearMonth, token);
+
+        // Assert
+        assertNotNull(result);
+        assertFalse(result.getResponsePayload().getStatus());
+    }
+
+    @Test
+    void testCardCVCVerification_Exception() {
+        // Arrange
+        String connectId = "connectId";
+        String cardNumber = "1234567890";
+        String cvv = "123";
+        String expiryYearMonth = "202512";
+        String token = "token";
+
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(Object.class)))
+                .thenThrow(new RuntimeException("Error"));
+
+        // Act
+        ValidateCPIResponse result = cardVerificationSrv.cardCVCVerification(connectId, cardNumber, cvv, expiryYearMonth, token);
+
+        // Assert
+        assertNotNull(result);
+        assertFalse(result.getResponsePayload().getStatus());
+    }
+
+    @Test
+    void testAddAuthorizationHeader() {
+        // Arrange
+        String token = "token";
+        String connectId = "connectId";
+
+        // Act
+        HttpHeaders headers = cardVerificationSrv.addAuthorizationHeader(token, connectId);
+
+        // Assert
+        assertNotNull(headers);
+        assertTrue(headers.containsKey(MSECConstants.CONNECT_ID));
+        assertTrue(headers.containsKey(MSECConstants.AUTHORIZATION));
+        assertEquals(token, headers.get(MSECConstants.AUTHORIZATION).get(0));
+        assertEquals(connectId, headers.get(MSECConstants.CONNECT_ID).get(0));
+    }
+}

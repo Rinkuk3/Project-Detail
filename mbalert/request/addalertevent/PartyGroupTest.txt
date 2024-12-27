@@ -1,0 +1,70 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class PartyGroupTest {
+
+    @Test
+    void testGetterAndSetterForBusinessPartyGroup() {
+        PartyGroup partyGroup = new PartyGroup();
+        BusinessPartyGroup businessPartyGroup = new BusinessPartyGroup();
+        businessPartyGroup.setBusinessName("BusinessName123");
+        partyGroup.setBusinessPartyGroup(businessPartyGroup);
+        
+        assertNotNull(partyGroup.getBusinessPartyGroup());
+        assertEquals("BusinessName123", partyGroup.getBusinessPartyGroup().getBusinessName());
+    }
+
+    @Test
+    void testToString() {
+        PartyGroup partyGroup = new PartyGroup();
+        BusinessPartyGroup businessPartyGroup = new BusinessPartyGroup();
+        businessPartyGroup.setBusinessName("BusinessName123");
+        partyGroup.setBusinessPartyGroup(businessPartyGroup);
+
+        String expected = "PartyGroup(businessPartyGroup=BusinessPartyGroup(businessName=BusinessName123))";
+        assertEquals(expected, partyGroup.toString());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        PartyGroup partyGroup1 = new PartyGroup();
+        BusinessPartyGroup businessPartyGroup1 = new BusinessPartyGroup();
+        businessPartyGroup1.setBusinessName("BusinessName123");
+        partyGroup1.setBusinessPartyGroup(businessPartyGroup1);
+
+        PartyGroup partyGroup2 = new PartyGroup();
+        BusinessPartyGroup businessPartyGroup2 = new BusinessPartyGroup();
+        businessPartyGroup2.setBusinessName("BusinessName123");
+        partyGroup2.setBusinessPartyGroup(businessPartyGroup2);
+
+        assertEquals(partyGroup1, partyGroup2);
+        assertEquals(partyGroup1.hashCode(), partyGroup2.hashCode());
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        PartyGroup partyGroup = new PartyGroup();
+        assertNotEquals(partyGroup, null);
+    }
+
+    @Test
+    void testEqualsWithDifferentType() {
+        PartyGroup partyGroup = new PartyGroup();
+        assertNotEquals(partyGroup, new Object());
+    }
+
+    @Test
+    void testHashCodeWithDifferentValues() {
+        PartyGroup partyGroup1 = new PartyGroup();
+        BusinessPartyGroup businessPartyGroup1 = new BusinessPartyGroup();
+        businessPartyGroup1.setBusinessName("BusinessName123");
+        partyGroup1.setBusinessPartyGroup(businessPartyGroup1);
+
+        PartyGroup partyGroup2 = new PartyGroup();
+        BusinessPartyGroup businessPartyGroup2 = new BusinessPartyGroup();
+        businessPartyGroup2.setBusinessName("BusinessName456");
+        partyGroup2.setBusinessPartyGroup(businessPartyGroup2);
+
+        assertNotEquals(partyGroup1.hashCode(), partyGroup2.hashCode());
+    }
+}

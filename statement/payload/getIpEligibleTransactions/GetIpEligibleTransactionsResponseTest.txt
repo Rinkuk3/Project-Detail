@@ -1,0 +1,28 @@
+package com.td.mbna.msec.midtier.statement.payload.getIpEligibleTransactions;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class GetIpEligibleTransactionsResponseTest {
+
+    @Test
+    void testGetAndSetResponsePayload() {
+        GetIpEligibleTransactionsResponse response = new GetIpEligibleTransactionsResponse();
+        
+        ResponsePayload responsePayload = new ResponsePayload();
+        response.setResponsePayload(responsePayload);
+        
+        assertNotNull(response.getResponsePayload());
+        assertEquals(responsePayload, response.getResponsePayload());
+    }
+
+    @Test
+    void testToString() {
+        GetIpEligibleTransactionsResponse response = new GetIpEligibleTransactionsResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        response.setResponsePayload(responsePayload);
+        
+        String expectedString = "GetIpEligibleTransactionsResponse{responsePayload=" + responsePayload + "}";
+        assertEquals(expectedString, response.toString());
+    }
+}

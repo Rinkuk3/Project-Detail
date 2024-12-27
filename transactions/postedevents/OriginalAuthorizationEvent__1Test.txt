@@ -1,0 +1,95 @@
+package com.td.api.mbcca.response.transactions.postedevents;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class OriginalAuthorizationEvent__1Test {
+
+    private OriginalAuthorizationEvent__1 originalAuthorizationEvent;
+
+    @Before
+    public void setUp() {
+        originalAuthorizationEvent = new OriginalAuthorizationEvent__1();
+    }
+
+    @Test
+    public void testGetAndSetTerminalChannelTypeCd() {
+        String terminalChannelTypeCd = "ATM";
+        originalAuthorizationEvent.setTerminalChannelTypeCd(terminalChannelTypeCd);
+        assertEquals(terminalChannelTypeCd, originalAuthorizationEvent.getTerminalChannelTypeCd());
+    }
+
+    @Test
+    public void testGetAndSetTransactionDetailAvailableTypeCd() {
+        String transactionDetailAvailableTypeCd = "DETAIL";
+        originalAuthorizationEvent.setTransactionDetailAvailableTypeCd(transactionDetailAvailableTypeCd);
+        assertEquals(transactionDetailAvailableTypeCd, originalAuthorizationEvent.getTransactionDetailAvailableTypeCd());
+    }
+
+    @Test
+    public void testGetAndSetMerchantPointOfServiceTerminalCapabilityCd() {
+        String merchantPointOfServiceTerminalCapabilityCd = "CAPABILITY";
+        originalAuthorizationEvent.setMerchantPointOfServiceTerminalCapabilityCd(merchantPointOfServiceTerminalCapabilityCd);
+        assertEquals(merchantPointOfServiceTerminalCapabilityCd, originalAuthorizationEvent.getMerchantPointOfServiceTerminalCapabilityCd());
+    }
+
+    @Test
+    public void testGetAndSetMerchantPointOfServiceTerminalEntryCd() {
+        String merchantPointOfServiceTerminalEntryCd = "ENTRY";
+        originalAuthorizationEvent.setMerchantPointOfServiceTerminalEntryCd(merchantPointOfServiceTerminalEntryCd);
+        assertEquals(merchantPointOfServiceTerminalEntryCd, originalAuthorizationEvent.getMerchantPointOfServiceTerminalEntryCd());
+    }
+
+    @Test
+    public void testToString() {
+        originalAuthorizationEvent.setTerminalChannelTypeCd("ATM");
+        originalAuthorizationEvent.setTransactionDetailAvailableTypeCd("DETAIL");
+        originalAuthorizationEvent.setMerchantPointOfServiceTerminalCapabilityCd("CAPABILITY");
+        originalAuthorizationEvent.setMerchantPointOfServiceTerminalEntryCd("ENTRY");
+
+        String expectedString = "com.td.api.mbcca.response.transactions.postedevents.OriginalAuthorizationEvent__1@"
+                + Integer.toHexString(System.identityHashCode(originalAuthorizationEvent)) + "[terminalChannelTypeCd=ATM,transactionDetailAvailableTypeCd=DETAIL,"
+                + "merchantPointOfServiceTerminalCapabilityCd=CAPABILITY,merchantPointOfServiceTerminalEntryCd=ENTRY,]";
+
+        assertEquals(expectedString, originalAuthorizationEvent.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        OriginalAuthorizationEvent__1 event1 = new OriginalAuthorizationEvent__1();
+        event1.setTerminalChannelTypeCd("ATM");
+        event1.setTransactionDetailAvailableTypeCd("DETAIL");
+        event1.setMerchantPointOfServiceTerminalCapabilityCd("CAPABILITY");
+        event1.setMerchantPointOfServiceTerminalEntryCd("ENTRY");
+
+        OriginalAuthorizationEvent__1 event2 = new OriginalAuthorizationEvent__1();
+        event2.setTerminalChannelTypeCd("ATM");
+        event2.setTransactionDetailAvailableTypeCd("DETAIL");
+        event2.setMerchantPointOfServiceTerminalCapabilityCd("CAPABILITY");
+        event2.setMerchantPointOfServiceTerminalEntryCd("ENTRY");
+
+        assertEquals(event1.hashCode(), event2.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        OriginalAuthorizationEvent__1 event1 = new OriginalAuthorizationEvent__1();
+        event1.setTerminalChannelTypeCd("ATM");
+        event1.setTransactionDetailAvailableTypeCd("DETAIL");
+        event1.setMerchantPointOfServiceTerminalCapabilityCd("CAPABILITY");
+        event1.setMerchantPointOfServiceTerminalEntryCd("ENTRY");
+
+        OriginalAuthorizationEvent__1 event2 = new OriginalAuthorizationEvent__1();
+        event2.setTerminalChannelTypeCd("ATM");
+        event2.setTransactionDetailAvailableTypeCd("DETAIL");
+        event2.setMerchantPointOfServiceTerminalCapabilityCd("CAPABILITY");
+        event2.setMerchantPointOfServiceTerminalEntryCd("ENTRY");
+
+        assertTrue(event1.equals(event2));
+
+        event2.setMerchantPointOfServiceTerminalEntryCd("NEW_ENTRY");
+        assertFalse(event1.equals(event2));
+    }
+}

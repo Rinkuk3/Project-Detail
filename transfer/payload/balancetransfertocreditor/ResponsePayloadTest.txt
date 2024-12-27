@@ -1,0 +1,152 @@
+package com.td.mbna.msec.midtier.transfer.payload.balancetransfertocreditor;
+
+import com.td.mbna.msec.midtier.transfer.payload.BTConfirmationType;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.*;
+
+public class ResponsePayloadTest {
+
+    private ResponsePayload responsePayload;
+
+    @Before
+    public void setUp() {
+        responsePayload = new ResponsePayload();
+    }
+
+    @Test
+    public void testGetAndSetConfirmation() {
+        List<BTConfirmationType> confirmationList = new ArrayList<>();
+        BTConfirmationType confirmation = new BTConfirmationType();
+        confirmationList.add(confirmation);
+
+        responsePayload.setConfirmation(confirmationList);
+        assertEquals(confirmationList, responsePayload.getConfirmation());
+
+        responsePayload.setConfirmation(new ArrayList<>());
+        assertNotNull(responsePayload.getConfirmation());
+        assertTrue(responsePayload.getConfirmation().isEmpty());
+    }
+
+    @Test
+    public void testGetAndSetMinNumOfDays() {
+        Integer minNumOfDays = 5;
+        responsePayload.setMinNumOfDays(minNumOfDays);
+        assertEquals(minNumOfDays, responsePayload.getMinNumOfDays());
+    }
+
+    @Test
+    public void testGetAndSetMaxNumOfDays() {
+        Integer maxNumOfDays = 10;
+        responsePayload.setMaxNumOfDays(maxNumOfDays);
+        assertEquals(maxNumOfDays, responsePayload.getMaxNumOfDays());
+    }
+
+    @Test
+    public void testGetAndSetContainFailure() {
+        responsePayload.setContainFailure(true);
+        assertTrue(responsePayload.getContainFailure());
+
+        responsePayload.setContainFailure(false);
+        assertFalse(responsePayload.getContainFailure());
+    }
+
+    @Test
+    public void testGetAndSetAllowBalanceTransfer() {
+        responsePayload.setAllowBalanceTransfer(true);
+        assertTrue(responsePayload.getAllowBalanceTransfer());
+
+        responsePayload.setAllowBalanceTransfer(false);
+        assertFalse(responsePayload.getAllowBalanceTransfer());
+    }
+
+    @Test
+    public void testGetAndSetAllowTransferToChequing() {
+        responsePayload.setAllowTransferToChequing(true);
+        assertTrue(responsePayload.getAllowTransferToChequing());
+
+        responsePayload.setAllowTransferToChequing(false);
+        assertFalse(responsePayload.getAllowTransferToChequing());
+    }
+
+    @Test
+    public void testToString() {
+        List<BTConfirmationType> confirmationList = new ArrayList<>();
+        BTConfirmationType confirmation = new BTConfirmationType();
+        confirmationList.add(confirmation);
+
+        responsePayload.setConfirmation(confirmationList);
+        responsePayload.setMinNumOfDays(5);
+        responsePayload.setMaxNumOfDays(10);
+        responsePayload.setContainFailure(true);
+        responsePayload.setAllowBalanceTransfer(true);
+        responsePayload.setAllowTransferToChequing(true);
+
+        String expectedString = "com.td.mbna.msec.midtier.transfer.payload.balancetransfertocreditor.ResponsePayload@"
+                + Integer.toHexString(System.identityHashCode(responsePayload))
+                + "[confirmation=" + confirmationList + ",minNumOfDays=5,maxNumOfDays=10,containFailure=true,allowBalanceTransfer=true,allowTransferToChequing=true]";
+        
+        assertEquals(expectedString, responsePayload.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        ResponsePayload payload1 = new ResponsePayload();
+        payload1.setContainFailure(true);
+        payload1.setMinNumOfDays(5);
+        payload1.setMaxNumOfDays(10);
+        payload1.setAllowBalanceTransfer(true);
+        payload1.setAllowTransferToChequing(true);
+
+        ResponsePayload payload2 = new ResponsePayload();
+        payload2.setContainFailure(true);
+        payload2.setMinNumOfDays(5);
+        payload2.setMaxNumOfDays(10);
+        payload2.setAllowBalanceTransfer(true);
+        payload2.setAllowTransferToChequing(true);
+
+        assertEquals(payload1.hashCode(), payload2.hashCode());
+
+        ResponsePayload payload3 = new ResponsePayload();
+        payload3.setContainFailure(false);
+        payload3.setMinNumOfDays(3);
+        payload3.setMaxNumOfDays(7);
+        payload3.setAllowBalanceTransfer(false);
+        payload3.setAllowTransferToChequing(false);
+
+        assertNotEquals(payload1.hashCode(), payload3.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        ResponsePayload payload1 = new ResponsePayload();
+        payload1.setContainFailure(true);
+        payload1.setMinNumOfDays(5);
+        payload1.setMaxNumOfDays(10);
+        payload1.setAllowBalanceTransfer(true);
+        payload1.setAllowTransferToChequing(true);
+
+        ResponsePayload payload2 = new ResponsePayload();
+        payload2.setContainFailure(true);
+        payload2.setMinNumOfDays(5);
+        payload2.setMaxNumOfDays(10);
+        payload2.setAllowBalanceTransfer(true);
+        payload2.setAllowTransferToChequing(true);
+
+        ResponsePayload payload3 = new ResponsePayload();
+        payload3.setContainFailure(false);
+        payload3.setMinNumOfDays(3);
+        payload3.setMaxNumOfDays(7);
+        payload3.setAllowBalanceTransfer(false);
+        payload3.setAllowTransferToChequing(false);
+
+        assertTrue(payload1.equals(payload2));
+        assertFalse(payload1.equals(payload3));
+        assertFalse(payload1.equals(null));
+        assertFalse(payload1.equals("String"));
+    }
+}

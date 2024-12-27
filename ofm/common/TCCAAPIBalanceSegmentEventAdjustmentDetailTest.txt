@@ -1,0 +1,174 @@
+package com.td.api.ofm.common;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.math.BigDecimal;
+
+class TCCAAPIBalanceSegmentEventAdjustmentDetailTest {
+
+    private TCCAAPIBalanceSegmentEventAdjustmentDetail detail;
+
+    @BeforeEach
+    void setUp() {
+        detail = new TCCAAPIBalanceSegmentEventAdjustmentDetail();
+    }
+
+    @Test
+    void testEventId() {
+        detail.setEventId("E123");
+        assertEquals("E123", detail.getEventId());
+    }
+
+    @Test
+    void testTypeCd() {
+        detail.setTypeCd("T1");
+        assertEquals("T1", detail.getTypeCd());
+    }
+
+    @Test
+    void testStatusCd() {
+        detail.setStatusCd("Active");
+        assertEquals("Active", detail.getStatusCd());
+    }
+
+    @Test
+    void testReasonDesc() {
+        detail.setReasonDesc("Desc");
+        assertEquals("Desc", detail.getReasonDesc());
+    }
+
+    @Test
+    void testReasonTxt() {
+        detail.setReasonTxt("Text");
+        assertEquals("Text", detail.getReasonTxt());
+    }
+
+    @Test
+    void testTransactionAmt() {
+        detail.setTransactionAmt(new BigDecimal("100.00"));
+        assertEquals(new BigDecimal("100.00"), detail.getTransactionAmt());
+    }
+
+    @Test
+    void testAccountingFunctionCd() {
+        detail.setAccountingFunctionCd("A123");
+        assertEquals("A123", detail.getAccountingFunctionCd());
+    }
+
+    @Test
+    void testClientReferenceNum() {
+        detail.setClientReferenceNum("CREF123");
+        assertEquals("CREF123", detail.getClientReferenceNum());
+    }
+
+    @Test
+    void testRequestTypeCd() {
+        detail.setRequestTypeCd("REQ1");
+        assertEquals("REQ1", detail.getRequestTypeCd());
+    }
+
+    @Test
+    void testRequestReferenceNum() {
+        detail.setRequestReferenceNum("REQREF123");
+        assertEquals("REQREF123", detail.getRequestReferenceNum());
+    }
+
+    @Test
+    void testTransmissionId() {
+        detail.setTransmissionId("TRAN123");
+        assertEquals("TRAN123", detail.getTransmissionId());
+    }
+
+    @Test
+    void testReleaseDt() {
+        detail.setReleaseDt("2024-12-26");
+        assertEquals("2024-12-26", detail.getReleaseDt());
+    }
+
+    @Test
+    void testCreditCardAgreement() {
+        TCCAAPICreditCardAgreementKey agreement = new TCCAAPICreditCardAgreementKey();
+        detail.setCreditCardAgreement(agreement);
+        assertEquals(agreement, detail.getCreditCardAgreement());
+    }
+
+    @Test
+    void testBalanceSegment() {
+        TCCAAPIBalanceSegmentDetail segment = new TCCAAPIBalanceSegmentDetail();
+        detail.setBalanceSegment(segment);
+        assertEquals(segment, detail.getBalanceSegment());
+    }
+
+    @Test
+    void testOriginalTransaction() {
+        TCCAAPITransactionDetail transaction = new TCCAAPITransactionDetail();
+        detail.setOriginalTransaction(transaction);
+        assertEquals(transaction, detail.getOriginalTransaction());
+    }
+
+    @Test
+    void testCreatedDt() {
+        detail.setCreatedDt("2024-12-26");
+        assertEquals("2024-12-26", detail.getCreatedDt());
+    }
+
+    @Test
+    void testCreatedByUserId() {
+        detail.setCreatedByUserId("User123");
+        assertEquals("User123", detail.getCreatedByUserId());
+    }
+
+    @Test
+    void testLastUpdatedDt() {
+        detail.setLastUpdatedDt("2024-12-27");
+        assertEquals("2024-12-27", detail.getLastUpdatedDt());
+    }
+
+    @Test
+    void testLastUpdatedByUserId() {
+        detail.setLastUpdatedByUserId("User456");
+        assertEquals("User456", detail.getLastUpdatedByUserId());
+    }
+
+    @Test
+    void testToString() {
+        detail.setEventId("E123");
+        detail.setTypeCd("T1");
+        detail.setStatusCd("Active");
+        detail.setReasonDesc("Desc");
+        detail.setReasonTxt("Text");
+        detail.setTransactionAmt(new BigDecimal("100.00"));
+        detail.setAccountingFunctionCd("A123");
+        detail.setClientReferenceNum("CREF123");
+        detail.setRequestTypeCd("REQ1");
+        detail.setRequestReferenceNum("REQREF123");
+        detail.setTransmissionId("TRAN123");
+        detail.setReleaseDt("2024-12-26");
+
+        String expectedString = "com.td.api.ofm.common.TCCAAPIBalanceSegmentEventAdjustmentDetail@" + Integer.toHexString(detail.hashCode()) + "[eventId=E123,typeCd=T1,statusCd=Active,reasonDesc=Desc,reasonTxt=Text,transactionAmt=100.00,accountingFunctionCd=A123,clientReferenceNum=CREF123,requestTypeCd=REQ1,requestReferenceNum=REQREF123,transmissionId=TRAN123,releaseDt=2024-12-26,creditCardAgreement=null,balanceSegment=null,originalTransaction=null,createdDt=null,createdByUserId=null,lastUpdatedDt=null,lastUpdatedByUserId=null]";
+        assertTrue(detail.toString().contains("E123"));
+        assertTrue(detail.toString().contains("T1"));
+    }
+
+    @Test
+    void testHashCode() {
+        TCCAAPIBalanceSegmentEventAdjustmentDetail anotherDetail = new TCCAAPIBalanceSegmentEventAdjustmentDetail();
+        anotherDetail.setEventId("E123");
+        anotherDetail.setTypeCd("T1");
+
+        assertEquals(detail.hashCode(), anotherDetail.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        TCCAAPIBalanceSegmentEventAdjustmentDetail anotherDetail = new TCCAAPIBalanceSegmentEventAdjustmentDetail();
+        anotherDetail.setEventId("E123");
+        anotherDetail.setTypeCd("T1");
+
+        assertTrue(detail.equals(anotherDetail));
+
+        anotherDetail.setEventId("E456");
+        assertFalse(detail.equals(anotherDetail));
+    }
+}

@@ -1,0 +1,114 @@
+package com.td.api.mbnaap.common;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ExternalDirectCreditTest {
+
+    @Test
+    void testGettersAndSetters() {
+        ExternalDirectCredit externalDirectCredit = new ExternalDirectCredit();
+        
+        // Create and set test values
+        externalDirectCredit.setBranchAddressTxt("123 Bank St.");
+        externalDirectCredit.setTimePeriodCd("Monthly");
+        externalDirectCredit.setTimePeriodNum("12");
+        externalDirectCredit.setPaymentTypeName("Credit");
+        externalDirectCredit.setFrequencyCd("Weekly");
+        externalDirectCredit.setDueDayNum("15");
+        externalDirectCredit.setDueAmt(1000.50);
+        externalDirectCredit.setRecurrenceCnt(12);
+        externalDirectCredit.setRecurrenceEndDt("2025-12-31");
+        externalDirectCredit.setArrangementHoldInd(false);
+        externalDirectCredit.setTelephoneChannelInd(true);
+        externalDirectCredit.setCreditCardAgreementCycleDateNum("5");
+        externalDirectCredit.setArrangementStartDt("2024-01-01");
+        externalDirectCredit.setConfirmationLetterRequiredInd(true);
+        
+        MbpdExtension mbpdExtension = new MbpdExtension();
+        mbpdExtension.setChequingAgreementHolderFullName("John Doe");
+        externalDirectCredit.setMbpdExtension(mbpdExtension);
+
+        CreditCardAgreementAltkey creditCardAgreementAltkey = new CreditCardAgreementAltkey();
+        creditCardAgreementAltkey.setCardNum("1234567890123456");
+        externalDirectCredit.setCreditCardAgreementAltkey(creditCardAgreementAltkey);
+        
+        GenericAccountAltkey genericAccountAltkey = new GenericAccountAltkey();
+        genericAccountAltkey.setAccountNum("9876543210");
+        externalDirectCredit.setGenericAccountAltkey(genericAccountAltkey);
+
+        // Assertions to check getter values
+        assertEquals("123 Bank St.", externalDirectCredit.getBranchAddressTxt());
+        assertEquals("Monthly", externalDirectCredit.getTimePeriodCd());
+        assertEquals("12", externalDirectCredit.getTimePeriodNum());
+        assertEquals("Credit", externalDirectCredit.getPaymentTypeName());
+        assertEquals("Weekly", externalDirectCredit.getFrequencyCd());
+        assertEquals("15", externalDirectCredit.getDueDayNum());
+        assertEquals(1000.50, externalDirectCredit.getDueAmt());
+        assertEquals(12, externalDirectCredit.getRecurrenceCnt());
+        assertEquals("2025-12-31", externalDirectCredit.getRecurrenceEndDt());
+        assertFalse(externalDirectCredit.getArrangementHoldInd());
+        assertTrue(externalDirectCredit.getTelephoneChannelInd());
+        assertEquals("5", externalDirectCredit.getCreditCardAgreementCycleDateNum());
+        assertEquals("2024-01-01", externalDirectCredit.getArrangementStartDt());
+        assertTrue(externalDirectCredit.getConfirmationLetterRequiredInd());
+        assertNotNull(externalDirectCredit.getMbpdExtension());
+        assertNotNull(externalDirectCredit.getCreditCardAgreementAltkey());
+        assertNotNull(externalDirectCredit.getGenericAccountAltkey());
+    }
+
+    @Test
+    void testToString() {
+        ExternalDirectCredit externalDirectCredit = new ExternalDirectCredit();
+        externalDirectCredit.setBranchAddressTxt("123 Bank St.");
+        externalDirectCredit.setTimePeriodCd("Monthly");
+        externalDirectCredit.setTimePeriodNum("12");
+        externalDirectCredit.setPaymentTypeName("Credit");
+        externalDirectCredit.setFrequencyCd("Weekly");
+        externalDirectCredit.setDueDayNum("15");
+        externalDirectCredit.setDueAmt(1000.50);
+        externalDirectCredit.setRecurrenceCnt(12);
+        externalDirectCredit.setRecurrenceEndDt("2025-12-31");
+        externalDirectCredit.setArrangementHoldInd(false);
+        externalDirectCredit.setTelephoneChannelInd(true);
+        externalDirectCredit.setCreditCardAgreementCycleDateNum("5");
+        externalDirectCredit.setArrangementStartDt("2024-01-01");
+        externalDirectCredit.setConfirmationLetterRequiredInd(true);
+        
+        MbpdExtension mbpdExtension = new MbpdExtension();
+        mbpdExtension.setChequingAgreementHolderFullName("John Doe");
+        externalDirectCredit.setMbpdExtension(mbpdExtension);
+
+        CreditCardAgreementAltkey creditCardAgreementAltkey = new CreditCardAgreementAltkey();
+        creditCardAgreementAltkey.setCardNum("1234567890123456");
+        externalDirectCredit.setCreditCardAgreementAltkey(creditCardAgreementAltkey);
+        
+        GenericAccountAltkey genericAccountAltkey = new GenericAccountAltkey();
+        genericAccountAltkey.setAccountNum("9876543210");
+        externalDirectCredit.setGenericAccountAltkey(genericAccountAltkey);
+
+        String expected = "ExternalDirectCredit(creditCardAgreementAltkey=" + externalDirectCredit.getCreditCardAgreementAltkey() +
+                ", genericAccountAltkey=" + externalDirectCredit.getGenericAccountAltkey() +
+                ", branchAddressTxt=123 Bank St., timePeriodCd=Monthly, timePeriodNum=12, paymentTypeName=Credit, frequencyCd=Weekly, " +
+                "dueDayNum=15, dueAmt=1000.5, recurrenceCnt=12, recurrenceEndDt=2025-12-31, arrangementHoldInd=false, " +
+                "telephoneChannelInd=true, creditCardAgreementCycleDateNum=5, arrangementStartDt=2024-01-01, confirmationLetterRequiredInd=true, " +
+                "mbpdExtension=" + externalDirectCredit.getMbpdExtension() + ")";
+        assertEquals(expected, externalDirectCredit.toString());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        ExternalDirectCredit externalDirectCredit1 = new ExternalDirectCredit();
+        externalDirectCredit1.setArrangementStartDt("2024-01-01");
+
+        ExternalDirectCredit externalDirectCredit2 = new ExternalDirectCredit();
+        externalDirectCredit2.setArrangementStartDt("2024-01-01");
+
+        assertTrue(externalDirectCredit1.equals(externalDirectCredit2));
+        assertEquals(externalDirectCredit1.hashCode(), externalDirectCredit2.hashCode());
+
+        externalDirectCredit2.setArrangementStartDt("2024-02-01");
+        assertFalse(externalDirectCredit1.equals(externalDirectCredit2));
+    }
+}

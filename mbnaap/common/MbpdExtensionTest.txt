@@ -1,0 +1,43 @@
+package com.td.api.mbnaap.common;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class MbpdExtensionTest {
+
+    @Test
+    void testGettersAndSetters() {
+        MbpdExtension mbpdExtension = new MbpdExtension();
+        
+        // Set value using setter
+        mbpdExtension.setChequingAgreementHolderFullName("John Doe");
+
+        // Get value using getter and assert
+        assertEquals("John Doe", mbpdExtension.getChequingAgreementHolderFullName());
+    }
+
+    @Test
+    void testToString() {
+        MbpdExtension mbpdExtension = new MbpdExtension();
+        mbpdExtension.setChequingAgreementHolderFullName("John Doe");
+
+        String expected = "MbpdExtension(chequingAgreementHolderFullName=John Doe)";
+        assertEquals(expected, mbpdExtension.toString());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        MbpdExtension mbpdExtension1 = new MbpdExtension();
+        mbpdExtension1.setChequingAgreementHolderFullName("John Doe");
+
+        MbpdExtension mbpdExtension2 = new MbpdExtension();
+        mbpdExtension2.setChequingAgreementHolderFullName("John Doe");
+
+        assertTrue(mbpdExtension1.equals(mbpdExtension2));
+        assertEquals(mbpdExtension1.hashCode(), mbpdExtension2.hashCode());
+
+        mbpdExtension2.setChequingAgreementHolderFullName("Jane Doe");
+        assertFalse(mbpdExtension1.equals(mbpdExtension2));
+    }
+}

@@ -1,0 +1,140 @@
+import com.td.mbna.msec.midtier.offers.payload.updatebalanceprotectioninsurance.UpdateBalanceProtectionInsuranceRequest;
+import com.td.mbna.msec.midtier.offers.payload.updatebalanceprotectioninsurance.UpdateBalanceProtectionInsuranceResponse;
+import com.td.mbna.msec.midtier.service.MsecValidator;
+import com.td.mbna.msec.midtier.util.BackEndSrvcUtil;
+import com.td.mbna.msec.midtier.util.ConfigUtil;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import com.td.mbna.msec.midtier.util.services.MidtierUtilHelper;
+import com.td.mbna.msec.midtier.util.tsys.TsysHelper;
+import com.td.mbna.msec.midtier.util.tsys.TsysRequest;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import javax.xml.bind.JAXBContext;
+import java.util.Map;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
+
+@RunWith(MockitoJUnitRunner.class)
+public class UpdateBalanceProtectionInsuranceOperationTest {
+
+    @Mock
+    private MsecValidator msecValidator;
+
+    @Mock
+    private TsysHelper tsysHelper;
+
+    @Mock
+    private BackEndSrvcUtil backEndSrvcUtil;
+
+    @Mock
+    private ConfigUtil configUtil;
+
+    @InjectMocks
+    private UpdateBalanceProtectionInsuranceOperation updateBalanceProtectionInsuranceOperation;
+
+    @Mock
+    private UpdateBalanceProtectionInsuranceRequest request;
+
+    @Mock
+    private UpdateBalanceProtectionInsuranceResponse response;
+
+    @Mock
+    private JAXBContext jaxbContext;
+
+    @Before
+    public void setUp() {
+        updateBalanceProtectionInsuranceOperation = new UpdateBalanceProtectionInsuranceOperation();
+    }
+
+    @Test
+    public void testInvokeService_Success() throws Exception {
+        // Arrange
+        when(request.getSessionInfo()).thenReturn(mock(SessionInfo.class));
+        when(request.getAcctNum()).thenReturn("account123");
+        when(TsysHelper.genStandardParams(any(), any())).thenReturn(mock(Map.class));
+        when(ConfigUtil.getProperty(any())).thenReturn("testValue");
+        when(BackEndSrvcUtil.invokeService(any(), any(), any(), any(), any(), any(), any(), any())).thenReturn(response);
+        when(JaxbUtil.getJaxbContext(any())).thenReturn(jaxbContext);
+
+        // Act
+        UpdateBalanceProtectionInsuranceResponse result = updateBalanceProtectionInsuranceOperation.invokeService(request);
+
+        // Assert
+        assert(result != null);
+        verify(BackEndSrvcUtil, times(1)).invokeService(any(), any(), any(), any(), any(), any(), any(), any());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testInvokeService_Failure() throws Exception {
+        // Arrange
+        when(request.getSessionInfo()).thenReturn(mock(SessionInfo.class));
+        when(request.getAcctNum()).thenReturn("account123");
+        when(TsysHelper.genStandardParams(any(), any())).thenReturn(mock(Map.class));
+        when(ConfigUtil.getProperty(any())).thenReturn("testValue");
+        when(BackEndSrvcUtil.invokeService(any(), any(), any(), any(), any(), any(), any(), any())).thenThrow(new RuntimeException("Service Error"));
+
+        // Act
+        updateBalanceProtectionInsuranceOperation.invokeService(request);
+    }
+
+    @Test
+    public void testRequiresDisclosureConsent() {
+        // Act
+        boolean result = updateBalanceProtectionInsuranceOperation.requiresDisclosureConsent();
+
+        // Assert
+        assert(result == true);
+    }
+
+    @Test
+    public void testGetConsentDisclosureFailedMsgCode() {
+        // Act
+        String result = updateBalanceProtectionInsuranceOperation.getConsentDisclosureFailedMsgCode();
+
+        // Assert
+        assert(result.equals("MS542"));
+    }
+
+    @Test
+    public void testGenerateAutoComment() {
+        // Act
+        boolean result = updateBalanceProtectionInsuranceOperation.generateAutoComment();
+
+        // Assert
+        assert(result == false);
+    }
+
+    @Test
+    public void testCreateAutoComment() {
+        // Act
+        List<String> result = updateBalanceProtectionInsuranceOperation.createAutoComment(mock(BaseRequest.class), mock(BaseResponse.class));
+
+        // Assert
+        assert(result == null);
+    }
+
+    @Test
+    public void testGetEmailInfoBean() {
+        // Act
+        EmailInfo result = updateBalanceProtectionInsuranceOperation.getEmailInfoBean(mock(BaseRequest.class), mock(BaseResponse.class));
+
+        // Assert
+        assert(result == null);
+    }
+
+    @Test
+    public void testGetValidator() {
+        // Act
+        MsecValidator result = updateBalanceProtectionInsuranceOperation.getValidator();
+
+        // Assert
+        assert(result != null);
+    }
+}

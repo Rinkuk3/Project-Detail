@@ -1,0 +1,143 @@
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import com.td.wsc.cstagt._2010._07._14.CaptureAgreementRequestType;
+import com.td.wsc.cstagt._2010._07._14.CaptureAgreementResponseType;
+import com.td.wsc.cstagt._2010._07._14.SearchAgreementRequestType;
+import com.td.wsc.cstagt._2010._07._14.SearchAgreementResponseType;
+import com.td.wsc.cstagt.wsdl.CustomerAgreement;
+import com.td.wsc.cstagt.wsdl.CustomerAgreementService;
+import com.td.mbna.msec.midtier.tdwsservices.TDwsServiceUtil;
+import com.sun.xml.ws.client.BindingProviderProperties;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+
+import javax.xml.ws.BindingProvider;
+import java.net.URL;
+
+class TdCustAgreementServiceTest {
+
+    private TdCustAgreementService tdCustAgreementService;
+
+    @Mock
+    private CustomerAgreementService customerAgreementServiceMock;
+    
+    @Mock
+    private CustomerAgreement customerAgreementMock;
+    
+    @Mock
+    private CaptureAgreementRequestType captureAgreementRequestMock;
+    
+    @Mock
+    private CaptureAgreementResponseType captureAgreementResponseMock;
+    
+    @Mock
+    private SearchAgreementRequestType searchAgreementRequestMock;
+    
+    @Mock
+    private SearchAgreementResponseType searchAgreementResponseMock;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        tdCustAgreementService = new TdCustAgreementService();
+    }
+
+    @Test
+    void testGetNamespace() {
+        String namespace = TdCustAgreementService.getNamespace();
+        assertNotNull(namespace);
+    }
+
+    @Test
+    void testIsEnabled() {
+        try (MockedStatic<TDwsServiceUtil> mockedTDwsServiceUtil = mockStatic(TDwsServiceUtil.class)) {
+            mockedTDwsServiceUtil.when(() -> TDwsServiceUtil.isPropertyTrue(anyString())).thenReturn(true);
+            boolean isEnabled = TdCustAgreementService.isEnabled();
+            assertTrue(isEnabled);
+        }
+    }
+
+    @Test
+    void testGetServicePort_SpringSupported() throws Exception {
+        try (MockedStatic<TdBaseService> mockedTdBaseService = mockStatic(TdBaseService.class)) {
+            mockedTdBaseService.when(TdBaseService::isSpringSupported).thenReturn(true);
+            when(TdBaseService.getServicePortFromSpring(TdBaseService.BEAN_TdCustAgreementService)).thenReturn(customerAgreementMock);
+            
+            CustomerAgreement port = TdCustAgreementService.getServicePort();
+            assertNotNull(port);
+        }
+    }
+
+    @Test
+    void testGetServicePort_UrlService() throws Exception {
+        try (MockedStatic<TDwsServiceUtil> mockedTDwsServiceUtil = mockStatic(TDwsServiceUtil.class)) {
+            mockedTDwsServiceUtil.when(() -> TDwsServiceUtil.getTDServiceParam(anyString())).thenReturn("http://mockurl");
+            URL url = new URL("http://mockurl");
+            QName qname = new QName("http://mocknamespace", "CustomerAgreement");
+            CustomerAgreementService customerAgreementService = new CustomerAgreementService(url, qname);
+            when(customerAgreementService.getPort(CustomerAgreement.class)).thenReturn(customerAgreementMock);
+
+            CustomerAgreement port = TdCustAgreementService.getServicePort();
+            assertNotNull(port);
+        }
+    }
+
+    @Test
+    void testCaptureAgreement() throws Exception {
+        when(TdCustAgreementService.getServicePort()).thenReturn(customerAgreementMock);
+        when(customerAgreementMock.captureAgreement(captureAgreementRequestMock)).thenReturn(captureAgreementResponseMock);
+        
+        byte[] response = TdCustAgreementService.captureAgreement(captureAgreementRequestMock);
+        
+        assertNotNull(response);
+        verify(customerAgreementMock, times(1)).captureAgreement(captureAgreementRequestMock);
+    }
+
+    @Test
+    void testCaptureAgreement_Exception() throws Exception {
+        when(TdCustAgreementService.getServicePort()).thenReturn(customerAgreementMock);
+        when(customerAgreementMock.captureAgreement(captureAgreementRequestMock)).thenThrow(new RuntimeException("Test Exception"));
+
+        assertThrows(RuntimeException.class, () -> {
+            TdCustAgreementService.captureAgreement(captureAgreementRequestMock);
+        });
+    }
+
+    @Test
+    void testSearchAgreement() throws Exception {
+        when(TdCustAgreementService.getServicePort()).thenReturn(customerAgreementMock);
+        when(customerAgreementMock.searchAgreement(searchAgreementRequestMock)).thenReturn(searchAgreementResponseMock);
+
+        byte[] response = TdCustAgreementService.searchAgreement(searchAgreementRequestMock);
+
+        assertNotNull(response);
+        verify(customerAgreementMock, times(1)).searchAgreement(searchAgreementRequestMock);
+    }
+
+    @Test
+    void testSearchAgreement_Exception() throws Exception {
+        when(TdCustAgreementService.getServicePort()).thenReturn(customerAgreementMock);
+        when(customerAgreementMock.searchAgreement(searchAgreementRequestMock)).thenThrow(new RuntimeException("Test Exception"));
+
+        assertThrows(RuntimeException.class, () -> {
+            TdCustAgreementService.searchAgreement(searchAgreementRequestMock);
+        });
+    }
+
+    @Test
+    void testCaptureAgreement_TimeoutSettings() throws Exception {
+        when(TdCustAgreementService.getServicePort()).thenReturn(customerAgreementMock);
+        when(customerAgreementMock.captureAgreement(captureAgreementRequestMock)).thenReturn(captureAgreementResponseMock);
+        
+        BindingProvider bindingProvider = (BindingProvider) customerAgreementMock;
+        when(bindingProvider.getRequestContext()).thenReturn(mock(java.util.Map.class));
+
+        byte[] response = TdCustAgreementService.captureAgreement(captureAgreementRequestMock);
+        
+        assertNotNull(response);
+        verify(bindingProvider.getRequestContext(), times(1)).put(BindingProviderProperties.CONNECT_TIMEOUT, 5000);
+        verify(bindingProvider.getRequestContext(), times(1)).put(BindingProviderProperties.REQUEST_TIMEOUT, 5000);
+    }
+}

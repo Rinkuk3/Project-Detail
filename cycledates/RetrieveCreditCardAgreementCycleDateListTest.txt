@@ -1,0 +1,118 @@
+package com.td.api.mbcca.response.account.cycledates;
+
+import com.td.api.mbcca.shared.Status;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Arrays;
+
+class RetrieveCreditCardAgreementCycleDateListTest {
+
+    @Test
+    void testGettersAndSetters() {
+        RetrieveCreditCardAgreementCycleDateList cycleDateList = new RetrieveCreditCardAgreementCycleDateList();
+        
+        // Test set and get status
+        Status status = new Status();
+        status.setCode("SUCCESS");
+        status.setMessage("Cycle dates retrieved successfully.");
+        
+        cycleDateList.setStatus(status);
+        assertEquals(status, cycleDateList.getStatus());
+
+        // Test set and get billingCycleDt
+        cycleDateList.setBillingCycleDt(Arrays.asList("2024-01-01", "2024-02-01"));
+        assertEquals(Arrays.asList("2024-01-01", "2024-02-01"), cycleDateList.getBillingCycleDt());
+
+        // Test set status and billingCycleDt to null
+        cycleDateList.setStatus(null);
+        cycleDateList.setBillingCycleDt(null);
+        assertNull(cycleDateList.getStatus());
+        assertNull(cycleDateList.getBillingCycleDt());
+    }
+
+    @Test
+    void testToString() {
+        RetrieveCreditCardAgreementCycleDateList cycleDateList = new RetrieveCreditCardAgreementCycleDateList();
+        
+        Status status = new Status();
+        status.setCode("SUCCESS");
+        status.setMessage("Cycle dates retrieved successfully.");
+        
+        cycleDateList.setStatus(status);
+        cycleDateList.setBillingCycleDt(Arrays.asList("2024-01-01", "2024-02-01"));
+
+        String expectedString = "com.td.api.mbcca.response.account.cycledates.RetrieveCreditCardAgreementCycleDateList@" + 
+            Integer.toHexString(cycleDateList.hashCode()) + "[status=" + status + ",billingCycleDt=[2024-01-01, 2024-02-01]]";
+
+        assertEquals(expectedString, cycleDateList.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        RetrieveCreditCardAgreementCycleDateList cycleDateList1 = new RetrieveCreditCardAgreementCycleDateList();
+        RetrieveCreditCardAgreementCycleDateList cycleDateList2 = new RetrieveCreditCardAgreementCycleDateList();
+        
+        Status status = new Status();
+        status.setCode("SUCCESS");
+        status.setMessage("Cycle dates retrieved successfully.");
+        
+        cycleDateList1.setStatus(status);
+        cycleDateList1.setBillingCycleDt(Arrays.asList("2024-01-01", "2024-02-01"));
+        
+        cycleDateList2.setStatus(status);
+        cycleDateList2.setBillingCycleDt(Arrays.asList("2024-01-01", "2024-02-01"));
+
+        assertEquals(cycleDateList1.hashCode(), cycleDateList2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        RetrieveCreditCardAgreementCycleDateList cycleDateList1 = new RetrieveCreditCardAgreementCycleDateList();
+        RetrieveCreditCardAgreementCycleDateList cycleDateList2 = new RetrieveCreditCardAgreementCycleDateList();
+        RetrieveCreditCardAgreementCycleDateList cycleDateList3 = new RetrieveCreditCardAgreementCycleDateList();
+        
+        Status status1 = new Status();
+        status1.setCode("SUCCESS");
+        status1.setMessage("Cycle dates retrieved successfully.");
+        
+        Status status2 = new Status();
+        status2.setCode("FAILURE");
+        status2.setMessage("Error retrieving cycle dates.");
+
+        cycleDateList1.setStatus(status1);
+        cycleDateList1.setBillingCycleDt(Arrays.asList("2024-01-01", "2024-02-01"));
+        
+        cycleDateList2.setStatus(status1);
+        cycleDateList2.setBillingCycleDt(Arrays.asList("2024-01-01", "2024-02-01"));
+
+        cycleDateList3.setStatus(status2);
+        cycleDateList3.setBillingCycleDt(Arrays.asList("2024-03-01"));
+
+        // Equal comparison
+        assertTrue(cycleDateList1.equals(cycleDateList2));
+
+        // Different status and cycle date
+        assertFalse(cycleDateList1.equals(cycleDateList3));
+
+        // Comparing with null
+        assertFalse(cycleDateList1.equals(null));
+
+        // Comparing with different class type
+        assertFalse(cycleDateList1.equals(new Object()));
+    }
+
+    @Test
+    void testEquals_SameObject() {
+        RetrieveCreditCardAgreementCycleDateList cycleDateList = new RetrieveCreditCardAgreementCycleDateList();
+        
+        Status status = new Status();
+        status.setCode("SUCCESS");
+        status.setMessage("Cycle dates retrieved successfully.");
+        
+        cycleDateList.setStatus(status);
+        cycleDateList.setBillingCycleDt(Arrays.asList("2024-01-01", "2024-02-01"));
+
+        assertTrue(cycleDateList.equals(cycleDateList));
+    }
+}

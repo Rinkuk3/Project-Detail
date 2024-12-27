@@ -1,0 +1,45 @@
+package com.td.mbna.msec.midtier.statement.payload.getStatementFileFromId;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestPayloadTest {
+
+    @Test
+    void testGetAndSetDocumentId() {
+        RequestPayload requestPayload = new RequestPayload();
+        String documentId = "12345";
+
+        requestPayload.setDocumentId(documentId);
+
+        assertEquals(documentId, requestPayload.getDocumentId());
+    }
+
+    @Test
+    void testGetAndSetFolder() {
+        RequestPayload requestPayload = new RequestPayload();
+        String folder = "statements";
+
+        requestPayload.setFolder(folder);
+
+        assertEquals(folder, requestPayload.getFolder());
+    }
+
+    @Test
+    void testSetDocumentIdToNull() {
+        RequestPayload requestPayload = new RequestPayload();
+
+        requestPayload.setDocumentId(null);
+
+        assertNull(requestPayload.getDocumentId());
+    }
+
+    @Test
+    void testSetFolderToNull() {
+        RequestPayload requestPayload = new RequestPayload();
+
+        requestPayload.setFolder(null);
+
+        assertNull(requestPayload.getFolder());
+    }
+}

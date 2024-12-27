@@ -1,0 +1,70 @@
+package com.td.mbna.msec.midtier.eligibility.payload.getentitlementflags;
+
+import com.td.mbna.msec.midtier.types.eligibility.CustEligType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ResponsePayloadTest {
+
+    private ResponsePayload responsePayload;
+    private CustEligType custEligType;
+
+    @BeforeEach
+    void setUp() {
+        responsePayload = new ResponsePayload();
+        custEligType = new CustEligType(); // Assuming CustEligType has a default constructor
+    }
+
+    @Test
+    void testGetSetCustElig() {
+        responsePayload.setCustElig(custEligType);
+        assertEquals(custEligType, responsePayload.getCustElig());
+    }
+
+    @Test
+    void testGetCustEligWhenNull() {
+        assertNotNull(responsePayload.getCustElig());
+    }
+
+    @Test
+    void testToString() {
+        responsePayload.setCustElig(custEligType);
+        String expected = "com.td.mbna.msec.midtier.eligibility.payload.getentitlementflags.ResponsePayload@" +
+                Integer.toHexString(System.identityHashCode(responsePayload)) +
+                "[custElig=" + custEligType.toString() + ",]";
+        assertEquals(expected, responsePayload.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        ResponsePayload responsePayload1 = new ResponsePayload();
+        responsePayload1.setCustElig(custEligType);
+
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        responsePayload2.setCustElig(custEligType);
+
+        assertEquals(responsePayload1.hashCode(), responsePayload2.hashCode());
+
+        responsePayload2.setCustElig(new CustEligType()); // new object
+        assertNotEquals(responsePayload1.hashCode(), responsePayload2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        ResponsePayload responsePayload1 = new ResponsePayload();
+        responsePayload1.setCustElig(custEligType);
+
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        responsePayload2.setCustElig(custEligType);
+
+        assertTrue(responsePayload1.equals(responsePayload2));
+
+        responsePayload2.setCustElig(new CustEligType());
+        assertFalse(responsePayload1.equals(responsePayload2));
+
+        assertFalse(responsePayload1.equals(null));
+        assertFalse(responsePayload1.equals(new Object()));
+    }
+}

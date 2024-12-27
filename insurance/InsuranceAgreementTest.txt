@@ -1,0 +1,143 @@
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+class InsuranceAgreementTest {
+
+    private InsuranceAgreement insuranceAgreement;
+    private ProductFeature productFeature;
+    private Cccyamt lastPremiumCccyamt;
+
+    @BeforeEach
+    void setUp() {
+        insuranceAgreement = new InsuranceAgreement();
+        productFeature = new ProductFeature();
+        lastPremiumCccyamt = new Cccyamt();
+    }
+
+    @Test
+    void testSetGetStatusCd() {
+        insuranceAgreement.setStatusCd("Active");
+        assertEquals("Active", insuranceAgreement.getStatusCd());
+    }
+
+    @Test
+    void testSetGetCancellationStatusReasonCd() {
+        insuranceAgreement.setCancellationStatusReasonCd("Reason");
+        assertEquals("Reason", insuranceAgreement.getCancellationStatusReasonCd());
+    }
+
+    @Test
+    void testSetGetOpenDt() {
+        insuranceAgreement.setOpenDt("2024-01-01");
+        assertEquals("2024-01-01", insuranceAgreement.getOpenDt());
+    }
+
+    @Test
+    void testSetGetSignedDt() {
+        insuranceAgreement.setSignedDt("2024-01-01");
+        assertEquals("2024-01-01", insuranceAgreement.getSignedDt());
+    }
+
+    @Test
+    void testSetGetLastMaintenanceDt() {
+        insuranceAgreement.setLastMaintenanceDt("2024-01-01");
+        assertEquals("2024-01-01", insuranceAgreement.getLastMaintenanceDt());
+    }
+
+    @Test
+    void testSetGetProviderName() {
+        insuranceAgreement.setProviderName("Provider Name");
+        assertEquals("Provider Name", insuranceAgreement.getProviderName());
+    }
+
+    @Test
+    void testSetGetProviderTelephoneNum() {
+        insuranceAgreement.setProviderTelephoneNum("123456789");
+        assertEquals("123456789", insuranceAgreement.getProviderTelephoneNum());
+    }
+
+    @Test
+    void testSetGetProductFeature() {
+        List<ProductFeature> productFeatureList = new ArrayList<>();
+        productFeatureList.add(productFeature);
+        insuranceAgreement.setProductFeature(productFeatureList);
+        assertEquals(productFeatureList, insuranceAgreement.getProductFeature());
+    }
+
+    @Test
+    void testSetGetLastPremiumCccyamt() {
+        insuranceAgreement.setLastPremiumCccyamt(lastPremiumCccyamt);
+        assertEquals(lastPremiumCccyamt, insuranceAgreement.getLastPremiumCccyamt());
+    }
+
+    @Test
+    void testSetGetLastPremiumDt() {
+        insuranceAgreement.setLastPremiumDt("2024-01-01");
+        assertEquals("2024-01-01", insuranceAgreement.getLastPremiumDt());
+    }
+
+    @Test
+    void testSetGetBalanceProtectionInsuranceCd() {
+        insuranceAgreement.setBalanceProtectionInsuranceCd("BP123");
+        assertEquals("BP123", insuranceAgreement.getBalanceProtectionInsuranceCd());
+    }
+
+    @Test
+    void testSetGetFeatureGroupId() {
+        insuranceAgreement.setFeatureGroupId("Group123");
+        assertEquals("Group123", insuranceAgreement.getFeatureGroupId());
+    }
+
+    @Test
+    void testSetGetFeatureGroupDesc() {
+        insuranceAgreement.setFeatureGroupDesc("Group Description");
+        assertEquals("Group Description", insuranceAgreement.getFeatureGroupDesc());
+    }
+
+    @Test
+    void testToString() {
+        insuranceAgreement.setStatusCd("Active");
+        insuranceAgreement.setProviderName("Provider Name");
+        insuranceAgreement.setProviderTelephoneNum("123456789");
+        insuranceAgreement.setOpenDt("2024-01-01");
+        String expectedString = "com.td.api.mbcca.response.insurance.InsuranceAgreement@" + Integer.toHexString(insuranceAgreement.hashCode()) +
+                "[statusCd=Active,cancellationStatusReasonCd=<null>,openDt=2024-01-01,signedDt=<null>,lastMaintenanceDt=<null>,providerName=Provider Name,providerTelephoneNum=123456789,productFeature=<null>,lastPremiumCccyamt=<null>,lastPremiumDt=<null>,balanceProtectionInsuranceCd=<null>,featureGroupId=<null>,featureGroupDesc=<null>]";
+        assertTrue(insuranceAgreement.toString().contains("statusCd=Active"));
+        assertTrue(insuranceAgreement.toString().contains("providerName=Provider Name"));
+    }
+
+    @Test
+    void testHashCode() {
+        insuranceAgreement.setStatusCd("Active");
+        insuranceAgreement.setProviderName("Provider Name");
+        int expectedHashCode = 31 * ("Active".hashCode()) + 31 * ("Provider Name".hashCode());
+        assertEquals(expectedHashCode, insuranceAgreement.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        InsuranceAgreement other = new InsuranceAgreement();
+        insuranceAgreement.setStatusCd("Active");
+        insuranceAgreement.setProviderName("Provider Name");
+        other.setStatusCd("Active");
+        other.setProviderName("Provider Name");
+
+        assertTrue(insuranceAgreement.equals(other));
+    }
+
+    @Test
+    void testNotEquals() {
+        InsuranceAgreement other = new InsuranceAgreement();
+        insuranceAgreement.setStatusCd("Active");
+        insuranceAgreement.setProviderName("Provider Name");
+        other.setStatusCd("Inactive");
+        other.setProviderName("Other Provider");
+
+        assertFalse(insuranceAgreement.equals(other));
+    }
+
+}

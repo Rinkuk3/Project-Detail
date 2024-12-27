@@ -1,0 +1,70 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class TsysExtensionTest {
+
+    @Test
+    public void testGettersAndSetters() {
+        TsysExtension tsysExtension = new TsysExtension();
+
+        // Test setter and getter methods
+        tsysExtension.setCreditLimitChangeActionCd("Increase");
+        assertEquals("Increase", tsysExtension.getCreditLimitChangeActionCd());
+
+        tsysExtension.setCreditLimitChangeActionCd("Decrease");
+        assertEquals("Decrease", tsysExtension.getCreditLimitChangeActionCd());
+
+        // Test setter with null value
+        tsysExtension.setCreditLimitChangeActionCd(null);
+        assertNull(tsysExtension.getCreditLimitChangeActionCd());
+    }
+
+    @Test
+    public void testToString() {
+        TsysExtension tsysExtension = new TsysExtension();
+        tsysExtension.setCreditLimitChangeActionCd("Increase");
+
+        String expectedString = "com.td.api.mbcca.creditcard.request.TsysExtension@" + Integer.toHexString(tsysExtension.hashCode()) +
+                "[creditLimitChangeActionCd=Increase]";
+        assertTrue(tsysExtension.toString().contains("creditLimitChangeActionCd"));
+    }
+
+    @Test
+    public void testHashCodeAndEquals() {
+        TsysExtension tsysExtension1 = new TsysExtension();
+        tsysExtension1.setCreditLimitChangeActionCd("Increase");
+
+        TsysExtension tsysExtension2 = new TsysExtension();
+        tsysExtension2.setCreditLimitChangeActionCd("Increase");
+
+        TsysExtension tsysExtension3 = new TsysExtension();
+        tsysExtension3.setCreditLimitChangeActionCd("Decrease");
+
+        // Test equality
+        assertTrue(tsysExtension1.equals(tsysExtension2));  // Same field values
+        assertFalse(tsysExtension1.equals(tsysExtension3)); // Different field values
+
+        // Test hashCode consistency
+        assertEquals(tsysExtension1.hashCode(), tsysExtension2.hashCode());
+        assertNotEquals(tsysExtension1.hashCode(), tsysExtension3.hashCode());
+    }
+
+    @Test
+    public void testEqualsNull() {
+        TsysExtension tsysExtension = new TsysExtension();
+        tsysExtension.setCreditLimitChangeActionCd("Increase");
+
+        // Test equality with null
+        assertFalse(tsysExtension.equals(null));
+    }
+
+    @Test
+    public void testEqualsDifferentClass() {
+        TsysExtension tsysExtension = new TsysExtension();
+        tsysExtension.setCreditLimitChangeActionCd("Increase");
+
+        // Test equality with object of different class
+        Object obj = new Object();
+        assertFalse(tsysExtension.equals(obj));
+    }
+}

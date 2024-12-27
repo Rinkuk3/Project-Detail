@@ -1,0 +1,61 @@
+package com.td.mbna.msec.midtier.statement.payload;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class HistoryStatementListTypeTest {
+
+    @Test
+    void testSetAndGetDocumentId() {
+        HistoryStatementListType historyStatement = new HistoryStatementListType();
+        historyStatement.setDocumentId("doc12345");
+        assertEquals("doc12345", historyStatement.getDocumentId());
+    }
+
+    @Test
+    void testSetAndGetStatementDate() {
+        HistoryStatementListType historyStatement = new HistoryStatementListType();
+        historyStatement.setStatementDate("2024-12-25");
+        assertEquals("2024-12-25", historyStatement.getStatementDate());
+    }
+
+    @Test
+    void testSetAndGetLoadDate() {
+        HistoryStatementListType historyStatement = new HistoryStatementListType();
+        historyStatement.setLoadDate("2024-12-26");
+        assertEquals("2024-12-26", historyStatement.getLoadDate());
+    }
+
+    @Test
+    void testSetAndGetInsertList() {
+        HistoryStatementListType historyStatement = new HistoryStatementListType();
+        InsertListType insertListType = new InsertListType(); // Mock InsertListType
+        historyStatement.setInsertList(insertListType);
+        assertEquals(insertListType, historyStatement.getInsertList());
+    }
+
+    @Test
+    void testSetAndGetAccountNumber() {
+        HistoryStatementListType historyStatement = new HistoryStatementListType();
+        historyStatement.setAccountNumber("acc12345");
+        assertEquals("acc12345", historyStatement.getAccountNumber());
+    }
+
+    @Test
+    void testSetAndGetValid() {
+        HistoryStatementListType historyStatement = new HistoryStatementListType();
+        historyStatement.setValid(true);
+        assertTrue(historyStatement.getValid());
+
+        historyStatement.setValid(false);
+        assertFalse(historyStatement.getValid());
+    }
+
+    @Test
+    void testSetValidNull() {
+        HistoryStatementListType historyStatement = new HistoryStatementListType();
+        historyStatement.setValid(null);
+        assertNull(historyStatement.getValid());
+    }
+}

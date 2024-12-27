@@ -1,0 +1,18 @@
+package com.td.mbna.msec.midtier.framework;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class FrameworkConstantsTest {
+
+    @Test
+    void testConstants() {
+        // Verify that the constants are correctly defined
+        assertEquals("_DefaultBeanName_", FrameworkConstants.DefaultBeanName);
+        assertEquals("OperationImpl", FrameworkConstants.GeneratedImplClassSuffix);
+        assertEquals("Operation", FrameworkConstants.GeneratedClassSuffix);
+        assertEquals("OperationRealImpl", FrameworkConstants.RealImplClassSuffix);
+        assertEquals("OperationStubImpl", FrameworkConstants.StubImplClassSuffix);
+    }
+}

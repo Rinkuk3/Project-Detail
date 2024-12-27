@@ -1,0 +1,154 @@
+import com.td.mbna.msec.midtier.offers.payload.requestretailregistration.RequestRetailRegistrationRequest;
+import com.td.mbna.msec.midtier.offers.payload.requestretailregistration.RequestRetailRegistrationResponse;
+import com.td.mbna.msec.midtier.mbofp.MbnaOFP;
+import com.td.mbna.msec.midtier.util.BackEndSrvcUtil;
+import com.td.mbna.msec.midtier.util.MidtierUtilHelper;
+import com.td.mbna.msec.midtier.util.OdsHelper;
+import com.td.mbna.msec.midtier.util.UuidUtil;
+import com.td.mbna.msec.midtier.util.services.MidtierUtilHelper;
+import com.td.mbna.msec.midtier.service.MsecValidator;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import javax.xml.bind.JAXBContext;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
+
+@RunWith(MockitoJUnitRunner.class)
+public class RequestRetailRegistrationOperationTest {
+
+    @Mock
+    private MbnaOFP mbnaOFP;
+
+    @Mock
+    private MsecValidator msecValidator;
+
+    @Mock
+    private BackEndSrvcUtil backEndSrvcUtil;
+
+    @Mock
+    private OdsHelper odsHelper;
+
+    @InjectMocks
+    private RequestRetailRegistrationOperation requestRetailRegistrationOperation;
+
+    private RequestRetailRegistrationRequest request;
+    private String token = "test-token";
+
+    @Before
+    public void setUp() {
+        request = mock(RequestRetailRegistrationRequest.class);
+    }
+
+    @Test
+    public void testInvokeService_Success() throws Exception {
+        // Arrange
+        when(request.getSessionInfo()).thenReturn(mock(RequestRetailRegistrationRequest.SessionInfo.class));
+        when(request.getAcctNum()).thenReturn("123456");
+        when(request.getCustId()).thenReturn("CUST123");
+        when(request.getRequestPayload()).thenReturn(mockRequestPayload());
+        when(mbnaOFP.updateOfferDisposition(any(Map.class), eq(token))).thenReturn(null);
+        when(BackEndSrvcUtil.invokeService(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any())).thenReturn(mock(RequestRetailRegistrationResponse.class));
+        when(OdsHelper.getCreditCardNum(any(), any())).thenReturn("4111111111111111");
+
+        // Act
+        RequestRetailRegistrationResponse response = requestRetailRegistrationOperation.invokeService(request, token);
+
+        // Assert
+        verify(mbnaOFP, times(1)).updateOfferDisposition(any(Map.class), eq(token));
+        verify(BackEndSrvcUtil, times(1)).invokeService(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any());
+        assert(response != null);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testInvokeService_Exception() throws Exception {
+        // Arrange
+        when(request.getSessionInfo()).thenReturn(mock(RequestRetailRegistrationRequest.SessionInfo.class));
+        when(request.getAcctNum()).thenReturn("123456");
+        when(request.getCustId()).thenReturn("CUST123");
+        when(request.getRequestPayload()).thenReturn(mockRequestPayload());
+        when(mbnaOFP.updateOfferDisposition(any(Map.class), eq(token))).thenThrow(new RuntimeException("Error"));
+
+        // Act
+        requestRetailRegistrationOperation.invokeService(request, token);
+    }
+
+    @Test
+    public void testRequiresDisclosureConsent() {
+        // Act
+        boolean result = requestRetailRegistrationOperation.requiresDisclosureConsent();
+
+        // Assert
+        assert(result == true);
+    }
+
+    @Test
+    public void testGetConsentDisclosureFailedMsgCode() {
+        // Act
+        String result = requestRetailRegistrationOperation.getConsentDisclosureFailedMsgCode();
+
+        // Assert
+        assert(result.equals("MS542"));
+    }
+
+    @Test
+    public void testGenerateAutoComment() {
+        // Act
+        boolean result = requestRetailRegistrationOperation.generateAutoComment();
+
+        // Assert
+        assert(result == false);
+    }
+
+    @Test
+    public void testCreateAutoComment() {
+        // Arrange
+        BaseRequest baseRequest = mock(BaseRequest.class);
+        BaseResponse baseResponse = mock(BaseResponse.class);
+
+        // Act
+        List<String> result = requestRetailRegistrationOperation.createAutoComment(baseRequest, baseResponse);
+
+        // Assert
+        assert(result == null);
+    }
+
+    @Test
+    public void testGetEmailInfoBean() {
+        // Act
+        EmailInfo result = requestRetailRegistrationOperation.getEmailInfoBean(null, null);
+
+        // Assert
+        assert(result == null);
+    }
+
+    @Test
+    public void testGetValidator() {
+        // Act
+        MsecValidator result = requestRetailRegistrationOperation.getValidator();
+
+        // Assert
+        assert(result != null);
+    }
+
+    private com.td.mbna.msec.midtier.offers.payload.requestretailregistration.RequestPayload mockRequestPayload() {
+        com.td.mbna.msec.midtier.offers.payload.requestretailregistration.RequestPayload payload = mock(com.td.mbna.msec.midtier.offers.payload.requestretailregistration.RequestPayload.class);
+        com.td.mbna.msec.midtier.offers.payload.requestretailregistration.SelectedOffer selectedOffer = mock(com.td.mbna.msec.midtier.offers.payload.requestretailregistration.SelectedOffer.class);
+
+        when(payload.getSelectedOffer()).thenReturn(selectedOffer);
+        when(payload.getRoleCD()).thenReturn("role");
+        when(selectedOffer.getOfferID()).thenReturn("offerId");
+        when(selectedOffer.getSubProductId()).thenReturn("subProductId");
+
+        return payload;
+    }
+}

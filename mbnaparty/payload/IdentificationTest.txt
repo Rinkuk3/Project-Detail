@@ -1,0 +1,96 @@
+package com.td.api.mbna.msec.midtier.mbnaparty.payload;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Date;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+public class IdentificationTest {
+
+    private Identification identification;
+
+    @BeforeEach
+    public void setUp() {
+        identification = new Identification();
+    }
+
+    @Test
+    public void testGetSetTypeCd() {
+        String typeCd = "passport";
+        identification.setTypeCd(typeCd);
+
+        assertEquals(typeCd, identification.getTypeCd());
+    }
+
+    @Test
+    public void testGetSetIdentificationNum() {
+        String idNum = "12345";
+        identification.setIdentificationNum(idNum);
+
+        assertEquals(idNum, identification.getIdentificationNum());
+    }
+
+    @Test
+    public void testGetSetIssuingTerritoryCd() {
+        String territoryCd = "US";
+        identification.setIssuingTerritoryCd(territoryCd);
+
+        assertEquals(territoryCd, identification.getIssuingTerritoryCd());
+    }
+
+    @Test
+    public void testGetSetIssuingCountryCd() {
+        String countryCd = "CA";
+        identification.setIssuingCountryCd(countryCd);
+
+        assertEquals(countryCd, identification.getIssuingCountryCd());
+    }
+
+    @Test
+    public void testGetSetStartDttm() {
+        Date startDttm = new Date();
+        identification.setStartDttm(startDttm);
+
+        assertEquals(startDttm, identification.getStartDttm());
+    }
+
+    @Test
+    public void testToString() {
+        identification.setTypeCd("passport");
+        identification.setIdentificationNum("12345");
+        identification.setIssuingTerritoryCd("US");
+        identification.setIssuingCountryCd("CA");
+        identification.setStartDttm(new Date());
+
+        assertTrue(identification.toString().contains("typeCd=passport"));
+        assertTrue(identification.toString().contains("identificationNum=12345"));
+        assertTrue(identification.toString().contains("issuingTerritoryCd=US"));
+        assertTrue(identification.toString().contains("issuingCountryCd=CA"));
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        Identification id1 = new Identification();
+        Identification id2 = new Identification();
+
+        id1.setTypeCd("passport");
+        id1.setIdentificationNum("12345");
+        id1.setIssuingTerritoryCd("US");
+        id1.setIssuingCountryCd("CA");
+        id1.setStartDttm(new Date());
+
+        id2.setTypeCd("passport");
+        id2.setIdentificationNum("12345");
+        id2.setIssuingTerritoryCd("US");
+        id2.setIssuingCountryCd("CA");
+        id2.setStartDttm(new Date());
+
+        assertEquals(id1, id2);
+        assertEquals(id1.hashCode(), id2.hashCode());
+
+        id2.setIdentificationNum("67890");
+        assertNotEquals(id1, id2);
+    }
+}

@@ -1,0 +1,18 @@
+package com.td.mbna.msec.midtier.statement.payload.getIpEligibleTransactions;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class GetIpEligibleTransactionsRequestTest {
+
+    @Test
+    void testGetAndSetRequestPayload() {
+        GetIpEligibleTransactionsRequest request = new GetIpEligibleTransactionsRequest();
+        
+        RequestPayload requestPayload = new RequestPayload();
+        request.setRequestPayload(requestPayload);
+        
+        assertNotNull(request.getRequestPayload());
+        assertEquals(requestPayload, request.getRequestPayload());
+    }
+}

@@ -1,0 +1,51 @@
+package com.td.api.mbalert.request.addalertevent;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class AltrExtensionTest {
+
+    @Test
+    void testAltrExtension() {
+        // Create an instance of AltrExtension
+        AltrExtension altrExtension = new AltrExtension();
+
+        // Test default values
+        assertNull(altrExtension.getAliasName());
+
+        // Set values and test getters
+        altrExtension.setAliasName("TestAlias");
+        assertEquals("TestAlias", altrExtension.getAliasName());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        AltrExtension altrExtension1 = new AltrExtension();
+        altrExtension1.setAliasName("TestAlias");
+
+        AltrExtension altrExtension2 = new AltrExtension();
+        altrExtension2.setAliasName("TestAlias");
+
+        AltrExtension altrExtension3 = new AltrExtension();
+        altrExtension3.setAliasName("AnotherAlias");
+
+        // Test equality method
+        assertTrue(altrExtension1.equals(altrExtension2));
+        assertFalse(altrExtension1.equals(altrExtension3));
+
+        // Test hashCode method
+        assertEquals(altrExtension1.hashCode(), altrExtension2.hashCode());
+        assertNotEquals(altrExtension1.hashCode(), altrExtension3.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        AltrExtension altrExtension = new AltrExtension();
+        altrExtension.setAliasName("TestAlias");
+
+        String toStringResult = altrExtension.toString();
+
+        assertTrue(toStringResult.contains("aliasName"));
+    }
+}

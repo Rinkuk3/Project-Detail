@@ -1,0 +1,130 @@
+package com.td.mbna.msec.midtier.mbalert.adaptor;
+
+import com.td.mbna.msec.midtier.service.EmailInfo;
+import com.td.mbna.msec.midtier.services.IMBNAConstants;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+class AlertEventAdaptorTest {
+
+    private AlertEventAdaptor alertEventAdaptor;
+    private EmailInfo emailInfo;
+
+    @BeforeEach
+    void setUp() {
+        alertEventAdaptor = new AlertEventAdaptor();
+        emailInfo = mock(EmailInfo.class);
+    }
+
+    @Test
+    void testGetRequestWithEnglishLanguage() {
+        // Setup mock values
+        when(emailInfo.getBusinessEventID()).thenReturn("EventID");
+        when(emailInfo.getPrimaryLanguagePref()).thenReturn("EN");
+        when(emailInfo.getPrimaryUserInfo().getFirstName()).thenReturn("John");
+        when(emailInfo.getPrimaryUserInfo().getLastName()).thenReturn("Doe");
+        when(emailInfo.getCustId()).thenReturn("12345");
+        when(emailInfo.getPrimaryEmailAddress()).thenReturn("john.doe@example.com");
+        when(emailInfo.getAcctNum()).thenReturn("MBNA123");
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("key1", "value1");
+        when(emailInfo.getAttributes()).thenReturn(attributes);
+
+        // Call method
+        AlertEventRequest request = alertEventAdaptor.getRequest(emailInfo);
+
+        // Assert
+        assertNotNull(request);
+        assertEquals("EventID", request.getAlert().getAlertTypeCd());
+        assertEquals("EN", request.getAlert().getLanguageCd());
+        assertEquals("John", request.getAlert().getParty().getIndividual().getFirstName());
+        assertEquals("Doe", request.getAlert().getParty().getIndividual().getLastName());
+        assertEquals("12345", request.getAlert().getParty().getInternalPartyIdentification().get(0).getPartyId());
+        assertEquals("john.doe@example.com", request.getAlert().getContact().get(0).getLocator().get(0).getEmailAddress().getText());
+    }
+
+    @Test
+    void testGetRequestWithFrenchLanguage() {
+        // Setup mock values
+        when(emailInfo.getBusinessEventID()).thenReturn("EventID");
+        when(emailInfo.getPrimaryLanguagePref()).thenReturn("FR");
+        when(emailInfo.getPrimaryUserInfo().getFirstName()).thenReturn("Jean");
+        when(emailInfo.getPrimaryUserInfo().getLastName()).thenReturn("Dupont");
+        when(emailInfo.getCustId()).thenReturn("54321");
+        when(emailInfo.getPrimaryEmailAddress()).thenReturn("jean.dupont@example.com");
+        when(emailInfo.getAcctNum()).thenReturn("MBNA543");
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("key1", "value1");
+        when(emailInfo.getAttributes()).thenReturn(attributes);
+
+        // Call method
+        AlertEventRequest request = alertEventAdaptor.getRequest(emailInfo);
+
+        // Assert
+        assertNotNull(request);
+        assertEquals("EventID", request.getAlert().getAlertTypeCd());
+        assertEquals("FR", request.getAlert().getLanguageCd());
+        assertEquals("Jean", request.getAlert().getParty().getIndividual().getFirstName());
+        assertEquals("Dupont", request.getAlert().getParty().getIndividual().getLastName());
+        assertEquals("54321", request.getAlert().getParty().getInternalPartyIdentification().get(0).getPartyId());
+        assertEquals("jean.dupont@example.com", request.getAlert().getContact().get(0).getLocator().get(0).getEmailAddress().getText());
+    }
+
+    @Test
+    void testGenEncodedTemplate() {
+        // Setup mock values
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("key1", "value1");
+        attributes.put("key2", "value2");
+
+        // Call method
+        TemplateItem template = alertEventAdaptor.genEncodedTemplate(attributes);
+
+        // Assert
+        assertNotNull(template);
+        assertEquals("metaDataContentVal", template.getKeyName());
+        assertNotNull(template.getKeyVal());
+        assertTrue(template.getKeyVal().length() > 0);
+    }
+
+    @Test
+    void testGetLanguageCdWithEnglish() {
+        // Setup mock values
+        when(emailInfo.getPrimaryLanguagePref()).thenReturn("EN");
+
+        // Call method
+        String langCd = alertEventAdaptor.getLanguageCd(emailInfo);
+
+        // Assert
+        assertEquals("EN", langCd);
+    }
+
+    @Test
+    void testGetLanguageCdWithFrench() {
+        // Setup mock values
+        when(emailInfo.getPrimaryLanguagePref()).thenReturn("FR");
+
+        // Call method
+        String langCd = alertEventAdaptor.getLanguageCd(emailInfo);
+
+        // Assert
+        assertEquals("FR", langCd);
+    }
+
+    @Test
+    void testGetLanguageCdWithNull() {
+        // Setup mock values
+        when(emailInfo.getPrimaryLanguagePref()).thenReturn(null);
+
+        // Call method
+        String langCd = alertEventAdaptor.getLanguageCd(emailInfo);
+
+        // Assert
+        assertEquals("EN", langCd); // Default to EN if null
+    }
+}

@@ -1,0 +1,134 @@
+import com.td.api.mbcca.response.account.CreditCardAgreement;
+import com.td.api.mbcca.response.account.DailyAuthorizationSummary;
+import com.td.api.mbcca.response.transactions.authorizations.summary.AuthorizationEvent;
+import com.td.api.mbcca.response.transactions.postedevents.PostedEvent;
+import com.td.mbna.msec.midtier.types.common.AcctOverviewType;
+import com.td.mbna.msec.midtier.types.common.AcctSnapshotType;
+import com.td.mbna.msec.midtier.types.common.OfferParamsType;
+import com.td.mbna.msec.midtier.types.common.StmtActivityType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.*;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class TdCardTxAdaptorTest {
+
+    private TdCardTxAdaptor adaptor;
+
+    @BeforeEach
+    void setUp() {
+        adaptor = new TdCardTxAdaptor();
+    }
+
+    @Test
+    void testConvertFromPostedEventToStmtActivity() throws Exception {
+        PostedEvent postedEvent = mock(PostedEvent.class);
+        when(postedEvent.getCardNum()).thenReturn("12345");
+        when(postedEvent.getEventId()).thenReturn("2019-12-12~2019-12-17~1603492");
+        when(postedEvent.getTransactionDt()).thenReturn("2019-12-12");
+        when(postedEvent.getAmt()).thenReturn(BigDecimal.TEN);
+        when(postedEvent.getDebitCreditCd()).thenReturn("Debit");
+        when(postedEvent.getActivityTypeDesc()).thenReturn("Purchase");
+        when(postedEvent.getEventDescriptionTxt()).thenReturn("Purchase Description");
+        when(postedEvent.getMerchantInfo()).thenReturn(mock(MerchantInfo.class));
+        when(postedEvent.getMerchantInfo().getName()).thenReturn("Merchant");
+        when(postedEvent.getMerchantInfo().getCity()).thenReturn("City");
+        when(postedEvent.getAcquirerReferenceNum()).thenReturn("123456");
+        when(postedEvent.getTargetedPromotionIndicatorCd()).thenReturn("N");
+
+        List<PostedEvent> postedEvents = new ArrayList<>();
+        postedEvents.add(postedEvent);
+
+        List<StmtActivityType> result = adaptor.convertFromPostedEventToStmtActivity(postedEvents);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        StmtActivityType stmtActivityType = result.get(0);
+        assertEquals("12345", stmtActivityType.getAcctId());
+    }
+
+    @Test
+    void testConvertToAccountSnapshot() {
+        CreditCardAgreement creditCardAgreement = mock(CreditCardAgreement.class);
+        DailyAuthorizationSummary dailyAuthorizationSummary = mock(DailyAuthorizationSummary.class);
+        when(creditCardAgreement.getDailyAuthorizationSummary()).thenReturn(new ArrayList<DailyAuthorizationSummary>() {{
+            add(dailyAuthorizationSummary);
+        }});
+        when(dailyAuthorizationSummary.getApprovedCccyamt()).thenReturn(mock(AmountType.class));
+        when(dailyAuthorizationSummary.getApprovedCccyamt().getAmount()).thenReturn(BigDecimal.TEN);
+        when(creditCardAgreement.getAvailableCreditLimitAmt()).thenReturn(BigDecimal.valueOf(1000));
+        when(creditCardAgreement.getAvailableBeyondCreditLimitCccyamt()).thenReturn(mock(AmountType.class));
+        when(creditCardAgreement.getAvailableBeyondCreditLimitCccyamt().getAmount()).thenReturn(BigDecimal.valueOf(200));
+
+        AcctSnapshotType result = adaptor.convertToAccountSnapshot(creditCardAgreement);
+
+        assertNotNull(result);
+        assertNotNull(result.getAcctOverview());
+        assertEquals(BigDecimal.valueOf(800), result.getAcctOverview().getCreditAvail());
+        assertNotNull(result.getAcctOverview().getOffersParams());
+    }
+
+    @Test
+    void testConvertFromAuthEventsToStmtActivity() {
+        AuthorizationEvent authorizationEvent = mock(AuthorizationEvent.class);
+        when(authorizationEvent.getAuthorizationResponseCd()).thenReturn("Approved");
+        when(authorizationEvent.getEventId()).thenReturn("2019-12-12~2019-12-17~1603492");
+        when(authorizationEvent.getOriginalCardNum()).thenReturn("12345");
+        when(authorizationEvent.getAmt()).thenReturn(BigDecimal.TEN);
+        when(authorizationEvent.getTransactionSourceDesc()).thenReturn("Transaction Source");
+        when(authorizationEvent.getMerchantInfo()).thenReturn(mock(MerchantInfo.class));
+        when(authorizationEvent.getMerchantInfo().getName()).thenReturn("Merchant");
+
+        List<AuthorizationEvent> authorizationEvents = new ArrayList<>();
+        authorizationEvents.add(authorizationEvent);
+
+        List<StmtActivityType> result = adaptor.convertFromAuthEventsToStmtActivity(authorizationEvents);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        StmtActivityType stmtActivityType = result.get(0);
+        assertEquals("12345", stmtActivityType.getAcctId());
+    }
+
+    @Test
+    void testConvertFromAuthEventsToStmtActivityWithNullOrEmpty() {
+        List<StmtActivityType> result = adaptor.convertFromAuthEventsToStmtActivity(new ArrayList<>());
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void testConvertFromAuthEventsToStmtActivityWithNull() {
+        List<StmtActivityType> result = adaptor.convertFromAuthEventsToStmtActivity(null);
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void testConvertFromPostedEventToStmtActivityWithException() throws Exception {
+        PostedEvent postedEvent = mock(PostedEvent.class);
+        when(postedEvent.getEventId()).thenReturn("2019-12-12~2019-12-17~1603492");
+        when(postedEvent.getTransactionDt()).thenReturn("Invalid Date");
+
+        List<PostedEvent> postedEvents = new ArrayList<>();
+        postedEvents.add(postedEvent);
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            adaptor.convertFromPostedEventToStmtActivity(postedEvents);
+        });
+        assertNotNull(exception);
+    }
+
+    @Test
+    void testConvertToAccountSnapshotWithNull() {
+        AcctSnapshotType result = adaptor.convertToAccountSnapshot(null);
+        assertNotNull(result);
+        assertNull(result.getAcctOverview());
+        assertNull(result.getPastDueAmount());
+    }
+}

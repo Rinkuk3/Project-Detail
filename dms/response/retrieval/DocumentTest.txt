@@ -1,0 +1,89 @@
+package com.td.api.dms.response.retrieval;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class DocumentTest {
+
+    private Document document;
+
+    @BeforeEach
+    void setUp() {
+        document = new Document();
+    }
+
+    @Test
+    void testGetSetDocumentId() {
+        String documentId = "doc123";
+        document.setDocumentId(documentId);
+        assertEquals(documentId, document.getDocumentId());
+    }
+
+    @Test
+    void testGetSetMimeType() {
+        String mimeType = "application/pdf";
+        document.setMimeType(mimeType);
+        assertEquals(mimeType, document.getMimeType());
+    }
+
+    @Test
+    void testGetSetContent() {
+        String content = "This is the document content";
+        document.setContent(content);
+        assertEquals(content, document.getContent());
+    }
+
+    @Test
+    void testToString() {
+        document.setDocumentId("doc123");
+        document.setMimeType("application/pdf");
+        document.setContent("This is the document content");
+
+        String expected = "com.td.api.dms.response.retrieval.Document@" + Integer.toHexString(System.identityHashCode(document)) +
+                          "[documentId=doc123,mimeType=application/pdf,content=This is the document content,]";
+        assertEquals(expected, document.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        Document doc1 = new Document();
+        Document doc2 = new Document();
+
+        doc1.setDocumentId("doc123");
+        doc1.setMimeType("application/pdf");
+        doc1.setContent("This is the document content");
+
+        doc2.setDocumentId("doc123");
+        doc2.setMimeType("application/pdf");
+        doc2.setContent("This is the document content");
+
+        assertEquals(doc1.hashCode(), doc2.hashCode());
+
+        doc2.setContent("New content");
+        assertNotEquals(doc1.hashCode(), doc2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        Document doc1 = new Document();
+        Document doc2 = new Document();
+
+        doc1.setDocumentId("doc123");
+        doc1.setMimeType("application/pdf");
+        doc1.setContent("This is the document content");
+
+        doc2.setDocumentId("doc123");
+        doc2.setMimeType("application/pdf");
+        doc2.setContent("This is the document content");
+
+        assertTrue(doc1.equals(doc2));
+
+        doc2.setContent("New content");
+        assertFalse(doc1.equals(doc2));
+
+        assertFalse(doc1.equals(null));
+        assertFalse(doc1.equals(new Object()));
+    }
+}

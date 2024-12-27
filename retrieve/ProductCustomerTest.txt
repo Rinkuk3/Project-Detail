@@ -1,0 +1,156 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class ProductCustomerTest {
+
+    private ProductCustomer productCustomer;
+
+    @BeforeEach
+    public void setUp() {
+        productCustomer = new ProductCustomer();
+    }
+
+    @Test
+    public void testGetConnectId() {
+        productCustomer.setConnectId("12345");
+        assertEquals("12345", productCustomer.getConnectId());
+    }
+
+    @Test
+    public void testSetConnectId() {
+        productCustomer.setConnectId("54321");
+        assertEquals("54321", productCustomer.getConnectId());
+    }
+
+    @Test
+    public void testGetProductVal() {
+        productCustomer.setProductVal("Product123");
+        assertEquals("Product123", productCustomer.getProductVal());
+    }
+
+    @Test
+    public void testSetProductVal() {
+        productCustomer.setProductVal("Product456");
+        assertEquals("Product456", productCustomer.getProductVal());
+    }
+
+    @Test
+    public void testGetProductCd() {
+        productCustomer.setProductCd("CD123");
+        assertEquals("CD123", productCustomer.getProductCd());
+    }
+
+    @Test
+    public void testSetProductCd() {
+        productCustomer.setProductCd("CD456");
+        assertEquals("CD456", productCustomer.getProductCd());
+    }
+
+    @Test
+    public void testGetRelationship() {
+        List<Relationship> relationships = new ArrayList<>();
+        relationships.add(new Relationship());
+        productCustomer.setRelationship(relationships);
+        assertEquals(relationships, productCustomer.getRelationship());
+    }
+
+    @Test
+    public void testSetRelationship() {
+        List<Relationship> relationships = new ArrayList<>();
+        relationships.add(new Relationship());
+        productCustomer.setRelationship(relationships);
+        assertEquals(relationships, productCustomer.getRelationship());
+    }
+
+    @Test
+    public void testToString() {
+        productCustomer.setConnectId("12345");
+        productCustomer.setProductVal("Product123");
+        productCustomer.setProductCd("CD123");
+        List<Relationship> relationships = new ArrayList<>();
+        relationships.add(new Relationship());
+        productCustomer.setRelationship(relationships);
+
+        String expectedString = "com.td.api.enrollment.retrieve.ProductCustomer@" + Integer.toHexString(System.identityHashCode(productCustomer)) +
+                "[connectId=12345,productVal=Product123,productCd=CD123,relationship=" + relationships + "]";
+
+        assertTrue(productCustomer.toString().contains("connectId=12345"));
+        assertTrue(productCustomer.toString().contains("productVal=Product123"));
+        assertTrue(productCustomer.toString().contains("productCd=CD123"));
+        assertTrue(productCustomer.toString().contains("relationship=" + relationships));
+    }
+
+    @Test
+    public void testHashCode() {
+        productCustomer.setConnectId("12345");
+        productCustomer.setProductVal("Product123");
+        productCustomer.setProductCd("CD123");
+        List<Relationship> relationships = new ArrayList<>();
+        relationships.add(new Relationship());
+        productCustomer.setRelationship(relationships);
+
+        ProductCustomer otherCustomer = new ProductCustomer();
+        otherCustomer.setConnectId("12345");
+        otherCustomer.setProductVal("Product123");
+        otherCustomer.setProductCd("CD123");
+        otherCustomer.setRelationship(relationships);
+
+        assertEquals(productCustomer.hashCode(), otherCustomer.hashCode());
+
+        otherCustomer.setConnectId("54321");
+        assertNotEquals(productCustomer.hashCode(), otherCustomer.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        productCustomer.setConnectId("12345");
+        productCustomer.setProductVal("Product123");
+        productCustomer.setProductCd("CD123");
+        List<Relationship> relationships = new ArrayList<>();
+        relationships.add(new Relationship());
+        productCustomer.setRelationship(relationships);
+
+        ProductCustomer otherCustomer = new ProductCustomer();
+        otherCustomer.setConnectId("12345");
+        otherCustomer.setProductVal("Product123");
+        otherCustomer.setProductCd("CD123");
+        otherCustomer.setRelationship(relationships);
+
+        assertTrue(productCustomer.equals(otherCustomer));
+
+        otherCustomer.setConnectId("54321");
+        assertFalse(productCustomer.equals(otherCustomer));
+
+        otherCustomer.setConnectId("12345");
+        otherCustomer.setProductVal("DifferentProduct");
+        assertFalse(productCustomer.equals(otherCustomer));
+
+        otherCustomer.setProductVal("Product123");
+        otherCustomer.setProductCd("DifferentCD");
+        assertFalse(productCustomer.equals(otherCustomer));
+
+        otherCustomer.setProductCd("CD123");
+        otherCustomer.setRelationship(new ArrayList<>());
+        assertFalse(productCustomer.equals(otherCustomer));
+    }
+
+    @Test
+    public void testEqualsNull() {
+        assertFalse(productCustomer.equals(null));
+    }
+
+    @Test
+    public void testEqualsDifferentClass() {
+        assertFalse(productCustomer.equals("Some random string"));
+    }
+
+    @Test
+    public void testEqualsSameInstance() {
+        assertTrue(productCustomer.equals(productCustomer));  // Same instance, should return true
+    }
+}

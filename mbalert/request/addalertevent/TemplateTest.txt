@@ -1,0 +1,105 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+
+class TemplateTest {
+
+    @Test
+    void testGetterAndSetterForTypeCd() {
+        Template template = new Template();
+        template.setTypeCd("TemplateType123");
+        assertEquals("TemplateType123", template.getTypeCd());
+    }
+
+    @Test
+    void testGetterAndSetterForTemplateItem() {
+        Template template = new Template();
+        TemplateItem templateItem = new TemplateItem();
+        templateItem.setItemName("Item1");
+        templateItem.setItemValue("Value1");
+        
+        template.setTemplateItem(Arrays.asList(templateItem));
+        
+        assertEquals(1, template.getTemplateItem().size());
+        assertEquals("Item1", template.getTemplateItem().get(0).getItemName());
+        assertEquals("Value1", template.getTemplateItem().get(0).getItemValue());
+    }
+
+    @Test
+    void testToString() {
+        Template template = new Template();
+        template.setTypeCd("TemplateType123");
+
+        TemplateItem templateItem = new TemplateItem();
+        templateItem.setItemName("Item1");
+        templateItem.setItemValue("Value1");
+        template.setTemplateItem(Arrays.asList(templateItem));
+
+        String expected = "Template(typeCd=TemplateType123, templateItem=[TemplateItem(itemName=Item1, itemValue=Value1)])";
+        assertEquals(expected, template.toString());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        Template template1 = new Template();
+        template1.setTypeCd("TemplateType123");
+
+        TemplateItem templateItem1 = new TemplateItem();
+        templateItem1.setItemName("Item1");
+        templateItem1.setItemValue("Value1");
+        template1.setTemplateItem(Arrays.asList(templateItem1));
+
+        Template template2 = new Template();
+        template2.setTypeCd("TemplateType123");
+
+        TemplateItem templateItem2 = new TemplateItem();
+        templateItem2.setItemName("Item1");
+        templateItem2.setItemValue("Value1");
+        template2.setTemplateItem(Arrays.asList(templateItem2));
+
+        assertEquals(template1, template2);
+        assertEquals(template1.hashCode(), template2.hashCode());
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        Template template = new Template();
+        assertNotEquals(template, null);
+    }
+
+    @Test
+    void testEqualsWithDifferentType() {
+        Template template = new Template();
+        assertNotEquals(template, new Object());
+    }
+
+    @Test
+    void testHashCodeWithDifferentValues() {
+        Template template1 = new Template();
+        template1.setTypeCd("TemplateType123");
+
+        TemplateItem templateItem1 = new TemplateItem();
+        templateItem1.setItemName("Item1");
+        templateItem1.setItemValue("Value1");
+        template1.setTemplateItem(Arrays.asList(templateItem1));
+
+        Template template2 = new Template();
+        template2.setTypeCd("TemplateType456");
+
+        TemplateItem templateItem2 = new TemplateItem();
+        templateItem2.setItemName("Item2");
+        templateItem2.setItemValue("Value2");
+        template2.setTemplateItem(Arrays.asList(templateItem2));
+
+        assertNotEquals(template1.hashCode(), template2.hashCode());
+    }
+
+    @Test
+    void testEmptyTemplateItemList() {
+        Template template = new Template();
+        template.setTypeCd("TemplateType123");
+        template.setTemplateItem(new ArrayList<>());
+        
+        assertTrue(template.getTemplateItem().isEmpty());
+    }
+}

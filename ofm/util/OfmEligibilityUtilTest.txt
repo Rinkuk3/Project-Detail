@@ -1,0 +1,143 @@
+package com.td.mbna.msec.midtier.ofm.util;
+
+import com.td.mbna.msec.midtier.cache.DisclosureServiceCommand;
+import com.td.mbna.msec.midtier.eligibility.payload.getentitlementflags.GetEntitlementFlagsRequest;
+import com.td.mbna.msec.midtier.eligibility.payload.getentitlementflags.GetEntitlementFlagsResponse;
+import com.td.mbna.msec.midtier.eligibility.payload.getentitlementflags.ResponsePayload;
+import com.td.mbna.msec.midtier.persistance.entity.Customers;
+import com.td.mbna.msec.midtier.persistance.mybatis.DBMybatisService;
+import com.td.mbna.msec.midtier.types.common.BaseRequest;
+import com.td.mbna.msec.midtier.types.common.CustAcctType;
+import com.td.mbna.msec.midtier.types.common.EligIdType;
+import com.td.mbna.msec.midtier.types.eligibility.AcctEligType;
+import com.td.mbna.msec.midtier.types.eligibility.CustEligType;
+import com.td.mbna.msec.midtier.types.eligibility.EligType;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class OfmEligibilityUtilTest {
+
+    @Mock
+    private MbnaOfm mbnaOfm;
+    
+    @Mock
+    private ParallelServiceCaller parallelServiceCaller;
+    
+    @Mock
+    private BaseRequest request;
+    
+    @Mock
+    private CustAcctType custAcct;
+
+    private OfmEligibilityUtil ofmEligibilityUtil;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        ofmEligibilityUtil = new OfmEligibilityUtil();
+        ofmEligibilityUtil.setMbnaOfm(mbnaOfm);
+    }
+
+    @Test
+    public void testGetGetEntitlementFlagsResponse() {
+        String cardNumber = "123456";
+        String acctNum = "654321";
+        boolean isPrimary = true;
+        String productCodes = "DEFAULT";
+        boolean chatEligibility = true;
+        String token = "token";
+
+        GetEntitlementFlagsResponse mockResponse = new GetEntitlementFlagsResponse();
+        Mockito.when(mbnaOfm.retrieveEligibility(Mockito.any(), Mockito.eq(chatEligibility), Mockito.eq(token)))
+                .thenReturn(mockResponse);
+
+        GetEntitlementFlagsResponse response = ofmEligibilityUtil.getGetEntitlementFlagsResponse(
+                request, cardNumber, acctNum, isPrimary, productCodes, chatEligibility, token);
+
+        assertNotNull(response);
+    }
+
+    @Test
+    public void testScheduleCalls() throws Exception {
+        List<CustAcctType> custAccts = Arrays.asList(custAcct);
+        String token = "token";
+        
+        Mockito.when(custAcct.getAcctNum()).thenReturn("654321");
+        Mockito.when(custAcct.getCardNum()).thenReturn("123456");
+        Mockito.when(custAcct.getProductCodes()).thenReturn("DEFAULT");
+        Mockito.when(custAcct.getArqCode()).thenReturn("arqCode");
+        
+        ofmEligibilityUtil.scheduleCalls(request, custAccts, parallelServiceCaller, token);
+
+        Mockito.verify(parallelServiceCaller, Mockito.times(1)).scheduleCall(Mockito.anyString(), Mockito.any());
+    }
+
+    @Test
+    public void testGetResult() throws Exception {
+        List<CustAcctType> custAccts = Arrays.asList(custAcct);
+        String token = "token";
+        
+        Mockito.when(custAcct.getAcctNum()).thenReturn("654321");
+        Mockito.when(custAcct.getCardNum()).thenReturn("123456");
+        
+        GetEntitlementFlagsResponse mockResponse = new GetEntitlementFlagsResponse();
+        ResponsePayload payload = new ResponsePayload();
+        mockResponse.setResponsePayload(payload);
+        
+        Mockito.when(mbnaOfm.retrieveEligibility(Mockito.any(), Mockito.anyBoolean(), Mockito.anyString()))
+                .thenReturn(mockResponse);
+
+        GetEntitlementFlagsResponse result = ofmEligibilityUtil.getResult(request, custAccts, parallelServiceCaller, token);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    public void testCheckCardServiceAndUpdate() {
+        CustEligType custElig = new CustEligType();
+        String acctNum = "654321";
+        
+        // Test with card service OK
+        ofmEligibilityUtil.checkCardServiceAndUpdate(custElig, acctNum, true);
+        
+        // Test with card service not OK
+        ofmEligibilityUtil.checkCardServiceAndUpdate(custElig, acctNum, false);
+    }
+
+    @Test
+    public void testDisableBT() {
+        CustEligType custElig = new CustEligType();
+        String acctNum = "654321";
+        
+        // Test disabling Balance Transfer
+        ofmEligibilityUtil.disableBT(custElig, acctNum);
+    }
+
+    @Test
+    public void testIsAllowed() {
+        List<EligType> eligList = Arrays.asList(new EligType());
+        EligType eligType = new EligType();
+        eligType.setEligId(EligIdType.ORDER_ACCESS_CHEQUE);
+        eligType.setEligValue(true);
+        
+        eligList.add(eligType);
+
+        assertTrue(OfmEligibilityUtil.isAllowed(eligList, EligIdType.ORDER_ACCESS_CHEQUE));
+        assertFalse(OfmEligibilityUtil.isAllowed(eligList, EligIdType.CREDIT_LINE_INCREASE));
+    }
+
+    @Test
+    public void testSetMbnaOfm() {
+        MbnaOfm mockMbnaOfm = Mockito.mock(MbnaOfm.class);
+        ofmEligibilityUtil.setMbnaOfm(mockMbnaOfm);
+
+        assertNotNull(ofmEligibilityUtil);
+    }
+}

@@ -1,0 +1,179 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+class RequestPayloadTest {
+
+    @Test
+    void testSetGetDisclosureInfo() {
+        RequestPayload requestPayload = new RequestPayload();
+        List<DisclosureInfoType> disclosureList = new ArrayList<>();
+        requestPayload.setDisclosureInfo(disclosureList);
+        
+        assertEquals(disclosureList, requestPayload.getDisclosureInfo());
+    }
+
+    @Test
+    void testSetGetLanguagePref() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setLanguagePref("EN");
+        
+        assertEquals("EN", requestPayload.getLanguagePref());
+    }
+
+    @Test
+    void testSetGetOfferId() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setOfferId("offerId123");
+        
+        assertEquals("offerId123", requestPayload.getOfferId());
+    }
+
+    @Test
+    void testSetGetReferenceNumber() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setReferenceNumber("ref123");
+        
+        assertEquals("ref123", requestPayload.getReferenceNumber());
+    }
+
+    @Test
+    void testSetGetNickName() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setNickName("Test Nick");
+        
+        assertEquals("Test Nick", requestPayload.getNickName());
+    }
+
+    @Test
+    void testSetGetSetupFees() {
+        RequestPayload requestPayload = new RequestPayload();
+        BigDecimal setupFees = new BigDecimal("100.00");
+        requestPayload.setSetupFees(setupFees);
+        
+        assertEquals(setupFees, requestPayload.getSetupFees());
+    }
+
+    @Test
+    void testSetGetInterestRate() {
+        RequestPayload requestPayload = new RequestPayload();
+        BigDecimal interestRate = new BigDecimal("10.5");
+        requestPayload.setInterestRate(interestRate);
+        
+        assertEquals(interestRate, requestPayload.getInterestRate());
+    }
+
+    @Test
+    void testSetGetTransactionAmt() {
+        RequestPayload requestPayload = new RequestPayload();
+        BigDecimal transactionAmt = new BigDecimal("500.00");
+        requestPayload.setTransactionAmt(transactionAmt);
+        
+        assertEquals(transactionAmt, requestPayload.getTransactionAmt());
+    }
+
+    @Test
+    void testSetGetDuration() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setDuration(12);
+        
+        assertEquals(12, requestPayload.getDuration());
+    }
+
+    @Test
+    void testSetGetConfirmed() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setConfirmed(true);
+        
+        assertTrue(requestPayload.getConfirmed());
+    }
+
+    @Test
+    void testSetGetEventId() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setEventId("event123");
+        
+        assertEquals("event123", requestPayload.getEventId());
+    }
+
+    @Test
+    void testSetGetProductId() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setProductId("prod123");
+        
+        assertEquals("prod123", requestPayload.getProductId());
+    }
+
+    @Test
+    void testSetGetStatementDataDt() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setStatementDataDt("2024-12-24");
+        
+        assertEquals("2024-12-24", requestPayload.getStatementDataDt());
+    }
+
+    @Test
+    void testSetGetEmailNotificationInfo() {
+        RequestPayload requestPayload = new RequestPayload();
+        EmailNotificationInfoType emailInfo = new EmailNotificationInfoType();
+        requestPayload.setEmailNotificationInfo(emailInfo);
+        
+        assertEquals(emailInfo, requestPayload.getEmailNotificationInfo());
+    }
+
+    @Test
+    void testSetGetInstallmentPlanDetails() {
+        RequestPayload requestPayload = new RequestPayload();
+        InstallmentPlanDetails planDetails = new InstallmentPlanDetails();
+        requestPayload.setInstallmentPlanDetails(planDetails);
+        
+        assertEquals(planDetails, requestPayload.getInstallmentPlanDetails());
+    }
+
+    @Test
+    void testToString() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setOfferId("offer123");
+        requestPayload.setReferenceNumber("ref456");
+        requestPayload.setNickName("Nick");
+        
+        String expectedString = "RequestPayload{" +
+                "disclosureInfo=[], languagePref='null', offerId='offer123', referenceNumber='ref456', " +
+                "nickName='Nick', setupFees=null, interestRate=null, contractAnnualRate=null, " +
+                "transactionAmt=null, duration=null, confirmed=false, eventId='null', productId='null', " +
+                "statementDataDt='null', emailNotificationInfo=null, installmentPlanDetails=null}";
+        
+        assertEquals(expectedString, requestPayload.toString());
+    }
+
+    @Test
+    void testEquals() {
+        RequestPayload requestPayload1 = new RequestPayload();
+        RequestPayload requestPayload2 = new RequestPayload();
+        
+        requestPayload1.setOfferId("offer123");
+        requestPayload2.setOfferId("offer123");
+        
+        assertEquals(requestPayload1, requestPayload2);
+        
+        requestPayload2.setOfferId("offer456");
+        assertNotEquals(requestPayload1, requestPayload2);
+    }
+
+    @Test
+    void testHashCode() {
+        RequestPayload requestPayload1 = new RequestPayload();
+        RequestPayload requestPayload2 = new RequestPayload();
+        
+        requestPayload1.setOfferId("offer123");
+        requestPayload2.setOfferId("offer123");
+        
+        assertEquals(requestPayload1.hashCode(), requestPayload2.hashCode());
+        
+        requestPayload2.setOfferId("offer456");
+        assertNotEquals(requestPayload1.hashCode(), requestPayload2.hashCode());
+    }
+}

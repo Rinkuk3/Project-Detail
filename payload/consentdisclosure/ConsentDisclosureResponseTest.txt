@@ -1,0 +1,89 @@
+package com.td.mbna.msec.midtier.disclosure.payload.consentdisclosure;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class ConsentDisclosureResponseTest {
+
+    private ConsentDisclosureResponse consentDisclosureResponse;
+    private ResponsePayload responsePayload;
+
+    @BeforeEach
+    public void setUp() {
+        consentDisclosureResponse = new ConsentDisclosureResponse();
+        responsePayload = new ResponsePayload();
+    }
+
+    @Test
+    public void testGetResponsePayload() {
+        consentDisclosureResponse.setResponsePayload(responsePayload);
+        assertNotNull(consentDisclosureResponse.getResponsePayload());
+    }
+
+    @Test
+    public void testSetResponsePayload() {
+        consentDisclosureResponse.setResponsePayload(responsePayload);
+        assertEquals(responsePayload, consentDisclosureResponse.getResponsePayload());
+    }
+
+    @Test
+    public void testToString() {
+        consentDisclosureResponse.setResponsePayload(responsePayload);
+        consentDisclosureResponse.setStatus("Success");
+        consentDisclosureResponse.setErrorMessages("No errors");
+
+        String result = consentDisclosureResponse.toString();
+        assertNotNull(result);
+        assertTrue(result.contains("status"));
+        assertTrue(result.contains("errorMsgs"));
+        assertTrue(result.contains("responsePayload"));
+    }
+
+    @Test
+    public void testHashCode() {
+        consentDisclosureResponse.setResponsePayload(responsePayload);
+        consentDisclosureResponse.setStatus("Success");
+        consentDisclosureResponse.setErrorMessages("No errors");
+        int hashCode = consentDisclosureResponse.hashCode();
+        assertTrue(hashCode != 0);
+    }
+
+    @Test
+    public void testEquals_SameObject() {
+        assertTrue(consentDisclosureResponse.equals(consentDisclosureResponse));
+    }
+
+    @Test
+    public void testEquals_Null() {
+        assertFalse(consentDisclosureResponse.equals(null));
+    }
+
+    @Test
+    public void testEquals_DifferentClass() {
+        assertFalse(consentDisclosureResponse.equals(new Object()));
+    }
+
+    @Test
+    public void testEquals_DifferentValues() {
+        ConsentDisclosureResponse another = new ConsentDisclosureResponse();
+        assertFalse(consentDisclosureResponse.equals(another));
+    }
+
+    @Test
+    public void testEquals_SameValues() {
+        ConsentDisclosureResponse another = new ConsentDisclosureResponse();
+        consentDisclosureResponse.setResponsePayload(responsePayload);
+        another.setResponsePayload(responsePayload);
+        consentDisclosureResponse.setStatus("Success");
+        another.setStatus("Success");
+        assertTrue(consentDisclosureResponse.equals(another));
+    }
+
+    @Test
+    public void testGetResponsePayload_Default() {
+        assertNull(consentDisclosureResponse.getResponsePayload());
+    }
+
+}

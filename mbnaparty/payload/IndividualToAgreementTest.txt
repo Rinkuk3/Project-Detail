@@ -1,0 +1,70 @@
+package com.td.api.mbna.msec.midtier.mbnaparty.payload;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+public class IndividualToAgreementTest {
+
+    private IndividualToAgreement individualToAgreement;
+
+    @BeforeEach
+    public void setUp() {
+        individualToAgreement = new IndividualToAgreement();
+    }
+
+    @Test
+    public void testGetSetCreditCardAgreement() {
+        CreditCardAgreement creditCardAgreement = new CreditCardAgreement();
+        individualToAgreement.setCreditCardAgreement(creditCardAgreement);
+        
+        assertEquals(creditCardAgreement, individualToAgreement.getCreditCardAgreement());
+    }
+
+    @Test
+    public void testGetSetRole() {
+        ArrayList<Role> role = new ArrayList<>();
+        role.add(new Role());
+        individualToAgreement.setRole(role);
+        
+        assertEquals(role, individualToAgreement.getRole());
+    }
+
+    @Test
+    public void testToString() {
+        CreditCardAgreement creditCardAgreement = new CreditCardAgreement();
+        ArrayList<Role> role = new ArrayList<>();
+        role.add(new Role());
+        
+        individualToAgreement.setCreditCardAgreement(creditCardAgreement);
+        individualToAgreement.setRole(role);
+        
+        String str = individualToAgreement.toString();
+        assertTrue(str.contains("creditCardAgreement"));
+        assertTrue(str.contains("role"));
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        IndividualToAgreement individualToAgreement1 = new IndividualToAgreement();
+        IndividualToAgreement individualToAgreement2 = new IndividualToAgreement();
+
+        CreditCardAgreement creditCardAgreement = new CreditCardAgreement();
+        ArrayList<Role> role = new ArrayList<>();
+        role.add(new Role());
+        
+        individualToAgreement1.setCreditCardAgreement(creditCardAgreement);
+        individualToAgreement1.setRole(role);
+        
+        individualToAgreement2.setCreditCardAgreement(creditCardAgreement);
+        individualToAgreement2.setRole(role);
+        
+        assertEquals(individualToAgreement1, individualToAgreement2);
+        assertEquals(individualToAgreement1.hashCode(), individualToAgreement2.hashCode());
+
+        individualToAgreement2.setCreditCardAgreement(new CreditCardAgreement());
+        assertNotEquals(individualToAgreement1, individualToAgreement2);
+    }
+}

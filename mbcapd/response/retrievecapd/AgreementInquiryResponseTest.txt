@@ -1,0 +1,90 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+
+class AgreementInquiryResponseTest {
+
+    @Test
+    void testGetterAndSetterForAgreement() {
+        AgreementInquiryResponse response = new AgreementInquiryResponse();
+        Agreement agreement = new Agreement(); // Assuming Agreement has a default constructor
+        response.setAgreement(Arrays.asList(agreement));
+        assertEquals(1, response.getAgreement().size());
+    }
+
+    @Test
+    void testToString() {
+        AgreementInquiryResponse response = new AgreementInquiryResponse();
+        Agreement agreement = new Agreement(); // Assuming Agreement has a default constructor
+        response.setAgreement(Arrays.asList(agreement));
+
+        String result = response.toString();
+        assertTrue(result.contains("agreement"));
+        assertTrue(result.contains(agreement.toString()));
+    }
+
+    @Test
+    void testHashCode() {
+        AgreementInquiryResponse response1 = new AgreementInquiryResponse();
+        Agreement agreement = new Agreement(); // Assuming Agreement has a default constructor
+        response1.setAgreement(Arrays.asList(agreement));
+
+        AgreementInquiryResponse response2 = new AgreementInquiryResponse();
+        response2.setAgreement(Arrays.asList(agreement));
+
+        assertEquals(response1.hashCode(), response2.hashCode());
+    }
+
+    @Test
+    void testEqualsSameObject() {
+        AgreementInquiryResponse response = new AgreementInquiryResponse();
+        assertTrue(response.equals(response));
+    }
+
+    @Test
+    void testEqualsDifferentObject() {
+        AgreementInquiryResponse response1 = new AgreementInquiryResponse();
+        response1.setAgreement(Arrays.asList(new Agreement())); // Assuming Agreement has a default constructor
+
+        AgreementInquiryResponse response2 = new AgreementInquiryResponse();
+        response2.setAgreement(Arrays.asList(new Agreement())); // Assuming Agreement has a default constructor
+
+        assertFalse(response1.equals(response2));
+    }
+
+    @Test
+    void testEqualsNull() {
+        AgreementInquiryResponse response = new AgreementInquiryResponse();
+        assertFalse(response.equals(null));
+    }
+
+    @Test
+    void testEqualsDifferentClass() {
+        AgreementInquiryResponse response = new AgreementInquiryResponse();
+        assertFalse(response.equals(new Object()));
+    }
+
+    @Test
+    void testEqualsWithDifferentAgreementList() {
+        AgreementInquiryResponse response1 = new AgreementInquiryResponse();
+        Agreement agreement1 = new Agreement(); // Assuming Agreement has a default constructor
+        response1.setAgreement(Arrays.asList(agreement1));
+
+        AgreementInquiryResponse response2 = new AgreementInquiryResponse();
+        Agreement agreement2 = new Agreement(); // Assuming Agreement has a default constructor
+        response2.setAgreement(Arrays.asList(agreement2));
+
+        assertFalse(response1.equals(response2));
+    }
+
+    @Test
+    void testEqualsWithNullAgreementList() {
+        AgreementInquiryResponse response1 = new AgreementInquiryResponse();
+        response1.setAgreement(null);
+
+        AgreementInquiryResponse response2 = new AgreementInquiryResponse();
+        response2.setAgreement(null);
+
+        assertTrue(response1.equals(response2));
+    }
+}

@@ -1,0 +1,71 @@
+package com.td.mbna.msec.midtier.enrollment;
+
+import com.td.mbna.msec.midtier.account.payload.deleteaccount.DeleteAccountResponse;
+import com.td.mbna.msec.midtier.customerprofile.payload.retrieveenrollment.RetrieveEnrollmentResponse;
+import com.td.mbna.msec.midtier.enrollment.facade.TdEnrollmentFacade;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+
+public class MbnaEnrollmentTest {
+
+    @InjectMocks
+    private MbnaEnrollmentImpl mbnaEnrollment;
+
+    @Mock
+    private TdEnrollmentFacade tdEnrollmentFacade;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testRetrieveEnrollment() {
+        String connectId = "testConnectId";
+        String token = "testToken";
+
+        RetrieveEnrollmentResponse mockResponse = new RetrieveEnrollmentResponse();
+        Mockito.when(tdEnrollmentFacade.retrieveEnrollments(eq(connectId), eq(token))).thenReturn(mockResponse);
+
+        RetrieveEnrollmentResponse response = mbnaEnrollment.retrieveEnrollment(connectId, token);
+
+        assertEquals(mockResponse, response);
+        Mockito.verify(tdEnrollmentFacade).retrieveEnrollments(eq(connectId), eq(token));
+    }
+
+    @Test
+    public void testUnEnroll() {
+        String connectId = "testConnectId";
+        String accountId = "testAccountId";
+        String token = "testToken";
+
+        DeleteAccountResponse mockResponse = new DeleteAccountResponse();
+        Mockito.when(tdEnrollmentFacade.unEnroll(eq(connectId), eq(accountId), eq(token))).thenReturn(mockResponse);
+
+        DeleteAccountResponse response = mbnaEnrollment.unEnroll(connectId, accountId, token);
+
+        assertEquals(mockResponse, response);
+        Mockito.verify(tdEnrollmentFacade).unEnroll(eq(connectId), eq(accountId), eq(token));
+    }
+
+    @Test
+    public void testCleanApiCache() {
+        String connectId = "testConnectId";
+        String expectedResponse = "Success";
+
+        Mockito.when(tdEnrollmentFacade.cleanApiCache(eq(connectId))).thenReturn(expectedResponse);
+
+        String response = mbnaEnrollment.cleanApiCache(connectId);
+
+        assertEquals(expectedResponse, response);
+        Mockito.verify(tdEnrollmentFacade).cleanApiCache(eq(connectId));
+    }
+}

@@ -1,0 +1,191 @@
+package com.td.mbna.msec.midtier.offers;
+
+import com.td.mbna.msec.midtier.service.EmailInfoImpl;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import com.td.mbna.msec.midtier.util.services.TDRestServiceUtil;
+import com.td.mbna.msec.midtier.util.ExceptionUtil;
+import com.td.api.mbcca.response.account.featureview.FeatureView;
+import com.td.mbna.msec.midtier.services.IMBNAConstants;
+import com.td.mbna.msec.midtier.mbofp.MbnaOFP;
+import com.td.mbna.msec.midtier.mbcca.MbnaCCA;
+import com.td.mbna.msec.midtier.offers.payload.requestInstallmentPlan.RequestInstallmentPlanRequest;
+import com.td.mbna.msec.midtier.offers.payload.requestInstallmentPlan.RequestInstallmentPlanResponse;
+import com.td.mbna.msec.midtier.offers.payload.requestInstallmentPlan.ResponsePayload;
+import com.td.mbna.msec.midtier.offers.payload.requestInstallmentPlan.InstallmentPlanDetails;
+import com.td.mbna.msec.midtier.util.ConfigUtil;
+import com.td.mbna.msec.midtier.util.services.MidtierUtilHelper;
+import com.td.mbna.msec.midtier.services.EmailInfo;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.UUID;
+import java.util.Map;
+import java.util.HashMap;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
+public class RequestInstallmentPlanOperationTest {
+
+    @InjectMocks
+    private RequestInstallmentPlanOperation requestInstallmentPlanOperation;
+
+    @Mock
+    private MbnaOFP mbnaOFP;
+
+    @Mock
+    private MbnaCCA mbnaCCA;
+
+    @Mock
+    private MbnaAlert mbnaAlert;
+
+    @Mock
+    private FeatureView featureView;
+
+    @Mock
+    private TDRestServiceUtil tdRestServiceUtil;
+
+    @Mock
+    private ConfigUtil configUtil;
+
+    @Mock
+    private GetDisclosureOperation getDisclosureOperation;
+
+    @Mock
+    private EmailInfoImpl emailInfoImpl;
+
+    @BeforeEach
+    void setUp() {
+        // Mock the required dependencies
+    }
+
+    @Test
+    void testInvokeService_WhenValidationOnly() {
+        // Arrange
+        RequestInstallmentPlanRequest request = mock(RequestInstallmentPlanRequest.class);
+        when(request.getRequestPayload()).thenReturn(new RequestInstallmentPlanRequest.RequestPayload());
+        when(request.getRequestPayload().getConfirmed()).thenReturn(false);
+
+        // Act
+        RequestInstallmentPlanResponse response = requestInstallmentPlanOperation.invokeService(request, "token");
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(ResponsePayload.class, response.getResponsePayload().getClass());
+    }
+
+    @Test
+    void testInvokeService_WhenCreateInstallmentPlan() throws Exception {
+        // Arrange
+        RequestInstallmentPlanRequest request = mock(RequestInstallmentPlanRequest.class);
+        when(request.getRequestPayload()).thenReturn(new RequestInstallmentPlanRequest.RequestPayload());
+        when(request.getAcctNum()).thenReturn("12345");
+
+        AddTargetPromotionAgreementFinancialEventResponse mockResponse = mock(AddTargetPromotionAgreementFinancialEventResponse.class);
+        when(mbnaOFP.requestInstallmentPlan(any(RequestInstallmentPlanRequest.class), anyString())).thenReturn(mockResponse);
+        when(mockResponse.getPromotionAgreementFinancialEventId()).thenReturn("event-id");
+
+        // Act
+        RequestInstallmentPlanResponse response = requestInstallmentPlanOperation.invokeService(request, "token");
+
+        // Assert
+        assertNotNull(response);
+        assertEquals("event-id", response.getResponsePayload().getEventId());
+    }
+
+    @Test
+    void testValidateInstallmentPlanRequest_DuplicateNickname() {
+        // Arrange
+        RequestInstallmentPlanRequest request = mock(RequestInstallmentPlanRequest.class);
+        when(request.getRequestPayload()).thenReturn(new RequestInstallmentPlanRequest.RequestPayload());
+        when(request.getRequestPayload().getNickName()).thenReturn("DuplicateNickname");
+
+        when(mbnaCCA.isDuplicateNickName(any(), any(), any(), any())).thenReturn(true);
+
+        // Act & Assert
+        Exception exception = assertThrows(MidtierUtilHelper.BusinessException.class, () -> {
+            requestInstallmentPlanOperation.validateInstallmentPlanRequest(request, "token");
+        });
+        assertTrue(exception.getMessage().contains("MS901"));
+    }
+
+    @Test
+    void testValidateInstallmentPlanRequest_NicknameInProfanityList() {
+        // Arrange
+        RequestInstallmentPlanRequest request = mock(RequestInstallmentPlanRequest.class);
+        when(request.getRequestPayload()).thenReturn(new RequestInstallmentPlanRequest.RequestPayload());
+        when(request.getRequestPayload().getNickName()).thenReturn("ProfaneNick");
+
+        requestInstallmentPlanOperation.profanityList = List.of("ProfaneNick");
+
+        // Act & Assert
+        Exception exception = assertThrows(MidtierUtilHelper.ValidationException.class, () -> {
+            requestInstallmentPlanOperation.validateInstallmentPlanRequest(request, "token");
+        });
+        assertTrue(exception.getMessage().contains("MS902"));
+    }
+
+    @Test
+    void testGenerateAutoComment() {
+        // Arrange
+        RequestInstallmentPlanRequest request = mock(RequestInstallmentPlanRequest.class);
+        RequestInstallmentPlanRequest.RequestPayload payload = mock(RequestInstallmentPlanRequest.RequestPayload.class);
+        InstallmentPlanDetails details = mock(InstallmentPlanDetails.class);
+        when(request.getRequestPayload()).thenReturn(payload);
+        when(payload.getInstallmentPlanDetails()).thenReturn(details);
+        when(details.getNickName()).thenReturn("TestNickname");
+        when(details.getPurchaseAmt()).thenReturn(100.0);
+        when(details.getPercentageFee()).thenReturn(5.0);
+        when(details.getPromotionFeatureDuration()).thenReturn(12);
+        when(details.getPromotionFeatureAnnualInterestRate()).thenReturn(10.0);
+
+        // Act
+        List<String> comments = requestInstallmentPlanOperation.createAutoComment(request, mock(BaseResponse.class));
+
+        // Assert
+        assertFalse(comments.isEmpty());
+        assertTrue(comments.get(0).contains("TestNickname"));
+    }
+
+    @Test
+    void testGetEmailInfoBean() {
+        // Arrange
+        RequestInstallmentPlanRequest request = mock(RequestInstallmentPlanRequest.class);
+        EmailNotificationInfoType emailNotificationInfoType = mock(EmailNotificationInfoType.class);
+        when(request.getRequestPayload()).thenReturn(new RequestInstallmentPlanRequest.RequestPayload());
+        when(request.getRequestPayload().getEmailNotificationInfo()).thenReturn(emailNotificationInfoType);
+        when(request.getSessionInfo()).thenReturn(mock(SessionInfo.class));
+        when(request.getAcctNum()).thenReturn("12345");
+
+        // Act
+        EmailInfo emailInfo = requestInstallmentPlanOperation.getEmailInfoBean(request, mock(BaseResponse.class));
+
+        // Assert
+        assertNotNull(emailInfo);
+        verify(mbnaAlert, times(1)).addAlertEvent(any());
+    }
+
+    @Test
+    void testRequiresDisclosureConsent() {
+        // Act
+        boolean result = requestInstallmentPlanOperation.requiresDisclosureConsent();
+
+        // Assert
+        assertTrue(result);
+    }
+
+    @Test
+    void testGetConsentDisclosureFailedMsgCode() {
+        // Act
+        String result = requestInstallmentPlanOperation.getConsentDisclosureFailedMsgCode();
+
+        // Assert
+        assertEquals("MS542", result);
+    }
+}

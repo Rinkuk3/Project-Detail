@@ -1,0 +1,52 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+
+import com.td.mbna.msec.midtier.service.EmailInfo;
+import com.td.mbna.msec.midtier.mbalert.facade.MbnaAlertFacade;
+
+class MbnaAlertTest {
+
+    @Mock
+    private MbnaAlertFacade mbnaAlertFacade;
+
+    @InjectMocks
+    private MbnaAlertImpl mbnaAlertImpl;
+
+    @Test
+    void testAddAlertEventSuccess() {
+        EmailInfo emailInfo = new EmailInfo();
+        when(mbnaAlertFacade.addAlertEvent(emailInfo)).thenReturn(true);
+
+        boolean result = mbnaAlertImpl.addAlertEvent(emailInfo);
+
+        assertTrue(result);
+        verify(mbnaAlertFacade, times(1)).addAlertEvent(emailInfo);
+    }
+
+    @Test
+    void testAddAlertEventFailure() {
+        EmailInfo emailInfo = new EmailInfo();
+        when(mbnaAlertFacade.addAlertEvent(emailInfo)).thenReturn(false);
+
+        boolean result = mbnaAlertImpl.addAlertEvent(emailInfo);
+
+        assertFalse(result);
+        verify(mbnaAlertFacade, times(1)).addAlertEvent(emailInfo);
+    }
+
+    @Test
+    void testAddAlertEventWithNullEmailInfo() {
+        when(mbnaAlertFacade.addAlertEvent(null)).thenReturn(false);
+
+        boolean result = mbnaAlertImpl.addAlertEvent(null);
+
+        assertFalse(result);
+        verify(mbnaAlertFacade, times(1)).addAlertEvent(null);
+    }
+}

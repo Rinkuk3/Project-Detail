@@ -1,0 +1,139 @@
+package com.td.mbna.msec.midtier.transfer.payload.updatebalancetransfertocreditorpayee;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import com.td.mbna.msec.midtier.transfer.payload.BalanceTransferToCreditorPayeeType;
+
+class RequestPayloadTest {
+
+    private RequestPayload requestPayload;
+    private BalanceTransferToCreditorPayeeType payee;
+
+    @BeforeEach
+    void setUp() {
+        requestPayload = new RequestPayload();
+        payee = new BalanceTransferToCreditorPayeeType();
+    }
+
+    @Test
+    void testGetAndSetCurrentNickname() {
+        String nickname = "My Payee";
+        requestPayload.setCurrentNickname(nickname);
+        assertEquals(nickname, requestPayload.getCurrentNickname());
+    }
+
+    @Test
+    void testGetAndSetPayee() {
+        requestPayload.setPayee(payee);
+        assertEquals(payee, requestPayload.getPayee());
+    }
+
+    @Test
+    void testToString() {
+        String nickname = "My Payee";
+        requestPayload.setCurrentNickname(nickname);
+        requestPayload.setPayee(payee);
+
+        String expectedString = "com.td.mbna.msec.midtier.transfer.payload.updatebalancetransfertocreditorpayee.RequestPayload@" +
+                Integer.toHexString(requestPayload.hashCode()) + "[currentNickname=" + nickname + ",payee=" + payee + "]";
+
+        assertEquals(expectedString, requestPayload.toString());
+    }
+
+    @Test
+    void testToStringWithNullValues() {
+        requestPayload.setCurrentNickname(null);
+        requestPayload.setPayee(null);
+
+        String expectedString = "com.td.mbna.msec.midtier.transfer.payload.updatebalancetransfertocreditorpayee.RequestPayload@" +
+                Integer.toHexString(requestPayload.hashCode()) + "[currentNickname=<null>,payee=<null>]";
+
+        assertEquals(expectedString, requestPayload.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        String nickname = "My Payee";
+        requestPayload.setCurrentNickname(nickname);
+        requestPayload.setPayee(payee);
+
+        int expectedHashCode = requestPayload.hashCode();
+
+        RequestPayload anotherRequestPayload = new RequestPayload();
+        anotherRequestPayload.setCurrentNickname(nickname);
+        anotherRequestPayload.setPayee(payee);
+
+        assertEquals(expectedHashCode, anotherRequestPayload.hashCode());
+    }
+
+    @Test
+    void testHashCodeWithNullValues() {
+        requestPayload.setCurrentNickname(null);
+        requestPayload.setPayee(null);
+
+        RequestPayload anotherRequestPayload = new RequestPayload();
+        anotherRequestPayload.setCurrentNickname(null);
+        anotherRequestPayload.setPayee(null);
+
+        assertEquals(requestPayload.hashCode(), anotherRequestPayload.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        String nickname = "My Payee";
+        requestPayload.setCurrentNickname(nickname);
+        requestPayload.setPayee(payee);
+
+        RequestPayload anotherRequestPayload = new RequestPayload();
+        anotherRequestPayload.setCurrentNickname(nickname);
+        anotherRequestPayload.setPayee(payee);
+
+        assertTrue(requestPayload.equals(anotherRequestPayload));
+
+        RequestPayload differentRequestPayload = new RequestPayload();
+        differentRequestPayload.setCurrentNickname("Different Nickname");
+        differentRequestPayload.setPayee(payee);
+
+        assertFalse(requestPayload.equals(differentRequestPayload));
+
+        assertFalse(requestPayload.equals(null));
+        assertFalse(requestPayload.equals(new Object()));
+    }
+
+    @Test
+    void testEqualsWithNullValues() {
+        requestPayload.setCurrentNickname(null);
+        requestPayload.setPayee(null);
+
+        RequestPayload anotherRequestPayload = new RequestPayload();
+        anotherRequestPayload.setCurrentNickname(null);
+        anotherRequestPayload.setPayee(null);
+
+        assertTrue(requestPayload.equals(anotherRequestPayload));
+    }
+
+    @Test
+    void testEqualsWithDifferentValues() {
+        String nickname = "My Payee";
+        requestPayload.setCurrentNickname(nickname);
+        requestPayload.setPayee(payee);
+
+        RequestPayload differentRequestPayload = new RequestPayload();
+        differentRequestPayload.setCurrentNickname("Different Nickname");
+        differentRequestPayload.setPayee(payee);
+
+        assertFalse(requestPayload.equals(differentRequestPayload));
+    }
+
+    @Test
+    void testEqualsWithSameReference() {
+        String nickname = "My Payee";
+        requestPayload.setCurrentNickname(nickname);
+        requestPayload.setPayee(payee);
+
+        RequestPayload sameRequestPayload = requestPayload;
+
+        assertTrue(requestPayload.equals(sameRequestPayload));
+    }
+}

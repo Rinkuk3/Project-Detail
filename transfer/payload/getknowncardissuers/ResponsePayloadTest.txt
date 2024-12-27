@@ -1,0 +1,128 @@
+package com.td.mbna.msec.midtier.transfer.payload.getknowncardissuers;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+
+class ResponsePayloadTest {
+
+    private ResponsePayload responsePayload;
+
+    @BeforeEach
+    void setUp() {
+        responsePayload = new ResponsePayload();
+    }
+
+    @Test
+    void testGetAndSetCardIssuer() {
+        List<String> cardIssuerList = Arrays.asList("Visa", "MasterCard");
+        responsePayload.setCardIssuer(cardIssuerList);
+        assertEquals(cardIssuerList, responsePayload.getCardIssuer());
+    }
+
+    @Test
+    void testToString() {
+        List<String> cardIssuerList = Arrays.asList("Visa", "MasterCard");
+        responsePayload.setCardIssuer(cardIssuerList);
+        
+        String expectedString = "com.td.mbna.msec.midtier.transfer.payload.getknowncardissuers.ResponsePayload@" +
+                Integer.toHexString(responsePayload.hashCode()) + "[cardIssuer=" + cardIssuerList + "]";
+        
+        assertEquals(expectedString, responsePayload.toString());
+    }
+
+    @Test
+    void testToStringWithNullCardIssuer() {
+        responsePayload.setCardIssuer(null);
+        
+        String expectedString = "com.td.mbna.msec.midtier.transfer.payload.getknowncardissuers.ResponsePayload@" +
+                Integer.toHexString(responsePayload.hashCode()) + "[cardIssuer=<null>]";
+        
+        assertEquals(expectedString, responsePayload.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        List<String> cardIssuerList = Arrays.asList("Visa", "MasterCard");
+        responsePayload.setCardIssuer(cardIssuerList);
+        
+        int expectedHashCode = responsePayload.hashCode();
+
+        ResponsePayload anotherResponsePayload = new ResponsePayload();
+        anotherResponsePayload.setCardIssuer(cardIssuerList);
+
+        assertEquals(expectedHashCode, anotherResponsePayload.hashCode());
+    }
+
+    @Test
+    void testHashCodeWithNullCardIssuer() {
+        responsePayload.setCardIssuer(null);
+        
+        ResponsePayload anotherResponsePayload = new ResponsePayload();
+        anotherResponsePayload.setCardIssuer(null);
+
+        assertEquals(responsePayload.hashCode(), anotherResponsePayload.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        List<String> cardIssuerList = Arrays.asList("Visa", "MasterCard");
+        responsePayload.setCardIssuer(cardIssuerList);
+        
+        ResponsePayload anotherResponsePayload = new ResponsePayload();
+        anotherResponsePayload.setCardIssuer(cardIssuerList);
+
+        assertTrue(responsePayload.equals(anotherResponsePayload));
+
+        ResponsePayload differentResponsePayload = new ResponsePayload();
+        differentResponsePayload.setCardIssuer(Arrays.asList("Amex"));
+
+        assertFalse(responsePayload.equals(differentResponsePayload));
+
+        assertFalse(responsePayload.equals(null));
+        assertFalse(responsePayload.equals(new Object()));
+    }
+
+    @Test
+    void testEqualsWithNullCardIssuer() {
+        responsePayload.setCardIssuer(null);
+
+        ResponsePayload anotherResponsePayload = new ResponsePayload();
+        anotherResponsePayload.setCardIssuer(null);
+
+        assertTrue(responsePayload.equals(anotherResponsePayload));
+    }
+
+    @Test
+    void testEqualsWithDifferentCardIssuer() {
+        responsePayload.setCardIssuer(Arrays.asList("Visa"));
+
+        ResponsePayload anotherResponsePayload = new ResponsePayload();
+        anotherResponsePayload.setCardIssuer(Arrays.asList("MasterCard"));
+
+        assertFalse(responsePayload.equals(anotherResponsePayload));
+    }
+
+    @Test
+    void testEqualsWithSameCardIssuerReference() {
+        List<String> cardIssuerList = Arrays.asList("Visa", "MasterCard");
+        
+        responsePayload.setCardIssuer(cardIssuerList);
+
+        ResponsePayload anotherResponsePayload = responsePayload;
+
+        assertTrue(responsePayload.equals(anotherResponsePayload));
+    }
+
+    @Test
+    void testEqualsWithNullValues() {
+        responsePayload.setCardIssuer(null);
+
+        ResponsePayload anotherResponsePayload = new ResponsePayload();
+        anotherResponsePayload.setCardIssuer(null);
+
+        assertTrue(responsePayload.equals(anotherResponsePayload));
+    }
+}

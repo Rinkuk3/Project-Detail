@@ -1,0 +1,157 @@
+package com.td.mbna.msec.midtier.transfer;
+
+import com.td.mbna.msec.midtier.autopay.payload.validatebankaccount.ValidateBankAccountRequest;
+import com.td.mbna.msec.midtier.autopay.payload.validatebankaccount.ValidateBankAccountResponse;
+import com.td.mbna.msec.midtier.persistance.entity.TtcDestinations;
+import com.td.mbna.msec.midtier.transfer.payload.updatedeposittochequingpayee.UpdateDepositToChequingPayeeRequest;
+import com.td.mbna.msec.midtier.transfer.payload.updatedeposittochequingpayee.UpdateDepositToChequingPayeeResponse;
+import com.td.mbna.msec.midtier.types.common.FieldErrorType;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import com.td.mbna.msec.midtier.util.services.MidtierUtilHelper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+import org.springmodules.validation.valang.ValangValidator;
+
+import java.text.NumberFormat;
+import java.util.Locale;
+
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+class UpdateDepositToChequingPayeeOperationTest {
+
+    @InjectMocks
+    private UpdateDepositToChequingPayeeOperation updateDepositToChequingPayeeOperation;
+
+    @Mock
+    private MbnaAP mbnaAP;
+    @Mock
+    private ValangValidator updateDepositToChequingPayeeRequestValidator;
+    @Mock
+    private UpdateDepositToChequingPayeeRequest updateDepositToChequingPayeeRequest;
+    @Mock
+    private UpdateDepositToChequingPayeeResponse updateDepositToChequingPayeeResponse;
+    @Mock
+    private TtcDestinations payeeDto;
+    @Mock
+    private ValidateBankAccountRequest validateBankAccountRequest;
+    @Mock
+    private ValidateBankAccountResponse validateBankAccountResponse;
+    @Mock
+    private NumberFormat numberFormat;
+    @Mock
+    private MidtierUtilHelper midtierUtilHelper;
+    @Mock
+    private MbnaLogger logger;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        updateDepositToChequingPayeeOperation = new UpdateDepositToChequingPayeeOperation();
+    }
+
+    @Test
+    void testInvokeService_withValidRequest() throws Exception {
+        // Prepare mocks
+        when(updateDepositToChequingPayeeRequest.getRequestPayload()).thenReturn(new DepositToChequingPayeeType());
+        when(updateDepositToChequingPayeeRequest.getRequestPayload().getPayee()).thenReturn(new DepositToChequingPayeeType());
+        when(updateDepositToChequingPayeeRequest.getCustId()).thenReturn("custId");
+        
+        // Simulate valid bank account validation
+        when(mbnaAP.validateBankAccount(any(), any())).thenReturn(validateBankAccountResponse);
+        when(validateBankAccountResponse.getResponsePayload()).thenReturn(new ValidateBankAccountResponse.ResponsePayload());
+        when(validateBankAccountResponse.getResponsePayload().isValidAccount()).thenReturn(true);
+        
+        // Simulate valid payee ID parsing
+        when(numberFormat.parse(anyString())).thenReturn(123);
+
+        when(DBMybatisService.updateTtcDestination(any(TtcDestinations.class))).thenReturn(null);
+
+        // Invoke the service
+        UpdateDepositToChequingPayeeResponse response = updateDepositToChequingPayeeOperation.invokeService(updateDepositToChequingPayeeRequest, "token");
+
+        // Verify and assert
+        assertNotNull(response);
+        verify(DBMybatisService, times(1)).updateTtcDestination(any(TtcDestinations.class));
+    }
+
+    @Test
+    void testInvokeService_withInvalidBankAccount() throws Exception {
+        // Prepare mocks
+        when(updateDepositToChequingPayeeRequest.getRequestPayload()).thenReturn(new DepositToChequingPayeeType());
+        when(updateDepositToChequingPayeeRequest.getRequestPayload().getPayee()).thenReturn(new DepositToChequingPayeeType());
+        when(updateDepositToChequingPayeeRequest.getCustId()).thenReturn("custId");
+        
+        // Simulate invalid bank account validation
+        when(mbnaAP.validateBankAccount(any(), any())).thenReturn(validateBankAccountResponse);
+        when(validateBankAccountResponse.getResponsePayload()).thenReturn(new ValidateBankAccountResponse.ResponsePayload());
+        when(validateBankAccountResponse.getResponsePayload().isValidAccount()).thenReturn(false);
+        
+        // Invoke the service and expect exception
+        assertThrows(ValidationException.class, () -> {
+            updateDepositToChequingPayeeOperation.invokeService(updateDepositToChequingPayeeRequest, "token");
+        });
+    }
+
+    @Test
+    void testInvokeService_withException() throws Exception {
+        // Prepare mocks
+        when(updateDepositToChequingPayeeRequest.getRequestPayload()).thenReturn(new DepositToChequingPayeeType());
+        when(updateDepositToChequingPayeeRequest.getRequestPayload().getPayee()).thenReturn(new DepositToChequingPayeeType());
+        when(updateDepositToChequingPayeeRequest.getCustId()).thenReturn("custId");
+
+        // Simulate exception during bank account validation
+        when(mbnaAP.validateBankAccount(any(), any())).thenThrow(new SOAPFaultException(null));
+
+        // Invoke the service and expect exception
+        assertThrows(MidtierUtilHelper.BusinessException.class, () -> {
+            updateDepositToChequingPayeeOperation.invokeService(updateDepositToChequingPayeeRequest, "token");
+        });
+    }
+
+    @Test
+    void testStripLeadingZeros() {
+        // Test stripLeadingZeros method
+        String result = UpdateDepositToChequingPayeeOperation.stripLeadingZeros("001234");
+        assertEquals("1234", result);
+
+        result = UpdateDepositToChequingPayeeOperation.stripLeadingZeros("000");
+        assertEquals("0", result);
+
+        result = UpdateDepositToChequingPayeeOperation.stripLeadingZeros("123");
+        assertEquals("123", result);
+    }
+
+    @Test
+    void testRequiresDisclosureConsent() {
+        assertFalse(updateDepositToChequingPayeeOperation.requiresDisclosureConsent());
+    }
+
+    @Test
+    void testGetConsentDisclosureFailedMsgCode() {
+        assertNull(updateDepositToChequingPayeeOperation.getConsentDisclosureFailedMsgCode());
+    }
+
+    @Test
+    void testGenerateAutoComment() {
+        assertFalse(updateDepositToChequingPayeeOperation.generateAutoComment());
+    }
+
+    @Test
+    void testCreateAutoComment() {
+        assertNull(updateDepositToChequingPayeeOperation.createAutoComment(null, null));
+    }
+
+    @Test
+    void testGetEmailInfoBean() {
+        assertNull(updateDepositToChequingPayeeOperation.getEmailInfoBean(null, null));
+    }
+
+    @Test
+    void testGetValidator() {
+        when(updateDepositToChequingPayeeRequestValidator.isValid(anyString())).thenReturn(true);
+        MsecValidator validator = updateDepositToChequingPayeeOperation.getValidator();
+        assertNotNull(validator);
+    }
+}

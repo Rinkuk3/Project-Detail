@@ -1,0 +1,129 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+class ForeignExchangeFeeTest {
+
+    private ForeignExchangeFee foreignExchangeFee;
+
+    @BeforeEach
+    void setUp() {
+        foreignExchangeFee = new ForeignExchangeFee();
+    }
+
+    @Test
+    void testGetSetWaiveInd() {
+        foreignExchangeFee.setWaiveInd(true);
+        assertTrue(foreignExchangeFee.getWaiveInd());
+        foreignExchangeFee.setWaiveInd(false);
+        assertFalse(foreignExchangeFee.getWaiveInd());
+    }
+
+    @Test
+    void testGetSetPermanentWaiveInd() {
+        foreignExchangeFee.setPermanentWaiveInd(true);
+        assertTrue(foreignExchangeFee.getPermanentWaiveInd());
+        foreignExchangeFee.setPermanentWaiveInd(false);
+        assertFalse(foreignExchangeFee.getPermanentWaiveInd());
+    }
+
+    @Test
+    void testGetSetCycleToWaiveCnt() {
+        foreignExchangeFee.setCycleToWaiveCnt(5);
+        assertEquals(5, foreignExchangeFee.getCycleToWaiveCnt());
+        foreignExchangeFee.setCycleToWaiveCnt(10);
+        assertEquals(10, foreignExchangeFee.getCycleToWaiveCnt());
+    }
+
+    @Test
+    void testGetSetLastUpdateDt() {
+        String date = "2024-12-20";
+        foreignExchangeFee.setLastUpdateDt(date);
+        assertEquals(date, foreignExchangeFee.getLastUpdateDt());
+
+        String newDate = "2025-01-01";
+        foreignExchangeFee.setLastUpdateDt(newDate);
+        assertEquals(newDate, foreignExchangeFee.getLastUpdateDt());
+    }
+
+    @Test
+    void testToString() {
+        foreignExchangeFee.setWaiveInd(true);
+        foreignExchangeFee.setPermanentWaiveInd(false);
+        foreignExchangeFee.setCycleToWaiveCnt(5);
+        foreignExchangeFee.setLastUpdateDt("2024-12-20");
+
+        String result = foreignExchangeFee.toString();
+        assertTrue(result.contains("waiveInd"));
+        assertTrue(result.contains("permanentWaiveInd"));
+        assertTrue(result.contains("cycleToWaiveCnt"));
+        assertTrue(result.contains("lastUpdateDt"));
+    }
+
+    @Test
+    void testHashCode() {
+        foreignExchangeFee.setWaiveInd(true);
+        foreignExchangeFee.setPermanentWaiveInd(false);
+        foreignExchangeFee.setCycleToWaiveCnt(5);
+        foreignExchangeFee.setLastUpdateDt("2024-12-20");
+
+        int hashCode = foreignExchangeFee.hashCode();
+        assertNotNull(hashCode);
+    }
+
+    @Test
+    void testEquals() {
+        ForeignExchangeFee other = new ForeignExchangeFee();
+        other.setWaiveInd(true);
+        other.setPermanentWaiveInd(false);
+        other.setCycleToWaiveCnt(5);
+        other.setLastUpdateDt("2024-12-20");
+
+        foreignExchangeFee.setWaiveInd(true);
+        foreignExchangeFee.setPermanentWaiveInd(false);
+        foreignExchangeFee.setCycleToWaiveCnt(5);
+        foreignExchangeFee.setLastUpdateDt("2024-12-20");
+
+        assertTrue(foreignExchangeFee.equals(other));
+    }
+
+    @Test
+    void testEquals_withNull() {
+        assertFalse(foreignExchangeFee.equals(null));
+    }
+
+    @Test
+    void testEquals_withDifferentType() {
+        assertFalse(foreignExchangeFee.equals("string"));
+    }
+
+    @Test
+    void testEquals_withDifferentValues() {
+        ForeignExchangeFee other = new ForeignExchangeFee();
+        other.setWaiveInd(true);
+
+        foreignExchangeFee.setWaiveInd(true);
+        foreignExchangeFee.setPermanentWaiveInd(false);
+        foreignExchangeFee.setCycleToWaiveCnt(5);
+        foreignExchangeFee.setLastUpdateDt("2024-12-20");
+
+        assertFalse(foreignExchangeFee.equals(other));
+    }
+
+    @Test
+    void testEquals_withNullFields() {
+        ForeignExchangeFee other = new ForeignExchangeFee();
+        other.setWaiveInd(null);
+        other.setPermanentWaiveInd(null);
+        other.setCycleToWaiveCnt(null);
+        other.setLastUpdateDt(null);
+
+        foreignExchangeFee.setWaiveInd(null);
+        foreignExchangeFee.setPermanentWaiveInd(null);
+        foreignExchangeFee.setCycleToWaiveCnt(null);
+        foreignExchangeFee.setLastUpdateDt(null);
+
+        assertTrue(foreignExchangeFee.equals(other));
+    }
+}

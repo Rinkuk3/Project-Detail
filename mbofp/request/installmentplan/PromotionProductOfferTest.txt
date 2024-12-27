@@ -1,0 +1,125 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class PromotionProductOfferTest {
+
+    private PromotionProductOffer promotionProductOffer;
+    private Feature feature;
+
+    @BeforeEach
+    void setUp() {
+        promotionProductOffer = new PromotionProductOffer();
+        feature = new Feature();
+    }
+
+    @Test
+    void testGetAndSetProductId() {
+        String productId = "PRODUCT_ID";
+        promotionProductOffer.setProductId(productId);
+        assertEquals(productId, promotionProductOffer.getProductId());
+    }
+
+    @Test
+    void testGetAndSetOfferId() {
+        String offerId = "OFFER_ID";
+        promotionProductOffer.setOfferId(offerId);
+        assertEquals(offerId, promotionProductOffer.getOfferId());
+    }
+
+    @Test
+    void testGetAndSetFeature() {
+        feature.setFrontEndFeeInd(true);
+        promotionProductOffer.setFeature(feature);
+        assertEquals(feature, promotionProductOffer.getFeature());
+    }
+
+    @Test
+    void testToString() {
+        feature.setFrontEndFeeInd(true);
+        promotionProductOffer.setProductId("PRODUCT_ID");
+        promotionProductOffer.setOfferId("OFFER_ID");
+        promotionProductOffer.setFeature(feature);
+
+        String expected = "com.td.api.mbofp.request.installmentplan.PromotionProductOffer@" 
+            + Integer.toHexString(promotionProductOffer.hashCode()) 
+            + "[productId=PRODUCT_ID,offerId=OFFER_ID,feature=" + feature + "]";
+
+        assertEquals(expected, promotionProductOffer.toString());
+    }
+
+    @Test
+    void testHashCodeAndEquals() {
+        Feature feature1 = new Feature();
+        feature1.setFrontEndFeeInd(true);
+
+        PromotionProductOffer offer1 = new PromotionProductOffer();
+        offer1.setProductId("PRODUCT_ID");
+        offer1.setOfferId("OFFER_ID");
+        offer1.setFeature(feature1);
+
+        PromotionProductOffer offer2 = new PromotionProductOffer();
+        offer2.setProductId("PRODUCT_ID");
+        offer2.setOfferId("OFFER_ID");
+        offer2.setFeature(feature1);
+
+        Feature feature2 = new Feature();
+        feature2.setFrontEndFeeInd(false);
+
+        PromotionProductOffer offer3 = new PromotionProductOffer();
+        offer3.setProductId("PRODUCT_ID");
+        offer3.setOfferId("OFFER_ID");
+        offer3.setFeature(feature2);
+
+        assertTrue(offer1.equals(offer2));
+        assertFalse(offer1.equals(offer3));
+        assertEquals(offer1.hashCode(), offer2.hashCode());
+        assertNotEquals(offer1.hashCode(), offer3.hashCode());
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        assertFalse(promotionProductOffer.equals(null));
+    }
+
+    @Test
+    void testEqualsWithDifferentClass() {
+        assertFalse(promotionProductOffer.equals(new Object()));
+    }
+
+    @Test
+    void testSameObjectEquals() {
+        assertTrue(promotionProductOffer.equals(promotionProductOffer));
+    }
+
+    @Test
+    void testEqualsWithNullValues() {
+        PromotionProductOffer offer1 = new PromotionProductOffer();
+        offer1.setProductId(null);
+        offer1.setOfferId(null);
+        offer1.setFeature(null);
+
+        PromotionProductOffer offer2 = new PromotionProductOffer();
+        offer2.setProductId(null);
+        offer2.setOfferId(null);
+        offer2.setFeature(null);
+
+        assertTrue(offer1.equals(offer2));
+    }
+
+    @Test
+    void testHashCodeWithNullValues() {
+        PromotionProductOffer offer1 = new PromotionProductOffer();
+        offer1.setProductId(null);
+        offer1.setOfferId(null);
+        offer1.setFeature(null);
+
+        PromotionProductOffer offer2 = new PromotionProductOffer();
+        offer2.setProductId(null);
+        offer2.setOfferId(null);
+        offer2.setFeature(null);
+
+        assertEquals(offer1.hashCode(), offer2.hashCode());
+    }
+}

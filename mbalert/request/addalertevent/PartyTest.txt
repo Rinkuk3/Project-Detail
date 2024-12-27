@@ -1,0 +1,180 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+
+class PartyTest {
+
+    @Test
+    void testGetterAndSetterForInternalPartyIdentification() {
+        Party party = new Party();
+        InternalPartyIdentification internalPartyIdentification = new InternalPartyIdentification();
+        internalPartyIdentification.setTypeCd("Type123");
+        internalPartyIdentification.setPartyId("Party456");
+        party.setInternalPartyIdentification(Arrays.asList(internalPartyIdentification));
+        assertEquals(1, party.getInternalPartyIdentification().size());
+        assertEquals("Type123", party.getInternalPartyIdentification().get(0).getTypeCd());
+    }
+
+    @Test
+    void testGetterAndSetterForPartyTypeCd() {
+        Party party = new Party();
+        party.setPartyTypeCd("Type123");
+        assertEquals("Type123", party.getPartyTypeCd());
+    }
+
+    @Test
+    void testGetterAndSetterForIndividual() {
+        Party party = new Party();
+        Individual individual = new Individual();
+        individual.setFirstName("John");
+        individual.setLastName("Doe");
+        individual.setTitlePrefix("Mr.");
+        party.setIndividual(individual);
+        assertEquals("John", party.getIndividual().getFirstName());
+        assertEquals("Doe", party.getIndividual().getLastName());
+        assertEquals("Mr.", party.getIndividual().getTitlePrefix());
+    }
+
+    @Test
+    void testGetterAndSetterForPartyGroup() {
+        Party party = new Party();
+        PartyGroup partyGroup = new PartyGroup();
+        partyGroup.setGroupName("Group1");
+        party.setPartyGroup(Arrays.asList(partyGroup));
+        assertEquals(1, party.getPartyGroup().size());
+        assertEquals("Group1", party.getPartyGroup().get(0).getGroupName());
+    }
+
+    @Test
+    void testGetterAndSetterForRoleCd() {
+        Party party = new Party();
+        party.setRoleCd("Role123");
+        assertEquals("Role123", party.getRoleCd());
+    }
+
+    @Test
+    void testToString() {
+        Party party = new Party();
+        InternalPartyIdentification internalPartyIdentification = new InternalPartyIdentification();
+        internalPartyIdentification.setTypeCd("Type123");
+        internalPartyIdentification.setPartyId("Party456");
+        party.setInternalPartyIdentification(Arrays.asList(internalPartyIdentification));
+
+        Individual individual = new Individual();
+        individual.setFirstName("John");
+        individual.setLastName("Doe");
+        individual.setTitlePrefix("Mr.");
+        party.setIndividual(individual);
+
+        PartyGroup partyGroup = new PartyGroup();
+        partyGroup.setGroupName("Group1");
+        party.setPartyGroup(Arrays.asList(partyGroup));
+
+        party.setPartyTypeCd("Type123");
+        party.setRoleCd("Role123");
+
+        String expected = "Party(internalPartyIdentification=[InternalPartyIdentification(typeCd=Type123, partyId=Party456)], " +
+                          "partyTypeCd=Type123, individual=Individual(lastName=Doe, firstName=John, titlePrefix=Mr.), " +
+                          "partyGroup=[PartyGroup(groupName=Group1)], roleCd=Role123)";
+        assertEquals(expected, party.toString());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        Party party1 = new Party();
+        InternalPartyIdentification internalPartyIdentification1 = new InternalPartyIdentification();
+        internalPartyIdentification1.setTypeCd("Type123");
+        internalPartyIdentification1.setPartyId("Party456");
+        party1.setInternalPartyIdentification(Arrays.asList(internalPartyIdentification1));
+
+        Individual individual1 = new Individual();
+        individual1.setFirstName("John");
+        individual1.setLastName("Doe");
+        individual1.setTitlePrefix("Mr.");
+        party1.setIndividual(individual1);
+
+        PartyGroup partyGroup1 = new PartyGroup();
+        partyGroup1.setGroupName("Group1");
+        party1.setPartyGroup(Arrays.asList(partyGroup1));
+
+        party1.setPartyTypeCd("Type123");
+        party1.setRoleCd("Role123");
+
+        Party party2 = new Party();
+        InternalPartyIdentification internalPartyIdentification2 = new InternalPartyIdentification();
+        internalPartyIdentification2.setTypeCd("Type123");
+        internalPartyIdentification2.setPartyId("Party456");
+        party2.setInternalPartyIdentification(Arrays.asList(internalPartyIdentification2));
+
+        Individual individual2 = new Individual();
+        individual2.setFirstName("John");
+        individual2.setLastName("Doe");
+        individual2.setTitlePrefix("Mr.");
+        party2.setIndividual(individual2);
+
+        PartyGroup partyGroup2 = new PartyGroup();
+        partyGroup2.setGroupName("Group1");
+        party2.setPartyGroup(Arrays.asList(partyGroup2));
+
+        party2.setPartyTypeCd("Type123");
+        party2.setRoleCd("Role123");
+
+        assertEquals(party1, party2);
+        assertEquals(party1.hashCode(), party2.hashCode());
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        Party party = new Party();
+        assertNotEquals(party, null);
+    }
+
+    @Test
+    void testEqualsWithDifferentType() {
+        Party party = new Party();
+        assertNotEquals(party, new Object());
+    }
+
+    @Test
+    void testHashCodeWithDifferentValues() {
+        Party party1 = new Party();
+        InternalPartyIdentification internalPartyIdentification1 = new InternalPartyIdentification();
+        internalPartyIdentification1.setTypeCd("Type123");
+        internalPartyIdentification1.setPartyId("Party456");
+        party1.setInternalPartyIdentification(Arrays.asList(internalPartyIdentification1));
+
+        Individual individual1 = new Individual();
+        individual1.setFirstName("John");
+        individual1.setLastName("Doe");
+        individual1.setTitlePrefix("Mr.");
+        party1.setIndividual(individual1);
+
+        PartyGroup partyGroup1 = new PartyGroup();
+        partyGroup1.setGroupName("Group1");
+        party1.setPartyGroup(Arrays.asList(partyGroup1));
+
+        party1.setPartyTypeCd("Type123");
+        party1.setRoleCd("Role123");
+
+        Party party2 = new Party();
+        InternalPartyIdentification internalPartyIdentification2 = new InternalPartyIdentification();
+        internalPartyIdentification2.setTypeCd("Type456");
+        internalPartyIdentification2.setPartyId("Party789");
+        party2.setInternalPartyIdentification(Arrays.asList(internalPartyIdentification2));
+
+        Individual individual2 = new Individual();
+        individual2.setFirstName("Jane");
+        individual2.setLastName("Smith");
+        individual2.setTitlePrefix("Ms.");
+        party2.setIndividual(individual2);
+
+        PartyGroup partyGroup2 = new PartyGroup();
+        partyGroup2.setGroupName("Group2");
+        party2.setPartyGroup(Arrays.asList(partyGroup2));
+
+        party2.setPartyTypeCd("Type456");
+        party2.setRoleCd("Role456");
+
+        assertNotEquals(party1.hashCode(), party2.hashCode());
+    }
+}

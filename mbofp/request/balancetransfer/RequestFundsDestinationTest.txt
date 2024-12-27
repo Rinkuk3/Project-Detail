@@ -1,0 +1,102 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestFundsDestinationTest {
+
+    private RequestFundsDestination requestFundsDestination;
+
+    @BeforeEach
+    void setUp() {
+        requestFundsDestination = new RequestFundsDestination();
+    }
+
+    @Test
+    void testGetAndSetRequestDestinationDepositTransactionAgreement() {
+        RequestDestinationDepositTransactionAgreement agreement = new RequestDestinationDepositTransactionAgreement();
+        requestFundsDestination.setRequestDestinationDepositTransactionAgreement(agreement);
+        assertEquals(agreement, requestFundsDestination.getRequestDestinationDepositTransactionAgreement());
+    }
+
+    @Test
+    void testGetAndSetRequestDestinationExternalBankAccount() {
+        RequestDestinationExternalBankAccount bankAccount = new RequestDestinationExternalBankAccount();
+        requestFundsDestination.setRequestDestinationExternalBankAccount(bankAccount);
+        assertEquals(bankAccount, requestFundsDestination.getRequestDestinationExternalBankAccount());
+    }
+
+    @Test
+    void testGetAndSetRequestDestinationExternalCreditorAccount() {
+        RequestDestinationExternalCreditorAccount creditorAccount = new RequestDestinationExternalCreditorAccount();
+        requestFundsDestination.setRequestDestinationExternalCreditorAccount(creditorAccount);
+        assertEquals(creditorAccount, requestFundsDestination.getRequestDestinationExternalCreditorAccount());
+    }
+
+    @Test
+    void testToString() {
+        RequestDestinationDepositTransactionAgreement agreement = new RequestDestinationDepositTransactionAgreement();
+        RequestDestinationExternalBankAccount bankAccount = new RequestDestinationExternalBankAccount();
+        RequestDestinationExternalCreditorAccount creditorAccount = new RequestDestinationExternalCreditorAccount();
+
+        requestFundsDestination.setRequestDestinationDepositTransactionAgreement(agreement);
+        requestFundsDestination.setRequestDestinationExternalBankAccount(bankAccount);
+        requestFundsDestination.setRequestDestinationExternalCreditorAccount(creditorAccount);
+
+        String expected = "com.td.api.mbofp.request.balancetransfer.RequestFundsDestination@"
+            + Integer.toHexString(requestFundsDestination.hashCode()) + "[requestDestinationDepositTransactionAgreement="
+            + agreement + ",requestDestinationExternalBankAccount=" + bankAccount + ",requestDestinationExternalCreditorAccount="
+            + creditorAccount + "]";
+
+        assertEquals(expected, requestFundsDestination.toString());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        RequestDestinationDepositTransactionAgreement agreement = new RequestDestinationDepositTransactionAgreement();
+        RequestDestinationExternalBankAccount bankAccount = new RequestDestinationExternalBankAccount();
+        RequestDestinationExternalCreditorAccount creditorAccount = new RequestDestinationExternalCreditorAccount();
+
+        requestFundsDestination.setRequestDestinationDepositTransactionAgreement(agreement);
+        requestFundsDestination.setRequestDestinationExternalBankAccount(bankAccount);
+        requestFundsDestination.setRequestDestinationExternalCreditorAccount(creditorAccount);
+
+        RequestFundsDestination otherRequestFundsDestination = new RequestFundsDestination();
+        otherRequestFundsDestination.setRequestDestinationDepositTransactionAgreement(agreement);
+        otherRequestFundsDestination.setRequestDestinationExternalBankAccount(bankAccount);
+        otherRequestFundsDestination.setRequestDestinationExternalCreditorAccount(creditorAccount);
+
+        assertTrue(requestFundsDestination.equals(otherRequestFundsDestination));
+        assertEquals(requestFundsDestination.hashCode(), otherRequestFundsDestination.hashCode());
+    }
+
+    @Test
+    void testNotEquals() {
+        RequestDestinationDepositTransactionAgreement agreement = new RequestDestinationDepositTransactionAgreement();
+        RequestDestinationExternalBankAccount bankAccount = new RequestDestinationExternalBankAccount();
+
+        requestFundsDestination.setRequestDestinationDepositTransactionAgreement(agreement);
+        requestFundsDestination.setRequestDestinationExternalBankAccount(bankAccount);
+
+        RequestFundsDestination otherRequestFundsDestination = new RequestFundsDestination();
+        RequestDestinationExternalCreditorAccount creditorAccount = new RequestDestinationExternalCreditorAccount();
+        otherRequestFundsDestination.setRequestDestinationExternalCreditorAccount(creditorAccount);
+
+        assertFalse(requestFundsDestination.equals(otherRequestFundsDestination));
+    }
+
+    @Test
+    void testNullEquals() {
+        assertFalse(requestFundsDestination.equals(null));
+    }
+
+    @Test
+    void testSameObjectEquals() {
+        assertTrue(requestFundsDestination.equals(requestFundsDestination));
+    }
+
+    @Test
+    void testEqualsDifferentClass() {
+        assertFalse(requestFundsDestination.equals(new Object()));
+    }
+}

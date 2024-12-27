@@ -1,0 +1,98 @@
+package com.td.api.dms.response;
+
+import com.td.api.dms.common.Status;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class DocumentListTest {
+
+    private DocumentList documentList;
+
+    @BeforeEach
+    void setUp() {
+        documentList = new DocumentList();
+    }
+
+    @Test
+    void testGetSetStatus() {
+        Status status = Status.SUCCESS;
+        documentList.setStatus(status);
+        assertEquals(status, documentList.getStatus());
+    }
+
+    @Test
+    void testGetSetDocument() {
+        Document document = new Document();
+        document.setDocumentId("doc123");
+        document.setFormat("PDF");
+
+        documentList.setDocument(Arrays.asList(document));
+
+        assertEquals(1, documentList.getDocument().size());
+        assertEquals("doc123", documentList.getDocument().get(0).getDocumentId());
+        assertEquals("PDF", documentList.getDocument().get(0).getFormat());
+    }
+
+    @Test
+    void testToString() {
+        Document document = new Document();
+        document.setDocumentId("doc123");
+        document.setFormat("PDF");
+
+        documentList.setStatus(Status.SUCCESS);
+        documentList.setDocument(Arrays.asList(document));
+
+        String expected = "com.td.api.dms.response.DocumentList@" + Integer.toHexString(System.identityHashCode(documentList)) + 
+                          "[status=SUCCESS,document=[Document{documentId=doc123,format=PDF,metadataItem=[]},],]";
+        assertEquals(expected, documentList.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        DocumentList list1 = new DocumentList();
+        DocumentList list2 = new DocumentList();
+
+        Document document = new Document();
+        document.setDocumentId("doc123");
+        document.setFormat("PDF");
+
+        list1.setStatus(Status.SUCCESS);
+        list1.setDocument(Arrays.asList(document));
+
+        list2.setStatus(Status.SUCCESS);
+        list2.setDocument(Arrays.asList(document));
+
+        assertEquals(list1.hashCode(), list2.hashCode());
+
+        list2.setStatus(Status.FAILURE);
+        assertNotEquals(list1.hashCode(), list2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        DocumentList list1 = new DocumentList();
+        DocumentList list2 = new DocumentList();
+
+        Document document = new Document();
+        document.setDocumentId("doc123");
+        document.setFormat("PDF");
+
+        list1.setStatus(Status.SUCCESS);
+        list1.setDocument(Arrays.asList(document));
+
+        list2.setStatus(Status.SUCCESS);
+        list2.setDocument(Arrays.asList(document));
+
+        assertTrue(list1.equals(list2));
+
+        list2.setStatus(Status.FAILURE);
+        assertFalse(list1.equals(list2));
+
+        assertFalse(list1.equals(null));
+        assertFalse(list1.equals(new Object()));
+    }
+}

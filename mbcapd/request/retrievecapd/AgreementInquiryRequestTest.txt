@@ -1,0 +1,131 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+
+class AgreementInquiryRequestTest {
+
+    @Test
+    void testGetterAndSetterForPartyKey() {
+        AgreementInquiryRequest request = new AgreementInquiryRequest();
+        request.setPartyKey("partyKey1");
+        assertEquals("partyKey1", request.getPartyKey());
+    }
+
+    @Test
+    void testGetterAndSetterForAgreementKey() {
+        AgreementInquiryRequest request = new AgreementInquiryRequest();
+        request.setAgreementKey(Arrays.asList("agreementKey1", "agreementKey2"));
+        assertEquals(2, request.getAgreementKey().size());
+        assertTrue(request.getAgreementKey().contains("agreementKey1"));
+    }
+
+    @Test
+    void testToString() {
+        AgreementInquiryRequest request = new AgreementInquiryRequest();
+        request.setPartyKey("partyKey1");
+        request.setAgreementKey(Arrays.asList("agreementKey1", "agreementKey2"));
+        String expected = "com.td.api.mbcapd.request.retrievecapd.AgreementInquiryRequest@" +
+                          Integer.toHexString(request.hashCode()) + "[partyKey=partyKey1,agreementKey=[agreementKey1, agreementKey2]]";
+        assertTrue(request.toString().contains("partyKey=partyKey1"));
+        assertTrue(request.toString().contains("agreementKey=[agreementKey1, agreementKey2]"));
+    }
+
+    @Test
+    void testHashCode() {
+        AgreementInquiryRequest request1 = new AgreementInquiryRequest();
+        request1.setPartyKey("partyKey1");
+        request1.setAgreementKey(Arrays.asList("agreementKey1"));
+        
+        AgreementInquiryRequest request2 = new AgreementInquiryRequest();
+        request2.setPartyKey("partyKey1");
+        request2.setAgreementKey(Arrays.asList("agreementKey1"));
+
+        assertEquals(request1.hashCode(), request2.hashCode());
+    }
+
+    @Test
+    void testEqualsSameObject() {
+        AgreementInquiryRequest request = new AgreementInquiryRequest();
+        request.setPartyKey("partyKey1");
+        request.setAgreementKey(Arrays.asList("agreementKey1"));
+        
+        assertTrue(request.equals(request));
+    }
+
+    @Test
+    void testEqualsDifferentObject() {
+        AgreementInquiryRequest request1 = new AgreementInquiryRequest();
+        request1.setPartyKey("partyKey1");
+        request1.setAgreementKey(Arrays.asList("agreementKey1"));
+        
+        AgreementInquiryRequest request2 = new AgreementInquiryRequest();
+        request2.setPartyKey("partyKey1");
+        request2.setAgreementKey(Arrays.asList("agreementKey2"));
+        
+        assertFalse(request1.equals(request2));
+    }
+
+    @Test
+    void testEqualsNull() {
+        AgreementInquiryRequest request = new AgreementInquiryRequest();
+        assertFalse(request.equals(null));
+    }
+
+    @Test
+    void testEqualsDifferentClass() {
+        AgreementInquiryRequest request = new AgreementInquiryRequest();
+        assertFalse(request.equals(new Object()));
+    }
+
+    @Test
+    void testEqualsWithDifferentPartyKey() {
+        AgreementInquiryRequest request1 = new AgreementInquiryRequest();
+        request1.setPartyKey("partyKey1");
+        request1.setAgreementKey(Arrays.asList("agreementKey1"));
+        
+        AgreementInquiryRequest request2 = new AgreementInquiryRequest();
+        request2.setPartyKey("partyKey2");
+        request2.setAgreementKey(Arrays.asList("agreementKey1"));
+        
+        assertFalse(request1.equals(request2));
+    }
+
+    @Test
+    void testEqualsWithNullPartyKey() {
+        AgreementInquiryRequest request1 = new AgreementInquiryRequest();
+        request1.setPartyKey(null);
+        request1.setAgreementKey(Arrays.asList("agreementKey1"));
+        
+        AgreementInquiryRequest request2 = new AgreementInquiryRequest();
+        request2.setPartyKey(null);
+        request2.setAgreementKey(Arrays.asList("agreementKey1"));
+        
+        assertTrue(request1.equals(request2));
+    }
+
+    @Test
+    void testEqualsWithNullAgreementKey() {
+        AgreementInquiryRequest request1 = new AgreementInquiryRequest();
+        request1.setPartyKey("partyKey1");
+        request1.setAgreementKey(null);
+        
+        AgreementInquiryRequest request2 = new AgreementInquiryRequest();
+        request2.setPartyKey("partyKey1");
+        request2.setAgreementKey(null);
+        
+        assertTrue(request1.equals(request2));
+    }
+
+    @Test
+    void testEqualsWithDifferentAgreementKey() {
+        AgreementInquiryRequest request1 = new AgreementInquiryRequest();
+        request1.setPartyKey("partyKey1");
+        request1.setAgreementKey(Arrays.asList("agreementKey1"));
+        
+        AgreementInquiryRequest request2 = new AgreementInquiryRequest();
+        request2.setPartyKey("partyKey1");
+        request2.setAgreementKey(Arrays.asList("agreementKey2"));
+        
+        assertFalse(request1.equals(request2));
+    }
+}

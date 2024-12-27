@@ -1,0 +1,165 @@
+package com.td.mbna.msec.midtier.transfer.util;
+
+import com.td.mbna.msec.midtier.transfer.payload.BalanceTransferToCreditorPaymentInfoType;
+import com.td.mbna.msec.midtier.transfer.payload.deposittochequing.RequestPayload;
+import com.td.mbna.msec.midtier.types.common.PromotionOfferType;
+import com.td.mbna.msec.midtier.util.FeeUtil;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class TotalUtilTest {
+
+    @InjectMocks
+    private TotalUtil totalUtil;
+
+    @Mock
+    private FeeUtil feeUtil;
+
+    @Mock
+    private RequestPayload depositToChequingRequest;
+
+    @Mock
+    private com.td.mbna.msec.midtier.types.common.PromotionOfferType promotionOffer;
+
+    @Mock
+    private BalanceTransferToCreditorPaymentInfoType paymentInfo;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testGetDepositToChequingTotal() {
+        // Arrange
+        BigDecimal transferAmt = new BigDecimal("1000");
+        BigDecimal transferFee = new BigDecimal("50");
+
+        when(depositToChequingRequest.getPaymentInfo()).thenReturn(paymentInfo);
+        when(paymentInfo.getAmount()).thenReturn(transferAmt);
+        when(depositToChequingRequest.getSelectedOffer()).thenReturn(promotionOffer);
+        when(FeeUtil.getBalanceTransferFee(promotionOffer, transferAmt)).thenReturn(transferFee);
+
+        // Act
+        BigDecimal total = TotalUtil.getDepositToChequingTotal(depositToChequingRequest);
+
+        // Assert
+        assertEquals(new BigDecimal("1050"), total);
+    }
+
+    @Test
+    void testGetDepositToChequingFee() {
+        // Arrange
+        BigDecimal transferAmt = new BigDecimal("1000");
+        BigDecimal transferFee = new BigDecimal("50");
+
+        when(depositToChequingRequest.getPaymentInfo()).thenReturn(paymentInfo);
+        when(paymentInfo.getAmount()).thenReturn(transferAmt);
+        when(depositToChequingRequest.getSelectedOffer()).thenReturn(promotionOffer);
+        when(FeeUtil.getBalanceTransferFee(promotionOffer, transferAmt)).thenReturn(transferFee);
+
+        // Act
+        BigDecimal fee = TotalUtil.getDepositToChequingFee(depositToChequingRequest);
+
+        // Assert
+        assertEquals(transferFee, fee);
+    }
+
+    @Test
+    void testGetbalanceTransferToCreditorTotal() {
+        // Arrange
+        BigDecimal transferAmt = new BigDecimal("500");
+        BigDecimal transferFee = new BigDecimal("25");
+        BalanceTransferToCreditorPaymentInfoType payment = mock(BalanceTransferToCreditorPaymentInfoType.class);
+        List<BalanceTransferToCreditorPaymentInfoType> payments = Collections.singletonList(payment);
+
+        when(payment.getAmount()).thenReturn(transferAmt);
+        when(FeeUtil.getBalanceTransferFee(promotionOffer, transferAmt)).thenReturn(transferFee);
+
+        // Act
+        BigDecimal total = TotalUtil.getbalanceTransferToCreditorTotal(promotionOffer, payments);
+
+        // Assert
+        assertEquals(transferAmt.add(transferFee), total);
+    }
+
+    @Test
+    void testGetTransferFeeTotal() {
+        // Arrange
+        BigDecimal transferAmt = new BigDecimal("500");
+        BigDecimal transferFee = new BigDecimal("25");
+        BalanceTransferToCreditorPaymentInfoType payment = mock(BalanceTransferToCreditorPaymentInfoType.class);
+        List<BalanceTransferToCreditorPaymentInfoType> payments = Collections.singletonList(payment);
+
+        when(payment.getAmount()).thenReturn(transferAmt);
+        when(FeeUtil.getBalanceTransferFee(promotionOffer, transferAmt)).thenReturn(transferFee);
+
+        // Act
+        BigDecimal feeTotal = TotalUtil.getTransferFeeTotal(promotionOffer, payments);
+
+        // Assert
+        assertEquals(transferFee, feeTotal);
+    }
+
+    @Test
+    void testGetTransferAmountTotal() {
+        // Arrange
+        BigDecimal transferAmt1 = new BigDecimal("500");
+        BigDecimal transferAmt2 = new BigDecimal("300");
+        BalanceTransferToCreditorPaymentInfoType payment1 = mock(BalanceTransferToCreditorPaymentInfoType.class);
+        BalanceTransferToCreditorPaymentInfoType payment2 = mock(BalanceTransferToCreditorPaymentInfoType.class);
+        List<BalanceTransferToCreditorPaymentInfoType> payments = List.of(payment1, payment2);
+
+        when(payment1.getAmount()).thenReturn(transferAmt1);
+        when(payment2.getAmount()).thenReturn(transferAmt2);
+
+        // Act
+        BigDecimal total = TotalUtil.getTransferAmountTotal(payments);
+
+        // Assert
+        assertEquals(transferAmt1.add(transferAmt2), total);
+    }
+
+    @Test
+    void testGetTransferAmountTotal_SinglePayment() {
+        // Arrange
+        BigDecimal transferAmt = new BigDecimal("500");
+        BalanceTransferToCreditorPaymentInfoType payment = mock(BalanceTransferToCreditorPaymentInfoType.class);
+        List<BalanceTransferToCreditorPaymentInfoType> payments = Collections.singletonList(payment);
+
+        when(payment.getAmount()).thenReturn(transferAmt);
+
+        // Act
+        BigDecimal total = TotalUtil.getTransferAmountTotal(payments);
+
+        // Assert
+        assertEquals(transferAmt, total);
+    }
+
+    @Test
+    void testGetTransferFeeTotal_RequestPayload() {
+        // Arrange
+        BigDecimal transferAmt = new BigDecimal("500");
+        BigDecimal transferFee = new BigDecimal("25");
+
+        when(depositToChequingRequest.getPaymentInfo()).thenReturn(paymentInfo);
+        when(paymentInfo.getAmount()).thenReturn(transferAmt);
+        when(depositToChequingRequest.getSelectedOffer()).thenReturn(promotionOffer);
+        when(FeeUtil.getBalanceTransferFee(promotionOffer, transferAmt)).thenReturn(transferFee);
+
+        // Act
+        BigDecimal feeTotal = TotalUtil.getTransferFeeTotal(depositToChequingRequest);
+
+        // Assert
+        assertEquals(transferFee, feeTotal);
+    }
+
+}

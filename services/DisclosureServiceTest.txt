@@ -1,0 +1,211 @@
+import static org.mockito.Mockito.*;
+
+import com.mbnaweb.xsd.types.common.SystemException;
+import com.td.mbna.msec.midtier.autopay.payload.addpad.AddPadRequest;
+import com.td.mbna.msec.midtier.creditcard.payload.increasecardlimit.IncreaseCardLimitRequest;
+import com.td.mbna.msec.midtier.customerprofile.payload.addauthorizeduser.AddAuthorizedUserRequest;
+import com.td.mbna.msec.midtier.customerprofile.payload.customeragreement.CaptureAgreementRequest;
+import com.td.mbna.msec.midtier.disclosure.payload.consentdisclosure.ConsentDisclosureRequest;
+import com.td.mbna.msec.midtier.exception.BusinessError;
+import com.td.mbna.msec.midtier.exception.SystemError;
+import com.td.mbna.msec.midtier.offers.payload.requestInstallmentPlan.RequestInstallmentPlanRequest;
+import com.td.mbna.msec.midtier.offers.payload.requestcashadvanceregistration.RequestCashAdvanceRegistrationRequest;
+import com.td.mbna.msec.midtier.offers.payload.requestinsurance.RequestInsuranceRequest;
+import com.td.mbna.msec.midtier.offers.payload.requestminpaymentdeferral.RequestMinPaymentDeferralRequest;
+import com.td.mbna.msec.midtier.offers.payload.requestproductchange.RequestProductChangeRequest;
+import com.td.mbna.msec.midtier.offers.payload.requestretailregistration.RequestRetailRegistrationRequest;
+import com.td.mbna.msec.midtier.offers.payload.updatebalanceprotectioninsurance.UpdateBalanceProtectionInsuranceRequest;
+import com.td.mbna.msec.midtier.statement.payload.updateStatementDeliveryPreferences.UpdateStatementDeliveryPreferencesRequest;
+import com.td.mbna.msec.midtier.transfer.payload.balancetransfertocreditor.BalanceTransferToCreditorRequest;
+import com.td.mbna.msec.midtier.transfer.payload.deposittochequing.DepositToChequingRequest;
+import com.td.mbna.msec.midtier.types.common.BaseRequest;
+import com.td.mbna.msec.midtier.types.common.TrackableRequest;
+import com.td.mbna.msec.midtier.util.BackEndSrvcUtil;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.*;
+
+import java.util.*;
+
+public class DisclosureServiceTest {
+
+    @Mock
+    private MbnaLogger logger;
+
+    @Mock
+    private BackEndSrvcUtil backEndSrvcUtil;
+
+    @Mock
+    private ConsentDisclosureRequest consentDisclosureRequest;
+
+    @Mock
+    private BalanceTransferToCreditorRequest balanceTransferToCreditorRequest;
+
+    @Mock
+    private AddAuthorizedUserRequest addAuthorizedUserRequest;
+
+    @Mock
+    private DepositToChequingRequest depositToChequingRequest;
+
+    @Mock
+    private IncreaseCardLimitRequest increaseCardLimitRequest;
+
+    @Mock
+    private UpdateStatementDeliveryPreferencesRequest updateStatementDeliveryPreferencesRequest;
+
+    @Mock
+    private RequestInsuranceRequest requestInsuranceRequest;
+
+    @Mock
+    private RequestProductChangeRequest requestProductChangeRequest;
+
+    @Mock
+    private RequestCashAdvanceRegistrationRequest requestCashAdvanceRegistrationRequest;
+
+    @Mock
+    private RequestRetailRegistrationRequest requestRetailRegistrationRequest;
+
+    @Mock
+    private UpdateBalanceProtectionInsuranceRequest updateBalanceProtectionInsuranceRequest;
+
+    @Mock
+    private RequestMinPaymentDeferralRequest requestMinPaymentDeferralRequest;
+
+    @Mock
+    private RequestInstallmentPlanRequest requestInstallmentPlanRequest;
+
+    @Mock
+    private CaptureAgreementRequest captureAgreementRequest;
+
+    @Mock
+    private AddPadRequest addPadRequest;
+
+    @Before
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        DisclosureService.logger = logger;
+    }
+
+    @Test
+    public void testConsentDisclosure_ConsentDisclosureRequest() throws Exception {
+        // Setup
+        ConsentDisclosureRequest request = mock(ConsentDisclosureRequest.class);
+        TrackableRequest trackableRequest = request;
+        when(request.getRequestPayload()).thenReturn(new ConsentDisclosureRequest.RequestPayload());
+
+        DisclosureInfoType disclosureInfoType = new DisclosureInfoType();
+        List<DisclosureInfoType> disclosureInfoList = new ArrayList<>();
+        disclosureInfoList.add(disclosureInfoType);
+        when(request.getRequestPayload().getDisclosureInfo()).thenReturn(disclosureInfoList);
+
+        // Test
+        DisclosureService.consentDisclosure(trackableRequest);
+
+        // Verify
+        verify(logger, times(1)).info(anyString());
+    }
+
+    @Test
+    public void testConsentDisclosure_BalanceTransferToCreditorRequest() throws Exception {
+        BalanceTransferToCreditorRequest request = mock(BalanceTransferToCreditorRequest.class);
+        TrackableRequest trackableRequest = request;
+
+        when(request.getRequestPayload().getConfirmed()).thenReturn(true);
+        DisclosureInfoType disclosureInfoType = new DisclosureInfoType();
+        List<DisclosureInfoType> disclosureInfoList = new ArrayList<>();
+        disclosureInfoList.add(disclosureInfoType);
+        when(request.getRequestPayload().getDisclosureInfo()).thenReturn(disclosureInfoList);
+
+        // Test
+        DisclosureService.consentDisclosure(trackableRequest);
+
+        // Verify
+        verify(logger, times(1)).info(anyString());
+    }
+
+    @Test
+    public void testConsentDisclosure_AddAuthorizedUserRequest() throws Exception {
+        AddAuthorizedUserRequest request = mock(AddAuthorizedUserRequest.class);
+        TrackableRequest trackableRequest = request;
+
+        DisclosureInfoType disclosureInfoType = new DisclosureInfoType();
+        List<DisclosureInfoType> disclosureInfoList = new ArrayList<>();
+        disclosureInfoList.add(disclosureInfoType);
+        when(request.getRequestPayload().getDisclosureInfo()).thenReturn(disclosureInfoList);
+
+        // Test
+        DisclosureService.consentDisclosure(trackableRequest);
+
+        // Verify
+        verify(logger, times(1)).info(anyString());
+    }
+
+    @Test
+    public void testConsentDisclosure_DepositToChequingRequest() throws Exception {
+        DepositToChequingRequest request = mock(DepositToChequingRequest.class);
+        TrackableRequest trackableRequest = request;
+
+        when(request.getRequestPayload().getConfirmed()).thenReturn(true);
+        DisclosureInfoType disclosureInfoType = new DisclosureInfoType();
+        List<DisclosureInfoType> disclosureInfoList = new ArrayList<>();
+        disclosureInfoList.add(disclosureInfoType);
+        when(request.getRequestPayload().getDisclosureInfo()).thenReturn(disclosureInfoList);
+
+        // Test
+        DisclosureService.consentDisclosure(trackableRequest);
+
+        // Verify
+        verify(logger, times(1)).info(anyString());
+    }
+
+    @Test
+    public void testConsentDisclosure_IncreaseCardLimitRequest() throws Exception {
+        IncreaseCardLimitRequest request = mock(IncreaseCardLimitRequest.class);
+        TrackableRequest trackableRequest = request;
+
+        DisclosureInfoType disclosureInfoType = new DisclosureInfoType();
+        List<DisclosureInfoType> disclosureInfoList = new ArrayList<>();
+        disclosureInfoList.add(disclosureInfoType);
+        when(request.getRequestPayload().getDisclosureInfo()).thenReturn(disclosureInfoList);
+
+        // Test
+        DisclosureService.consentDisclosure(trackableRequest);
+
+        // Verify
+        verify(logger, times(1)).info(anyString());
+    }
+
+    @Test
+    public void testConsentDisclosure_SystemError() throws Exception {
+        CaptureAgreementRequest request = mock(CaptureAgreementRequest.class);
+        TrackableRequest trackableRequest = request;
+
+        when(request.getRequestPayload().getDisclosureInfo()).thenReturn(null);
+
+        try {
+            DisclosureService.consentDisclosure(trackableRequest);
+        } catch (SystemError e) {
+            verify(logger, times(1)).error(anyString(), any());
+        }
+    }
+
+    @Test
+    public void testConsentDisclosure_InvalidRequestType() throws Exception {
+        TrackableRequest request = mock(TrackableRequest.class);
+        DisclosureService.consentDisclosure(request);
+
+        verify(logger, times(1)).warning(anyString());
+    }
+
+    @Test
+    public void testConsentDisclosure_EmptyDisclosureInfoList() throws Exception {
+        TrackableRequest request = mock(TrackableRequest.class);
+        when(request.getRequestPayload()).thenReturn(new ConsentDisclosureRequest.RequestPayload());
+        when(request.getRequestPayload().getDisclosureInfo()).thenReturn(new ArrayList<>());
+
+        DisclosureService.consentDisclosure(request);
+
+        verify(logger, times(1)).warning(anyString());
+    }
+}

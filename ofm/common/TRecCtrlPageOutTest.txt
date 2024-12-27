@@ -1,0 +1,125 @@
+package com.td.api.ofm.common;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.net.URI;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class TRecCtrlPageOutTest {
+
+    private TRecCtrlPageOut recCtrlPageOut;
+
+    @BeforeEach
+    public void setUp() {
+        recCtrlPageOut = new TRecCtrlPageOut();
+    }
+
+    @Test
+    public void testGettersAndSetters() {
+        recCtrlPageOut.setPage(1);
+        recCtrlPageOut.setPageSize(10);
+        recCtrlPageOut.setTotalPageCnt(5);
+        recCtrlPageOut.setMatchedCnt(50);
+        recCtrlPageOut.setSentCnt(40);
+        recCtrlPageOut.setNextUri(URI.create("http://example.com/next"));
+        recCtrlPageOut.setPrevUri(URI.create("http://example.com/prev"));
+        recCtrlPageOut.setFirstUri(URI.create("http://example.com/first"));
+        recCtrlPageOut.setLastUri(URI.create("http://example.com/last"));
+
+        assertEquals(1, recCtrlPageOut.getPage());
+        assertEquals(10, recCtrlPageOut.getPageSize());
+        assertEquals(5, recCtrlPageOut.getTotalPageCnt());
+        assertEquals(50, recCtrlPageOut.getMatchedCnt());
+        assertEquals(40, recCtrlPageOut.getSentCnt());
+        assertEquals(URI.create("http://example.com/next"), recCtrlPageOut.getNextUri());
+        assertEquals(URI.create("http://example.com/prev"), recCtrlPageOut.getPrevUri());
+        assertEquals(URI.create("http://example.com/first"), recCtrlPageOut.getFirstUri());
+        assertEquals(URI.create("http://example.com/last"), recCtrlPageOut.getLastUri());
+    }
+
+    @Test
+    public void testToString() {
+        recCtrlPageOut.setPage(1);
+        recCtrlPageOut.setPageSize(10);
+        recCtrlPageOut.setTotalPageCnt(5);
+        recCtrlPageOut.setMatchedCnt(50);
+        recCtrlPageOut.setSentCnt(40);
+        recCtrlPageOut.setNextUri(URI.create("http://example.com/next"));
+        recCtrlPageOut.setPrevUri(URI.create("http://example.com/prev"));
+        recCtrlPageOut.setFirstUri(URI.create("http://example.com/first"));
+        recCtrlPageOut.setLastUri(URI.create("http://example.com/last"));
+
+        String expectedString = "com.td.api.ofm.common.TRecCtrlPageOut@" +
+            Integer.toHexString(recCtrlPageOut.hashCode()) +
+            "[page=1,pageSize=10,totalPageCnt=5,matchedCnt=50,sentCnt=40,nextUri=http://example.com/next,prevUri=http://example.com/prev,firstUri=http://example.com/first,lastUri=http://example.com/last]";
+
+        assertEquals(expectedString, recCtrlPageOut.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        recCtrlPageOut.setPage(1);
+        recCtrlPageOut.setPageSize(10);
+        recCtrlPageOut.setTotalPageCnt(5);
+        recCtrlPageOut.setMatchedCnt(50);
+        recCtrlPageOut.setSentCnt(40);
+        recCtrlPageOut.setNextUri(URI.create("http://example.com/next"));
+        recCtrlPageOut.setPrevUri(URI.create("http://example.com/prev"));
+        recCtrlPageOut.setFirstUri(URI.create("http://example.com/first"));
+        recCtrlPageOut.setLastUri(URI.create("http://example.com/last"));
+
+        int expectedHashCode = 1;
+        expectedHashCode = 31 * expectedHashCode + (recCtrlPageOut.getPrevUri() != null ? recCtrlPageOut.getPrevUri().hashCode() : 0);
+        expectedHashCode = 31 * expectedHashCode + (recCtrlPageOut.getFirstUri() != null ? recCtrlPageOut.getFirstUri().hashCode() : 0);
+        expectedHashCode = 31 * expectedHashCode + (recCtrlPageOut.getLastUri() != null ? recCtrlPageOut.getLastUri().hashCode() : 0);
+        expectedHashCode = 31 * expectedHashCode + (recCtrlPageOut.getSentCnt() != null ? recCtrlPageOut.getSentCnt().hashCode() : 0);
+        expectedHashCode = 31 * expectedHashCode + (recCtrlPageOut.getPageSize() != null ? recCtrlPageOut.getPageSize().hashCode() : 0);
+        expectedHashCode = 31 * expectedHashCode + (recCtrlPageOut.getTotalPageCnt() != null ? recCtrlPageOut.getTotalPageCnt().hashCode() : 0);
+        expectedHashCode = 31 * expectedHashCode + (recCtrlPageOut.getPage() != null ? recCtrlPageOut.getPage().hashCode() : 0);
+        expectedHashCode = 31 * expectedHashCode + (recCtrlPageOut.getNextUri() != null ? recCtrlPageOut.getNextUri().hashCode() : 0);
+        expectedHashCode = 31 * expectedHashCode + (recCtrlPageOut.getMatchedCnt() != null ? recCtrlPageOut.getMatchedCnt().hashCode() : 0);
+
+        assertEquals(expectedHashCode, recCtrlPageOut.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        TRecCtrlPageOut other = new TRecCtrlPageOut();
+        recCtrlPageOut.setPage(1);
+        recCtrlPageOut.setPageSize(10);
+        recCtrlPageOut.setTotalPageCnt(5);
+        recCtrlPageOut.setMatchedCnt(50);
+        recCtrlPageOut.setSentCnt(40);
+        recCtrlPageOut.setNextUri(URI.create("http://example.com/next"));
+        recCtrlPageOut.setPrevUri(URI.create("http://example.com/prev"));
+        recCtrlPageOut.setFirstUri(URI.create("http://example.com/first"));
+        recCtrlPageOut.setLastUri(URI.create("http://example.com/last"));
+
+        other.setPage(1);
+        other.setPageSize(10);
+        other.setTotalPageCnt(5);
+        other.setMatchedCnt(50);
+        other.setSentCnt(40);
+        other.setNextUri(URI.create("http://example.com/next"));
+        other.setPrevUri(URI.create("http://example.com/prev"));
+        other.setFirstUri(URI.create("http://example.com/first"));
+        other.setLastUri(URI.create("http://example.com/last"));
+
+        assertTrue(recCtrlPageOut.equals(other));
+
+        other.setPageSize(20);
+        assertFalse(recCtrlPageOut.equals(other));
+
+        other.setPageSize(10);
+        other.setPage(2);
+        assertFalse(recCtrlPageOut.equals(other));
+
+        other.setPage(1);
+        assertTrue(recCtrlPageOut.equals(other));
+
+        assertTrue(recCtrlPageOut.equals(recCtrlPageOut));
+        assertFalse(recCtrlPageOut.equals(new Object()));
+    }
+}

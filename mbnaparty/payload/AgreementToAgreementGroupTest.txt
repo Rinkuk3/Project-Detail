@@ -1,0 +1,47 @@
+package com.td.api.mbna.msec.midtier.mbnaparty.payload;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+public class AgreementToAgreementGroupTest {
+
+    private AgreementToAgreementGroup agreementToAgreementGroup;
+
+    @BeforeEach
+    public void setUp() {
+        agreementToAgreementGroup = new AgreementToAgreementGroup();
+    }
+
+    @Test
+    public void testGetSetGroupName() {
+        String groupName = "TestGroup";
+        agreementToAgreementGroup.setGroupName(groupName);
+
+        assertEquals(groupName, agreementToAgreementGroup.getGroupName());
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        AgreementToAgreementGroup agreementGroup1 = new AgreementToAgreementGroup();
+        AgreementToAgreementGroup agreementGroup2 = new AgreementToAgreementGroup();
+
+        agreementGroup1.setGroupName("Group1");
+        agreementGroup2.setGroupName("Group1");
+
+        assertEquals(agreementGroup1, agreementGroup2);
+        assertEquals(agreementGroup1.hashCode(), agreementGroup2.hashCode());
+
+        agreementGroup2.setGroupName("Group2");
+        assertNotEquals(agreementGroup1, agreementGroup2);
+    }
+
+    @Test
+    public void testToString() {
+        agreementToAgreementGroup.setGroupName("TestGroup");
+
+        String expectedString = "AgreementToAgreementGroup(groupName=TestGroup)";
+        assertEquals(expectedString, agreementToAgreementGroup.toString());
+    }
+}

@@ -1,0 +1,97 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RecipientTest {
+
+    private Recipient recipient;
+
+    @BeforeEach
+    void setUp() {
+        recipient = new Recipient();
+    }
+
+    @Test
+    void testGetAndSetFullName() {
+        String fullName = "John Doe";
+        recipient.setFullName(fullName);
+        assertEquals(fullName, recipient.getFullName());
+    }
+
+    @Test
+    void testGetAndSetIndividualFirstName() {
+        String individualFirstName = "John";
+        recipient.setIndividualFirstName(individualFirstName);
+        assertEquals(individualFirstName, recipient.getIndividualFirstName());
+    }
+
+    @Test
+    void testGetAndSetIndividualLastName() {
+        String individualLastName = "Doe";
+        recipient.setIndividualLastName(individualLastName);
+        assertEquals(individualLastName, recipient.getIndividualLastName());
+    }
+
+    @Test
+    void testToString() {
+        String fullName = "John Doe";
+        String individualFirstName = "John";
+        String individualLastName = "Doe";
+
+        recipient.setFullName(fullName);
+        recipient.setIndividualFirstName(individualFirstName);
+        recipient.setIndividualLastName(individualLastName);
+
+        String expected = "com.td.api.mbofp.request.balancetransfer.Recipient@" 
+            + Integer.toHexString(recipient.hashCode()) 
+            + "[fullName=" + fullName
+            + ",individualFirstName=" + individualFirstName
+            + ",individualLastName=" + individualLastName + "]";
+
+        assertEquals(expected, recipient.toString());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        Recipient otherRecipient = new Recipient();
+        String fullName = "John Doe";
+        String individualFirstName = "John";
+        String individualLastName = "Doe";
+
+        recipient.setFullName(fullName);
+        recipient.setIndividualFirstName(individualFirstName);
+        recipient.setIndividualLastName(individualLastName);
+
+        otherRecipient.setFullName(fullName);
+        otherRecipient.setIndividualFirstName(individualFirstName);
+        otherRecipient.setIndividualLastName(individualLastName);
+
+        assertTrue(recipient.equals(otherRecipient));
+        assertEquals(recipient.hashCode(), otherRecipient.hashCode());
+    }
+
+    @Test
+    void testNotEquals() {
+        Recipient otherRecipient = new Recipient();
+        recipient.setFullName("John Doe");
+        otherRecipient.setFullName("Jane Doe");
+
+        assertFalse(recipient.equals(otherRecipient));
+    }
+
+    @Test
+    void testNullEquals() {
+        assertFalse(recipient.equals(null));
+    }
+
+    @Test
+    void testSameObjectEquals() {
+        assertTrue(recipient.equals(recipient));
+    }
+
+    @Test
+    void testEqualsDifferentClass() {
+        assertFalse(recipient.equals(new Object()));
+    }
+}

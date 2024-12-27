@@ -1,0 +1,51 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class LocatorTest {
+
+    @Test
+    void testStreetAddress() {
+        Locator locator = new Locator();
+        
+        StreetAddress streetAddress = new StreetAddress("123 Main St", "City", "Province", "12345");
+        locator.setStreetAddress(streetAddress);
+        
+        assertEquals(streetAddress, locator.getStreetAddress());
+    }
+
+    @Test
+    void testSetterAndGetter() {
+        Locator locator = new Locator();
+        
+        StreetAddress streetAddress = new StreetAddress("456 Oak St", "Town", "State", "67890");
+        locator.setStreetAddress(streetAddress);
+        
+        assertNotNull(locator.getStreetAddress());
+        assertEquals(streetAddress, locator.getStreetAddress());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        Locator locator1 = new Locator();
+        Locator locator2 = new Locator();
+        
+        StreetAddress streetAddress = new StreetAddress("789 Pine St", "Village", "Region", "54321");
+        
+        locator1.setStreetAddress(streetAddress);
+        locator2.setStreetAddress(streetAddress);
+        
+        assertEquals(locator1, locator2);
+        assertEquals(locator1.hashCode(), locator2.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        Locator locator = new Locator();
+        
+        StreetAddress streetAddress = new StreetAddress("101 Maple St", "Suburb", "District", "98765");
+        locator.setStreetAddress(streetAddress);
+        
+        String expectedString = "Locator(streetAddress=" + streetAddress + ")";
+        assertEquals(expectedString, locator.toString());
+    }
+}

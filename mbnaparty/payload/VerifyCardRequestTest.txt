@@ -1,0 +1,55 @@
+package com.td.api.mbna.msec.midtier.mbnaparty.payload;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class VerifyCardRequestTest {
+
+    private VerifyCardRequest verifyCardRequest;
+
+    @BeforeEach
+    public void setUp() {
+        verifyCardRequest = new VerifyCardRequest();
+    }
+
+    @Test
+    public void testGetSetRequestPayload() {
+        RequestPayload requestPayload = new RequestPayload();
+        verifyCardRequest.setRequestPayload(requestPayload);
+        assertEquals(requestPayload, verifyCardRequest.getRequestPayload());
+    }
+
+    @Test
+    public void testInheritance() {
+        assertTrue(verifyCardRequest instanceof BaseRequest);
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        RequestPayload requestPayload = new RequestPayload();
+        VerifyCardRequest request1 = new VerifyCardRequest();
+        request1.setRequestPayload(requestPayload);
+
+        VerifyCardRequest request2 = new VerifyCardRequest();
+        request2.setRequestPayload(requestPayload);
+
+        assertEquals(request1, request2);
+        assertEquals(request1.hashCode(), request2.hashCode());
+
+        RequestPayload differentPayload = new RequestPayload();
+        request2.setRequestPayload(differentPayload);
+
+        assertNotEquals(request1, request2);
+    }
+
+    @Test
+    public void testToString() {
+        RequestPayload requestPayload = new RequestPayload();
+        verifyCardRequest.setRequestPayload(requestPayload);
+
+        String str = verifyCardRequest.toString();
+        assertTrue(str.contains("requestPayload"));
+    }
+}

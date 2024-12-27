@@ -1,0 +1,124 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CreditCardAgreementTest {
+
+    @Test
+    public void testGettersAndSetters() {
+        CreditCardAgreement creditCardAgreement = new CreditCardAgreement();
+
+        // Test setter and getter methods
+        creditCardAgreement.setCreditLimitAmt(new java.math.BigDecimal("5000"));
+        assertEquals(new java.math.BigDecimal("5000"), creditCardAgreement.getCreditLimitAmt());
+
+        AlternateDisclosureGroup alternateDisclosureGroup = new AlternateDisclosureGroup();
+        creditCardAgreement.setAlternateDisclosureGroup(alternateDisclosureGroup);
+        assertEquals(alternateDisclosureGroup, creditCardAgreement.getAlternateDisclosureGroup());
+
+        creditCardAgreement.setHighBalanceDt("2024-12-20");
+        assertEquals("2024-12-20", creditCardAgreement.getHighBalanceDt());
+
+        Cccyamt cccyamt = new Cccyamt();
+        creditCardAgreement.setPreviousCreditLimitCccyamt(cccyamt);
+        assertEquals(cccyamt, creditCardAgreement.getPreviousCreditLimitCccyamt());
+
+        creditCardAgreement.setCreditLimitStartDt("2024-01-01");
+        assertEquals("2024-01-01", creditCardAgreement.getCreditLimitStartDt());
+
+        creditCardAgreement.setCreditDeclinedCorrespondenceId("ID12345");
+        assertEquals("ID12345", creditCardAgreement.getCreditDeclinedCorrespondenceId());
+
+        creditCardAgreement.setCreditDeclinedReasonCd("DECLINED");
+        assertEquals("DECLINED", creditCardAgreement.getCreditDeclinedReasonCd());
+
+        creditCardAgreement.setCreditDeclinedReasonDesc("Credit declined due to insufficient funds");
+        assertEquals("Credit declined due to insufficient funds", creditCardAgreement.getCreditDeclinedReasonDesc());
+
+        creditCardAgreement.setCreditLimitChangeCd("CHANGE");
+        assertEquals("CHANGE", creditCardAgreement.getCreditLimitChangeCd());
+
+        creditCardAgreement.setPreviousCashAdvanceLimitCccyamt(cccyamt);
+        assertEquals(cccyamt, creditCardAgreement.getPreviousCashAdvanceLimitCccyamt());
+
+        creditCardAgreement.setCashAdvanceLimitCccyamt(cccyamt);
+        assertEquals(cccyamt, creditCardAgreement.getCashAdvanceLimitCccyamt());
+
+        creditCardAgreement.setCashAdvanceLimitEffectiveCccyamt(cccyamt);
+        assertEquals(cccyamt, creditCardAgreement.getCashAdvanceLimitEffectiveCccyamt());
+
+        creditCardAgreement.setCashAdvanceLimitStartDt("2024-02-01");
+        assertEquals("2024-02-01", creditCardAgreement.getCashAdvanceLimitStartDt());
+
+        creditCardAgreement.setLastCheckRejectionFeePostedDt("2024-03-01");
+        assertEquals("2024-03-01", creditCardAgreement.getLastCheckRejectionFeePostedDt());
+
+        creditCardAgreement.setLastNotSufficientFundsFeePostedDt("2024-03-02");
+        assertEquals("2024-03-02", creditCardAgreement.getLastNotSufficientFundsFeePostedDt());
+
+        ChargeOffStatus chargeOffStatus = new ChargeOffStatus();
+        creditCardAgreement.setChargeOffStatus(chargeOffStatus);
+        assertEquals(chargeOffStatus, creditCardAgreement.getChargeOffStatus());
+
+        ReinstatementStatus reinstatementStatus = new ReinstatementStatus();
+        creditCardAgreement.setReinstatementStatus(reinstatementStatus);
+        assertEquals(reinstatementStatus, creditCardAgreement.getReinstatementStatus());
+    }
+
+    @Test
+    public void testToString() {
+        CreditCardAgreement creditCardAgreement = new CreditCardAgreement();
+        creditCardAgreement.setCreditLimitAmt(new java.math.BigDecimal("5000"));
+        creditCardAgreement.setHighBalanceDt("2024-12-20");
+        creditCardAgreement.setCreditLimitStartDt("2024-01-01");
+
+        String expectedString = "com.td.api.mbcca.creditcard.response.CreditCardAgreement@" + 
+                Integer.toHexString(creditCardAgreement.hashCode()) +
+                "[creditLimitAmt=5000,alternateDisclosureGroup=<null>,highBalanceDt=2024-12-20,previousCreditLimitCccyamt=<null>,creditLimitStartDt=2024-01-01,creditDeclinedCorrespondenceId=<null>,creditDeclinedReasonCd=<null>,creditDeclinedReasonDesc=<null>,creditLimitChangeCd=<null>,previousCashAdvanceLimitCccyamt=<null>,cashAdvanceLimitCccyamt=<null>,cashAdvanceLimitEffectiveCccyamt=<null>,cashAdvanceLimitStartDt=<null>,lastCheckRejectionFeePostedDt=<null>,lastNotSufficientFundsFeePostedDt=<null>,chargeOffStatus=<null>,reinstatementStatus=<null>]";
+        assertTrue(creditCardAgreement.toString().contains("creditLimitAmt"));
+    }
+
+    @Test
+    public void testHashCodeAndEquals() {
+        CreditCardAgreement creditCardAgreement1 = new CreditCardAgreement();
+        creditCardAgreement1.setCreditLimitAmt(new java.math.BigDecimal("5000"));
+        creditCardAgreement1.setHighBalanceDt("2024-12-20");
+        creditCardAgreement1.setCreditLimitStartDt("2024-01-01");
+
+        CreditCardAgreement creditCardAgreement2 = new CreditCardAgreement();
+        creditCardAgreement2.setCreditLimitAmt(new java.math.BigDecimal("5000"));
+        creditCardAgreement2.setHighBalanceDt("2024-12-20");
+        creditCardAgreement2.setCreditLimitStartDt("2024-01-01");
+
+        CreditCardAgreement creditCardAgreement3 = new CreditCardAgreement();
+        creditCardAgreement3.setCreditLimitAmt(new java.math.BigDecimal("6000"));
+        creditCardAgreement3.setHighBalanceDt("2024-12-21");
+        creditCardAgreement3.setCreditLimitStartDt("2024-02-01");
+
+        // Test equality
+        assertTrue(creditCardAgreement1.equals(creditCardAgreement2));  // Same field values
+        assertFalse(creditCardAgreement1.equals(creditCardAgreement3)); // Different field values
+
+        // Test hashCode consistency
+        assertEquals(creditCardAgreement1.hashCode(), creditCardAgreement2.hashCode());
+        assertNotEquals(creditCardAgreement1.hashCode(), creditCardAgreement3.hashCode());
+    }
+
+    @Test
+    public void testEqualsNull() {
+        CreditCardAgreement creditCardAgreement = new CreditCardAgreement();
+        creditCardAgreement.setCreditLimitAmt(new java.math.BigDecimal("5000"));
+
+        // Test equality with null
+        assertFalse(creditCardAgreement.equals(null));
+    }
+
+    @Test
+    public void testEqualsDifferentClass() {
+        CreditCardAgreement creditCardAgreement = new CreditCardAgreement();
+        creditCardAgreement.setCreditLimitAmt(new java.math.BigDecimal("5000"));
+
+        // Test equality with object of different class
+        Object obj = new Object();
+        assertFalse(creditCardAgreement.equals(obj));
+    }
+}

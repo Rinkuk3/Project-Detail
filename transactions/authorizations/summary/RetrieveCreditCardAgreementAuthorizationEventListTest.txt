@@ -1,0 +1,97 @@
+package com.td.api.mbcca.response.transactions.authorizations.summary;
+
+import com.td.api.mbcca.shared.Status;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class RetrieveCreditCardAgreementAuthorizationEventListTest {
+
+    private RetrieveCreditCardAgreementAuthorizationEventList list;
+    private Status status;
+    private AuthorizationEvent authorizationEvent;
+
+    @Before
+    public void setUp() {
+        list = new RetrieveCreditCardAgreementAuthorizationEventList();
+        status = new Status();
+        authorizationEvent = new AuthorizationEvent();
+    }
+
+    @Test
+    public void testGetAndSetStatus() {
+        list.setStatus(status);
+        assertEquals(status, list.getStatus());
+    }
+
+    @Test
+    public void testGetAndSetAuthorizationEvent() {
+        list.setAuthorizationEvent(new ArrayList<AuthorizationEvent>());
+        assertNotNull(list.getAuthorizationEvent());
+    }
+
+    @Test
+    public void testToString() {
+        list.setStatus(status);
+        list.setAuthorizationEvent(new ArrayList<AuthorizationEvent>());
+
+        String expectedString = "com.td.api.mbcca.response.transactions.authorizations.summary.RetrieveCreditCardAgreementAuthorizationEventList@" +
+                                Integer.toHexString(System.identityHashCode(list)) +
+                                "[status=" + status + ",authorizationEvent=[]]";
+        assertEquals(expectedString, list.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        list.setStatus(status);
+        list.setAuthorizationEvent(new ArrayList<AuthorizationEvent>());
+
+        int expectedHashCode = 31 * (31 + (list.getAuthorizationEvent() != null ? list.getAuthorizationEvent().hashCode() : 0)) +
+                               (list.getStatus() != null ? list.getStatus().hashCode() : 0);
+        assertEquals(expectedHashCode, list.hashCode());
+    }
+
+    @Test
+    public void testEquals_withEqualObjects() {
+        list.setStatus(status);
+        list.setAuthorizationEvent(new ArrayList<AuthorizationEvent>());
+
+        RetrieveCreditCardAgreementAuthorizationEventList other = new RetrieveCreditCardAgreementAuthorizationEventList();
+        other.setStatus(status);
+        other.setAuthorizationEvent(new ArrayList<AuthorizationEvent>());
+
+        assertTrue(list.equals(other));
+    }
+
+    @Test
+    public void testEquals_withDifferentStatus() {
+        list.setStatus(status);
+        list.setAuthorizationEvent(new ArrayList<AuthorizationEvent>());
+
+        Status otherStatus = new Status(); // Different status
+        RetrieveCreditCardAgreementAuthorizationEventList other = new RetrieveCreditCardAgreementAuthorizationEventList();
+        other.setStatus(otherStatus);
+        other.setAuthorizationEvent(new ArrayList<AuthorizationEvent>());
+
+        assertFalse(list.equals(other));
+    }
+
+    @Test
+    public void testEquals_withNull() {
+        assertFalse(list.equals(null));
+    }
+
+    @Test
+    public void testEquals_withDifferentClass() {
+        String other = "Some String";
+        assertFalse(list.equals(other));
+    }
+
+    @Test
+    public void testEquals_withSameInstance() {
+        list.setStatus(status);
+        list.setAuthorizationEvent(new ArrayList<AuthorizationEvent>());
+        assertTrue(list.equals(list));  // Comparing with itself
+    }
+}

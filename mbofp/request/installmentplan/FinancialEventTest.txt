@@ -1,0 +1,167 @@
+import com.td.api.mbofp.request.common.TransactionCccyamt;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class FinancialEventTest {
+
+    private FinancialEvent financialEvent;
+    private TransactionCccyamt transactionCccyamt;
+
+    @BeforeEach
+    void setUp() {
+        financialEvent = new FinancialEvent();
+        transactionCccyamt = new TransactionCccyamt(); // assuming this is a valid object with default constructor
+    }
+
+    @Test
+    void testGetAndSetEventId() {
+        String eventId = "EVT123";
+        financialEvent.setEventId(eventId);
+        assertEquals(eventId, financialEvent.getEventId());
+    }
+
+    @Test
+    void testGetAndSetEventDesc() {
+        String eventDesc = "Transaction description";
+        financialEvent.setEventDesc(eventDesc);
+        assertEquals(eventDesc, financialEvent.getEventDesc());
+    }
+
+    @Test
+    void testGetAndSetDebitTxt() {
+        String debitTxt = "Debit transaction text";
+        financialEvent.setDebitTxt(debitTxt);
+        assertEquals(debitTxt, financialEvent.getDebitTxt());
+    }
+
+    @Test
+    void testGetAndSetTermBalanceCd() {
+        String termBalanceCd = "BalanceCode";
+        financialEvent.setTermBalanceCd(termBalanceCd);
+        assertEquals(termBalanceCd, financialEvent.getTermBalanceCd());
+    }
+
+    @Test
+    void testGetAndSetTransactionCccyamt() {
+        financialEvent.setTransactionCccyamt(transactionCccyamt);
+        assertEquals(transactionCccyamt, financialEvent.getTransactionCccyamt());
+    }
+
+    @Test
+    void testToString() {
+        financialEvent.setEventId("EVT123");
+        financialEvent.setEventDesc("Event Description");
+        financialEvent.setDebitTxt("Debit Description");
+        financialEvent.setTermBalanceCd("Balance Code");
+        financialEvent.setTransactionCccyamt(transactionCccyamt);
+        
+        String expected = "com.td.api.mbofp.request.installmentplan.FinancialEvent@" 
+            + Integer.toHexString(financialEvent.hashCode()) 
+            + "[eventId=EVT123,eventDesc=Event Description,debitTxt=Debit Description,termBalanceCd=Balance Code,transactionCccyamt=" + transactionCccyamt + "]";
+        
+        assertEquals(expected, financialEvent.toString());
+    }
+
+    @Test
+    void testHashCodeAndEquals() {
+        FinancialEvent event1 = new FinancialEvent();
+        event1.setEventId("EVT123");
+        event1.setEventDesc("Event 1");
+        event1.setDebitTxt("Debit Text 1");
+        event1.setTermBalanceCd("Term Code 1");
+        event1.setTransactionCccyamt(transactionCccyamt);
+
+        FinancialEvent event2 = new FinancialEvent();
+        event2.setEventId("EVT123");
+        event2.setEventDesc("Event 1");
+        event2.setDebitTxt("Debit Text 1");
+        event2.setTermBalanceCd("Term Code 1");
+        event2.setTransactionCccyamt(transactionCccyamt);
+
+        FinancialEvent event3 = new FinancialEvent();
+        event3.setEventId("EVT124");
+        event3.setEventDesc("Event 2");
+        event3.setDebitTxt("Debit Text 2");
+        event3.setTermBalanceCd("Term Code 2");
+        event3.setTransactionCccyamt(transactionCccyamt);
+
+        assertTrue(event1.equals(event2));
+        assertFalse(event1.equals(event3));
+        assertEquals(event1.hashCode(), event2.hashCode());
+        assertNotEquals(event1.hashCode(), event3.hashCode());
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        assertFalse(financialEvent.equals(null));
+    }
+
+    @Test
+    void testEqualsWithDifferentClass() {
+        assertFalse(financialEvent.equals(new Object()));
+    }
+
+    @Test
+    void testSameObjectEquals() {
+        assertTrue(financialEvent.equals(financialEvent));
+    }
+
+    @Test
+    void testEqualsWithNullValues() {
+        FinancialEvent event1 = new FinancialEvent();
+        event1.setEventId(null);
+        event1.setEventDesc(null);
+        event1.setDebitTxt(null);
+        event1.setTermBalanceCd(null);
+        event1.setTransactionCccyamt(null);
+
+        FinancialEvent event2 = new FinancialEvent();
+        event2.setEventId(null);
+        event2.setEventDesc(null);
+        event2.setDebitTxt(null);
+        event2.setTermBalanceCd(null);
+        event2.setTransactionCccyamt(null);
+
+        assertTrue(event1.equals(event2));
+    }
+
+    @Test
+    void testEqualsWithPartialNullValues() {
+        FinancialEvent event1 = new FinancialEvent();
+        event1.setEventId("EVT123");
+        event1.setEventDesc("Event 1");
+        event1.setDebitTxt(null);
+        event1.setTermBalanceCd(null);
+        event1.setTransactionCccyamt(null);
+
+        FinancialEvent event2 = new FinancialEvent();
+        event2.setEventId("EVT123");
+        event2.setEventDesc("Event 1");
+        event2.setDebitTxt(null);
+        event2.setTermBalanceCd(null);
+        event2.setTransactionCccyamt(null);
+
+        assertTrue(event1.equals(event2));
+    }
+
+    @Test
+    void testHashCodeWithNullValues() {
+        FinancialEvent event1 = new FinancialEvent();
+        event1.setEventId(null);
+        event1.setEventDesc(null);
+        event1.setDebitTxt(null);
+        event1.setTermBalanceCd(null);
+        event1.setTransactionCccyamt(null);
+
+        FinancialEvent event2 = new FinancialEvent();
+        event2.setEventId(null);
+        event2.setEventDesc(null);
+        event2.setDebitTxt(null);
+        event2.setTermBalanceCd(null);
+        event2.setTransactionCccyamt(null);
+
+        assertEquals(event1.hashCode(), event2.hashCode());
+    }
+}

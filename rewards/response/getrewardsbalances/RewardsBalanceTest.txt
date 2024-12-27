@@ -1,0 +1,30 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class RewardsBalanceTest {
+
+    private RewardsBalance rewardsBalance;
+    private RewardsBalanceDTO pendingDTO;
+    private RewardsBalanceDTO availableDTO;
+
+    @BeforeEach
+    public void setUp() {
+        rewardsBalance = new RewardsBalance();
+        pendingDTO = new RewardsBalanceDTO();
+        availableDTO = new RewardsBalanceDTO();
+    }
+
+    @Test
+    public void testGetSetPending() {
+        rewardsBalance.setPending(pendingDTO);
+        assertEquals(pendingDTO, rewardsBalance.getPending());
+    }
+
+    @Test
+    public void testGetSetAvailable() {
+        rewardsBalance.setAvailable(availableDTO);
+        assertEquals(availableDTO, rewardsBalance.getAvailable());
+    }
+}

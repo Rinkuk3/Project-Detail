@@ -1,0 +1,114 @@
+package com.td.mbna.msec.midtier.ofm.adapter;
+
+import com.td.api.ofm.common.TCCAAPIAgreementPartyFeature;
+import com.td.api.ofm.request.TSvcRetrieveCreditCardAgreementPartyFeatureListRq;
+import com.td.api.ofm.response.TSvcRetrieveCreditCardAgreementPartyFeatureListRs;
+import com.td.mbna.msec.midtier.eligibility.payload.getentitlementflags.GetEntitlementFlagsRequest;
+import com.td.mbna.msec.midtier.eligibility.payload.getentitlementflags.GetEntitlementFlagsResponse;
+import com.td.mbna.msec.midtier.eligibility.payload.getentitlementflags.ResponsePayload;
+import com.td.mbna.msec.midtier.types.common.EligIdType;
+import com.td.mbna.msec.midtier.types.eligibility.AcctEligType;
+import com.td.mbna.msec.midtier.types.eligibility.CustEligType;
+import com.td.mbna.msec.midtier.types.eligibility.EligType;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.Mockito.*;
+
+public class MbnaOfmAdapterTest {
+
+    @InjectMocks
+    private MbnaOfmAdapter mbnaOfmAdapter;
+
+    @Mock
+    private TSvcRetrieveCreditCardAgreementPartyFeatureListRs ofmApiResponse;
+
+    @Mock
+    private GetEntitlementFlagsRequest retrieveEligibilityRequest;
+
+    @Mock
+    private TCCAAPIAgreementPartyFeature tccaApiAgreementPartyFeature;
+
+    @Mock
+    private MbnaLogger logger;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testConvert() {
+        // Setup mock responses
+        when(ofmApiResponse.getAgreementPartyFeature()).thenReturn(new ArrayList<>());
+        when(retrieveEligibilityRequest.getCustId()).thenReturn("12345");
+        when(retrieveEligibilityRequest.getAcctNum()).thenReturn("67890");
+        when(retrieveEligibilityRequest.getIsPrimaryUser()).thenReturn(true);
+
+        // Execute method
+        GetEntitlementFlagsResponse response = mbnaOfmAdapter.convert(ofmApiResponse, retrieveEligibilityRequest, true);
+
+        // Verify method calls and response
+        verify(ofmApiResponse).getAgreementPartyFeature();
+        verify(retrieveEligibilityRequest).getCustId();
+        verify(retrieveEligibilityRequest).getAcctNum();
+        verify(retrieveEligibilityRequest).getIsPrimaryUser();
+        
+        assert response != null;
+        assert response.getResponsePayload().getCustElig() != null;
+        assert response.getResponsePayload().getCustElig().getCustId().equals("12345");
+    }
+
+    @Test
+    public void testBuildAcctsElig_withNoChat() {
+        when(ofmApiResponse.getAgreementPartyFeature()).thenReturn(new ArrayList<>());
+        when(retrieveEligibilityRequest.getAcctNum()).thenReturn("67890");
+        when(retrieveEligibilityRequest.getIsPrimaryUser()).thenReturn(true);
+
+        List<AcctEligType> acctsElig = mbnaOfmAdapter.buildAcctsElig("67890", ofmApiResponse, true, true);
+
+        assert acctsElig != null;
+        assert acctsElig.size() == 1;
+        assert acctsElig.get(0).getAcctId().equals("67890");
+    }
+
+    @Test
+    public void testBuildEligType() {
+        when(tccaApiAgreementPartyFeature.getFeature()).thenReturn(new TCCAAPIAgreementPartyFeature());
+        when(tccaApiAgreementPartyFeature.getEligibleInd()).thenReturn(true);
+
+        EligType eligType = mbnaOfmAdapter.buildEligType(tccaApiAgreementPartyFeature, true, true);
+
+        assert eligType != null;
+        assert eligType.getEligValue() == true;
+    }
+
+    @Test
+    public void testBuildCustElig() {
+        when(ofmApiResponse.getAgreementPartyFeature()).thenReturn(new ArrayList<>());
+        
+        List<EligType> custElig = mbnaOfmAdapter.buildCustElig(ofmApiResponse);
+
+        assert custElig != null;
+        assert custElig.isEmpty();
+    }
+
+    @Test
+    public void testBuildTsvcRetrieveCreditCardAgreementPartyFeatureListRq() {
+        when(retrieveEligibilityRequest.getCardNum()).thenReturn("98765");
+        when(retrieveEligibilityRequest.getCustId()).thenReturn("12345");
+
+        TSvcRetrieveCreditCardAgreementPartyFeatureListRq request = mbnaOfmAdapter.buildTsvcRetrieveCreditCardAgreementPartyFeatureListRq(retrieveEligibilityRequest);
+
+        assert request != null;
+        assert request.getCardNum().equals("98765");
+        assert request.getPartyId().equals("12345");
+    }
+}

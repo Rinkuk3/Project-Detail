@@ -1,0 +1,128 @@
+package com.td.mbna.msec.midtier.services;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class IMBNAConstantsTest {
+
+    @Test
+    void testLangConstants() {
+        assertNotNull(IMBNAConstants.LANG_ENGLISH);
+        assertEquals("English", IMBNAConstants.LANG_ENGLISH);
+
+        assertNotNull(IMBNAConstants.LANG_FRENCH);
+        assertEquals("French", IMBNAConstants.LANG_FRENCH);
+    }
+
+    @Test
+    void testLocaleConstants() {
+        assertNotNull(IMBNAConstants.ENGLISH_LOCALE);
+        assertEquals("en_CA", IMBNAConstants.ENGLISH_LOCALE);
+
+        assertNotNull(IMBNAConstants.FRENCH_LOCALE);
+        assertEquals("fr_CA", IMBNAConstants.FRENCH_LOCALE);
+    }
+
+    @Test
+    void testStatementDeliveryPreferences() {
+        assertNotNull(IMBNAConstants.DELIVERY_ONLINE);
+        assertEquals("Opt-in of eStatements", IMBNAConstants.DELIVERY_ONLINE);
+
+        assertNotNull(IMBNAConstants.ESTATEMENT_OPT_IN);
+        assertEquals("OptIneStatement", IMBNAConstants.ESTATEMENT_OPT_IN);
+
+        assertNotNull(IMBNAConstants.DELIVERY_PAPER);
+        assertEquals("Opt-out of eStatements", IMBNAConstants.DELIVERY_PAPER);
+
+        assertNotNull(IMBNAConstants.ESTATEMENT_OPT_OUT);
+        assertEquals("OptOuteStatement", IMBNAConstants.ESTATEMENT_OPT_OUT);
+    }
+
+    @Test
+    void testCardHolderTypes() {
+        assertNotNull(IMBNAConstants.USER_PRINCIPAL);
+        assertEquals("Principal Card Holder", IMBNAConstants.USER_PRINCIPAL);
+
+        assertNotNull(IMBNAConstants.USER_PRINCIPAL_FRENCH);
+        assertEquals("Titulaire principal de la carte", IMBNAConstants.USER_PRINCIPAL_FRENCH);
+
+        assertNotNull(IMBNAConstants.USER_AUTHORIZED);
+        assertEquals("Authorized User", IMBNAConstants.USER_AUTHORIZED);
+
+        assertNotNull(IMBNAConstants.USER_AUTHORIZED_FRENCH);
+        assertEquals("Utilisateurs autoris�s", IMBNAConstants.USER_AUTHORIZED_FRENCH);
+    }
+
+    @Test
+    void testBusinessEventIDs() {
+        assertNotNull(IMBNAConstants.BUSINESSEVENT_ID_ACTIVATECARDREQUEST);
+        assertEquals("CardActivated", IMBNAConstants.BUSINESSEVENT_ID_ACTIVATECARDREQUEST);
+
+        assertNotNull(IMBNAConstants.BUSINESSEVENT_ID_ADDAUTHORIZEDUSERREQUEST);
+        assertEquals("AuthorizedUserAdded", IMBNAConstants.BUSINESSEVENT_ID_ADDAUTHORIZEDUSERREQUEST);
+
+        assertNotNull(IMBNAConstants.BUSINESSEVENT_ID_REQUESTCHEQUEREQUEST);
+        assertEquals("AccessCheque", IMBNAConstants.BUSINESSEVENT_ID_REQUESTCHEQUEREQUEST);
+
+        assertNotNull(IMBNAConstants.BUSINESSEVENT_ID_REPLACECARDREQUEST);
+        assertEquals("CardReplaceRequest", IMBNAConstants.BUSINESSEVENT_ID_REPLACECARDREQUEST);
+
+        assertNotNull(IMBNAConstants.BUSINESSEVENT_ID_DECREASECARDLIMITREQUEST);
+        assertEquals("CreditLimitDecrease", IMBNAConstants.BUSINESSEVENT_ID_DECREASECARDLIMITREQUEST);
+
+        assertNotNull(IMBNAConstants.BUSINESSEVENT_ID_INCREASECARDLIMITREQUEST);
+        assertEquals("CreditLimitIncrease", IMBNAConstants.BUSINESSEVENT_ID_INCREASECARDLIMITREQUEST);
+
+        assertNotNull(IMBNAConstants.BUSINESSEVENT_ID_INCREASECARDLIMITREQUEST_OFFER);
+        assertEquals("CLIApproved", IMBNAConstants.BUSINESSEVENT_ID_INCREASECARDLIMITREQUEST_OFFER);
+
+        assertNotNull(IMBNAConstants.BUSINESSEVENT_ID_UPDATESTATEMENTDELIVERYPREFERENCESREQUEST);
+        assertEquals("StatementPreference", IMBNAConstants.BUSINESSEVENT_ID_UPDATESTATEMENTDELIVERYPREFERENCESREQUEST);
+
+        assertNotNull(IMBNAConstants.BUSINESSEVENT_ID_ORDERHARDCOPYSTATEMENTSREQUEST);
+        assertEquals("StatementReprint", IMBNAConstants.BUSINESSEVENT_ID_ORDERHARDCOPYSTATEMENTSREQUEST);
+
+        assertNotNull(IMBNAConstants.BUSINESSEVENT_ID_UPDATECUSTOMER_ADDRESS_REQUEST);
+        assertEquals("AddressUpdate", IMBNAConstants.BUSINESSEVENT_ID_UPDATECUSTOMER_ADDRESS_REQUEST);
+
+        assertNotNull(IMBNAConstants.BUSINESSEVENT_ID_UPDATECUSTOMER_PHONE_REQUEST);
+        assertEquals("PhoneUpdate", IMBNAConstants.BUSINESSEVENT_ID_UPDATECUSTOMER_PHONE_REQUEST);
+
+        assertNotNull(IMBNAConstants.BUSINESSEVENT_ID_UPDATECUSTOMER_EMAIL_REQUEST);
+        assertEquals("EmailAddressIpdate", IMBNAConstants.BUSINESSEVENT_ID_UPDATECUSTOMER_EMAIL_REQUEST);
+
+        assertNotNull(IMBNAConstants.BUSINESSEVENT_ID_BALANCETRANSFERTOCREDITORREQUEST);
+        assertEquals("BalanceTransfer", IMBNAConstants.BUSINESSEVENT_ID_BALANCETRANSFERTOCREDITORREQUEST);
+
+        assertNotNull(IMBNAConstants.BUSINESSEVENT_ID_TTC);
+        assertEquals("TransferToChequing", IMBNAConstants.BUSINESSEVENT_ID_TTC);
+
+        assertNotNull(IMBNAConstants.BUSINESSEVENT_ID_KYC_UPDATE_PROFILE_REQUEST);
+        assertEquals("KycUpdateProfile", IMBNAConstants.BUSINESSEVENT_ID_KYC_UPDATE_PROFILE_REQUEST);
+
+        assertNotNull(IMBNAConstants.BUSINESSEVENT_ID_BALANCE_PROTECTION_INSURANCE);
+        assertEquals("BalanceProtectionInsurance", IMBNAConstants.BUSINESSEVENT_ID_BALANCE_PROTECTION_INSURANCE);
+
+        assertNotNull(IMBNAConstants.BUSINESSEVENT_ID_IP_ENROLLMENT);
+        assertEquals("IpEnrollment", IMBNAConstants.BUSINESSEVENT_ID_IP_ENROLLMENT);
+    }
+
+    @Test
+    void testAlertTypeCodes() {
+        assertNotNull(IMBNAConstants.ALERT_TYPE_CD_BALANCETRANSFER);
+        assertEquals("MBNA_INTEG_BALANCETRANSFER", IMBNAConstants.ALERT_TYPE_CD_BALANCETRANSFER);
+
+        assertNotNull(IMBNAConstants.ALERT_TYPE_CD_ESTATEMENT);
+        assertEquals("MBNA_INTEG_ESTATEMENT", IMBNAConstants.ALERT_TYPE_CD_ESTATEMENT);
+
+        assertNotNull(IMBNAConstants.ALERT_TYPE_CD_IPENROLLMENT);
+        assertEquals("MBNA_INTEG_IPENROLLMENT", IMBNAConstants.ALERT_TYPE_CD_IPENROLLMENT);
+
+        assertNotNull(IMBNAConstants.ALERT_TYPE_CD_PRODUCTCHANGE);
+        assertEquals("MBNA_INTEG_PRODUCTCHANGE", IMBNAConstants.ALERT_TYPE_CD_PRODUCTCHANGE);
+
+        assertNotNull(IMBNAConstants.ALERT_TYPE_CD_SECUREGENERIC);
+        assertEquals("MBNA_INTEG_SECUREGENERIC", IMBNAConstants.ALERT_TYPE_CD_SECUREGENERIC);
+    }
+}

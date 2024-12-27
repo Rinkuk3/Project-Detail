@@ -1,0 +1,153 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+
+class MobilePushTest {
+
+    @Test
+    void testGetterAndSetterForLocatorUsageTypeCd() {
+        MobilePush mobilePush = new MobilePush();
+        mobilePush.setLocatorUsageTypeCd("UsageType123");
+        assertEquals("UsageType123", mobilePush.getLocatorUsageTypeCd());
+    }
+
+    @Test
+    void testGetterAndSetterForDeliveryStatusCd() {
+        MobilePush mobilePush = new MobilePush();
+        mobilePush.setDeliveryStatusCd("Status123");
+        assertEquals("Status123", mobilePush.getDeliveryStatusCd());
+    }
+
+    @Test
+    void testGetterAndSetterForLocatorText() {
+        MobilePush mobilePush = new MobilePush();
+        LocatorText locatorText = new LocatorText();
+        locatorText.setLocatorTxt("LocatorText123");
+        mobilePush.setLocatorText(Arrays.asList(locatorText));
+        assertEquals(1, mobilePush.getLocatorText().size());
+        assertEquals("LocatorText123", mobilePush.getLocatorText().get(0).getLocatorTxt());
+    }
+
+    @Test
+    void testGetterAndSetterForAltrExtension() {
+        MobilePush mobilePush = new MobilePush();
+        AltrExtension altrExtension = new AltrExtension();
+        altrExtension.setExtensionData("ExtensionData123");
+        mobilePush.setAltrExtension(altrExtension);
+        assertEquals("ExtensionData123", mobilePush.getAltrExtension().getExtensionData());
+    }
+
+    @Test
+    void testGetterAndSetterForFeatureLocator() {
+        MobilePush mobilePush = new MobilePush();
+        FeatureLocator featureLocator = new FeatureLocator();
+        featureLocator.setFeatureId("Feature123");
+        mobilePush.setFeatureLocator(Arrays.asList(featureLocator));
+        assertEquals(1, mobilePush.getFeatureLocator().size());
+        assertEquals("Feature123", mobilePush.getFeatureLocator().get(0).getFeatureId());
+    }
+
+    @Test
+    void testGetterAndSetterForDeviceToken() {
+        MobilePush mobilePush = new MobilePush();
+        mobilePush.setDeviceToken("DeviceToken123");
+        assertEquals("DeviceToken123", mobilePush.getDeviceToken());
+    }
+
+    @Test
+    void testGetterAndSetterForAlertLocatorSequenceNum() {
+        MobilePush mobilePush = new MobilePush();
+        mobilePush.setAlertLocatorSequenceNum("Seq123");
+        assertEquals("Seq123", mobilePush.getAlertLocatorSequenceNum());
+    }
+
+    @Test
+    void testToString() {
+        MobilePush mobilePush = new MobilePush();
+        mobilePush.setLocatorUsageTypeCd("UsageType123");
+        mobilePush.setDeliveryStatusCd("Status123");
+        LocatorText locatorText = new LocatorText();
+        locatorText.setLocatorTxt("LocatorText123");
+        mobilePush.setLocatorText(Arrays.asList(locatorText));
+        AltrExtension altrExtension = new AltrExtension();
+        altrExtension.setExtensionData("ExtensionData123");
+        mobilePush.setAltrExtension(altrExtension);
+        FeatureLocator featureLocator = new FeatureLocator();
+        featureLocator.setFeatureId("Feature123");
+        mobilePush.setFeatureLocator(Arrays.asList(featureLocator));
+        mobilePush.setDeviceToken("DeviceToken123");
+        mobilePush.setAlertLocatorSequenceNum("Seq123");
+
+        String expected = "MobilePush(locatorUsageTypeCd=UsageType123, deliveryStatusCd=Status123, " +
+                          "locatorText=[LocatorText(locatorTxt=LocatorText123)], altrExtension=AltrExtension(extensionData=ExtensionData123), " +
+                          "featureLocator=[FeatureLocator(featureId=Feature123)], deviceToken=DeviceToken123, alertLocatorSequenceNum=Seq123)";
+        assertEquals(expected, mobilePush.toString());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        MobilePush mobilePush1 = new MobilePush();
+        mobilePush1.setLocatorUsageTypeCd("UsageType123");
+        mobilePush1.setDeliveryStatusCd("Status123");
+        LocatorText locatorText1 = new LocatorText();
+        locatorText1.setLocatorTxt("LocatorText123");
+        mobilePush1.setLocatorText(Arrays.asList(locatorText1));
+        AltrExtension altrExtension1 = new AltrExtension();
+        altrExtension1.setExtensionData("ExtensionData123");
+        mobilePush1.setAltrExtension(altrExtension1);
+        FeatureLocator featureLocator1 = new FeatureLocator();
+        featureLocator1.setFeatureId("Feature123");
+        mobilePush1.setFeatureLocator(Arrays.asList(featureLocator1));
+        mobilePush1.setDeviceToken("DeviceToken123");
+        mobilePush1.setAlertLocatorSequenceNum("Seq123");
+
+        MobilePush mobilePush2 = new MobilePush();
+        mobilePush2.setLocatorUsageTypeCd("UsageType123");
+        mobilePush2.setDeliveryStatusCd("Status123");
+        LocatorText locatorText2 = new LocatorText();
+        locatorText2.setLocatorTxt("LocatorText123");
+        mobilePush2.setLocatorText(Arrays.asList(locatorText2));
+        AltrExtension altrExtension2 = new AltrExtension();
+        altrExtension2.setExtensionData("ExtensionData123");
+        mobilePush2.setAltrExtension(altrExtension2);
+        FeatureLocator featureLocator2 = new FeatureLocator();
+        featureLocator2.setFeatureId("Feature123");
+        mobilePush2.setFeatureLocator(Arrays.asList(featureLocator2));
+        mobilePush2.setDeviceToken("DeviceToken123");
+        mobilePush2.setAlertLocatorSequenceNum("Seq123");
+
+        assertEquals(mobilePush1, mobilePush2);
+        assertEquals(mobilePush1.hashCode(), mobilePush2.hashCode());
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        MobilePush mobilePush = new MobilePush();
+        assertNotEquals(mobilePush, null);
+    }
+
+    @Test
+    void testEqualsWithDifferentType() {
+        MobilePush mobilePush = new MobilePush();
+        assertNotEquals(mobilePush, new Object());
+    }
+
+    @Test
+    void testHashCodeWithDifferentValues() {
+        MobilePush mobilePush1 = new MobilePush();
+        mobilePush1.setLocatorUsageTypeCd("UsageType123");
+        mobilePush1.setDeliveryStatusCd("Status123");
+        LocatorText locatorText1 = new LocatorText();
+        locatorText1.setLocatorTxt("LocatorText123");
+        mobilePush1.setLocatorText(Arrays.asList(locatorText1));
+        
+        MobilePush mobilePush2 = new MobilePush();
+        mobilePush2.setLocatorUsageTypeCd("UsageType456");
+        mobilePush2.setDeliveryStatusCd("Status456");
+        LocatorText locatorText2 = new LocatorText();
+        locatorText2.setLocatorTxt("LocatorText456");
+        mobilePush2.setLocatorText(Arrays.asList(locatorText2));
+        
+        assertNotEquals(mobilePush1.hashCode(), mobilePush2.hashCode());
+    }
+}

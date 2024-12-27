@@ -1,0 +1,108 @@
+package com.td.api.mbcca.creditcard.request;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class AddressInfoTest {
+
+    @Test
+    void testGetSetCardAddressId() {
+        AddressInfo addressInfo = new AddressInfo();
+        addressInfo.setCardAddressId("12345");
+        assertEquals("12345", addressInfo.getCardAddressId());
+    }
+
+    @Test
+    void testGetSetCorrespondenceAddressId() {
+        AddressInfo addressInfo = new AddressInfo();
+        addressInfo.setCorrespondenceAddressId("67890");
+        assertEquals("67890", addressInfo.getCorrespondenceAddressId());
+    }
+
+    @Test
+    void testGetSetPinMailerAddressId() {
+        AddressInfo addressInfo = new AddressInfo();
+        addressInfo.setPinMailerAddressId("112233");
+        assertEquals("112233", addressInfo.getPinMailerAddressId());
+    }
+
+    @Test
+    void testGetSetStatementAddressId() {
+        AddressInfo addressInfo = new AddressInfo();
+        addressInfo.setStatementAddressId("445566");
+        assertEquals("445566", addressInfo.getStatementAddressId());
+    }
+
+    @Test
+    void testToString() {
+        AddressInfo addressInfo = new AddressInfo();
+        addressInfo.setCardAddressId("12345");
+        addressInfo.setCorrespondenceAddressId("67890");
+        addressInfo.setPinMailerAddressId("112233");
+        addressInfo.setStatementAddressId("445566");
+        
+        String expected = "com.td.api.mbcca.creditcard.request.AddressInfo@" + 
+                          Integer.toHexString(addressInfo.hashCode()) + 
+                          "[cardAddressId=12345,correspondenceAddressId=67890,pinMailerAddressId=112233,statementAddressId=445566]";
+        assertEquals(expected, addressInfo.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        AddressInfo addressInfo1 = new AddressInfo();
+        addressInfo1.setCardAddressId("12345");
+        addressInfo1.setCorrespondenceAddressId("67890");
+        addressInfo1.setPinMailerAddressId("112233");
+        addressInfo1.setStatementAddressId("445566");
+
+        AddressInfo addressInfo2 = new AddressInfo();
+        addressInfo2.setCardAddressId("12345");
+        addressInfo2.setCorrespondenceAddressId("67890");
+        addressInfo2.setPinMailerAddressId("112233");
+        addressInfo2.setStatementAddressId("445566");
+
+        assertEquals(addressInfo1.hashCode(), addressInfo2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        AddressInfo addressInfo1 = new AddressInfo();
+        addressInfo1.setCardAddressId("12345");
+        addressInfo1.setCorrespondenceAddressId("67890");
+        addressInfo1.setPinMailerAddressId("112233");
+        addressInfo1.setStatementAddressId("445566");
+
+        AddressInfo addressInfo2 = new AddressInfo();
+        addressInfo2.setCardAddressId("12345");
+        addressInfo2.setCorrespondenceAddressId("67890");
+        addressInfo2.setPinMailerAddressId("112233");
+        addressInfo2.setStatementAddressId("445566");
+
+        assertTrue(addressInfo1.equals(addressInfo2));
+    }
+
+    @Test
+    void testEqualsWithDifferentObjects() {
+        AddressInfo addressInfo1 = new AddressInfo();
+        addressInfo1.setCardAddressId("12345");
+
+        AddressInfo addressInfo2 = new AddressInfo();
+        addressInfo2.setCardAddressId("67890");
+
+        assertFalse(addressInfo1.equals(addressInfo2));
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        AddressInfo addressInfo = new AddressInfo();
+        assertFalse(addressInfo.equals(null));
+    }
+
+    @Test
+    void testEqualsWithDifferentClass() {
+        AddressInfo addressInfo = new AddressInfo();
+        String differentClass = "DifferentClass";
+        assertFalse(addressInfo.equals(differentClass));
+    }
+
+}

@@ -1,0 +1,119 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.mockito.Mockito;
+
+class InsuranceEnrolmentEventTest {
+
+    private InsuranceEnrolmentEvent insuranceEnrolmentEvent;
+
+    @BeforeEach
+    void setUp() {
+        insuranceEnrolmentEvent = new InsuranceEnrolmentEvent();
+    }
+
+    @Test
+    void testGetAndSetAgreementAltkey() {
+        AgreementAltkey agreementAltkey = Mockito.mock(AgreementAltkey.class);
+        insuranceEnrolmentEvent.setAgreementAltkey(agreementAltkey);
+        assertEquals(agreementAltkey, insuranceEnrolmentEvent.getAgreementAltkey());
+    }
+
+    @Test
+    void testGetAndSetProductId() {
+        insuranceEnrolmentEvent.setProductId("product123");
+        assertEquals("product123", insuranceEnrolmentEvent.getProductId());
+    }
+
+    @Test
+    void testGetAndSetIndividual() {
+        Individual individual = Mockito.mock(Individual.class);
+        insuranceEnrolmentEvent.setIndividual(individual);
+        assertEquals(individual, insuranceEnrolmentEvent.getIndividual());
+    }
+
+    @Test
+    void testGetAndSetSolicitationChannelTypeCd() {
+        insuranceEnrolmentEvent.setSolicitationChannelTypeCd("channel1");
+        assertEquals("channel1", insuranceEnrolmentEvent.getSolicitationChannelTypeCd());
+    }
+
+    @Test
+    void testGetAndSetAccessChannelTypeCd() {
+        insuranceEnrolmentEvent.setAccessChannelTypeCd("access1");
+        assertEquals("access1", insuranceEnrolmentEvent.getAccessChannelTypeCd());
+    }
+
+    @Test
+    void testToString() {
+        AgreementAltkey agreementAltkey = Mockito.mock(AgreementAltkey.class);
+        Individual individual = Mockito.mock(Individual.class);
+        insuranceEnrolmentEvent.setAgreementAltkey(agreementAltkey);
+        insuranceEnrolmentEvent.setProductId("product123");
+        insuranceEnrolmentEvent.setIndividual(individual);
+        insuranceEnrolmentEvent.setSolicitationChannelTypeCd("channel1");
+        insuranceEnrolmentEvent.setAccessChannelTypeCd("access1");
+
+        String expected = "com.td.api.mbofp.request.insuranceenrolment.InsuranceEnrolmentEvent@" + 
+                          Integer.toHexString(insuranceEnrolmentEvent.hashCode()) + 
+                          "[agreementAltkey=" + agreementAltkey + 
+                          ",productId=product123," +
+                          "individual=" + individual + 
+                          ",solicitationChannelTypeCd=channel1," +
+                          "accessChannelTypeCd=access1]";
+
+        assertEquals(expected, insuranceEnrolmentEvent.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        AgreementAltkey agreementAltkey = Mockito.mock(AgreementAltkey.class);
+        Individual individual = Mockito.mock(Individual.class);
+
+        insuranceEnrolmentEvent.setAgreementAltkey(agreementAltkey);
+        insuranceEnrolmentEvent.setProductId("product123");
+        insuranceEnrolmentEvent.setIndividual(individual);
+        insuranceEnrolmentEvent.setSolicitationChannelTypeCd("channel1");
+        insuranceEnrolmentEvent.setAccessChannelTypeCd("access1");
+
+        int expectedHashCode = 1;
+        expectedHashCode = 31 * expectedHashCode + (agreementAltkey == null ? 0 : agreementAltkey.hashCode());
+        expectedHashCode = 31 * expectedHashCode + (productId == null ? 0 : productId.hashCode());
+        expectedHashCode = 31 * expectedHashCode + (individual == null ? 0 : individual.hashCode());
+        expectedHashCode = 31 * expectedHashCode + (solicitationChannelTypeCd == null ? 0 : solicitationChannelTypeCd.hashCode());
+        expectedHashCode = 31 * expectedHashCode + (accessChannelTypeCd == null ? 0 : accessChannelTypeCd.hashCode());
+
+        assertEquals(expectedHashCode, insuranceEnrolmentEvent.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        AgreementAltkey agreementAltkey = Mockito.mock(AgreementAltkey.class);
+        Individual individual = Mockito.mock(Individual.class);
+
+        insuranceEnrolmentEvent.setAgreementAltkey(agreementAltkey);
+        insuranceEnrolmentEvent.setProductId("product123");
+        insuranceEnrolmentEvent.setIndividual(individual);
+        insuranceEnrolmentEvent.setSolicitationChannelTypeCd("channel1");
+        insuranceEnrolmentEvent.setAccessChannelTypeCd("access1");
+
+        InsuranceEnrolmentEvent otherEvent = new InsuranceEnrolmentEvent();
+        otherEvent.setAgreementAltkey(agreementAltkey);
+        otherEvent.setProductId("product123");
+        otherEvent.setIndividual(individual);
+        otherEvent.setSolicitationChannelTypeCd("channel1");
+        otherEvent.setAccessChannelTypeCd("access1");
+
+        assertTrue(insuranceEnrolmentEvent.equals(otherEvent));
+
+        otherEvent.setProductId("product456");
+        assertFalse(insuranceEnrolmentEvent.equals(otherEvent));
+
+        otherEvent.setProductId("product123");
+        otherEvent.setIndividual(null);
+        assertFalse(insuranceEnrolmentEvent.equals(otherEvent));
+
+        assertFalse(insuranceEnrolmentEvent.equals(null));
+        assertFalse(insuranceEnrolmentEvent.equals(new Object()));
+    }
+}

@@ -1,0 +1,38 @@
+package com.td.mbna.msec.midtier.statement.payload.getIpEligibleTransactions;
+
+import com.td.mbna.msec.midtier.types.common.CardHolderInfo;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestPayloadTest {
+
+    @Test
+    void testGetAndSetCardHolderInfos() {
+        RequestPayload requestPayload = new RequestPayload();
+
+        CardHolderInfo cardHolderInfo = new CardHolderInfo();
+        List<CardHolderInfo> cardHolderInfoList = List.of(cardHolderInfo);
+
+        requestPayload.setCardHolderInfos(cardHolderInfoList);
+
+        List<CardHolderInfo> result = requestPayload.getCardHolderInfos();
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(cardHolderInfo, result.get(0));
+    }
+
+    @Test
+    void testSetCardHolderInfosWithEmptyList() {
+        RequestPayload requestPayload = new RequestPayload();
+        
+        List<CardHolderInfo> emptyList = new ArrayList<>();
+        requestPayload.setCardHolderInfos(emptyList);
+        
+        assertNotNull(requestPayload.getCardHolderInfos());
+        assertTrue(requestPayload.getCardHolderInfos().isEmpty());
+    }
+}

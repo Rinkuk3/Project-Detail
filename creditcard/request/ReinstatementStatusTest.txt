@@ -1,0 +1,70 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class ReinstatementStatusTest {
+
+    @Test
+    public void testGettersAndSetters() {
+        ReinstatementStatus reinstatementStatus = new ReinstatementStatus();
+
+        // Test setter and getter methods
+        reinstatementStatus.setReinstatementInd(true);
+        assertTrue(reinstatementStatus.getReinstatementInd());
+
+        reinstatementStatus.setReinstatementInd(false);
+        assertFalse(reinstatementStatus.getReinstatementInd());
+
+        // Test setter with null value
+        reinstatementStatus.setReinstatementInd(null);
+        assertNull(reinstatementStatus.getReinstatementInd());
+    }
+
+    @Test
+    public void testToString() {
+        ReinstatementStatus reinstatementStatus = new ReinstatementStatus();
+        reinstatementStatus.setReinstatementInd(true);
+
+        String expectedString = "com.td.api.mbcca.creditcard.request.ReinstatementStatus@" + Integer.toHexString(reinstatementStatus.hashCode()) +
+                "[reinstatementInd=true]";
+        assertTrue(reinstatementStatus.toString().contains("reinstatementInd"));
+    }
+
+    @Test
+    public void testHashCodeAndEquals() {
+        ReinstatementStatus reinstatementStatus1 = new ReinstatementStatus();
+        reinstatementStatus1.setReinstatementInd(true);
+
+        ReinstatementStatus reinstatementStatus2 = new ReinstatementStatus();
+        reinstatementStatus2.setReinstatementInd(true);
+
+        ReinstatementStatus reinstatementStatus3 = new ReinstatementStatus();
+        reinstatementStatus3.setReinstatementInd(false);
+
+        // Test equality
+        assertTrue(reinstatementStatus1.equals(reinstatementStatus2));  // Same field values
+        assertFalse(reinstatementStatus1.equals(reinstatementStatus3)); // Different field values
+
+        // Test hashCode consistency
+        assertEquals(reinstatementStatus1.hashCode(), reinstatementStatus2.hashCode());
+        assertNotEquals(reinstatementStatus1.hashCode(), reinstatementStatus3.hashCode());
+    }
+
+    @Test
+    public void testEqualsNull() {
+        ReinstatementStatus reinstatementStatus = new ReinstatementStatus();
+        reinstatementStatus.setReinstatementInd(true);
+
+        // Test equality with null
+        assertFalse(reinstatementStatus.equals(null));
+    }
+
+    @Test
+    public void testEqualsDifferentClass() {
+        ReinstatementStatus reinstatementStatus = new ReinstatementStatus();
+        reinstatementStatus.setReinstatementInd(true);
+
+        // Test equality with object of different class
+        Object obj = new Object();
+        assertFalse(reinstatementStatus.equals(obj));
+    }
+}

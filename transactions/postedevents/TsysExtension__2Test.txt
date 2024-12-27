@@ -1,0 +1,87 @@
+package com.td.api.mbcca.response.transactions.postedevents;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class TsysExtension__2Test {
+
+    private TsysExtension__2 tsysExtension;
+
+    @Before
+    public void setUp() {
+        tsysExtension = new TsysExtension__2();
+    }
+
+    @Test
+    public void testGetAndSetClearingSweepInd() {
+        tsysExtension.setClearingSweepInd(true);
+        assertTrue(tsysExtension.getClearingSweepInd());
+
+        tsysExtension.setClearingSweepInd(false);
+        assertFalse(tsysExtension.getClearingSweepInd());
+
+        tsysExtension.setClearingSweepInd(null);
+        assertNull(tsysExtension.getClearingSweepInd());
+    }
+
+    @Test
+    public void testToString() {
+        tsysExtension.setClearingSweepInd(true);
+        String expectedString = "com.td.api.mbcca.response.transactions.postedevents.TsysExtension__2@" 
+                + Integer.toHexString(System.identityHashCode(tsysExtension)) 
+                + "[clearingSweepInd=true]";
+        assertEquals(expectedString, tsysExtension.toString());
+
+        tsysExtension.setClearingSweepInd(false);
+        expectedString = "com.td.api.mbcca.response.transactions.postedevents.TsysExtension__2@" 
+                + Integer.toHexString(System.identityHashCode(tsysExtension)) 
+                + "[clearingSweepInd=false]";
+        assertEquals(expectedString, tsysExtension.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        TsysExtension__2 tsysExtension1 = new TsysExtension__2();
+        tsysExtension1.setClearingSweepInd(true);
+
+        TsysExtension__2 tsysExtension2 = new TsysExtension__2();
+        tsysExtension2.setClearingSweepInd(true);
+
+        TsysExtension__2 tsysExtension3 = new TsysExtension__2();
+        tsysExtension3.setClearingSweepInd(false);
+
+        assertEquals(tsysExtension1.hashCode(), tsysExtension2.hashCode());
+        assertNotEquals(tsysExtension1.hashCode(), tsysExtension3.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        TsysExtension__2 tsysExtension1 = new TsysExtension__2();
+        tsysExtension1.setClearingSweepInd(true);
+
+        TsysExtension__2 tsysExtension2 = new TsysExtension__2();
+        tsysExtension2.setClearingSweepInd(true);
+
+        TsysExtension__2 tsysExtension3 = new TsysExtension__2();
+        tsysExtension3.setClearingSweepInd(false);
+
+        assertTrue(tsysExtension1.equals(tsysExtension2));
+        assertFalse(tsysExtension1.equals(tsysExtension3));
+
+        // Test equality with a different class type
+        assertFalse(tsysExtension1.equals("String"));
+    }
+
+    @Test
+    public void testEqualsWithNull() {
+        TsysExtension__2 tsysExtension1 = new TsysExtension__2();
+        tsysExtension1.setClearingSweepInd(null);
+
+        TsysExtension__2 tsysExtension2 = new TsysExtension__2();
+        tsysExtension2.setClearingSweepInd(null);
+
+        assertTrue(tsysExtension1.equals(tsysExtension2));
+    }
+}

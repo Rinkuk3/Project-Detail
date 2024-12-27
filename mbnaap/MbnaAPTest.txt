@@ -1,0 +1,119 @@
+package com.td.mbna.msec.midtier.mbnaap;
+
+import static org.mockito.Mockito.*;
+
+import com.td.api.mbpad.response.retrievebranch.RetrieveBranchResponse;
+import com.td.mbna.msec.midtier.autopay.payload.addpad.AddPadRequest;
+import com.td.mbna.msec.midtier.autopay.payload.addpad.AddPadResponse;
+import com.td.mbna.msec.midtier.autopay.payload.checkpadenrolled.CheckPadEnrolledResponse;
+import com.td.mbna.msec.midtier.autopay.payload.retrievepad.RetrievePadResponse;
+import com.td.mbna.msec.midtier.autopay.payload.updatepad.UpdatePadRequest;
+import com.td.mbna.msec.midtier.autopay.payload.validatebankaccount.ValidateBankAccountRequest;
+import com.td.mbna.msec.midtier.autopay.payload.validatebankaccount.ValidateBankAccountResponse;
+import com.td.mbna.msec.midtier.mbnaap.facade.MbnaAPFacade;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class MbnaAPTest {
+
+    @Mock
+    private MbnaAPFacade mbnaAPFacade;
+
+    @InjectMocks
+    private MbnaAPImpl mbnaAPImpl;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testCheckEnrolledForPad() {
+        String cardNum = "123456";
+        String token = "sampleToken";
+        CheckPadEnrolledResponse expectedResponse = new CheckPadEnrolledResponse();
+        when(mbnaAPFacade.checkEnrolledForPad(cardNum, token)).thenReturn(expectedResponse);
+
+        CheckPadEnrolledResponse response = mbnaAPImpl.checkEnrolledForPad(cardNum, token);
+
+        assertNotNull(response);
+        verify(mbnaAPFacade, times(1)).checkEnrolledForPad(cardNum, token);
+    }
+
+    @Test
+    public void testRetrievePad() {
+        String arrangementId = "arrangement123";
+        String token = "sampleToken";
+        RetrievePadResponse expectedResponse = new RetrievePadResponse();
+        when(mbnaAPFacade.retrievePad(arrangementId, token)).thenReturn(expectedResponse);
+
+        RetrievePadResponse response = mbnaAPImpl.retrievePad(arrangementId, token);
+
+        assertNotNull(response);
+        verify(mbnaAPFacade, times(1)).retrievePad(arrangementId, token);
+    }
+
+    @Test
+    public void testDeletePad() {
+        String arrangementId = "arrangement123";
+        String token = "sampleToken";
+
+        boolean result = mbnaAPImpl.deletePad(arrangementId, token);
+
+        assertFalse(result);
+    }
+
+    @Test
+    public void testAddPad() {
+        AddPadRequest addPadRequest = new AddPadRequest();
+        String token = "sampleToken";
+        AddPadResponse expectedResponse = new AddPadResponse();
+        when(mbnaAPFacade.addPad(addPadRequest, token)).thenReturn(expectedResponse);
+
+        AddPadResponse response = mbnaAPImpl.addPad(addPadRequest, token);
+
+        assertNotNull(response);
+        verify(mbnaAPFacade, times(1)).addPad(addPadRequest, token);
+    }
+
+    @Test
+    public void testUpdatePad() {
+        UpdatePadRequest updatePadRequest = new UpdatePadRequest();
+        String token = "sampleToken";
+
+        String result = mbnaAPImpl.updatePad(updatePadRequest, token);
+
+        assertNull(result);
+    }
+
+    @Test
+    public void testValidateBankAccount() {
+        ValidateBankAccountRequest request = new ValidateBankAccountRequest();
+        String token = "sampleToken";
+        ValidateBankAccountResponse expectedResponse = new ValidateBankAccountResponse();
+        when(mbnaAPFacade.validateBankAccount(request, token)).thenReturn(expectedResponse);
+
+        ValidateBankAccountResponse response = mbnaAPImpl.validateBankAccount(request, token);
+
+        assertNotNull(response);
+        verify(mbnaAPFacade, times(1)).validateBankAccount(request, token);
+    }
+
+    @Test
+    public void testRetrieveBranch() {
+        String bankNum = "bank123";
+        String branchNum = "branch123";
+        String token = "sampleToken";
+        RetrieveBranchResponse expectedResponse = new RetrieveBranchResponse();
+        when(mbnaAPFacade.retrieveBranch(bankNum, branchNum, token)).thenReturn(expectedResponse);
+
+        RetrieveBranchResponse response = mbnaAPImpl.retrieveBranch(bankNum, branchNum, token);
+
+        assertNotNull(response);
+        verify(mbnaAPFacade, times(1)).retrieveBranch(bankNum, branchNum, token);
+    }
+}

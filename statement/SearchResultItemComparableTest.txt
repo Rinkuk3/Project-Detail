@@ -1,0 +1,136 @@
+package com.td.mbna.msec.midtier.statement;
+
+import com.mbnaweb.xsd.types.statement.HistoryStatementListType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class SearchResultItemComparableTest {
+
+    private SearchResultItemComparable comparator;
+
+    @Mock
+    private HistoryStatementListType item1;
+
+    @Mock
+    private HistoryStatementListType item2;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        comparator = new SearchResultItemComparable();
+    }
+
+    @Test
+    void testCompare_StatementDateDifferent() throws Exception {
+        // Arrange
+        String date1 = "20231215"; // Statement Date: 2023-12-15
+        String date2 = "20231210"; // Statement Date: 2023-12-10
+
+        when(item1.getStatementDate()).thenReturn(date1);
+        when(item2.getStatementDate()).thenReturn(date2);
+
+        // Act
+        int result = comparator.compare(item1, item2);
+
+        // Assert
+        assertTrue(result < 0);  // Statement Date of item1 is later, so result should be negative (descending order)
+    }
+
+    @Test
+    void testCompare_StatementDateEqual_LoadDateDifferent() throws Exception {
+        // Arrange
+        String statementDate = "20231215"; // Statement Date: 2023-12-15
+        String loadDate1 = "2023/12/15 10:30:00"; // Load Date: 2023-12-15 10:30:00
+        String loadDate2 = "2023/12/15 09:00:00"; // Load Date: 2023-12-15 09:00:00
+
+        when(item1.getStatementDate()).thenReturn(statementDate);
+        when(item2.getStatementDate()).thenReturn(statementDate);
+        when(item1.getLoadDate()).thenReturn(loadDate1);
+        when(item2.getLoadDate()).thenReturn(loadDate2);
+
+        // Act
+        int result = comparator.compare(item1, item2);
+
+        // Assert
+        assertTrue(result < 0); // item1 has a later load date, so the result should be negative
+    }
+
+    @Test
+    void testCompare_StatementDateEqual_LoadDateEqual() throws Exception {
+        // Arrange
+        String statementDate = "20231215"; // Statement Date: 2023-12-15
+        String loadDate = "2023/12/15 10:00:00"; // Load Date: 2023-12-15 10:00:00
+
+        when(item1.getStatementDate()).thenReturn(statementDate);
+        when(item2.getStatementDate()).thenReturn(statementDate);
+        when(item1.getLoadDate()).thenReturn(loadDate);
+        when(item2.getLoadDate()).thenReturn(loadDate);
+
+        // Act
+        int result = comparator.compare(item1, item2);
+
+        // Assert
+        assertEquals(0, result);  // Both statement and load dates are the same, so result should be 0
+    }
+
+    @Test
+    void testCompare_StatementDateInvalid() {
+        // Arrange
+        when(item1.getStatementDate()).thenReturn("invalidDate");
+        when(item2.getStatementDate()).thenReturn("20231215");
+
+        // Act & Assert
+        assertThrows(RuntimeException.class, () -> {
+            comparator.compare(item1, item2);
+        });
+    }
+
+    @Test
+    void testCompare_LoadDateInvalid() {
+        // Arrange
+        when(item1.getStatementDate()).thenReturn("20231215");
+        when(item2.getStatementDate()).thenReturn("20231210");
+        when(item1.getLoadDate()).thenReturn("invalidDate");
+        when(item2.getLoadDate()).thenReturn("2023/12/15 10:00:00");
+
+        // Act & Assert
+        assertThrows(RuntimeException.class, () -> {
+            comparator.compare(item1, item2);
+        });
+    }
+
+    @Test
+    void testCompare_NullStatementDate() {
+        // Arrange
+        when(item1.getStatementDate()).thenReturn(null);
+        when(item2.getStatementDate()).thenReturn("20231215");
+
+        // Act & Assert
+        assertThrows(RuntimeException.class, () -> {
+            comparator.compare(item1, item2);
+        });
+    }
+
+    @Test
+    void testCompare_NullLoadDate() throws Exception {
+        // Arrange
+        String statementDate = "20231215"; // Statement Date: 2023-12-15
+        when(item1.getStatementDate()).thenReturn(statementDate);
+        when(item2.getStatementDate()).thenReturn(statementDate);
+        when(item1.getLoadDate()).thenReturn(null);
+        when(item2.getLoadDate()).thenReturn("2023/12/15 10:00:00");
+
+        // Act & Assert
+        assertThrows(RuntimeException.class, () -> {
+            comparator.compare(item1, item2);
+        });
+    }
+}

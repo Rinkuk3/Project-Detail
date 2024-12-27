@@ -1,0 +1,123 @@
+package com.td.mbna.msec.midtier.persistance.entity;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class InterceptorDispositionTest {
+
+    @Test
+    public void testDefaultConstructor() {
+        InterceptorDisposition interceptorDisposition = new InterceptorDisposition();
+        assertNull(interceptorDisposition.getUcid());
+        assertNull(interceptorDisposition.getOfferId());
+        assertNull(interceptorDisposition.getInterceptorType());
+        assertNull(interceptorDisposition.getConnectId());
+        assertNull(interceptorDisposition.getTsysAccountId());
+        assertNull(interceptorDisposition.getInterceptorId());
+        assertNull(interceptorDisposition.getCardRole());
+        assertNull(interceptorDisposition.getDispositionStatus());
+        assertNull(interceptorDisposition.getTimestamp());
+    }
+
+    @Test
+    public void testParameterizedConstructor() {
+        String ucid = "UCID123";
+        String connectId = "CONNECT456";
+        String interceptorType = "TypeA";
+        String dispositionStatus = "StatusX";
+        
+        InterceptorDisposition interceptorDisposition = new InterceptorDisposition(ucid, connectId, interceptorType, dispositionStatus);
+        
+        assertEquals(ucid, interceptorDisposition.getUcid());
+        assertEquals(connectId, interceptorDisposition.getConnectId());
+        assertEquals(interceptorType, interceptorDisposition.getInterceptorType());
+        assertEquals(dispositionStatus, interceptorDisposition.getDispositionStatus());
+    }
+
+    @Test
+    public void testSetAndGetUcid() {
+        InterceptorDisposition interceptorDisposition = new InterceptorDisposition();
+        interceptorDisposition.setUcid("UCID123");
+        assertEquals("UCID123", interceptorDisposition.getUcid());
+    }
+
+    @Test
+    public void testSetAndGetOfferId() {
+        InterceptorDisposition interceptorDisposition = new InterceptorDisposition();
+        interceptorDisposition.setOfferId("OFFER001");
+        assertEquals("OFFER001", interceptorDisposition.getOfferId());
+    }
+
+    @Test
+    public void testSetAndGetInterceptorType() {
+        InterceptorDisposition interceptorDisposition = new InterceptorDisposition();
+        interceptorDisposition.setInterceptorType("TypeA");
+        assertEquals("TypeA", interceptorDisposition.getInterceptorType());
+    }
+
+    @Test
+    public void testSetAndGetConnectId() {
+        InterceptorDisposition interceptorDisposition = new InterceptorDisposition();
+        interceptorDisposition.setConnectId("CONNECT123");
+        assertEquals("CONNECT123", interceptorDisposition.getConnectId());
+    }
+
+    @Test
+    public void testSetAndGetTsysAccountId() {
+        InterceptorDisposition interceptorDisposition = new InterceptorDisposition();
+        interceptorDisposition.setTsysAccountId("TSYS001");
+        assertEquals("TSYS001", interceptorDisposition.getTsysAccountId());
+    }
+
+    @Test
+    public void testSetAndGetInterceptorId() {
+        InterceptorDisposition interceptorDisposition = new InterceptorDisposition();
+        interceptorDisposition.setInterceptorId("INTERCEPTOR001");
+        assertEquals("INTERCEPTOR001", interceptorDisposition.getInterceptorId());
+    }
+
+    @Test
+    public void testSetAndGetCardRole() {
+        InterceptorDisposition interceptorDisposition = new InterceptorDisposition();
+        interceptorDisposition.setCardRole("ROLE1");
+        assertEquals("ROLE1", interceptorDisposition.getCardRole());
+    }
+
+    @Test
+    public void testSetAndGetDispositionStatus() {
+        InterceptorDisposition interceptorDisposition = new InterceptorDisposition();
+        interceptorDisposition.setDispositionStatus("DISPOSITION_X");
+        assertEquals("DISPOSITION_X", interceptorDisposition.getDispositionStatus());
+    }
+
+    @Test
+    public void testSetAndGetTimestamp() {
+        InterceptorDisposition interceptorDisposition = new InterceptorDisposition();
+        Date now = new Date();
+        interceptorDisposition.setTimestamp(now);
+        assertEquals(now, interceptorDisposition.getTimestamp());
+    }
+
+    @Test
+    public void testEquals() {
+        InterceptorDisposition interceptorDisposition1 = new InterceptorDisposition("UCID123", "CONNECT456", "TypeA", "StatusX");
+        InterceptorDisposition interceptorDisposition2 = new InterceptorDisposition("UCID123", "CONNECT456", "TypeA", "StatusX");
+        
+        assertTrue(interceptorDisposition1.equals(interceptorDisposition2));
+        
+        interceptorDisposition2.setUcid("UCID456");
+        
+        assertFalse(interceptorDisposition1.equals(interceptorDisposition2));
+    }
+
+    @Test
+    public void testHashCode() {
+        InterceptorDisposition interceptorDisposition1 = new InterceptorDisposition("UCID123", "CONNECT456", "TypeA", "StatusX");
+        InterceptorDisposition interceptorDisposition2 = new InterceptorDisposition("UCID123", "CONNECT456", "TypeA", "StatusX");
+        
+        assertEquals(interceptorDisposition1.hashCode(), interceptorDisposition2.hashCode());
+    }
+}

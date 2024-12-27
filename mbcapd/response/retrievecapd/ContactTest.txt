@@ -1,0 +1,163 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import java.util.List;
+
+class ContactTest {
+
+    @Test
+    void testGetterAndSetterForAddressSubtypeCd() {
+        Contact contact = new Contact();
+        contact.setAddressSubtypeCd("Subtype123");
+        assertEquals("Subtype123", contact.getAddressSubtypeCd());
+    }
+
+    @Test
+    void testGetterAndSetterForAddressVal() {
+        Contact contact = new Contact();
+        contact.setAddressVal("Address123");
+        assertEquals("Address123", contact.getAddressVal());
+    }
+
+    @Test
+    void testGetterAndSetterForAlertBlocklistSetup() {
+        Contact contact = new Contact();
+        List<AlertBlocklistSetup> alertBlocklistSetupList = new ArrayList<>();
+        AlertBlocklistSetup setup = new AlertBlocklistSetup();
+        alertBlocklistSetupList.add(setup);
+        contact.setAlertBlocklistSetup(alertBlocklistSetupList);
+        assertEquals(alertBlocklistSetupList, contact.getAlertBlocklistSetup());
+    }
+
+    @Test
+    void testToString() {
+        Contact contact = new Contact();
+        contact.setAddressSubtypeCd("Subtype123");
+        contact.setAddressVal("Address123");
+        List<AlertBlocklistSetup> alertBlocklistSetupList = new ArrayList<>();
+        AlertBlocklistSetup setup = new AlertBlocklistSetup();
+        alertBlocklistSetupList.add(setup);
+        contact.setAlertBlocklistSetup(alertBlocklistSetupList);
+
+        String result = contact.toString();
+        assertTrue(result.contains("addressSubtypeCd"));
+        assertTrue(result.contains("addressVal"));
+        assertTrue(result.contains("alertBlocklistSetup"));
+    }
+
+    @Test
+    void testHashCode() {
+        Contact contact1 = new Contact();
+        contact1.setAddressSubtypeCd("Subtype123");
+        contact1.setAddressVal("Address123");
+        List<AlertBlocklistSetup> alertBlocklistSetupList1 = new ArrayList<>();
+        AlertBlocklistSetup setup1 = new AlertBlocklistSetup();
+        alertBlocklistSetupList1.add(setup1);
+        contact1.setAlertBlocklistSetup(alertBlocklistSetupList1);
+
+        Contact contact2 = new Contact();
+        contact2.setAddressSubtypeCd("Subtype123");
+        contact2.setAddressVal("Address123");
+        List<AlertBlocklistSetup> alertBlocklistSetupList2 = new ArrayList<>();
+        AlertBlocklistSetup setup2 = new AlertBlocklistSetup();
+        alertBlocklistSetupList2.add(setup2);
+        contact2.setAlertBlocklistSetup(alertBlocklistSetupList2);
+
+        assertEquals(contact1.hashCode(), contact2.hashCode());
+    }
+
+    @Test
+    void testEqualsSameObject() {
+        Contact contact = new Contact();
+        contact.setAddressSubtypeCd("Subtype123");
+        contact.setAddressVal("Address123");
+        assertTrue(contact.equals(contact));
+    }
+
+    @Test
+    void testEqualsDifferentObject() {
+        Contact contact1 = new Contact();
+        contact1.setAddressSubtypeCd("Subtype123");
+        contact1.setAddressVal("Address123");
+
+        Contact contact2 = new Contact();
+        contact2.setAddressSubtypeCd("Subtype123");
+        contact2.setAddressVal("Address123");
+
+        assertTrue(contact1.equals(contact2));
+    }
+
+    @Test
+    void testEqualsNull() {
+        Contact contact = new Contact();
+        assertFalse(contact.equals(null));
+    }
+
+    @Test
+    void testEqualsDifferentClass() {
+        Contact contact = new Contact();
+        assertFalse(contact.equals(new Object()));
+    }
+
+    @Test
+    void testEqualsWithDifferentAddressSubtypeCd() {
+        Contact contact1 = new Contact();
+        contact1.setAddressSubtypeCd("Subtype123");
+        contact1.setAddressVal("Address123");
+
+        Contact contact2 = new Contact();
+        contact2.setAddressSubtypeCd("Subtype456");
+        contact2.setAddressVal("Address123");
+
+        assertFalse(contact1.equals(contact2));
+    }
+
+    @Test
+    void testEqualsWithDifferentAddressVal() {
+        Contact contact1 = new Contact();
+        contact1.setAddressSubtypeCd("Subtype123");
+        contact1.setAddressVal("Address123");
+
+        Contact contact2 = new Contact();
+        contact2.setAddressSubtypeCd("Subtype123");
+        contact2.setAddressVal("Address456");
+
+        assertFalse(contact1.equals(contact2));
+    }
+
+    @Test
+    void testEqualsWithNullAlertBlocklistSetup() {
+        Contact contact1 = new Contact();
+        contact1.setAddressSubtypeCd("Subtype123");
+        contact1.setAddressVal("Address123");
+        contact1.setAlertBlocklistSetup(null);
+
+        Contact contact2 = new Contact();
+        contact2.setAddressSubtypeCd("Subtype123");
+        contact2.setAddressVal("Address123");
+        contact2.setAlertBlocklistSetup(null);
+
+        assertTrue(contact1.equals(contact2));
+    }
+
+    @Test
+    void testEqualsWithNonNullAlertBlocklistSetup() {
+        Contact contact1 = new Contact();
+        contact1.setAddressSubtypeCd("Subtype123");
+        contact1.setAddressVal("Address123");
+        List<AlertBlocklistSetup> alertBlocklistSetupList1 = new ArrayList<>();
+        AlertBlocklistSetup setup1 = new AlertBlocklistSetup();
+        alertBlocklistSetupList1.add(setup1);
+        contact1.setAlertBlocklistSetup(alertBlocklistSetupList1);
+
+        Contact contact2 = new Contact();
+        contact2.setAddressSubtypeCd("Subtype123");
+        contact2.setAddressVal("Address123");
+        List<AlertBlocklistSetup> alertBlocklistSetupList2 = new ArrayList<>();
+        AlertBlocklistSetup setup2 = new AlertBlocklistSetup();
+        alertBlocklistSetupList2.add(setup2);
+        contact2.setAlertBlocklistSetup(alertBlocklistSetupList2);
+
+        assertTrue(contact1.equals(contact2));
+    }
+}

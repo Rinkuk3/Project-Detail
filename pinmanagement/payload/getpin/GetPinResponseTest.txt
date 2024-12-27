@@ -1,0 +1,111 @@
+package com.td.mbna.msec.midtier.pinmanagement.payload.getpin;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class GetPinResponseTest {
+
+    @Test
+    public void testSetAndGetResponsePayload() {
+        GetPinResponse getPinResponse = new GetPinResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        getPinResponse.setResponsePayload(responsePayload);
+        assertEquals(responsePayload, getPinResponse.getResponsePayload());
+    }
+
+    @Test
+    public void testToString() {
+        GetPinResponse getPinResponse = new GetPinResponse();
+        getPinResponse.setStatus(true);
+        getPinResponse.setErrorMessages("No error");
+        
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatus(true);
+        getPinResponse.setResponsePayload(responsePayload);
+
+        String expectedString = "com.td.mbna.msec.midtier.pinmanagement.payload.getpin.GetPinResponse@" + 
+                                Integer.toHexString(System.identityHashCode(getPinResponse)) + 
+                                "[status=true,errorMsgs=No error,responsePayload=" + responsePayload + "]";
+        assertEquals(expectedString, getPinResponse.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        GetPinResponse getPinResponse1 = new GetPinResponse();
+        getPinResponse1.setStatus(true);
+        getPinResponse1.setErrorMessages("No error");
+        
+        ResponsePayload responsePayload1 = new ResponsePayload();
+        responsePayload1.setStatus(true);
+        getPinResponse1.setResponsePayload(responsePayload1);
+
+        GetPinResponse getPinResponse2 = new GetPinResponse();
+        getPinResponse2.setStatus(true);
+        getPinResponse2.setErrorMessages("No error");
+        
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        responsePayload2.setStatus(true);
+        getPinResponse2.setResponsePayload(responsePayload2);
+
+        assertEquals(getPinResponse1.hashCode(), getPinResponse2.hashCode());
+
+        getPinResponse2.setStatus(false);
+        assertNotEquals(getPinResponse1.hashCode(), getPinResponse2.hashCode());
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        GetPinResponse getPinResponse1 = new GetPinResponse();
+        getPinResponse1.setStatus(true);
+        getPinResponse1.setErrorMessages("No error");
+        
+        ResponsePayload responsePayload1 = new ResponsePayload();
+        responsePayload1.setStatus(true);
+        getPinResponse1.setResponsePayload(responsePayload1);
+
+        GetPinResponse getPinResponse2 = new GetPinResponse();
+        getPinResponse2.setStatus(true);
+        getPinResponse2.setErrorMessages("No error");
+        
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        responsePayload2.setStatus(true);
+        getPinResponse2.setResponsePayload(responsePayload2);
+
+        assertTrue(getPinResponse1.equals(getPinResponse2));
+        assertEquals(getPinResponse1.hashCode(), getPinResponse2.hashCode());
+    }
+
+    @Test
+    public void testEqualsWithNull() {
+        GetPinResponse getPinResponse = new GetPinResponse();
+        getPinResponse.setStatus(true);
+
+        assertFalse(getPinResponse.equals(null));
+    }
+
+    @Test
+    public void testEqualsWithDifferentClass() {
+        GetPinResponse getPinResponse = new GetPinResponse();
+
+        assertFalse(getPinResponse.equals("NonGetPinResponse"));
+    }
+
+    @Test
+    public void testEqualsWithDifferentValues() {
+        GetPinResponse getPinResponse1 = new GetPinResponse();
+        getPinResponse1.setStatus(true);
+        getPinResponse1.setErrorMessages("No error");
+
+        GetPinResponse getPinResponse2 = new GetPinResponse();
+        getPinResponse2.setStatus(false);
+        getPinResponse2.setErrorMessages("Error");
+
+        assertFalse(getPinResponse1.equals(getPinResponse2));
+    }
+
+    @Test
+    public void testDefaultConstructor() {
+        GetPinResponse getPinResponse = new GetPinResponse();
+        assertNotNull(getPinResponse.getResponsePayload());
+    }
+}

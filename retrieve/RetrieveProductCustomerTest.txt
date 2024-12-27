@@ -1,0 +1,87 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+
+public class RetrieveProductCustomerTest {
+
+    private RetrieveProductCustomer retrieveProductCustomer;
+
+    @BeforeEach
+    public void setUp() {
+        retrieveProductCustomer = new RetrieveProductCustomer();
+    }
+
+    @Test
+    public void testGetProductCustomer() {
+        ProductCustomer productCustomer = new ProductCustomer();
+        retrieveProductCustomer.setProductCustomer(Arrays.asList(productCustomer));
+
+        assertEquals(1, retrieveProductCustomer.getProductCustomer().size());
+        assertEquals(productCustomer, retrieveProductCustomer.getProductCustomer().get(0));
+    }
+
+    @Test
+    public void testSetProductCustomer() {
+        ProductCustomer productCustomer = new ProductCustomer();
+        retrieveProductCustomer.setProductCustomer(Arrays.asList(productCustomer));
+
+        assertEquals(1, retrieveProductCustomer.getProductCustomer().size());
+        assertEquals(productCustomer, retrieveProductCustomer.getProductCustomer().get(0));
+    }
+
+    @Test
+    public void testToString() {
+        ProductCustomer productCustomer = new ProductCustomer();
+        retrieveProductCustomer.setProductCustomer(Arrays.asList(productCustomer));
+
+        String expectedString = "com.td.api.enrollment.retrieve.RetrieveProductCustomer@" +
+                Integer.toHexString(System.identityHashCode(retrieveProductCustomer)) +
+                "[productCustomer=[" + productCustomer + "]]";
+
+        assertTrue(retrieveProductCustomer.toString().contains("productCustomer"));
+    }
+
+    @Test
+    public void testHashCode() {
+        ProductCustomer productCustomer = new ProductCustomer();
+        retrieveProductCustomer.setProductCustomer(Arrays.asList(productCustomer));
+
+        RetrieveProductCustomer otherRetrieveProductCustomer = new RetrieveProductCustomer();
+        otherRetrieveProductCustomer.setProductCustomer(Arrays.asList(productCustomer));
+
+        assertEquals(retrieveProductCustomer.hashCode(), otherRetrieveProductCustomer.hashCode());
+
+        otherRetrieveProductCustomer.setProductCustomer(new ArrayList<>());
+        assertNotEquals(retrieveProductCustomer.hashCode(), otherRetrieveProductCustomer.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        ProductCustomer productCustomer = new ProductCustomer();
+        retrieveProductCustomer.setProductCustomer(Arrays.asList(productCustomer));
+
+        RetrieveProductCustomer otherRetrieveProductCustomer = new RetrieveProductCustomer();
+        otherRetrieveProductCustomer.setProductCustomer(Arrays.asList(productCustomer));
+
+        assertTrue(retrieveProductCustomer.equals(otherRetrieveProductCustomer));
+
+        otherRetrieveProductCustomer.setProductCustomer(new ArrayList<>());
+        assertFalse(retrieveProductCustomer.equals(otherRetrieveProductCustomer));
+
+        assertFalse(retrieveProductCustomer.equals(null));
+        assertFalse(retrieveProductCustomer.equals("Random String"));
+    }
+
+    @Test
+    public void testEqualsSameInstance() {
+        assertTrue(retrieveProductCustomer.equals(retrieveProductCustomer));  // Same instance, should return true
+    }
+
+    @Test
+    public void testSetProductCustomerNull() {
+        retrieveProductCustomer.setProductCustomer(null);
+        assertNull(retrieveProductCustomer.getProductCustomer());
+    }
+}

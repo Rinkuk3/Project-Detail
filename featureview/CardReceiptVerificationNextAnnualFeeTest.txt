@@ -1,0 +1,113 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+class CardReceiptVerificationNextAnnualFeeTest {
+
+    private CardReceiptVerificationNextAnnualFee cardReceiptVerificationNextAnnualFee;
+
+    @BeforeEach
+    void setUp() {
+        cardReceiptVerificationNextAnnualFee = new CardReceiptVerificationNextAnnualFee();
+    }
+
+    @Test
+    void testGetSetPartyRoleCd() {
+        String partyRoleCd = "ROLE_CD";
+        cardReceiptVerificationNextAnnualFee.setPartyRoleCd(partyRoleCd);
+        assertEquals(partyRoleCd, cardReceiptVerificationNextAnnualFee.getPartyRoleCd());
+    }
+
+    @Test
+    void testGetSetPartyId() {
+        String partyId = "PARTY123";
+        cardReceiptVerificationNextAnnualFee.setPartyId(partyId);
+        assertEquals(partyId, cardReceiptVerificationNextAnnualFee.getPartyId());
+    }
+
+    @Test
+    void testGetSetPartyName() {
+        String partyName = "John Doe";
+        cardReceiptVerificationNextAnnualFee.setPartyName(partyName);
+        assertEquals(partyName, cardReceiptVerificationNextAnnualFee.getPartyName());
+    }
+
+    @Test
+    void testGetSetAccountNum() {
+        String accountNum = "ACC123456";
+        cardReceiptVerificationNextAnnualFee.setAccountNum(accountNum);
+        assertEquals(accountNum, cardReceiptVerificationNextAnnualFee.getAccountNum());
+    }
+
+    @Test
+    void testGetSetNextChargeDt() {
+        String nextChargeDt = "2025-12-31";
+        cardReceiptVerificationNextAnnualFee.setNextChargeDt(nextChargeDt);
+        assertEquals(nextChargeDt, cardReceiptVerificationNextAnnualFee.getNextChargeDt());
+    }
+
+    @Test
+    void testToString() {
+        cardReceiptVerificationNextAnnualFee.setPartyRoleCd("ROLE_CD");
+        cardReceiptVerificationNextAnnualFee.setPartyId("PARTY123");
+        cardReceiptVerificationNextAnnualFee.setPartyName("John Doe");
+        cardReceiptVerificationNextAnnualFee.setAccountNum("ACC123456");
+        cardReceiptVerificationNextAnnualFee.setNextChargeDt("2025-12-31");
+
+        String result = cardReceiptVerificationNextAnnualFee.toString();
+        assertTrue(result.contains("partyRoleCd"));
+        assertTrue(result.contains("partyId"));
+        assertTrue(result.contains("partyName"));
+        assertTrue(result.contains("accountNum"));
+        assertTrue(result.contains("nextChargeDt"));
+    }
+
+    @Test
+    void testHashCode() {
+        cardReceiptVerificationNextAnnualFee.setPartyRoleCd("ROLE_CD");
+        cardReceiptVerificationNextAnnualFee.setPartyId("PARTY123");
+        cardReceiptVerificationNextAnnualFee.setPartyName("John Doe");
+        cardReceiptVerificationNextAnnualFee.setAccountNum("ACC123456");
+        cardReceiptVerificationNextAnnualFee.setNextChargeDt("2025-12-31");
+
+        int hashCode = cardReceiptVerificationNextAnnualFee.hashCode();
+        assertNotNull(hashCode);
+    }
+
+    @Test
+    void testEquals() {
+        CardReceiptVerificationNextAnnualFee other = new CardReceiptVerificationNextAnnualFee();
+        other.setPartyRoleCd("ROLE_CD");
+        other.setPartyId("PARTY123");
+        other.setPartyName("John Doe");
+        other.setAccountNum("ACC123456");
+        other.setNextChargeDt("2025-12-31");
+
+        cardReceiptVerificationNextAnnualFee.setPartyRoleCd("ROLE_CD");
+        cardReceiptVerificationNextAnnualFee.setPartyId("PARTY123");
+        cardReceiptVerificationNextAnnualFee.setPartyName("John Doe");
+        cardReceiptVerificationNextAnnualFee.setAccountNum("ACC123456");
+        cardReceiptVerificationNextAnnualFee.setNextChargeDt("2025-12-31");
+
+        assertTrue(cardReceiptVerificationNextAnnualFee.equals(other));
+    }
+
+    @Test
+    void testEquals_withNull() {
+        assertFalse(cardReceiptVerificationNextAnnualFee.equals(null));
+    }
+
+    @Test
+    void testEquals_withDifferentType() {
+        assertFalse(cardReceiptVerificationNextAnnualFee.equals("string"));
+    }
+
+    @Test
+    void testEquals_withDifferentValues() {
+        CardReceiptVerificationNextAnnualFee other = new CardReceiptVerificationNextAnnualFee();
+        other.setPartyRoleCd("ROLE_DIFF");
+
+        assertFalse(cardReceiptVerificationNextAnnualFee.equals(other));
+    }
+}

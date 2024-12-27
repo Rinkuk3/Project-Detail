@@ -1,0 +1,122 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+
+class RequestPayloadTest {
+
+    @Test
+    void testSetGetDisclosureInfo() {
+        RequestPayload requestPayload = new RequestPayload();
+        DisclosureInfoType disclosure = new DisclosureInfoType();
+        
+        // Test setting and getting disclosureInfo
+        requestPayload.setDisclosureInfo(Arrays.asList(disclosure));
+        assertEquals(1, requestPayload.getDisclosureInfo().size());
+        assertEquals(disclosure, requestPayload.getDisclosureInfo().get(0));
+        
+        requestPayload.setDisclosureInfo(null);
+        assertNull(requestPayload.getDisclosureInfo());
+    }
+
+    @Test
+    void testSetGetLanguagePref() {
+        RequestPayload requestPayload = new RequestPayload();
+        
+        // Test setting and getting languagePref
+        requestPayload.setLanguagePref("EN");
+        assertEquals("EN", requestPayload.getLanguagePref());
+        
+        requestPayload.setLanguagePref(null);
+        assertNull(requestPayload.getLanguagePref());
+    }
+
+    @Test
+    void testSetGetRoleCD() {
+        RequestPayload requestPayload = new RequestPayload();
+        
+        // Test setting and getting roleCD
+        requestPayload.setRoleCD("admin");
+        assertEquals("admin", requestPayload.getRoleCD());
+        
+        requestPayload.setRoleCD(null);
+        assertNull(requestPayload.getRoleCD());
+    }
+
+    @Test
+    void testSetGetSelectedOffer() {
+        RequestPayload requestPayload = new RequestPayload();
+        PromotionOfferType offer = new PromotionOfferType();
+        
+        // Test setting and getting selectedOffer
+        requestPayload.setSelectedOffer(offer);
+        assertEquals(offer, requestPayload.getSelectedOffer());
+        
+        requestPayload.setSelectedOffer(null);
+        assertNull(requestPayload.getSelectedOffer());
+    }
+
+    @Test
+    void testToString() {
+        RequestPayload requestPayload = new RequestPayload();
+        DisclosureInfoType disclosure = new DisclosureInfoType();
+        PromotionOfferType offer = new PromotionOfferType();
+        
+        requestPayload.setDisclosureInfo(Arrays.asList(disclosure));
+        requestPayload.setLanguagePref("EN");
+        requestPayload.setRoleCD("admin");
+        requestPayload.setSelectedOffer(offer);
+        
+        String expectedString = "RequestPayload@" + Integer.toHexString(System.identityHashCode(requestPayload)) + "[disclosureInfo=[" + disclosure + "],languagePref=EN,roleCD=admin,selectedOffer=" + offer + "]";
+        assertEquals(expectedString, requestPayload.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        RequestPayload requestPayload1 = new RequestPayload();
+        RequestPayload requestPayload2 = new RequestPayload();
+        DisclosureInfoType disclosure = new DisclosureInfoType();
+        PromotionOfferType offer = new PromotionOfferType();
+        
+        requestPayload1.setDisclosureInfo(Arrays.asList(disclosure));
+        requestPayload1.setLanguagePref("EN");
+        requestPayload1.setRoleCD("admin");
+        requestPayload1.setSelectedOffer(offer);
+        
+        requestPayload2.setDisclosureInfo(Arrays.asList(disclosure));
+        requestPayload2.setLanguagePref("EN");
+        requestPayload2.setRoleCD("admin");
+        requestPayload2.setSelectedOffer(offer);
+        
+        assertEquals(requestPayload1.hashCode(), requestPayload2.hashCode());
+        
+        requestPayload2.setRoleCD("user");
+        assertNotEquals(requestPayload1.hashCode(), requestPayload2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        RequestPayload requestPayload1 = new RequestPayload();
+        RequestPayload requestPayload2 = new RequestPayload();
+        DisclosureInfoType disclosure = new DisclosureInfoType();
+        PromotionOfferType offer = new PromotionOfferType();
+        
+        requestPayload1.setDisclosureInfo(Arrays.asList(disclosure));
+        requestPayload1.setLanguagePref("EN");
+        requestPayload1.setRoleCD("admin");
+        requestPayload1.setSelectedOffer(offer);
+        
+        requestPayload2.setDisclosureInfo(Arrays.asList(disclosure));
+        requestPayload2.setLanguagePref("EN");
+        requestPayload2.setRoleCD("admin");
+        requestPayload2.setSelectedOffer(offer);
+        
+        assertEquals(requestPayload1, requestPayload2);
+        
+        requestPayload2.setRoleCD("user");
+        assertNotEquals(requestPayload1, requestPayload2);
+        
+        requestPayload2.setRoleCD("admin");
+        requestPayload2.setLanguagePref("FR");
+        assertNotEquals(requestPayload1, requestPayload2);
+    }
+}

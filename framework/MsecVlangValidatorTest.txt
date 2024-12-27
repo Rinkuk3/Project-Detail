@@ -1,0 +1,79 @@
+package com.td.mbna.msec.midtier.framework;
+
+import com.td.mbna.msec.midtier.types.common.FieldErrorType;
+import com.td.mbna.msec.midtier.types.common.ValidationException;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.validation.BindException;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
+import org.springmodules.validation.valang.ValangValidator;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class MsecVlangValidatorTest {
+
+    @Test
+    void testValidateWithErrors() {
+        // Mocking ValangValidator
+        ValangValidator mockValidator = Mockito.mock(ValangValidator.class);
+        MsecVlangValidator msecVlangValidator = new MsecVlangValidator(mockValidator);
+
+        // Creating a request object (for testing purpose, can be any object)
+        Object request = new Object();
+
+        // Mocking the BindException (Errors object)
+        Errors mockErrors = new BindException(request, "target");
+
+        // Adding mock errors to simulate validation failure
+        mockErrors.addError(new ObjectError("field1", "errorCode1", "defaultMessage1"));
+        mockErrors.addError(new ObjectError("field2", "errorCode2", "defaultMessage2"));
+
+        // Mocking the validator's behavior
+        Mockito.when(mockValidator.validate(Mockito.any(), Mockito.any(Errors.class)))
+                .thenAnswer(invocation -> {
+                    ((Errors) invocation.getArguments()[1]).addError(new ObjectError("field1", "errorCode1"));
+                    return null;
+                });
+
+        // Test validate method when errors are present
+        ValidationException result = msecVlangValidator.validate(request);
+
+        // Verify the validation exception contains the errors
+        assertNotNull(result);
+        List<FieldErrorType> fieldErrors = result.getFieldError();
+        assertEquals(2, fieldErrors.size());
+        assertEquals("field1", fieldErrors.get(0).getField());
+        assertEquals("errorCode1", fieldErrors.get(0).getErrorCode());
+        assertEquals("field2", fieldErrors.get(1).getField());
+        assertEquals("errorCode2", fieldErrors.get(1).getErrorCode());
+    }
+
+    @Test
+    void testValidateWithoutErrors() {
+        // Mocking ValangValidator
+        ValangValidator mockValidator = Mockito.mock(ValangValidator.class);
+        MsecVlangValidator msecVlangValidator = new MsecVlangValidator(mockValidator);
+
+        // Creating a request object (for testing purpose, can be any object)
+        Object request = new Object();
+
+        // Mocking the BindException (Errors object)
+        Errors mockErrors = new BindException(request, "target");
+
+        // Mocking the validator's behavior to not add any errors
+        Mockito.when(mockValidator.validate(Mockito.any(), Mockito.any(Errors.class)))
+                .thenAnswer(invocation -> {
+                    // No errors added to the Errors object
+                    return null;
+                });
+
+        // Test validate method when there are no errors
+        ValidationException result = msecVlangValidator.validate(request);
+
+        // Verify the result is null when there are no validation errors
+        assertNull(result);
+    }
+}

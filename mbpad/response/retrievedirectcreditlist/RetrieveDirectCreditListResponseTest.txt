@@ -1,0 +1,84 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+
+class RetrieveDirectCreditListResponseTest {
+
+    @Test
+    void testPagination() {
+        RetrieveDirectCreditListResponse response = new RetrieveDirectCreditListResponse();
+        
+        Pagination pagination = new Pagination(1, 10);
+        response.setPagination(pagination);
+        
+        assertEquals(pagination, response.getPagination());
+    }
+
+    @Test
+    void testDirectCredit() {
+        RetrieveDirectCreditListResponse response = new RetrieveDirectCreditListResponse();
+        
+        DirectCredit directCredit1 = new DirectCredit();
+        DirectCredit directCredit2 = new DirectCredit();
+        response.setDirectCredit(Arrays.asList(directCredit1, directCredit2));
+        
+        assertEquals(2, response.getDirectCredit().size());
+        assertEquals(directCredit1, response.getDirectCredit().get(0));
+        assertEquals(directCredit2, response.getDirectCredit().get(1));
+    }
+
+    @Test
+    void testSetterAndGetter() {
+        RetrieveDirectCreditListResponse response = new RetrieveDirectCreditListResponse();
+        
+        Pagination pagination = new Pagination(2, 20);
+        DirectCredit directCredit1 = new DirectCredit();
+        DirectCredit directCredit2 = new DirectCredit();
+        
+        response.setPagination(pagination);
+        response.setDirectCredit(Arrays.asList(directCredit1, directCredit2));
+        
+        assertNotNull(response.getPagination());
+        assertNotNull(response.getDirectCredit());
+        
+        assertEquals(pagination, response.getPagination());
+        assertEquals(2, response.getDirectCredit().size());
+        assertEquals(directCredit1, response.getDirectCredit().get(0));
+        assertEquals(directCredit2, response.getDirectCredit().get(1));
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        RetrieveDirectCreditListResponse response1 = new RetrieveDirectCreditListResponse();
+        RetrieveDirectCreditListResponse response2 = new RetrieveDirectCreditListResponse();
+        
+        Pagination pagination = new Pagination(1, 10);
+        DirectCredit directCredit1 = new DirectCredit();
+        DirectCredit directCredit2 = new DirectCredit();
+        
+        response1.setPagination(pagination);
+        response1.setDirectCredit(Arrays.asList(directCredit1, directCredit2));
+        
+        response2.setPagination(pagination);
+        response2.setDirectCredit(Arrays.asList(directCredit1, directCredit2));
+        
+        assertEquals(response1, response2);
+        assertEquals(response1.hashCode(), response2.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        RetrieveDirectCreditListResponse response = new RetrieveDirectCreditListResponse();
+        
+        Pagination pagination = new Pagination(1, 10);
+        DirectCredit directCredit1 = new DirectCredit();
+        DirectCredit directCredit2 = new DirectCredit();
+        
+        response.setPagination(pagination);
+        response.setDirectCredit(Arrays.asList(directCredit1, directCredit2));
+        
+        String expectedString = "RetrieveDirectCreditListResponse(pagination=" + pagination + 
+                                ", directCredit=" + Arrays.asList(directCredit1, directCredit2) + ")";
+        assertEquals(expectedString, response.toString());
+    }
+}

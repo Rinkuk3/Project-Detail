@@ -1,0 +1,62 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class ProductChangeRequestTest {
+
+    private ProductChangeRequest productChangeRequest;
+    private ProductChangeEvent productChangeEvent;
+
+    @BeforeEach
+    void setUp() {
+        productChangeRequest = new ProductChangeRequest();
+        productChangeEvent = new ProductChangeEvent(); // Assuming ProductChangeEvent has a default constructor or setter
+    }
+
+    @Test
+    void testGetAndSetProductChangeEvent() {
+        productChangeRequest.setProductChangeEvent(productChangeEvent);
+        assertEquals(productChangeEvent, productChangeRequest.getProductChangeEvent());
+    }
+
+    @Test
+    void testToString() {
+        productChangeRequest.setProductChangeEvent(productChangeEvent);
+        String expected = "com.td.api.mbofp.request.productchange.ProductChangeRequest@" +
+                          Integer.toHexString(productChangeRequest.hashCode()) +
+                          "[productChangeEvent=" + productChangeEvent + "]";
+        assertEquals(expected, productChangeRequest.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        productChangeRequest.setProductChangeEvent(productChangeEvent);
+        int expectedHashCode = 1;
+        expectedHashCode = 31 * expectedHashCode + (productChangeEvent == null ? 0 : productChangeEvent.hashCode());
+        assertEquals(expectedHashCode, productChangeRequest.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        productChangeRequest.setProductChangeEvent(productChangeEvent);
+
+        // Test equality with same object
+        assertTrue(productChangeRequest.equals(productChangeRequest));
+
+        // Test equality with another object having the same productChangeEvent
+        ProductChangeRequest anotherProductChangeRequest = new ProductChangeRequest();
+        anotherProductChangeRequest.setProductChangeEvent(productChangeEvent);
+        assertTrue(productChangeRequest.equals(anotherProductChangeRequest));
+
+        // Test inequality with different productChangeEvent
+        ProductChangeRequest differentProductChangeRequest = new ProductChangeRequest();
+        differentProductChangeRequest.setProductChangeEvent(new ProductChangeEvent());
+        assertFalse(productChangeRequest.equals(differentProductChangeRequest));
+
+        // Test inequality with null
+        assertFalse(productChangeRequest.equals(null));
+
+        // Test inequality with an object of a different class
+        assertFalse(productChangeRequest.equals(new Object()));
+    }
+}

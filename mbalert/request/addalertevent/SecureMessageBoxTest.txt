@@ -1,0 +1,216 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+
+class SecureMessageBoxTest {
+
+    @Test
+    void testGetterAndSetterForLocatorUsageTypeCd() {
+        SecureMessageBox secureMessageBox = new SecureMessageBox();
+        secureMessageBox.setLocatorUsageTypeCd("Locator123");
+        assertEquals("Locator123", secureMessageBox.getLocatorUsageTypeCd());
+    }
+
+    @Test
+    void testGetterAndSetterForDeliveryStatusCd() {
+        SecureMessageBox secureMessageBox = new SecureMessageBox();
+        secureMessageBox.setDeliveryStatusCd("Delivered");
+        assertEquals("Delivered", secureMessageBox.getDeliveryStatusCd());
+    }
+
+    @Test
+    void testGetterAndSetterForLocatorText() {
+        SecureMessageBox secureMessageBox = new SecureMessageBox();
+        LocatorText locatorText = new LocatorText();
+        locatorText.setLocatorTxt("Sample Text");
+        locatorText.setTypeCd("Type123");
+        secureMessageBox.setLocatorText(Arrays.asList(locatorText));
+        
+        assertEquals(1, secureMessageBox.getLocatorText().size());
+        assertEquals("Sample Text", secureMessageBox.getLocatorText().get(0).getLocatorTxt());
+    }
+
+    @Test
+    void testGetterAndSetterForAltrExtension() {
+        SecureMessageBox secureMessageBox = new SecureMessageBox();
+        AltrExtension altrExtension = new AltrExtension();
+        altrExtension.setExtensionDetail("ExtensionDetail123");
+        secureMessageBox.setAltrExtension(altrExtension);
+        
+        assertEquals("ExtensionDetail123", secureMessageBox.getAltrExtension().getExtensionDetail());
+    }
+
+    @Test
+    void testGetterAndSetterForText() {
+        SecureMessageBox secureMessageBox = new SecureMessageBox();
+        secureMessageBox.setText("Sample Text");
+        assertEquals("Sample Text", secureMessageBox.getText());
+    }
+
+    @Test
+    void testGetterAndSetterForFeatureLocator() {
+        SecureMessageBox secureMessageBox = new SecureMessageBox();
+        FeatureLocator featureLocator = new FeatureLocator();
+        featureLocator.setFeature("Feature123");
+        secureMessageBox.setFeatureLocator(Arrays.asList(featureLocator));
+        
+        assertEquals(1, secureMessageBox.getFeatureLocator().size());
+        assertEquals("Feature123", secureMessageBox.getFeatureLocator().get(0).getFeature());
+    }
+
+    @Test
+    void testGetterAndSetterForTypeCd() {
+        SecureMessageBox secureMessageBox = new SecureMessageBox();
+        secureMessageBox.setTypeCd("Type123");
+        assertEquals("Type123", secureMessageBox.getTypeCd());
+    }
+
+    @Test
+    void testGetterAndSetterForAlertLocatorSequenceNum() {
+        SecureMessageBox secureMessageBox = new SecureMessageBox();
+        secureMessageBox.setAlertLocatorSequenceNum("Seq123");
+        assertEquals("Seq123", secureMessageBox.getAlertLocatorSequenceNum());
+    }
+
+    @Test
+    void testToString() {
+        SecureMessageBox secureMessageBox = new SecureMessageBox();
+        secureMessageBox.setLocatorUsageTypeCd("Locator123");
+        secureMessageBox.setDeliveryStatusCd("Delivered");
+
+        LocatorText locatorText = new LocatorText();
+        locatorText.setLocatorTxt("Sample Text");
+        locatorText.setTypeCd("Type123");
+        secureMessageBox.setLocatorText(Arrays.asList(locatorText));
+
+        AltrExtension altrExtension = new AltrExtension();
+        altrExtension.setExtensionDetail("ExtensionDetail123");
+        secureMessageBox.setAltrExtension(altrExtension);
+
+        secureMessageBox.setText("Sample Text");
+
+        FeatureLocator featureLocator = new FeatureLocator();
+        featureLocator.setFeature("Feature123");
+        secureMessageBox.setFeatureLocator(Arrays.asList(featureLocator));
+
+        secureMessageBox.setTypeCd("Type123");
+        secureMessageBox.setAlertLocatorSequenceNum("Seq123");
+
+        String expected = "SecureMessageBox(locatorUsageTypeCd=Locator123, deliveryStatusCd=Delivered, " +
+                          "locatorText=[LocatorText(locatorTxt=Sample Text, typeCd=Type123)], " +
+                          "altrExtension=AltrExtension(extensionDetail=ExtensionDetail123), text=Sample Text, " +
+                          "featureLocator=[FeatureLocator(feature=Feature123)], typeCd=Type123, alertLocatorSequenceNum=Seq123)";
+        assertEquals(expected, secureMessageBox.toString());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        SecureMessageBox secureMessageBox1 = new SecureMessageBox();
+        secureMessageBox1.setLocatorUsageTypeCd("Locator123");
+        secureMessageBox1.setDeliveryStatusCd("Delivered");
+
+        LocatorText locatorText1 = new LocatorText();
+        locatorText1.setLocatorTxt("Sample Text");
+        locatorText1.setTypeCd("Type123");
+        secureMessageBox1.setLocatorText(Arrays.asList(locatorText1));
+
+        AltrExtension altrExtension1 = new AltrExtension();
+        altrExtension1.setExtensionDetail("ExtensionDetail123");
+        secureMessageBox1.setAltrExtension(altrExtension1);
+
+        secureMessageBox1.setText("Sample Text");
+
+        FeatureLocator featureLocator1 = new FeatureLocator();
+        featureLocator1.setFeature("Feature123");
+        secureMessageBox1.setFeatureLocator(Arrays.asList(featureLocator1));
+
+        secureMessageBox1.setTypeCd("Type123");
+        secureMessageBox1.setAlertLocatorSequenceNum("Seq123");
+
+        SecureMessageBox secureMessageBox2 = new SecureMessageBox();
+        secureMessageBox2.setLocatorUsageTypeCd("Locator123");
+        secureMessageBox2.setDeliveryStatusCd("Delivered");
+
+        LocatorText locatorText2 = new LocatorText();
+        locatorText2.setLocatorTxt("Sample Text");
+        locatorText2.setTypeCd("Type123");
+        secureMessageBox2.setLocatorText(Arrays.asList(locatorText2));
+
+        AltrExtension altrExtension2 = new AltrExtension();
+        altrExtension2.setExtensionDetail("ExtensionDetail123");
+        secureMessageBox2.setAltrExtension(altrExtension2);
+
+        secureMessageBox2.setText("Sample Text");
+
+        FeatureLocator featureLocator2 = new FeatureLocator();
+        featureLocator2.setFeature("Feature123");
+        secureMessageBox2.setFeatureLocator(Arrays.asList(featureLocator2));
+
+        secureMessageBox2.setTypeCd("Type123");
+        secureMessageBox2.setAlertLocatorSequenceNum("Seq123");
+
+        assertEquals(secureMessageBox1, secureMessageBox2);
+        assertEquals(secureMessageBox1.hashCode(), secureMessageBox2.hashCode());
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        SecureMessageBox secureMessageBox = new SecureMessageBox();
+        assertNotEquals(secureMessageBox, null);
+    }
+
+    @Test
+    void testEqualsWithDifferentType() {
+        SecureMessageBox secureMessageBox = new SecureMessageBox();
+        assertNotEquals(secureMessageBox, new Object());
+    }
+
+    @Test
+    void testHashCodeWithDifferentValues() {
+        SecureMessageBox secureMessageBox1 = new SecureMessageBox();
+        secureMessageBox1.setLocatorUsageTypeCd("Locator123");
+        secureMessageBox1.setDeliveryStatusCd("Delivered");
+
+        LocatorText locatorText1 = new LocatorText();
+        locatorText1.setLocatorTxt("Sample Text");
+        locatorText1.setTypeCd("Type123");
+        secureMessageBox1.setLocatorText(Arrays.asList(locatorText1));
+
+        AltrExtension altrExtension1 = new AltrExtension();
+        altrExtension1.setExtensionDetail("ExtensionDetail123");
+        secureMessageBox1.setAltrExtension(altrExtension1);
+
+        secureMessageBox1.setText("Sample Text");
+
+        FeatureLocator featureLocator1 = new FeatureLocator();
+        featureLocator1.setFeature("Feature123");
+        secureMessageBox1.setFeatureLocator(Arrays.asList(featureLocator1));
+
+        secureMessageBox1.setTypeCd("Type123");
+        secureMessageBox1.setAlertLocatorSequenceNum("Seq123");
+
+        SecureMessageBox secureMessageBox2 = new SecureMessageBox();
+        secureMessageBox2.setLocatorUsageTypeCd("Locator456");
+        secureMessageBox2.setDeliveryStatusCd("Pending");
+
+        LocatorText locatorText2 = new LocatorText();
+        locatorText2.setLocatorTxt("Different Text");
+        locatorText2.setTypeCd("Type456");
+        secureMessageBox2.setLocatorText(Arrays.asList(locatorText2));
+
+        AltrExtension altrExtension2 = new AltrExtension();
+        altrExtension2.setExtensionDetail("DifferentExtension");
+        secureMessageBox2.setAltrExtension(altrExtension2);
+
+        secureMessageBox2.setText("Different Text");
+
+        FeatureLocator featureLocator2 = new FeatureLocator();
+        featureLocator2.setFeature("Feature456");
+        secureMessageBox2.setFeatureLocator(Arrays.asList(featureLocator2));
+
+        secureMessageBox2.setTypeCd("Type456");
+        secureMessageBox2.setAlertLocatorSequenceNum("Seq456");
+
+        assertNotEquals(secureMessageBox1.hashCode(), secureMessageBox2.hashCode());
+    }
+}

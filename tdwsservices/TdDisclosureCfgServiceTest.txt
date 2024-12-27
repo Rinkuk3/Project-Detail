@@ -1,0 +1,114 @@
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import com.td.wsc.dscfg._2010._07._05.AssembleDisclosureRequestType;
+import com.td.wsc.dscfg._2010._07._05.AssembleDisclosureResponseType;
+import com.td.wsc.dscfg.wsdl.DisclosureConfiguration;
+import com.td.wsc.dscfg.wsdl.DisclosureConfigurationService;
+import com.td.mbna.msec.midtier.tdwsservices.TDwsServiceUtil;
+import com.sun.xml.ws.client.BindingProviderProperties;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+
+import javax.xml.ws.BindingProvider;
+import java.net.URL;
+
+class TdDisclosureCfgServiceTest {
+
+    private TdDisclosureCfgService tdDisclosureCfgService;
+
+    @Mock
+    private DisclosureConfigurationService disclosureConfigurationServiceMock;
+    
+    @Mock
+    private DisclosureConfiguration disclosureConfigurationMock;
+    
+    @Mock
+    private AssembleDisclosureRequestType assembleDisclosureRequestMock;
+    
+    @Mock
+    private AssembleDisclosureResponseType assembleDisclosureResponseMock;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        tdDisclosureCfgService = new TdDisclosureCfgService();
+    }
+
+    @Test
+    void testGetNamespace() {
+        String namespace = TdDisclosureCfgService.getNamespace();
+        assertNotNull(namespace);
+    }
+
+    @Test
+    void testIsEnabled() {
+        try (MockedStatic<TDwsServiceUtil> mockedTDwsServiceUtil = mockStatic(TDwsServiceUtil.class)) {
+            mockedTDwsServiceUtil.when(() -> TDwsServiceUtil.isPropertyTrue(anyString())).thenReturn(true);
+            boolean isEnabled = TdDisclosureCfgService.isEnabled();
+            assertTrue(isEnabled);
+        }
+    }
+
+    @Test
+    void testGetServicePort_SpringSupported() throws Exception {
+        try (MockedStatic<TdBaseService> mockedTdBaseService = mockStatic(TdBaseService.class)) {
+            mockedTdBaseService.when(TdBaseService::isSpringSupported).thenReturn(true);
+            when(TdBaseService.getServicePortFromSpring(TdBaseService.BEAN_TdDisclosureCfgService)).thenReturn(disclosureConfigurationMock);
+            
+            DisclosureConfiguration port = TdDisclosureCfgService.getServicePort();
+            assertNotNull(port);
+        }
+    }
+
+    @Test
+    void testGetServicePort_UrlService() throws Exception {
+        try (MockedStatic<TDwsServiceUtil> mockedTDwsServiceUtil = mockStatic(TDwsServiceUtil.class)) {
+            mockedTDwsServiceUtil.when(() -> TDwsServiceUtil.getTDServiceParam(anyString())).thenReturn("http://mockurl");
+            URL url = new URL("http://mockurl");
+            QName qname = new QName("http://mocknamespace", "DisclosureConfiguration");
+            DisclosureConfigurationService disclosureConfigurationService = new DisclosureConfigurationService(url, qname);
+            when(disclosureConfigurationService.getPort(DisclosureConfiguration.class)).thenReturn(disclosureConfigurationMock);
+
+            DisclosureConfiguration port = TdDisclosureCfgService.getServicePort();
+            assertNotNull(port);
+        }
+    }
+
+    @Test
+    void testAssembleDisclosure() throws Exception {
+        when(TdDisclosureCfgService.getServicePort()).thenReturn(disclosureConfigurationMock);
+        when(disclosureConfigurationMock.assembleDisclosure(assembleDisclosureRequestMock)).thenReturn(assembleDisclosureResponseMock);
+        
+        byte[] response = TdDisclosureCfgService.assembleDisclosure(assembleDisclosureRequestMock);
+        
+        assertNotNull(response);
+        verify(disclosureConfigurationMock, times(1)).assembleDisclosure(assembleDisclosureRequestMock);
+    }
+
+    @Test
+    void testAssembleDisclosure_Exception() throws Exception {
+        when(TdDisclosureCfgService.getServicePort()).thenReturn(disclosureConfigurationMock);
+        when(disclosureConfigurationMock.assembleDisclosure(assembleDisclosureRequestMock)).thenThrow(new RuntimeException("Test Exception"));
+
+        assertThrows(RuntimeException.class, () -> {
+            TdDisclosureCfgService.assembleDisclosure(assembleDisclosureRequestMock);
+        });
+    }
+
+    @Test
+    void testAssembleDisclosure_TimeoutSettings() throws Exception {
+        when(TdDisclosureCfgService.getServicePort()).thenReturn(disclosureConfigurationMock);
+        when(disclosureConfigurationMock.assembleDisclosure(assembleDisclosureRequestMock)).thenReturn(assembleDisclosureResponseMock);
+        
+        BindingProvider bindingProvider = (BindingProvider) disclosureConfigurationMock;
+        when(bindingProvider.getRequestContext()).thenReturn(mock(java.util.Map.class));
+
+        byte[] response = TdDisclosureCfgService.assembleDisclosure(assembleDisclosureRequestMock);
+        
+        assertNotNull(response);
+        verify(bindingProvider.getRequestContext(), times(1)).put(BindingProviderProperties.CONNECT_TIMEOUT, 5000);
+        verify(bindingProvider.getRequestContext(), times(1)).put(BindingProviderProperties.REQUEST_TIMEOUT, 5000);
+    }
+}

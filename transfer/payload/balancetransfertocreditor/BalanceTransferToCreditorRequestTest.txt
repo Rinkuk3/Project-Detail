@@ -1,0 +1,103 @@
+package com.td.mbna.msec.midtier.transfer.payload.balancetransfertocreditor;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class BalanceTransferToCreditorRequestTest {
+
+    private BalanceTransferToCreditorRequest request;
+
+    @Before
+    public void setUp() {
+        request = new BalanceTransferToCreditorRequest();
+    }
+
+    @Test
+    public void testGetAndSetRequestPayload() {
+        RequestPayload payload = new RequestPayload();
+        payload.setConfirmed(true);
+        request.setRequestPayload(payload);
+
+        assertNotNull(request.getRequestPayload());
+        assertEquals(payload, request.getRequestPayload());
+
+        request.setRequestPayload(null);
+        assertNull(request.getRequestPayload());
+    }
+
+    @Test
+    public void testToString() {
+        request.setCustId("CUST123");
+        request.setAliasCustId("ALIAS123");
+        request.setAcctNum("ACCT123");
+        request.setAcctType("SAVINGS");
+        request.setLanguagePref("EN");
+        request.setAuditInfo("AuditInfo");
+        request.setIsPrimaryUser(true);
+        request.setReserved1("reserved");
+        request.setCustInterface("WEB");
+
+        RequestPayload payload = new RequestPayload();
+        payload.setConfirmed(true);
+        request.setRequestPayload(payload);
+
+        String expectedString = "com.td.mbna.msec.midtier.transfer.payload.balancetransfertocreditor.BalanceTransferToCreditorRequest@"
+                + Integer.toHexString(System.identityHashCode(request))
+                + "[sessionInfo=<null>,custId=CUST123,aliasCustId=ALIAS123,acctNum=ACCT123,acctType=SAVINGS,languagePref=EN,auditInfo=AuditInfo,isPrimaryUser=true,reserved1=reserved,custInterface=WEB,requestPayload=" + payload + "]";
+
+        assertEquals(expectedString, request.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        BalanceTransferToCreditorRequest request1 = new BalanceTransferToCreditorRequest();
+        request1.setCustId("CUST123");
+        request1.setAliasCustId("ALIAS123");
+        request1.setAcctNum("ACCT123");
+
+        BalanceTransferToCreditorRequest request2 = new BalanceTransferToCreditorRequest();
+        request2.setCustId("CUST123");
+        request2.setAliasCustId("ALIAS123");
+        request2.setAcctNum("ACCT123");
+
+        BalanceTransferToCreditorRequest request3 = new BalanceTransferToCreditorRequest();
+        request3.setCustId("CUST456");
+        request3.setAliasCustId("ALIAS456");
+        request3.setAcctNum("ACCT456");
+
+        assertEquals(request1.hashCode(), request2.hashCode());
+        assertNotEquals(request1.hashCode(), request3.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        BalanceTransferToCreditorRequest request1 = new BalanceTransferToCreditorRequest();
+        request1.setCustId("CUST123");
+        request1.setAliasCustId("ALIAS123");
+        request1.setAcctNum("ACCT123");
+
+        BalanceTransferToCreditorRequest request2 = new BalanceTransferToCreditorRequest();
+        request2.setCustId("CUST123");
+        request2.setAliasCustId("ALIAS123");
+        request2.setAcctNum("ACCT123");
+
+        BalanceTransferToCreditorRequest request3 = new BalanceTransferToCreditorRequest();
+        request3.setCustId("CUST456");
+        request3.setAliasCustId("ALIAS456");
+        request3.setAcctNum("ACCT456");
+
+        assertTrue(request1.equals(request2));
+        assertFalse(request1.equals(request3));
+        assertFalse(request1.equals(null));
+        assertFalse(request1.equals("String"));
+    }
+
+    @Test
+    public void testGetRequestPayloadLazyInitialization() {
+        BalanceTransferToCreditorRequest requestWithNullPayload = new BalanceTransferToCreditorRequest();
+        assertNotNull(requestWithNullPayload.getRequestPayload()); // This should initialize the requestPayload
+        assertTrue(requestWithNullPayload.getRequestPayload() instanceof RequestPayload);
+    }
+}

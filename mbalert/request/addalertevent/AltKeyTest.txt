@@ -1,0 +1,77 @@
+package com.td.api.mbalert.request.addalertevent;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class AltKeyTest {
+
+    @Test
+    void testAltKey() {
+        // Create an instance of AltKey
+        AltKey altKey = new AltKey();
+
+        // Test default values
+        assertNull(altKey.getPartyKey());
+        assertNull(altKey.getPartyKeyTypeCd());
+        assertNull(altKey.getPartyTypeCd());
+        assertNull(altKey.getEventMessageKey());
+
+        // Set values and test getters
+        altKey.setPartyKey("partyKeyValue");
+        altKey.setPartyKeyTypeCd("partyKeyTypeValue");
+        altKey.setPartyTypeCd("partyTypeValue");
+        EventMessageKey eventMessageKey = new EventMessageKey();
+        altKey.setEventMessageKey(eventMessageKey);
+
+        assertEquals("partyKeyValue", altKey.getPartyKey());
+        assertEquals("partyKeyTypeValue", altKey.getPartyKeyTypeCd());
+        assertEquals("partyTypeValue", altKey.getPartyTypeCd());
+        assertEquals(eventMessageKey, altKey.getEventMessageKey());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        AltKey altKey1 = new AltKey();
+        altKey1.setPartyKey("partyKeyValue1");
+        altKey1.setPartyKeyTypeCd("partyKeyTypeValue1");
+        altKey1.setPartyTypeCd("partyTypeValue1");
+        altKey1.setEventMessageKey(new EventMessageKey());
+
+        AltKey altKey2 = new AltKey();
+        altKey2.setPartyKey("partyKeyValue1");
+        altKey2.setPartyKeyTypeCd("partyKeyTypeValue1");
+        altKey2.setPartyTypeCd("partyTypeValue1");
+        altKey2.setEventMessageKey(new EventMessageKey());
+
+        AltKey altKey3 = new AltKey();
+        altKey3.setPartyKey("partyKeyValue2");
+        altKey3.setPartyKeyTypeCd("partyKeyTypeValue2");
+        altKey3.setPartyTypeCd("partyTypeValue2");
+        altKey3.setEventMessageKey(new EventMessageKey());
+
+        // Test equality method
+        assertTrue(altKey1.equals(altKey2));
+        assertFalse(altKey1.equals(altKey3));
+
+        // Test hashCode method
+        assertEquals(altKey1.hashCode(), altKey2.hashCode());
+        assertNotEquals(altKey1.hashCode(), altKey3.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        AltKey altKey = new AltKey();
+        altKey.setPartyKey("partyKeyValue");
+        altKey.setPartyKeyTypeCd("partyKeyTypeValue");
+        altKey.setPartyTypeCd("partyTypeValue");
+        altKey.setEventMessageKey(new EventMessageKey());
+
+        String toStringResult = altKey.toString();
+
+        assertTrue(toStringResult.contains("partyKey"));
+        assertTrue(toStringResult.contains("partyKeyTypeCd"));
+        assertTrue(toStringResult.contains("partyTypeCd"));
+        assertTrue(toStringResult.contains("eventMessageKey"));
+    }
+}

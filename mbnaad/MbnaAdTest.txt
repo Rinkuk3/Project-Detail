@@ -1,0 +1,185 @@
+package com.td.mbna.msec.midtier.mbnaad;
+
+import com.td.mbna.msec.midtier.cardreplacement.payload.replacecard.ReplaceCardRequest;
+import com.td.mbna.msec.midtier.cardreplacement.payload.replacecard.ReplaceCardResponse;
+import com.td.mbna.msec.midtier.cardservice.payload.activatecard.ActivateCardResponse;
+import com.td.mbna.msec.midtier.cardservice.payload.validatecpi.ValidateCPIResponse;
+import com.td.mbna.msec.midtier.mbnaad.request.response.RetrieveAccessCardListRs;
+import com.td.mbna.msec.midtier.mbnaad.request.response.accesscard.RetrieveAccessCard;
+import com.td.mbna.msec.midtier.pinmanagement.payload.changepin.ChangePinResponse;
+import com.td.mbna.msec.midtier.pinmanagement.payload.getpin.GetPinResponse;
+import com.td.mbna.msec.midtier.pinmanagement.payload.unlockpin.UnblockPinResponse;
+import com.td.mbna.msec.midtier.util.perf.ProfileLog;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
+public class MbnaAdTest {
+
+    @Mock
+    private ChipCardInfoSrv chipCardInfoSrv;
+
+    @Mock
+    private CardActivationSrv cardActivationSrv;
+
+    @Mock
+    private UserInfoSrv userInfoSrv;
+
+    @Mock
+    private CardVerificationSrv cardVerificationSrv;
+
+    @InjectMocks
+    private MbnaAdImpl mbnaAdImpl;
+
+    private String connectId = "connectId";
+    private String cardNumber = "123456";
+    private String partyKey = "partyKey";
+    private String token = "token";
+
+    @BeforeEach
+    public void setUp() {
+        // Initialize mocks and setup
+    }
+
+    @Test
+    public void testRetrieveChipCardInfo() {
+        RetrieveAccessCardListRs mockResponse = new RetrieveAccessCardListRs();
+        when(chipCardInfoSrv.retrieveChipCardInfo(connectId, cardNumber, partyKey, token))
+                .thenReturn(mockResponse);
+
+        RetrieveAccessCardListRs result = mbnaAdImpl.retrieveChipCardInfo(connectId, cardNumber, partyKey, token);
+
+        assertNotNull(result);
+        verify(chipCardInfoSrv, times(1)).retrieveChipCardInfo(connectId, cardNumber, partyKey, token);
+    }
+
+    @Test
+    public void testRetrieveAccessCardInfo() {
+        RetrieveAccessCard mockResponse = new RetrieveAccessCard();
+        when(chipCardInfoSrv.retrieveAccessCardList(connectId, cardNumber, token))
+                .thenReturn(mockResponse);
+
+        RetrieveAccessCard result = mbnaAdImpl.retrieveAccessCardInfo(connectId, cardNumber, token);
+
+        assertNotNull(result);
+        verify(chipCardInfoSrv, times(1)).retrieveAccessCardList(connectId, cardNumber, token);
+    }
+
+    @Test
+    public void testViewPin() {
+        GetPinResponse mockResponse = new GetPinResponse();
+        when(chipCardInfoSrv.viewPin(connectId, cardNumber, partyKey, token))
+                .thenReturn(mockResponse);
+
+        GetPinResponse result = mbnaAdImpl.viewPin(connectId, cardNumber, partyKey, token);
+
+        assertNotNull(result);
+        verify(chipCardInfoSrv, times(1)).viewPin(connectId, cardNumber, partyKey, token);
+    }
+
+    @Test
+    public void testUpdatePin() {
+        ChangePinResponse mockResponse = new ChangePinResponse();
+        when(chipCardInfoSrv.updatePin(connectId, cardNumber, "encryptedPin", partyKey, token))
+                .thenReturn(mockResponse);
+
+        ChangePinResponse result = mbnaAdImpl.updatePin(connectId, cardNumber, "encryptedPin", partyKey, token);
+
+        assertNotNull(result);
+        verify(chipCardInfoSrv, times(1)).updatePin(connectId, cardNumber, "encryptedPin", partyKey, token);
+    }
+
+    @Test
+    public void testUnblockPin() {
+        UnblockPinResponse mockResponse = new UnblockPinResponse();
+        when(chipCardInfoSrv.unblockPin(connectId, cardNumber, partyKey, token, "seqNumber", true))
+                .thenReturn(mockResponse);
+
+        UnblockPinResponse result = mbnaAdImpl.unblockPin(connectId, cardNumber, partyKey, token, "seqNumber", true);
+
+        assertNotNull(result);
+        verify(chipCardInfoSrv, times(1)).unblockPin(connectId, cardNumber, partyKey, token, "seqNumber", true);
+    }
+
+    @Test
+    public void testActivateCard() {
+        ActivateCardResponse mockResponse = new ActivateCardResponse();
+        when(cardActivationSrv.activateCard(connectId, cardNumber, partyKey, token))
+                .thenReturn(mockResponse);
+
+        ActivateCardResponse result = mbnaAdImpl.activateCard(connectId, cardNumber, partyKey, token);
+
+        assertNotNull(result);
+        verify(cardActivationSrv, times(1)).activateCard(connectId, cardNumber, partyKey, token);
+    }
+
+    @Test
+    public void testIssueCardForAU() {
+        com.mbnaweb.xsd.msgs.customerprofile.AddAuthorizedUserRequest addAuthorizedUserRequest = mock(com.mbnaweb.xsd.msgs.customerprofile.AddAuthorizedUserRequest.class);
+        com.mbnaweb.xsd.msgs.customerprofile.AddAuthorizedUserResponse response = mock(com.mbnaweb.xsd.msgs.customerprofile.AddAuthorizedUserResponse.class);
+        when(userInfoSrv.issueCardForAU(addAuthorizedUserRequest, response, cardNumber, token))
+                .thenReturn(true);
+
+        Boolean result = mbnaAdImpl.issueCardForAU(addAuthorizedUserRequest, response, cardNumber, token);
+
+        assertTrue(result);
+        verify(userInfoSrv, times(1)).issueCardForAU(addAuthorizedUserRequest, response, cardNumber, token);
+    }
+
+    @Test
+    public void testCardVerification() {
+        ValidateCPIResponse mockResponse = new ValidateCPIResponse();
+        when(cardVerificationSrv.cardVerification(connectId, cardNumber, "cvv", "expiryYear", "expiryMonth", token))
+                .thenReturn(mockResponse);
+
+        ValidateCPIResponse result = mbnaAdImpl.cardVerification(connectId, cardNumber, "cvv", "expiryYear", "expiryMonth", token);
+
+        assertNotNull(result);
+        verify(cardVerificationSrv, times(1)).cardVerification(connectId, cardNumber, "cvv", "expiryYear", "expiryMonth", token);
+    }
+
+    @Test
+    public void testIssueCard() throws MBNAException {
+        ReplaceCardRequest replaceCardRequest = mock(ReplaceCardRequest.class);
+        ReplaceCardResponse mockResponse = new ReplaceCardResponse();
+        when(userInfoSrv.issueCard(connectId, replaceCardRequest, token))
+                .thenReturn(mockResponse);
+
+        ReplaceCardResponse result = mbnaAdImpl.issueCard(connectId, replaceCardRequest, token);
+
+        assertNotNull(result);
+        verify(userInfoSrv, times(1)).issueCard(connectId, replaceCardRequest, token);
+    }
+
+    @Test
+    public void testCardCVCVerification() {
+        ValidateCPIResponse mockResponse = new ValidateCPIResponse();
+        when(cardVerificationSrv.cardCVCVerification(connectId, cardNumber, "cvv", "expiryMonthYear", token))
+                .thenReturn(mockResponse);
+
+        ValidateCPIResponse result = mbnaAdImpl.cardCVCVerification(connectId, cardNumber, "cvv", "expiryMonthYear", token);
+
+        assertNotNull(result);
+        verify(cardVerificationSrv, times(1)).cardCVCVerification(connectId, cardNumber, "cvv", "expiryMonthYear", token);
+    }
+
+    @Test
+    public void testVerifyCardExpiry() {
+        RetrieveAccessCard mockResponse = new RetrieveAccessCard();
+        when(chipCardInfoSrv.verifyCardExpiry(connectId, cardNumber, token))
+                .thenReturn(mockResponse);
+
+        RetrieveAccessCard result = mbnaAdImpl.retrieveAccessCard(connectId, cardNumber, token);
+
+        assertNotNull(result);
+        verify(chipCardInfoSrv, times(1)).verifyCardExpiry(connectId, cardNumber, token);
+    }
+}

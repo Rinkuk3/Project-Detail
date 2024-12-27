@@ -1,0 +1,73 @@
+package com.td.api.mbalert.request.addalertevent;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class EventToEventTest {
+
+    @Test
+    void testEventToEvent() {
+        // Create an instance of EventToEvent
+        EventToEvent eventToEvent = new EventToEvent();
+
+        // Test default values of fields
+        assertNull(eventToEvent.getContactEvent());
+        assertNull(eventToEvent.getRoleCd());
+
+        // Test setting and getting 'contactEvent'
+        ContactEvent contactEvent = new ContactEvent();
+        contactEvent.setKey("key123");
+        contactEvent.setReasonCd("reasonCode");
+        eventToEvent.setContactEvent(contactEvent);
+        assertEquals(contactEvent, eventToEvent.getContactEvent());
+
+        // Test setting and getting 'roleCd'
+        String roleCd = "role123";
+        eventToEvent.setRoleCd(roleCd);
+        assertEquals(roleCd, eventToEvent.getRoleCd());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        // Create two instances of EventToEvent with the same properties
+        EventToEvent eventToEvent1 = new EventToEvent();
+        ContactEvent contactEvent1 = new ContactEvent();
+        contactEvent1.setKey("key123");
+        contactEvent1.setReasonCd("reasonCode");
+        eventToEvent1.setContactEvent(contactEvent1);
+        eventToEvent1.setRoleCd("role123");
+
+        EventToEvent eventToEvent2 = new EventToEvent();
+        ContactEvent contactEvent2 = new ContactEvent();
+        contactEvent2.setKey("key123");
+        contactEvent2.setReasonCd("reasonCode");
+        eventToEvent2.setContactEvent(contactEvent2);
+        eventToEvent2.setRoleCd("role123");
+
+        // Test equality
+        assertTrue(eventToEvent1.equals(eventToEvent2));
+
+        // Test hashCode
+        assertEquals(eventToEvent1.hashCode(), eventToEvent2.hashCode());
+
+        // Modify one object and test inequality
+        eventToEvent2.setRoleCd("role124");
+        assertFalse(eventToEvent1.equals(eventToEvent2));
+    }
+
+    @Test
+    void testToString() {
+        // Create an instance of EventToEvent
+        EventToEvent eventToEvent = new EventToEvent();
+        ContactEvent contactEvent = new ContactEvent();
+        contactEvent.setKey("key123");
+        contactEvent.setReasonCd("reasonCode");
+        eventToEvent.setContactEvent(contactEvent);
+        eventToEvent.setRoleCd("role123");
+
+        // Test the toString() method
+        String toStringResult = eventToEvent.toString();
+        assertTrue(toStringResult.contains("contactEvent"));
+        assertTrue(toStringResult.contains("roleCd"));
+    }
+}

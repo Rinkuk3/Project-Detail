@@ -1,0 +1,158 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class PartyResponseTest {
+
+    private PartyResponse partyResponse;
+
+    @BeforeEach
+    void setUp() {
+        partyResponse = new PartyResponse();
+    }
+
+    @Test
+    void testGetAndSetTypeCd() {
+        String typeCd = "Type1";
+        partyResponse.setTypeCd(typeCd);
+        assertEquals(typeCd, partyResponse.getTypeCd());
+    }
+
+    @Test
+    void testGetAndSetReasonCd() {
+        String reasonCd = "Reason1";
+        partyResponse.setReasonCd(reasonCd);
+        assertEquals(reasonCd, partyResponse.getReasonCd());
+    }
+
+    @Test
+    void testGetAndSetParty() {
+        Party party = new Party();
+        party.setRoleCd("Role1");
+        partyResponse.setParty(party);
+        assertEquals(party, partyResponse.getParty());
+    }
+
+    @Test
+    void testGetAndSetOriginatingUserId() {
+        String originatingUserId = "User1";
+        partyResponse.setOriginatingUserId(originatingUserId);
+        assertEquals(originatingUserId, partyResponse.getOriginatingUserId());
+    }
+
+    @Test
+    void testGetAndSetOriginatingUserFunctionCd() {
+        String functionCd = "Function1";
+        partyResponse.setOriginatingUserFunctionCd(functionCd);
+        assertEquals(functionCd, partyResponse.getOriginatingUserFunctionCd());
+    }
+
+    @Test
+    void testGetAndSetSolicitationChannelTypeCd() {
+        String solicitationChannelTypeCd = "Channel1";
+        partyResponse.setSolicitationChannelTypeCd(solicitationChannelTypeCd);
+        assertEquals(solicitationChannelTypeCd, partyResponse.getSolicitationChannelTypeCd());
+    }
+
+    @Test
+    void testGetAndSetAccessChannelTypeCd() {
+        String accessChannelTypeCd = "AccessChannel1";
+        partyResponse.setAccessChannelTypeCd(accessChannelTypeCd);
+        assertEquals(accessChannelTypeCd, partyResponse.getAccessChannelTypeCd());
+    }
+
+    @Test
+    void testGetAndSetPromotionOfferToAgreement() {
+        PromotionOfferToAgreement promotionOfferToAgreement = new PromotionOfferToAgreement();
+        partyResponse.setPromotionOfferToAgreement(promotionOfferToAgreement);
+        assertEquals(promotionOfferToAgreement, partyResponse.getPromotionOfferToAgreement());
+    }
+
+    @Test
+    void testToString() {
+        partyResponse.setTypeCd("Type1");
+        partyResponse.setReasonCd("Reason1");
+        Party party = new Party();
+        party.setRoleCd("Role1");
+        partyResponse.setParty(party);
+        partyResponse.setOriginatingUserId("User1");
+        partyResponse.setOriginatingUserFunctionCd("Function1");
+        partyResponse.setSolicitationChannelTypeCd("Channel1");
+        partyResponse.setAccessChannelTypeCd("AccessChannel1");
+        partyResponse.setPromotionOfferToAgreement(new PromotionOfferToAgreement());
+        
+        String expected = "com.td.api.mbofp.request.updateofferdisposition.PartyResponse@" +
+                          Integer.toHexString(partyResponse.hashCode()) +
+                          "[typeCd=Type1,reasonCd=Reason1,party=com.td.api.mbofp.request.updateofferdisposition.Party@" + 
+                          Integer.toHexString(party.hashCode()) + "[roleCd=Role1],originatingUserId=User1,originatingUserFunctionCd=Function1,solicitationChannelTypeCd=Channel1,accessChannelTypeCd=AccessChannel1,promotionOfferToAgreement=com.td.api.mbofp.request.updateofferdisposition.PromotionOfferToAgreement@" + 
+                          Integer.toHexString(promotionOfferToAgreement.hashCode()) + "]";
+        assertEquals(expected, partyResponse.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        partyResponse.setTypeCd("Type1");
+        partyResponse.setReasonCd("Reason1");
+        Party party = new Party();
+        party.setRoleCd("Role1");
+        partyResponse.setParty(party);
+        partyResponse.setOriginatingUserId("User1");
+        partyResponse.setOriginatingUserFunctionCd("Function1");
+        partyResponse.setSolicitationChannelTypeCd("Channel1");
+        partyResponse.setAccessChannelTypeCd("AccessChannel1");
+        partyResponse.setPromotionOfferToAgreement(new PromotionOfferToAgreement());
+        
+        int expectedHashCode = 1;
+        expectedHashCode = 31 * expectedHashCode + (partyResponse.getPromotionOfferToAgreement() == null ? 0 : partyResponse.getPromotionOfferToAgreement().hashCode());
+        expectedHashCode = 31 * expectedHashCode + (partyResponse.getOriginatingUserId() == null ? 0 : partyResponse.getOriginatingUserId().hashCode());
+        expectedHashCode = 31 * expectedHashCode + (partyResponse.getAccessChannelTypeCd() == null ? 0 : partyResponse.getAccessChannelTypeCd().hashCode());
+        expectedHashCode = 31 * expectedHashCode + (partyResponse.getTypeCd() == null ? 0 : partyResponse.getTypeCd().hashCode());
+        expectedHashCode = 31 * expectedHashCode + (partyResponse.getOriginatingUserFunctionCd() == null ? 0 : partyResponse.getOriginatingUserFunctionCd().hashCode());
+        expectedHashCode = 31 * expectedHashCode + (partyResponse.getSolicitationChannelTypeCd() == null ? 0 : partyResponse.getSolicitationChannelTypeCd().hashCode());
+        expectedHashCode = 31 * expectedHashCode + (partyResponse.getParty() == null ? 0 : partyResponse.getParty().hashCode());
+        expectedHashCode = 31 * expectedHashCode + (partyResponse.getReasonCd() == null ? 0 : partyResponse.getReasonCd().hashCode());
+        
+        assertEquals(expectedHashCode, partyResponse.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        partyResponse.setTypeCd("Type1");
+        partyResponse.setReasonCd("Reason1");
+        Party party = new Party();
+        party.setRoleCd("Role1");
+        partyResponse.setParty(party);
+        partyResponse.setOriginatingUserId("User1");
+        partyResponse.setOriginatingUserFunctionCd("Function1");
+        partyResponse.setSolicitationChannelTypeCd("Channel1");
+        partyResponse.setAccessChannelTypeCd("AccessChannel1");
+        partyResponse.setPromotionOfferToAgreement(new PromotionOfferToAgreement());
+
+        // Test equality with same object
+        assertTrue(partyResponse.equals(partyResponse));
+
+        // Test equality with another object having the same fields
+        PartyResponse anotherPartyResponse = new PartyResponse();
+        anotherPartyResponse.setTypeCd("Type1");
+        anotherPartyResponse.setReasonCd("Reason1");
+        anotherPartyResponse.setParty(party);
+        anotherPartyResponse.setOriginatingUserId("User1");
+        anotherPartyResponse.setOriginatingUserFunctionCd("Function1");
+        anotherPartyResponse.setSolicitationChannelTypeCd("Channel1");
+        anotherPartyResponse.setAccessChannelTypeCd("AccessChannel1");
+        anotherPartyResponse.setPromotionOfferToAgreement(new PromotionOfferToAgreement());
+        
+        assertTrue(partyResponse.equals(anotherPartyResponse));
+
+        // Test inequality with a different PartyResponse
+        PartyResponse differentPartyResponse = new PartyResponse();
+        differentPartyResponse.setTypeCd("DifferentType");
+        assertFalse(partyResponse.equals(differentPartyResponse));
+
+        // Test inequality with null
+        assertFalse(partyResponse.equals(null));
+
+        // Test inequality with an object of a different class
+        assertFalse(partyResponse.equals(new Object()));
+    }
+}

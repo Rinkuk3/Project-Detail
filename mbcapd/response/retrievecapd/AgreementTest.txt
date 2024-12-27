@@ -1,0 +1,193 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.math.BigDecimal;
+import java.util.Arrays;
+
+class AgreementTest {
+
+    @Test
+    void testGetterAndSetterForAgreementKey() {
+        Agreement agreement = new Agreement();
+        agreement.setAgreementKey("agreementKey1");
+        assertEquals("agreementKey1", agreement.getAgreementKey());
+    }
+
+    @Test
+    void testGetterAndSetterForAccountApplicationCd() {
+        Agreement agreement = new Agreement();
+        agreement.setAccountApplicationCd("applicationCd1");
+        assertEquals("applicationCd1", agreement.getAccountApplicationCd());
+    }
+
+    @Test
+    void testGetterAndSetterForAccountNum() {
+        Agreement agreement = new Agreement();
+        agreement.setAccountNum("accountNum1");
+        assertEquals("accountNum1", agreement.getAccountNum());
+    }
+
+    @Test
+    void testGetterAndSetterForBranchNum() {
+        Agreement agreement = new Agreement();
+        agreement.setBranchNum("branchNum1");
+        assertEquals("branchNum1", agreement.getBranchNum());
+    }
+
+    @Test
+    void testGetterAndSetterForBalanceAmt() {
+        Agreement agreement = new Agreement();
+        agreement.setBalanceAmt(new BigDecimal("1000.00"));
+        assertEquals(new BigDecimal("1000.00"), agreement.getBalanceAmt());
+    }
+
+    @Test
+    void testGetterAndSetterForCreditLimitAmt() {
+        Agreement agreement = new Agreement();
+        agreement.setCreditLimitAmt(new BigDecimal("5000.00"));
+        assertEquals(new BigDecimal("5000.00"), agreement.getCreditLimitAmt());
+    }
+
+    @Test
+    void testGetterAndSetterForAlertSetup() {
+        Agreement agreement = new Agreement();
+        AlertSetup alertSetup = new AlertSetup(); // Assuming AlertSetup has a default constructor
+        agreement.setAlertSetup(Arrays.asList(alertSetup));
+        assertEquals(1, agreement.getAlertSetup().size());
+    }
+
+    @Test
+    void testGetterAndSetterForContact() {
+        Agreement agreement = new Agreement();
+        Contact contact = new Contact(); // Assuming Contact has a default constructor
+        agreement.setContact(Arrays.asList(contact));
+        assertEquals(1, agreement.getContact().size());
+    }
+
+    @Test
+    void testToString() {
+        Agreement agreement = new Agreement();
+        agreement.setAgreementKey("agreementKey1");
+        agreement.setAccountApplicationCd("applicationCd1");
+        agreement.setAccountNum("accountNum1");
+        agreement.setBranchNum("branchNum1");
+        agreement.setBalanceAmt(new BigDecimal("1000.00"));
+        agreement.setCreditLimitAmt(new BigDecimal("5000.00"));
+
+        String result = agreement.toString();
+        assertTrue(result.contains("agreementKey=agreementKey1"));
+        assertTrue(result.contains("accountApplicationCd=applicationCd1"));
+        assertTrue(result.contains("accountNum=accountNum1"));
+        assertTrue(result.contains("branchNum=branchNum1"));
+        assertTrue(result.contains("balanceAmt=1000.00"));
+        assertTrue(result.contains("creditLimitAmt=5000.00"));
+    }
+
+    @Test
+    void testHashCode() {
+        Agreement agreement1 = new Agreement();
+        agreement1.setAgreementKey("agreementKey1");
+        agreement1.setBalanceAmt(new BigDecimal("1000.00"));
+
+        Agreement agreement2 = new Agreement();
+        agreement2.setAgreementKey("agreementKey1");
+        agreement2.setBalanceAmt(new BigDecimal("1000.00"));
+
+        assertEquals(agreement1.hashCode(), agreement2.hashCode());
+    }
+
+    @Test
+    void testEqualsSameObject() {
+        Agreement agreement = new Agreement();
+        assertTrue(agreement.equals(agreement));
+    }
+
+    @Test
+    void testEqualsDifferentObject() {
+        Agreement agreement1 = new Agreement();
+        agreement1.setAgreementKey("agreementKey1");
+
+        Agreement agreement2 = new Agreement();
+        agreement2.setAgreementKey("agreementKey2");
+
+        assertFalse(agreement1.equals(agreement2));
+    }
+
+    @Test
+    void testEqualsNull() {
+        Agreement agreement = new Agreement();
+        assertFalse(agreement.equals(null));
+    }
+
+    @Test
+    void testEqualsDifferentClass() {
+        Agreement agreement = new Agreement();
+        assertFalse(agreement.equals(new Object()));
+    }
+
+    @Test
+    void testEqualsWithDifferentAgreementKey() {
+        Agreement agreement1 = new Agreement();
+        agreement1.setAgreementKey("agreementKey1");
+
+        Agreement agreement2 = new Agreement();
+        agreement2.setAgreementKey("agreementKey2");
+
+        assertFalse(agreement1.equals(agreement2));
+    }
+
+    @Test
+    void testEqualsWithNullAgreementKey() {
+        Agreement agreement1 = new Agreement();
+        agreement1.setAgreementKey(null);
+
+        Agreement agreement2 = new Agreement();
+        agreement2.setAgreementKey(null);
+
+        assertTrue(agreement1.equals(agreement2));
+    }
+
+    @Test
+    void testEqualsWithDifferentBalanceAmt() {
+        Agreement agreement1 = new Agreement();
+        agreement1.setBalanceAmt(new BigDecimal("1000.00"));
+
+        Agreement agreement2 = new Agreement();
+        agreement2.setBalanceAmt(new BigDecimal("2000.00"));
+
+        assertFalse(agreement1.equals(agreement2));
+    }
+
+    @Test
+    void testEqualsWithNullBalanceAmt() {
+        Agreement agreement1 = new Agreement();
+        agreement1.setBalanceAmt(null);
+
+        Agreement agreement2 = new Agreement();
+        agreement2.setBalanceAmt(null);
+
+        assertTrue(agreement1.equals(agreement2));
+    }
+
+    @Test
+    void testEqualsWithDifferentCreditLimitAmt() {
+        Agreement agreement1 = new Agreement();
+        agreement1.setCreditLimitAmt(new BigDecimal("5000.00"));
+
+        Agreement agreement2 = new Agreement();
+        agreement2.setCreditLimitAmt(new BigDecimal("7000.00"));
+
+        assertFalse(agreement1.equals(agreement2));
+    }
+
+    @Test
+    void testEqualsWithNullCreditLimitAmt() {
+        Agreement agreement1 = new Agreement();
+        agreement1.setCreditLimitAmt(null);
+
+        Agreement agreement2 = new Agreement();
+        agreement2.setCreditLimitAmt(null);
+
+        assertTrue(agreement1.equals(agreement2));
+    }
+
+}

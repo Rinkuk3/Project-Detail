@@ -1,0 +1,101 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class PromotionChannelTest {
+
+    private PromotionChannel promotionChannel;
+
+    @BeforeEach
+    void setUp() {
+        promotionChannel = new PromotionChannel();
+    }
+
+    @Test
+    void testGetAndSetSolicitationChannelTypeCd() {
+        String solicitationChannelTypeCd = "SOLICITATION_CD";
+        promotionChannel.setSolicitationChannelTypeCd(solicitationChannelTypeCd);
+        assertEquals(solicitationChannelTypeCd, promotionChannel.getSolicitationChannelTypeCd());
+    }
+
+    @Test
+    void testGetAndSetAccessChannelTypeCd() {
+        String accessChannelTypeCd = "ACCESS_CD";
+        promotionChannel.setAccessChannelTypeCd(accessChannelTypeCd);
+        assertEquals(accessChannelTypeCd, promotionChannel.getAccessChannelTypeCd());
+    }
+
+    @Test
+    void testToString() {
+        promotionChannel.setSolicitationChannelTypeCd("SOLICITATION_CD");
+        promotionChannel.setAccessChannelTypeCd("ACCESS_CD");
+
+        String expected = "com.td.api.mbofp.request.installmentplan.PromotionChannel@" 
+            + Integer.toHexString(promotionChannel.hashCode()) 
+            + "[solicitationChannelTypeCd=SOLICITATION_CD,accessChannelTypeCd=ACCESS_CD]";
+        
+        assertEquals(expected, promotionChannel.toString());
+    }
+
+    @Test
+    void testHashCodeAndEquals() {
+        PromotionChannel channel1 = new PromotionChannel();
+        channel1.setSolicitationChannelTypeCd("SOLICITATION_CD");
+        channel1.setAccessChannelTypeCd("ACCESS_CD");
+
+        PromotionChannel channel2 = new PromotionChannel();
+        channel2.setSolicitationChannelTypeCd("SOLICITATION_CD");
+        channel2.setAccessChannelTypeCd("ACCESS_CD");
+
+        PromotionChannel channel3 = new PromotionChannel();
+        channel3.setSolicitationChannelTypeCd("DIFFERENT_SOLICITATION_CD");
+        channel3.setAccessChannelTypeCd("ACCESS_CD");
+
+        assertTrue(channel1.equals(channel2));
+        assertFalse(channel1.equals(channel3));
+        assertEquals(channel1.hashCode(), channel2.hashCode());
+        assertNotEquals(channel1.hashCode(), channel3.hashCode());
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        assertFalse(promotionChannel.equals(null));
+    }
+
+    @Test
+    void testEqualsWithDifferentClass() {
+        assertFalse(promotionChannel.equals(new Object()));
+    }
+
+    @Test
+    void testSameObjectEquals() {
+        assertTrue(promotionChannel.equals(promotionChannel));
+    }
+
+    @Test
+    void testEqualsWithNullValues() {
+        PromotionChannel channel1 = new PromotionChannel();
+        channel1.setSolicitationChannelTypeCd(null);
+        channel1.setAccessChannelTypeCd(null);
+
+        PromotionChannel channel2 = new PromotionChannel();
+        channel2.setSolicitationChannelTypeCd(null);
+        channel2.setAccessChannelTypeCd(null);
+
+        assertTrue(channel1.equals(channel2));
+    }
+
+    @Test
+    void testHashCodeWithNullValues() {
+        PromotionChannel channel1 = new PromotionChannel();
+        channel1.setSolicitationChannelTypeCd(null);
+        channel1.setAccessChannelTypeCd(null);
+
+        PromotionChannel channel2 = new PromotionChannel();
+        channel2.setSolicitationChannelTypeCd(null);
+        channel2.setAccessChannelTypeCd(null);
+
+        assertEquals(channel1.hashCode(), channel2.hashCode());
+    }
+}

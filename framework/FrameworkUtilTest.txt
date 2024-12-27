@@ -1,0 +1,131 @@
+package com.td.mbna.msec.midtier.framework;
+
+import com.mbnaweb.xsd.types.common.ErrorType;
+import com.mbnaweb.xsd.types.common.FieldErrorType;
+import com.mbnaweb.xsd.types.common.TrackableRequest;
+import com.td.mbna.msec.midtier.exception.BusinessError;
+import com.td.mbna.msec.midtier.exception.SystemError;
+import com.td.mbna.msec.midtier.exception.ValidationError;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class FrameworkUtilTest {
+
+    @Test
+    void testGetOpNameFromClass() {
+        Class<?> opClass = FrameworkUtilTest.class;
+        String opName = FrameworkUtil.getOpName(opClass);
+        assertEquals("frameworkUtilTest", opName);
+    }
+
+    @Test
+    void testGetOpNameFromRequest() {
+        TrackableRequest request = Mockito.mock(TrackableRequest.class);
+        Mockito.when(request.getClass()).thenReturn(FrameworkUtilTest.class);
+        
+        String opName = FrameworkUtil.getOpName(request);
+        assertEquals("frameworkUtilTest", opName);
+    }
+
+    @Test
+    void testInsertBusinessExceptionTrigger() {
+        TrackableRequest request = Mockito.mock(TrackableRequest.class);
+        request.getSessionInfo().setSessionId("initialSessionId");
+        
+        FrameworkUtil.insertBusinessExceptionTrigger(request);
+        
+        assertEquals("businessException", request.getSessionInfo().getSessionId());
+    }
+
+    @Test
+    void testInsertSystemExceptionTrigger() {
+        TrackableRequest request = Mockito.mock(TrackableRequest.class);
+        request.getSessionInfo().setSessionId("initialSessionId");
+        
+        FrameworkUtil.insertSystemExceptionTrigger(request);
+        
+        assertEquals("systemException", request.getSessionInfo().getSessionId());
+    }
+
+    @Test
+    void testInsertValidationExceptionTrigger() {
+        TrackableRequest request = Mockito.mock(TrackableRequest.class);
+        request.getSessionInfo().setSessionId("initialSessionId");
+        
+        FrameworkUtil.insertValidationExceptionTrigger(request);
+        
+        assertEquals("validationException", request.getSessionInfo().getSessionId());
+    }
+
+    @Test
+    void testHasBusinessExceptionTrigger() {
+        TrackableRequest request = Mockito.mock(TrackableRequest.class);
+        Mockito.when(request.getSessionInfo().getSessionId()).thenReturn("businessException");
+        
+        assertTrue(FrameworkUtil.hasBusinessExceptionTrigger(request));
+    }
+
+    @Test
+    void testHasSystemExceptionTrigger() {
+        TrackableRequest request = Mockito.mock(TrackableRequest.class);
+        Mockito.when(request.getSessionInfo().getSessionId()).thenReturn("systemException");
+        
+        assertTrue(FrameworkUtil.hasSystemExceptionTrigger(request));
+    }
+
+    @Test
+    void testHasValidationExceptionTrigger() {
+        TrackableRequest request = Mockito.mock(TrackableRequest.class);
+        Mockito.when(request.getSessionInfo().getSessionId()).thenReturn("validationException");
+        
+        assertTrue(FrameworkUtil.hasValidationExceptionTrigger(request));
+    }
+
+    @Test
+    void testSimulateTestExceptionBusiness() throws BusinessError, SystemError, ValidationError {
+        TrackableRequest request = Mockito.mock(TrackableRequest.class);
+        FrameworkInjectionLiaison<BusinessError, SystemError> frameworkInjection = Mockito.mock(FrameworkInjectionLiaison.class);
+        FrameworkValidationLiaison<ValidationError> frameworkValidation = Mockito.mock(FrameworkValidationLiaison.class);
+        
+        FrameworkUtil.insertBusinessExceptionTrigger(request);
+        
+        assertThrows(BusinessError.class, () -> 
+            FrameworkUtil.simulateTestException(request, frameworkInjection, frameworkValidation));
+    }
+
+    @Test
+    void testSimulateTestExceptionSystem() throws BusinessError, SystemError, ValidationError {
+        TrackableRequest request = Mockito.mock(TrackableRequest.class);
+        FrameworkInjectionLiaison<BusinessError, SystemError> frameworkInjection = Mockito.mock(FrameworkInjectionLiaison.class);
+        FrameworkValidationLiaison<ValidationError> frameworkValidation = Mockito.mock(FrameworkValidationLiaison.class);
+        
+        FrameworkUtil.insertSystemExceptionTrigger(request);
+        
+        assertThrows(SystemError.class, () -> 
+            FrameworkUtil.simulateTestException(request, frameworkInjection, frameworkValidation));
+    }
+
+    @Test
+    void testSimulateTestExceptionValidation() throws BusinessError, SystemError, ValidationError {
+        TrackableRequest request = Mockito.mock(TrackableRequest.class);
+        FrameworkInjectionLiaison<BusinessError, SystemError> frameworkInjection = Mockito.mock(FrameworkInjectionLiaison.class);
+        FrameworkValidationLiaison<ValidationError> frameworkValidation = Mockito.mock(FrameworkValidationLiaison.class);
+        
+        FrameworkUtil.insertValidationExceptionTrigger(request);
+        
+        assertThrows(ValidationError.class, () -> 
+            FrameworkUtil.simulateTestException(request, frameworkInjection, frameworkValidation));
+    }
+
+    @Test
+    void testGenGenericSystemException() {
+        com.mbnaweb.xsd.types.common.SystemException systemException = FrameworkUtil.genGenericSystemException();
+        
+        assertNotNull(systemException);
+        assertEquals("MS502", systemException.getErrorCode());
+        assertEquals("MS502", systemException.getErrorDescription());
+        assertEquals(ErrorType.ERROR, systemException.getSeverity());
+    }
+}

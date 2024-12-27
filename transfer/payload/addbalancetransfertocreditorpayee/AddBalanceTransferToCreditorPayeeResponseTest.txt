@@ -1,0 +1,100 @@
+package com.td.mbna.msec.midtier.transfer.payload.addbalancetransfertocreditorpayee;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class AddBalanceTransferToCreditorPayeeResponseTest {
+
+    private AddBalanceTransferToCreditorPayeeResponse response;
+
+    @Before
+    public void setUp() {
+        response = new AddBalanceTransferToCreditorPayeeResponse();
+    }
+
+    @Test
+    public void testGetAndSetResponsePayload() {
+        ResponsePayload payload = new ResponsePayload();
+        response.setResponsePayload(payload);
+        assertEquals(payload, response.getResponsePayload());
+
+        response.setResponsePayload(null);
+        assertNull(response.getResponsePayload());
+    }
+
+    @Test
+    public void testGetResponsePayloadWhenNull() {
+        // Ensure that the responsePayload is lazily initialized if null
+        assertNotNull(response.getResponsePayload());
+    }
+
+    @Test
+    public void testToString() {
+        response.setStatus("status");
+        response.setErrorMessages("errorMsgs");
+        
+        ResponsePayload payload = new ResponsePayload();
+        response.setResponsePayload(payload);
+
+        String expectedString = "com.td.mbna.msec.midtier.transfer.payload.addbalancetransfertocreditorpayee.AddBalanceTransferToCreditorPayeeResponse@"
+                + Integer.toHexString(System.identityHashCode(response))
+                + "[status=status,errorMsgs=errorMsgs,responsePayload=" + payload + "]";
+
+        assertEquals(expectedString, response.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        AddBalanceTransferToCreditorPayeeResponse response1 = new AddBalanceTransferToCreditorPayeeResponse();
+        response1.setStatus("status");
+        response1.setErrorMessages("errorMsgs");
+
+        AddBalanceTransferToCreditorPayeeResponse response2 = new AddBalanceTransferToCreditorPayeeResponse();
+        response2.setStatus("status");
+        response2.setErrorMessages("errorMsgs");
+
+        AddBalanceTransferToCreditorPayeeResponse response3 = new AddBalanceTransferToCreditorPayeeResponse();
+        response3.setStatus("differentStatus");
+        response3.setErrorMessages("errorMsgs");
+
+        assertEquals(response1.hashCode(), response2.hashCode());
+        assertNotEquals(response1.hashCode(), response3.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        AddBalanceTransferToCreditorPayeeResponse response1 = new AddBalanceTransferToCreditorPayeeResponse();
+        response1.setStatus("status");
+        response1.setErrorMessages("errorMsgs");
+
+        AddBalanceTransferToCreditorPayeeResponse response2 = new AddBalanceTransferToCreditorPayeeResponse();
+        response2.setStatus("status");
+        response2.setErrorMessages("errorMsgs");
+
+        AddBalanceTransferToCreditorPayeeResponse response3 = new AddBalanceTransferToCreditorPayeeResponse();
+        response3.setStatus("differentStatus");
+        response3.setErrorMessages("errorMsgs");
+
+        assertTrue(response1.equals(response2));
+        assertFalse(response1.equals(response3));
+
+        // Test equality with a different class type
+        assertFalse(response1.equals("String"));
+    }
+
+    @Test
+    public void testEqualsWithNull() {
+        AddBalanceTransferToCreditorPayeeResponse response1 = new AddBalanceTransferToCreditorPayeeResponse();
+        response1.setStatus(null);
+        response1.setErrorMessages(null);
+
+        AddBalanceTransferToCreditorPayeeResponse response2 = new AddBalanceTransferToCreditorPayeeResponse();
+        response2.setStatus(null);
+        response2.setErrorMessages(null);
+
+        assertTrue(response1.equals(response2));
+    }
+
+}

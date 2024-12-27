@@ -1,0 +1,210 @@
+package com.td.mbna.msec.midtier.statement;
+
+import com.td.mbna.msec.midtier.mbcca.MbnaCCA;
+import com.td.mbna.msec.midtier.statement.payload.getStatementActivity.GetStatementActivityRequest;
+import com.td.mbna.msec.midtier.statement.payload.getStatementActivity.GetStatementActivityResponse;
+import com.td.mbna.msec.midtier.statement.payload.getStatementActivity.ResponsePayload;
+import com.td.mbna.msec.midtier.types.common.BaseRequest;
+import com.td.mbna.msec.midtier.types.common.BaseResponse;
+import com.td.mbna.msec.midtier.types.common.CardHolderInfo;
+import com.td.mbna.msec.midtier.types.common.StmtActivityType;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+
+import java.util.List;
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class GetStatementActivityOperationTest {
+
+    @Mock
+    private MbnaCCA mbnaCCA;
+
+    @InjectMocks
+    private GetStatementActivityOperation getStatementActivityOperation;
+
+    @Mock
+    private GetStatementActivityRequest request;
+
+    @Mock
+    private GetStatementActivityResponse response;
+
+    @Mock
+    private ResponsePayload responsePayload;
+
+    @Mock
+    private List<StmtActivityType> stmtActivityTypeList;
+
+    @Mock
+    private CardHolderInfo cardHolderInfo;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testInvokeService_Success() {
+        // Arrange
+        String connectId = "testConnectId";
+        String acctNum = "123456";
+        String closingDate = "2024-12-31";
+        String dueDate = "2025-01-15";
+        String token = "testToken";
+        
+        when(request.getSessionInfo()).thenReturn(mock(GetStatementActivityRequest.SessionInfo.class));
+        when(request.getAcctNum()).thenReturn(acctNum);
+        when(request.getRequestPayload().getStatementClosingDate()).thenReturn(closingDate);
+        when(request.getRequestPayload().getStatementPaymentDueDate()).thenReturn(dueDate);
+        when(request.getSessionInfo().getConnectId()).thenReturn(connectId);
+        
+        StmtActivityType stmtActivity = mock(StmtActivityType.class);
+        when(stmtActivity.getAcctId()).thenReturn(acctNum);
+        when(stmtActivityTypeList.isEmpty()).thenReturn(false);
+        when(mbnaCCA.retrieveStatementActivities(connectId, acctNum, closingDate, dueDate, token))
+                .thenReturn(new GetStatementActivityResponse());
+        
+        CardHolderInfo cardHolder = mock(CardHolderInfo.class);
+        when(cardHolder.getCardNumber()).thenReturn(acctNum);
+        when(cardHolder.getCardHolderName()).thenReturn("John Doe");
+        when(request.getRequestPayload().getCardHolderInfos()).thenReturn(Arrays.asList(cardHolder));
+        
+        // Act
+        GetStatementActivityResponse result = getStatementActivityOperation.invokeService(request, token);
+
+        // Assert
+        assertNotNull(result);
+        verify(mbnaCCA, times(1)).retrieveStatementActivities(connectId, acctNum, closingDate, dueDate, token);
+    }
+
+    @Test
+    void testInvokeService_NoStatementActivities() {
+        // Arrange
+        String connectId = "testConnectId";
+        String acctNum = "123456";
+        String closingDate = "2024-12-31";
+        String dueDate = "2025-01-15";
+        String token = "testToken";
+        
+        when(request.getSessionInfo()).thenReturn(mock(GetStatementActivityRequest.SessionInfo.class));
+        when(request.getAcctNum()).thenReturn(acctNum);
+        when(request.getRequestPayload().getStatementClosingDate()).thenReturn(closingDate);
+        when(request.getRequestPayload().getStatementPaymentDueDate()).thenReturn(dueDate);
+        when(request.getSessionInfo().getConnectId()).thenReturn(connectId);
+        
+        when(mbnaCCA.retrieveStatementActivities(connectId, acctNum, closingDate, dueDate, token))
+                .thenReturn(null);
+        
+        // Act
+        GetStatementActivityResponse result = getStatementActivityOperation.invokeService(request, token);
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testUpdatePayloadWithCardHolderName_Success() {
+        // Arrange
+        String acctNum = "123456";
+        String cardHolderName = "John Doe";
+        
+        StmtActivityType stmtActivity = mock(StmtActivityType.class);
+        when(stmtActivity.getAcctId()).thenReturn(acctNum);
+
+        CardHolderInfo cardHolder = mock(CardHolderInfo.class);
+        when(cardHolder.getCardNumber()).thenReturn(acctNum);
+        when(cardHolder.getCardHolderName()).thenReturn(cardHolderName);
+
+        GetStatementActivityRequest requestMock = mock(GetStatementActivityRequest.class);
+        GetStatementActivityRequest.RequestPayload requestPayload = mock(GetStatementActivityRequest.RequestPayload.class);
+        when(requestMock.getRequestPayload()).thenReturn(requestPayload);
+        when(requestPayload.getCardHolderInfos()).thenReturn(Arrays.asList(cardHolder));
+
+        ResponsePayload responsePayloadMock = mock(ResponsePayload.class);
+        List<StmtActivityType> stmtActivities = Arrays.asList(stmtActivity);
+        when(responsePayloadMock.getStatementActivities()).thenReturn(stmtActivities);
+
+        // Act
+        getStatementActivityOperation.updatePayloadWithCardHolderName(requestMock, responsePayloadMock);
+
+        // Assert
+        verify(stmtActivity, times(1)).setCardHolderName(cardHolderName);
+    }
+
+    @Test
+    void testUpdatePayloadWithCardHolderName_NoCardHolders() {
+        // Arrange
+        GetStatementActivityRequest requestMock = mock(GetStatementActivityRequest.class);
+        GetStatementActivityRequest.RequestPayload requestPayload = mock(GetStatementActivityRequest.RequestPayload.class);
+        when(requestMock.getRequestPayload()).thenReturn(requestPayload);
+        when(requestPayload.getCardHolderInfos()).thenReturn(Arrays.asList());
+
+        ResponsePayload responsePayloadMock = mock(ResponsePayload.class);
+        List<StmtActivityType> stmtActivities = Arrays.asList(mock(StmtActivityType.class));
+        when(responsePayloadMock.getStatementActivities()).thenReturn(stmtActivities);
+
+        // Act
+        getStatementActivityOperation.updatePayloadWithCardHolderName(requestMock, responsePayloadMock);
+
+        // Assert
+        verify(responsePayloadMock, times(0)).setCardHolderName(anyString());
+    }
+
+    @Test
+    void testRequiresDisclosureConsent() {
+        // Act
+        boolean result = getStatementActivityOperation.requiresDisclosureConsent();
+
+        // Assert
+        assertFalse(result);
+    }
+
+    @Test
+    void testGetConsentDisclosureFailedMsgCode() {
+        // Act
+        String result = getStatementActivityOperation.getConsentDisclosureFailedMsgCode();
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testGenerateAutoComment() {
+        // Act
+        boolean result = getStatementActivityOperation.generateAutoComment();
+
+        // Assert
+        assertFalse(result);
+    }
+
+    @Test
+    void testCreateAutoComment() {
+        // Act
+        List<String> result = getStatementActivityOperation.createAutoComment(mock(BaseRequest.class), mock(BaseResponse.class));
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testGetEmailInfoBean() {
+        // Act
+        EmailInfo result = getStatementActivityOperation.getEmailInfoBean(mock(BaseRequest.class), mock(BaseResponse.class));
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testGetValidator() {
+        // Act
+        MsecValidator result = getStatementActivityOperation.getValidator();
+
+        // Assert
+        assertNull(result);
+    }
+}

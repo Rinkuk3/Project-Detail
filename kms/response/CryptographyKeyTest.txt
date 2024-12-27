@@ -1,0 +1,137 @@
+package com.td.api.kms.response;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class CryptographyKeyTest {
+
+    private CryptographyKey cryptographyKey;
+
+    @BeforeEach
+    void setUp() {
+        cryptographyKey = new CryptographyKey();
+    }
+
+    @Test
+    void testSetAndGetEncodingSchemeTypeCd() {
+        cryptographyKey.setEncodingSchemeTypeCd("AES");
+        assertEquals("AES", cryptographyKey.getEncodingSchemeTypeCd());
+    }
+
+    @Test
+    void testSetAndGetTypeName() {
+        cryptographyKey.setTypeName("Data Session Key");
+        assertEquals("Data Session Key", cryptographyKey.getTypeName());
+    }
+
+    @Test
+    void testSetAndGetKeyId() {
+        cryptographyKey.setKeyId("12345");
+        assertEquals("12345", cryptographyKey.getKeyId());
+    }
+
+    @Test
+    void testSetAndGetKeyVal() {
+        cryptographyKey.setKeyVal("abcd1234");
+        assertEquals("abcd1234", cryptographyKey.getKeyVal());
+    }
+
+    @Test
+    void testSetAndGetIndexVal() {
+        cryptographyKey.setIndexVal("indexVal123");
+        assertEquals("indexVal123", cryptographyKey.getIndexVal());
+    }
+
+    @Test
+    void testSetAndGetCheckDigitVal() {
+        cryptographyKey.setCheckDigitVal("checkDigit123");
+        assertEquals("checkDigit123", cryptographyKey.getCheckDigitVal());
+    }
+
+    @Test
+    void testToString() {
+        cryptographyKey.setEncodingSchemeTypeCd("AES");
+        cryptographyKey.setTypeName("Data Session Key");
+        cryptographyKey.setKeyId("12345");
+        cryptographyKey.setKeyVal("abcd1234");
+        cryptographyKey.setIndexVal("indexVal123");
+        cryptographyKey.setCheckDigitVal("checkDigit123");
+
+        String expectedToString = "com.td.api.kms.response.CryptographyKey@" + Integer.toHexString(cryptographyKey.hashCode()) +
+                "[encodingSchemeTypeCd=AES,typeName=Data Session Key,keyId=12345,keyVal=abcd1234,indexVal=indexVal123,checkDigitVal=checkDigit123]";
+        assertEquals(expectedToString, cryptographyKey.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        CryptographyKey cryptographyKey1 = new CryptographyKey();
+        CryptographyKey cryptographyKey2 = new CryptographyKey();
+        assertEquals(cryptographyKey1.hashCode(), cryptographyKey2.hashCode());
+
+        cryptographyKey1.setEncodingSchemeTypeCd("AES");
+        cryptographyKey1.setTypeName("Data Session Key");
+        cryptographyKey1.setKeyId("12345");
+        cryptographyKey1.setKeyVal("abcd1234");
+        cryptographyKey1.setIndexVal("indexVal123");
+        cryptographyKey1.setCheckDigitVal("checkDigit123");
+
+        cryptographyKey2.setEncodingSchemeTypeCd("AES");
+        cryptographyKey2.setTypeName("Data Session Key");
+        cryptographyKey2.setKeyId("12345");
+        cryptographyKey2.setKeyVal("abcd1234");
+        cryptographyKey2.setIndexVal("indexVal123");
+        cryptographyKey2.setCheckDigitVal("checkDigit123");
+
+        assertEquals(cryptographyKey1.hashCode(), cryptographyKey2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        CryptographyKey cryptographyKey1 = new CryptographyKey();
+        CryptographyKey cryptographyKey2 = new CryptographyKey();
+        assertTrue(cryptographyKey1.equals(cryptographyKey2));
+
+        cryptographyKey1.setEncodingSchemeTypeCd("AES");
+        cryptographyKey1.setTypeName("Data Session Key");
+        cryptographyKey1.setKeyId("12345");
+        cryptographyKey1.setKeyVal("abcd1234");
+        cryptographyKey1.setIndexVal("indexVal123");
+        cryptographyKey1.setCheckDigitVal("checkDigit123");
+
+        cryptographyKey2.setEncodingSchemeTypeCd("AES");
+        cryptographyKey2.setTypeName("Data Session Key");
+        cryptographyKey2.setKeyId("12345");
+        cryptographyKey2.setKeyVal("abcd1234");
+        cryptographyKey2.setIndexVal("indexVal123");
+        cryptographyKey2.setCheckDigitVal("checkDigit123");
+
+        assertTrue(cryptographyKey1.equals(cryptographyKey2));
+
+        cryptographyKey2.setKeyVal("newKeyVal"); // Change one field
+        assertFalse(cryptographyKey1.equals(cryptographyKey2));
+
+        cryptographyKey2.setTypeName("PIN Block Session Key"); // Change another field
+        assertFalse(cryptographyKey1.equals(cryptographyKey2));
+
+        cryptographyKey2.setEncodingSchemeTypeCd("DES"); // Change another field
+        assertFalse(cryptographyKey1.equals(cryptographyKey2));
+
+        cryptographyKey2.setCheckDigitVal("newCheckDigit"); // Change checkDigitVal
+        assertFalse(cryptographyKey1.equals(cryptographyKey2));
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        CryptographyKey cryptographyKey1 = new CryptographyKey();
+        assertFalse(cryptographyKey1.equals(null));
+    }
+
+    @Test
+    void testEqualsWithDifferentClass() {
+        CryptographyKey cryptographyKey1 = new CryptographyKey();
+        String str = "DifferentClass";
+        assertFalse(cryptographyKey1.equals(str));
+    }
+}

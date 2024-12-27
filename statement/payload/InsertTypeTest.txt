@@ -1,0 +1,60 @@
+package com.td.mbna.msec.midtier.statement.payload;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class InsertTypeTest {
+
+    @Test
+    void testSetAndGetInsertDate() {
+        InsertType insertType = new InsertType();
+        
+        // Test setting and getting insertDate
+        insertType.setInsertDate("2024-01-01");
+        assertEquals("2024-01-01", insertType.getInsertDate());
+    }
+
+    @Test
+    void testSetAndGetInsertTitle() {
+        InsertType insertType = new InsertType();
+        
+        // Test setting and getting insertTitle
+        insertType.setInsertTitle("Insert Title");
+        assertEquals("Insert Title", insertType.getInsertTitle());
+    }
+
+    @Test
+    void testSetAndGetInsertId() {
+        InsertType insertType = new InsertType();
+        
+        // Test setting and getting insertId
+        insertType.setInsertId("12345");
+        assertEquals("12345", insertType.getInsertId());
+    }
+
+    @Test
+    void testSetAndGetDocumentId() {
+        InsertType insertType = new InsertType();
+        
+        // Test setting and getting documentId
+        insertType.setDocumentId("67890");
+        assertEquals("67890", insertType.getDocumentId());
+    }
+
+    @Test
+    void testSetAndGetAllFields() {
+        InsertType insertType = new InsertType();
+        
+        // Test setting and getting all fields
+        insertType.setInsertDate("2024-01-01");
+        insertType.setInsertTitle("Sample Insert");
+        insertType.setInsertId("12345");
+        insertType.setDocumentId("67890");
+
+        assertEquals("2024-01-01", insertType.getInsertDate());
+        assertEquals("Sample Insert", insertType.getInsertTitle());
+        assertEquals("12345", insertType.getInsertId());
+        assertEquals("67890", insertType.getDocumentId());
+    }
+}

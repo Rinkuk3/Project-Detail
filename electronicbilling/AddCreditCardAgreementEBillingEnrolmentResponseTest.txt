@@ -1,0 +1,93 @@
+package com.td.api.mbcca.response.account.electronicbilling;
+
+import com.td.api.mbcca.shared.Status;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class AddCreditCardAgreementEBillingEnrolmentResponseTest {
+
+    private AddCreditCardAgreementEBillingEnrolmentResponse response;
+
+    @BeforeEach
+    void setUp() {
+        response = new AddCreditCardAgreementEBillingEnrolmentResponse();
+    }
+
+    @Test
+    void testGetSetStatus() {
+        Status status = Status.SUCCESS;
+        response.setStatus(status);
+        assertEquals(status, response.getStatus());
+    }
+
+    @Test
+    void testGetSetResponseTypeCd() {
+        String responseTypeCd = "CD001";
+        response.setResponseTypeCd(responseTypeCd);
+        assertEquals(responseTypeCd, response.getResponseTypeCd());
+    }
+
+    @Test
+    void testGetSetResponseReasonDesc() {
+        String responseReasonDesc = "Success";
+        response.setResponseReasonDesc(responseReasonDesc);
+        assertEquals(responseReasonDesc, response.getResponseReasonDesc());
+    }
+
+    @Test
+    void testToString() {
+        Status status = Status.SUCCESS;
+        String responseTypeCd = "CD001";
+        String responseReasonDesc = "Success";
+        
+        response.setStatus(status);
+        response.setResponseTypeCd(responseTypeCd);
+        response.setResponseReasonDesc(responseReasonDesc);
+
+        String expected = "com.td.api.mbcca.response.account.electronicbilling.AddCreditCardAgreementEBillingEnrolmentResponse@" + 
+                          Integer.toHexString(System.identityHashCode(response)) + 
+                          "[status=SUCCESS,responseTypeCd=CD001,responseReasonDesc=Success,]";
+        assertEquals(expected, response.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        AddCreditCardAgreementEBillingEnrolmentResponse response1 = new AddCreditCardAgreementEBillingEnrolmentResponse();
+        response1.setStatus(Status.SUCCESS);
+        response1.setResponseTypeCd("CD001");
+        response1.setResponseReasonDesc("Success");
+
+        AddCreditCardAgreementEBillingEnrolmentResponse response2 = new AddCreditCardAgreementEBillingEnrolmentResponse();
+        response2.setStatus(Status.SUCCESS);
+        response2.setResponseTypeCd("CD001");
+        response2.setResponseReasonDesc("Success");
+
+        assertEquals(response1.hashCode(), response2.hashCode());
+
+        response2.setResponseReasonDesc("Failure");
+        assertNotEquals(response1.hashCode(), response2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        AddCreditCardAgreementEBillingEnrolmentResponse response1 = new AddCreditCardAgreementEBillingEnrolmentResponse();
+        response1.setStatus(Status.SUCCESS);
+        response1.setResponseTypeCd("CD001");
+        response1.setResponseReasonDesc("Success");
+
+        AddCreditCardAgreementEBillingEnrolmentResponse response2 = new AddCreditCardAgreementEBillingEnrolmentResponse();
+        response2.setStatus(Status.SUCCESS);
+        response2.setResponseTypeCd("CD001");
+        response2.setResponseReasonDesc("Success");
+
+        assertTrue(response1.equals(response2));
+
+        response2.setResponseReasonDesc("Failure");
+        assertFalse(response1.equals(response2));
+
+        assertFalse(response1.equals(null));
+        assertFalse(response1.equals(new Object()));
+    }
+}

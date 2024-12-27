@@ -1,0 +1,90 @@
+package com.td.api.mbnaap.common;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class DirectCreditTest {
+
+    @Test
+    void testGettersAndSetters() {
+        DirectCredit directCredit = new DirectCredit();
+        
+        // Create and set test values
+        directCredit.setStatusCd("ACTIVE");
+        directCredit.setStatusStartDttm(new Date());
+        directCredit.setCreationDttm(new Date());
+        directCredit.setArrangementId("arrangement123");
+        directCredit.setPreAuthorizationTypeName("PreAuthType1");
+        directCredit.setStatusStartDt("2024-12-23");
+        
+        InternalDirectCredit internalDirectCredit = new InternalDirectCredit();
+        internalDirectCredit.setTimePeriodCd("Monthly");
+        directCredit.setInternalDirectCredit(internalDirectCredit);
+        
+        ExternalDirectCredit externalDirectCredit = new ExternalDirectCredit();
+        externalDirectCredit.setBankName("External Bank");
+        directCredit.setExternalDirectCredit(externalDirectCredit);
+        
+        CreditCardAgreementAltkey creditCardAgreementAltkey = new CreditCardAgreementAltkey();
+        creditCardAgreementAltkey.setCardNum("1234567890123456");
+        directCredit.setCreditCardAgreementAltkey(creditCardAgreementAltkey);
+
+        // Assertions to check getter values
+        assertEquals("ACTIVE", directCredit.getStatusCd());
+        assertNotNull(directCredit.getStatusStartDttm());
+        assertNotNull(directCredit.getCreationDttm());
+        assertEquals("arrangement123", directCredit.getArrangementId());
+        assertEquals("PreAuthType1", directCredit.getPreAuthorizationTypeName());
+        assertEquals("2024-12-23", directCredit.getStatusStartDt());
+        assertNotNull(directCredit.getInternalDirectCredit());
+        assertNotNull(directCredit.getExternalDirectCredit());
+        assertNotNull(directCredit.getCreditCardAgreementAltkey());
+    }
+
+    @Test
+    void testToString() {
+        DirectCredit directCredit = new DirectCredit();
+        directCredit.setStatusCd("ACTIVE");
+        directCredit.setStatusStartDttm(new Date());
+        directCredit.setCreationDttm(new Date());
+        directCredit.setArrangementId("arrangement123");
+        directCredit.setPreAuthorizationTypeName("PreAuthType1");
+        directCredit.setStatusStartDt("2024-12-23");
+        
+        InternalDirectCredit internalDirectCredit = new InternalDirectCredit();
+        internalDirectCredit.setTimePeriodCd("Monthly");
+        directCredit.setInternalDirectCredit(internalDirectCredit);
+        
+        ExternalDirectCredit externalDirectCredit = new ExternalDirectCredit();
+        externalDirectCredit.setBankName("External Bank");
+        directCredit.setExternalDirectCredit(externalDirectCredit);
+        
+        CreditCardAgreementAltkey creditCardAgreementAltkey = new CreditCardAgreementAltkey();
+        creditCardAgreementAltkey.setCardNum("1234567890123456");
+        directCredit.setCreditCardAgreementAltkey(creditCardAgreementAltkey);
+
+        String expected = "DirectCredit(statusCd=ACTIVE, statusStartDttm=" + directCredit.getStatusStartDttm() +
+                ", creationDttm=" + directCredit.getCreationDttm() + ", internalDirectCredit=" + directCredit.getInternalDirectCredit() +
+                ", externalDirectCredit=" + directCredit.getExternalDirectCredit() + ", creditCardAgreementAltkey=" + directCredit.getCreditCardAgreementAltkey() +
+                ", arrangementId=arrangement123, preAuthorizationTypeName=PreAuthType1, statusStartDt=2024-12-23)";
+        assertEquals(expected, directCredit.toString());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        DirectCredit directCredit1 = new DirectCredit();
+        directCredit1.setArrangementId("arrangement123");
+        
+        DirectCredit directCredit2 = new DirectCredit();
+        directCredit2.setArrangementId("arrangement123");
+        
+        assertTrue(directCredit1.equals(directCredit2));
+        assertEquals(directCredit1.hashCode(), directCredit2.hashCode());
+
+        directCredit2.setArrangementId("arrangement124");
+        assertFalse(directCredit1.equals(directCredit2));
+    }
+}

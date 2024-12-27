@@ -1,0 +1,110 @@
+package com.td.api.mbcca.response.transactions.postedevents;
+
+import com.td.api.mbcca.shared.Cccyamt;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.math.BigDecimal;
+
+import static org.junit.Assert.*;
+
+public class ForeignExchangeInfoTest {
+
+    private ForeignExchangeInfo foreignExchangeInfo;
+
+    @Before
+    public void setUp() {
+        foreignExchangeInfo = new ForeignExchangeInfo();
+    }
+
+    @Test
+    public void testGetAndSetForeignTransactionInd() {
+        Boolean foreignTransactionInd = true;
+        foreignExchangeInfo.setForeignTransactionInd(foreignTransactionInd);
+        assertEquals(foreignTransactionInd, foreignExchangeInfo.getForeignTransactionInd());
+    }
+
+    @Test
+    public void testGetAndSetExchangeMarkupFeeCccyamt() {
+        Cccyamt exchangeMarkupFeeCccyamt = new Cccyamt();
+        foreignExchangeInfo.setExchangeMarkupFeeCccyamt(exchangeMarkupFeeCccyamt);
+        assertEquals(exchangeMarkupFeeCccyamt, foreignExchangeInfo.getExchangeMarkupFeeCccyamt());
+    }
+
+    @Test
+    public void testGetAndSetMarkupChargeCd() {
+        String markupChargeCd = "MC123";
+        foreignExchangeInfo.setMarkupChargeCd(markupChargeCd);
+        assertEquals(markupChargeCd, foreignExchangeInfo.getMarkupChargeCd());
+    }
+
+    @Test
+    public void testGetAndSetConversionMarkupRate() {
+        BigDecimal conversionMarkupRate = new BigDecimal("1.23");
+        foreignExchangeInfo.setConversionMarkupRate(conversionMarkupRate);
+        assertEquals(conversionMarkupRate, foreignExchangeInfo.getConversionMarkupRate());
+    }
+
+    @Test
+    public void testGetAndSetFromCccyamt() {
+        FromCccyamt fromCccyamt = new FromCccyamt();
+        foreignExchangeInfo.setFromCccyamt(fromCccyamt);
+        assertEquals(fromCccyamt, foreignExchangeInfo.getFromCccyamt());
+    }
+
+    @Test
+    public void testToString() {
+        foreignExchangeInfo.setForeignTransactionInd(true);
+        foreignExchangeInfo.setMarkupChargeCd("MC123");
+        foreignExchangeInfo.setConversionMarkupRate(new BigDecimal("1.23"));
+        foreignExchangeInfo.setExchangeMarkupFeeCccyamt(new Cccyamt());
+        foreignExchangeInfo.setFromCccyamt(new FromCccyamt());
+
+        String expectedString = "com.td.api.mbcca.response.transactions.postedevents.ForeignExchangeInfo@" 
+                + Integer.toHexString(System.identityHashCode(foreignExchangeInfo))
+                + "[foreignTransactionInd=true,exchangeMarkupFeeCccyamt=<null>,markupChargeCd=MC123,conversionMarkupRate=1.23,fromCccyamt=<null>,]";
+
+        assertEquals(expectedString, foreignExchangeInfo.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        ForeignExchangeInfo fei1 = new ForeignExchangeInfo();
+        fei1.setForeignTransactionInd(true);
+        fei1.setMarkupChargeCd("MC123");
+        fei1.setConversionMarkupRate(new BigDecimal("1.23"));
+        fei1.setExchangeMarkupFeeCccyamt(new Cccyamt());
+        fei1.setFromCccyamt(new FromCccyamt());
+
+        ForeignExchangeInfo fei2 = new ForeignExchangeInfo();
+        fei2.setForeignTransactionInd(true);
+        fei2.setMarkupChargeCd("MC123");
+        fei2.setConversionMarkupRate(new BigDecimal("1.23"));
+        fei2.setExchangeMarkupFeeCccyamt(new Cccyamt());
+        fei2.setFromCccyamt(new FromCccyamt());
+
+        assertEquals(fei1.hashCode(), fei2.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        ForeignExchangeInfo fei1 = new ForeignExchangeInfo();
+        fei1.setForeignTransactionInd(true);
+        fei1.setMarkupChargeCd("MC123");
+        fei1.setConversionMarkupRate(new BigDecimal("1.23"));
+        fei1.setExchangeMarkupFeeCccyamt(new Cccyamt());
+        fei1.setFromCccyamt(new FromCccyamt());
+
+        ForeignExchangeInfo fei2 = new ForeignExchangeInfo();
+        fei2.setForeignTransactionInd(true);
+        fei2.setMarkupChargeCd("MC123");
+        fei2.setConversionMarkupRate(new BigDecimal("1.23"));
+        fei2.setExchangeMarkupFeeCccyamt(new Cccyamt());
+        fei2.setFromCccyamt(new FromCccyamt());
+
+        assertTrue(fei1.equals(fei2));
+
+        fei2.setMarkupChargeCd("MC124");
+        assertFalse(fei1.equals(fei2));
+    }
+}

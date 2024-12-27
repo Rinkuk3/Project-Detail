@@ -1,0 +1,89 @@
+package com.td.mbna.msec.midtier.transfer.payload.deposittochequing;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class DepositToChequingResponseTest {
+
+    private DepositToChequingResponse depositToChequingResponse;
+
+    @Before
+    public void setUp() {
+        depositToChequingResponse = new DepositToChequingResponse();
+    }
+
+    @Test
+    public void testGetAndSetResponsePayload() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        depositToChequingResponse.setResponsePayload(responsePayload);
+        assertEquals(responsePayload, depositToChequingResponse.getResponsePayload());
+    }
+
+    @Test
+    public void testGetResponsePayloadLazyInitialization() {
+        // Test if responsePayload is initialized lazily
+        assertNotNull(depositToChequingResponse.getResponsePayload());
+    }
+
+    @Test
+    public void testToString() {
+        depositToChequingResponse.setStatus("SUCCESS");
+        depositToChequingResponse.setErrorMessages("No errors");
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatus(true);
+        depositToChequingResponse.setResponsePayload(responsePayload);
+
+        String expectedString = "com.td.mbna.msec.midtier.transfer.payload.deposittochequing.DepositToChequingResponse@"
+                + Integer.toHexString(System.identityHashCode(depositToChequingResponse))
+                + "[status=SUCCESS,errorMsgs=No errors,responsePayload=" + responsePayload + "]";
+        
+        assertEquals(expectedString, depositToChequingResponse.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        DepositToChequingResponse response1 = new DepositToChequingResponse();
+        response1.setStatus("SUCCESS");
+        response1.setErrorMessages("No errors");
+        ResponsePayload responsePayload1 = new ResponsePayload();
+        responsePayload1.setStatus(true);
+        response1.setResponsePayload(responsePayload1);
+
+        DepositToChequingResponse response2 = new DepositToChequingResponse();
+        response2.setStatus("SUCCESS");
+        response2.setErrorMessages("No errors");
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        responsePayload2.setStatus(true);
+        response2.setResponsePayload(responsePayload2);
+
+        assertEquals(response1.hashCode(), response2.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        DepositToChequingResponse response1 = new DepositToChequingResponse();
+        response1.setStatus("SUCCESS");
+        response1.setErrorMessages("No errors");
+        ResponsePayload responsePayload1 = new ResponsePayload();
+        responsePayload1.setStatus(true);
+        response1.setResponsePayload(responsePayload1);
+
+        DepositToChequingResponse response2 = new DepositToChequingResponse();
+        response2.setStatus("SUCCESS");
+        response2.setErrorMessages("No errors");
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        responsePayload2.setStatus(true);
+        response2.setResponsePayload(responsePayload2);
+
+        DepositToChequingResponse response3 = new DepositToChequingResponse();
+        response3.setStatus("FAIL");
+        response3.setErrorMessages("Some error");
+
+        assertTrue(response1.equals(response2));
+        assertFalse(response1.equals(response3));
+        assertFalse(response1.equals(null));
+        assertFalse(response1.equals("Some String"));
+    }
+}

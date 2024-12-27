@@ -1,0 +1,49 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class AddConsentRequestTest {
+
+    @Test
+    void testCreditCardAgreementPaymentInstruction() {
+        AddConsentRequest addConsentRequest = new AddConsentRequest();
+        
+        CreditCardAgreementPaymentInstruction paymentInstruction = new CreditCardAgreementPaymentInstruction();
+        addConsentRequest.setCreditCardAgreementPaymentInstruction(paymentInstruction);
+        
+        assertEquals(paymentInstruction, addConsentRequest.getCreditCardAgreementPaymentInstruction());
+    }
+    
+    @Test
+    void testSetterAndGetter() {
+        AddConsentRequest addConsentRequest = new AddConsentRequest();
+        
+        CreditCardAgreementPaymentInstruction paymentInstruction = new CreditCardAgreementPaymentInstruction();
+        addConsentRequest.setCreditCardAgreementPaymentInstruction(paymentInstruction);
+        
+        assertNotNull(addConsentRequest.getCreditCardAgreementPaymentInstruction());
+    }
+    
+    @Test
+    void testEqualsAndHashCode() {
+        AddConsentRequest addConsentRequest1 = new AddConsentRequest();
+        AddConsentRequest addConsentRequest2 = new AddConsentRequest();
+        
+        CreditCardAgreementPaymentInstruction paymentInstruction = new CreditCardAgreementPaymentInstruction();
+        addConsentRequest1.setCreditCardAgreementPaymentInstruction(paymentInstruction);
+        addConsentRequest2.setCreditCardAgreementPaymentInstruction(paymentInstruction);
+        
+        assertEquals(addConsentRequest1, addConsentRequest2);
+        assertEquals(addConsentRequest1.hashCode(), addConsentRequest2.hashCode());
+    }
+    
+    @Test
+    void testToString() {
+        AddConsentRequest addConsentRequest = new AddConsentRequest();
+        
+        CreditCardAgreementPaymentInstruction paymentInstruction = new CreditCardAgreementPaymentInstruction();
+        addConsentRequest.setCreditCardAgreementPaymentInstruction(paymentInstruction);
+        
+        String expectedString = "AddConsentRequest(creditCardAgreementPaymentInstruction=" + paymentInstruction + ")";
+        assertEquals(expectedString, addConsentRequest.toString());
+    }
+}

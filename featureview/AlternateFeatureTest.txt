@@ -1,0 +1,104 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.math.BigDecimal;
+
+import com.td.api.mbcca.shared.Cccyamt;
+
+class AlternateFeatureTest {
+
+    private AlternateFeature alternateFeature;
+    private Cccyamt minimumFeeCccyamt;
+
+    @BeforeEach
+    void setUp() {
+        alternateFeature = new AlternateFeature();
+        minimumFeeCccyamt = new Cccyamt(); // Assuming Cccyamt has a default constructor
+    }
+
+    @Test
+    void testGetSetFeatureId() {
+        String featureId = "123";
+        alternateFeature.setFeatureId(featureId);
+        assertEquals(featureId, alternateFeature.getFeatureId());
+    }
+
+    @Test
+    void testGetSetFeatureDesc() {
+        String featureDesc = "Feature Description";
+        alternateFeature.setFeatureDesc(featureDesc);
+        assertEquals(featureDesc, alternateFeature.getFeatureDesc());
+    }
+
+    @Test
+    void testGetSetFeePercentageRate() {
+        BigDecimal feePercentageRate = new BigDecimal("10.5");
+        alternateFeature.setFeePercentageRate(feePercentageRate);
+        assertEquals(feePercentageRate, alternateFeature.getFeePercentageRate());
+    }
+
+    @Test
+    void testGetSetMinimumFeeCccyamt() {
+        alternateFeature.setMinimumFeeCccyamt(minimumFeeCccyamt);
+        assertEquals(minimumFeeCccyamt, alternateFeature.getMinimumFeeCccyamt());
+    }
+
+    @Test
+    void testToString() {
+        alternateFeature.setFeatureId("123");
+        alternateFeature.setFeatureDesc("Feature Description");
+        alternateFeature.setFeePercentageRate(new BigDecimal("10.5"));
+        alternateFeature.setMinimumFeeCccyamt(minimumFeeCccyamt);
+        
+        String result = alternateFeature.toString();
+        assertTrue(result.contains("featureId=123"));
+        assertTrue(result.contains("featureDesc=Feature Description"));
+        assertTrue(result.contains("feePercentageRate=10.5"));
+    }
+
+    @Test
+    void testHashCode() {
+        alternateFeature.setFeatureId("123");
+        alternateFeature.setFeatureDesc("Feature Description");
+        alternateFeature.setFeePercentageRate(new BigDecimal("10.5"));
+        alternateFeature.setMinimumFeeCccyamt(minimumFeeCccyamt);
+        
+        int hashCode = alternateFeature.hashCode();
+        assertNotNull(hashCode);
+    }
+
+    @Test
+    void testEquals() {
+        AlternateFeature otherFeature = new AlternateFeature();
+        otherFeature.setFeatureId("123");
+        otherFeature.setFeatureDesc("Feature Description");
+        otherFeature.setFeePercentageRate(new BigDecimal("10.5"));
+        otherFeature.setMinimumFeeCccyamt(minimumFeeCccyamt);
+
+        alternateFeature.setFeatureId("123");
+        alternateFeature.setFeatureDesc("Feature Description");
+        alternateFeature.setFeePercentageRate(new BigDecimal("10.5"));
+        alternateFeature.setMinimumFeeCccyamt(minimumFeeCccyamt);
+
+        assertTrue(alternateFeature.equals(otherFeature));
+    }
+
+    @Test
+    void testEquals_withNull() {
+        assertFalse(alternateFeature.equals(null));
+    }
+
+    @Test
+    void testEquals_withDifferentType() {
+        assertFalse(alternateFeature.equals("string"));
+    }
+
+    @Test
+    void testEquals_withDifferentValues() {
+        AlternateFeature otherFeature = new AlternateFeature();
+        otherFeature.setFeatureId("124"); // Different featureId
+
+        assertFalse(alternateFeature.equals(otherFeature));
+    }
+}

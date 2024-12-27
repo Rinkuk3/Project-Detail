@@ -1,0 +1,27 @@
+package com.td.mbna.msec.midtier.statement.payload.getStatementListForYear;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class GetStatementListForYearRequestTest {
+
+    @Test
+    void testGetAndSetRequestPayload() {
+        GetStatementListForYearRequest request = new GetStatementListForYearRequest();
+        RequestPayload payload = new RequestPayload();
+
+        request.setRequestPayload(payload);
+
+        assertEquals(payload, request.getRequestPayload());
+    }
+
+    @Test
+    void testSetRequestPayloadToNull() {
+        GetStatementListForYearRequest request = new GetStatementListForYearRequest();
+
+        request.setRequestPayload(null);
+
+        assertNull(request.getRequestPayload());
+    }
+}

@@ -1,0 +1,48 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class RewardsBalancesResponseTest {
+
+    private RewardsBalancesResponse rewardsBalancesResponse;
+    private RewardsBalance rewardsBalance;
+    private AccountAttributes accountAttributes;
+
+    @BeforeEach
+    public void setUp() {
+        rewardsBalancesResponse = new RewardsBalancesResponse();
+        rewardsBalance = new RewardsBalance();
+        accountAttributes = new AccountAttributes();
+    }
+
+    @Test
+    public void testGetSetRewardsAccountStatus() {
+        rewardsBalancesResponse.setRewardsAccountStatus("Active");
+        assertEquals("Active", rewardsBalancesResponse.getRewardsAccountStatus());
+    }
+
+    @Test
+    public void testGetSetCanRedeemRewards() {
+        rewardsBalancesResponse.setCanRedeemRewards(true);
+        assertTrue(rewardsBalancesResponse.getCanRedeemRewards());
+    }
+
+    @Test
+    public void testGetSetCanEarnRewards() {
+        rewardsBalancesResponse.setCanEarnRewards(false);
+        assertFalse(rewardsBalancesResponse.getCanEarnRewards());
+    }
+
+    @Test
+    public void testGetSetRewardsBalance() {
+        rewardsBalancesResponse.setRewardsBalance(rewardsBalance);
+        assertEquals(rewardsBalance, rewardsBalancesResponse.getRewardsBalance());
+    }
+
+    @Test
+    public void testGetSetAccountAttributes() {
+        rewardsBalancesResponse.setAccountAttributes(accountAttributes);
+        assertEquals(accountAttributes, rewardsBalancesResponse.getAccountAttributes());
+    }
+}

@@ -1,0 +1,102 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class RelationshipTest {
+
+    private Relationship relationship;
+
+    @BeforeEach
+    public void setUp() {
+        relationship = new Relationship();
+    }
+
+    @Test
+    public void testGetRelationshipCd() {
+        relationship.setRelationshipCd("Rel123");
+        assertEquals("Rel123", relationship.getRelationshipCd());
+    }
+
+    @Test
+    public void testSetRelationshipCd() {
+        relationship.setRelationshipCd("Rel456");
+        assertEquals("Rel456", relationship.getRelationshipCd());
+    }
+
+    @Test
+    public void testGetRelationshipVal() {
+        relationship.setRelationshipVal("Value123");
+        assertEquals("Value123", relationship.getRelationshipVal());
+    }
+
+    @Test
+    public void testSetRelationshipVal() {
+        relationship.setRelationshipVal("Value456");
+        assertEquals("Value456", relationship.getRelationshipVal());
+    }
+
+    @Test
+    public void testToString() {
+        relationship.setRelationshipCd("Rel123");
+        relationship.setRelationshipVal("Value123");
+
+        String expectedString = "com.td.api.enrollment.retrieve.Relationship@" + Integer.toHexString(System.identityHashCode(relationship)) +
+                "[relationshipCd=Rel123,relationshipVal=Value123]";
+
+        assertTrue(relationship.toString().contains("relationshipCd=Rel123"));
+        assertTrue(relationship.toString().contains("relationshipVal=Value123"));
+    }
+
+    @Test
+    public void testHashCode() {
+        relationship.setRelationshipCd("Rel123");
+        relationship.setRelationshipVal("Value123");
+
+        Relationship otherRelationship = new Relationship();
+        otherRelationship.setRelationshipCd("Rel123");
+        otherRelationship.setRelationshipVal("Value123");
+
+        assertEquals(relationship.hashCode(), otherRelationship.hashCode());
+
+        otherRelationship.setRelationshipCd("Rel456");
+        assertNotEquals(relationship.hashCode(), otherRelationship.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        relationship.setRelationshipCd("Rel123");
+        relationship.setRelationshipVal("Value123");
+
+        Relationship otherRelationship = new Relationship();
+        otherRelationship.setRelationshipCd("Rel123");
+        otherRelationship.setRelationshipVal("Value123");
+
+        assertTrue(relationship.equals(otherRelationship));
+
+        otherRelationship.setRelationshipCd("Rel456");
+        assertFalse(relationship.equals(otherRelationship));
+
+        otherRelationship.setRelationshipCd("Rel123");
+        otherRelationship.setRelationshipVal("Value456");
+        assertFalse(relationship.equals(otherRelationship));
+
+        otherRelationship.setRelationshipVal("Value123");
+        assertFalse(relationship.equals(otherRelationship));
+    }
+
+    @Test
+    public void testEqualsNull() {
+        assertFalse(relationship.equals(null));
+    }
+
+    @Test
+    public void testEqualsDifferentClass() {
+        assertFalse(relationship.equals("Some random string"));
+    }
+
+    @Test
+    public void testEqualsSameInstance() {
+        assertTrue(relationship.equals(relationship));  // Same instance, should return true
+    }
+}

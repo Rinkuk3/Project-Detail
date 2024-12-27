@@ -1,0 +1,85 @@
+package com.td.mbna.msec.midtier.disclosure.payload.getdisclosure;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class GetDisclosureResponseTest {
+
+    @Test
+    public void testToString() {
+        GetDisclosureResponse getDisclosureResponse = new GetDisclosureResponse();
+        getDisclosureResponse.setStatus("Success");
+        getDisclosureResponse.setErrorMessages("No Errors");
+        ResponsePayload responsePayload = new ResponsePayload();
+        getDisclosureResponse.setResponsePayload(responsePayload);
+
+        String result = getDisclosureResponse.toString();
+        assertNotNull(result);
+        assertTrue(result.contains("status"));
+        assertTrue(result.contains("errorMsgs"));
+        assertTrue(result.contains("responsePayload"));
+    }
+
+    @Test
+    public void testGetResponsePayload() {
+        GetDisclosureResponse getDisclosureResponse = new GetDisclosureResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        getDisclosureResponse.setResponsePayload(responsePayload);
+
+        assertEquals(responsePayload, getDisclosureResponse.getResponsePayload());
+    }
+
+    @Test
+    public void testSetResponsePayload() {
+        GetDisclosureResponse getDisclosureResponse = new GetDisclosureResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        getDisclosureResponse.setResponsePayload(responsePayload);
+
+        assertEquals(responsePayload, getDisclosureResponse.getResponsePayload());
+    }
+
+    @Test
+    public void testHashCode() {
+        GetDisclosureResponse getDisclosureResponse = new GetDisclosureResponse();
+        int hashCode = getDisclosureResponse.hashCode();
+        assertNotEquals(0, hashCode);
+    }
+
+    @Test
+    public void testEquals_SameObject() {
+        GetDisclosureResponse getDisclosureResponse = new GetDisclosureResponse();
+        assertTrue(getDisclosureResponse.equals(getDisclosureResponse));
+    }
+
+    @Test
+    public void testEquals_Null() {
+        GetDisclosureResponse getDisclosureResponse = new GetDisclosureResponse();
+        assertFalse(getDisclosureResponse.equals(null));
+    }
+
+    @Test
+    public void testEquals_DifferentClass() {
+        GetDisclosureResponse getDisclosureResponse = new GetDisclosureResponse();
+        assertFalse(getDisclosureResponse.equals(new Object()));
+    }
+
+    @Test
+    public void testEquals_SameValues() {
+        GetDisclosureResponse getDisclosureResponse1 = new GetDisclosureResponse();
+        GetDisclosureResponse getDisclosureResponse2 = new GetDisclosureResponse();
+        getDisclosureResponse1.setStatus("Success");
+        getDisclosureResponse2.setStatus("Success");
+
+        assertTrue(getDisclosureResponse1.equals(getDisclosureResponse2));
+    }
+
+    @Test
+    public void testEquals_DifferentValues() {
+        GetDisclosureResponse getDisclosureResponse1 = new GetDisclosureResponse();
+        GetDisclosureResponse getDisclosureResponse2 = new GetDisclosureResponse();
+        getDisclosureResponse1.setStatus("Success");
+        getDisclosureResponse2.setStatus("Failure");
+
+        assertFalse(getDisclosureResponse1.equals(getDisclosureResponse2));
+    }
+}

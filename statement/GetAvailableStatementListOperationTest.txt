@@ -1,0 +1,154 @@
+package com.td.mbna.msec.midtier.statement;
+
+import com.td.mbna.msec.midtier.mbcca.MbnaCCA;
+import com.td.mbna.msec.midtier.statement.payload.getAvailableStatementList.GetAvailableStatementListRequest;
+import com.td.mbna.msec.midtier.statement.payload.getAvailableStatementList.GetAvailableStatementListResponse;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import com.td.mbna.msec.midtier.util.services.MidtierUtilHelper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class GetAvailableStatementListOperationTest {
+
+    @Mock
+    private MbnaCCA mbnaCCA;
+
+    @InjectMocks
+    private GetAvailableStatementListOperation getAvailableStatementListOperation;
+
+    @Mock
+    private GetAvailableStatementListRequest request;
+
+    @Mock
+    private GetAvailableStatementListResponse response;
+
+    @Mock
+    private GetAvailableStatementListResponse.ResponsePayload responsePayload;
+
+    @Mock
+    private GetAvailableStatementListResponse.AvailableStatementList availableStatementList;
+
+    @Mock
+    private MidtierUtilHelper midtierUtilHelper;
+
+    @Mock
+    private FeeUtil feeUtil;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testInvokeService() throws Exception {
+        // Arrange
+        String connectId = "testConnectId";
+        String acctNum = "123456";
+        String token = "testToken";
+
+        // Mock request
+        when(request.getSessionInfo()).thenReturn(mock(GetAvailableStatementListRequest.SessionInfo.class));
+        when(request.getAcctNum()).thenReturn(acctNum);
+        when(request.getSessionInfo().getConnectId()).thenReturn(connectId);
+
+        // Mock response
+        when(mbnaCCA.retrieveAvailableStatementList(connectId, acctNum, token)).thenReturn(response);
+        when(response.getResponsePayload()).thenReturn(responsePayload);
+        when(responsePayload.getAvailableStatementList()).thenReturn(availableStatementList);
+        
+        // Mock FeeUtil
+        when(FeeUtil.getStatementFee()).thenReturn(10.0);
+        
+        // Act
+        GetAvailableStatementListResponse result = getAvailableStatementListOperation.invokeService(request, token);
+
+        // Assert
+        assertNotNull(result);
+        verify(mbnaCCA, times(1)).retrieveAvailableStatementList(connectId, acctNum, token);
+        verify(responsePayload, times(1)).getAvailableStatementList();
+        verify(availableStatementList, times(1)).setHardCopyRate(10.0);
+        verify(StatementUtil.class);
+    }
+
+    @Test
+    void testInvokeService_ExceptionHandling() {
+        // Arrange
+        String connectId = "testConnectId";
+        String acctNum = "123456";
+        String token = "testToken";
+
+        // Mock request
+        when(request.getSessionInfo()).thenReturn(mock(GetAvailableStatementListRequest.SessionInfo.class));
+        when(request.getAcctNum()).thenReturn(acctNum);
+        when(request.getSessionInfo().getConnectId()).thenReturn(connectId);
+
+        // Mock response to throw exception
+        when(mbnaCCA.retrieveAvailableStatementList(connectId, acctNum, token)).thenThrow(new RuntimeException("Service Error"));
+
+        // Act & Assert
+        try {
+            getAvailableStatementListOperation.invokeService(request, token);
+            fail("Expected exception to be thrown");
+        } catch (Exception e) {
+            assertEquals("MS601", e.getMessage());
+        }
+    }
+
+    @Test
+    void testRequiresDisclosureConsent() {
+        // Act
+        boolean result = getAvailableStatementListOperation.requiresDisclosureConsent();
+
+        // Assert
+        assertFalse(result);
+    }
+
+    @Test
+    void testGetConsentDisclosureFailedMsgCode() {
+        // Act
+        String result = getAvailableStatementListOperation.getConsentDisclosureFailedMsgCode();
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testGenerateAutoComment() {
+        // Act
+        boolean result = getAvailableStatementListOperation.generateAutoComment();
+
+        // Assert
+        assertFalse(result);
+    }
+
+    @Test
+    void testCreateAutoComment() {
+        // Act
+        List<String> result = getAvailableStatementListOperation.createAutoComment(mock(BaseRequest.class), mock(BaseResponse.class));
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testGetEmailInfoBean() {
+        // Act
+        EmailInfo result = getAvailableStatementListOperation.getEmailInfoBean(mock(BaseRequest.class), mock(BaseResponse.class));
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testGetValidator() {
+        // Act
+        MsecValidator result = getAvailableStatementListOperation.getValidator();
+
+        // Assert
+        assertNull(result);
+    }
+}

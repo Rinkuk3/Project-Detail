@@ -1,0 +1,172 @@
+package com.td.mbna.msec.midtier.services;
+
+import com.td.mbna.msec.midtier.types.common.EmailNotificationInfoType;
+import com.td.mbna.msec.midtier.types.common.PrimaryCardMemberInfo;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class EmailInfoTest {
+
+    private EmailInfoImpl emailInfoImpl;
+
+    @BeforeEach
+    void setUp() {
+        emailInfoImpl = new EmailInfoImpl();
+    }
+
+    @Test
+    void testConstructorWithNullNotificationInfo() {
+        emailInfoImpl = new EmailInfoImpl(null, "logonId", "businessEventID", true);
+        assertNotNull(emailInfoImpl);
+        assertEquals("", emailInfoImpl.getLogonId());
+        assertEquals("businessEventID", emailInfoImpl.getBusinessEventID());
+    }
+
+    @Test
+    void testConstructorWithValidNotificationInfo() {
+        EmailNotificationInfoType notificationInfo = Mockito.mock(EmailNotificationInfoType.class);
+        Mockito.when(notificationInfo.getSendEmail()).thenReturn(true);
+        Mockito.when(notificationInfo.getPrimaryUserEmailAddress()).thenReturn("test@example.com");
+        Mockito.when(notificationInfo.getPrimaryUserLanguage()).thenReturn("EN");
+        Mockito.when(notificationInfo.getPrimaryUserFirstName()).thenReturn("John");
+        Mockito.when(notificationInfo.getPrimaryUserMiddleName()).thenReturn("M");
+        Mockito.when(notificationInfo.getPrimaryUserLastName()).thenReturn("Doe");
+        Mockito.when(notificationInfo.getCardName()).thenReturn("Visa");
+        Mockito.when(notificationInfo.getCardEnding()).thenReturn("1234");
+        Mockito.when(notificationInfo.getPrimaryCustId()).thenReturn("cust123");
+
+        emailInfoImpl = new EmailInfoImpl(notificationInfo, "logonId", "businessEventID", true);
+
+        assertTrue(emailInfoImpl.isTriggerEmailNotification());
+        assertEquals("businessEventID", emailInfoImpl.getBusinessEventID());
+        assertEquals("test@example.com", emailInfoImpl.getPrimaryEmailAddress());
+        assertEquals("EN", emailInfoImpl.getPrimaryLanguagePref());
+        assertEquals("John", emailInfoImpl.getAccountFirstName());
+        assertEquals("Doe", emailInfoImpl.getAccountLastName());
+        assertEquals("Visa", emailInfoImpl.getCardName());
+        assertEquals("1234", emailInfoImpl.getCardEnding());
+        assertEquals("cust123", emailInfoImpl.getCustId());
+    }
+
+    @Test
+    void testConstructorWithNonPrimaryUser() {
+        EmailNotificationInfoType notificationInfo = Mockito.mock(EmailNotificationInfoType.class);
+        Mockito.when(notificationInfo.getSendEmail()).thenReturn(true);
+        Mockito.when(notificationInfo.getPrimaryUserEmailAddress()).thenReturn("test@example.com");
+        Mockito.when(notificationInfo.getPrimaryUserLanguage()).thenReturn("EN");
+        Mockito.when(notificationInfo.getPrimaryUserFirstName()).thenReturn("John");
+        Mockito.when(notificationInfo.getPrimaryUserMiddleName()).thenReturn("M");
+        Mockito.when(notificationInfo.getPrimaryUserLastName()).thenReturn("Doe");
+        Mockito.when(notificationInfo.getCardName()).thenReturn("Visa");
+        Mockito.when(notificationInfo.getCardEnding()).thenReturn("1234");
+        Mockito.when(notificationInfo.getPrimaryCustId()).thenReturn("cust123");
+
+        emailInfoImpl = new EmailInfoImpl(notificationInfo, "logonId", "businessEventID", false);
+
+        assertEquals("USER_AUTHORIZED", emailInfoImpl.getInitiatedBy());
+    }
+
+    @Test
+    void testGetConfirmationNumbersStringWithValidList() {
+        emailInfoImpl.setConfirmationNumbers(Arrays.asList("conf123", "conf456", "conf789"));
+        String result = emailInfoImpl.getConfirmationNumbersString();
+        assertEquals("conf123-conf456-conf789", result);
+    }
+
+    @Test
+    void testGetConfirmationNumbersStringWithSingleConfirmationNumber() {
+        emailInfoImpl.setConfirmationNumber("conf123");
+        String result = emailInfoImpl.getConfirmationNumbersString();
+        assertEquals("conf123", result);
+    }
+
+    @Test
+    void testGetConfirmationNumbersStringWithEmptyList() {
+        emailInfoImpl.setConfirmationNumbers(Arrays.asList());
+        String result = emailInfoImpl.getConfirmationNumbersString();
+        assertEquals("", result);
+    }
+
+    @Test
+    void testSetAndGetAttributes() {
+        emailInfoImpl.addAttribute("key1", "value1");
+        assertEquals("value1", emailInfoImpl.getAttribute("key1"));
+        emailInfoImpl.addAttribute("key2", "value2");
+        assertEquals("value2", emailInfoImpl.getAttribute("key2"));
+    }
+
+    @Test
+    void testSetRetryLogic() {
+        Consumer<String> retryLogic = (s) -> System.out.println(s);
+        emailInfoImpl.setRetryLogic(retryLogic);
+        assertNotNull(emailInfoImpl.getRetryLogic());
+    }
+
+    @Test
+    void testToString() {
+        emailInfoImpl.setBusinessEventID("businessEventID");
+        emailInfoImpl.setLogonId("logonId");
+        emailInfoImpl.setPrimaryEmailAddress("test@example.com");
+        emailInfoImpl.setPrimaryLanguagePref("EN");
+        emailInfoImpl.setAccountFirstName("John");
+        emailInfoImpl.setAccountLastName("Doe");
+        emailInfoImpl.setCardName("Visa");
+        emailInfoImpl.setCardEnding("1234");
+
+        String result = emailInfoImpl.toString();
+        assertTrue(result.contains("businessEventID=businessEventID"));
+        assertTrue(result.contains("logonId=logonId"));
+        assertTrue(result.contains("primaryEmailAddress=test@example.com"));
+    }
+
+    @Test
+    void testLogEmailInfo() {
+        emailInfoImpl.setLogonId("logonId");
+        emailInfoImpl.setBusinessEventID("businessEventID");
+        emailInfoImpl.setPrimaryEmailAddress("test@example.com");
+        emailInfoImpl.setPrimaryLanguagePref("EN");
+        emailInfoImpl.setAccountFirstName("John");
+        emailInfoImpl.setAccountLastName("Doe");
+
+        // This test checks if the logEmailInfo method is invoked correctly, but since it's a private static method, we cannot directly assert it.
+        // We can only ensure that no exceptions are thrown and that the method executes correctly.
+        emailInfoImpl.toString(); // Calls the method that internally calls logEmailInfo
+    }
+
+    @Test
+    void testSetAndGetOldEmailAddress() {
+        emailInfoImpl.setOldEmailAddress("old@example.com");
+        assertEquals("old@example.com", emailInfoImpl.getOldEmailAddress());
+    }
+
+    @Test
+    void testSetAndGetStatementDeliveryPreferenceSelected() {
+        emailInfoImpl.setStatementDeliveryPreferenceSelected("ONLINE");
+        assertEquals("ONLINE", emailInfoImpl.getStatementDeliveryPreferenceSelected());
+    }
+
+    @Test
+    void testSetAndGetConnectId() {
+        emailInfoImpl.setConnectId("connectId123");
+        assertEquals("connectId123", emailInfoImpl.getConnectId());
+    }
+
+    @Test
+    void testSetAndGetAcctNum() {
+        emailInfoImpl.setAcctNum("acct123");
+        assertEquals("acct123", emailInfoImpl.getAcctNum());
+    }
+
+    @Test
+    void testSetAndGetToken() {
+        emailInfoImpl.setToken("token123");
+        assertEquals("token123", emailInfoImpl.getToken());
+    }
+
+}

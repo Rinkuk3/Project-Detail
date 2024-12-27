@@ -1,0 +1,94 @@
+package com.td.api.ofm.common;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class TCCAAPIBalanceSegmentEventInfoTest {
+
+    private TCCAAPIBalanceSegmentEventInfo eventInfo;
+    private TCCAAPIBalanceSegmentEventAdjustment adjustment;
+
+    @BeforeEach
+    public void setUp() {
+        eventInfo = new TCCAAPIBalanceSegmentEventInfo();
+        adjustment = new TCCAAPIBalanceSegmentEventAdjustment();
+    }
+
+    @Test
+    public void testGettersAndSetters() {
+        eventInfo.setTypeCd("typeA");
+        eventInfo.setExternalReferenceNum("ext123");
+        eventInfo.setCardNum("card123");
+        eventInfo.setSolicitationChannelTypeCd("web");
+        eventInfo.setAccessChannelTypeCd("mobile");
+
+        assertEquals("typeA", eventInfo.getTypeCd());
+        assertEquals("ext123", eventInfo.getExternalReferenceNum());
+        assertEquals("card123", eventInfo.getCardNum());
+        assertEquals("web", eventInfo.getSolicitationChannelTypeCd());
+        assertEquals("mobile", eventInfo.getAccessChannelTypeCd());
+    }
+
+    @Test
+    public void testAdjustmentEvent() {
+        eventInfo.getAdjustmentEvent().add(adjustment);
+        assertTrue(eventInfo.getAdjustmentEvent().contains(adjustment));
+    }
+
+    @Test
+    public void testToString() {
+        eventInfo.setTypeCd("typeA");
+        eventInfo.setExternalReferenceNum("ext123");
+        eventInfo.setCardNum("card123");
+        eventInfo.setSolicitationChannelTypeCd("web");
+        eventInfo.setAccessChannelTypeCd("mobile");
+        eventInfo.getAdjustmentEvent().add(adjustment);
+
+        String expectedString = "com.td.api.ofm.common.TCCAAPIBalanceSegmentEventInfo@" + Integer.toHexString(eventInfo.hashCode()) +
+                "[typeCd=typeA,externalReferenceNum=ext123,cardNum=card123,solicitationChannelTypeCd=web,accessChannelTypeCd=mobile,adjustmentEvent=" + eventInfo.getAdjustmentEvent() + "]";
+
+        assertEquals(expectedString, eventInfo.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        eventInfo.setTypeCd("typeA");
+        eventInfo.setExternalReferenceNum("ext123");
+        eventInfo.setCardNum("card123");
+        eventInfo.setSolicitationChannelTypeCd("web");
+        eventInfo.setAccessChannelTypeCd("mobile");
+        eventInfo.getAdjustmentEvent().add(adjustment);
+
+        int expectedHashCode = 31 * (31 * (31 * (31 * (31 * (31 * (31 * "card123".hashCode() + "mobile".hashCode()) +
+                "typeA".hashCode()) + adjustment.hashCode()) + "web".hashCode()) + "ext123".hashCode()) +
+                "typeA".hashCode()) + adjustment.hashCode();
+
+        assertEquals(expectedHashCode, eventInfo.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        TCCAAPIBalanceSegmentEventInfo eventInfo2 = new TCCAAPIBalanceSegmentEventInfo();
+        eventInfo.setTypeCd("typeA");
+        eventInfo.setExternalReferenceNum("ext123");
+        eventInfo.setCardNum("card123");
+        eventInfo.setSolicitationChannelTypeCd("web");
+        eventInfo.setAccessChannelTypeCd("mobile");
+        eventInfo.getAdjustmentEvent().add(adjustment);
+
+        eventInfo2.setTypeCd("typeA");
+        eventInfo2.setExternalReferenceNum("ext123");
+        eventInfo2.setCardNum("card123");
+        eventInfo2.setSolicitationChannelTypeCd("web");
+        eventInfo2.setAccessChannelTypeCd("mobile");
+        eventInfo2.getAdjustmentEvent().add(adjustment);
+
+        assertTrue(eventInfo.equals(eventInfo2));
+
+        eventInfo2.setAccessChannelTypeCd("desktop");
+        assertFalse(eventInfo.equals(eventInfo2));
+    }
+
+}

@@ -1,0 +1,222 @@
+package com.td.mbna.msec.midtier.statement;
+
+import com.mbnaweb.xsd.types.common.CardNumHistoryType;
+import com.mbnaweb.xsd.types.statement.HistoryStatementListType;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class DMSStatementFilterUtilTest {
+
+    @Test
+    void testFilterStatements_withNullStmtInfoList() {
+        List<HistoryStatementListType> stmtInfoList = null;
+        List<CardNumHistoryType> cardList = new ArrayList<>();
+
+        List<HistoryStatementListType> result = DMSStatementFilterUtil.filterStatements(stmtInfoList, cardList);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void testFilterStatements_withEmptyStmtInfoList() {
+        List<HistoryStatementListType> stmtInfoList = new ArrayList<>();
+        List<CardNumHistoryType> cardList = new ArrayList<>();
+
+        List<HistoryStatementListType> result = DMSStatementFilterUtil.filterStatements(stmtInfoList, cardList);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void testFilterStatements_withValidStmtInfoList() throws Exception {
+        // Create CardNumHistoryType mock
+        CardNumHistoryType card1 = Mockito.mock(CardNumHistoryType.class);
+        CardNumHistoryType card2 = Mockito.mock(CardNumHistoryType.class);
+        CardNumHistoryType card3 = Mockito.mock(CardNumHistoryType.class);
+
+        // Set mock values for the cards
+        Mockito.when(card1.getCard()).thenReturn("1234");
+        Mockito.when(card2.getCard()).thenReturn("5678");
+        Mockito.when(card3.getCard()).thenReturn("9876");
+
+        List<CardNumHistoryType> cardList = Arrays.asList(card1, card2, card3);
+
+        // Create HistoryStatementListType mock
+        HistoryStatementListType stmt1 = Mockito.mock(HistoryStatementListType.class);
+        HistoryStatementListType stmt2 = Mockito.mock(HistoryStatementListType.class);
+        HistoryStatementListType stmt3 = Mockito.mock(HistoryStatementListType.class);
+
+        // Set mock values for the statements
+        Mockito.when(stmt1.getAccountNumber()).thenReturn("1234");
+        Mockito.when(stmt1.getStatementDate()).thenReturn("20241225");
+        Mockito.when(stmt1.getLoadDate()).thenReturn("20241220");
+
+        Mockito.when(stmt2.getAccountNumber()).thenReturn("5678");
+        Mockito.when(stmt2.getStatementDate()).thenReturn("20241225");
+        Mockito.when(stmt2.getLoadDate()).thenReturn("20241222");
+
+        Mockito.when(stmt3.getAccountNumber()).thenReturn("1234");
+        Mockito.when(stmt3.getStatementDate()).thenReturn("20241225");
+        Mockito.when(stmt3.getLoadDate()).thenReturn("20241221");
+
+        List<HistoryStatementListType> stmtInfoList = Arrays.asList(stmt1, stmt2, stmt3);
+
+        List<HistoryStatementListType> result = DMSStatementFilterUtil.filterStatements(stmtInfoList, cardList);
+
+        // Assert the result list is filtered and sorted correctly
+        assertEquals(2, result.size());
+        assertEquals("1234", result.get(0).getAccountNumber());
+        assertEquals("5678", result.get(1).getAccountNumber());
+    }
+
+    @Test
+    void testFilterStatements_withMismatchedCardNumbers() throws Exception {
+        // Create CardNumHistoryType mock
+        CardNumHistoryType card1 = Mockito.mock(CardNumHistoryType.class);
+        CardNumHistoryType card2 = Mockito.mock(CardNumHistoryType.class);
+
+        // Set mock values for the cards
+        Mockito.when(card1.getCard()).thenReturn("1234");
+        Mockito.when(card2.getCard()).thenReturn("5678");
+
+        List<CardNumHistoryType> cardList = Arrays.asList(card1, card2);
+
+        // Create HistoryStatementListType mock
+        HistoryStatementListType stmt1 = Mockito.mock(HistoryStatementListType.class);
+        HistoryStatementListType stmt2 = Mockito.mock(HistoryStatementListType.class);
+
+        // Set mock values for the statements
+        Mockito.when(stmt1.getAccountNumber()).thenReturn("0000");
+        Mockito.when(stmt1.getStatementDate()).thenReturn("20241225");
+        Mockito.when(stmt1.getLoadDate()).thenReturn("20241220");
+
+        Mockito.when(stmt2.getAccountNumber()).thenReturn("5678");
+        Mockito.when(stmt2.getStatementDate()).thenReturn("20241225");
+        Mockito.when(stmt2.getLoadDate()).thenReturn("20241222");
+
+        List<HistoryStatementListType> stmtInfoList = Arrays.asList(stmt1, stmt2);
+
+        List<HistoryStatementListType> result = DMSStatementFilterUtil.filterStatements(stmtInfoList, cardList);
+
+        // Assert the result list contains the valid statement
+        assertEquals(1, result.size());
+        assertEquals("5678", result.get(0).getAccountNumber());
+    }
+
+    @Test
+    void testFilterStatements_withNullAccountNumber() throws Exception {
+        // Create CardNumHistoryType mock
+        CardNumHistoryType card1 = Mockito.mock(CardNumHistoryType.class);
+        CardNumHistoryType card2 = Mockito.mock(CardNumHistoryType.class);
+
+        // Set mock values for the cards
+        Mockito.when(card1.getCard()).thenReturn("1234");
+        Mockito.when(card2.getCard()).thenReturn("5678");
+
+        List<CardNumHistoryType> cardList = Arrays.asList(card1, card2);
+
+        // Create HistoryStatementListType mock
+        HistoryStatementListType stmt1 = Mockito.mock(HistoryStatementListType.class);
+        HistoryStatementListType stmt2 = Mockito.mock(HistoryStatementListType.class);
+
+        // Set mock values for the statements
+        Mockito.when(stmt1.getAccountNumber()).thenReturn(null);
+        Mockito.when(stmt1.getStatementDate()).thenReturn("20241225");
+        Mockito.when(stmt1.getLoadDate()).thenReturn("20241220");
+
+        Mockito.when(stmt2.getAccountNumber()).thenReturn("5678");
+        Mockito.when(stmt2.getStatementDate()).thenReturn("20241225");
+        Mockito.when(stmt2.getLoadDate()).thenReturn("20241222");
+
+        List<HistoryStatementListType> stmtInfoList = Arrays.asList(stmt1, stmt2);
+
+        List<HistoryStatementListType> result = DMSStatementFilterUtil.filterStatements(stmtInfoList, cardList);
+
+        // Assert the result list contains the valid statement and ignores the one with null account number
+        assertEquals(1, result.size());
+        assertEquals("5678", result.get(0).getAccountNumber());
+    }
+
+    @Test
+    void testBuildDMSCardList_withNullCardList() {
+        String result = DMSStatementFilterUtil.buildDMSCardList(null);
+        assertEquals("", result);
+    }
+
+    @Test
+    void testBuildDMSCardList_withEmptyCardList() {
+        List<CardNumHistoryType> cardList = new ArrayList<>();
+        String result = DMSStatementFilterUtil.buildDMSCardList(cardList);
+        assertEquals("", result);
+    }
+
+    @Test
+    void testBuildDMSCardList_withValidCardList() {
+        CardNumHistoryType card1 = Mockito.mock(CardNumHistoryType.class);
+        CardNumHistoryType card2 = Mockito.mock(CardNumHistoryType.class);
+
+        Mockito.when(card1.getCard()).thenReturn("1234");
+        Mockito.when(card2.getCard()).thenReturn("5678");
+
+        List<CardNumHistoryType> cardList = Arrays.asList(card1, card2);
+
+        String result = DMSStatementFilterUtil.buildDMSCardList(cardList);
+        assertEquals("1234,5678", result);
+    }
+
+    @Test
+    void testStringToDate_withValidDate() {
+        String dateStr = "20241225";
+        Date result = DMSStatementFilterUtil.stringToDate(dateStr);
+        assertNotNull(result);
+    }
+
+    @Test
+    void testStringToDate_withInvalidDate() {
+        String dateStr = "invalid-date";
+        Date result = DMSStatementFilterUtil.stringToDate(dateStr);
+        assertNull(result);
+    }
+
+    @Test
+    void testIsActiveInStatementPeriod_withValidCard() throws Exception {
+        // Create mock CardNumHistoryType
+        CardNumHistoryType card = Mockito.mock(CardNumHistoryType.class);
+
+        // Set mock start and end date
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Date startDate = sdf.parse("20240101");
+        Date endDate = sdf.parse("20241231");
+
+        Mockito.when(card.getStartDate()).thenReturn(javax.xml.datatype.DatatypeFactory.newInstance().newXMLGregorianCalendar(sdf.format(startDate)));
+        Mockito.when(card.getEndDate()).thenReturn(javax.xml.datatype.DatatypeFactory.newInstance().newXMLGregorianCalendar(sdf.format(endDate)));
+
+        List<CardNumHistoryType> cardList = Arrays.asList(card);
+
+        boolean result = DMSStatementFilterUtil.isActiveInStatementPeriod("1234", "20241225", cardList);
+        assertTrue(result);
+    }
+
+    @Test
+    void testIsActiveInStatementPeriod_withInvalidCard() throws Exception {
+        // Create mock CardNumHistoryType
+        CardNumHistoryType card = Mockito.mock(CardNumHistoryType.class);
+
+        // Set mock start and end date
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Date startDate = sdf.parse("20240101");
+        Date endDate = sdf.parse("20241231");
+
+        Mockito.when(card.getStartDate()).thenReturn(javax.xml.datatype.DatatypeFactory.newInstance().newXMLGregorianCalendar(sdf.format(startDate)));
+        Mockito.when(card.getEndDate()).thenReturn(javax.xml.datatype.DatatypeFactory.newInstance().newXMLGregorianCalendar(sdf.format(endDate)));
+
+        List<CardNumHistoryType> cardList = Arrays.asList(card);
+
+        boolean result = DMSStatementFilterUtil.isActiveInStatementPeriod("5678", "20241225", cardList);
+        assertFalse(result);
+    }
+}

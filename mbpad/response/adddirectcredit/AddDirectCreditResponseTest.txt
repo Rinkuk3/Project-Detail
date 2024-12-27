@@ -1,0 +1,49 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class AddDirectCreditResponseTest {
+
+    @Test
+    void testArrangementId() {
+        AddDirectCreditResponse addDirectCreditResponse = new AddDirectCreditResponse();
+        
+        String arrangementId = "arrangement123";
+        addDirectCreditResponse.setArrangementId(arrangementId);
+        
+        assertEquals(arrangementId, addDirectCreditResponse.getArrangementId());
+    }
+
+    @Test
+    void testSetterAndGetter() {
+        AddDirectCreditResponse addDirectCreditResponse = new AddDirectCreditResponse();
+        
+        String arrangementId = "arrangement123";
+        addDirectCreditResponse.setArrangementId(arrangementId);
+        
+        assertNotNull(addDirectCreditResponse.getArrangementId());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        AddDirectCreditResponse addDirectCreditResponse1 = new AddDirectCreditResponse();
+        AddDirectCreditResponse addDirectCreditResponse2 = new AddDirectCreditResponse();
+        
+        String arrangementId = "arrangement123";
+        addDirectCreditResponse1.setArrangementId(arrangementId);
+        addDirectCreditResponse2.setArrangementId(arrangementId);
+        
+        assertEquals(addDirectCreditResponse1, addDirectCreditResponse2);
+        assertEquals(addDirectCreditResponse1.hashCode(), addDirectCreditResponse2.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        AddDirectCreditResponse addDirectCreditResponse = new AddDirectCreditResponse();
+        
+        String arrangementId = "arrangement123";
+        addDirectCreditResponse.setArrangementId(arrangementId);
+        
+        String expectedString = "AddDirectCreditResponse(arrangementId=" + arrangementId + ")";
+        assertEquals(expectedString, addDirectCreditResponse.toString());
+    }
+}

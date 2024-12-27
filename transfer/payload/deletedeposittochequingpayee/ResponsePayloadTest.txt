@@ -1,0 +1,79 @@
+package com.td.mbna.msec.midtier.transfer.payload.deletedeposittochequingpayee;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class ResponsePayloadTest {
+
+    private ResponsePayload responsePayload;
+
+    @Before
+    public void setUp() {
+        responsePayload = new ResponsePayload();
+    }
+
+    @Test
+    public void testGetAndSetStatus() {
+        responsePayload.setStatus(true);
+        assertTrue(responsePayload.getStatus());
+
+        responsePayload.setStatus(false);
+        assertFalse(responsePayload.getStatus());
+
+        responsePayload.setStatus(null);
+        assertNull(responsePayload.getStatus());
+    }
+
+    @Test
+    public void testToString() {
+        responsePayload.setStatus(true);
+        String expectedString = "com.td.mbna.msec.midtier.transfer.payload.deletedeposittochequingpayee.ResponsePayload@"
+                + Integer.toHexString(System.identityHashCode(responsePayload))
+                + "[status=true]";
+        assertEquals(expectedString, responsePayload.toString());
+
+        responsePayload.setStatus(null);
+        expectedString = "com.td.mbna.msec.midtier.transfer.payload.deletedeposittochequingpayee.ResponsePayload@"
+                + Integer.toHexString(System.identityHashCode(responsePayload))
+                + "[status=<null>]";
+        assertEquals(expectedString, responsePayload.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        ResponsePayload responsePayload1 = new ResponsePayload();
+        responsePayload1.setStatus(true);
+
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        responsePayload2.setStatus(true);
+
+        ResponsePayload responsePayload3 = new ResponsePayload();
+        responsePayload3.setStatus(false);
+
+        assertEquals(responsePayload1.hashCode(), responsePayload2.hashCode());
+        assertNotEquals(responsePayload1.hashCode(), responsePayload3.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        ResponsePayload responsePayload1 = new ResponsePayload();
+        responsePayload1.setStatus(true);
+
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        responsePayload2.setStatus(true);
+
+        ResponsePayload responsePayload3 = new ResponsePayload();
+        responsePayload3.setStatus(false);
+
+        ResponsePayload responsePayload4 = new ResponsePayload();
+        responsePayload4.setStatus(null);
+
+        assertTrue(responsePayload1.equals(responsePayload2));  // Same status
+        assertFalse(responsePayload1.equals(responsePayload3)); // Different status
+        assertFalse(responsePayload1.equals(responsePayload4)); // One is null
+        assertFalse(responsePayload1.equals(null));  // Null check
+        assertFalse(responsePayload1.equals("String")); // Different object type
+    }
+}

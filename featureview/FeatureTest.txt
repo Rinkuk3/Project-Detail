@@ -1,0 +1,157 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.math.BigDecimal;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+class FeatureTest {
+
+    private Feature feature;
+
+    @BeforeEach
+    void setUp() {
+        feature = new Feature();
+    }
+
+    @Test
+    void testGetSetFeatureId() {
+        String featureId = "F123";
+        feature.setFeatureId(featureId);
+        assertEquals(featureId, feature.getFeatureId());
+    }
+
+    @Test
+    void testGetSetFeatureDesc() {
+        String featureDesc = "Annual Fee";
+        feature.setFeatureDesc(featureDesc);
+        assertEquals(featureDesc, feature.getFeatureDesc());
+    }
+
+    @Test
+    void testGetSetFeePercentageRate() {
+        BigDecimal feePercentageRate = new BigDecimal("2.5");
+        feature.setFeePercentageRate(feePercentageRate);
+        assertEquals(feePercentageRate, feature.getFeePercentageRate());
+    }
+
+    @Test
+    void testGetSetMinimumFeeCccyamt() {
+        Cccyamt minimumFeeCccyamt = new Cccyamt();
+        feature.setMinimumFeeCccyamt(minimumFeeCccyamt);
+        assertEquals(minimumFeeCccyamt, feature.getMinimumFeeCccyamt());
+    }
+
+    @Test
+    void testToString() {
+        Cccyamt minimumFeeCccyamt = new Cccyamt();
+        feature.setFeatureId("F123");
+        feature.setFeatureDesc("Annual Fee");
+        feature.setFeePercentageRate(new BigDecimal("2.5"));
+        feature.setMinimumFeeCccyamt(minimumFeeCccyamt);
+
+        String result = feature.toString();
+        assertTrue(result.contains("featureId"));
+        assertTrue(result.contains("featureDesc"));
+        assertTrue(result.contains("feePercentageRate"));
+        assertTrue(result.contains("minimumFeeCccyamt"));
+    }
+
+    @Test
+    void testHashCode() {
+        feature.setFeatureId("F123");
+        feature.setFeatureDesc("Annual Fee");
+        feature.setFeePercentageRate(new BigDecimal("2.5"));
+        feature.setMinimumFeeCccyamt(new Cccyamt());
+
+        int hashCode = feature.hashCode();
+        assertNotNull(hashCode);
+    }
+
+    @Test
+    void testEquals() {
+        Feature other = new Feature();
+        other.setFeatureId("F123");
+        other.setFeatureDesc("Annual Fee");
+        other.setFeePercentageRate(new BigDecimal("2.5"));
+        other.setMinimumFeeCccyamt(new Cccyamt());
+
+        feature.setFeatureId("F123");
+        feature.setFeatureDesc("Annual Fee");
+        feature.setFeePercentageRate(new BigDecimal("2.5"));
+        feature.setMinimumFeeCccyamt(new Cccyamt());
+
+        assertTrue(feature.equals(other));
+    }
+
+    @Test
+    void testEquals_withNull() {
+        assertFalse(feature.equals(null));
+    }
+
+    @Test
+    void testEquals_withDifferentType() {
+        assertFalse(feature.equals("string"));
+    }
+
+    @Test
+    void testEquals_withDifferentValues() {
+        Feature other = new Feature();
+        other.setFeatureId("F124");
+
+        feature.setFeatureId("F123");
+        feature.setFeatureDesc("Annual Fee");
+        feature.setFeePercentageRate(new BigDecimal("2.5"));
+        feature.setMinimumFeeCccyamt(new Cccyamt());
+
+        assertFalse(feature.equals(other));
+    }
+
+    @Test
+    void testEquals_withNullFeatureId() {
+        Feature other = new Feature();
+        other.setFeatureId(null);
+        other.setFeatureDesc("Annual Fee");
+        other.setFeePercentageRate(new BigDecimal("2.5"));
+        other.setMinimumFeeCccyamt(new Cccyamt());
+
+        feature.setFeatureId(null);
+        feature.setFeatureDesc("Annual Fee");
+        feature.setFeePercentageRate(new BigDecimal("2.5"));
+        feature.setMinimumFeeCccyamt(new Cccyamt());
+
+        assertTrue(feature.equals(other));
+    }
+
+    @Test
+    void testEquals_withNullFeePercentageRate() {
+        Feature other = new Feature();
+        other.setFeatureId("F123");
+        other.setFeatureDesc("Annual Fee");
+        other.setFeePercentageRate(null);
+        other.setMinimumFeeCccyamt(new Cccyamt());
+
+        feature.setFeatureId("F123");
+        feature.setFeatureDesc("Annual Fee");
+        feature.setFeePercentageRate(null);
+        feature.setMinimumFeeCccyamt(new Cccyamt());
+
+        assertTrue(feature.equals(other));
+    }
+
+    @Test
+    void testEquals_withNullMinimumFeeCccyamt() {
+        Feature other = new Feature();
+        other.setFeatureId("F123");
+        other.setFeatureDesc("Annual Fee");
+        other.setFeePercentageRate(new BigDecimal("2.5"));
+        other.setMinimumFeeCccyamt(null);
+
+        feature.setFeatureId("F123");
+        feature.setFeatureDesc("Annual Fee");
+        feature.setFeePercentageRate(new BigDecimal("2.5"));
+        feature.setMinimumFeeCccyamt(null);
+
+        assertTrue(feature.equals(other));
+    }
+}

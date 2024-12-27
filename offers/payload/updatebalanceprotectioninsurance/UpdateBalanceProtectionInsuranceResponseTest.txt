@@ -1,0 +1,74 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class UpdateBalanceProtectionInsuranceResponseTest {
+
+    @Test
+    void testSetGetResponsePayload() {
+        UpdateBalanceProtectionInsuranceResponse response = new UpdateBalanceProtectionInsuranceResponse();
+        ResponsePayload payload = new ResponsePayload();
+        
+        response.setResponsePayload(payload);
+        assertEquals(payload, response.getResponsePayload());
+        
+        ResponsePayload newPayload = new ResponsePayload();
+        response.setResponsePayload(newPayload);
+        assertEquals(newPayload, response.getResponsePayload());
+    }
+
+    @Test
+    void testToString() {
+        UpdateBalanceProtectionInsuranceResponse response = new UpdateBalanceProtectionInsuranceResponse();
+        response.setStatus("SUCCESS");
+        response.setErrorMessages("No errors");
+        
+        ResponsePayload payload = new ResponsePayload();
+        response.setResponsePayload(payload);
+        
+        String expectedString = "UpdateBalanceProtectionInsuranceResponse@" + Integer.toHexString(System.identityHashCode(response)) + 
+                "[status=SUCCESS,errorMsgs=No errors,responsePayload=" + payload + "]";
+        
+        assertEquals(expectedString, response.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        UpdateBalanceProtectionInsuranceResponse response1 = new UpdateBalanceProtectionInsuranceResponse();
+        UpdateBalanceProtectionInsuranceResponse response2 = new UpdateBalanceProtectionInsuranceResponse();
+        
+        response1.setStatus("SUCCESS");
+        response1.setErrorMessages("No errors");
+        response2.setStatus("SUCCESS");
+        response2.setErrorMessages("No errors");
+
+        assertEquals(response1.hashCode(), response2.hashCode());
+
+        response2.setStatus("FAILURE");
+        assertNotEquals(response1.hashCode(), response2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        UpdateBalanceProtectionInsuranceResponse response1 = new UpdateBalanceProtectionInsuranceResponse();
+        UpdateBalanceProtectionInsuranceResponse response2 = new UpdateBalanceProtectionInsuranceResponse();
+        
+        response1.setStatus("SUCCESS");
+        response1.setErrorMessages("No errors");
+        response2.setStatus("SUCCESS");
+        response2.setErrorMessages("No errors");
+
+        assertEquals(response1, response2);
+
+        response2.setErrorMessages("Some error");
+        assertNotEquals(response1, response2);
+
+        response1.setResponsePayload(new ResponsePayload());
+        response2.setResponsePayload(new ResponsePayload());
+        assertEquals(response1, response2);
+
+        response1.setResponsePayload(null);
+        assertNotEquals(response1, response2);
+
+        assertNotEquals(response1, new Object());
+    }
+}

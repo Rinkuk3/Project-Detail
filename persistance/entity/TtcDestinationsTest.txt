@@ -1,0 +1,123 @@
+package com.td.mbna.msec.midtier.persistance.entity;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class TtcDestinationsTest {
+
+    @Test
+    public void testConstructor() {
+        TtcDestinations ttcDestinations = new TtcDestinations();
+        assertNull(ttcDestinations.getTtcDestinationId());
+        assertNull(ttcDestinations.getCustomerId());
+        assertNull(ttcDestinations.getNickname());
+        assertNull(ttcDestinations.getBankId());
+        assertNull(ttcDestinations.getTransitNum());
+        assertNull(ttcDestinations.getAccountNumber());
+    }
+
+    @Test
+    public void testSetAndGetTtcDestinationId() {
+        TtcDestinations ttcDestinations = new TtcDestinations();
+        ttcDestinations.setTtcDestinationId(1);
+        assertEquals(1, ttcDestinations.getTtcDestinationId());
+    }
+
+    @Test
+    public void testSetAndGetCustomerId() {
+        TtcDestinations ttcDestinations = new TtcDestinations();
+        ttcDestinations.setCustomerId("CUST123");
+        assertEquals("CUST123", ttcDestinations.getCustomerId());
+    }
+
+    @Test
+    public void testSetAndGetNickname() {
+        TtcDestinations ttcDestinations = new TtcDestinations();
+        ttcDestinations.setNickname("John Doe");
+        assertEquals("John Doe", ttcDestinations.getNickname());
+    }
+
+    @Test
+    public void testSetAndGetBankId() {
+        TtcDestinations ttcDestinations = new TtcDestinations();
+        ttcDestinations.setBankId("BANK123");
+        assertEquals("BANK123", ttcDestinations.getBankId());
+    }
+
+    @Test
+    public void testSetAndGetTransitNum() {
+        TtcDestinations ttcDestinations = new TtcDestinations();
+        ttcDestinations.setTransitNum("123456");
+        assertEquals("123456", ttcDestinations.getTransitNum());
+    }
+
+    @Test
+    public void testSetAndGetAccountNumber() {
+        TtcDestinations ttcDestinations = new TtcDestinations();
+        ttcDestinations.setAccountNumber("987654321");
+        assertEquals("987654321", ttcDestinations.getAccountNumber());
+    }
+
+    @Test
+    public void testEquals() {
+        TtcDestinations ttcDestinations1 = new TtcDestinations();
+        ttcDestinations1.setTtcDestinationId(1);
+        ttcDestinations1.setCustomerId("CUST123");
+        ttcDestinations1.setNickname("John Doe");
+        ttcDestinations1.setBankId("BANK123");
+        ttcDestinations1.setTransitNum("123456");
+        ttcDestinations1.setAccountNumber("987654321");
+
+        TtcDestinations ttcDestinations2 = new TtcDestinations();
+        ttcDestinations2.setTtcDestinationId(1);
+        ttcDestinations2.setCustomerId("CUST123");
+        ttcDestinations2.setNickname("John Doe");
+        ttcDestinations2.setBankId("BANK123");
+        ttcDestinations2.setTransitNum("123456");
+        ttcDestinations2.setAccountNumber("987654321");
+
+        assertTrue(ttcDestinations1.equals(ttcDestinations2));
+    }
+
+    @Test
+    public void testEqualsWithDifferentValues() {
+        TtcDestinations ttcDestinations1 = new TtcDestinations();
+        ttcDestinations1.setTtcDestinationId(1);
+        ttcDestinations1.setCustomerId("CUST123");
+        ttcDestinations1.setNickname("John Doe");
+
+        TtcDestinations ttcDestinations2 = new TtcDestinations();
+        ttcDestinations2.setTtcDestinationId(2);
+        ttcDestinations2.setCustomerId("CUST124");
+        ttcDestinations2.setNickname("Jane Doe");
+
+        assertFalse(ttcDestinations1.equals(ttcDestinations2));
+    }
+
+    @Test
+    public void testHashCode() {
+        TtcDestinations ttcDestinations1 = new TtcDestinations();
+        ttcDestinations1.setTtcDestinationId(1);
+        ttcDestinations1.setCustomerId("CUST123");
+
+        TtcDestinations ttcDestinations2 = new TtcDestinations();
+        ttcDestinations2.setTtcDestinationId(1);
+        ttcDestinations2.setCustomerId("CUST123");
+
+        assertEquals(ttcDestinations1.hashCode(), ttcDestinations2.hashCode());
+    }
+
+    @Test
+    public void testHashCodeWithDifferentValues() {
+        TtcDestinations ttcDestinations1 = new TtcDestinations();
+        ttcDestinations1.setTtcDestinationId(1);
+        ttcDestinations1.setCustomerId("CUST123");
+
+        TtcDestinations ttcDestinations2 = new TtcDestinations();
+        ttcDestinations2.setTtcDestinationId(2);
+        ttcDestinations2.setCustomerId("CUST124");
+
+        assertNotEquals(ttcDestinations1.hashCode(), ttcDestinations2.hashCode());
+    }
+}

@@ -1,0 +1,131 @@
+package com.td.mbna.msec.midtier.disclosure;
+
+import com.td.mbna.msec.midtier.disclosure.payload.consentdisclosure.ConsentDisclosureRequest;
+import com.td.mbna.msec.midtier.disclosure.payload.consentdisclosure.ConsentDisclosureResponse;
+import com.td.mbna.msec.midtier.types.common.BaseRequest;
+import com.td.mbna.msec.midtier.types.common.BaseResponse;
+import com.td.mbna.msec.midtier.types.common.DisclosureInfoType;
+import com.td.mbna.msec.midtier.util.services.JAXBJsonConverter;
+import com.td.mbna.msec.midtier.persistance.mybatis.DBMybatisService;
+import com.td.mbna.msec.midtier.service.MsecValidator;
+import com.td.mbna.msec.midtier.service.EmailInfo;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class ConsentDisclosureOperationTest {
+
+    @InjectMocks
+    private ConsentDisclosureOperation consentDisclosureOperation;
+
+    @Mock
+    private MsecValidator msecValidator;
+
+    @Mock
+    private ValangValidator consentDisclosureRequestValidator;
+
+    @Mock
+    private DBMybatisService dbMybatisService;
+
+    @Mock
+    private JAXBJsonConverter jaxbJsonConverter;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testInvokeService_nullRequest() {
+        ConsentDisclosureResponse response = consentDisclosureOperation.invokeService(null);
+        assertNotNull(response);
+        assertEquals("Success", response.getStatus());
+    }
+
+    @Test
+    void testInvokeService_noDisclosureInfo() {
+        ConsentDisclosureRequest request = new ConsentDisclosureRequest();
+        request.setCustId("123");
+        request.setRequestPayload(new ConsentDisclosureRequest.RequestPayload());
+        
+        ConsentDisclosureResponse response = consentDisclosureOperation.invokeService(request);
+        assertNotNull(response);
+        assertEquals("Success", response.getStatus());
+    }
+
+    @Test
+    void testInvokeService_noMatchingDisclosure() {
+        ConsentDisclosureRequest request = new ConsentDisclosureRequest();
+        request.setCustId("123");
+        request.setRequestPayload(new ConsentDisclosureRequest.RequestPayload());
+        DisclosureInfoType disclosureInfo = new DisclosureInfoType();
+        disclosureInfo.setDisclosureDocTypeId("OTHER_ID");
+        request.getRequestPayload().setDisclosureInfo(Arrays.asList(disclosureInfo));
+
+        ConsentDisclosureResponse response = consentDisclosureOperation.invokeService(request);
+        assertNotNull(response);
+        assertEquals("Success", response.getStatus());
+    }
+
+    @Test
+    void testInvokeService_withMatchingDisclosure() {
+        ConsentDisclosureRequest request = new ConsentDisclosureRequest();
+        request.setCustId("123");
+        request.setRequestPayload(new ConsentDisclosureRequest.RequestPayload());
+
+        DisclosureInfoType disclosureInfo = new DisclosureInfoType();
+        disclosureInfo.setDisclosureDocTypeId("EAA1");
+        disclosureInfo.setDisclosureDocPublishedDate("2024-01-01T00:00:00");
+
+        request.getRequestPayload().setDisclosureInfo(Arrays.asList(disclosureInfo));
+
+        when(jaxbJsonConverter.convert("2024-01-01T00:00:00")).thenReturn(mock(javax.xml.datatype.XMLGregorianCalendar.class));
+        
+        ConsentDisclosureResponse response = consentDisclosureOperation.invokeService(request);
+        assertNotNull(response);
+        assertEquals("Success", response.getStatus());
+
+        verify(dbMybatisService, times(1)).logEAAPublishedDateAccepted(eq("123"), any(Date.class));
+    }
+
+    @Test
+    void testRequiresDisclosureConsent() {
+        assertTrue(consentDisclosureOperation.requiresDisclosureConsent());
+    }
+
+    @Test
+    void testGetConsentDisclosureFailedMsgCode() {
+        assertEquals("MS525", consentDisclosureOperation.getConsentDisclosureFailedMsgCode());
+    }
+
+    @Test
+    void testGenerateAutoComment() {
+        BaseRequest request = mock(BaseRequest.class);
+        BaseResponse response = mock(BaseResponse.class);
+
+        List<String> comments = consentDisclosureOperation.createAutoComment(request, response);
+        assertNotNull(comments);
+        assertFalse(comments.isEmpty());
+    }
+
+    @Test
+    void testGetEmailInfoBean() {
+        BaseRequest request = mock(BaseRequest.class);
+        BaseResponse response = mock(BaseResponse.class);
+
+        EmailInfo emailInfo = consentDisclosureOperation.getEmailInfoBean(request, response);
+        assertNull(emailInfo);
+    }
+
+    @Test
+    void testGetValidator() {
+        assertNotNull(consentDisclosureOperation.getValidator());
+    }
+}

@@ -1,0 +1,80 @@
+package com.td.mbna.msec.midtier.statement.payload.updateStatementDeliveryPreferences;
+
+import com.td.mbna.msec.midtier.statement.payload.AcctDeliveryPreferenceType;
+import com.td.mbna.msec.midtier.types.common.DisclosureInfoType;
+import com.td.mbna.msec.midtier.statement.payload.MultiAcctDeliveryPreferenceType;
+import com.td.mbna.msec.midtier.types.common.EmailNotificationInfoType;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestPayloadTest {
+
+    @Test
+    void testSetAndGetAcctDeliveryPreference() {
+        RequestPayload requestPayload = new RequestPayload();
+        AcctDeliveryPreferenceType acctDeliveryPreference = new AcctDeliveryPreferenceType(); // Mocking AcctDeliveryPreferenceType
+        requestPayload.setAcctDeliveryPreference(acctDeliveryPreference);
+        assertEquals(acctDeliveryPreference, requestPayload.getAcctDeliveryPreference());
+    }
+
+    @Test
+    void testSetAndGetDisclosureInfo() {
+        RequestPayload requestPayload = new RequestPayload();
+        List<DisclosureInfoType> disclosureInfo = new ArrayList<>();
+        DisclosureInfoType disclosure = new DisclosureInfoType(); // Mocking DisclosureInfoType
+        disclosureInfo.add(disclosure);
+        requestPayload.setDisclosureInfo(disclosureInfo);
+        assertEquals(disclosureInfo, requestPayload.getDisclosureInfo());
+    }
+
+    @Test
+    void testSetAndGetEmailNotificationInfo() {
+        RequestPayload requestPayload = new RequestPayload();
+        EmailNotificationInfoType emailNotificationInfo = new EmailNotificationInfoType(); // Mocking EmailNotificationInfoType
+        requestPayload.setEmailNotificationInfo(emailNotificationInfo);
+        assertEquals(emailNotificationInfo, requestPayload.getEmailNotificationInfo());
+    }
+
+    @Test
+    void testSetAndGetMultiAcctDiveryPrefRq() {
+        RequestPayload requestPayload = new RequestPayload();
+        List<MultiAcctDeliveryPreferenceType> multiAcctDiveryPrefRq = new ArrayList<>();
+        MultiAcctDeliveryPreferenceType multiAcctPref = new MultiAcctDeliveryPreferenceType(); // Mocking MultiAcctDeliveryPreferenceType
+        multiAcctDiveryPrefRq.add(multiAcctPref);
+        requestPayload.setMultiAcctDiveryPrefRq(multiAcctDiveryPrefRq);
+        assertEquals(multiAcctDiveryPrefRq, requestPayload.getMultiAcctDiveryPrefRq());
+    }
+
+    @Test
+    void testGetDisclosureInfoDefault() {
+        RequestPayload requestPayload = new RequestPayload();
+        assertNotNull(requestPayload.getDisclosureInfo());
+        assertTrue(requestPayload.getDisclosureInfo().isEmpty());
+    }
+
+    @Test
+    void testGetMultiAcctDiveryPrefRqDefault() {
+        RequestPayload requestPayload = new RequestPayload();
+        assertNotNull(requestPayload.getMultiAcctDiveryPrefRq());
+        assertTrue(requestPayload.getMultiAcctDiveryPrefRq().isEmpty());
+    }
+
+    @Test
+    void testSetDisclosureInfoNull() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setDisclosureInfo(null);
+        assertNull(requestPayload.getDisclosureInfo());
+    }
+
+    @Test
+    void testSetMultiAcctDiveryPrefRqNull() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setMultiAcctDiveryPrefRq(null);
+        assertNull(requestPayload.getMultiAcctDiveryPrefRq());
+    }
+
+}

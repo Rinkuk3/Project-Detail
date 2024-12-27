@@ -1,0 +1,112 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class ExceptionInfoBeanTest {
+
+    @Test
+    void testGetSetExceptionClassification() {
+        ExceptionInfoBean exceptionInfoBean = new ExceptionInfoBean();
+        String exceptionClassification = "SampleClassification";
+        exceptionInfoBean.setExceptionClassification(exceptionClassification);
+        assertEquals(exceptionClassification, exceptionInfoBean.getExceptionClassification());
+    }
+
+    @Test
+    void testGetSetErrorCode() {
+        ExceptionInfoBean exceptionInfoBean = new ExceptionInfoBean();
+        String errorCode = "E123";
+        exceptionInfoBean.setErrorCode(errorCode);
+        assertEquals(errorCode, exceptionInfoBean.getErrorCode());
+    }
+
+    @Test
+    void testGetSetSeverity() {
+        ExceptionInfoBean exceptionInfoBean = new ExceptionInfoBean();
+        String severity = "High";
+        exceptionInfoBean.setSeverity(severity);
+        assertEquals(severity, exceptionInfoBean.getSeverity());
+    }
+
+    @Test
+    void testGetSetErrorDescription() {
+        ExceptionInfoBean exceptionInfoBean = new ExceptionInfoBean();
+        String errorDescription = "Some error occurred";
+        exceptionInfoBean.setErrorDescription(errorDescription);
+        assertEquals(errorDescription, exceptionInfoBean.getErrorDescription());
+    }
+
+    @Test
+    void testGetSetSoapExceptionMessage() {
+        ExceptionInfoBean exceptionInfoBean = new ExceptionInfoBean();
+        String soapExceptionMessage = "SOAP message error";
+        exceptionInfoBean.setSoapExceptionMessage(soapExceptionMessage);
+        assertEquals(soapExceptionMessage, exceptionInfoBean.getSoapExceptionMessage());
+    }
+
+    @Test
+    void testToString() {
+        ExceptionInfoBean exceptionInfoBean = new ExceptionInfoBean();
+        exceptionInfoBean.setErrorCode("E123");
+        exceptionInfoBean.setSeverity("High");
+        exceptionInfoBean.setErrorDescription("Some error occurred");
+        exceptionInfoBean.setSoapExceptionMessage("SOAP message error");
+
+        String result = exceptionInfoBean.toString();
+        assertNotNull(result);
+        assertTrue(result.contains("errorCode"));
+        assertTrue(result.contains("severity"));
+        assertTrue(result.contains("errorDescription"));
+        assertTrue(result.contains("soapExceptionMessage"));
+    }
+
+    @Test
+    void testEquals() {
+        ExceptionInfoBean exceptionInfoBean1 = new ExceptionInfoBean();
+        ExceptionInfoBean exceptionInfoBean2 = new ExceptionInfoBean();
+        
+        exceptionInfoBean1.setErrorCode("E123");
+        exceptionInfoBean1.setSeverity("High");
+        exceptionInfoBean1.setErrorDescription("Some error occurred");
+        exceptionInfoBean1.setSoapExceptionMessage("SOAP message error");
+
+        exceptionInfoBean2.setErrorCode("E123");
+        exceptionInfoBean2.setSeverity("High");
+        exceptionInfoBean2.setErrorDescription("Some error occurred");
+        exceptionInfoBean2.setSoapExceptionMessage("SOAP message error");
+
+        assertTrue(exceptionInfoBean1.equals(exceptionInfoBean2));
+
+        exceptionInfoBean2.setErrorCode("E124");
+        assertFalse(exceptionInfoBean1.equals(exceptionInfoBean2));
+    }
+
+    @Test
+    void testHashCode() {
+        ExceptionInfoBean exceptionInfoBean1 = new ExceptionInfoBean();
+        ExceptionInfoBean exceptionInfoBean2 = new ExceptionInfoBean();
+        
+        exceptionInfoBean1.setErrorCode("E123");
+        exceptionInfoBean1.setSeverity("High");
+        exceptionInfoBean1.setErrorDescription("Some error occurred");
+        exceptionInfoBean1.setSoapExceptionMessage("SOAP message error");
+
+        exceptionInfoBean2.setErrorCode("E123");
+        exceptionInfoBean2.setSeverity("High");
+        exceptionInfoBean2.setErrorDescription("Some error occurred");
+        exceptionInfoBean2.setSoapExceptionMessage("SOAP message error");
+
+        assertEquals(exceptionInfoBean1.hashCode(), exceptionInfoBean2.hashCode());
+    }
+
+    @Test
+    void testEqualsWithDifferentObjectType() {
+        ExceptionInfoBean exceptionInfoBean = new ExceptionInfoBean();
+        assertFalse(exceptionInfoBean.equals(new Object()));
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        ExceptionInfoBean exceptionInfoBean = new ExceptionInfoBean();
+        assertFalse(exceptionInfoBean.equals(null));
+    }
+}

@@ -1,0 +1,82 @@
+package com.td.api.ofm.request;
+
+import com.td.api.ofm.common.TCCAAPIBalanceSegmentEventAdjustmentInfo;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class TSvcAddCreditCardAgreementBalanceSegmentEventAdjustmentRqTest {
+
+    private TSvcAddCreditCardAgreementBalanceSegmentEventAdjustmentRq request;
+    private TCCAAPIBalanceSegmentEventAdjustmentInfo adjustmentEvent;
+
+    @BeforeEach
+    public void setUp() {
+        request = new TSvcAddCreditCardAgreementBalanceSegmentEventAdjustmentRq();
+        adjustmentEvent = new TCCAAPIBalanceSegmentEventAdjustmentInfo(); // Assuming you can mock or create a default object here
+    }
+
+    @Test
+    public void testGetAdjustmentEvent() {
+        request.setAdjustmentEvent(adjustmentEvent);
+        assertEquals(adjustmentEvent, request.getAdjustmentEvent());
+    }
+
+    @Test
+    public void testSetAdjustmentEvent() {
+        request.setAdjustmentEvent(adjustmentEvent);
+        assertNotNull(request.getAdjustmentEvent());
+        assertEquals(adjustmentEvent, request.getAdjustmentEvent());
+    }
+
+    @Test
+    public void testToString() {
+        request.setAdjustmentEvent(adjustmentEvent);
+        String expectedString = TSvcAddCreditCardAgreementBalanceSegmentEventAdjustmentRq.class.getName() + '@' + Integer.toHexString(System.identityHashCode(request)) + "[adjustmentEvent=" + adjustmentEvent + "]";
+        assertEquals(expectedString, request.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        TSvcAddCreditCardAgreementBalanceSegmentEventAdjustmentRq anotherRequest = new TSvcAddCreditCardAgreementBalanceSegmentEventAdjustmentRq();
+        request.setAdjustmentEvent(adjustmentEvent);
+        anotherRequest.setAdjustmentEvent(adjustmentEvent);
+
+        assertEquals(request.hashCode(), anotherRequest.hashCode());
+    }
+
+    @Test
+    public void testEquals_SameObject() {
+        assertTrue(request.equals(request));
+    }
+
+    @Test
+    public void testEquals_DifferentClass() {
+        assertFalse(request.equals(new Object()));
+    }
+
+    @Test
+    public void testEquals_NullObject() {
+        assertFalse(request.equals(null));
+    }
+
+    @Test
+    public void testEquals_DifferentAdjustmentEvent() {
+        TCCAAPIBalanceSegmentEventAdjustmentInfo differentAdjustmentEvent = new TCCAAPIBalanceSegmentEventAdjustmentInfo();
+        request.setAdjustmentEvent(adjustmentEvent);
+        TSvcAddCreditCardAgreementBalanceSegmentEventAdjustmentRq differentRequest = new TSvcAddCreditCardAgreementBalanceSegmentEventAdjustmentRq();
+        differentRequest.setAdjustmentEvent(differentAdjustmentEvent);
+
+        assertFalse(request.equals(differentRequest));
+    }
+
+    @Test
+    public void testEquals_SameAdjustmentEvent() {
+        request.setAdjustmentEvent(adjustmentEvent);
+        TSvcAddCreditCardAgreementBalanceSegmentEventAdjustmentRq sameRequest = new TSvcAddCreditCardAgreementBalanceSegmentEventAdjustmentRq();
+        sameRequest.setAdjustmentEvent(adjustmentEvent);
+
+        assertTrue(request.equals(sameRequest));
+    }
+}

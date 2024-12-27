@@ -1,0 +1,118 @@
+package com.td.mbna.msec.midtier.offers;
+
+import com.td.mbna.msec.midtier.offers.payload.requestcashadvanceregistration.RequestCashAdvanceRegistrationRequest;
+import com.td.mbna.msec.midtier.offers.payload.requestcashadvanceregistration.RequestCashAdvanceRegistrationResponse;
+import com.td.mbna.msec.midtier.service.MsecValidator;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import com.td.mbna.msec.midtier.util.UuidUtil;
+import com.td.mbna.msec.midtier.util.ods.OdsHelper;
+import com.td.mbna.msec.midtier.util.services.BackEndSrvcUtil;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+import javax.xml.bind.JAXBContext;
+import java.util.HashMap;
+import java.util.Map;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestCashAdvanceRegistrationOperationTest {
+
+    @Mock
+    private MbnaOFP mbnaOFP;
+
+    @Mock
+    private MsecValidator msecValidator;
+
+    @Mock
+    private OdsHelper odsHelper;
+
+    @Mock
+    private BackEndSrvcUtil backEndSrvcUtil;
+
+    @Mock
+    private RequestCashAdvanceRegistrationRequest request;
+
+    @Mock
+    private RequestCashAdvanceRegistrationResponse response;
+
+    @InjectMocks
+    private RequestCashAdvanceRegistrationOperation requestCashAdvanceRegistrationOperation;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testInvokeServiceSuccess() throws Exception {
+        String accountNumber = "123456";
+        String customerId = "7891011";
+        String[] token = {"token"};
+
+        when(request.getAcctNum()).thenReturn(accountNumber);
+        when(request.getCustId()).thenReturn(customerId);
+        when(request.getRequestPayload()).thenReturn(mock(RequestCashAdvanceRegistrationRequest.Payload.class));
+        when(mbnaOFP.updateOfferDisposition(anyMap(), eq(token[0]))).thenReturn(null);
+        when(BackEndSrvcUtil.invokeService(anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyMap(), eq(null), eq(BackEndSrvcUtil.TDOperation.TdOfferFulfillmentService_requestCashAdvanceRegistration), eq(JAXBContext.class)))
+                .thenReturn(response);
+        when(UuidUtil.genUuid()).thenReturn("uuid123");
+
+        RequestCashAdvanceRegistrationResponse result = requestCashAdvanceRegistrationOperation.invokeService(request, token);
+
+        assertNotNull(result);
+        verify(mbnaOFP, times(1)).updateOfferDisposition(anyMap(), eq(token[0]));
+        verify(BackEndSrvcUtil, times(1)).invokeService(anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyMap(), eq(null), eq(BackEndSrvcUtil.TDOperation.TdOfferFulfillmentService_requestCashAdvanceRegistration), eq(JAXBContext.class));
+    }
+
+    @Test
+    void testInvokeServiceNullRequest() {
+        String[] token = {"token"};
+        RequestCashAdvanceRegistrationResponse result = requestCashAdvanceRegistrationOperation.invokeService(null, token);
+        assertNull(result);
+    }
+
+    @Test
+    void testInvokeServiceException() throws Exception {
+        String accountNumber = "123456";
+        String customerId = "7891011";
+        String[] token = {"token"};
+
+        when(request.getAcctNum()).thenReturn(accountNumber);
+        when(request.getCustId()).thenReturn(customerId);
+        when(request.getRequestPayload()).thenReturn(mock(RequestCashAdvanceRegistrationRequest.Payload.class));
+        when(mbnaOFP.updateOfferDisposition(anyMap(), eq(token[0]))).thenThrow(new RuntimeException("Test Exception"));
+
+        assertThrows(Exception.class, () -> requestCashAdvanceRegistrationOperation.invokeService(request, token));
+    }
+
+    @Test
+    void testRequiresDisclosureConsent() {
+        assertTrue(requestCashAdvanceRegistrationOperation.requiresDisclosureConsent());
+    }
+
+    @Test
+    void testGetConsentDisclosureFailedMsgCode() {
+        assertEquals("MS542", requestCashAdvanceRegistrationOperation.getConsentDisclosureFailedMsgCode());
+    }
+
+    @Test
+    void testGenerateAutoComment() {
+        assertFalse(requestCashAdvanceRegistrationOperation.generateAutoComment());
+    }
+
+    @Test
+    void testCreateAutoComment() {
+        assertNull(requestCashAdvanceRegistrationOperation.createAutoComment(mock(RequestCashAdvanceRegistrationRequest.class), mock(RequestCashAdvanceRegistrationResponse.class)));
+    }
+
+    @Test
+    void testGetEmailInfoBean() {
+        assertNull(requestCashAdvanceRegistrationOperation.getEmailInfoBean(mock(RequestCashAdvanceRegistrationRequest.class), mock(RequestCashAdvanceRegistrationResponse.class)));
+    }
+
+    @Test
+    void testGetValidator() {
+        assertNotNull(requestCashAdvanceRegistrationOperation.getValidator());
+    }
+}

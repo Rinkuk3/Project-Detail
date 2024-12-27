@@ -1,0 +1,155 @@
+package com.td.mbna.msec.midtier.transfer.payload;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class BalanceTransferToCreditorSummaryTypeTest {
+
+    private BalanceTransferToCreditorSummaryType summary;
+
+    @BeforeEach
+    void setUp() {
+        summary = new BalanceTransferToCreditorSummaryType();
+    }
+
+    @Test
+    void testGetAndSetTransferAmt() {
+        BigDecimal transferAmt = new BigDecimal("1000.50");
+        summary.setTransferAmt(transferAmt);
+        assertEquals(transferAmt, summary.getTransferAmt());
+    }
+
+    @Test
+    void testGetAndSetTransferFee() {
+        BigDecimal transferFee = new BigDecimal("50.00");
+        summary.setTransferFee(transferFee);
+        assertEquals(transferFee, summary.getTransferFee());
+    }
+
+    @Test
+    void testGetAndSetCreditRemaining() {
+        BigDecimal creditRemaining = new BigDecimal("950.50");
+        summary.setCreditRemaining(creditRemaining);
+        assertEquals(creditRemaining, summary.getCreditRemaining());
+    }
+
+    @Test
+    void testToString() {
+        BigDecimal transferAmt = new BigDecimal("1000.50");
+        BigDecimal transferFee = new BigDecimal("50.00");
+        BigDecimal creditRemaining = new BigDecimal("950.50");
+
+        summary.setTransferAmt(transferAmt);
+        summary.setTransferFee(transferFee);
+        summary.setCreditRemaining(creditRemaining);
+
+        String expectedString = "com.td.mbna.msec.midtier.transfer.payload.BalanceTransferToCreditorSummaryType@" +
+                Integer.toHexString(summary.hashCode()) +
+                "[transferAmt=1000.50,transferFee=50.00,creditRemaining=950.50]";
+
+        assertEquals(expectedString, summary.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        BigDecimal transferAmt = new BigDecimal("1000.50");
+        BigDecimal transferFee = new BigDecimal("50.00");
+        BigDecimal creditRemaining = new BigDecimal("950.50");
+
+        summary.setTransferAmt(transferAmt);
+        summary.setTransferFee(transferFee);
+        summary.setCreditRemaining(creditRemaining);
+
+        int expectedHashCode = summary.hashCode();
+
+        BalanceTransferToCreditorSummaryType anotherSummary = new BalanceTransferToCreditorSummaryType();
+        anotherSummary.setTransferAmt(transferAmt);
+        anotherSummary.setTransferFee(transferFee);
+        anotherSummary.setCreditRemaining(creditRemaining);
+
+        assertEquals(expectedHashCode, anotherSummary.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        BigDecimal transferAmt = new BigDecimal("1000.50");
+        BigDecimal transferFee = new BigDecimal("50.00");
+        BigDecimal creditRemaining = new BigDecimal("950.50");
+
+        summary.setTransferAmt(transferAmt);
+        summary.setTransferFee(transferFee);
+        summary.setCreditRemaining(creditRemaining);
+
+        BalanceTransferToCreditorSummaryType anotherSummary = new BalanceTransferToCreditorSummaryType();
+        anotherSummary.setTransferAmt(transferAmt);
+        anotherSummary.setTransferFee(transferFee);
+        anotherSummary.setCreditRemaining(creditRemaining);
+
+        assertTrue(summary.equals(anotherSummary));
+
+        // Test different transferAmt
+        anotherSummary.setTransferAmt(new BigDecimal("1200.00"));
+        assertFalse(summary.equals(anotherSummary));
+
+        // Test different transferFee
+        anotherSummary.setTransferAmt(transferAmt);
+        anotherSummary.setTransferFee(new BigDecimal("75.00"));
+        assertFalse(summary.equals(anotherSummary));
+
+        // Test different creditRemaining
+        anotherSummary.setTransferFee(transferFee);
+        anotherSummary.setCreditRemaining(new BigDecimal("900.00"));
+        assertFalse(summary.equals(anotherSummary));
+
+        // Test null value
+        assertFalse(summary.equals(null));
+
+        // Test different object type
+        assertFalse(summary.equals(new Object()));
+    }
+
+    @Test
+    void testEqualsWithSameReference() {
+        BigDecimal transferAmt = new BigDecimal("1000.50");
+        BigDecimal transferFee = new BigDecimal("50.00");
+        BigDecimal creditRemaining = new BigDecimal("950.50");
+
+        summary.setTransferAmt(transferAmt);
+        summary.setTransferFee(transferFee);
+        summary.setCreditRemaining(creditRemaining);
+
+        assertTrue(summary.equals(summary));
+    }
+
+    @Test
+    void testEqualsWithNullValues() {
+        summary.setTransferAmt(null);
+        summary.setTransferFee(null);
+        summary.setCreditRemaining(null);
+
+        BalanceTransferToCreditorSummaryType anotherSummary = new BalanceTransferToCreditorSummaryType();
+        anotherSummary.setTransferAmt(null);
+        anotherSummary.setTransferFee(null);
+        anotherSummary.setCreditRemaining(null);
+
+        assertTrue(summary.equals(anotherSummary));
+    }
+
+    @Test
+    void testHashCodeWithNullValues() {
+        summary.setTransferAmt(null);
+        summary.setTransferFee(null);
+        summary.setCreditRemaining(null);
+
+        BalanceTransferToCreditorSummaryType anotherSummary = new BalanceTransferToCreditorSummaryType();
+        anotherSummary.setTransferAmt(null);
+        anotherSummary.setTransferFee(null);
+        anotherSummary.setCreditRemaining(null);
+
+        assertEquals(summary.hashCode(), anotherSummary.hashCode());
+    }
+}

@@ -1,0 +1,72 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class PartialUpdateCreditCardAgreementRqTest {
+
+    @Test
+    public void testGettersAndSetters() {
+        PartialUpdateCreditCardAgreementRq request = new PartialUpdateCreditCardAgreementRq();
+        CreditCardAgreement creditCardAgreement = new CreditCardAgreement();
+
+        // Test setter and getter methods
+        request.setCreditCardAgreement(creditCardAgreement);
+        assertEquals(creditCardAgreement, request.getCreditCardAgreement());
+
+        // Test setter with null value
+        request.setCreditCardAgreement(null);
+        assertNull(request.getCreditCardAgreement());
+    }
+
+    @Test
+    public void testToString() {
+        PartialUpdateCreditCardAgreementRq request = new PartialUpdateCreditCardAgreementRq();
+        CreditCardAgreement creditCardAgreement = new CreditCardAgreement();
+        request.setCreditCardAgreement(creditCardAgreement);
+
+        String expectedString = "com.td.api.mbcca.creditcard.request.PartialUpdateCreditCardAgreementRq@" + Integer.toHexString(request.hashCode()) + "[creditCardAgreement=" + creditCardAgreement + "]";
+        assertTrue(request.toString().contains("creditCardAgreement"));
+    }
+
+    @Test
+    public void testHashCodeAndEquals() {
+        PartialUpdateCreditCardAgreementRq request1 = new PartialUpdateCreditCardAgreementRq();
+        CreditCardAgreement creditCardAgreement1 = new CreditCardAgreement();
+        request1.setCreditCardAgreement(creditCardAgreement1);
+
+        PartialUpdateCreditCardAgreementRq request2 = new PartialUpdateCreditCardAgreementRq();
+        CreditCardAgreement creditCardAgreement2 = new CreditCardAgreement();
+        request2.setCreditCardAgreement(creditCardAgreement2);
+
+        PartialUpdateCreditCardAgreementRq request3 = new PartialUpdateCreditCardAgreementRq();
+        request3.setCreditCardAgreement(null);
+
+        // Test equality
+        assertTrue(request1.equals(request2));  // Same CreditCardAgreement object
+        assertFalse(request1.equals(request3)); // Different creditCardAgreement value (one is null)
+
+        // Test hashCode consistency
+        assertEquals(request1.hashCode(), request2.hashCode());
+        assertNotEquals(request1.hashCode(), request3.hashCode());
+    }
+
+    @Test
+    public void testEqualsNull() {
+        PartialUpdateCreditCardAgreementRq request = new PartialUpdateCreditCardAgreementRq();
+        CreditCardAgreement creditCardAgreement = new CreditCardAgreement();
+        request.setCreditCardAgreement(creditCardAgreement);
+
+        // Test equality with null
+        assertFalse(request.equals(null));
+    }
+
+    @Test
+    public void testEqualsDifferentClass() {
+        PartialUpdateCreditCardAgreementRq request = new PartialUpdateCreditCardAgreementRq();
+        CreditCardAgreement creditCardAgreement = new CreditCardAgreement();
+        request.setCreditCardAgreement(creditCardAgreement);
+
+        // Test equality with object of different class
+        Object obj = new Object();
+        assertFalse(request.equals(obj));
+    }
+}

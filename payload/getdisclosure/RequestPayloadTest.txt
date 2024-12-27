@@ -1,0 +1,105 @@
+package com.td.mbna.msec.midtier.disclosure.payload.getdisclosure;
+
+import com.td.mbna.msec.midtier.types.common.DisclosureInputType;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class RequestPayloadTest {
+
+    @Test
+    public void testGetDisclosureType() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setDisclosureType("TestDisclosureType");
+        assertEquals("TestDisclosureType", requestPayload.getDisclosureType());
+    }
+
+    @Test
+    public void testSetDisclosureType() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setDisclosureType("TestDisclosureType");
+        assertEquals("TestDisclosureType", requestPayload.getDisclosureType());
+    }
+
+    @Test
+    public void testGetDisclosureInput() {
+        RequestPayload requestPayload = new RequestPayload();
+        DisclosureInputType disclosureInput = new DisclosureInputType();
+        requestPayload.setDisclosureInput(disclosureInput);
+        assertEquals(disclosureInput, requestPayload.getDisclosureInput());
+    }
+
+    @Test
+    public void testSetDisclosureInput() {
+        RequestPayload requestPayload = new RequestPayload();
+        DisclosureInputType disclosureInput = new DisclosureInputType();
+        requestPayload.setDisclosureInput(disclosureInput);
+        assertEquals(disclosureInput, requestPayload.getDisclosureInput());
+    }
+
+    @Test
+    public void testToString() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setDisclosureType("TestDisclosureType");
+        DisclosureInputType disclosureInput = new DisclosureInputType();
+        requestPayload.setDisclosureInput(disclosureInput);
+
+        String result = requestPayload.toString();
+        assertNotNull(result);
+        assertTrue(result.contains("disclosureType"));
+        assertTrue(result.contains("disclosureInput"));
+    }
+
+    @Test
+    public void testHashCode() {
+        RequestPayload requestPayload = new RequestPayload();
+        int hashCode = requestPayload.hashCode();
+        assertNotEquals(0, hashCode);
+    }
+
+    @Test
+    public void testEquals_SameObject() {
+        RequestPayload requestPayload = new RequestPayload();
+        assertTrue(requestPayload.equals(requestPayload));
+    }
+
+    @Test
+    public void testEquals_Null() {
+        RequestPayload requestPayload = new RequestPayload();
+        assertFalse(requestPayload.equals(null));
+    }
+
+    @Test
+    public void testEquals_DifferentClass() {
+        RequestPayload requestPayload = new RequestPayload();
+        assertFalse(requestPayload.equals(new Object()));
+    }
+
+    @Test
+    public void testEquals_SameValues() {
+        RequestPayload requestPayload1 = new RequestPayload();
+        RequestPayload requestPayload2 = new RequestPayload();
+        requestPayload1.setDisclosureType("TestDisclosureType");
+        requestPayload2.setDisclosureType("TestDisclosureType");
+
+        DisclosureInputType disclosureInput = new DisclosureInputType();
+        requestPayload1.setDisclosureInput(disclosureInput);
+        requestPayload2.setDisclosureInput(disclosureInput);
+
+        assertTrue(requestPayload1.equals(requestPayload2));
+    }
+
+    @Test
+    public void testEquals_DifferentValues() {
+        RequestPayload requestPayload1 = new RequestPayload();
+        RequestPayload requestPayload2 = new RequestPayload();
+        requestPayload1.setDisclosureType("TestDisclosureType");
+        requestPayload2.setDisclosureType("DifferentType");
+
+        DisclosureInputType disclosureInput = new DisclosureInputType();
+        requestPayload1.setDisclosureInput(disclosureInput);
+        requestPayload2.setDisclosureInput(disclosureInput);
+
+        assertFalse(requestPayload1.equals(requestPayload2));
+    }
+}

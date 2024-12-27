@@ -1,0 +1,75 @@
+package com.td.api.mbnaap.common;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class TransactionTest {
+
+    @Test
+    void testGettersAndSetters() {
+        Transaction transaction = new Transaction();
+
+        CreditCardAgreementAltkey creditCardAgreementAltkey = new CreditCardAgreementAltkey();
+        creditCardAgreementAltkey.setCardNum("123456789");
+        creditCardAgreementAltkey.setAccountNum("987654321");
+
+        transaction.setCreditCardAgreementAltkey(creditCardAgreementAltkey);
+        transaction.setTransactionId("TXN12345");
+        transaction.setStatusCd("COMPLETED");
+        transaction.setTransactionDt("2024-12-23");
+        transaction.setTransactionAmt(150.75);
+
+        assertEquals(creditCardAgreementAltkey, transaction.getCreditCardAgreementAltkey());
+        assertEquals("TXN12345", transaction.getTransactionId());
+        assertEquals("COMPLETED", transaction.getStatusCd());
+        assertEquals("2024-12-23", transaction.getTransactionDt());
+        assertEquals(150.75, transaction.getTransactionAmt());
+    }
+
+    @Test
+    void testToString() {
+        Transaction transaction = new Transaction();
+
+        CreditCardAgreementAltkey creditCardAgreementAltkey = new CreditCardAgreementAltkey();
+        creditCardAgreementAltkey.setCardNum("123456789");
+        creditCardAgreementAltkey.setAccountNum("987654321");
+
+        transaction.setCreditCardAgreementAltkey(creditCardAgreementAltkey);
+        transaction.setTransactionId("TXN12345");
+        transaction.setStatusCd("COMPLETED");
+        transaction.setTransactionDt("2024-12-23");
+        transaction.setTransactionAmt(150.75);
+
+        String expected = "Transaction(creditCardAgreementAltkey=CreditCardAgreementAltkey(cardNum=123456789, cardNumMasked=null, accountNum=987654321, accountNumMasked=null, key=null), transactionId=TXN12345, statusCd=COMPLETED, transactionDt=2024-12-23, transactionAmt=150.75)";
+        assertEquals(expected, transaction.toString());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        Transaction transaction1 = new Transaction();
+
+        CreditCardAgreementAltkey creditCardAgreementAltkey = new CreditCardAgreementAltkey();
+        creditCardAgreementAltkey.setCardNum("123456789");
+        creditCardAgreementAltkey.setAccountNum("987654321");
+
+        transaction1.setCreditCardAgreementAltkey(creditCardAgreementAltkey);
+        transaction1.setTransactionId("TXN12345");
+        transaction1.setStatusCd("COMPLETED");
+        transaction1.setTransactionDt("2024-12-23");
+        transaction1.setTransactionAmt(150.75);
+
+        Transaction transaction2 = new Transaction();
+        transaction2.setCreditCardAgreementAltkey(creditCardAgreementAltkey);
+        transaction2.setTransactionId("TXN12345");
+        transaction2.setStatusCd("COMPLETED");
+        transaction2.setTransactionDt("2024-12-23");
+        transaction2.setTransactionAmt(150.75);
+
+        assertTrue(transaction1.equals(transaction2));
+        assertEquals(transaction1.hashCode(), transaction2.hashCode());
+
+        transaction2.setTransactionId("TXN67890"); // Modify one field
+        assertFalse(transaction1.equals(transaction2));
+    }
+}

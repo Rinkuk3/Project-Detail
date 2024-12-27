@@ -1,0 +1,79 @@
+package com.td.api.mbcca.custnote.request;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class AddCCAMemoRequestTest {
+
+    @Test
+    void testGettersAndSetters() {
+        AddCCAMemoRequest addCCAMemoRequest = new AddCCAMemoRequest();
+        
+        Memo memo = new Memo();
+        addCCAMemoRequest.setMemo(memo);
+        assertEquals(memo, addCCAMemoRequest.getMemo());
+
+        addCCAMemoRequest.setMemo(null);
+        assertNull(addCCAMemoRequest.getMemo());
+    }
+
+    @Test
+    void testToString() {
+        AddCCAMemoRequest addCCAMemoRequest = new AddCCAMemoRequest();
+        
+        Memo memo = new Memo();
+        addCCAMemoRequest.setMemo(memo);
+
+        String expectedString = "com.td.api.mbcca.custnote.request.AddCCAMemoRequest@" + 
+            Integer.toHexString(addCCAMemoRequest.hashCode()) + "[memo=" + memo + "]";
+
+        assertEquals(expectedString, addCCAMemoRequest.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        AddCCAMemoRequest addCCAMemoRequest1 = new AddCCAMemoRequest();
+        AddCCAMemoRequest addCCAMemoRequest2 = new AddCCAMemoRequest();
+        
+        Memo memo = new Memo();
+        addCCAMemoRequest1.setMemo(memo);
+        addCCAMemoRequest2.setMemo(memo);
+
+        assertEquals(addCCAMemoRequest1.hashCode(), addCCAMemoRequest2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        AddCCAMemoRequest addCCAMemoRequest1 = new AddCCAMemoRequest();
+        AddCCAMemoRequest addCCAMemoRequest2 = new AddCCAMemoRequest();
+        AddCCAMemoRequest addCCAMemoRequest3 = new AddCCAMemoRequest();
+
+        Memo memo = new Memo();
+        addCCAMemoRequest1.setMemo(memo);
+        addCCAMemoRequest2.setMemo(memo);
+        addCCAMemoRequest3.setMemo(null);
+
+        // Equal comparison
+        assertTrue(addCCAMemoRequest1.equals(addCCAMemoRequest2));
+
+        // Comparing different objects
+        assertFalse(addCCAMemoRequest1.equals(addCCAMemoRequest3));
+
+        // Comparing with null
+        assertFalse(addCCAMemoRequest1.equals(null));
+
+        // Comparing with different class type
+        assertFalse(addCCAMemoRequest1.equals(new Object()));
+    }
+
+    @Test
+    void testEquals_SameObject() {
+        AddCCAMemoRequest addCCAMemoRequest = new AddCCAMemoRequest();
+        
+        Memo memo = new Memo();
+        addCCAMemoRequest.setMemo(memo);
+
+        assertTrue(addCCAMemoRequest.equals(addCCAMemoRequest));
+    }
+
+}

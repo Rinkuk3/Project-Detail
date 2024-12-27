@@ -1,0 +1,50 @@
+package com.td.mbna.msec.midtier.statement.payload.getStatementListForYear;
+
+import com.td.mbna.msec.midtier.statement.payload.HistoryStatementListType;
+import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ResponsePayloadTest {
+
+    @Test
+    void testGetAndSetHistoryStatementList() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        
+        // Create a mock HistoryStatementListType object
+        HistoryStatementListType historyStatement = new HistoryStatementListType();
+        
+        // Set value
+        responsePayload.setHistoryStatementList(Collections.singletonList(historyStatement));
+        
+        // Assert that the getter returns the correct value
+        assertNotNull(responsePayload.getHistoryStatementList());
+        assertEquals(1, responsePayload.getHistoryStatementList().size());
+        assertSame(historyStatement, responsePayload.getHistoryStatementList().get(0));
+    }
+
+    @Test
+    void testSetHistoryStatementListToNull() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        
+        // Set value to null
+        responsePayload.setHistoryStatementList(null);
+        
+        // Assert that the getter returns null
+        assertNull(responsePayload.getHistoryStatementList());
+    }
+
+    @Test
+    void testSetEmptyHistoryStatementList() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        
+        // Set empty list
+        responsePayload.setHistoryStatementList(Collections.emptyList());
+        
+        // Assert that the getter returns an empty list
+        assertNotNull(responsePayload.getHistoryStatementList());
+        assertTrue(responsePayload.getHistoryStatementList().isEmpty());
+    }
+}

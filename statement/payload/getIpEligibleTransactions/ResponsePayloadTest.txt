@@ -1,0 +1,49 @@
+package com.td.mbna.msec.midtier.statement.payload.getIpEligibleTransactions;
+
+import com.td.mbna.msec.midtier.types.common.StmtActivityType;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ResponsePayloadTest {
+
+    @Test
+    void testGetAndSetIpEligibleTransactions() {
+        ResponsePayload responsePayload = new ResponsePayload();
+
+        StmtActivityType stmtActivityType = new StmtActivityType();
+        List<StmtActivityType> stmtActivityTypeList = List.of(stmtActivityType);
+
+        responsePayload.setIpEligibleTransactions(stmtActivityTypeList);
+
+        List<StmtActivityType> result = responsePayload.getIpEligibleTransactions();
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(stmtActivityType, result.get(0));
+    }
+
+    @Test
+    void testSetIpEligibleTransactionsWithEmptyList() {
+        ResponsePayload responsePayload = new ResponsePayload();
+
+        List<StmtActivityType> emptyList = new ArrayList<>();
+        responsePayload.setIpEligibleTransactions(emptyList);
+
+        assertNotNull(responsePayload.getIpEligibleTransactions());
+        assertTrue(responsePayload.getIpEligibleTransactions().isEmpty());
+    }
+
+    @Test
+    void testToString() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        
+        StmtActivityType stmtActivityType = new StmtActivityType();
+        responsePayload.setIpEligibleTransactions(List.of(stmtActivityType));
+
+        String expectedString = "ResponsePayload{ipEligibleTransactions=" + List.of(stmtActivityType) + '}';
+        assertEquals(expectedString, responsePayload.toString());
+    }
+}

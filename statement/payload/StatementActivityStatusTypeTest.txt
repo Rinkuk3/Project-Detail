@@ -1,0 +1,68 @@
+package com.td.mbna.msec.midtier.statement.payload;
+
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class StatementActivityStatusTypeTest {
+
+    @Test
+    void testSetAndGetStatementEndDate() {
+        StatementActivityStatusType status = new StatementActivityStatusType();
+        
+        // Test setting and getting statementEndDate
+        status.setStatementEndDate("2024-12-31");
+        assertEquals("2024-12-31", status.getStatementEndDate());
+    }
+
+    @Test
+    void testSetAndGetStatementPaymentDueDate() {
+        StatementActivityStatusType status = new StatementActivityStatusType();
+        
+        // Test setting and getting statementPaymentDueDate
+        status.setStatementPaymentDueDate("2025-01-15");
+        assertEquals("2025-01-15", status.getStatementPaymentDueDate());
+    }
+
+    @Test
+    void testSetAndGetActivityAvailable() {
+        StatementActivityStatusType status = new StatementActivityStatusType();
+        
+        // Test setting and getting activityAvailable
+        status.setActivityAvailable(true);
+        assertTrue(status.getActivityAvailable());
+        
+        status.setActivityAvailable(false);
+        assertFalse(status.getActivityAvailable());
+    }
+
+    @Test
+    void testSetAndGetStatementBalance() {
+        StatementActivityStatusType status = new StatementActivityStatusType();
+        BigDecimal balance = new BigDecimal("150.75");
+        
+        // Test setting and getting statementBalance
+        status.setStatementBalance(balance);
+        assertEquals(balance, status.getStatementBalance());
+    }
+
+    @Test
+    void testSetAndGetAllFields() {
+        StatementActivityStatusType status = new StatementActivityStatusType();
+        BigDecimal balance = new BigDecimal("150.75");
+
+        // Set all fields
+        status.setStatementEndDate("2024-12-31");
+        status.setStatementPaymentDueDate("2025-01-15");
+        status.setActivityAvailable(true);
+        status.setStatementBalance(balance);
+        
+        // Validate all fields
+        assertEquals("2024-12-31", status.getStatementEndDate());
+        assertEquals("2025-01-15", status.getStatementPaymentDueDate());
+        assertTrue(status.getActivityAvailable());
+        assertEquals(balance, status.getStatementBalance());
+    }
+}

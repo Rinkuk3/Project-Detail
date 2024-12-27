@@ -1,0 +1,82 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestInstallmentPlanResponseTest {
+
+    @Test
+    void testSetGetResponsePayload() {
+        RequestInstallmentPlanResponse response = new RequestInstallmentPlanResponse();
+        ResponsePayload payload = new ResponsePayload();
+        response.setResponsePayload(payload);
+        
+        assertEquals(payload, response.getResponsePayload());
+    }
+
+    @Test
+    void testToString() {
+        RequestInstallmentPlanResponse response = new RequestInstallmentPlanResponse();
+        response.setStatus("status");
+        response.setErrorMsgs("errorMsgs");
+
+        ResponsePayload payload = new ResponsePayload();
+        response.setResponsePayload(payload);
+
+        String expectedString = "RequestInstallmentPlanResponse@" + Integer.toHexString(System.identityHashCode(response)) + 
+                                "[status=status,errorMsgs=errorMsgs,responsePayload=" + payload + "]";
+        
+        assertEquals(expectedString, response.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        RequestInstallmentPlanResponse response1 = new RequestInstallmentPlanResponse();
+        RequestInstallmentPlanResponse response2 = new RequestInstallmentPlanResponse();
+        
+        ResponsePayload payload = new ResponsePayload();
+        response1.setResponsePayload(payload);
+        response2.setResponsePayload(payload);
+        
+        assertEquals(response1.hashCode(), response2.hashCode());
+        
+        response1.setStatus("status");
+        assertNotEquals(response1.hashCode(), response2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        RequestInstallmentPlanResponse response1 = new RequestInstallmentPlanResponse();
+        RequestInstallmentPlanResponse response2 = new RequestInstallmentPlanResponse();
+        
+        ResponsePayload payload = new ResponsePayload();
+        response1.setResponsePayload(payload);
+        response2.setResponsePayload(payload);
+        
+        assertEquals(response1, response2);
+        
+        response1.setStatus("status");
+        assertNotEquals(response1, response2);
+    }
+
+    @Test
+    void testNotEquals() {
+        RequestInstallmentPlanResponse response1 = new RequestInstallmentPlanResponse();
+        RequestInstallmentPlanResponse response2 = new RequestInstallmentPlanResponse();
+        
+        ResponsePayload payload = new ResponsePayload();
+        response1.setResponsePayload(payload);
+        response2.setResponsePayload(payload);
+        
+        response1.setStatus("status");
+        
+        assertNotEquals(response1, response2);
+    }
+
+    @Test
+    void testDefaultValues() {
+        RequestInstallmentPlanResponse response = new RequestInstallmentPlanResponse();
+        
+        assertNull(response.getResponsePayload());
+        assertNull(response.getStatus());
+        assertNull(response.getErrorMsgs());
+    }
+}

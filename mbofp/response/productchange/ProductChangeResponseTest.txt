@@ -1,0 +1,64 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class ProductChangeResponseTest {
+
+    private ProductChangeResponse response;
+
+    @BeforeEach
+    void setUp() {
+        response = new ProductChangeResponse();
+    }
+
+    @Test
+    void testGetAndSetEventId() {
+        String eventId = "event123";
+        response.setEventId(eventId);
+        assertEquals(eventId, response.getEventId());
+    }
+
+    @Test
+    void testToString() {
+        response.setEventId("event123");
+        
+        String expectedString = "com.td.api.mbofp.response.productchange.ProductChangeResponse@" +
+                                Integer.toHexString(response.hashCode()) +
+                                "[eventId=event123]";
+        assertEquals(expectedString, response.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        response.setEventId("event123");
+        
+        int expectedHashCode = 1;
+        expectedHashCode = 31 * expectedHashCode + (response.getEventId() == null ? 0 : response.getEventId().hashCode());
+        
+        assertEquals(expectedHashCode, response.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        response.setEventId("event123");
+
+        // Test equality with the same object
+        assertTrue(response.equals(response));
+
+        // Test equality with another object having the same eventId
+        ProductChangeResponse anotherResponse = new ProductChangeResponse();
+        anotherResponse.setEventId("event123");
+        assertTrue(response.equals(anotherResponse));
+
+        // Test inequality with a different eventId
+        ProductChangeResponse differentResponse = new ProductChangeResponse();
+        differentResponse.setEventId("event456");
+        assertFalse(response.equals(differentResponse));
+
+        // Test inequality with null
+        assertFalse(response.equals(null));
+
+        // Test inequality with an object of a different class
+        assertFalse(response.equals(new Object()));
+    }
+}

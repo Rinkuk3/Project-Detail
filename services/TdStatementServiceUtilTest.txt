@@ -1,0 +1,134 @@
+package com.td.mbna.msec.midtier.services;
+
+import com.td.api.dms.common.Additionalstatus;
+import com.td.api.dms.common.Status;
+import com.td.api.dms.request.*;
+import com.td.api.dms.response.DocumentList;
+import com.td.mbna.msec.midtier.util.BackEndSrvcUtil;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import com.td.mbna.msec.midtier.util.services.TDRestServiceUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class TdStatementServiceUtilTest {
+
+    @Mock
+    private TDRestServiceUtil mockTdRestServiceUtil;
+
+    @Mock
+    private MbnaLogger mockLogger;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        TdStatementServiceUtil.setLogger(mockLogger);
+    }
+
+    @Test
+    void testSearchInserts_success() throws Exception {
+        // Prepare mock values
+        String insertId = "12345";
+        String dmApiPortal = "TestPortal";
+        String insertsFolder = "InsertsFolder";
+        String token = "testToken";
+        DocumentList mockDocumentList = mock(DocumentList.class);
+
+        // Mock the TDRestServiceUtil response
+        when(mockTdRestServiceUtil.invokeRestService(anyString(), any(), eq(DocumentList.class), eq(token)))
+                .thenReturn(mockDocumentList);
+
+        // Call the method
+        DocumentList result = TdStatementServiceUtil.searchInserts(insertId, dmApiPortal, insertsFolder, token, mockTdRestServiceUtil);
+
+        // Assert the result
+        assertNotNull(result);
+        verify(mockTdRestServiceUtil).invokeRestService(eq(BackEndSrvcUtil.TDOperation.TdDocuManagementService_search), any(), eq(DocumentList.class), eq(token));
+    }
+
+    @Test
+    void testSearchInserts_error() throws Exception {
+        // Prepare mock values
+        String insertId = "12345";
+        String dmApiPortal = "TestPortal";
+        String insertsFolder = "InsertsFolder";
+        String token = "testToken";
+
+        // Mock the TDRestServiceUtil to throw an exception
+        when(mockTdRestServiceUtil.invokeRestService(anyString(), any(), eq(DocumentList.class), eq(token)))
+                .thenThrow(new Exception("Error"));
+
+        // Call the method
+        DocumentList result = TdStatementServiceUtil.searchInserts(insertId, dmApiPortal, insertsFolder, token, mockTdRestServiceUtil);
+
+        // Assert the result
+        assertNotNull(result);
+        assertNotNull(result.getStatus());
+        assertEquals(500, result.getStatus().getAdditionalStatus().get(0).getStatusCode());
+        verify(mockLogger).error(anyString(), eq("Error"), any(Exception.class));
+    }
+
+    @Test
+    void testCreateDocumentSearchRequestForInsert() {
+        // Prepare mock values
+        String insertId = "12345";
+        String dmApiPortal = "TestPortal";
+        String insertsFolder = "InsertsFolder";
+
+        // Call the method
+        DocumentSearchRequest result = TdStatementServiceUtil.createDocumentSearchRequestForInsert(insertId, dmApiPortal, insertsFolder);
+
+        // Assert the result
+        assertNotNull(result);
+        assertEquals(dmApiPortal, result.getPortal());
+        assertEquals(insertsFolder, result.getFolder());
+        assertEquals(1, result.getQuery().size());
+        assertEquals(2, result.getOrderBy().size());
+    }
+
+    @Test
+    void testCreateDocumentSearchRequest_validRequest() {
+        // Prepare mock values
+        String statementsFolder = "StatementsFolder";
+        String dmApiPortal = "TestPortal";
+        String cardNumbersList = "12345,67890";
+        String startDate = "2023-01-01";
+        String endDate = "2023-12-31";
+
+        // Call the method
+        DocumentSearchRequest result = TdStatementServiceUtil.createDocumentSearchRequest(statementsFolder, dmApiPortal, cardNumbersList, startDate, endDate);
+
+        // Assert the result
+        assertNotNull(result);
+        assertEquals(statementsFolder, result.getFolder());
+        assertEquals(dmApiPortal, result.getPortal());
+        assertEquals(2, result.getQuery().size());
+        assertNotNull(result.getQuery().get(0).getValue());
+        assertEquals(2, result.getQuery().get(1).getValue().size());
+        assertEquals("2023-01-01", result.getQuery().get(1).getValue().get(0));
+        assertEquals("2023-12-31", result.getQuery().get(1).getValue().get(1));
+    }
+
+    @Test
+    void testCreateDocumentSearchRequest_invalidCardNumbers() {
+        // Prepare mock values
+        String statementsFolder = "StatementsFolder";
+        String dmApiPortal = "TestPortal";
+        String cardNumbersList = "";
+        String startDate = "2023-01-01";
+        String endDate = "2023-12-31";
+
+        // Call the method
+        DocumentSearchRequest result = TdStatementServiceUtil.createDocumentSearchRequest(statementsFolder, dmApiPortal, cardNumbersList, startDate, endDate);
+
+        // Assert the result
+        assertNull(result);
+    }
+}

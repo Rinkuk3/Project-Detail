@@ -1,0 +1,92 @@
+package com.td.mbna.msec.midtier.eligibility.payload.getentitlementflags;
+
+import com.td.mbna.msec.midtier.types.common.CustAcctType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestPayloadTest {
+
+    private RequestPayload requestPayload;
+    private CustAcctType accountType;
+
+    @BeforeEach
+    void setUp() {
+        requestPayload = new RequestPayload();
+        accountType = new CustAcctType(); // Assuming CustAcctType has a default constructor
+    }
+
+    @Test
+    void testGetSetCustId() {
+        requestPayload.setCustId("custId");
+        assertEquals("custId", requestPayload.getCustId());
+    }
+
+    @Test
+    void testGetSetConnectId() {
+        requestPayload.setConnectId("connectId");
+        assertEquals("connectId", requestPayload.getConnectId());
+    }
+
+    @Test
+    void testGetSetEnrolledAccts() {
+        requestPayload.setEnrolledAccts(Arrays.asList(accountType));
+        assertEquals(1, requestPayload.getEnrolledAccts().size());
+        assertEquals(accountType, requestPayload.getEnrolledAccts().get(0));
+    }
+
+    @Test
+    void testToString() {
+        requestPayload.setCustId("custId");
+        requestPayload.setConnectId("connectId");
+        requestPayload.setEnrolledAccts(Arrays.asList(accountType));
+
+        String expected = "com.td.mbna.msec.midtier.eligibility.payload.getentitlementflags.RequestPayload@" +
+                Integer.toHexString(System.identityHashCode(requestPayload)) +
+                "[custId=custId,connectId=connectId,enrolledAccts=[" + accountType.toString() + "],]";
+
+        assertEquals(expected, requestPayload.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        RequestPayload requestPayload1 = new RequestPayload();
+        requestPayload1.setCustId("custId");
+        requestPayload1.setConnectId("connectId");
+        requestPayload1.setEnrolledAccts(Arrays.asList(accountType));
+
+        RequestPayload requestPayload2 = new RequestPayload();
+        requestPayload2.setCustId("custId");
+        requestPayload2.setConnectId("connectId");
+        requestPayload2.setEnrolledAccts(Arrays.asList(accountType));
+
+        assertEquals(requestPayload1.hashCode(), requestPayload2.hashCode());
+
+        requestPayload2.setCustId("newCustId");
+        assertNotEquals(requestPayload1.hashCode(), requestPayload2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        RequestPayload requestPayload1 = new RequestPayload();
+        requestPayload1.setCustId("custId");
+        requestPayload1.setConnectId("connectId");
+        requestPayload1.setEnrolledAccts(Arrays.asList(accountType));
+
+        RequestPayload requestPayload2 = new RequestPayload();
+        requestPayload2.setCustId("custId");
+        requestPayload2.setConnectId("connectId");
+        requestPayload2.setEnrolledAccts(Arrays.asList(accountType));
+
+        assertTrue(requestPayload1.equals(requestPayload2));
+
+        requestPayload2.setCustId("newCustId");
+        assertFalse(requestPayload1.equals(requestPayload2));
+
+        assertFalse(requestPayload1.equals(null));
+        assertFalse(requestPayload1.equals(new Object()));
+    }
+}

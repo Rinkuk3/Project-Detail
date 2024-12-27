@@ -1,0 +1,55 @@
+package com.td.api.mbnaap.common;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class CreditCardAgreementAltkeyTest {
+
+    @Test
+    void testGettersAndSetters() {
+        CreditCardAgreementAltkey altkey = new CreditCardAgreementAltkey();
+
+        altkey.setCardNum("1234567890123456");
+        altkey.setCardNumMasked("****5678");
+        altkey.setAccountNum("1234567890");
+        altkey.setAccountNumMasked("****7890");
+        altkey.setKey("key123");
+
+        assertEquals("1234567890123456", altkey.getCardNum());
+        assertEquals("****5678", altkey.getCardNumMasked());
+        assertEquals("1234567890", altkey.getAccountNum());
+        assertEquals("****7890", altkey.getAccountNumMasked());
+        assertEquals("key123", altkey.getKey());
+    }
+
+    @Test
+    void testToString() {
+        CreditCardAgreementAltkey altkey = new CreditCardAgreementAltkey();
+        altkey.setCardNum("1234567890123456");
+        altkey.setCardNumMasked("****5678");
+        altkey.setAccountNum("1234567890");
+        altkey.setAccountNumMasked("****7890");
+        altkey.setKey("key123");
+
+        String expected = "CreditCardAgreementAltkey(cardNum=1234567890123456, cardNumMasked=****5678, accountNum=1234567890, accountNumMasked=****7890, key=key123)";
+        assertEquals(expected, altkey.toString());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        CreditCardAgreementAltkey altkey1 = new CreditCardAgreementAltkey();
+        altkey1.setCardNum("1234567890123456");
+        altkey1.setAccountNum("1234567890");
+
+        CreditCardAgreementAltkey altkey2 = new CreditCardAgreementAltkey();
+        altkey2.setCardNum("1234567890123456");
+        altkey2.setAccountNum("1234567890");
+
+        assertTrue(altkey1.equals(altkey2));
+        assertEquals(altkey1.hashCode(), altkey2.hashCode());
+
+        altkey2.setCardNum("6543210987654321");
+        assertFalse(altkey1.equals(altkey2));
+    }
+}

@@ -1,0 +1,143 @@
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
+
+import com.td.api.mbcapd.request.retrievecapd.AgreementInquiryRequest;
+import com.td.api.mbcapd.response.retrievecapd.AgreementInquiryResponse;
+import com.td.mbna.msec.midtier.customerprofile.payload.retrievecapd.*;
+import com.td.mbna.msec.midtier.customerprofile.payload.savevaletdata.*;
+import com.td.mbna.msec.midtier.customerprofile.payload.retrievevaletdata.*;
+
+class MbnaCapdFacadeTest {
+
+    @InjectMocks
+    private MbnaCapdFacade mbnaCapdFacade;
+
+    @Mock
+    private RestTemplate restTemplate;
+
+    @Mock
+    private MbnaCapdAdaptor mbnaCapdAdaptor;
+
+    @Mock
+    private HttpHeaders headers;
+
+    private RetrieveCapdRequest retrieveCapdRequest;
+    private SaveValetDataRequest saveValetDataRequest;
+    private RetrieveValetDataRequest retrieveValetDataRequest;
+    private String token = "mockToken";
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        retrieveCapdRequest = mock(RetrieveCapdRequest.class);
+        saveValetDataRequest = mock(SaveValetDataRequest.class);
+        retrieveValetDataRequest = mock(RetrieveValetDataRequest.class);
+    }
+
+    @Test
+    void testRetrieveCapd() {
+        AgreementInquiryRequest agreementInquiryRequest = mock(AgreementInquiryRequest.class);
+        AgreementInquiryResponse agreementInquiryResponse = mock(AgreementInquiryResponse.class);
+        RetrieveCapdResponse expectedResponse = mock(RetrieveCapdResponse.class);
+        
+        when(mbnaCapdAdaptor.getRequest(retrieveCapdRequest)).thenReturn(agreementInquiryRequest);
+        when(mbnaCapdAdaptor.getResponse(agreementInquiryResponse)).thenReturn(expectedResponse);
+        
+        HttpEntity<AgreementInquiryRequest> requestEntity = new HttpEntity<>(agreementInquiryRequest, new HttpHeaders());
+        ResponseEntity<AgreementInquiryResponse> responseEntity = new ResponseEntity<>(agreementInquiryResponse, HttpStatus.OK);
+
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), eq(requestEntity), eq(AgreementInquiryResponse.class)))
+                .thenReturn(responseEntity);
+        
+        RetrieveCapdResponse result = mbnaCapdFacade.retrieveCapd(retrieveCapdRequest, token);
+        assertNotNull(result);
+    }
+
+    @Test
+    void testRetrieveCapd_withException() {
+        when(mbnaCapdAdaptor.getRequest(retrieveCapdRequest)).thenReturn(mock(AgreementInquiryRequest.class));
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(), eq(AgreementInquiryResponse.class)))
+                .thenThrow(new RuntimeException("API Error"));
+
+        RetrieveCapdResponse result = mbnaCapdFacade.retrieveCapd(retrieveCapdRequest, token);
+        assertNull(result);
+    }
+
+    @Test
+    void testSaveValetData() {
+        SaveValetDataResponse expectedResponse = new SaveValetDataResponse();
+        SaveValetDataResponsePayload responsePayload = mock(SaveValetDataResponsePayload.class);
+        expectedResponse.setResponsePayload(responsePayload);
+
+        when(saveValetDataRequest.getRequestPayload()).thenReturn(mock(SaveValetDataRequestPayload.class));
+        
+        HttpEntity<SaveValetDataRequestPayload> requestEntity = new HttpEntity<>(mock(SaveValetDataRequestPayload.class), new HttpHeaders());
+        ResponseEntity<SaveValetDataResponsePayload> responseEntity = new ResponseEntity<>(mock(SaveValetDataResponsePayload.class), HttpStatus.OK);
+
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), eq(requestEntity), eq(SaveValetDataResponsePayload.class)))
+                .thenReturn(responseEntity);
+
+        SaveValetDataResponse result = mbnaCapdFacade.saveValetData(saveValetDataRequest, token);
+        assertNotNull(result);
+    }
+
+    @Test
+    void testSaveValetData_withNullPayload() {
+        when(saveValetDataRequest.getRequestPayload()).thenReturn(null);
+        
+        SaveValetDataResponse result = mbnaCapdFacade.saveValetData(saveValetDataRequest, token);
+        assertNull(result);
+    }
+
+    @Test
+    void testSaveValetData_withException() {
+        when(saveValetDataRequest.getRequestPayload()).thenReturn(mock(SaveValetDataRequestPayload.class));
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(), eq(SaveValetDataResponsePayload.class)))
+                .thenThrow(new RuntimeException("API Error"));
+        
+        SaveValetDataResponse result = mbnaCapdFacade.saveValetData(saveValetDataRequest, token);
+        assertNull(result);
+    }
+
+    @Test
+    void testRetrieveValetData() {
+        RetrieveValetDataResponse expectedResponse = new RetrieveValetDataResponse();
+        RetrieveValetDataResponsePayload responsePayload = mock(RetrieveValetDataResponsePayload.class);
+        expectedResponse.setResponsePayload(responsePayload);
+
+        when(retrieveValetDataRequest.getRequestPayload()).thenReturn(mock(RetrieveValetDataRequestPayload.class));
+        
+        HttpEntity<RetrieveValetDataRequestPayload> requestEntity = new HttpEntity<>(mock(RetrieveValetDataRequestPayload.class), new HttpHeaders());
+        ResponseEntity<RetrieveValetDataResponsePayload> responseEntity = new ResponseEntity<>(mock(RetrieveValetDataResponsePayload.class), HttpStatus.OK);
+
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), eq(requestEntity), eq(RetrieveValetDataResponsePayload.class)))
+                .thenReturn(responseEntity);
+
+        RetrieveValetDataResponse result = mbnaCapdFacade.retrieveValetData(retrieveValetDataRequest, token);
+        assertNotNull(result);
+    }
+
+    @Test
+    void testRetrieveValetData_withException() {
+        when(retrieveValetDataRequest.getRequestPayload()).thenReturn(mock(RetrieveValetDataRequestPayload.class));
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(), eq(RetrieveValetDataResponsePayload.class)))
+                .thenThrow(new RuntimeException("API Error"));
+        
+        RetrieveValetDataResponse result = mbnaCapdFacade.retrieveValetData(retrieveValetDataRequest, token);
+        assertNull(result);
+    }
+    
+    @Test
+    void testAddAuthorizationHeader() {
+        HttpHeaders headers = mbnaCapdFacade.addAuthorizationHeader(token);
+        assertNotNull(headers);
+        assertTrue(headers.containsKey(MSECConstants.AUTHORIZATION));
+        assertEquals(token, headers.get(MSECConstants.AUTHORIZATION).get(0));
+    }
+}

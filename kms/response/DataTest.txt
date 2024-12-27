@@ -1,0 +1,101 @@
+package com.td.api.kms.response;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class DataTest {
+
+    private Data data;
+
+    @BeforeEach
+    void setUp() {
+        data = new Data();
+    }
+
+    @Test
+    void testSetAndGetEncodingSchemeTypeCd() {
+        data.setEncodingSchemeTypeCd("UTF-8");
+        assertEquals("UTF-8", data.getEncodingSchemeTypeCd());
+    }
+
+    @Test
+    void testSetAndGetPlainTxt() {
+        data.setPlainTxt("Hello World");
+        assertEquals("Hello World", data.getPlainTxt());
+    }
+
+    @Test
+    void testSetAndGetLengthCnt() {
+        data.setLengthCnt(123);
+        assertEquals(123, data.getLengthCnt());
+    }
+
+    @Test
+    void testToString() {
+        data.setEncodingSchemeTypeCd("UTF-8");
+        data.setPlainTxt("Hello World");
+        data.setLengthCnt(123);
+
+        String expectedToString = "com.td.api.kms.response.Data@" + Integer.toHexString(data.hashCode()) +
+                "[encodingSchemeTypeCd=UTF-8,plainTxt=Hello World,lengthCnt=123]";
+        assertEquals(expectedToString, data.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        Data data1 = new Data();
+        Data data2 = new Data();
+        assertEquals(data1.hashCode(), data2.hashCode());
+
+        data1.setEncodingSchemeTypeCd("UTF-8");
+        data1.setPlainTxt("Hello World");
+        data1.setLengthCnt(123);
+
+        data2.setEncodingSchemeTypeCd("UTF-8");
+        data2.setPlainTxt("Hello World");
+        data2.setLengthCnt(123);
+
+        assertEquals(data1.hashCode(), data2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        Data data1 = new Data();
+        Data data2 = new Data();
+        assertTrue(data1.equals(data2));
+
+        data1.setEncodingSchemeTypeCd("UTF-8");
+        data1.setPlainTxt("Hello World");
+        data1.setLengthCnt(123);
+
+        data2.setEncodingSchemeTypeCd("UTF-8");
+        data2.setPlainTxt("Hello World");
+        data2.setLengthCnt(123);
+
+        assertTrue(data1.equals(data2));
+
+        data2.setLengthCnt(456); // Change one field
+        assertFalse(data1.equals(data2));
+
+        data2.setPlainTxt("Goodbye World"); // Change another field
+        assertFalse(data1.equals(data2));
+
+        data2.setEncodingSchemeTypeCd("ASCII"); // Change another field
+        assertFalse(data1.equals(data2));
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        Data data1 = new Data();
+        assertFalse(data1.equals(null));
+    }
+
+    @Test
+    void testEqualsWithDifferentClass() {
+        Data data1 = new Data();
+        String str = "DifferentClass";
+        assertFalse(data1.equals(str));
+    }
+}

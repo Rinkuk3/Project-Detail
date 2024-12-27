@@ -1,0 +1,99 @@
+package com.td.api.kms.request;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class KmsExtensionTest {
+
+    private KmsExtension kmsExtension;
+
+    @BeforeEach
+    void setUp() {
+        kmsExtension = new KmsExtension();
+    }
+
+    @Test
+    void testSetAndGetInitializationVectorVal() {
+        String initializationVectorVal = "initializationVector";
+        kmsExtension.setInitializationVectorVal(initializationVectorVal);
+        assertEquals(initializationVectorVal, kmsExtension.getInitializationVectorVal());
+    }
+
+    @Test
+    void testSetAndGetAuthorizationTagVal() {
+        String authorizationTagVal = "authorizationTag";
+        kmsExtension.setAuthorizationTagVal(authorizationTagVal);
+        assertEquals(authorizationTagVal, kmsExtension.getAuthorizationTagVal());
+    }
+
+    @Test
+    void testToString() {
+        String initializationVectorVal = "initializationVector";
+        String authorizationTagVal = "authorizationTag";
+
+        kmsExtension.setInitializationVectorVal(initializationVectorVal);
+        kmsExtension.setAuthorizationTagVal(authorizationTagVal);
+
+        String expectedToString = "com.td.api.kms.request.KmsExtension@" + Integer.toHexString(kmsExtension.hashCode()) +
+                "[initializationVectorVal=" + initializationVectorVal + ",authorizationTagVal=" + authorizationTagVal + "]";
+        assertEquals(expectedToString, kmsExtension.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        KmsExtension kmsExtension1 = new KmsExtension();
+        KmsExtension kmsExtension2 = new KmsExtension();
+        assertEquals(kmsExtension1.hashCode(), kmsExtension2.hashCode());
+
+        String initializationVectorVal = "initializationVector";
+        String authorizationTagVal = "authorizationTag";
+
+        kmsExtension1.setInitializationVectorVal(initializationVectorVal);
+        kmsExtension1.setAuthorizationTagVal(authorizationTagVal);
+
+        kmsExtension2.setInitializationVectorVal(initializationVectorVal);
+        kmsExtension2.setAuthorizationTagVal(authorizationTagVal);
+
+        assertEquals(kmsExtension1.hashCode(), kmsExtension2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        KmsExtension kmsExtension1 = new KmsExtension();
+        KmsExtension kmsExtension2 = new KmsExtension();
+        assertTrue(kmsExtension1.equals(kmsExtension2));
+
+        String initializationVectorVal = "initializationVector";
+        String authorizationTagVal = "authorizationTag";
+
+        kmsExtension1.setInitializationVectorVal(initializationVectorVal);
+        kmsExtension1.setAuthorizationTagVal(authorizationTagVal);
+
+        kmsExtension2.setInitializationVectorVal(initializationVectorVal);
+        kmsExtension2.setAuthorizationTagVal(authorizationTagVal);
+
+        assertTrue(kmsExtension1.equals(kmsExtension2));
+
+        kmsExtension2.setAuthorizationTagVal("differentTag");
+        assertFalse(kmsExtension1.equals(kmsExtension2));
+
+        kmsExtension2.setAuthorizationTagVal(authorizationTagVal);
+        kmsExtension2.setInitializationVectorVal("differentVector");
+        assertFalse(kmsExtension1.equals(kmsExtension2));
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        KmsExtension kmsExtension1 = new KmsExtension();
+        assertFalse(kmsExtension1.equals(null));
+    }
+
+    @Test
+    void testEqualsWithDifferentClass() {
+        KmsExtension kmsExtension1 = new KmsExtension();
+        String str = "DifferentClass";
+        assertFalse(kmsExtension1.equals(str));
+    }
+}

@@ -1,0 +1,119 @@
+package com.td.api.kms.response;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class CipherDataTest {
+
+    private CipherData cipherData;
+
+    @BeforeEach
+    void setUp() {
+        cipherData = new CipherData();
+    }
+
+    @Test
+    void testSetAndGetEncodingSchemeTypeCd() {
+        cipherData.setEncodingSchemeTypeCd("AES");
+        assertEquals("AES", cipherData.getEncodingSchemeTypeCd());
+    }
+
+    @Test
+    void testSetAndGetCipherTxt() {
+        cipherData.setCipherTxt("ciphertext");
+        assertEquals("ciphertext", cipherData.getCipherTxt());
+    }
+
+    @Test
+    void testSetAndGetLengthCnt() {
+        cipherData.setLengthCnt(128);
+        assertEquals(128, cipherData.getLengthCnt());
+    }
+
+    @Test
+    void testSetAndGetKmsExtension() {
+        KmsExtension kmsExtension = new KmsExtension(); // Assuming KmsExtension has a default constructor
+        cipherData.setKmsExtension(kmsExtension);
+        assertEquals(kmsExtension, cipherData.getKmsExtension());
+    }
+
+    @Test
+    void testToString() {
+        KmsExtension kmsExtension = new KmsExtension(); // Assuming KmsExtension has a default constructor
+        cipherData.setEncodingSchemeTypeCd("AES");
+        cipherData.setCipherTxt("ciphertext");
+        cipherData.setLengthCnt(128);
+        cipherData.setKmsExtension(kmsExtension);
+
+        String expectedToString = "com.td.api.kms.response.CipherData@" + Integer.toHexString(cipherData.hashCode()) +
+                "[encodingSchemeTypeCd=AES,cipherTxt=ciphertext,lengthCnt=128,kmsExtension=" + kmsExtension + "]";
+        assertEquals(expectedToString, cipherData.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        CipherData cipherData1 = new CipherData();
+        CipherData cipherData2 = new CipherData();
+        assertEquals(cipherData1.hashCode(), cipherData2.hashCode());
+
+        cipherData1.setEncodingSchemeTypeCd("AES");
+        cipherData1.setCipherTxt("ciphertext");
+        cipherData1.setLengthCnt(128);
+        KmsExtension kmsExtension = new KmsExtension(); // Assuming KmsExtension has a default constructor
+        cipherData1.setKmsExtension(kmsExtension);
+
+        cipherData2.setEncodingSchemeTypeCd("AES");
+        cipherData2.setCipherTxt("ciphertext");
+        cipherData2.setLengthCnt(128);
+        cipherData2.setKmsExtension(kmsExtension);
+
+        assertEquals(cipherData1.hashCode(), cipherData2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        CipherData cipherData1 = new CipherData();
+        CipherData cipherData2 = new CipherData();
+        assertTrue(cipherData1.equals(cipherData2));
+
+        cipherData1.setEncodingSchemeTypeCd("AES");
+        cipherData1.setCipherTxt("ciphertext");
+        cipherData1.setLengthCnt(128);
+        KmsExtension kmsExtension = new KmsExtension(); // Assuming KmsExtension has a default constructor
+        cipherData1.setKmsExtension(kmsExtension);
+
+        cipherData2.setEncodingSchemeTypeCd("AES");
+        cipherData2.setCipherTxt("ciphertext");
+        cipherData2.setLengthCnt(128);
+        cipherData2.setKmsExtension(kmsExtension);
+
+        assertTrue(cipherData1.equals(cipherData2));
+
+        cipherData2.setCipherTxt("newCiphertext"); // Change one field
+        assertFalse(cipherData1.equals(cipherData2));
+
+        cipherData2.setLengthCnt(256); // Change another field
+        assertFalse(cipherData1.equals(cipherData2));
+
+        cipherData2.setEncodingSchemeTypeCd("DES"); // Change another field
+        assertFalse(cipherData1.equals(cipherData2));
+
+        cipherData2.setKmsExtension(new KmsExtension()); // Change the KmsExtension
+        assertFalse(cipherData1.equals(cipherData2));
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        CipherData cipherData1 = new CipherData();
+        assertFalse(cipherData1.equals(null));
+    }
+
+    @Test
+    void testEqualsWithDifferentClass() {
+        CipherData cipherData1 = new CipherData();
+        String str = "DifferentClass";
+        assertFalse(cipherData1.equals(str));
+    }
+}

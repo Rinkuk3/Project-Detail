@@ -1,0 +1,165 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.Date;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class EmailAddressTest {
+
+    private EmailAddress emailAddress;
+
+    @BeforeEach
+    public void setUp() {
+        emailAddress = new EmailAddress();
+    }
+
+    @Test
+    public void testGetText() {
+        emailAddress.setText("test@example.com");
+        assertEquals("test@example.com", emailAddress.getText());
+    }
+
+    @Test
+    public void testSetText() {
+        emailAddress.setText("new@example.com");
+        assertEquals("new@example.com", emailAddress.getText());
+    }
+
+    @Test
+    public void testGetDomainName() {
+        emailAddress.setDomainName("example.com");
+        assertEquals("example.com", emailAddress.getDomainName());
+    }
+
+    @Test
+    public void testSetDomainName() {
+        emailAddress.setDomainName("newdomain.com");
+        assertEquals("newdomain.com", emailAddress.getDomainName());
+    }
+
+    @Test
+    public void testGetDesc() {
+        emailAddress.setDesc("Test Email");
+        assertEquals("Test Email", emailAddress.getDesc());
+    }
+
+    @Test
+    public void testSetDesc() {
+        emailAddress.setDesc("Updated Email");
+        assertEquals("Updated Email", emailAddress.getDesc());
+    }
+
+    @Test
+    public void testGetLastUpdateDttm() {
+        Date now = new Date();
+        emailAddress.setLastUpdateDttm(now);
+        assertEquals(now, emailAddress.getLastUpdateDttm());
+    }
+
+    @Test
+    public void testSetLastUpdateDttm() {
+        Date now = new Date();
+        emailAddress.setLastUpdateDttm(now);
+        assertEquals(now, emailAddress.getLastUpdateDttm());
+    }
+
+    @Test
+    public void testToString() {
+        emailAddress.setText("test@example.com");
+        emailAddress.setDomainName("example.com");
+        emailAddress.setDesc("Test Email");
+        Date now = new Date();
+        emailAddress.setLastUpdateDttm(now);
+
+        String expectedString = "com.td.api.mbcca.request.ebilling.EmailAddress@" + Integer.toHexString(System.identityHashCode(emailAddress)) +
+                "[text=test@example.com,domainName=example.com,desc=Test Email,lastUpdateDttm=" + now + "]";
+        assertTrue(emailAddress.toString().contains("text=test@example.com"));
+        assertTrue(emailAddress.toString().contains("domainName=example.com"));
+        assertTrue(emailAddress.toString().contains("desc=Test Email"));
+    }
+
+    @Test
+    public void testHashCode() {
+        EmailAddress email1 = new EmailAddress();
+        email1.setText("test@example.com");
+        email1.setDomainName("example.com");
+        email1.setDesc("Test Email");
+        email1.setLastUpdateDttm(new Date());
+
+        EmailAddress email2 = new EmailAddress();
+        email2.setText("test@example.com");
+        email2.setDomainName("example.com");
+        email2.setDesc("Test Email");
+        email2.setLastUpdateDttm(new Date());
+
+        assertEquals(email1.hashCode(), email2.hashCode());
+
+        email2.setText("new@example.com");
+        assertNotEquals(email1.hashCode(), email2.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        EmailAddress email1 = new EmailAddress();
+        email1.setText("test@example.com");
+        email1.setDomainName("example.com");
+        email1.setDesc("Test Email");
+        email1.setLastUpdateDttm(new Date());
+
+        EmailAddress email2 = new EmailAddress();
+        email2.setText("test@example.com");
+        email2.setDomainName("example.com");
+        email2.setDesc("Test Email");
+        email2.setLastUpdateDttm(new Date());
+
+        assertTrue(email1.equals(email2));
+
+        email2.setText("new@example.com");
+        assertFalse(email1.equals(email2));
+
+        email2.setText("test@example.com");
+        email2.setDomainName("newdomain.com");
+        assertFalse(email1.equals(email2));
+
+        email2.setDomainName("example.com");
+        email2.setDesc("New Desc");
+        assertFalse(email1.equals(email2));
+
+        email2.setDesc("Test Email");
+        email2.setLastUpdateDttm(null);
+        assertFalse(email1.equals(email2));
+    }
+
+    @Test
+    public void testEqualsNull() {
+        EmailAddress email1 = new EmailAddress();
+        email1.setText("test@example.com");
+        email1.setDomainName("example.com");
+        email1.setDesc("Test Email");
+        email1.setLastUpdateDttm(null);
+
+        assertFalse(email1.equals(null));
+    }
+
+    @Test
+    public void testEqualsDifferentClass() {
+        EmailAddress email1 = new EmailAddress();
+        email1.setText("test@example.com");
+        email1.setDomainName("example.com");
+        email1.setDesc("Test Email");
+        email1.setLastUpdateDttm(null);
+
+        String someString = "RandomString";
+        assertFalse(email1.equals(someString));
+    }
+
+    @Test
+    public void testEqualsSameInstance() {
+        EmailAddress email1 = new EmailAddress();
+        email1.setText("test@example.com");
+        email1.setDomainName("example.com");
+        email1.setDesc("Test Email");
+        email1.setLastUpdateDttm(null);
+
+        assertTrue(email1.equals(email1));  // Same instance, should return true
+    }
+}

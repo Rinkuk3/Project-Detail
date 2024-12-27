@@ -1,0 +1,62 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CcapiExtensionTest {
+
+    @Test
+    public void testGettersAndSetters() {
+        CcapiExtension extension = new CcapiExtension();
+        
+        // Test setter and getter for debitCardNum
+        extension.setDebitCardNum("1234567890123456");
+        assertEquals("1234567890123456", extension.getDebitCardNum());
+    }
+
+    @Test
+    public void testToString() {
+        CcapiExtension extension = new CcapiExtension();
+        extension.setDebitCardNum("1234567890123456");
+        
+        String expectedString = "com.td.api.mbcca.creditcard.request.CcapiExtension@" + Integer.toHexString(extension.hashCode()) + "[debitCardNum=1234567890123456,]";
+        assertEquals(expectedString, extension.toString());
+    }
+
+    @Test
+    public void testHashCodeAndEquals() {
+        CcapiExtension extension1 = new CcapiExtension();
+        extension1.setDebitCardNum("1234567890123456");
+
+        CcapiExtension extension2 = new CcapiExtension();
+        extension2.setDebitCardNum("1234567890123456");
+
+        CcapiExtension extension3 = new CcapiExtension();
+        extension3.setDebitCardNum("6543210987654321");
+
+        // Test equality
+        assertTrue(extension1.equals(extension2));
+        assertFalse(extension1.equals(extension3));
+
+        // Test hashCode consistency
+        assertEquals(extension1.hashCode(), extension2.hashCode());
+        assertNotEquals(extension1.hashCode(), extension3.hashCode());
+    }
+
+    @Test
+    public void testEqualsNull() {
+        CcapiExtension extension = new CcapiExtension();
+        extension.setDebitCardNum("1234567890123456");
+        
+        // Test equality with null
+        assertFalse(extension.equals(null));
+    }
+
+    @Test
+    public void testEqualsDifferentClass() {
+        CcapiExtension extension = new CcapiExtension();
+        extension.setDebitCardNum("1234567890123456");
+        
+        // Test equality with object of different class
+        Object obj = new Object();
+        assertFalse(extension.equals(obj));
+    }
+}

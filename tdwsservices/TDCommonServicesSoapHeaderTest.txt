@@ -1,0 +1,133 @@
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPEnvelope;
+import javax.xml.soap.SOAPHeader;
+import javax.xml.soap.SOAPMessage;
+import javax.xml.ws.handler.soap.SOAPMessageContext;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+import org.springframework.ws.soap.SoapMessage;
+import com.td.mbna.msec.midtier.tdwsservices.TDwsServiceUtil;
+import com.td.mbna.msec.midtier.util.UuidUtil;
+import com.td.mbna.msec.midtier.util.SoapUtil;
+
+public class TDCommonServicesSoapHeaderTest {
+
+    private TDCommonServicesSoapHeader tdCommonServicesSoapHeader;
+
+    @Mock
+    private SOAPMessageContext smcMock;
+    
+    @Mock
+    private SoapUtil.SoapMsgInfo soapMsgInfoMock;
+    
+    @Mock
+    private SOAPMessage soapMessageMock;
+    
+    @Mock
+    private SOAPEnvelope soapEnvelopeMock;
+    
+    @Mock
+    private SOAPHeader soapHeaderMock;
+
+    @Mock
+    private SOAPElement soapElementMock;
+
+    @Mock
+    private TDwsServiceUtil tdwsServiceUtilMock;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        tdCommonServicesSoapHeader = new TDCommonServicesSoapHeader();
+    }
+
+    @Test
+    void testHandleMessage() {
+        when(smcMock.getMessage()).thenReturn(soapMessageMock);
+        when(soapMessageMock.getSOAPPart()).thenReturn(mock(javax.xml.soap.SOAPPart.class));
+        when(soapMessageMock.getSOAPPart().getEnvelope()).thenReturn(soapEnvelopeMock);
+        when(soapEnvelopeMock.getHeader()).thenReturn(soapHeaderMock);
+        when(soapMsgInfoMock.isRequest()).thenReturn(true);
+        when(smcMock.get(TDwsServiceUtil.TD_MESSAGE_HEADER_OPERATION)).thenReturn("operation");
+        when(smcMock.get(TDwsServiceUtil.TD_MESSAGE_HEADER_ENDPOINT)).thenReturn("endpoint");
+        
+        // Mock static methods of TDwsServiceUtil
+        try (MockedStatic<TDwsServiceUtil> mockedTDwsServiceUtil = mockStatic(TDwsServiceUtil.class)) {
+            mockedTDwsServiceUtil.when(() -> TDwsServiceUtil.getTDServiceParam(anyString()))
+                .thenReturn("value");
+            
+            boolean result = tdCommonServicesSoapHeader.handleMessage(smcMock);
+            
+            assertTrue(result);
+            verify(soapHeaderMock, times(1)).addChildElement(anyString(), anyString(), anyString());
+        }
+    }
+
+    @Test
+    void testInsertCSHeader_WithValidRequest() throws Exception {
+        when(smcMock.getMessage()).thenReturn(soapMessageMock);
+        when(soapMessageMock.getSOAPPart()).thenReturn(mock(javax.xml.soap.SOAPPart.class));
+        when(soapMessageMock.getSOAPPart().getEnvelope()).thenReturn(soapEnvelopeMock);
+        when(soapEnvelopeMock.getHeader()).thenReturn(soapHeaderMock);
+        when(soapMsgInfoMock.isRequest()).thenReturn(true);
+        when(smcMock.get(TDwsServiceUtil.TD_MESSAGE_HEADER_OPERATION)).thenReturn("operation");
+        when(smcMock.get(TDwsServiceUtil.TD_MESSAGE_HEADER_ENDPOINT)).thenReturn("endpoint");
+        
+        // Mock static methods of TDwsServiceUtil
+        try (MockedStatic<TDwsServiceUtil> mockedTDwsServiceUtil = mockStatic(TDwsServiceUtil.class)) {
+            mockedTDwsServiceUtil.when(() -> TDwsServiceUtil.getTDServiceParam(anyString()))
+                .thenReturn("value");
+            
+            tdCommonServicesSoapHeader.insertCSHeader(soapMsgInfoMock);
+            
+            verify(soapHeaderMock, times(1)).addChildElement(anyString(), anyString(), anyString());
+            verify(soapHeaderMock, times(1)).detachNode();
+        }
+    }
+
+    @Test
+    void testInsertCSHeader_WhenSOAPHeaderIsNull() throws Exception {
+        when(smcMock.getMessage()).thenReturn(soapMessageMock);
+        when(soapMessageMock.getSOAPPart()).thenReturn(mock(javax.xml.soap.SOAPPart.class));
+        when(soapMessageMock.getSOAPPart().getEnvelope()).thenReturn(soapEnvelopeMock);
+        when(soapMsgInfoMock.isRequest()).thenReturn(true);
+        
+        // Mock static methods of TDwsServiceUtil
+        try (MockedStatic<TDwsServiceUtil> mockedTDwsServiceUtil = mockStatic(TDwsServiceUtil.class)) {
+            mockedTDwsServiceUtil.when(() -> TDwsServiceUtil.getTDServiceParam(anyString()))
+                .thenReturn("value");
+
+            when(soapEnvelopeMock.getHeader()).thenReturn(null);
+
+            tdCommonServicesSoapHeader.insertCSHeader(soapMsgInfoMock);
+
+            verify(soapEnvelopeMock, times(1)).addHeader();
+        }
+    }
+
+    @Test
+    void testInsertCSHeader_ExceptionHandling() {
+        when(smcMock.getMessage()).thenReturn(soapMessageMock);
+        when(soapMessageMock.getSOAPPart()).thenReturn(mock(javax.xml.soap.SOAPPart.class));
+        when(soapMessageMock.getSOAPPart().getEnvelope()).thenReturn(soapEnvelopeMock);
+        when(soapMsgInfoMock.isRequest()).thenReturn(true);
+        
+        // Mock static methods of TDwsServiceUtil
+        try (MockedStatic<TDwsServiceUtil> mockedTDwsServiceUtil = mockStatic(TDwsServiceUtil.class)) {
+            mockedTDwsServiceUtil.when(() -> TDwsServiceUtil.getTDServiceParam(anyString()))
+                .thenReturn("value");
+            
+            doThrow(new RuntimeException("Test Exception")).when(soapEnvelopeMock).getHeader();
+
+            tdCommonServicesSoapHeader.insertCSHeader(soapMsgInfoMock);
+
+            // Verify that error was logged
+            verify(tdCommonServicesSoapHeader.logger, times(1)).error(anyString(), any(Exception.class));
+        }
+    }
+}

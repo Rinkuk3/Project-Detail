@@ -1,0 +1,100 @@
+package com.td.api.mbalert.request.addalertevent;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+
+class EmailAddressTest {
+
+    @Test
+    void testEmailAddress() {
+        // Create an instance of EmailAddress
+        EmailAddress emailAddress = new EmailAddress();
+
+        // Test default values of fields
+        assertNull(emailAddress.getLocatorUsageTypeCd());
+        assertNull(emailAddress.getDeliveryStatusCd());
+        assertTrue(emailAddress.getLocatorText().isEmpty());
+        assertNull(emailAddress.getAltrExtension());
+        assertNull(emailAddress.getText());
+        assertTrue(emailAddress.getFeatureLocator().isEmpty());
+        assertNull(emailAddress.getAlertLocatorSequenceNum());
+
+        // Test setting and getting 'locatorUsageTypeCd'
+        String locatorUsageTypeCd = "EMAIL";
+        emailAddress.setLocatorUsageTypeCd(locatorUsageTypeCd);
+        assertEquals(locatorUsageTypeCd, emailAddress.getLocatorUsageTypeCd());
+
+        // Test setting and getting 'deliveryStatusCd'
+        String deliveryStatusCd = "DELIVERED";
+        emailAddress.setDeliveryStatusCd(deliveryStatusCd);
+        assertEquals(deliveryStatusCd, emailAddress.getDeliveryStatusCd());
+
+        // Test setting and getting 'locatorText'
+        LocatorText locatorText = new LocatorText();
+        emailAddress.setLocatorText(Arrays.asList(locatorText));
+        assertEquals(1, emailAddress.getLocatorText().size());
+        assertEquals(locatorText, emailAddress.getLocatorText().get(0));
+
+        // Test setting and getting 'altrExtension'
+        AltrExtension altrExtension = new AltrExtension();
+        emailAddress.setAltrExtension(altrExtension);
+        assertEquals(altrExtension, emailAddress.getAltrExtension());
+
+        // Test setting and getting 'text'
+        String text = "test@example.com";
+        emailAddress.setText(text);
+        assertEquals(text, emailAddress.getText());
+
+        // Test setting and getting 'featureLocator'
+        FeatureLocator featureLocator = new FeatureLocator();
+        emailAddress.setFeatureLocator(Arrays.asList(featureLocator));
+        assertEquals(1, emailAddress.getFeatureLocator().size());
+        assertEquals(featureLocator, emailAddress.getFeatureLocator().get(0));
+
+        // Test setting and getting 'alertLocatorSequenceNum'
+        String alertLocatorSequenceNum = "12345";
+        emailAddress.setAlertLocatorSequenceNum(alertLocatorSequenceNum);
+        assertEquals(alertLocatorSequenceNum, emailAddress.getAlertLocatorSequenceNum());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        // Create two instances of EmailAddress with the same properties
+        EmailAddress emailAddress1 = new EmailAddress();
+        emailAddress1.setLocatorUsageTypeCd("EMAIL");
+        emailAddress1.setDeliveryStatusCd("DELIVERED");
+        emailAddress1.setText("test@example.com");
+
+        EmailAddress emailAddress2 = new EmailAddress();
+        emailAddress2.setLocatorUsageTypeCd("EMAIL");
+        emailAddress2.setDeliveryStatusCd("DELIVERED");
+        emailAddress2.setText("test@example.com");
+
+        // Test equality
+        assertTrue(emailAddress1.equals(emailAddress2));
+
+        // Test hashCode
+        assertEquals(emailAddress1.hashCode(), emailAddress2.hashCode());
+
+        // Modify one object and test inequality
+        emailAddress2.setText("another@example.com");
+        assertFalse(emailAddress1.equals(emailAddress2));
+    }
+
+    @Test
+    void testToString() {
+        // Create an instance of EmailAddress
+        EmailAddress emailAddress = new EmailAddress();
+        emailAddress.setLocatorUsageTypeCd("EMAIL");
+        emailAddress.setDeliveryStatusCd("DELIVERED");
+        emailAddress.setText("test@example.com");
+
+        // Test the toString() method
+        String toStringResult = emailAddress.toString();
+        assertTrue(toStringResult.contains("locatorUsageTypeCd"));
+        assertTrue(toStringResult.contains("deliveryStatusCd"));
+        assertTrue(toStringResult.contains("text"));
+    }
+}

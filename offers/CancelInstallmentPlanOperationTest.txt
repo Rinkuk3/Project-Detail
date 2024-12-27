@@ -1,0 +1,194 @@
+import com.td.mbna.msec.midtier.offers.payload.cancelInstallmentPlan.*;
+import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+class CancelInstallmentPlanOperationTest {
+
+    @Test
+    void testInvokeService_SuccessWithoutRefund() throws Exception {
+        // Mocking dependencies
+        MbnaCCA mbnaCCA = mock(MbnaCCA.class);
+        ValangValidator cancelIpValidator = mock(ValangValidator.class);
+        CancelInstallmentPlanRequest request = mock(CancelInstallmentPlanRequest.class);
+        CancelInstallmentPlanResponse response = new CancelInstallmentPlanResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        response.setResponsePayload(responsePayload);
+        
+        when(request.getCardNum()).thenReturn("123456");
+        when(request.getAcctNum()).thenReturn("78910");
+        when(request.getSessionInfo()).thenReturn(mock(SessionInfo.class));
+        when(request.getRequestPayload()).thenReturn(new RequestPayload());
+        
+        // Simulate successful cancellation response without refund
+        PartialUpdateCreditCardAgreementRetailEventGracePeriodEndDateResponse cancelRs = mock(PartialUpdateCreditCardAgreementRetailEventGracePeriodEndDateResponse.class);
+        when(mbnaCCA.cancelIp(anyString(), anyString(), any(), any(), any())).thenReturn(cancelRs);
+        
+        CancelInstallmentPlanOperation operation = new CancelInstallmentPlanOperation();
+        operation.mbnaCCA = mbnaCCA;
+        operation.cancelIpValidator = cancelIpValidator;
+
+        // Invoking the service
+        CancelInstallmentPlanResponse actualResponse = operation.invokeService(request);
+
+        // Verifying results
+        assertNotNull(actualResponse);
+        assertTrue(actualResponse.getResponsePayload().getCancelStatus());
+    }
+
+    @Test
+    void testInvokeService_SuccessWithRefund() throws Exception {
+        // Mocking dependencies
+        MbnaCCA mbnaCCA = mock(MbnaCCA.class);
+        ValangValidator cancelIpValidator = mock(ValangValidator.class);
+        CancelInstallmentPlanRequest request = mock(CancelInstallmentPlanRequest.class);
+        CancelInstallmentPlanResponse response = new CancelInstallmentPlanResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        response.setResponsePayload(responsePayload);
+
+        when(request.getCardNum()).thenReturn("123456");
+        when(request.getAcctNum()).thenReturn("78910");
+        when(request.getSessionInfo()).thenReturn(mock(SessionInfo.class));
+        when(request.getRequestPayload()).thenReturn(new RequestPayload());
+
+        // Simulate successful cancellation response with refund
+        PartialUpdateCreditCardAgreementRetailEventGracePeriodEndDateResponse cancelRs = mock(PartialUpdateCreditCardAgreementRetailEventGracePeriodEndDateResponse.class);
+        when(cancelRs.getInstalmentPlanFeeRefundInd()).thenReturn(true);
+        AddCreditCardAgreementPostedAdjustmentEventResponse refundRs = mock(AddCreditCardAgreementPostedAdjustmentEventResponse.class);
+        when(refundRs.getStatus()).thenReturn(mock(ServerStatus.class));
+        when(mbnaCCA.cancelIp(anyString(), anyString(), any(), any(), any())).thenReturn(cancelRs);
+        when(mbnaCCA.refundIpFee(anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyDouble(), anyString(), anyString())).thenReturn(refundRs);
+
+        CancelInstallmentPlanOperation operation = new CancelInstallmentPlanOperation();
+        operation.mbnaCCA = mbnaCCA;
+        operation.cancelIpValidator = cancelIpValidator;
+
+        // Invoking the service
+        CancelInstallmentPlanResponse actualResponse = operation.invokeService(request);
+
+        // Verifying results
+        assertNotNull(actualResponse);
+        assertTrue(actualResponse.getResponsePayload().getCancelStatus());
+        assertEquals(ResponsePayload.RefundStatus.PASSED, actualResponse.getResponsePayload().getRefundStatus());
+    }
+
+    @Test
+    void testInvokeService_FailedRefund() throws Exception {
+        // Mocking dependencies
+        MbnaCCA mbnaCCA = mock(MbnaCCA.class);
+        ValangValidator cancelIpValidator = mock(ValangValidator.class);
+        CancelInstallmentPlanRequest request = mock(CancelInstallmentPlanRequest.class);
+        CancelInstallmentPlanResponse response = new CancelInstallmentPlanResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        response.setResponsePayload(responsePayload);
+
+        when(request.getCardNum()).thenReturn("123456");
+        when(request.getAcctNum()).thenReturn("78910");
+        when(request.getSessionInfo()).thenReturn(mock(SessionInfo.class));
+        when(request.getRequestPayload()).thenReturn(new RequestPayload());
+
+        // Simulate successful cancellation response with failed refund
+        PartialUpdateCreditCardAgreementRetailEventGracePeriodEndDateResponse cancelRs = mock(PartialUpdateCreditCardAgreementRetailEventGracePeriodEndDateResponse.class);
+        when(cancelRs.getInstalmentPlanFeeRefundInd()).thenReturn(true);
+        AddCreditCardAgreementPostedAdjustmentEventResponse refundRs = mock(AddCreditCardAgreementPostedAdjustmentEventResponse.class);
+        when(refundRs.getStatus()).thenReturn(mock(ServerStatus.class));
+        when(mbnaCCA.cancelIp(anyString(), anyString(), any(), any(), any())).thenReturn(cancelRs);
+        when(mbnaCCA.refundIpFee(anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyDouble(), anyString(), anyString())).thenReturn(refundRs);
+
+        CancelInstallmentPlanOperation operation = new CancelInstallmentPlanOperation();
+        operation.mbnaCCA = mbnaCCA;
+        operation.cancelIpValidator = cancelIpValidator;
+
+        // Invoking the service
+        CancelInstallmentPlanResponse actualResponse = operation.invokeService(request);
+
+        // Verifying results
+        assertNotNull(actualResponse);
+        assertTrue(actualResponse.getResponsePayload().getCancelStatus());
+        assertEquals(ResponsePayload.RefundStatus.FAILED, actualResponse.getResponsePayload().getRefundStatus());
+    }
+
+    @Test
+    void testCreateAutoComment() {
+        // Mocking dependencies
+        CancelInstallmentPlanRequest request = mock(CancelInstallmentPlanRequest.class);
+        CancelInstallmentPlanResponse response = new CancelInstallmentPlanResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        response.setResponsePayload(responsePayload);
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setNickName("Test Nickname");
+        requestPayload.setAmount(100.0);
+        requestPayload.setInterestRate(5.0);
+        requestPayload.setFee(10.0);
+        requestPayload.setBalanceOfIp(50.0);
+        when(request.getRequestPayload()).thenReturn(requestPayload);
+
+        // Successful cancellation and refund passed
+        responsePayload.setCancelStatus(true);
+        responsePayload.setRefundStatus(ResponsePayload.RefundStatus.PASSED);
+
+        CancelInstallmentPlanOperation operation = new CancelInstallmentPlanOperation();
+
+        // Create comment
+        List<String> comment = operation.createAutoComment(request, response);
+
+        // Verify comment contains the expected text
+        assertTrue(comment.get(0).contains("NickName: Test Nickname"));
+        assertTrue(comment.get(0).contains("Refund: 10.0"));
+    }
+
+    @Test
+    void testCreateAutoComment_FailedRefund() {
+        // Mocking dependencies
+        CancelInstallmentPlanRequest request = mock(CancelInstallmentPlanRequest.class);
+        CancelInstallmentPlanResponse response = new CancelInstallmentPlanResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        response.setResponsePayload(responsePayload);
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setNickName("Test Nickname");
+        requestPayload.setAmount(100.0);
+        requestPayload.setInterestRate(5.0);
+        requestPayload.setFee(10.0);
+        requestPayload.setBalanceOfIp(50.0);
+        when(request.getRequestPayload()).thenReturn(requestPayload);
+
+        // Successful cancellation and refund failed
+        responsePayload.setCancelStatus(true);
+        responsePayload.setRefundStatus(ResponsePayload.RefundStatus.FAILED);
+
+        CancelInstallmentPlanOperation operation = new CancelInstallmentPlanOperation();
+
+        // Create comment
+        List<String> comment = operation.createAutoComment(request, response);
+
+        // Verify comment contains the expected text
+        assertTrue(comment.get(0).contains("Refund: Failed"));
+    }
+
+    @Test
+    void testRequiresDisclosureConsent() {
+        CancelInstallmentPlanOperation operation = new CancelInstallmentPlanOperation();
+        assertFalse(operation.requiresDisclosureConsent());
+    }
+
+    @Test
+    void testGenerateAutoComment() {
+        CancelInstallmentPlanOperation operation = new CancelInstallmentPlanOperation();
+        assertTrue(operation.generateAutoComment());
+    }
+
+    @Test
+    void testGetEmailInfoBean() {
+        CancelInstallmentPlanOperation operation = new CancelInstallmentPlanOperation();
+        assertNull(operation.getEmailInfoBean(mock(CancelInstallmentPlanRequest.class), mock(CancelInstallmentPlanResponse.class)));
+    }
+
+    @Test
+    void testGetValidator() {
+        CancelInstallmentPlanOperation operation = new CancelInstallmentPlanOperation();
+        assertNotNull(operation.getValidator());
+    }
+}

@@ -1,0 +1,84 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+
+public class TCCAAPIAgreementPartyFeatureTest {
+
+    private TCCAAPIAgreementPartyFeature partyFeature;
+    private TCCAAPIFeature feature;
+    private TCCAAPIEligibilityReason eligibilityReason;
+
+    @BeforeEach
+    public void setUp() {
+        partyFeature = new TCCAAPIAgreementPartyFeature();
+        feature = new TCCAAPIFeature();  // Assuming a simple constructor or mock for this
+        eligibilityReason = new TCCAAPIEligibilityReason();  // Assuming a simple constructor or mock for this
+    }
+
+    @Test
+    public void testGetAndSetFeature() {
+        partyFeature.setFeature(feature);
+        assertEquals(feature, partyFeature.getFeature());
+    }
+
+    @Test
+    public void testGetAndSetEligibleInd() {
+        partyFeature.setEligibleInd(true);
+        assertTrue(partyFeature.getEligibleInd());
+
+        partyFeature.setEligibleInd(false);
+        assertFalse(partyFeature.getEligibleInd());
+    }
+
+    @Test
+    public void testGetAndSetEligibilityReason() {
+        partyFeature.setEligibilityReason(Arrays.asList(eligibilityReason));
+        assertEquals(1, partyFeature.getEligibilityReason().size());
+        assertTrue(partyFeature.getEligibilityReason().contains(eligibilityReason));
+    }
+
+    @Test
+    public void testToString() {
+        partyFeature.setFeature(feature);
+        partyFeature.setEligibleInd(true);
+        partyFeature.setEligibilityReason(Arrays.asList(eligibilityReason));
+        String expectedString = "com.td.api.ofm.common.TCCAAPIAgreementPartyFeature@" + Integer.toHexString(partyFeature.hashCode()) +
+                "[feature=" + feature + ",eligibleInd=true,eligibilityReason=" + Arrays.asList(eligibilityReason) + "]";
+        assertEquals(expectedString, partyFeature.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        partyFeature.setFeature(feature);
+        partyFeature.setEligibleInd(true);
+        partyFeature.setEligibilityReason(Arrays.asList(eligibilityReason));
+        TCCAAPIAgreementPartyFeature anotherPartyFeature = new TCCAAPIAgreementPartyFeature();
+        anotherPartyFeature.setFeature(feature);
+        anotherPartyFeature.setEligibleInd(true);
+        anotherPartyFeature.setEligibilityReason(Arrays.asList(eligibilityReason));
+        assertEquals(partyFeature.hashCode(), anotherPartyFeature.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        partyFeature.setFeature(feature);
+        partyFeature.setEligibleInd(true);
+        partyFeature.setEligibilityReason(Arrays.asList(eligibilityReason));
+
+        TCCAAPIAgreementPartyFeature equalPartyFeature = new TCCAAPIAgreementPartyFeature();
+        equalPartyFeature.setFeature(feature);
+        equalPartyFeature.setEligibleInd(true);
+        equalPartyFeature.setEligibilityReason(Arrays.asList(eligibilityReason));
+
+        assertTrue(partyFeature.equals(equalPartyFeature));
+
+        TCCAAPIAgreementPartyFeature notEqualPartyFeature = new TCCAAPIAgreementPartyFeature();
+        notEqualPartyFeature.setFeature(new TCCAAPIFeature());  // different feature
+        notEqualPartyFeature.setEligibleInd(false);  // different eligibleInd
+        notEqualPartyFeature.setEligibilityReason(Arrays.asList(new TCCAAPIEligibilityReason())); // different eligibility reason
+
+        assertFalse(partyFeature.equals(notEqualPartyFeature));
+    }
+}

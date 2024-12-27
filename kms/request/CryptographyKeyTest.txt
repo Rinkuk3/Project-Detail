@@ -1,0 +1,180 @@
+package com.td.api.kms.request;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class CryptographyKeyTest {
+
+    private CryptographyKey cryptographyKey;
+
+    @BeforeEach
+    void setUp() {
+        cryptographyKey = new CryptographyKey();
+    }
+
+    @Test
+    void testSetAndGetEncodingSchemeTypeCd() {
+        String encodingSchemeTypeCd = "Scheme1";
+        cryptographyKey.setEncodingSchemeTypeCd(encodingSchemeTypeCd);
+        assertEquals(encodingSchemeTypeCd, cryptographyKey.getEncodingSchemeTypeCd());
+    }
+
+    @Test
+    void testSetAndGetTypeName() {
+        String typeName = "Type1";
+        cryptographyKey.setTypeName(typeName);
+        assertEquals(typeName, cryptographyKey.getTypeName());
+    }
+
+    @Test
+    void testSetAndGetKeyId() {
+        String keyId = "Key123";
+        cryptographyKey.setKeyId(keyId);
+        assertEquals(keyId, cryptographyKey.getKeyId());
+    }
+
+    @Test
+    void testSetAndGetKeyVal() {
+        String keyVal = "KeyVal123";
+        cryptographyKey.setKeyVal(keyVal);
+        assertEquals(keyVal, cryptographyKey.getKeyVal());
+    }
+
+    @Test
+    void testSetAndGetIndexVal() {
+        String indexVal = "Index123";
+        cryptographyKey.setIndexVal(indexVal);
+        assertEquals(indexVal, cryptographyKey.getIndexVal());
+    }
+
+    @Test
+    void testSetAndGetCheckDigitVal() {
+        String checkDigitVal = "CheckDigit123";
+        cryptographyKey.setCheckDigitVal(checkDigitVal);
+        assertEquals(checkDigitVal, cryptographyKey.getCheckDigitVal());
+    }
+
+    @Test
+    void testSetAndGetKmsExtension() {
+        KmsExtension kmsExtension = new KmsExtension();
+        cryptographyKey.setKmsExtension(kmsExtension);
+        assertEquals(kmsExtension, cryptographyKey.getKmsExtension());
+    }
+
+    @Test
+    void testToString() {
+        String encodingSchemeTypeCd = "Scheme1";
+        String typeName = "Type1";
+        String keyId = "Key123";
+        String keyVal = "KeyVal123";
+        String indexVal = "Index123";
+        String checkDigitVal = "CheckDigit123";
+        KmsExtension kmsExtension = new KmsExtension();
+
+        cryptographyKey.setEncodingSchemeTypeCd(encodingSchemeTypeCd);
+        cryptographyKey.setTypeName(typeName);
+        cryptographyKey.setKeyId(keyId);
+        cryptographyKey.setKeyVal(keyVal);
+        cryptographyKey.setIndexVal(indexVal);
+        cryptographyKey.setCheckDigitVal(checkDigitVal);
+        cryptographyKey.setKmsExtension(kmsExtension);
+
+        String expectedToString = "com.td.api.kms.request.CryptographyKey@" + Integer.toHexString(cryptographyKey.hashCode()) +
+                "[encodingSchemeTypeCd=" + encodingSchemeTypeCd + ",typeName=" + typeName + ",keyId=" + keyId + 
+                ",keyVal=" + keyVal + ",indexVal=" + indexVal + ",checkDigitVal=" + checkDigitVal + 
+                ",kmsExtension=" + kmsExtension + "]";
+        assertEquals(expectedToString, cryptographyKey.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        CryptographyKey key1 = new CryptographyKey();
+        CryptographyKey key2 = new CryptographyKey();
+        assertEquals(key1.hashCode(), key2.hashCode());
+
+        String encodingSchemeTypeCd = "Scheme1";
+        String typeName = "Type1";
+        String keyId = "Key123";
+        String keyVal = "KeyVal123";
+        String indexVal = "Index123";
+        String checkDigitVal = "CheckDigit123";
+        KmsExtension kmsExtension = new KmsExtension();
+
+        key1.setEncodingSchemeTypeCd(encodingSchemeTypeCd);
+        key1.setTypeName(typeName);
+        key1.setKeyId(keyId);
+        key1.setKeyVal(keyVal);
+        key1.setIndexVal(indexVal);
+        key1.setCheckDigitVal(checkDigitVal);
+        key1.setKmsExtension(kmsExtension);
+
+        key2.setEncodingSchemeTypeCd(encodingSchemeTypeCd);
+        key2.setTypeName(typeName);
+        key2.setKeyId(keyId);
+        key2.setKeyVal(keyVal);
+        key2.setIndexVal(indexVal);
+        key2.setCheckDigitVal(checkDigitVal);
+        key2.setKmsExtension(kmsExtension);
+
+        assertEquals(key1.hashCode(), key2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        CryptographyKey key1 = new CryptographyKey();
+        CryptographyKey key2 = new CryptographyKey();
+        assertTrue(key1.equals(key2));
+
+        String encodingSchemeTypeCd = "Scheme1";
+        String typeName = "Type1";
+        String keyId = "Key123";
+        String keyVal = "KeyVal123";
+        String indexVal = "Index123";
+        String checkDigitVal = "CheckDigit123";
+        KmsExtension kmsExtension = new KmsExtension();
+
+        key1.setEncodingSchemeTypeCd(encodingSchemeTypeCd);
+        key1.setTypeName(typeName);
+        key1.setKeyId(keyId);
+        key1.setKeyVal(keyVal);
+        key1.setIndexVal(indexVal);
+        key1.setCheckDigitVal(checkDigitVal);
+        key1.setKmsExtension(kmsExtension);
+
+        key2.setEncodingSchemeTypeCd(encodingSchemeTypeCd);
+        key2.setTypeName(typeName);
+        key2.setKeyId(keyId);
+        key2.setKeyVal(keyVal);
+        key2.setIndexVal(indexVal);
+        key2.setCheckDigitVal(checkDigitVal);
+        key2.setKmsExtension(kmsExtension);
+
+        assertTrue(key1.equals(key2));
+
+        key2.setKeyVal("DifferentKeyVal");
+        assertFalse(key1.equals(key2));
+
+        key2.setKeyVal(keyVal);
+        key2.setCheckDigitVal("DifferentCheckDigit");
+        assertFalse(key1.equals(key2));
+
+        key2.setCheckDigitVal(checkDigitVal);
+        key2.setEncodingSchemeTypeCd("Scheme2");
+        assertFalse(key1.equals(key2));
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        CryptographyKey key = new CryptographyKey();
+        assertFalse(key.equals(null));
+    }
+
+    @Test
+    void testEqualsWithDifferentClass() {
+        CryptographyKey key = new CryptographyKey();
+        String str = "DifferentClass";
+        assertFalse(key.equals(str));
+    }
+}

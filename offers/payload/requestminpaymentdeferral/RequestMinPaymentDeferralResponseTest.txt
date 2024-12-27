@@ -1,0 +1,63 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestMinPaymentDeferralResponseTest {
+
+    @Test
+    void testSetGetResponsePayload() {
+        RequestMinPaymentDeferralResponse response = new RequestMinPaymentDeferralResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        response.setResponsePayload(responsePayload);
+        
+        assertEquals(responsePayload, response.getResponsePayload());
+    }
+
+    @Test
+    void testToString() {
+        RequestMinPaymentDeferralResponse response = new RequestMinPaymentDeferralResponse();
+        response.setStatus("status");
+        response.setErrorMsgs("errorMsgs");
+        
+        String expectedString = "RequestMinPaymentDeferralResponse@" + Integer.toHexString(System.identityHashCode(response)) + "[status=status,errorMsgs=errorMsgs,responsePayload=<null>]";
+        assertEquals(expectedString, response.toString());
+        
+        ResponsePayload responsePayload = new ResponsePayload();
+        response.setResponsePayload(responsePayload);
+        expectedString = "RequestMinPaymentDeferralResponse@" + Integer.toHexString(System.identityHashCode(response)) + "[status=status,errorMsgs=errorMsgs,responsePayload=" + responsePayload.toString() + "]";
+        assertEquals(expectedString, response.toString());
+    }
+
+    @Test
+    void testEquals() {
+        RequestMinPaymentDeferralResponse response1 = new RequestMinPaymentDeferralResponse();
+        RequestMinPaymentDeferralResponse response2 = new RequestMinPaymentDeferralResponse();
+        
+        response1.setStatus("status");
+        response1.setErrorMsgs("errorMsgs");
+        
+        response2.setStatus("status");
+        response2.setErrorMsgs("errorMsgs");
+        
+        assertEquals(response1, response2);
+        
+        response2.setStatus("newStatus");
+        assertNotEquals(response1, response2);
+    }
+
+    @Test
+    void testHashCode() {
+        RequestMinPaymentDeferralResponse response1 = new RequestMinPaymentDeferralResponse();
+        RequestMinPaymentDeferralResponse response2 = new RequestMinPaymentDeferralResponse();
+        
+        response1.setStatus("status");
+        response1.setErrorMsgs("errorMsgs");
+        
+        response2.setStatus("status");
+        response2.setErrorMsgs("errorMsgs");
+        
+        assertEquals(response1.hashCode(), response2.hashCode());
+        
+        response2.setStatus("newStatus");
+        assertNotEquals(response1.hashCode(), response2.hashCode());
+    }
+}

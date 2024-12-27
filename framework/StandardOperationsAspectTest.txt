@@ -1,0 +1,155 @@
+package com.td.mbna.msec.midtier.framework;
+
+import com.td.mbna.msec.midtier.service.MsecMidtierCommonOperations;
+import com.td.mbna.msec.midtier.types.common.BaseRequest;
+import com.td.mbna.msec.midtier.types.common.BaseResponse;
+import com.td.mbna.msec.midtier.util.ExceptionUtil;
+import com.td.mbna.msec.midtier.util.MidtierUtilHelper;
+import com.td.mbna.msec.midtier.util.services.MidtierUtilHelper;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+
+import java.util.Arrays;
+import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class StandardOperationsAspectTest {
+
+    @InjectMocks
+    private StandardOperationsAspect standardOperationsAspect;
+
+    @Mock
+    private MsecMidtierCommonOperations<?, ?> midtierServiceOperation;
+
+    @Mock
+    private ProceedingJoinPoint joinPoint;
+
+    @Mock
+    private BaseRequest request;
+
+    @Mock
+    private BaseResponse response;
+
+    @Mock
+    private Signature signature;
+
+    @Mock
+    private MethodSignature methodSignature;
+
+    @Mock
+    private ExceptionUtil exceptionUtil;
+
+    @Mock
+    private MidtierUtilHelper midtierUtilHelper;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        when(joinPoint.getTarget()).thenReturn(midtierServiceOperation);
+        when(joinPoint.getArgs()).thenReturn(new Object[]{request});
+        when(joinPoint.getSignature()).thenReturn(methodSignature);
+        when(methodSignature.getReturnType()).thenReturn(BaseResponse.class);
+    }
+
+    @Test
+    void testInvokeService_validRequest_successfulExecution() throws Throwable {
+        // Setup valid conditions for the method
+        when(midtierServiceOperation.requiresDisclosureConsent()).thenReturn(true);
+        when(midtierServiceOperation.getValidator()).thenReturn(null);  // No validation exception
+        when(joinPoint.proceed()).thenReturn(response);
+        
+        BaseResponse result = standardOperationsAspect.invokeService(joinPoint);
+        
+        assertNotNull(result);
+        verify(midtierServiceOperation, times(1)).getValidator();
+        verify(midtierServiceOperation, times(1)).requiresDisclosureConsent();
+    }
+
+    @Test
+    void testInvokeService_invalidRequest_validationException() throws Throwable {
+        // Simulate validation exception
+        when(midtierServiceOperation.getValidator()).thenReturn(mock(MsecValidator.class));
+        when(midtierServiceOperation.getValidator().validate(request)).thenReturn(new ValidationException());
+        
+        try {
+            standardOperationsAspect.invokeService(joinPoint);
+            fail("Exception should have been thrown");
+        } catch (ValidationException ex) {
+            assertNotNull(ex);
+            verify(midtierServiceOperation, times(1)).getValidator();
+        }
+    }
+
+    @Test
+    void testInvokeService_withDisclosureConsent_failed() throws Throwable {
+        // Simulate failure in capturing consent
+        when(midtierServiceOperation.requiresDisclosureConsent()).thenReturn(true);
+        doThrow(new Exception("Consent Failed")).when(midtierServiceOperation).requiresDisclosureConsent();
+
+        try {
+            standardOperationsAspect.invokeService(joinPoint);
+            fail("Exception should have been thrown");
+        } catch (Throwable ex) {
+            assertTrue(ex instanceof RuntimeException);
+            verify(midtierServiceOperation, times(1)).requiresDisclosureConsent();
+        }
+    }
+
+    @Test
+    void testInvokeService_withErrorResponse() throws Throwable {
+        // Simulate error in response
+        when(joinPoint.proceed()).thenReturn(null);  // Simulate null response
+
+        try {
+            standardOperationsAspect.invokeService(joinPoint);
+            fail("Exception should have been thrown");
+        } catch (RuntimeException ex) {
+            assertTrue(ex.getMessage().contains("MS601"));
+        }
+    }
+
+    @Test
+    void testInvokeService_withSuccessfulResponse_emailTriggered() throws Throwable {
+        // Simulate successful service response with email trigger
+        when(joinPoint.proceed()).thenReturn(response);
+        when(response.getErrorMessages()).thenReturn(Arrays.asList());
+        when(midtierServiceOperation.generateAutoComment()).thenReturn(true);
+        
+        standardOperationsAspect.invokeService(joinPoint);
+        
+        verify(midtierServiceOperation, times(1)).generateAutoComment();
+        verify(midtierServiceOperation, times(1)).createAutoComment(any(), eq(response));
+    }
+
+    @Test
+    void testInvokeService_withErrorMessages() throws Throwable {
+        // Simulate error messages in the response
+        when(joinPoint.proceed()).thenReturn(response);
+        when(response.getErrorMessages()).thenReturn(Arrays.asList(new BaseResponse.ErrorMessage("ERROR_CODE", "Error Description")));
+
+        try {
+            standardOperationsAspect.invokeService(joinPoint);
+            fail("Exception should have been thrown");
+        } catch (RuntimeException ex) {
+            assertTrue(ex.getMessage().contains("ERROR_CODE"));
+        }
+    }
+
+    @Test
+    void testInvokeService_withAuditLogging() throws Throwable {
+        // Simulate successful execution with audit log creation
+        when(joinPoint.proceed()).thenReturn(response);
+        
+        BaseResponse result = standardOperationsAspect.invokeService(joinPoint);
+        
+        assertNotNull(result);
+        verify(midtierServiceOperation, times(1)).createAuditLog(any(), any(), any(), any());
+    }
+
+}

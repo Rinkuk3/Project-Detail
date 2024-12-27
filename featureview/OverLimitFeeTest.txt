@@ -1,0 +1,129 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+class OverLimitFeeTest {
+
+    private OverLimitFee overLimitFee;
+
+    @BeforeEach
+    void setUp() {
+        overLimitFee = new OverLimitFee();
+    }
+
+    @Test
+    void testGetSetWaiveInd() {
+        overLimitFee.setWaiveInd(true);
+        assertTrue(overLimitFee.getWaiveInd());
+        overLimitFee.setWaiveInd(false);
+        assertFalse(overLimitFee.getWaiveInd());
+    }
+
+    @Test
+    void testGetSetPermanentWaiveInd() {
+        overLimitFee.setPermanentWaiveInd(true);
+        assertTrue(overLimitFee.getPermanentWaiveInd());
+        overLimitFee.setPermanentWaiveInd(false);
+        assertFalse(overLimitFee.getPermanentWaiveInd());
+    }
+
+    @Test
+    void testGetSetCycleToWaiveCnt() {
+        overLimitFee.setCycleToWaiveCnt(5);
+        assertEquals(5, overLimitFee.getCycleToWaiveCnt());
+        overLimitFee.setCycleToWaiveCnt(10);
+        assertEquals(10, overLimitFee.getCycleToWaiveCnt());
+    }
+
+    @Test
+    void testGetSetLastUpdateDt() {
+        String date = "2024-12-20";
+        overLimitFee.setLastUpdateDt(date);
+        assertEquals(date, overLimitFee.getLastUpdateDt());
+
+        String newDate = "2025-01-01";
+        overLimitFee.setLastUpdateDt(newDate);
+        assertEquals(newDate, overLimitFee.getLastUpdateDt());
+    }
+
+    @Test
+    void testToString() {
+        overLimitFee.setWaiveInd(true);
+        overLimitFee.setPermanentWaiveInd(false);
+        overLimitFee.setCycleToWaiveCnt(5);
+        overLimitFee.setLastUpdateDt("2024-12-20");
+
+        String result = overLimitFee.toString();
+        assertTrue(result.contains("waiveInd"));
+        assertTrue(result.contains("permanentWaiveInd"));
+        assertTrue(result.contains("cycleToWaiveCnt"));
+        assertTrue(result.contains("lastUpdateDt"));
+    }
+
+    @Test
+    void testHashCode() {
+        overLimitFee.setWaiveInd(true);
+        overLimitFee.setPermanentWaiveInd(false);
+        overLimitFee.setCycleToWaiveCnt(5);
+        overLimitFee.setLastUpdateDt("2024-12-20");
+
+        int hashCode = overLimitFee.hashCode();
+        assertNotNull(hashCode);
+    }
+
+    @Test
+    void testEquals() {
+        OverLimitFee other = new OverLimitFee();
+        other.setWaiveInd(true);
+        other.setPermanentWaiveInd(false);
+        other.setCycleToWaiveCnt(5);
+        other.setLastUpdateDt("2024-12-20");
+
+        overLimitFee.setWaiveInd(true);
+        overLimitFee.setPermanentWaiveInd(false);
+        overLimitFee.setCycleToWaiveCnt(5);
+        overLimitFee.setLastUpdateDt("2024-12-20");
+
+        assertTrue(overLimitFee.equals(other));
+    }
+
+    @Test
+    void testEquals_withNull() {
+        assertFalse(overLimitFee.equals(null));
+    }
+
+    @Test
+    void testEquals_withDifferentType() {
+        assertFalse(overLimitFee.equals("string"));
+    }
+
+    @Test
+    void testEquals_withDifferentValues() {
+        OverLimitFee other = new OverLimitFee();
+        other.setWaiveInd(true);
+
+        overLimitFee.setWaiveInd(true);
+        overLimitFee.setPermanentWaiveInd(false);
+        overLimitFee.setCycleToWaiveCnt(5);
+        overLimitFee.setLastUpdateDt("2024-12-20");
+
+        assertFalse(overLimitFee.equals(other));
+    }
+
+    @Test
+    void testEquals_withNullFields() {
+        OverLimitFee other = new OverLimitFee();
+        other.setWaiveInd(null);
+        other.setPermanentWaiveInd(null);
+        other.setCycleToWaiveCnt(null);
+        other.setLastUpdateDt(null);
+
+        overLimitFee.setWaiveInd(null);
+        overLimitFee.setPermanentWaiveInd(null);
+        overLimitFee.setCycleToWaiveCnt(null);
+        overLimitFee.setLastUpdateDt(null);
+
+        assertTrue(overLimitFee.equals(other));
+    }
+}

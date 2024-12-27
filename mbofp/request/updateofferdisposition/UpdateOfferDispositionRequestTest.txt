@@ -1,0 +1,79 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class UpdateOfferDispositionRequestTest {
+
+    private UpdateOfferDispositionRequest updateOfferDispositionRequest;
+    private PartyResponse partyResponse;
+
+    @BeforeEach
+    void setUp() {
+        updateOfferDispositionRequest = new UpdateOfferDispositionRequest();
+        partyResponse = new PartyResponse();
+    }
+
+    @Test
+    void testGetAndSetPartyResponse() {
+        partyResponse.setTypeCd("Type1");
+        partyResponse.setReasonCd("Reason1");
+        updateOfferDispositionRequest.setPartyResponse(partyResponse);
+        assertEquals(partyResponse, updateOfferDispositionRequest.getPartyResponse());
+    }
+
+    @Test
+    void testToString() {
+        partyResponse.setTypeCd("Type1");
+        partyResponse.setReasonCd("Reason1");
+        updateOfferDispositionRequest.setPartyResponse(partyResponse);
+
+        String expected = "com.td.api.mbofp.request.updateofferdisposition.UpdateOfferDispositionRequest@" +
+                          Integer.toHexString(updateOfferDispositionRequest.hashCode()) +
+                          "[partyResponse=com.td.api.mbofp.request.updateofferdisposition.PartyResponse@" +
+                          Integer.toHexString(partyResponse.hashCode()) + "[typeCd=Type1,reasonCd=Reason1]]";
+        assertEquals(expected, updateOfferDispositionRequest.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        partyResponse.setTypeCd("Type1");
+        partyResponse.setReasonCd("Reason1");
+        updateOfferDispositionRequest.setPartyResponse(partyResponse);
+
+        int expectedHashCode = 1;
+        expectedHashCode = 31 * expectedHashCode + (updateOfferDispositionRequest.getPartyResponse() == null ? 0 : updateOfferDispositionRequest.getPartyResponse().hashCode());
+        assertEquals(expectedHashCode, updateOfferDispositionRequest.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        partyResponse.setTypeCd("Type1");
+        partyResponse.setReasonCd("Reason1");
+        updateOfferDispositionRequest.setPartyResponse(partyResponse);
+
+        // Test equality with same object
+        assertTrue(updateOfferDispositionRequest.equals(updateOfferDispositionRequest));
+
+        // Test equality with another object having the same fields
+        UpdateOfferDispositionRequest anotherRequest = new UpdateOfferDispositionRequest();
+        PartyResponse anotherPartyResponse = new PartyResponse();
+        anotherPartyResponse.setTypeCd("Type1");
+        anotherPartyResponse.setReasonCd("Reason1");
+        anotherRequest.setPartyResponse(anotherPartyResponse);
+        assertTrue(updateOfferDispositionRequest.equals(anotherRequest));
+
+        // Test inequality with a different PartyResponse
+        UpdateOfferDispositionRequest differentRequest = new UpdateOfferDispositionRequest();
+        PartyResponse differentPartyResponse = new PartyResponse();
+        differentPartyResponse.setTypeCd("Type2");
+        differentPartyResponse.setReasonCd("Reason2");
+        differentRequest.setPartyResponse(differentPartyResponse);
+        assertFalse(updateOfferDispositionRequest.equals(differentRequest));
+
+        // Test inequality with null
+        assertFalse(updateOfferDispositionRequest.equals(null));
+
+        // Test inequality with an object of a different class
+        assertFalse(updateOfferDispositionRequest.equals(new Object()));
+    }
+}

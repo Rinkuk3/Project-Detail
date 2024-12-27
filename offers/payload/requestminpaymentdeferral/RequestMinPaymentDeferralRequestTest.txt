@@ -1,0 +1,113 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestMinPaymentDeferralRequestTest {
+
+    @Test
+    void testSetGetRequestPayload() {
+        RequestMinPaymentDeferralRequest request = new RequestMinPaymentDeferralRequest();
+        RequestPayload requestPayload = new RequestPayload();
+        request.setRequestPayload(requestPayload);
+        
+        assertEquals(requestPayload, request.getRequestPayload());
+    }
+
+    @Test
+    void testToString() {
+        RequestMinPaymentDeferralRequest request = new RequestMinPaymentDeferralRequest();
+        request.setSessionInfo("sessionInfo");
+        request.setCustId("custId");
+        request.setAliasCustId("aliasCustId");
+        request.setAcctNum("acctNum");
+        request.setAcctType("acctType");
+        request.setLanguagePref("languagePref");
+        request.setAuditInfo("auditInfo");
+        request.setIsPrimaryUser(true);
+        request.setReserved1("reserved1");
+        request.setCustInterface("custInterface");
+        request.setIsMultiCard(true);
+        request.setCardNum("cardNum");
+        
+        String expectedString = "RequestMinPaymentDeferralRequest@" + Integer.toHexString(System.identityHashCode(request)) + "[sessionInfo=sessionInfo,custId=custId,aliasCustId=aliasCustId,acctNum=acctNum,acctType=acctType,languagePref=languagePref,auditInfo=auditInfo,isPrimaryUser=true,reserved1=reserved1,custInterface=custInterface,isMultiCard=true,cardNum=cardNum,requestPayload=<null>]";
+        assertEquals(expectedString, request.toString());
+        
+        RequestPayload requestPayload = new RequestPayload();
+        request.setRequestPayload(requestPayload);
+        expectedString = "RequestMinPaymentDeferralRequest@" + Integer.toHexString(System.identityHashCode(request)) + "[sessionInfo=sessionInfo,custId=custId,aliasCustId=aliasCustId,acctNum=acctNum,acctType=acctType,languagePref=languagePref,auditInfo=auditInfo,isPrimaryUser=true,reserved1=reserved1,custInterface=custInterface,isMultiCard=true,cardNum=cardNum,requestPayload=" + requestPayload.toString() + "]";
+        assertEquals(expectedString, request.toString());
+    }
+
+    @Test
+    void testEquals() {
+        RequestMinPaymentDeferralRequest request1 = new RequestMinPaymentDeferralRequest();
+        RequestMinPaymentDeferralRequest request2 = new RequestMinPaymentDeferralRequest();
+        
+        request1.setSessionInfo("sessionInfo");
+        request1.setCustId("custId");
+        request1.setAliasCustId("aliasCustId");
+        request1.setAcctNum("acctNum");
+        request1.setAcctType("acctType");
+        request1.setLanguagePref("languagePref");
+        request1.setAuditInfo("auditInfo");
+        request1.setIsPrimaryUser(true);
+        request1.setReserved1("reserved1");
+        request1.setCustInterface("custInterface");
+        request1.setIsMultiCard(true);
+        request1.setCardNum("cardNum");
+        
+        request2.setSessionInfo("sessionInfo");
+        request2.setCustId("custId");
+        request2.setAliasCustId("aliasCustId");
+        request2.setAcctNum("acctNum");
+        request2.setAcctType("acctType");
+        request2.setLanguagePref("languagePref");
+        request2.setAuditInfo("auditInfo");
+        request2.setIsPrimaryUser(true);
+        request2.setReserved1("reserved1");
+        request2.setCustInterface("custInterface");
+        request2.setIsMultiCard(true);
+        request2.setCardNum("cardNum");
+        
+        assertEquals(request1, request2);
+        
+        request2.setCustId("newCustId");
+        assertNotEquals(request1, request2);
+    }
+
+    @Test
+    void testHashCode() {
+        RequestMinPaymentDeferralRequest request1 = new RequestMinPaymentDeferralRequest();
+        RequestMinPaymentDeferralRequest request2 = new RequestMinPaymentDeferralRequest();
+        
+        request1.setSessionInfo("sessionInfo");
+        request1.setCustId("custId");
+        request1.setAliasCustId("aliasCustId");
+        request1.setAcctNum("acctNum");
+        request1.setAcctType("acctType");
+        request1.setLanguagePref("languagePref");
+        request1.setAuditInfo("auditInfo");
+        request1.setIsPrimaryUser(true);
+        request1.setReserved1("reserved1");
+        request1.setCustInterface("custInterface");
+        request1.setIsMultiCard(true);
+        request1.setCardNum("cardNum");
+        
+        request2.setSessionInfo("sessionInfo");
+        request2.setCustId("custId");
+        request2.setAliasCustId("aliasCustId");
+        request2.setAcctNum("acctNum");
+        request2.setAcctType("acctType");
+        request2.setLanguagePref("languagePref");
+        request2.setAuditInfo("auditInfo");
+        request2.setIsPrimaryUser(true);
+        request2.setReserved1("reserved1");
+        request2.setCustInterface("custInterface");
+        request2.setIsMultiCard(true);
+        request2.setCardNum("cardNum");
+        
+        assertEquals(request1.hashCode(), request2.hashCode());
+        
+        request2.setCustId("newCustId");
+        assertNotEquals(request1.hashCode(), request2.hashCode());
+    }
+}

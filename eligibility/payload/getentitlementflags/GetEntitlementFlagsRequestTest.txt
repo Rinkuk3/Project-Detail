@@ -1,0 +1,118 @@
+package com.td.mbna.msec.midtier.eligibility.payload.getentitlementflags;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class GetEntitlementFlagsRequestTest {
+
+    private GetEntitlementFlagsRequest request;
+    private RequestPayload requestPayload;
+
+    @BeforeEach
+    void setUp() {
+        request = new GetEntitlementFlagsRequest();
+        requestPayload = new RequestPayload();
+    }
+
+    @Test
+    void testGetSetRequestPayload() {
+        request.setRequestPayload(requestPayload);
+        assertEquals(requestPayload, request.getRequestPayload());
+    }
+
+    @Test
+    void testToString() {
+        request.setSessionInfo("sessionInfo");
+        request.setCustId("custId");
+        request.setAliasCustId("aliasCustId");
+        request.setAcctNum("acctNum");
+        request.setAcctType("acctType");
+        request.setLanguagePref("EN");
+        request.setAuditInfo("auditInfo");
+        request.setIsPrimaryUser("true");
+        request.setReserved1("reserved1");
+        request.setCustInterface("web");
+        request.setRequestPayload(requestPayload);
+
+        String expected = "com.td.mbna.msec.midtier.eligibility.payload.getentitlementflags.GetEntitlementFlagsRequest@" +
+                Integer.toHexString(System.identityHashCode(request)) +
+                "[sessionInfo=sessionInfo,custId=custId,aliasCustId=aliasCustId,acctNum=acctNum,acctType=acctType," +
+                "languagePref=EN,auditInfo=auditInfo,isPrimaryUser=true,reserved1=reserved1,custInterface=web," +
+                "requestPayload=" + requestPayload.toString() + ",]";
+
+        assertEquals(expected, request.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        GetEntitlementFlagsRequest request1 = new GetEntitlementFlagsRequest();
+        request1.setSessionInfo("sessionInfo");
+        request1.setCustId("custId");
+        request1.setAliasCustId("aliasCustId");
+        request1.setAcctNum("acctNum");
+        request1.setAcctType("acctType");
+        request1.setLanguagePref("EN");
+        request1.setAuditInfo("auditInfo");
+        request1.setIsPrimaryUser("true");
+        request1.setReserved1("reserved1");
+        request1.setCustInterface("web");
+        request1.setRequestPayload(requestPayload);
+
+        GetEntitlementFlagsRequest request2 = new GetEntitlementFlagsRequest();
+        request2.setSessionInfo("sessionInfo");
+        request2.setCustId("custId");
+        request2.setAliasCustId("aliasCustId");
+        request2.setAcctNum("acctNum");
+        request2.setAcctType("acctType");
+        request2.setLanguagePref("EN");
+        request2.setAuditInfo("auditInfo");
+        request2.setIsPrimaryUser("true");
+        request2.setReserved1("reserved1");
+        request2.setCustInterface("web");
+        request2.setRequestPayload(requestPayload);
+
+        assertEquals(request1.hashCode(), request2.hashCode());
+
+        request2.setCustId("newCustId");
+        assertNotEquals(request1.hashCode(), request2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        GetEntitlementFlagsRequest request1 = new GetEntitlementFlagsRequest();
+        request1.setSessionInfo("sessionInfo");
+        request1.setCustId("custId");
+        request1.setAliasCustId("aliasCustId");
+        request1.setAcctNum("acctNum");
+        request1.setAcctType("acctType");
+        request1.setLanguagePref("EN");
+        request1.setAuditInfo("auditInfo");
+        request1.setIsPrimaryUser("true");
+        request1.setReserved1("reserved1");
+        request1.setCustInterface("web");
+        request1.setRequestPayload(requestPayload);
+
+        GetEntitlementFlagsRequest request2 = new GetEntitlementFlagsRequest();
+        request2.setSessionInfo("sessionInfo");
+        request2.setCustId("custId");
+        request2.setAliasCustId("aliasCustId");
+        request2.setAcctNum("acctNum");
+        request2.setAcctType("acctType");
+        request2.setLanguagePref("EN");
+        request2.setAuditInfo("auditInfo");
+        request2.setIsPrimaryUser("true");
+        request2.setReserved1("reserved1");
+        request2.setCustInterface("web");
+        request2.setRequestPayload(requestPayload);
+
+        assertTrue(request1.equals(request2));
+
+        request2.setCustId("newCustId");
+        assertFalse(request1.equals(request2));
+
+        assertFalse(request1.equals(null));
+        assertFalse(request1.equals(new Object()));
+    }
+}

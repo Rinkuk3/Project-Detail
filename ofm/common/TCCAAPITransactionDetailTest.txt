@@ -1,0 +1,95 @@
+package com.td.api.ofm.common;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class TCCAAPITransactionDetailTest {
+
+    private TCCAAPITransactionDetail transactionDetail;
+
+    @BeforeEach
+    public void setUp() {
+        transactionDetail = new TCCAAPITransactionDetail();
+    }
+
+    @Test
+    public void testGettersAndSetters() {
+        transactionDetail.setTransactionDt("2024-12-26");
+        transactionDetail.setReferenceNum("ref12345");
+        transactionDetail.setReceiptNum("rec67890");
+        transactionDetail.setTransactionCd("txn001");
+        transactionDetail.setCashOptionCd("cash01");
+
+        assertEquals("2024-12-26", transactionDetail.getTransactionDt());
+        assertEquals("ref12345", transactionDetail.getReferenceNum());
+        assertEquals("rec67890", transactionDetail.getReceiptNum());
+        assertEquals("txn001", transactionDetail.getTransactionCd());
+        assertEquals("cash01", transactionDetail.getCashOptionCd());
+    }
+
+    @Test
+    public void testToString() {
+        transactionDetail.setTransactionDt("2024-12-26");
+        transactionDetail.setReferenceNum("ref12345");
+        transactionDetail.setReceiptNum("rec67890");
+        transactionDetail.setTransactionCd("txn001");
+        transactionDetail.setCashOptionCd("cash01");
+
+        String expectedString = "com.td.api.ofm.common.TCCAAPITransactionDetail@" + Integer.toHexString(transactionDetail.hashCode()) +
+                "[transactionDt=2024-12-26,referenceNum=ref12345,receiptNum=rec67890,transactionCd=txn001,cashOptionCd=cash01]";
+
+        assertEquals(expectedString, transactionDetail.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        transactionDetail.setTransactionDt("2024-12-26");
+        transactionDetail.setReferenceNum("ref12345");
+        transactionDetail.setReceiptNum("rec67890");
+        transactionDetail.setTransactionCd("txn001");
+        transactionDetail.setCashOptionCd("cash01");
+
+        int expectedHashCode = 31 * (31 * (31 * (31 * ("ref12345".hashCode()) + "txn001".hashCode()) + "2024-12-26".hashCode()) + "cash01".hashCode()) + "rec67890".hashCode();
+
+        assertEquals(expectedHashCode, transactionDetail.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        TCCAAPITransactionDetail transactionDetail2 = new TCCAAPITransactionDetail();
+        transactionDetail.setTransactionDt("2024-12-26");
+        transactionDetail.setReferenceNum("ref12345");
+        transactionDetail.setReceiptNum("rec67890");
+        transactionDetail.setTransactionCd("txn001");
+        transactionDetail.setCashOptionCd("cash01");
+
+        transactionDetail2.setTransactionDt("2024-12-26");
+        transactionDetail2.setReferenceNum("ref12345");
+        transactionDetail2.setReceiptNum("rec67890");
+        transactionDetail2.setTransactionCd("txn001");
+        transactionDetail2.setCashOptionCd("cash01");
+
+        assertTrue(transactionDetail.equals(transactionDetail2));
+
+        transactionDetail2.setReceiptNum("rec99999");
+        assertFalse(transactionDetail.equals(transactionDetail2));
+
+        transactionDetail2.setReceiptNum("rec67890");
+        transactionDetail2.setReferenceNum("ref99999");
+        assertFalse(transactionDetail.equals(transactionDetail2));
+
+        transactionDetail2.setReferenceNum("ref12345");
+        transactionDetail2.setTransactionCd("txn002");
+        assertFalse(transactionDetail.equals(transactionDetail2));
+
+        transactionDetail2.setTransactionCd("txn001");
+        transactionDetail2.setTransactionDt("2024-12-25");
+        assertFalse(transactionDetail.equals(transactionDetail2));
+
+        transactionDetail2.setTransactionDt("2024-12-26");
+        transactionDetail2.setCashOptionCd("cash02");
+        assertFalse(transactionDetail.equals(transactionDetail2));
+    }
+}

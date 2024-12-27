@@ -1,0 +1,85 @@
+package com.td.api.dms.common;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class StatusTest {
+
+    private Status status;
+    private Additionalstatus additionalstatus;
+
+    @BeforeEach
+    void setUp() {
+        status = new Status();
+        additionalstatus = new Additionalstatus();
+    }
+
+    @Test
+    void testGetAndSetServerStatusCode() {
+        status.setServerStatusCode("200");
+        assertEquals("200", status.getServerStatusCode());
+    }
+
+    @Test
+    void testGetAndSetAdditionalStatus() {
+        additionalstatus.setStatusCode(100);
+        additionalstatus.setStatusDesc("Test Description");
+        status.setAdditionalStatus(Arrays.asList(additionalstatus));
+        assertEquals(1, status.getAdditionalStatus().size());
+        assertEquals(additionalstatus, status.getAdditionalStatus().get(0));
+    }
+
+    @Test
+    void testToString() {
+        additionalstatus.setStatusCode(100);
+        additionalstatus.setStatusDesc("Test Description");
+        status.setServerStatusCode("200");
+        status.setAdditionalStatus(Arrays.asList(additionalstatus));
+
+        String expectedString = "com.td.api.dms.common.Status@" + Integer.toHexString(System.identityHashCode(status)) +
+                "[serverStatusCode=200,additionalStatus=" + status.getAdditionalStatus() + ",]";
+
+        assertTrue(status.toString().contains("serverStatusCode=200"));
+        assertTrue(status.toString().contains("additionalStatus=" + status.getAdditionalStatus()));
+    }
+
+    @Test
+    void testHashCode() {
+        Status status1 = new Status();
+        Status status2 = new Status();
+        assertEquals(status1.hashCode(), status2.hashCode());
+
+        status1.setServerStatusCode("200");
+        status2.setServerStatusCode("200");
+        assertEquals(status1.hashCode(), status2.hashCode());
+
+        additionalstatus.setStatusCode(100);
+        status1.setAdditionalStatus(Arrays.asList(additionalstatus));
+        status2.setAdditionalStatus(Arrays.asList(additionalstatus));
+        assertEquals(status1.hashCode(), status2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        Status status1 = new Status();
+        Status status2 = new Status();
+        assertTrue(status1.equals(status2));
+
+        status1.setServerStatusCode("200");
+        assertFalse(status1.equals(status2));
+        status2.setServerStatusCode("200");
+        assertTrue(status1.equals(status2));
+
+        additionalstatus.setStatusCode(100);
+        status1.setAdditionalStatus(Arrays.asList(additionalstatus));
+        status2.setAdditionalStatus(Arrays.asList(additionalstatus));
+        assertTrue(status1.equals(status2));
+
+        status2.setAdditionalStatus(Arrays.asList(new Additionalstatus()));
+        assertFalse(status1.equals(status2));
+    }
+}

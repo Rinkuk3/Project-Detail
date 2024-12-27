@@ -1,0 +1,105 @@
+package com.td.mbna.msec.midtier.transfer.payload.addbalancetransfertocreditorpayee;
+
+import com.td.mbna.msec.midtier.transfer.payload.BalanceTransferToCreditorPayeeType;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class RequestPayloadTest {
+
+    private RequestPayload requestPayload;
+    private BalanceTransferToCreditorPayeeType payee;
+
+    @Before
+    public void setUp() {
+        requestPayload = new RequestPayload();
+        payee = new BalanceTransferToCreditorPayeeType();
+    }
+
+    @Test
+    public void testGetAndSetPayee() {
+        requestPayload.setPayee(payee);
+        assertEquals(payee, requestPayload.getPayee());
+
+        requestPayload.setPayee(null);
+        assertNull(requestPayload.getPayee());
+    }
+
+    @Test
+    public void testGetAndSetConfirmed() {
+        requestPayload.setConfirmed(true);
+        assertTrue(requestPayload.getConfirmed());
+
+        requestPayload.setConfirmed(false);
+        assertFalse(requestPayload.getConfirmed());
+
+        requestPayload.setConfirmed(null);
+        assertNull(requestPayload.getConfirmed());
+    }
+
+    @Test
+    public void testToString() {
+        requestPayload.setPayee(payee);
+        requestPayload.setConfirmed(true);
+
+        String expectedString = "com.td.mbna.msec.midtier.transfer.payload.addbalancetransfertocreditorpayee.RequestPayload@"
+                + Integer.toHexString(System.identityHashCode(requestPayload))
+                + "[payee=" + payee + ",confirmed=true]";
+
+        assertEquals(expectedString, requestPayload.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        RequestPayload payload1 = new RequestPayload();
+        payload1.setPayee(payee);
+        payload1.setConfirmed(true);
+
+        RequestPayload payload2 = new RequestPayload();
+        payload2.setPayee(payee);
+        payload2.setConfirmed(true);
+
+        RequestPayload payload3 = new RequestPayload();
+        payload3.setPayee(payee);
+        payload3.setConfirmed(false);
+
+        assertEquals(payload1.hashCode(), payload2.hashCode());
+        assertNotEquals(payload1.hashCode(), payload3.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        RequestPayload payload1 = new RequestPayload();
+        payload1.setPayee(payee);
+        payload1.setConfirmed(true);
+
+        RequestPayload payload2 = new RequestPayload();
+        payload2.setPayee(payee);
+        payload2.setConfirmed(true);
+
+        RequestPayload payload3 = new RequestPayload();
+        payload3.setPayee(payee);
+        payload3.setConfirmed(false);
+
+        assertTrue(payload1.equals(payload2));
+        assertFalse(payload1.equals(payload3));
+
+        // Test equality with a different class type
+        assertFalse(payload1.equals("String"));
+    }
+
+    @Test
+    public void testEqualsWithNull() {
+        RequestPayload payload1 = new RequestPayload();
+        payload1.setPayee(null);
+        payload1.setConfirmed(null);
+
+        RequestPayload payload2 = new RequestPayload();
+        payload2.setPayee(null);
+        payload2.setConfirmed(null);
+
+        assertTrue(payload1.equals(payload2));
+    }
+
+}

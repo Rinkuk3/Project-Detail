@@ -1,0 +1,75 @@
+package com.td.api.ofm.common;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class TCCAAPITransactionTest {
+
+    private TCCAAPITransaction transaction;
+
+    @BeforeEach
+    public void setUp() {
+        transaction = new TCCAAPITransaction();
+    }
+
+    @Test
+    public void testGettersAndSetters() {
+        transaction.setTransactionDt("2024-12-26");
+        transaction.setReferenceNum("ref12345");
+        transaction.setReceiptNum("rec67890");
+
+        assertEquals("2024-12-26", transaction.getTransactionDt());
+        assertEquals("ref12345", transaction.getReferenceNum());
+        assertEquals("rec67890", transaction.getReceiptNum());
+    }
+
+    @Test
+    public void testToString() {
+        transaction.setTransactionDt("2024-12-26");
+        transaction.setReferenceNum("ref12345");
+        transaction.setReceiptNum("rec67890");
+
+        String expectedString = "com.td.api.ofm.common.TCCAAPITransaction@" + Integer.toHexString(transaction.hashCode()) +
+                "[transactionDt=2024-12-26,referenceNum=ref12345,receiptNum=rec67890]";
+
+        assertEquals(expectedString, transaction.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        transaction.setTransactionDt("2024-12-26");
+        transaction.setReferenceNum("ref12345");
+        transaction.setReceiptNum("rec67890");
+
+        int expectedHashCode = 31 * (31 * ("ref12345".hashCode()) + ("2024-12-26".hashCode())) + "rec67890".hashCode();
+
+        assertEquals(expectedHashCode, transaction.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        TCCAAPITransaction transaction2 = new TCCAAPITransaction();
+        transaction.setTransactionDt("2024-12-26");
+        transaction.setReferenceNum("ref12345");
+        transaction.setReceiptNum("rec67890");
+
+        transaction2.setTransactionDt("2024-12-26");
+        transaction2.setReferenceNum("ref12345");
+        transaction2.setReceiptNum("rec67890");
+
+        assertTrue(transaction.equals(transaction2));
+
+        transaction2.setReceiptNum("rec99999");
+        assertFalse(transaction.equals(transaction2));
+
+        transaction2.setReceiptNum("rec67890");
+        transaction2.setReferenceNum("ref99999");
+        assertFalse(transaction.equals(transaction2));
+
+        transaction2.setReferenceNum("ref12345");
+        transaction2.setTransactionDt("2024-12-25");
+        assertFalse(transaction.equals(transaction2));
+    }
+}

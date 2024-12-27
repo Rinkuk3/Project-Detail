@@ -1,0 +1,143 @@
+package com.td.mbna.msec.midtier.mbnaap.facade;
+
+import com.td.api.mbpad.request.addconsent.AddConsentRequest;
+import com.td.api.mbpad.request.adddirectcredit.AddDirectCreditRequest;
+import com.td.api.mbpad.response.adddirectcredit.AddDirectCreditResponse;
+import com.td.api.mbpad.response.retrievedirectcredit.RetrieveDirectCreditResponse;
+import com.td.api.mbpad.response.retrievedirectcreditlist.RetrieveDirectCreditListResponse;
+import com.td.api.mbpad.response.validone.ValidoneResponse;
+import com.td.mbna.msec.midtier.autopay.payload.addpad.AddPadRequest;
+import com.td.mbna.msec.midtier.autopay.payload.addpad.AddPadResponse;
+import com.td.mbna.msec.midtier.autopay.payload.checkpadenrolled.CheckPadEnrolledResponse;
+import com.td.mbna.msec.midtier.autopay.payload.retrievepad.RetrievePadResponse;
+import com.td.mbna.msec.midtier.autopay.payload.updatepad.UpdatePadRequest;
+import com.td.mbna.msec.midtier.util.services.MSECConstants;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class MbnaAPFacadeTest {
+
+    @InjectMocks
+    private MbnaAPFacade mbnaAPFacade;
+
+    @Mock
+    private RestTemplate restTemplate;
+
+    @Mock
+    private MbnaAPAdaptor mbnaAPAdaptor;
+
+    private static final String TOKEN = "testToken";
+    private static final String CARD_NUM = "123456789";
+    private static final String ARRANGEMENT_ID = "arrangement123";
+    private static final String BANK_NUM = "123";
+    private static final String BRANCH_NUM = "456";
+    private static final String ACCOUNT_NUM = "789";
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testCheckEnrolledForPad() {
+        CheckPadEnrolledResponse mockResponse = new CheckPadEnrolledResponse();
+        mockResponse.setResponsePayload(new CheckPadEnrolledResponse.Payload());
+        mockResponse.getResponsePayload().setArrangementId(ARRANGEMENT_ID);
+        RetrievePadResponse retrievePadResponse = new RetrievePadResponse();
+        retrievePadResponse.setResponsePayload(new RetrievePadResponse.Payload());
+        retrievePadResponse.getResponsePayload().setBankAccount(ACCOUNT_NUM);
+
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(), eq(RetrieveDirectCreditListResponse.class)))
+                .thenReturn(new ResponseEntity<>(new RetrieveDirectCreditListResponse(), HttpStatus.OK));
+        when(mbnaAPAdaptor.checkPadEnrolled(any())).thenReturn(mockResponse);
+        when(mbnaAPFacade.retrievePad(eq(ARRANGEMENT_ID), eq(TOKEN))).thenReturn(retrievePadResponse);
+
+        CheckPadEnrolledResponse response = mbnaAPFacade.checkEnrolledForPad(CARD_NUM, TOKEN);
+
+        assertNotNull(response);
+        assertEquals(ACCOUNT_NUM, response.getResponsePayload().getAccountNum());
+    }
+
+    @Test
+    void testAddPad() {
+        AddPadRequest addPadRequest = new AddPadRequest();
+        AddConsentRequest addConsentRequest = new AddConsentRequest();
+        AddDirectCreditRequest addDirectCreditRequest = new AddDirectCreditRequest();
+        AddPadResponse addPadResponse = new AddPadResponse();
+
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(), eq(AddConsentRequest.class)))
+                .thenReturn(new ResponseEntity<>(addConsentRequest, HttpStatus.OK));
+        when(mbnaAPAdaptor.getAddConsentRequest(any(), anyBoolean())).thenReturn(addConsentRequest);
+        when(mbnaAPAdaptor.getAddDirectCreditRequest(any())).thenReturn(addDirectCreditRequest);
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(), eq(AddDirectCreditResponse.class)))
+                .thenReturn(new ResponseEntity<>(new AddDirectCreditResponse(), HttpStatus.OK));
+        when(mbnaAPAdaptor.getAddPadResponse(any())).thenReturn(addPadResponse);
+
+        AddPadResponse response = mbnaAPFacade.addPad(addPadRequest, TOKEN);
+
+        assertNotNull(response);
+    }
+
+    @Test
+    void testValidateBankAccount() {
+        ValidoneResponse validoneResponse = new ValidoneResponse();
+        validoneResponse.setValidAccount(true);
+
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(), eq(ValidoneResponse.class)))
+                .thenReturn(new ResponseEntity<>(validoneResponse, HttpStatus.OK));
+
+        ValidateBankAccountResponse response = mbnaAPFacade.validateBankAccount(new ValidateBankAccountRequest(), TOKEN);
+
+        assertTrue(response.getResponsePayload().isValidAccount());
+    }
+
+    @Test
+    void testRetrieveBranch() {
+        RetrieveBranchResponse mockResponse = new RetrieveBranchResponse();
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(), eq(RetrieveBranchResponse.class)))
+                .thenReturn(new ResponseEntity<>(mockResponse, HttpStatus.OK));
+
+        RetrieveBranchResponse response = mbnaAPFacade.retrieveBranch(BANK_NUM, BRANCH_NUM, TOKEN);
+
+        assertNotNull(response);
+    }
+
+    @Test
+    void testRetrievePad() {
+        RetrievePadResponse mockResponse = new RetrievePadResponse();
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(), eq(RetrieveDirectCreditResponse.class)))
+                .thenReturn(new ResponseEntity<>(new RetrieveDirectCreditResponse(), HttpStatus.OK));
+        when(mbnaAPAdaptor.getRetrivePadResponse(any())).thenReturn(mockResponse);
+
+        RetrievePadResponse response = mbnaAPFacade.retrievePad(ARRANGEMENT_ID, TOKEN);
+
+        assertNotNull(response);
+    }
+
+    @Test
+    void testAddAuthorizationHeader() {
+        HttpHeaders headers = mbnaAPFacade.addAuthorizationHeader(TOKEN);
+        assertNotNull(headers);
+        assertTrue(headers.containsKey(MSECConstants.AUTHORIZATION));
+    }
+
+    @Test
+    void testHandleExceptionInCheckEnrolledForPad() {
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(), eq(RetrieveDirectCreditListResponse.class)))
+                .thenThrow(new RestClientException("Rest client exception"));
+
+        CheckPadEnrolledResponse response = mbnaAPFacade.checkEnrolledForPad(CARD_NUM, TOKEN);
+        assertNull(response);
+    }
+}

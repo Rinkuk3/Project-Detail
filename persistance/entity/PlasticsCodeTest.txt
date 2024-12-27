@@ -1,0 +1,137 @@
+package com.td.mbna.msec.midtier.persistance.entity;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class PlasticsCodeTest {
+
+    @Test
+    public void testSetAndGetProductCodes() {
+        PlasticsCode plasticsCode = new PlasticsCode();
+        plasticsCode.setProductCodes("Product123");
+        assertEquals("Product123", plasticsCode.getProductCodes());
+    }
+
+    @Test
+    public void testSetAndGetLanguage() {
+        PlasticsCode plasticsCode = new PlasticsCode();
+        plasticsCode.setLanguage("EN");
+        assertEquals("EN", plasticsCode.getLanguage());
+    }
+
+    @Test
+    public void testSetAndGetPoCode() {
+        PlasticsCode plasticsCode = new PlasticsCode();
+        plasticsCode.setPoCode("PO123");
+        assertEquals("PO123", plasticsCode.getPoCode());
+    }
+
+    @Test
+    public void testSetAndGetPictureId() {
+        PlasticsCode plasticsCode = new PlasticsCode();
+        plasticsCode.setPictureId("Picture123");
+        assertEquals("Picture123", plasticsCode.getPictureId());
+    }
+
+    @Test
+    public void testToString() {
+        PlasticsCode plasticsCode = new PlasticsCode();
+        plasticsCode.setProductCodes("Product123");
+        plasticsCode.setPoCode("PO123");
+        plasticsCode.setPictureId("Picture123");
+        assertEquals("Product123 | PO123 | Picture123", plasticsCode.toString());
+    }
+
+    @Test
+    public void testEqualsWithSameObject() {
+        PlasticsCode plasticsCode = new PlasticsCode();
+        assertTrue(plasticsCode.equals(plasticsCode));
+    }
+
+    @Test
+    public void testEqualsWithNullObject() {
+        PlasticsCode plasticsCode = new PlasticsCode();
+        assertFalse(plasticsCode.equals(null));
+    }
+
+    @Test
+    public void testEqualsWithDifferentClass() {
+        PlasticsCode plasticsCode = new PlasticsCode();
+        String otherClassObject = "String Object";
+        assertFalse(plasticsCode.equals(otherClassObject));
+    }
+
+    @Test
+    public void testEqualsWithDifferentProductCodes() {
+        PlasticsCode plasticsCode1 = new PlasticsCode();
+        PlasticsCode plasticsCode2 = new PlasticsCode();
+
+        plasticsCode1.setProductCodes("Product123");
+        plasticsCode2.setProductCodes("Product124");
+
+        assertFalse(plasticsCode1.equals(plasticsCode2));
+    }
+
+    @Test
+    public void testEqualsWithSameValues() {
+        PlasticsCode plasticsCode1 = new PlasticsCode();
+        PlasticsCode plasticsCode2 = new PlasticsCode();
+
+        plasticsCode1.setProductCodes("Product123");
+        plasticsCode1.setLanguage("EN");
+        plasticsCode1.setPoCode("PO123");
+
+        plasticsCode2.setProductCodes("Product123");
+        plasticsCode2.setLanguage("EN");
+        plasticsCode2.setPoCode("PO123");
+
+        assertTrue(plasticsCode1.equals(plasticsCode2));
+    }
+
+    @Test
+    public void testHashCode() {
+        PlasticsCode plasticsCode1 = new PlasticsCode();
+        plasticsCode1.setProductCodes("Product123");
+        plasticsCode1.setLanguage("EN");
+        plasticsCode1.setPoCode("PO123");
+
+        PlasticsCode plasticsCode2 = new PlasticsCode();
+        plasticsCode2.setProductCodes("Product123");
+        plasticsCode2.setLanguage("EN");
+        plasticsCode2.setPoCode("PO123");
+
+        assertEquals(plasticsCode1.hashCode(), plasticsCode2.hashCode());
+    }
+
+    @Test
+    public void testHashCodeWithDifferentValues() {
+        PlasticsCode plasticsCode1 = new PlasticsCode();
+        plasticsCode1.setProductCodes("Product123");
+        plasticsCode1.setLanguage("EN");
+        plasticsCode1.setPoCode("PO123");
+
+        PlasticsCode plasticsCode2 = new PlasticsCode();
+        plasticsCode2.setProductCodes("Product124");
+        plasticsCode2.setLanguage("FR");
+        plasticsCode2.setPoCode("PO124");
+
+        assertNotEquals(plasticsCode1.hashCode(), plasticsCode2.hashCode());
+    }
+
+    @Test
+    public void testEqualsAndHashCodeConsistency() {
+        PlasticsCode plasticsCode1 = new PlasticsCode();
+        plasticsCode1.setProductCodes("Product123");
+        plasticsCode1.setLanguage("EN");
+        plasticsCode1.setPoCode("PO123");
+
+        PlasticsCode plasticsCode2 = new PlasticsCode();
+        plasticsCode2.setProductCodes("Product123");
+        plasticsCode2.setLanguage("EN");
+        plasticsCode2.setPoCode("PO123");
+
+        assertTrue(plasticsCode1.equals(plasticsCode2));
+        assertEquals(plasticsCode1.hashCode(), plasticsCode2.hashCode());
+    }
+}

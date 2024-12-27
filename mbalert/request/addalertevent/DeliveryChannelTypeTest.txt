@@ -1,0 +1,72 @@
+package com.td.api.mbalert.request.addalertevent;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class DeliveryChannelTypeTest {
+
+    @Test
+    void testDeliveryChannelType() {
+        // Create an instance of DeliveryChannelType
+        DeliveryChannelType deliveryChannelType = new DeliveryChannelType();
+
+        // Test the default values of the fields
+        assertNull(deliveryChannelType.getTypeCd());
+        assertNull(deliveryChannelType.getExpiryDateTime());
+
+        // Test setting and getting the 'typeCd' field
+        String typeCd = "email";
+        deliveryChannelType.setTypeCd(typeCd);
+        assertEquals(typeCd, deliveryChannelType.getTypeCd());
+
+        // Test setting and getting the 'expiryDateTime' field
+        ExpiryDateTime expiryDateTime = new ExpiryDateTime();
+        expiryDateTime.setDateTime("2024-12-31T23:59:59");
+        deliveryChannelType.setExpiryDateTime(expiryDateTime);
+        assertEquals(expiryDateTime, deliveryChannelType.getExpiryDateTime());
+        assertEquals("2024-12-31T23:59:59", deliveryChannelType.getExpiryDateTime().getDateTime());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        // Create two instances of DeliveryChannelType with the same properties
+        DeliveryChannelType deliveryChannelType1 = new DeliveryChannelType();
+        deliveryChannelType1.setTypeCd("email");
+        ExpiryDateTime expiryDateTime1 = new ExpiryDateTime();
+        expiryDateTime1.setDateTime("2024-12-31T23:59:59");
+        deliveryChannelType1.setExpiryDateTime(expiryDateTime1);
+
+        DeliveryChannelType deliveryChannelType2 = new DeliveryChannelType();
+        deliveryChannelType2.setTypeCd("email");
+        ExpiryDateTime expiryDateTime2 = new ExpiryDateTime();
+        expiryDateTime2.setDateTime("2024-12-31T23:59:59");
+        deliveryChannelType2.setExpiryDateTime(expiryDateTime2);
+
+        // Test equality
+        assertTrue(deliveryChannelType1.equals(deliveryChannelType2));
+
+        // Test hashCode
+        assertEquals(deliveryChannelType1.hashCode(), deliveryChannelType2.hashCode());
+
+        // Modify one object and test inequality
+        deliveryChannelType2.setTypeCd("sms");
+        assertFalse(deliveryChannelType1.equals(deliveryChannelType2));
+    }
+
+    @Test
+    void testToString() {
+        // Create an instance of DeliveryChannelType
+        DeliveryChannelType deliveryChannelType = new DeliveryChannelType();
+        deliveryChannelType.setTypeCd("email");
+        ExpiryDateTime expiryDateTime = new ExpiryDateTime();
+        expiryDateTime.setDateTime("2024-12-31T23:59:59");
+        deliveryChannelType.setExpiryDateTime(expiryDateTime);
+
+        // Test the toString() method
+        String toStringResult = deliveryChannelType.toString();
+        assertTrue(toStringResult.contains("typeCd"));
+        assertTrue(toStringResult.contains("expiryDateTime"));
+        assertTrue(toStringResult.contains("2024-12-31T23:59:59"));
+    }
+}

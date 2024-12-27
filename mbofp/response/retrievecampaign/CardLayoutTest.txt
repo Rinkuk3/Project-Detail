@@ -1,0 +1,76 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class CardLayoutTest {
+
+    private CardLayout cardLayout;
+
+    @BeforeEach
+    void setUp() {
+        cardLayout = new CardLayout();
+    }
+
+    @Test
+    void testGetAndSetCardLayoutId() {
+        String cardLayoutId = "CL123";
+        cardLayout.setCardLayoutId(cardLayoutId);
+        assertEquals(cardLayoutId, cardLayout.getCardLayoutId());
+    }
+
+    @Test
+    void testGetAndSetLanguageCd() {
+        String languageCd = "EN";
+        cardLayout.setLanguageCd(languageCd);
+        assertEquals(languageCd, cardLayout.getLanguageCd());
+    }
+
+    @Test
+    void testToString() {
+        cardLayout.setCardLayoutId("CL123");
+        cardLayout.setLanguageCd("EN");
+
+        String expectedString = "com.td.api.mbofp.response.retrievecampaign.CardLayout@" +
+                                Integer.toHexString(cardLayout.hashCode()) +
+                                "[cardLayoutId=CL123,languageCd=EN]";
+        assertEquals(expectedString, cardLayout.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        cardLayout.setCardLayoutId("CL123");
+        cardLayout.setLanguageCd("EN");
+
+        int expectedHashCode = 1;
+        expectedHashCode = 31 * expectedHashCode + (cardLayout.getCardLayoutId() == null ? 0 : cardLayout.getCardLayoutId().hashCode());
+        expectedHashCode = 31 * expectedHashCode + (cardLayout.getLanguageCd() == null ? 0 : cardLayout.getLanguageCd().hashCode());
+
+        assertEquals(expectedHashCode, cardLayout.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        cardLayout.setCardLayoutId("CL123");
+        cardLayout.setLanguageCd("EN");
+
+        // Test equality with the same object
+        assertTrue(cardLayout.equals(cardLayout));
+
+        // Test equality with another object having the same field values
+        CardLayout anotherCardLayout = new CardLayout();
+        anotherCardLayout.setCardLayoutId("CL123");
+        anotherCardLayout.setLanguageCd("EN");
+        assertTrue(cardLayout.equals(anotherCardLayout));
+
+        // Test inequality with different field values
+        CardLayout differentCardLayout = new CardLayout();
+        differentCardLayout.setCardLayoutId("CL124");
+        assertFalse(cardLayout.equals(differentCardLayout));
+
+        // Test inequality with null
+        assertFalse(cardLayout.equals(null));
+
+        // Test inequality with an object of a different class
+        assertFalse(cardLayout.equals(new Object()));
+    }
+}

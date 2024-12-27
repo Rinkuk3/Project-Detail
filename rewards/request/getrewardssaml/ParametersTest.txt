@@ -1,0 +1,98 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class ParametersTest {
+
+    private Parameters parameters;
+
+    @BeforeEach
+    public void setUp() {
+        parameters = new Parameters();
+    }
+
+    @Test
+    public void testGetSetSubject() {
+        String subject = "subjectValue";
+        parameters.setSubject(subject);
+        assertEquals(subject, parameters.getSubject());
+    }
+
+    @Test
+    public void testGetSetAccountId() {
+        String accountId = "accountIdValue";
+        parameters.setAccountId(accountId);
+        assertEquals(accountId, parameters.getAccountId());
+    }
+
+    @Test
+    public void testGetSetLocale() {
+        String locale = "en-US";
+        parameters.setLocale(locale);
+        assertEquals(locale, parameters.getLocale());
+    }
+
+    @Test
+    public void testToString() {
+        parameters.setSubject("subjectValue");
+        parameters.setAccountId("accountIdValue");
+        parameters.setLocale("en-US");
+        String expectedString = "com.td.api.rewards.request.getrewardssaml.Parameters@" +
+                Integer.toHexString(System.identityHashCode(parameters)) +
+                "[subject=subjectValue,accountId=accountIdValue,locale=en-US]";
+        assertTrue(parameters.toString().contains("subject=subjectValue"));
+        assertTrue(parameters.toString().contains("accountId=accountIdValue"));
+        assertTrue(parameters.toString().contains("locale=en-US"));
+    }
+
+    @Test
+    public void testHashCode() {
+        parameters.setSubject("subjectValue");
+        parameters.setAccountId("accountIdValue");
+        parameters.setLocale("en-US");
+
+        Parameters otherParameters = new Parameters();
+        otherParameters.setSubject("subjectValue");
+        otherParameters.setAccountId("accountIdValue");
+        otherParameters.setLocale("en-US");
+
+        assertEquals(parameters.hashCode(), otherParameters.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        parameters.setSubject("subjectValue");
+        parameters.setAccountId("accountIdValue");
+        parameters.setLocale("en-US");
+
+        Parameters otherParameters = new Parameters();
+        otherParameters.setSubject("subjectValue");
+        otherParameters.setAccountId("accountIdValue");
+        otherParameters.setLocale("en-US");
+
+        assertTrue(parameters.equals(otherParameters));
+
+        otherParameters.setSubject("differentSubject");
+        assertFalse(parameters.equals(otherParameters));
+
+        assertFalse(parameters.equals(null));
+
+        assertFalse(parameters.equals(new Object()));
+    }
+
+    @Test
+    public void testEqualsWithNullFields() {
+        Parameters nullFieldsParameters = new Parameters();
+
+        nullFieldsParameters.setSubject(null);
+        nullFieldsParameters.setAccountId(null);
+        nullFieldsParameters.setLocale(null);
+
+        parameters.setSubject(null);
+        parameters.setAccountId(null);
+        parameters.setLocale(null);
+
+        assertTrue(parameters.equals(nullFieldsParameters));
+    }
+}

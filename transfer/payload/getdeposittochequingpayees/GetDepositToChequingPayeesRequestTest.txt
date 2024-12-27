@@ -1,0 +1,211 @@
+package com.td.mbna.msec.midtier.transfer.payload.getdeposittochequingpayees;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class GetDepositToChequingPayeesRequestTest {
+
+    private GetDepositToChequingPayeesRequest request;
+
+    @BeforeEach
+    void setUp() {
+        request = new GetDepositToChequingPayeesRequest();
+    }
+
+    @Test
+    void testGetAndSetRequestPayload() {
+        Object payload = new Object();
+        request.setRequestPayload(payload);
+        assertEquals(payload, request.getRequestPayload());
+    }
+
+    @Test
+    void testToString() {
+        request.setRequestPayload("Test Payload");
+        request.setSessionInfo("sessionInfo");
+        request.setCustId("custId");
+        request.setAliasCustId("aliasCustId");
+        request.setAcctNum("acctNum");
+        request.setAcctType("acctType");
+        request.setLanguagePref("EN");
+        request.setAuditInfo("auditInfo");
+        request.setIsPrimaryUser(true);
+        request.setReserved1("reserved1");
+        request.setCustInterface("custInterface");
+
+        String expectedString = "com.td.mbna.msec.midtier.transfer.payload.getdeposittochequingpayees.GetDepositToChequingPayeesRequest@" + 
+                                Integer.toHexString(request.hashCode()) + "[sessionInfo=sessionInfo,custId=custId,aliasCustId=aliasCustId,acctNum=acctNum,acctType=acctType,languagePref=EN,auditInfo=auditInfo,isPrimaryUser=true,reserved1=reserved1,custInterface=custInterface,requestPayload=Test Payload]";
+
+        assertEquals(expectedString, request.toString());
+    }
+
+    @Test
+    void testToStringWithNullFields() {
+        request.setRequestPayload(null);
+        request.setSessionInfo(null);
+        request.setCustId(null);
+        request.setAliasCustId(null);
+        request.setAcctNum(null);
+        request.setAcctType(null);
+        request.setLanguagePref(null);
+        request.setAuditInfo(null);
+        request.setIsPrimaryUser(null);
+        request.setReserved1(null);
+        request.setCustInterface(null);
+
+        String expectedString = "com.td.mbna.msec.midtier.transfer.payload.getdeposittochequingpayees.GetDepositToChequingPayeesRequest@" +
+                                Integer.toHexString(request.hashCode()) + "[sessionInfo=<null>,custId=<null>,aliasCustId=<null>,acctNum=<null>,acctType=<null>,languagePref=<null>,auditInfo=<null>,isPrimaryUser=<null>,reserved1=<null>,custInterface=<null>,requestPayload=<null>]";
+
+        assertEquals(expectedString, request.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        request.setSessionInfo("sessionInfo");
+        request.setCustId("custId");
+        request.setAliasCustId("aliasCustId");
+        request.setAcctNum("acctNum");
+        request.setAcctType("acctType");
+        request.setLanguagePref("EN");
+        request.setAuditInfo("auditInfo");
+        request.setIsPrimaryUser(true);
+        request.setReserved1("reserved1");
+        request.setCustInterface("custInterface");
+        request.setRequestPayload("Test Payload");
+
+        int expectedHashCode = request.hashCode();
+
+        GetDepositToChequingPayeesRequest anotherRequest = new GetDepositToChequingPayeesRequest();
+        anotherRequest.setSessionInfo("sessionInfo");
+        anotherRequest.setCustId("custId");
+        anotherRequest.setAliasCustId("aliasCustId");
+        anotherRequest.setAcctNum("acctNum");
+        anotherRequest.setAcctType("acctType");
+        anotherRequest.setLanguagePref("EN");
+        anotherRequest.setAuditInfo("auditInfo");
+        anotherRequest.setIsPrimaryUser(true);
+        anotherRequest.setReserved1("reserved1");
+        anotherRequest.setCustInterface("custInterface");
+        anotherRequest.setRequestPayload("Test Payload");
+
+        assertEquals(expectedHashCode, anotherRequest.hashCode());
+    }
+
+    @Test
+    void testHashCodeWithNullFields() {
+        request.setSessionInfo(null);
+        request.setCustId(null);
+        request.setAliasCustId(null);
+        request.setAcctNum(null);
+        request.setAcctType(null);
+        request.setLanguagePref(null);
+        request.setAuditInfo(null);
+        request.setIsPrimaryUser(null);
+        request.setReserved1(null);
+        request.setCustInterface(null);
+        request.setRequestPayload(null);
+
+        GetDepositToChequingPayeesRequest anotherRequest = new GetDepositToChequingPayeesRequest();
+        anotherRequest.setSessionInfo(null);
+        anotherRequest.setCustId(null);
+        anotherRequest.setAliasCustId(null);
+        anotherRequest.setAcctNum(null);
+        anotherRequest.setAcctType(null);
+        anotherRequest.setLanguagePref(null);
+        anotherRequest.setAuditInfo(null);
+        anotherRequest.setIsPrimaryUser(null);
+        anotherRequest.setReserved1(null);
+        anotherRequest.setCustInterface(null);
+        anotherRequest.setRequestPayload(null);
+
+        assertEquals(request.hashCode(), anotherRequest.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        request.setSessionInfo("sessionInfo");
+        request.setCustId("custId");
+        request.setAliasCustId("aliasCustId");
+        request.setAcctNum("acctNum");
+        request.setAcctType("acctType");
+        request.setLanguagePref("EN");
+        request.setAuditInfo("auditInfo");
+        request.setIsPrimaryUser(true);
+        request.setReserved1("reserved1");
+        request.setCustInterface("custInterface");
+        request.setRequestPayload("Test Payload");
+
+        GetDepositToChequingPayeesRequest anotherRequest = new GetDepositToChequingPayeesRequest();
+        anotherRequest.setSessionInfo("sessionInfo");
+        anotherRequest.setCustId("custId");
+        anotherRequest.setAliasCustId("aliasCustId");
+        anotherRequest.setAcctNum("acctNum");
+        anotherRequest.setAcctType("acctType");
+        anotherRequest.setLanguagePref("EN");
+        anotherRequest.setAuditInfo("auditInfo");
+        anotherRequest.setIsPrimaryUser(true);
+        anotherRequest.setReserved1("reserved1");
+        anotherRequest.setCustInterface("custInterface");
+        anotherRequest.setRequestPayload("Test Payload");
+
+        assertTrue(request.equals(anotherRequest));
+
+        GetDepositToChequingPayeesRequest differentRequest = new GetDepositToChequingPayeesRequest();
+        assertFalse(request.equals(differentRequest));
+
+        assertFalse(request.equals(null));
+        assertFalse(request.equals(new Object()));
+    }
+
+    @Test
+    void testEqualsWithNullFields() {
+        request.setSessionInfo(null);
+        request.setCustId(null);
+        request.setAliasCustId(null);
+        request.setAcctNum(null);
+        request.setAcctType(null);
+        request.setLanguagePref(null);
+        request.setAuditInfo(null);
+        request.setIsPrimaryUser(null);
+        request.setReserved1(null);
+        request.setCustInterface(null);
+        request.setRequestPayload(null);
+
+        GetDepositToChequingPayeesRequest anotherRequest = new GetDepositToChequingPayeesRequest();
+        anotherRequest.setSessionInfo(null);
+        anotherRequest.setCustId(null);
+        anotherRequest.setAliasCustId(null);
+        anotherRequest.setAcctNum(null);
+        anotherRequest.setAcctType(null);
+        anotherRequest.setLanguagePref(null);
+        anotherRequest.setAuditInfo(null);
+        anotherRequest.setIsPrimaryUser(null);
+        anotherRequest.setReserved1(null);
+        anotherRequest.setCustInterface(null);
+        anotherRequest.setRequestPayload(null);
+
+        assertTrue(request.equals(anotherRequest));
+    }
+
+    @Test
+    void testEqualsWithDifferentFields() {
+        request.setSessionInfo("sessionInfo");
+        request.setCustId("custId");
+        request.setAliasCustId("aliasCustId");
+        request.setAcctNum("acctNum");
+        request.setAcctType("acctType");
+        request.setLanguagePref("EN");
+        request.setAuditInfo("auditInfo");
+        request.setIsPrimaryUser(true);
+        request.setReserved1("reserved1");
+        request.setCustInterface("custInterface");
+        request.setRequestPayload("Test Payload");
+
+        GetDepositToChequingPayeesRequest differentRequest = new GetDepositToChequingPayeesRequest();
+        differentRequest.setSessionInfo("differentSessionInfo");
+
+        assertFalse(request.equals(differentRequest));
+    }
+}

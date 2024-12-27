@@ -1,0 +1,144 @@
+package com.td.mbna.msec.midtier.persistance.entity;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CustomerActionItemTest {
+
+    @Test
+    public void testGetActionID() {
+        CustomerActionItem item = new CustomerActionItem();
+        item.setActionID(12345L);
+        assertEquals(12345L, item.getActionID());
+    }
+
+    @Test
+    public void testSetActionID() {
+        CustomerActionItem item = new CustomerActionItem();
+        item.setActionID(12345L);
+        assertEquals(12345L, item.getActionID());
+    }
+
+    @Test
+    public void testGetCustomerID() {
+        CustomerActionItem item = new CustomerActionItem();
+        item.setCustomerID("CUST123");
+        assertEquals("CUST123", item.getCustomerID());
+    }
+
+    @Test
+    public void testSetCustomerID() {
+        CustomerActionItem item = new CustomerActionItem();
+        item.setCustomerID("CUST123");
+        assertEquals("CUST123", item.getCustomerID());
+    }
+
+    @Test
+    public void testGetAccountNumber() {
+        CustomerActionItem item = new CustomerActionItem();
+        item.setAccountNumber("ACC123");
+        assertEquals("ACC123", item.getAccountNumber());
+    }
+
+    @Test
+    public void testSetAccountNumber() {
+        CustomerActionItem item = new CustomerActionItem();
+        item.setAccountNumber("ACC123");
+        assertEquals("ACC123", item.getAccountNumber());
+    }
+
+    @Test
+    public void testGetVisited() {
+        CustomerActionItem item = new CustomerActionItem();
+        item.setVisited("Yes");
+        assertEquals("Yes", item.getVisited());
+    }
+
+    @Test
+    public void testSetVisited() {
+        CustomerActionItem item = new CustomerActionItem();
+        item.setVisited("Yes");
+        assertEquals("Yes", item.getVisited());
+    }
+
+    @Test
+    public void testGetDismissed() {
+        CustomerActionItem item = new CustomerActionItem();
+        item.setDismissed("No");
+        assertEquals("No", item.getDismissed());
+    }
+
+    @Test
+    public void testSetDismissed() {
+        CustomerActionItem item = new CustomerActionItem();
+        item.setDismissed("No");
+        assertEquals("No", item.getDismissed());
+    }
+
+    @Test
+    public void testGetCount() {
+        CustomerActionItem item = new CustomerActionItem();
+        item.setCount(10);
+        assertEquals(10, item.getCount());
+    }
+
+    @Test
+    public void testSetCount() {
+        CustomerActionItem item = new CustomerActionItem();
+        item.setCount(10);
+        assertEquals(10, item.getCount());
+    }
+
+    @Test
+    public void testEquals() {
+        CustomerActionItem item1 = new CustomerActionItem();
+        item1.setActionID(12345L);
+        item1.setCustomerID("CUST123");
+        item1.setAccountNumber("ACC123");
+        item1.setVisited("Yes");
+        item1.setDismissed("No");
+        item1.setCount(10);
+
+        CustomerActionItem item2 = new CustomerActionItem();
+        item2.setActionID(12345L);
+        item2.setCustomerID("CUST123");
+        item2.setAccountNumber("ACC123");
+        item2.setVisited("Yes");
+        item2.setDismissed("No");
+        item2.setCount(10);
+
+        assertTrue(item1.equals(item2));
+
+        CustomerActionItem item3 = new CustomerActionItem();
+        item3.setActionID(54321L);
+        item3.setCustomerID("CUST456");
+        item3.setAccountNumber("ACC456");
+        item3.setVisited("No");
+        item3.setDismissed("Yes");
+        item3.setCount(20);
+
+        assertFalse(item1.equals(item3));
+    }
+
+    @Test
+    public void testHashCode() {
+        CustomerActionItem item1 = new CustomerActionItem();
+        item1.setActionID(12345L);
+        item1.setCustomerID("CUST123");
+        item1.setAccountNumber("ACC123");
+        item1.setVisited("Yes");
+        item1.setDismissed("No");
+        item1.setCount(10);
+
+        CustomerActionItem item2 = new CustomerActionItem();
+        item2.setActionID(12345L);
+        item2.setCustomerID("CUST123");
+        item2.setAccountNumber("ACC123");
+        item2.setVisited("Yes");
+        item2.setDismissed("No");
+        item2.setCount(10);
+
+        assertEquals(item1.hashCode(), item2.hashCode());
+    }
+}

@@ -1,0 +1,62 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class ChargeOffStatusTest {
+
+    @Test
+    public void testGettersAndSetters() {
+        ChargeOffStatus status = new ChargeOffStatus();
+        
+        // Test setter and getter for reasonCd
+        status.setReasonCd("DEFAULT_REASON");
+        assertEquals("DEFAULT_REASON", status.getReasonCd());
+    }
+
+    @Test
+    public void testToString() {
+        ChargeOffStatus status = new ChargeOffStatus();
+        status.setReasonCd("DEFAULT_REASON");
+        
+        String expectedString = "com.td.api.mbcca.creditcard.request.ChargeOffStatus@" + Integer.toHexString(status.hashCode()) + "[reasonCd=DEFAULT_REASON,]";
+        assertEquals(expectedString, status.toString());
+    }
+
+    @Test
+    public void testHashCodeAndEquals() {
+        ChargeOffStatus status1 = new ChargeOffStatus();
+        status1.setReasonCd("DEFAULT_REASON");
+
+        ChargeOffStatus status2 = new ChargeOffStatus();
+        status2.setReasonCd("DEFAULT_REASON");
+
+        ChargeOffStatus status3 = new ChargeOffStatus();
+        status3.setReasonCd("ANOTHER_REASON");
+
+        // Test equality
+        assertTrue(status1.equals(status2));
+        assertFalse(status1.equals(status3));
+
+        // Test hashCode consistency
+        assertEquals(status1.hashCode(), status2.hashCode());
+        assertNotEquals(status1.hashCode(), status3.hashCode());
+    }
+
+    @Test
+    public void testEqualsNull() {
+        ChargeOffStatus status = new ChargeOffStatus();
+        status.setReasonCd("DEFAULT_REASON");
+        
+        // Test equality with null
+        assertFalse(status.equals(null));
+    }
+
+    @Test
+    public void testEqualsDifferentClass() {
+        ChargeOffStatus status = new ChargeOffStatus();
+        status.setReasonCd("DEFAULT_REASON");
+        
+        // Test equality with object of different class
+        Object obj = new Object();
+        assertFalse(status.equals(obj));
+    }
+}

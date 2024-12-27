@@ -1,0 +1,148 @@
+package com.td.mbna.msec.midtier.transfer.payload.getbalancetransfertocreditorsummary;
+
+import com.td.mbna.msec.midtier.transfer.payload.BalanceTransferToCreditorPaymentInfoType;
+import com.td.mbna.msec.midtier.types.common.PromotionOfferType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestPayloadTest {
+
+    private RequestPayload requestPayload;
+    private List<BalanceTransferToCreditorPaymentInfoType> paymentInfo;
+    private BigDecimal currentCreditRemaining;
+    private PromotionOfferType selectedOffer;
+
+    @BeforeEach
+    void setUp() {
+        requestPayload = new RequestPayload();
+        paymentInfo = new ArrayList<>();
+        currentCreditRemaining = new BigDecimal("1000.00");
+        selectedOffer = new PromotionOfferType();
+    }
+
+    @Test
+    void testGetAndSetPaymentInfo() {
+        requestPayload.setPaymentInfo(paymentInfo);
+        assertEquals(paymentInfo, requestPayload.getPaymentInfo());
+    }
+
+    @Test
+    void testGetAndSetCurrentCreditRemaining() {
+        requestPayload.setCurrentCreditRemaining(currentCreditRemaining);
+        assertEquals(currentCreditRemaining, requestPayload.getCurrentCreditRemaining());
+    }
+
+    @Test
+    void testGetAndSetSelectedOffer() {
+        requestPayload.setSelectedOffer(selectedOffer);
+        assertEquals(selectedOffer, requestPayload.getSelectedOffer());
+    }
+
+    @Test
+    void testToString() {
+        requestPayload.setPaymentInfo(paymentInfo);
+        requestPayload.setCurrentCreditRemaining(currentCreditRemaining);
+        requestPayload.setSelectedOffer(selectedOffer);
+
+        String expectedString = "com.td.mbna.msec.midtier.transfer.payload.getbalancetransfertocreditorsummary.RequestPayload@" +
+                                Integer.toHexString(requestPayload.hashCode()) + "[paymentInfo=" + paymentInfo + 
+                                ",currentCreditRemaining=" + currentCreditRemaining + 
+                                ",selectedOffer=" + selectedOffer + "]";
+
+        assertEquals(expectedString, requestPayload.toString());
+    }
+
+    @Test
+    void testToStringWithNullFields() {
+        requestPayload.setPaymentInfo(null);
+        requestPayload.setCurrentCreditRemaining(null);
+        requestPayload.setSelectedOffer(null);
+
+        String expectedString = "com.td.mbna.msec.midtier.transfer.payload.getbalancetransfertocreditorsummary.RequestPayload@" +
+                                Integer.toHexString(requestPayload.hashCode()) + "[paymentInfo=<null>,currentCreditRemaining=<null>,selectedOffer=<null>]";
+
+        assertEquals(expectedString, requestPayload.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        requestPayload.setPaymentInfo(paymentInfo);
+        requestPayload.setCurrentCreditRemaining(currentCreditRemaining);
+        requestPayload.setSelectedOffer(selectedOffer);
+
+        RequestPayload anotherRequestPayload = new RequestPayload();
+        anotherRequestPayload.setPaymentInfo(paymentInfo);
+        anotherRequestPayload.setCurrentCreditRemaining(currentCreditRemaining);
+        anotherRequestPayload.setSelectedOffer(selectedOffer);
+
+        assertEquals(requestPayload.hashCode(), anotherRequestPayload.hashCode());
+    }
+
+    @Test
+    void testHashCodeWithNullFields() {
+        requestPayload.setPaymentInfo(null);
+        requestPayload.setCurrentCreditRemaining(null);
+        requestPayload.setSelectedOffer(null);
+
+        RequestPayload anotherRequestPayload = new RequestPayload();
+        anotherRequestPayload.setPaymentInfo(null);
+        anotherRequestPayload.setCurrentCreditRemaining(null);
+        anotherRequestPayload.setSelectedOffer(null);
+
+        assertEquals(requestPayload.hashCode(), anotherRequestPayload.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        requestPayload.setPaymentInfo(paymentInfo);
+        requestPayload.setCurrentCreditRemaining(currentCreditRemaining);
+        requestPayload.setSelectedOffer(selectedOffer);
+
+        RequestPayload anotherRequestPayload = new RequestPayload();
+        anotherRequestPayload.setPaymentInfo(paymentInfo);
+        anotherRequestPayload.setCurrentCreditRemaining(currentCreditRemaining);
+        anotherRequestPayload.setSelectedOffer(selectedOffer);
+
+        assertTrue(requestPayload.equals(anotherRequestPayload));
+
+        RequestPayload differentRequestPayload = new RequestPayload();
+        assertFalse(requestPayload.equals(differentRequestPayload));
+
+        assertFalse(requestPayload.equals(null));
+        assertFalse(requestPayload.equals(new Object()));
+    }
+
+    @Test
+    void testEqualsWithNullFields() {
+        requestPayload.setPaymentInfo(null);
+        requestPayload.setCurrentCreditRemaining(null);
+        requestPayload.setSelectedOffer(null);
+
+        RequestPayload anotherRequestPayload = new RequestPayload();
+        anotherRequestPayload.setPaymentInfo(null);
+        anotherRequestPayload.setCurrentCreditRemaining(null);
+        anotherRequestPayload.setSelectedOffer(null);
+
+        assertTrue(requestPayload.equals(anotherRequestPayload));
+    }
+
+    @Test
+    void testEqualsWithDifferentFields() {
+        requestPayload.setPaymentInfo(paymentInfo);
+        requestPayload.setCurrentCreditRemaining(currentCreditRemaining);
+        requestPayload.setSelectedOffer(selectedOffer);
+
+        RequestPayload differentRequestPayload = new RequestPayload();
+        differentRequestPayload.setPaymentInfo(new ArrayList<>());
+        differentRequestPayload.setCurrentCreditRemaining(new BigDecimal("500.00"));
+        differentRequestPayload.setSelectedOffer(new PromotionOfferType());
+
+        assertFalse(requestPayload.equals(differentRequestPayload));
+    }
+}

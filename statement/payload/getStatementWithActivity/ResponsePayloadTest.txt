@@ -1,0 +1,84 @@
+package com.td.mbna.msec.midtier.statement.payload.getStatementWithActivity;
+
+import com.td.mbna.msec.midtier.statement.payload.StmtOnlineSummaryType;
+import com.td.mbna.msec.midtier.statement.payload.getAvailableStatementList.AvailableStatementListType;
+import com.td.mbna.msec.midtier.types.common.StmtActivityType;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ResponsePayloadTest {
+
+    @Test
+    void testSetAndGetAvailableStatementList() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        AvailableStatementListType availableStatementList = new AvailableStatementListType(); // Mocking AvailableStatementListType
+        responsePayload.setAvailableStatementList(availableStatementList);
+        assertEquals(availableStatementList, responsePayload.getAvailableStatementList());
+    }
+
+    @Test
+    void testSetAndGetOnlineSummary() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        StmtOnlineSummaryType onlineSummary = new StmtOnlineSummaryType(); // Mocking StmtOnlineSummaryType
+        responsePayload.setOnlineSummary(onlineSummary);
+        assertEquals(onlineSummary, responsePayload.getOnlineSummary());
+    }
+
+    @Test
+    void testSetAndGetStatementActivities() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        List<StmtActivityType> activities = new ArrayList<>();
+        StmtActivityType activity = new StmtActivityType(); // Mocking StmtActivityType
+        activities.add(activity);
+        responsePayload.setStatementActivities(activities);
+        assertEquals(activities, responsePayload.getStatementActivities());
+    }
+
+    @Test
+    void testSetAndGetNumActivitiesExceedsMax() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        Boolean numActivitiesExceedsMax = true;
+        responsePayload.setNumActivitiesExceedsMax(numActivitiesExceedsMax);
+        assertEquals(numActivitiesExceedsMax, responsePayload.getNumActivitiesExceedsMax());
+    }
+
+    @Test
+    void testAddStmtActivityType() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        StmtActivityType activity = new StmtActivityType(); // Mocking StmtActivityType
+        responsePayload.getStatementActivities().add(activity);
+        assertTrue(responsePayload.getStatementActivities().contains(activity));
+    }
+
+    @Test
+    void testSetAvailableStatementListNull() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setAvailableStatementList(null);
+        assertNull(responsePayload.getAvailableStatementList());
+    }
+
+    @Test
+    void testSetStatementActivitiesNull() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatementActivities(null);
+        assertNull(responsePayload.getStatementActivities());
+    }
+
+    @Test
+    void testSetOnlineSummaryNull() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setOnlineSummary(null);
+        assertNull(responsePayload.getOnlineSummary());
+    }
+
+    @Test
+    void testSetNumActivitiesExceedsMaxNull() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setNumActivitiesExceedsMax(null);
+        assertNull(responsePayload.getNumActivitiesExceedsMax());
+    }
+}

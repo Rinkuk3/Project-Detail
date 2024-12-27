@@ -1,0 +1,41 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class RewardsBalanceListTest {
+
+    private RewardsBalanceList rewardsBalanceList;
+    private RewardsBalanceItem rewardsBalanceItem;
+
+    @BeforeEach
+    public void setUp() {
+        rewardsBalanceList = new RewardsBalanceList();
+        rewardsBalanceItem = new RewardsBalanceItem();
+        rewardsBalanceItem.setLoyaltyUnitOfMeasureCd("USD");
+        rewardsBalanceItem.setAvailableBalanceQty(500L);
+    }
+
+    @Test
+    public void testGetSetAvailableBalance() {
+        rewardsBalanceList.setAvailableBalance(Arrays.asList(rewardsBalanceItem));
+        assertNotNull(rewardsBalanceList.getAvailableBalance());
+        assertEquals(1, rewardsBalanceList.getAvailableBalance().size());
+        assertEquals("USD", rewardsBalanceList.getAvailableBalance().get(0).getLoyaltyUnitOfMeasureCd());
+        assertEquals(500L, rewardsBalanceList.getAvailableBalance().get(0).getAvailableBalanceQty());
+    }
+
+    @Test
+    public void testSetAvailableBalanceEmptyList() {
+        rewardsBalanceList.setAvailableBalance(Collections.emptyList());
+        assertTrue(rewardsBalanceList.getAvailableBalance().isEmpty());
+    }
+
+    @Test
+    public void testGetAvailableBalance() {
+        assertNotNull(rewardsBalanceList.getAvailableBalance());
+        assertTrue(rewardsBalanceList.getAvailableBalance().isEmpty());
+    }
+}

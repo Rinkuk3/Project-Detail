@@ -1,0 +1,20 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class BusinessErrorTest {
+
+    @Test
+    public void testSetAndGetFaultInfo() {
+        BusinessError businessError = new BusinessError();
+        BusinessException faultInfo = new BusinessException();
+
+        businessError.setFaultInfo(faultInfo);
+        assertEquals(faultInfo, businessError.getFaultInfo());
+    }
+
+    @Test
+    public void testInheritanceFromException() {
+        BusinessError businessError = new BusinessError();
+        assertTrue(businessError instanceof Exception);
+    }
+}

@@ -1,0 +1,93 @@
+package com.td.api.ofm.common;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class TCCAAPIBalanceSegmentEventAdjustmentInfoTest {
+
+    private TCCAAPIBalanceSegmentEventAdjustmentInfo eventAdjustmentInfo;
+    private TCCAAPIBalanceSegment balanceSegment;
+    private TCCAAPITransaction originalTransaction;
+
+    @BeforeEach
+    public void setUp() {
+        eventAdjustmentInfo = new TCCAAPIBalanceSegmentEventAdjustmentInfo();
+        balanceSegment = new TCCAAPIBalanceSegment();
+        originalTransaction = new TCCAAPITransaction();
+    }
+
+    @Test
+    public void testGettersAndSetters() {
+        eventAdjustmentInfo.setOriginalAdjustmentEventId("event123");
+        eventAdjustmentInfo.setRequestReferenceNum("ref123");
+        eventAdjustmentInfo.setBalanceSegment(balanceSegment);
+        eventAdjustmentInfo.setOriginalTransaction(originalTransaction);
+        eventAdjustmentInfo.setSolicitationChannelTypeCd("web");
+        eventAdjustmentInfo.setAccessChannelTypeCd("mobile");
+
+        assertEquals("event123", eventAdjustmentInfo.getOriginalAdjustmentEventId());
+        assertEquals("ref123", eventAdjustmentInfo.getRequestReferenceNum());
+        assertEquals(balanceSegment, eventAdjustmentInfo.getBalanceSegment());
+        assertEquals(originalTransaction, eventAdjustmentInfo.getOriginalTransaction());
+        assertEquals("web", eventAdjustmentInfo.getSolicitationChannelTypeCd());
+        assertEquals("mobile", eventAdjustmentInfo.getAccessChannelTypeCd());
+    }
+
+    @Test
+    public void testToString() {
+        eventAdjustmentInfo.setOriginalAdjustmentEventId("event123");
+        eventAdjustmentInfo.setRequestReferenceNum("ref123");
+        eventAdjustmentInfo.setBalanceSegment(balanceSegment);
+        eventAdjustmentInfo.setOriginalTransaction(originalTransaction);
+        eventAdjustmentInfo.setSolicitationChannelTypeCd("web");
+        eventAdjustmentInfo.setAccessChannelTypeCd("mobile");
+
+        String expectedString = "com.td.api.ofm.common.TCCAAPIBalanceSegmentEventAdjustmentInfo@" + Integer.toHexString(eventAdjustmentInfo.hashCode()) +
+                "[originalAdjustmentEventId=event123,requestReferenceNum=ref123,balanceSegment=" + balanceSegment +
+                ",originalTransaction=" + originalTransaction + ",solicitationChannelTypeCd=web,accessChannelTypeCd=mobile,]";
+
+        assertEquals(expectedString, eventAdjustmentInfo.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        eventAdjustmentInfo.setOriginalAdjustmentEventId("event123");
+        eventAdjustmentInfo.setRequestReferenceNum("ref123");
+        eventAdjustmentInfo.setBalanceSegment(balanceSegment);
+        eventAdjustmentInfo.setOriginalTransaction(originalTransaction);
+        eventAdjustmentInfo.setSolicitationChannelTypeCd("web");
+        eventAdjustmentInfo.setAccessChannelTypeCd("mobile");
+
+        int expectedHashCode = 31 * (31 * (31 * (31 * (31 * (31 * "event123".hashCode() + "ref123".hashCode()) +
+                balanceSegment.hashCode()) + originalTransaction.hashCode()) + "web".hashCode()) + "mobile".hashCode()) +
+                balanceSegment.hashCode();
+
+        assertEquals(expectedHashCode, eventAdjustmentInfo.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        TCCAAPIBalanceSegmentEventAdjustmentInfo eventAdjustmentInfo2 = new TCCAAPIBalanceSegmentEventAdjustmentInfo();
+        eventAdjustmentInfo.setOriginalAdjustmentEventId("event123");
+        eventAdjustmentInfo.setRequestReferenceNum("ref123");
+        eventAdjustmentInfo.setBalanceSegment(balanceSegment);
+        eventAdjustmentInfo.setOriginalTransaction(originalTransaction);
+        eventAdjustmentInfo.setSolicitationChannelTypeCd("web");
+        eventAdjustmentInfo.setAccessChannelTypeCd("mobile");
+
+        eventAdjustmentInfo2.setOriginalAdjustmentEventId("event123");
+        eventAdjustmentInfo2.setRequestReferenceNum("ref123");
+        eventAdjustmentInfo2.setBalanceSegment(balanceSegment);
+        eventAdjustmentInfo2.setOriginalTransaction(originalTransaction);
+        eventAdjustmentInfo2.setSolicitationChannelTypeCd("web");
+        eventAdjustmentInfo2.setAccessChannelTypeCd("mobile");
+
+        assertTrue(eventAdjustmentInfo.equals(eventAdjustmentInfo2));
+
+        eventAdjustmentInfo2.setAccessChannelTypeCd("desktop");
+        assertFalse(eventAdjustmentInfo.equals(eventAdjustmentInfo2));
+    }
+
+}

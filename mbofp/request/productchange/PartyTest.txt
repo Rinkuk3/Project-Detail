@@ -1,0 +1,73 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class PartyTest {
+
+    private Party party;
+
+    @BeforeEach
+    void setUp() {
+        party = new Party();
+    }
+
+    @Test
+    void testGetAndSetLanguageTypeCd() {
+        String languageTypeCd = "EN";
+        party.setLanguageTypeCd(languageTypeCd);
+        assertEquals(languageTypeCd, party.getLanguageTypeCd());
+    }
+
+    @Test
+    void testGetAndSetIdentificationMembershipNum() {
+        String identificationMembershipNum = "12345";
+        party.setIdentificationMembershipNum(identificationMembershipNum);
+        assertEquals(identificationMembershipNum, party.getIdentificationMembershipNum());
+    }
+
+    @Test
+    void testToString() {
+        party.setLanguageTypeCd("EN");
+        party.setIdentificationMembershipNum("12345");
+
+        String expected = "com.td.api.mbofp.request.productchange.Party@" + 
+                          Integer.toHexString(party.hashCode()) + 
+                          "[languageTypeCd=EN,identificationMembershipNum=12345]";
+
+        assertEquals(expected, party.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        party.setLanguageTypeCd("EN");
+        party.setIdentificationMembershipNum("12345");
+
+        int expectedHashCode = 1;
+        expectedHashCode = 31 * expectedHashCode + ("EN" == null ? 0 : "EN".hashCode());
+        expectedHashCode = 31 * expectedHashCode + ("12345" == null ? 0 : "12345".hashCode());
+
+        assertEquals(expectedHashCode, party.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        party.setLanguageTypeCd("EN");
+        party.setIdentificationMembershipNum("12345");
+
+        Party otherParty = new Party();
+        otherParty.setLanguageTypeCd("EN");
+        otherParty.setIdentificationMembershipNum("12345");
+
+        assertTrue(party.equals(otherParty));
+
+        otherParty.setLanguageTypeCd("FR");
+        assertFalse(party.equals(otherParty));
+
+        otherParty.setLanguageTypeCd("EN");
+        otherParty.setIdentificationMembershipNum("67890");
+        assertFalse(party.equals(otherParty));
+
+        assertFalse(party.equals(null));
+        assertFalse(party.equals(new Object()));
+    }
+}

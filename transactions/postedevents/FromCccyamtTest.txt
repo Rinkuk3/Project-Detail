@@ -1,0 +1,85 @@
+package com.td.api.mbcca.response.transactions.postedevents;
+
+import com.td.api.mbcca.shared.TsysExtensionCurrencyNumericCd;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.math.BigDecimal;
+
+import static org.junit.Assert.*;
+
+public class FromCccyamtTest {
+
+    private FromCccyamt fromCccyamt;
+
+    @Before
+    public void setUp() {
+        fromCccyamt = new FromCccyamt();
+    }
+
+    @Test
+    public void testGetAndSetAmount() {
+        BigDecimal amount = new BigDecimal("100.00");
+        fromCccyamt.setAmount(amount);
+        assertEquals(amount, fromCccyamt.getAmount());
+    }
+
+    @Test
+    public void testGetAndSetCurrencyCd() {
+        String currencyCd = "USD";
+        fromCccyamt.setCurrencyCd(currencyCd);
+        assertEquals(currencyCd, fromCccyamt.getCurrencyCd());
+    }
+
+    @Test
+    public void testGetAndSetTsysExtension() {
+        TsysExtensionCurrencyNumericCd tsysExtension = new TsysExtensionCurrencyNumericCd();
+        fromCccyamt.setTsysExtension(tsysExtension);
+        assertEquals(tsysExtension, fromCccyamt.getTsysExtension());
+    }
+
+    @Test
+    public void testToString() {
+        fromCccyamt.setAmount(new BigDecimal("100.00"));
+        fromCccyamt.setCurrencyCd("USD");
+        fromCccyamt.setTsysExtension(new TsysExtensionCurrencyNumericCd());
+
+        String expectedString = "com.td.api.mbcca.response.transactions.postedevents.FromCccyamt@"
+                + Integer.toHexString(System.identityHashCode(fromCccyamt)) + "[amount=100.00,currencyCd=USD,tsysExtension=<null>,]";
+        
+        assertEquals(expectedString, fromCccyamt.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        FromCccyamt fcc1 = new FromCccyamt();
+        fcc1.setAmount(new BigDecimal("100.00"));
+        fcc1.setCurrencyCd("USD");
+        fcc1.setTsysExtension(new TsysExtensionCurrencyNumericCd());
+
+        FromCccyamt fcc2 = new FromCccyamt();
+        fcc2.setAmount(new BigDecimal("100.00"));
+        fcc2.setCurrencyCd("USD");
+        fcc2.setTsysExtension(new TsysExtensionCurrencyNumericCd());
+
+        assertEquals(fcc1.hashCode(), fcc2.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        FromCccyamt fcc1 = new FromCccyamt();
+        fcc1.setAmount(new BigDecimal("100.00"));
+        fcc1.setCurrencyCd("USD");
+        fcc1.setTsysExtension(new TsysExtensionCurrencyNumericCd());
+
+        FromCccyamt fcc2 = new FromCccyamt();
+        fcc2.setAmount(new BigDecimal("100.00"));
+        fcc2.setCurrencyCd("USD");
+        fcc2.setTsysExtension(new TsysExtensionCurrencyNumericCd());
+
+        assertTrue(fcc1.equals(fcc2));
+
+        fcc2.setCurrencyCd("EUR");
+        assertFalse(fcc1.equals(fcc2));
+    }
+}

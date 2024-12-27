@@ -1,0 +1,131 @@
+package com.td.api.mbna.msec.midtier.mbnaparty.payload;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+
+public class RequestPayloadTest {
+
+    private RequestPayload requestPayload;
+
+    @BeforeEach
+    public void setUp() {
+        requestPayload = new RequestPayload();
+    }
+
+    @Test
+    public void testGetSetConnectionId() {
+        String connectionId = "123456";
+        requestPayload.setConnectionId(connectionId);
+        assertEquals(connectionId, requestPayload.getConnectionId());
+    }
+
+    @Test
+    public void testGetSetCardNumber() {
+        String cardNumber = "1234-5678-9876-5432";
+        requestPayload.setCardNumber(cardNumber);
+        assertEquals(cardNumber, requestPayload.getCardNumber());
+    }
+
+    @Test
+    public void testGetSetCardholderName() {
+        String cardholderName = "John Doe";
+        requestPayload.setCardholderName(cardholderName);
+        assertEquals(cardholderName, requestPayload.getCardholderName());
+    }
+
+    @Test
+    public void testGetSetCvc() {
+        String cvc = "123";
+        requestPayload.setCvc(cvc);
+        assertEquals(cvc, requestPayload.getCvc());
+    }
+
+    @Test
+    public void testGetSetCardExpiryDt() {
+        String cardExpiryDt = "12/25";
+        requestPayload.setCardExpiryDt(cardExpiryDt);
+        assertEquals(cardExpiryDt, requestPayload.getCardExpiryDt());
+    }
+
+    @Test
+    public void testGetSetMotherMaidenName() {
+        String motherMaidenName = "Smith";
+        requestPayload.setMotherMaidenName(motherMaidenName);
+        assertEquals(motherMaidenName, requestPayload.getMotherMaidenName());
+    }
+
+    @Test
+    public void testGetSetDateOfBirth() {
+        String dateOfBirth = "01/01/1980";
+        requestPayload.setDateOfBirth(dateOfBirth);
+        assertEquals(dateOfBirth, requestPayload.getDateOfBirth());
+    }
+
+    @Test
+    public void testGetSetTelephoneNo() {
+        String telephoneNo = "123-456-7890";
+        requestPayload.setTelephoneNo(telephoneNo);
+        assertEquals(telephoneNo, requestPayload.getTelephoneNo());
+    }
+
+    @Test
+    public void testGetSetLastPaymentAmount() {
+        BigDecimal lastPaymentAmount = new BigDecimal("100.00");
+        requestPayload.setLastPaymentAmount(lastPaymentAmount);
+        assertEquals(lastPaymentAmount, requestPayload.getLastPaymentAmount());
+    }
+
+    @Test
+    public void testToString() {
+        requestPayload.setConnectionId("123456");
+        requestPayload.setCardNumber("1234-5678-9876-5432");
+        requestPayload.setCardholderName("John Doe");
+        requestPayload.setCvc("123");
+        requestPayload.setCardExpiryDt("12/25");
+        requestPayload.setMotherMaidenName("Smith");
+        requestPayload.setDateOfBirth("01/01/1980");
+        requestPayload.setTelephoneNo("123-456-7890");
+        requestPayload.setLastPaymentAmount(new BigDecimal("100.00"));
+
+        String str = requestPayload.toString();
+        assertTrue(str.contains("connectionId"));
+        assertTrue(str.contains("cardNumber"));
+        assertTrue(str.contains("cardholderName"));
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        RequestPayload requestPayload1 = new RequestPayload();
+        RequestPayload requestPayload2 = new RequestPayload();
+
+        requestPayload1.setConnectionId("123456");
+        requestPayload1.setCardNumber("1234-5678-9876-5432");
+        requestPayload1.setCardholderName("John Doe");
+        requestPayload1.setCvc("123");
+        requestPayload1.setCardExpiryDt("12/25");
+        requestPayload1.setMotherMaidenName("Smith");
+        requestPayload1.setDateOfBirth("01/01/1980");
+        requestPayload1.setTelephoneNo("123-456-7890");
+        requestPayload1.setLastPaymentAmount(new BigDecimal("100.00"));
+
+        requestPayload2.setConnectionId("123456");
+        requestPayload2.setCardNumber("1234-5678-9876-5432");
+        requestPayload2.setCardholderName("John Doe");
+        requestPayload2.setCvc("123");
+        requestPayload2.setCardExpiryDt("12/25");
+        requestPayload2.setMotherMaidenName("Smith");
+        requestPayload2.setDateOfBirth("01/01/1980");
+        requestPayload2.setTelephoneNo("123-456-7890");
+        requestPayload2.setLastPaymentAmount(new BigDecimal("100.00"));
+
+        assertEquals(requestPayload1, requestPayload2);
+        assertEquals(requestPayload1.hashCode(), requestPayload2.hashCode());
+
+        requestPayload2.setConnectionId("654321");
+        assertNotEquals(requestPayload1, requestPayload2);
+    }
+}

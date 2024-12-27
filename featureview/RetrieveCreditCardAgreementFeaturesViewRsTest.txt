@@ -1,0 +1,87 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+class RetrieveCreditCardAgreementFeaturesViewRsTest {
+
+    private RetrieveCreditCardAgreementFeaturesViewRs agreementFeaturesViewRs;
+    private FeatureView featureView;
+
+    @BeforeEach
+    void setUp() {
+        agreementFeaturesViewRs = new RetrieveCreditCardAgreementFeaturesViewRs();
+        featureView = new FeatureView(); // Assuming FeatureView is another class you have
+    }
+
+    @Test
+    void testGetSetFeatureView() {
+        agreementFeaturesViewRs.setFeatureView(featureView);
+        assertEquals(featureView, agreementFeaturesViewRs.getFeatureView());
+
+        FeatureView newFeatureView = new FeatureView(); // another instance of FeatureView
+        agreementFeaturesViewRs.setFeatureView(newFeatureView);
+        assertEquals(newFeatureView, agreementFeaturesViewRs.getFeatureView());
+    }
+
+    @Test
+    void testToString() {
+        agreementFeaturesViewRs.setFeatureView(featureView);
+        String result = agreementFeaturesViewRs.toString();
+        assertTrue(result.contains("featureView"));
+        assertTrue(result.contains(featureView.toString()));
+    }
+
+    @Test
+    void testHashCode() {
+        agreementFeaturesViewRs.setFeatureView(featureView);
+        int hashCode = agreementFeaturesViewRs.hashCode();
+        assertNotNull(hashCode);
+    }
+
+    @Test
+    void testEquals() {
+        RetrieveCreditCardAgreementFeaturesViewRs other = new RetrieveCreditCardAgreementFeaturesViewRs();
+        other.setFeatureView(featureView);
+
+        agreementFeaturesViewRs.setFeatureView(featureView);
+        assertTrue(agreementFeaturesViewRs.equals(other));
+
+        // Test with different object
+        FeatureView anotherFeatureView = new FeatureView();
+        other.setFeatureView(anotherFeatureView);
+        assertFalse(agreementFeaturesViewRs.equals(other));
+    }
+
+    @Test
+    void testEquals_withNull() {
+        assertFalse(agreementFeaturesViewRs.equals(null));
+    }
+
+    @Test
+    void testEquals_withDifferentType() {
+        assertFalse(agreementFeaturesViewRs.equals("string"));
+    }
+
+    @Test
+    void testEquals_withSameObject() {
+        agreementFeaturesViewRs.setFeatureView(featureView);
+        assertTrue(agreementFeaturesViewRs.equals(agreementFeaturesViewRs)); // same object
+    }
+
+    @Test
+    void testEquals_withNullFeatureView() {
+        RetrieveCreditCardAgreementFeaturesViewRs other = new RetrieveCreditCardAgreementFeaturesViewRs();
+        agreementFeaturesViewRs.setFeatureView(null);
+        other.setFeatureView(null);
+        assertTrue(agreementFeaturesViewRs.equals(other)); // both have null featureView
+    }
+
+    @Test
+    void testEquals_withNullFeatureViewInOther() {
+        RetrieveCreditCardAgreementFeaturesViewRs other = new RetrieveCreditCardAgreementFeaturesViewRs();
+        other.setFeatureView(null);
+        agreementFeaturesViewRs.setFeatureView(featureView);
+        assertFalse(agreementFeaturesViewRs.equals(other)); // one has null, other has non-null featureView
+    }
+}

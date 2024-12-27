@@ -1,0 +1,120 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+class CashAdvanceFeeFeatureGroupTest {
+
+    private CashAdvanceFeeFeatureGroup cashAdvanceFeeFeatureGroup;
+
+    @BeforeEach
+    void setUp() {
+        cashAdvanceFeeFeatureGroup = new CashAdvanceFeeFeatureGroup();
+    }
+
+    @Test
+    void testGetSetSubjectToCashAdvanceFeeTransactionVal() {
+        String subjectToCashAdvanceFeeTransactionVal = "Yes";
+        cashAdvanceFeeFeatureGroup.setSubjectToCashAdvanceFeeTransactionVal(subjectToCashAdvanceFeeTransactionVal);
+        assertEquals(subjectToCashAdvanceFeeTransactionVal, cashAdvanceFeeFeatureGroup.getSubjectToCashAdvanceFeeTransactionVal());
+    }
+
+    @Test
+    void testGetSetFeature() {
+        Feature feature = new Feature();
+        cashAdvanceFeeFeatureGroup.setFeature(feature);
+        assertEquals(feature, cashAdvanceFeeFeatureGroup.getFeature());
+    }
+
+    @Test
+    void testGetSetAlternateFeature() {
+        AlternateFeature alternateFeature = new AlternateFeature();
+        cashAdvanceFeeFeatureGroup.setAlternateFeature(alternateFeature);
+        assertEquals(alternateFeature, cashAdvanceFeeFeatureGroup.getAlternateFeature());
+    }
+
+    @Test
+    void testToString() {
+        Feature feature = new Feature();
+        AlternateFeature alternateFeature = new AlternateFeature();
+        
+        cashAdvanceFeeFeatureGroup.setSubjectToCashAdvanceFeeTransactionVal("Yes");
+        cashAdvanceFeeFeatureGroup.setFeature(feature);
+        cashAdvanceFeeFeatureGroup.setAlternateFeature(alternateFeature);
+
+        String result = cashAdvanceFeeFeatureGroup.toString();
+        assertTrue(result.contains("subjectToCashAdvanceFeeTransactionVal"));
+        assertTrue(result.contains("feature"));
+        assertTrue(result.contains("alternateFeature"));
+    }
+
+    @Test
+    void testHashCode() {
+        cashAdvanceFeeFeatureGroup.setSubjectToCashAdvanceFeeTransactionVal("Yes");
+        cashAdvanceFeeFeatureGroup.setFeature(new Feature());
+        cashAdvanceFeeFeatureGroup.setAlternateFeature(new AlternateFeature());
+
+        int hashCode = cashAdvanceFeeFeatureGroup.hashCode();
+        assertNotNull(hashCode);
+    }
+
+    @Test
+    void testEquals() {
+        CashAdvanceFeeFeatureGroup other = new CashAdvanceFeeFeatureGroup();
+        other.setSubjectToCashAdvanceFeeTransactionVal("Yes");
+        other.setFeature(new Feature());
+        other.setAlternateFeature(new AlternateFeature());
+
+        cashAdvanceFeeFeatureGroup.setSubjectToCashAdvanceFeeTransactionVal("Yes");
+        cashAdvanceFeeFeatureGroup.setFeature(new Feature());
+        cashAdvanceFeeFeatureGroup.setAlternateFeature(new AlternateFeature());
+
+        assertTrue(cashAdvanceFeeFeatureGroup.equals(other));
+    }
+
+    @Test
+    void testEquals_withNull() {
+        assertFalse(cashAdvanceFeeFeatureGroup.equals(null));
+    }
+
+    @Test
+    void testEquals_withDifferentType() {
+        assertFalse(cashAdvanceFeeFeatureGroup.equals("string"));
+    }
+
+    @Test
+    void testEquals_withDifferentValues() {
+        CashAdvanceFeeFeatureGroup other = new CashAdvanceFeeFeatureGroup();
+        other.setSubjectToCashAdvanceFeeTransactionVal("No");
+
+        assertFalse(cashAdvanceFeeFeatureGroup.equals(other));
+    }
+
+    @Test
+    void testEquals_withNullFeature() {
+        CashAdvanceFeeFeatureGroup other = new CashAdvanceFeeFeatureGroup();
+        other.setSubjectToCashAdvanceFeeTransactionVal("Yes");
+        other.setFeature(null);
+        other.setAlternateFeature(new AlternateFeature());
+
+        cashAdvanceFeeFeatureGroup.setSubjectToCashAdvanceFeeTransactionVal("Yes");
+        cashAdvanceFeeFeatureGroup.setFeature(null);
+        cashAdvanceFeeFeatureGroup.setAlternateFeature(new AlternateFeature());
+
+        assertTrue(cashAdvanceFeeFeatureGroup.equals(other));
+    }
+
+    @Test
+    void testEquals_withNullAlternateFeature() {
+        CashAdvanceFeeFeatureGroup other = new CashAdvanceFeeFeatureGroup();
+        other.setSubjectToCashAdvanceFeeTransactionVal("Yes");
+        other.setFeature(new Feature());
+        other.setAlternateFeature(null);
+
+        cashAdvanceFeeFeatureGroup.setSubjectToCashAdvanceFeeTransactionVal("Yes");
+        cashAdvanceFeeFeatureGroup.setFeature(new Feature());
+        cashAdvanceFeeFeatureGroup.setAlternateFeature(null);
+
+        assertTrue(cashAdvanceFeeFeatureGroup.equals(other));
+    }
+}

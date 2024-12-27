@@ -1,0 +1,173 @@
+package com.td.mbna.msec.midtier.transfer;
+
+import com.td.mbna.msec.midtier.persistance.entity.BtDestinations;
+import com.td.mbna.msec.midtier.persistance.entity.Creditors;
+import com.td.mbna.msec.midtier.persistance.mybatis.DBMybatisService;
+import com.td.mbna.msec.midtier.service.EmailInfo;
+import com.td.mbna.msec.midtier.transfer.payload.BalanceTransferToCreditorPayeeType;
+import com.td.mbna.msec.midtier.transfer.payload.addbalancetransfertocreditorpayee.AddBalanceTransferToCreditorPayeeRequest;
+import com.td.mbna.msec.midtier.transfer.payload.addbalancetransfertocreditorpayee.AddBalanceTransferToCreditorPayeeResponse;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import com.td.mbna.msec.midtier.util.ExceptionUtil;
+import com.td.mbna.msec.midtier.util.MsecValidator;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class AddBalanceTransferToCreditorPayeeOperationTest {
+
+    @InjectMocks
+    private AddBalanceTransferToCreditorPayeeOperation addBalanceTransferToCreditorPayeeOperation;
+
+    @Mock
+    private MsecValidator msecValidator;
+
+    @Mock
+    private DBMybatisService dbMybatisService;
+
+    @Mock
+    private AddBalanceTransferToCreditorPayeeRequest addBalanceTransferToCreditorPayeeRequest;
+
+    @Mock
+    private AddBalanceTransferToCreditorPayeeResponse addBalanceTransferToCreditorPayeeResponse;
+
+    @Mock
+    private BalanceTransferToCreditorPayeeType balanceTransferToCreditorPayeeType;
+
+    @Mock
+    private Creditors creditors;
+
+    @Mock
+    private BtDestinations btDestinations;
+
+    @Mock
+    private MbnaLogger mbnaLogger;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testInvokeService_ConfirmedFalse() {
+        // Arrange
+        when(addBalanceTransferToCreditorPayeeRequest.getRequestPayload()).thenReturn(new AddBalanceTransferToCreditorPayeeRequest().getRequestPayload());
+        when(addBalanceTransferToCreditorPayeeRequest.getRequestPayload().getConfirmed()).thenReturn(false);
+
+        // Act
+        AddBalanceTransferToCreditorPayeeResponse response = addBalanceTransferToCreditorPayeeOperation.invokeService(addBalanceTransferToCreditorPayeeRequest);
+
+        // Assert
+        assertNotNull(response);
+        assertFalse(response.getResponsePayload().getStatus());
+    }
+
+    @Test
+    void testInvokeService_ExceptionThrown() {
+        // Arrange
+        when(addBalanceTransferToCreditorPayeeRequest.getRequestPayload()).thenReturn(new AddBalanceTransferToCreditorPayeeRequest().getRequestPayload());
+        when(addBalanceTransferToCreditorPayeeRequest.getRequestPayload().getConfirmed()).thenReturn(true);
+        when(addBalanceTransferToCreditorPayeeRequest.getCustId()).thenReturn("12345");
+
+        BalanceTransferToCreditorPayeeType payee = new BalanceTransferToCreditorPayeeType();
+        payee.setMerchantId("merchant-001");
+        payee.setNickName("Nick");
+        payee.setCardNum("123456789");
+
+        when(addBalanceTransferToCreditorPayeeRequest.getRequestPayload().getPayee()).thenReturn(payee);
+
+        when(dbMybatisService.getCreditorByMerchantId(anyString())).thenThrow(new RuntimeException("Database error"));
+
+        // Act and Assert
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            addBalanceTransferToCreditorPayeeOperation.invokeService(addBalanceTransferToCreditorPayeeRequest);
+        });
+        assertTrue(exception.getMessage().contains("Database error"));
+    }
+
+    @Test
+    void testInvokeService_ValidRequest() {
+        // Arrange
+        when(addBalanceTransferToCreditorPayeeRequest.getRequestPayload()).thenReturn(new AddBalanceTransferToCreditorPayeeRequest().getRequestPayload());
+        when(addBalanceTransferToCreditorPayeeRequest.getRequestPayload().getConfirmed()).thenReturn(true);
+        when(addBalanceTransferToCreditorPayeeRequest.getCustId()).thenReturn("12345");
+
+        BalanceTransferToCreditorPayeeType payee = new BalanceTransferToCreditorPayeeType();
+        payee.setMerchantId("merchant-001");
+        payee.setNickName("Nick");
+        payee.setCardNum("123456789");
+
+        when(addBalanceTransferToCreditorPayeeRequest.getRequestPayload().getPayee()).thenReturn(payee);
+
+        Creditors creditor = new Creditors();
+        creditor.setCreditorId("creditor-001");
+        when(dbMybatisService.getCreditorByMerchantId(payee.getMerchantId())).thenReturn(creditor);
+
+        // Act
+        AddBalanceTransferToCreditorPayeeResponse response = addBalanceTransferToCreditorPayeeOperation.invokeService(addBalanceTransferToCreditorPayeeRequest);
+
+        // Assert
+        verify(dbMybatisService).saveBtDestination(any(BtDestinations.class));
+        assertNotNull(response);
+        assertTrue(response.getResponsePayload().getStatus());
+    }
+
+    @Test
+    void testRequiresDisclosureConsent() {
+        // Act
+        boolean result = addBalanceTransferToCreditorPayeeOperation.requiresDisclosureConsent();
+
+        // Assert
+        assertFalse(result);
+    }
+
+    @Test
+    void testGetConsentDisclosureFailedMsgCode() {
+        // Act
+        String result = addBalanceTransferToCreditorPayeeOperation.getConsentDisclosureFailedMsgCode();
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testGenerateAutoComment() {
+        // Act
+        boolean result = addBalanceTransferToCreditorPayeeOperation.generateAutoComment();
+
+        // Assert
+        assertFalse(result);
+    }
+
+    @Test
+    void testCreateAutoComment() {
+        // Act
+        List<String> result = addBalanceTransferToCreditorPayeeOperation.createAutoComment(null, null);
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testGetEmailInfoBean() {
+        // Act
+        EmailInfo result = addBalanceTransferToCreditorPayeeOperation.getEmailInfoBean(null, null);
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testGetValidator() {
+        // Act
+        MsecValidator result = addBalanceTransferToCreditorPayeeOperation.getValidator();
+
+        // Assert
+        assertNotNull(result);
+    }
+}

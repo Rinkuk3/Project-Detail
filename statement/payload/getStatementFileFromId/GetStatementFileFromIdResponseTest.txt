@@ -1,0 +1,26 @@
+package com.td.mbna.msec.midtier.statement.payload.getStatementFileFromId;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class GetStatementFileFromIdResponseTest {
+
+    @Test
+    void testGetAndSetResponsePayload() {
+        GetStatementFileFromIdResponse response = new GetStatementFileFromIdResponse();
+
+        ResponsePayload payload = new ResponsePayload();
+        response.setResponsePayload(payload);
+
+        assertEquals(payload, response.getResponsePayload());
+    }
+
+    @Test
+    void testSetResponsePayloadToNull() {
+        GetStatementFileFromIdResponse response = new GetStatementFileFromIdResponse();
+
+        response.setResponsePayload(null);
+
+        assertNull(response.getResponsePayload());
+    }
+}

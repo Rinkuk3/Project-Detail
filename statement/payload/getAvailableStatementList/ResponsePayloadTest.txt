@@ -1,0 +1,19 @@
+package com.td.mbna.msec.midtier.statement.payload.getAvailableStatementList;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ResponsePayloadTest {
+
+    @Test
+    void testGetAndSetAvailableStatementList() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        
+        AvailableStatementListType availableStatementList = new AvailableStatementListType();
+        responsePayload.setAvailableStatementList(availableStatementList);
+        
+        assertNotNull(responsePayload.getAvailableStatementList());
+        assertEquals(availableStatementList, responsePayload.getAvailableStatementList());
+    }
+}

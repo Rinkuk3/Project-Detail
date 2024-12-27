@@ -1,0 +1,95 @@
+package com.td.api.mbcca.response.transactions.postedevents;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class AdjustmentInfoTest {
+
+    private AdjustmentInfo adjustmentInfo;
+
+    @Before
+    public void setUp() {
+        adjustmentInfo = new AdjustmentInfo();
+    }
+
+    @Test
+    public void testGetAndSetAccountingFunctionCd() {
+        String accountingFunctionCd = "ACC123";
+        adjustmentInfo.setAccountingFunctionCd(accountingFunctionCd);
+        assertEquals(accountingFunctionCd, adjustmentInfo.getAccountingFunctionCd());
+    }
+
+    @Test
+    public void testGetAndSetActivityTypeCd() {
+        String activityTypeCd = "ACT123";
+        adjustmentInfo.setActivityTypeCd(activityTypeCd);
+        assertEquals(activityTypeCd, adjustmentInfo.getActivityTypeCd());
+    }
+
+    @Test
+    public void testGetAndSetGlMainAccountVal() {
+        String glMainAccountVal = "GL123";
+        adjustmentInfo.setGlMainAccountVal(glMainAccountVal);
+        assertEquals(glMainAccountVal, adjustmentInfo.getGlMainAccountVal());
+    }
+
+    @Test
+    public void testGetAndSetEventTxt() {
+        String eventTxt = "Event Description";
+        adjustmentInfo.setEventTxt(eventTxt);
+        assertEquals(eventTxt, adjustmentInfo.getEventTxt());
+    }
+
+    @Test
+    public void testToString() {
+        adjustmentInfo.setAccountingFunctionCd("ACC123");
+        adjustmentInfo.setActivityTypeCd("ACT123");
+        adjustmentInfo.setGlMainAccountVal("GL123");
+        adjustmentInfo.setEventTxt("Event Description");
+        
+        String expectedString = "com.td.api.mbcca.response.transactions.postedevents.AdjustmentInfo@" 
+                + Integer.toHexString(System.identityHashCode(adjustmentInfo)) 
+                + "[accountingFunctionCd=ACC123,activityTypeCd=ACT123,glMainAccountVal=GL123,eventTxt=Event Description,]";
+        
+        assertEquals(expectedString, adjustmentInfo.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        AdjustmentInfo adjustmentInfo1 = new AdjustmentInfo();
+        adjustmentInfo1.setAccountingFunctionCd("ACC123");
+        adjustmentInfo1.setActivityTypeCd("ACT123");
+        adjustmentInfo1.setGlMainAccountVal("GL123");
+        adjustmentInfo1.setEventTxt("Event Description");
+        
+        AdjustmentInfo adjustmentInfo2 = new AdjustmentInfo();
+        adjustmentInfo2.setAccountingFunctionCd("ACC123");
+        adjustmentInfo2.setActivityTypeCd("ACT123");
+        adjustmentInfo2.setGlMainAccountVal("GL123");
+        adjustmentInfo2.setEventTxt("Event Description");
+
+        assertEquals(adjustmentInfo1.hashCode(), adjustmentInfo2.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        AdjustmentInfo adjustmentInfo1 = new AdjustmentInfo();
+        adjustmentInfo1.setAccountingFunctionCd("ACC123");
+        adjustmentInfo1.setActivityTypeCd("ACT123");
+        adjustmentInfo1.setGlMainAccountVal("GL123");
+        adjustmentInfo1.setEventTxt("Event Description");
+
+        AdjustmentInfo adjustmentInfo2 = new AdjustmentInfo();
+        adjustmentInfo2.setAccountingFunctionCd("ACC123");
+        adjustmentInfo2.setActivityTypeCd("ACT123");
+        adjustmentInfo2.setGlMainAccountVal("GL123");
+        adjustmentInfo2.setEventTxt("Event Description");
+
+        assertTrue(adjustmentInfo1.equals(adjustmentInfo2));
+
+        adjustmentInfo2.setEventTxt("Different Event");
+        assertFalse(adjustmentInfo1.equals(adjustmentInfo2));
+    }
+}

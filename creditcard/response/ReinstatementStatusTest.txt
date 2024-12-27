@@ -1,0 +1,99 @@
+package com.td.api.mbcca.creditcard.response;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class ReinstatementStatusTest {
+
+    @Test
+    void testGettersAndSetters() {
+        ReinstatementStatus reinstatementStatus = new ReinstatementStatus();
+        
+        // Test setPreviousChargeOffReasonCd and getPreviousChargeOffReasonCd methods
+        String previousChargeOffReasonCd = "ChargeOffReason";
+        reinstatementStatus.setPreviousChargeOffReasonCd(previousChargeOffReasonCd);
+        assertEquals(previousChargeOffReasonCd, reinstatementStatus.getPreviousChargeOffReasonCd());
+
+        // Test setReinstatedDt and getReinstatedDt methods
+        String reinstatedDt = "2024-12-20";
+        reinstatementStatus.setReinstatedDt(reinstatedDt);
+        assertEquals(reinstatedDt, reinstatementStatus.getReinstatedDt());
+    }
+
+    @Test
+    void testToString() {
+        ReinstatementStatus reinstatementStatus = new ReinstatementStatus();
+        
+        String previousChargeOffReasonCd = "ChargeOffReason";
+        String reinstatedDt = "2024-12-20";
+        
+        reinstatementStatus.setPreviousChargeOffReasonCd(previousChargeOffReasonCd);
+        reinstatementStatus.setReinstatedDt(reinstatedDt);
+
+        String expectedString = "com.td.api.mbcca.creditcard.response.ReinstatementStatus@" + 
+            Integer.toHexString(reinstatementStatus.hashCode()) + "[previousChargeOffReasonCd=" + previousChargeOffReasonCd + ",reinstatedDt=" + reinstatedDt + "]";
+
+        assertEquals(expectedString, reinstatementStatus.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        ReinstatementStatus reinstatementStatus1 = new ReinstatementStatus();
+        ReinstatementStatus reinstatementStatus2 = new ReinstatementStatus();
+
+        String previousChargeOffReasonCd = "ChargeOffReason";
+        String reinstatedDt = "2024-12-20";
+
+        reinstatementStatus1.setPreviousChargeOffReasonCd(previousChargeOffReasonCd);
+        reinstatementStatus1.setReinstatedDt(reinstatedDt);
+
+        reinstatementStatus2.setPreviousChargeOffReasonCd(previousChargeOffReasonCd);
+        reinstatementStatus2.setReinstatedDt(reinstatedDt);
+
+        assertEquals(reinstatementStatus1.hashCode(), reinstatementStatus2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        ReinstatementStatus reinstatementStatus1 = new ReinstatementStatus();
+        ReinstatementStatus reinstatementStatus2 = new ReinstatementStatus();
+        ReinstatementStatus reinstatementStatus3 = new ReinstatementStatus();
+
+        String previousChargeOffReasonCd = "ChargeOffReason";
+        String reinstatedDt = "2024-12-20";
+
+        reinstatementStatus1.setPreviousChargeOffReasonCd(previousChargeOffReasonCd);
+        reinstatementStatus1.setReinstatedDt(reinstatedDt);
+
+        reinstatementStatus2.setPreviousChargeOffReasonCd(previousChargeOffReasonCd);
+        reinstatementStatus2.setReinstatedDt(reinstatedDt);
+
+        reinstatementStatus3.setPreviousChargeOffReasonCd(null);
+        reinstatementStatus3.setReinstatedDt(null);
+
+        // Equal comparison
+        assertTrue(reinstatementStatus1.equals(reinstatementStatus2));
+
+        // Comparing different objects
+        assertFalse(reinstatementStatus1.equals(reinstatementStatus3));
+
+        // Comparing with null
+        assertFalse(reinstatementStatus1.equals(null));
+
+        // Comparing with different class type
+        assertFalse(reinstatementStatus1.equals(new Object()));
+    }
+
+    @Test
+    void testEquals_SameObject() {
+        ReinstatementStatus reinstatementStatus = new ReinstatementStatus();
+        String previousChargeOffReasonCd = "ChargeOffReason";
+        String reinstatedDt = "2024-12-20";
+        
+        reinstatementStatus.setPreviousChargeOffReasonCd(previousChargeOffReasonCd);
+        reinstatementStatus.setReinstatedDt(reinstatedDt);
+
+        assertTrue(reinstatementStatus.equals(reinstatementStatus));
+    }
+
+}

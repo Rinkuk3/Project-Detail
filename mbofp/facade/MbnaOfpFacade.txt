@@ -1,0 +1,191 @@
+package com.td.mbna.msec.midtier.mbofp.facade;
+
+import com.td.api.mbofp.request.balancetransfer.BalanceTransferRequest;
+import com.td.api.mbofp.request.installmentplan.AddTargetPromotionAgreementFinancialEventRequest;
+import com.td.api.mbofp.request.insuranceenrolment.InsuranceEnrolmentRequest;
+import com.td.api.mbofp.request.productchange.ProductChangeRequest;
+import com.td.api.mbofp.request.updateofferdisposition.UpdateOfferDispositionRequest;
+import com.td.api.mbofp.response.balancetransfer.BalanceTransferResponse;
+import com.td.api.mbofp.response.installmentplan.AddTargetPromotionAgreementFinancialEventResponse;
+import com.td.api.mbofp.response.insuranceenrolment.InsuranceEnrolmentResponse;
+import com.td.api.mbofp.response.productchange.ProductChangeResponse;
+import com.td.api.mbofp.response.updateofferdisposition.UpdateOfferDispositionResponse;
+import com.td.mbna.msec.midtier.mbofp.adaptor.*;
+import com.td.mbna.msec.midtier.offers.payload.requestInstallmentPlan.RequestInstallmentPlanRequest;
+import com.td.mbna.msec.midtier.offers.payload.requestinsurance.RequestInsuranceResponse;
+import com.td.mbna.msec.midtier.offers.payload.requestproductchange.RequestProductChangeResponse;
+import com.td.mbna.msec.midtier.offers.payload.retrieveoffers.RetrieveOffersResponse;
+import com.td.mbna.msec.midtier.transfer.payload.balancetransfertocreditor.BalanceTransferToCreditorResponse;
+import com.td.mbna.msec.midtier.transfer.payload.deposittochequing.DepositToChequingResponse;
+import com.td.mbna.msec.midtier.util.services.MSECConstants;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+public class MbnaOfpFacadeTest {
+
+    @InjectMocks
+    private MbnaOfpFacade mbnaOfpFacade;
+
+    @Mock
+    private RestTemplate restTemplate;
+
+    @Mock
+    private DepositToChequingAdaptor depositToChequingAdaptor;
+
+    @Mock
+    private BalanceTransferAdaptor balanceTransferAdaptor;
+
+    @Mock
+    private InsuranceEnrolmentAdaptor insuranceEnrolmentAdaptor;
+
+    @Mock
+    private OffersRetrievalAdaptor offersRetrievalAdaptor;
+
+    @Mock
+    private ProductChangeAdaptor productChangeAdaptor;
+
+    @Mock
+    private UpdateOfferDispositionAdaptor updateOfferDispositionAdaptor;
+
+    @Mock
+    private InstallmentPlanAdaptor installmentPlanAdaptor;
+
+    private Map<String, Object> params;
+    private String token = "testToken";
+
+    @BeforeEach
+    public void setUp() {
+        params = new HashMap<>();
+        params.put("PARAM_ACCT_ID", "1234567890");
+        params.put("PARAM_SUBPRODUCT_ID", "subProductId");
+    }
+
+    @Test
+    public void testUpdateOfferDisposition() {
+        UpdateOfferDispositionRequest request = mock(UpdateOfferDispositionRequest.class);
+        when(updateOfferDispositionAdaptor.getRequest(any())).thenReturn(request);
+
+        UriComponentsBuilder uriBuilder = mock(UriComponentsBuilder.class);
+        when(uriBuilder.toUriString()).thenReturn("uri");
+
+        HttpEntity<UpdateOfferDispositionRequest> requestEntity = mock(HttpEntity.class);
+        ResponseEntity<UpdateOfferDispositionResponse> responseEntity = mock(ResponseEntity.class);
+
+        doNothing().when(restTemplate).exchange(anyString(), any(), any(), eq(UpdateOfferDispositionResponse.class));
+
+        mbnaOfpFacade.updateOfferDisposition(params, token);
+
+        verify(restTemplate, times(1)).exchange(anyString(), any(), any(), eq(UpdateOfferDispositionResponse.class));
+    }
+
+    @Test
+    public void testRequestProductChange() {
+        ProductChangeRequest productChangeRequest = mock(ProductChangeRequest.class);
+        ProductChangeResponse productChangeResponse = mock(ProductChangeResponse.class);
+        RequestProductChangeResponse response = mock(RequestProductChangeResponse.class);
+
+        when(productChangeAdaptor.getRequest(any())).thenReturn(productChangeRequest);
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(ProductChangeResponse.class)))
+                .thenReturn(ResponseEntity.ok(productChangeResponse));
+        when(productChangeAdaptor.getResponse(any())).thenReturn(response);
+
+        RequestProductChangeResponse result = mbnaOfpFacade.requestProductChange(params, token);
+
+        verify(restTemplate, times(1)).exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(ProductChangeResponse.class));
+        verify(productChangeAdaptor, times(1)).getResponse(any(ProductChangeResponse.class));
+    }
+
+    @Test
+    public void testRetrieveOfferList() {
+        Map<String, String> params = new HashMap<>();
+        params.put(MSECConstants.TD_OFP_API_AGREEMENT_ID, "agreementId");
+        params.put(MSECConstants.TD_OFP_API_PARTY_ID, "partyId");
+        params.put(MSECConstants.CONNECT_ID, "connectId");
+
+        RetrieveOfferListRs offerList = mock(RetrieveOfferListRs.class);
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(HttpEntity.class), eq(RetrieveOfferListRs.class)))
+                .thenReturn(ResponseEntity.ok(offerList));
+
+        RetrieveOffersResponse response = mbnaOfpFacade.retrieveOfferList(params, token);
+
+        verify(restTemplate, times(1)).exchange(anyString(), eq(HttpMethod.GET), any(HttpEntity.class), eq(RetrieveOfferListRs.class));
+    }
+
+    @Test
+    public void testInsuranceEnrolment() {
+        InsuranceEnrolmentRequest insuranceEnrolmentRequest = mock(InsuranceEnrolmentRequest.class);
+        InsuranceEnrolmentResponse insuranceEnrolmentResponse = mock(InsuranceEnrolmentResponse.class);
+        RequestInsuranceResponse response = mock(RequestInsuranceResponse.class);
+
+        when(insuranceEnrolmentAdaptor.getRequest(any())).thenReturn(insuranceEnrolmentRequest);
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(InsuranceEnrolmentResponse.class)))
+                .thenReturn(ResponseEntity.ok(insuranceEnrolmentResponse));
+        when(insuranceEnrolmentAdaptor.getResponse(any())).thenReturn(response);
+
+        RequestInsuranceResponse result = mbnaOfpFacade.insuranceEnrolment(params, token);
+
+        verify(restTemplate, times(1)).exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(InsuranceEnrolmentResponse.class));
+        verify(insuranceEnrolmentAdaptor, times(1)).getResponse(any(InsuranceEnrolmentResponse.class));
+    }
+
+    @Test
+    public void testDepositToChequing() {
+        BalanceTransferRequest balanceTransferRequest = mock(BalanceTransferRequest.class);
+        BalanceTransferResponse balanceTransferResponse = mock(BalanceTransferResponse.class);
+        DepositToChequingResponse response = mock(DepositToChequingResponse.class);
+
+        when(depositToChequingAdaptor.getRequest(any())).thenReturn(balanceTransferRequest);
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(BalanceTransferResponse.class)))
+                .thenReturn(ResponseEntity.ok(balanceTransferResponse));
+        when(depositToChequingAdaptor.getResponse(any())).thenReturn(response);
+
+        DepositToChequingResponse result = mbnaOfpFacade.depositToChequing(params, token);
+
+        verify(restTemplate, times(1)).exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(BalanceTransferResponse.class));
+        verify(depositToChequingAdaptor, times(1)).getResponse(any(BalanceTransferResponse.class));
+    }
+
+    @Test
+    public void testBalanceTransferToCreditor() {
+        BalanceTransferRequest balanceTransferRequest = mock(BalanceTransferRequest.class);
+        BalanceTransferResponse balanceTransferResponse = mock(BalanceTransferResponse.class);
+        BalanceTransferToCreditorResponse response = mock(BalanceTransferToCreditorResponse.class);
+
+        when(balanceTransferAdaptor.getRequest(any())).thenReturn(balanceTransferRequest);
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(BalanceTransferResponse.class)))
+                .thenReturn(ResponseEntity.ok(balanceTransferResponse));
+        when(balanceTransferAdaptor.getResponse(any())).thenReturn(response);
+
+        BalanceTransferToCreditorResponse result = mbnaOfpFacade.balanceTransferToCreditor(params, token);
+
+        verify(restTemplate, times(1)).exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(BalanceTransferResponse.class));
+        verify(balanceTransferAdaptor, times(1)).getResponse(any(BalanceTransferResponse.class));
+    }
+
+    @Test
+    public void testRequestInstallmentPlan() {
+        RequestInstallmentPlanRequest requestInstallmentPlanRequest = mock(RequestInstallmentPlanRequest.class);
+        AddTargetPromotionAgreementFinancialEventRequest addRequest = mock(AddTargetPromotionAgreementFinancialEventRequest.class);
+        AddTargetPromotionAgreementFinancialEventResponse addResponse = mock(AddTargetPromotionAgreementFinancialEventResponse.class);
+
+        when(installmentPlanAdaptor.generateIPFinancialEventRequest(any())).thenReturn(addRequest);
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(AddTargetPromotionAgreementFinancialEventResponse.class)))
+                .thenReturn(ResponseEntity.ok(addResponse));
+
+        AddTargetPromotionAgreementFinancialEventResponse result = mbnaOfpFacade.requestInstallmentPlan(requestInstallmentPlanRequest, token);
+
+        verify(restTemplate, times(1)).exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(AddTargetPromotionAgreementFinancialEventResponse.class));
+    }
+}

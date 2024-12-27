@@ -1,0 +1,105 @@
+package com.td.api.dms.request;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+
+class DocumentSearchRequestTest {
+
+    @Test
+    void testGetSetPortal() {
+        DocumentSearchRequest request = new DocumentSearchRequest();
+        request.setPortal("TestPortal");
+        assertEquals("TestPortal", request.getPortal());
+    }
+
+    @Test
+    void testGetSetFolder() {
+        DocumentSearchRequest request = new DocumentSearchRequest();
+        request.setFolder("TestFolder");
+        assertEquals("TestFolder", request.getFolder());
+    }
+
+    @Test
+    void testGetSetOrderBy() {
+        DocumentSearchRequest request = new DocumentSearchRequest();
+        OrderBy orderBy = new OrderBy();
+        request.setOrderBy(Arrays.asList(orderBy));
+        assertEquals(Arrays.asList(orderBy), request.getOrderBy());
+    }
+
+    @Test
+    void testGetSetQuery() {
+        DocumentSearchRequest request = new DocumentSearchRequest();
+        Query query = new Query();
+        request.setQuery(Arrays.asList(query));
+        assertEquals(Arrays.asList(query), request.getQuery());
+    }
+
+    @Test
+    void testGetSetMaxResults() {
+        DocumentSearchRequest request = new DocumentSearchRequest();
+        request.setMaxResults(10);
+        assertEquals(Integer.valueOf(10), request.getMaxResults());
+    }
+
+    @Test
+    void testToString() {
+        DocumentSearchRequest request = new DocumentSearchRequest();
+        request.setPortal("TestPortal");
+        request.setFolder("TestFolder");
+        request.setMaxResults(10);
+        request.setOrderBy(Arrays.asList(new OrderBy()));
+        request.setQuery(Arrays.asList(new Query()));
+        String expectedString = "com.td.api.dms.request.DocumentSearchRequest@" + Integer.toHexString(request.hashCode()) + 
+                "[portal=TestPortal,folder=TestFolder,orderBy=" + request.getOrderBy() + ",query=" + request.getQuery() + 
+                ",maxResults=10,]";
+        assertEquals(expectedString, request.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        DocumentSearchRequest request1 = new DocumentSearchRequest();
+        request1.setPortal("TestPortal");
+        request1.setFolder("TestFolder");
+        request1.setMaxResults(10);
+        request1.setOrderBy(Arrays.asList(new OrderBy()));
+        request1.setQuery(Arrays.asList(new Query()));
+
+        DocumentSearchRequest request2 = new DocumentSearchRequest();
+        request2.setPortal("TestPortal");
+        request2.setFolder("TestFolder");
+        request2.setMaxResults(10);
+        request2.setOrderBy(Arrays.asList(new OrderBy()));
+        request2.setQuery(Arrays.asList(new Query()));
+
+        assertEquals(request1.hashCode(), request2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        DocumentSearchRequest request1 = new DocumentSearchRequest();
+        request1.setPortal("TestPortal");
+        request1.setFolder("TestFolder");
+        request1.setMaxResults(10);
+        request1.setOrderBy(Arrays.asList(new OrderBy()));
+        request1.setQuery(Arrays.asList(new Query()));
+
+        DocumentSearchRequest request2 = new DocumentSearchRequest();
+        request2.setPortal("TestPortal");
+        request2.setFolder("TestFolder");
+        request2.setMaxResults(10);
+        request2.setOrderBy(Arrays.asList(new OrderBy()));
+        request2.setQuery(Arrays.asList(new Query()));
+
+        assertTrue(request1.equals(request2));
+
+        DocumentSearchRequest request3 = new DocumentSearchRequest();
+        request3.setPortal("AnotherPortal");
+        request3.setFolder("AnotherFolder");
+        request3.setMaxResults(20);
+
+        assertFalse(request1.equals(request3));
+    }
+}

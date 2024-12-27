@@ -1,0 +1,119 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import com.td.mbna.msec.midtier.offers.payload.requestretailregistration.RequestRetailRegistrationRequest;
+import com.td.mbna.msec.midtier.offers.payload.requestretailregistration.RequestPayload;
+
+class RequestRetailRegistrationRequestTest {
+
+    @Test
+    void testSetGetRequestPayload() {
+        RequestRetailRegistrationRequest request = new RequestRetailRegistrationRequest();
+        RequestPayload requestPayload = new RequestPayload();
+        
+        // Test setting and getting requestPayload
+        request.setRequestPayload(requestPayload);
+        assertEquals(requestPayload, request.getRequestPayload());
+        
+        request.setRequestPayload(null);
+        assertNull(request.getRequestPayload());
+    }
+
+    @Test
+    void testToString() {
+        RequestRetailRegistrationRequest request = new RequestRetailRegistrationRequest();
+        RequestPayload requestPayload = new RequestPayload();
+        
+        request.setRequestPayload(requestPayload);
+        request.setSessionInfo("session123");
+        request.setCustId("cust123");
+        request.setAliasCustId("alias123");
+        request.setAcctNum("123456");
+        request.setAcctType("typeA");
+        request.setLanguagePref("EN");
+        request.setAuditInfo("auditInfo123");
+        request.setIsPrimaryUser(true);
+        request.setReserved1("reserved");
+        request.setCustInterface("interface123");
+        
+        String expectedString = "RequestRetailRegistrationRequest@" + Integer.toHexString(System.identityHashCode(request)) + "[sessionInfo=session123,custId=cust123,aliasCustId=alias123,acctNum=123456,acctType=typeA,languagePref=EN,auditInfo=auditInfo123,isPrimaryUser=true,reserved1=reserved,custInterface=interface123,requestPayload=" + requestPayload + "]";
+        assertEquals(expectedString, request.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        RequestRetailRegistrationRequest request1 = new RequestRetailRegistrationRequest();
+        RequestRetailRegistrationRequest request2 = new RequestRetailRegistrationRequest();
+        
+        RequestPayload requestPayload = new RequestPayload();
+        request1.setRequestPayload(requestPayload);
+        request2.setRequestPayload(requestPayload);
+        
+        request1.setSessionInfo("session123");
+        request1.setCustId("cust123");
+        request1.setAliasCustId("alias123");
+        request1.setAcctNum("123456");
+        request1.setAcctType("typeA");
+        request1.setLanguagePref("EN");
+        request1.setAuditInfo("auditInfo123");
+        request1.setIsPrimaryUser(true);
+        request1.setReserved1("reserved");
+        request1.setCustInterface("interface123");
+        
+        request2.setSessionInfo("session123");
+        request2.setCustId("cust123");
+        request2.setAliasCustId("alias123");
+        request2.setAcctNum("123456");
+        request2.setAcctType("typeA");
+        request2.setLanguagePref("EN");
+        request2.setAuditInfo("auditInfo123");
+        request2.setIsPrimaryUser(true);
+        request2.setReserved1("reserved");
+        request2.setCustInterface("interface123");
+
+        assertEquals(request1.hashCode(), request2.hashCode());
+        
+        request2.setCustId("cust124");
+        assertNotEquals(request1.hashCode(), request2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        RequestRetailRegistrationRequest request1 = new RequestRetailRegistrationRequest();
+        RequestRetailRegistrationRequest request2 = new RequestRetailRegistrationRequest();
+        
+        RequestPayload requestPayload = new RequestPayload();
+        request1.setRequestPayload(requestPayload);
+        request2.setRequestPayload(requestPayload);
+        
+        request1.setSessionInfo("session123");
+        request1.setCustId("cust123");
+        request1.setAliasCustId("alias123");
+        request1.setAcctNum("123456");
+        request1.setAcctType("typeA");
+        request1.setLanguagePref("EN");
+        request1.setAuditInfo("auditInfo123");
+        request1.setIsPrimaryUser(true);
+        request1.setReserved1("reserved");
+        request1.setCustInterface("interface123");
+
+        request2.setSessionInfo("session123");
+        request2.setCustId("cust123");
+        request2.setAliasCustId("alias123");
+        request2.setAcctNum("123456");
+        request2.setAcctType("typeA");
+        request2.setLanguagePref("EN");
+        request2.setAuditInfo("auditInfo123");
+        request2.setIsPrimaryUser(true);
+        request2.setReserved1("reserved");
+        request2.setCustInterface("interface123");
+
+        assertEquals(request1, request2);
+        
+        request2.setCustId("cust124");
+        assertNotEquals(request1, request2);
+        
+        request2.setCustId("cust123");
+        request2.setSessionInfo("session124");
+        assertNotEquals(request1, request2);
+    }
+}

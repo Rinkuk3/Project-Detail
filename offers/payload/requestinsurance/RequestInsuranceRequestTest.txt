@@ -1,0 +1,154 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestInsuranceRequestTest {
+
+    @Test
+    void testSetGetRequestPayload() {
+        RequestInsuranceRequest requestInsuranceRequest = new RequestInsuranceRequest();
+        RequestPayload requestPayload = new RequestPayload();
+        requestInsuranceRequest.setRequestPayload(requestPayload);
+        
+        assertEquals(requestPayload, requestInsuranceRequest.getRequestPayload());
+    }
+
+    @Test
+    void testToString() {
+        RequestInsuranceRequest requestInsuranceRequest = new RequestInsuranceRequest();
+        requestInsuranceRequest.setSessionInfo("sessionInfo");
+        requestInsuranceRequest.setCustId("custId");
+        requestInsuranceRequest.setAliasCustId("aliasCustId");
+        requestInsuranceRequest.setAcctNum("acctNum");
+        requestInsuranceRequest.setAcctType("acctType");
+        requestInsuranceRequest.setLanguagePref("en");
+        requestInsuranceRequest.setAuditInfo("auditInfo");
+        requestInsuranceRequest.setIsPrimaryUser(true);
+        requestInsuranceRequest.setReserved1("reserved1");
+        requestInsuranceRequest.setCustInterface("interface");
+        requestInsuranceRequest.setRequestPayload(new RequestPayload());
+
+        String expectedString = "RequestInsuranceRequest@" + Integer.toHexString(System.identityHashCode(requestInsuranceRequest)) + "[" +
+                "sessionInfo=sessionInfo," +
+                "custId=custId," +
+                "aliasCustId=aliasCustId," +
+                "acctNum=acctNum," +
+                "acctType=acctType," +
+                "languagePref=en," +
+                "auditInfo=auditInfo," +
+                "isPrimaryUser=true," +
+                "reserved1=reserved1," +
+                "custInterface=interface," +
+                "requestPayload=" + requestInsuranceRequest.getRequestPayload() +
+                "]";
+
+        assertEquals(expectedString, requestInsuranceRequest.toString());
+    }
+
+    @Test
+    void testEquals() {
+        RequestInsuranceRequest requestInsuranceRequest1 = new RequestInsuranceRequest();
+        RequestInsuranceRequest requestInsuranceRequest2 = new RequestInsuranceRequest();
+        
+        requestInsuranceRequest1.setSessionInfo("sessionInfo");
+        requestInsuranceRequest2.setSessionInfo("sessionInfo");
+
+        assertEquals(requestInsuranceRequest1, requestInsuranceRequest2);
+
+        requestInsuranceRequest2.setSessionInfo("otherSessionInfo");
+        assertNotEquals(requestInsuranceRequest1, requestInsuranceRequest2);
+    }
+
+    @Test
+    void testHashCode() {
+        RequestInsuranceRequest requestInsuranceRequest1 = new RequestInsuranceRequest();
+        RequestInsuranceRequest requestInsuranceRequest2 = new RequestInsuranceRequest();
+
+        requestInsuranceRequest1.setSessionInfo("sessionInfo");
+        requestInsuranceRequest2.setSessionInfo("sessionInfo");
+
+        assertEquals(requestInsuranceRequest1.hashCode(), requestInsuranceRequest2.hashCode());
+
+        requestInsuranceRequest2.setSessionInfo("otherSessionInfo");
+        assertNotEquals(requestInsuranceRequest1.hashCode(), requestInsuranceRequest2.hashCode());
+    }
+
+    @Test
+    void testSetGetSessionInfo() {
+        RequestInsuranceRequest requestInsuranceRequest = new RequestInsuranceRequest();
+        requestInsuranceRequest.setSessionInfo("sessionInfo");
+
+        assertEquals("sessionInfo", requestInsuranceRequest.getSessionInfo());
+    }
+
+    @Test
+    void testSetGetCustId() {
+        RequestInsuranceRequest requestInsuranceRequest = new RequestInsuranceRequest();
+        requestInsuranceRequest.setCustId("custId");
+
+        assertEquals("custId", requestInsuranceRequest.getCustId());
+    }
+
+    @Test
+    void testSetGetAliasCustId() {
+        RequestInsuranceRequest requestInsuranceRequest = new RequestInsuranceRequest();
+        requestInsuranceRequest.setAliasCustId("aliasCustId");
+
+        assertEquals("aliasCustId", requestInsuranceRequest.getAliasCustId());
+    }
+
+    @Test
+    void testSetGetAcctNum() {
+        RequestInsuranceRequest requestInsuranceRequest = new RequestInsuranceRequest();
+        requestInsuranceRequest.setAcctNum("acctNum");
+
+        assertEquals("acctNum", requestInsuranceRequest.getAcctNum());
+    }
+
+    @Test
+    void testSetGetAcctType() {
+        RequestInsuranceRequest requestInsuranceRequest = new RequestInsuranceRequest();
+        requestInsuranceRequest.setAcctType("acctType");
+
+        assertEquals("acctType", requestInsuranceRequest.getAcctType());
+    }
+
+    @Test
+    void testSetGetLanguagePref() {
+        RequestInsuranceRequest requestInsuranceRequest = new RequestInsuranceRequest();
+        requestInsuranceRequest.setLanguagePref("en");
+
+        assertEquals("en", requestInsuranceRequest.getLanguagePref());
+    }
+
+    @Test
+    void testSetGetAuditInfo() {
+        RequestInsuranceRequest requestInsuranceRequest = new RequestInsuranceRequest();
+        requestInsuranceRequest.setAuditInfo("auditInfo");
+
+        assertEquals("auditInfo", requestInsuranceRequest.getAuditInfo());
+    }
+
+    @Test
+    void testSetGetIsPrimaryUser() {
+        RequestInsuranceRequest requestInsuranceRequest = new RequestInsuranceRequest();
+        requestInsuranceRequest.setIsPrimaryUser(true);
+
+        assertTrue(requestInsuranceRequest.getIsPrimaryUser());
+    }
+
+    @Test
+    void testSetGetReserved1() {
+        RequestInsuranceRequest requestInsuranceRequest = new RequestInsuranceRequest();
+        requestInsuranceRequest.setReserved1("reserved1");
+
+        assertEquals("reserved1", requestInsuranceRequest.getReserved1());
+    }
+
+    @Test
+    void testSetGetCustInterface() {
+        RequestInsuranceRequest requestInsuranceRequest = new RequestInsuranceRequest();
+        requestInsuranceRequest.setCustInterface("interface");
+
+        assertEquals("interface", requestInsuranceRequest.getCustInterface());
+    }
+}

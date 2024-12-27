@@ -1,0 +1,76 @@
+package com.td.api.mbalert.request.addalertevent;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ConditionTest {
+
+    @Test
+    void testCondition() {
+        // Create an instance of Condition
+        Condition condition = new Condition();
+
+        // Test the default value of the 'identifier' list
+        assertNotNull(condition.getIdentifier());
+        assertTrue(condition.getIdentifier().isEmpty());
+
+        // Add an Identifier object to the list
+        Identifier identifier = new Identifier();
+        identifier.setId("12345");
+        condition.getIdentifier().add(identifier);
+
+        // Test that the identifier is added to the list
+        assertEquals(1, condition.getIdentifier().size());
+        assertEquals("12345", condition.getIdentifier().get(0).getId());
+
+        // Test setting and getting a list of identifiers
+        List<Identifier> identifiers = new ArrayList<>();
+        Identifier identifier2 = new Identifier();
+        identifier2.setId("67890");
+        identifiers.add(identifier2);
+        condition.setIdentifier(identifiers);
+
+        // Verify the list was updated
+        assertEquals(1, condition.getIdentifier().size());
+        assertEquals("67890", condition.getIdentifier().get(0).getId());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        // Create two instances of Condition with the same list of identifiers
+        Condition condition1 = new Condition();
+        Identifier identifier1 = new Identifier();
+        identifier1.setId("12345");
+        condition1.getIdentifier().add(identifier1);
+
+        Condition condition2 = new Condition();
+        Identifier identifier2 = new Identifier();
+        identifier2.setId("12345");
+        condition2.getIdentifier().add(identifier2);
+
+        // Test equality method
+        assertTrue(condition1.equals(condition2));
+
+        // Test hashCode method
+        assertEquals(condition1.hashCode(), condition2.hashCode());
+
+        // Modify one object and test inequality
+        condition2.getIdentifier().get(0).setId("67890");
+        assertFalse(condition1.equals(condition2));
+    }
+
+    @Test
+    void testToString() {
+        // Create an instance of Condition
+        Condition condition = new Condition();
+        Identifier identifier = new Identifier();
+        identifier.setId("12345");
+        condition.getIdentifier().add(identifier);
+
+        // Test toString method
+        String toStringResult = condition.toString();
+        assertTrue(toStringResult.contains("identifier"));
+        assertTrue(toStringResult.contains("12345"));
+    }
+}

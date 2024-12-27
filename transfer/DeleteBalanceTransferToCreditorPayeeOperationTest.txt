@@ -1,0 +1,135 @@
+package com.td.mbna.msec.midtier.transfer;
+
+import com.td.mbna.msec.midtier.persistance.entity.BtDestinations;
+import com.td.mbna.msec.midtier.persistance.mybatis.DBMybatisService;
+import com.td.mbna.msec.midtier.transfer.payload.BalanceTransferToCreditorPayeeType;
+import com.td.mbna.msec.midtier.transfer.payload.deletebalancetransfertocreditorpayee.DeleteBalanceTransferToCreditorPayeeRequest;
+import com.td.mbna.msec.midtier.transfer.payload.deletebalancetransfertocreditorpayee.DeleteBalanceTransferToCreditorPayeeResponse;
+import com.td.mbna.msec.midtier.util.ExceptionUtil;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class DeleteBalanceTransferToCreditorPayeeOperationTest {
+
+    @InjectMocks
+    private DeleteBalanceTransferToCreditorPayeeOperation deleteBalanceTransferToCreditorPayeeOperation;
+
+    @Mock
+    private DBMybatisService dbMybatisService;
+
+    @Mock
+    private DeleteBalanceTransferToCreditorPayeeRequest deleteBalanceTransferToCreditorPayeeRequest;
+
+    @Mock
+    private DeleteBalanceTransferToCreditorPayeeResponse deleteBalanceTransferToCreditorPayeeResponse;
+
+    @Mock
+    private BalanceTransferToCreditorPayeeType balanceTransferToCreditorPayeeType;
+
+    @Mock
+    private BtDestinations btDestinations;
+
+    @Mock
+    private MbnaLogger mbnaLogger;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testInvokeService_Success() throws Exception {
+        // Arrange
+        when(deleteBalanceTransferToCreditorPayeeRequest.getRequestPayload()).thenReturn(new DeleteBalanceTransferToCreditorPayeeRequest().getRequestPayload());
+        BalanceTransferToCreditorPayeeType payee = new BalanceTransferToCreditorPayeeType();
+        payee.setId("12345");
+        when(deleteBalanceTransferToCreditorPayeeRequest.getRequestPayload().getPayee()).thenReturn(payee);
+
+        BtDestinations payeeDto = new BtDestinations();
+        payeeDto.setBtDestinationId(12345);
+        when(dbMybatisService.deleteBtDestination(any(BtDestinations.class))).thenReturn(true);
+
+        // Act
+        DeleteBalanceTransferToCreditorPayeeResponse response = deleteBalanceTransferToCreditorPayeeOperation.invokeService(deleteBalanceTransferToCreditorPayeeRequest);
+
+        // Assert
+        assertNotNull(response);
+        verify(dbMybatisService).deleteBtDestination(any(BtDestinations.class));
+    }
+
+    @Test
+    void testInvokeService_ExceptionThrown() {
+        // Arrange
+        when(deleteBalanceTransferToCreditorPayeeRequest.getRequestPayload()).thenReturn(new DeleteBalanceTransferToCreditorPayeeRequest().getRequestPayload());
+        BalanceTransferToCreditorPayeeType payee = new BalanceTransferToCreditorPayeeType();
+        payee.setId("12345");
+        when(deleteBalanceTransferToCreditorPayeeRequest.getRequestPayload().getPayee()).thenReturn(payee);
+
+        when(dbMybatisService.deleteBtDestination(any(BtDestinations.class))).thenThrow(new RuntimeException("Database error"));
+
+        // Act and Assert
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            deleteBalanceTransferToCreditorPayeeOperation.invokeService(deleteBalanceTransferToCreditorPayeeRequest);
+        });
+        assertTrue(exception.getMessage().contains("Database error"));
+    }
+
+    @Test
+    void testRequiresDisclosureConsent() {
+        // Act
+        boolean result = deleteBalanceTransferToCreditorPayeeOperation.requiresDisclosureConsent();
+
+        // Assert
+        assertFalse(result);
+    }
+
+    @Test
+    void testGetConsentDisclosureFailedMsgCode() {
+        // Act
+        String result = deleteBalanceTransferToCreditorPayeeOperation.getConsentDisclosureFailedMsgCode();
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testGenerateAutoComment() {
+        // Act
+        boolean result = deleteBalanceTransferToCreditorPayeeOperation.generateAutoComment();
+
+        // Assert
+        assertFalse(result);
+    }
+
+    @Test
+    void testCreateAutoComment() {
+        // Act
+        List<String> result = deleteBalanceTransferToCreditorPayeeOperation.createAutoComment(null, null);
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testGetEmailInfoBean() {
+        // Act
+        EmailInfo result = deleteBalanceTransferToCreditorPayeeOperation.getEmailInfoBean(null, null);
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testGetValidator() {
+        // Act
+        MsecValidator result = deleteBalanceTransferToCreditorPayeeOperation.getValidator();
+
+        // Assert
+        assertNull(result);
+    }
+}

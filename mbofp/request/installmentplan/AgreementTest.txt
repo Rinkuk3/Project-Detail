@@ -1,0 +1,102 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class AgreementTest {
+
+    private Agreement agreement;
+    private AgreementToCard agreementToCard;
+    private AgreementToDocument agreementToDocument;
+
+    @BeforeEach
+    void setUp() {
+        agreement = new Agreement();
+        agreementToCard = new AgreementToCard();  // Assuming a default constructor
+        agreementToDocument = new AgreementToDocument();  // Assuming a default constructor
+    }
+
+    @Test
+    void testGetAndSetHostAgreementNum() {
+        String hostAgreementNum = "AG123";
+        agreement.setHostAgreementNum(hostAgreementNum);
+        assertEquals(hostAgreementNum, agreement.getHostAgreementNum());
+    }
+
+    @Test
+    void testGetAndSetAgreementToCard() {
+        agreement.setAgreementToCard(agreementToCard);
+        assertEquals(agreementToCard, agreement.getAgreementToCard());
+    }
+
+    @Test
+    void testGetAndSetAgreementToDocument() {
+        agreement.setAgreementToDocument(agreementToDocument);
+        assertEquals(agreementToDocument, agreement.getAgreementToDocument());
+    }
+
+    @Test
+    void testToString() {
+        agreement.setHostAgreementNum("AG123");
+        agreement.setAgreementToCard(agreementToCard);
+        agreement.setAgreementToDocument(agreementToDocument);
+
+        String expected = "com.td.api.mbofp.request.installmentplan.Agreement@" 
+            + Integer.toHexString(agreement.hashCode()) 
+            + "[hostAgreementNum=AG123,agreementToCard=" + agreementToCard 
+            + ",agreementToDocument=" + agreementToDocument + "]";
+        
+        assertEquals(expected, agreement.toString());
+    }
+
+    @Test
+    void testHashCodeAndEquals() {
+        Agreement agreement1 = new Agreement();
+        agreement1.setHostAgreementNum("AG123");
+        agreement1.setAgreementToCard(agreementToCard);
+        agreement1.setAgreementToDocument(agreementToDocument);
+
+        Agreement agreement2 = new Agreement();
+        agreement2.setHostAgreementNum("AG123");
+        agreement2.setAgreementToCard(agreementToCard);
+        agreement2.setAgreementToDocument(agreementToDocument);
+
+        Agreement agreement3 = new Agreement();
+        agreement3.setHostAgreementNum("AG456");
+
+        assertTrue(agreement1.equals(agreement2));
+        assertFalse(agreement1.equals(agreement3));
+        assertEquals(agreement1.hashCode(), agreement2.hashCode());
+        assertNotEquals(agreement1.hashCode(), agreement3.hashCode());
+    }
+
+    @Test
+    void testEqualsDifferentClass() {
+        assertFalse(agreement.equals(new Object()));
+    }
+
+    @Test
+    void testNullEquals() {
+        assertFalse(agreement.equals(null));
+    }
+
+    @Test
+    void testSameObjectEquals() {
+        assertTrue(agreement.equals(agreement));
+    }
+
+    @Test
+    void testEqualsWithNullFields() {
+        Agreement agreement1 = new Agreement();
+        agreement1.setHostAgreementNum(null);
+        agreement1.setAgreementToCard(null);
+        agreement1.setAgreementToDocument(null);
+
+        Agreement agreement2 = new Agreement();
+        agreement2.setHostAgreementNum(null);
+        agreement2.setAgreementToCard(null);
+        agreement2.setAgreementToDocument(null);
+
+        assertTrue(agreement1.equals(agreement2));
+    }
+}

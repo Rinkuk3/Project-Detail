@@ -1,0 +1,103 @@
+package com.td.api.mbcca.creditcard.response;
+
+import com.td.api.mbcca.shared.Status;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class PartialUpdateCreditCardAgreementRsTest {
+
+    @Test
+    void testGettersAndSetters() {
+        PartialUpdateCreditCardAgreementRs response = new PartialUpdateCreditCardAgreementRs();
+        
+        // Create mock objects for Status and CreditCardAgreement
+        Status status = new Status();
+        CreditCardAgreement creditCardAgreement = new CreditCardAgreement();
+
+        // Test setStatus and getStatus methods
+        response.setStatus(status);
+        assertEquals(status, response.getStatus());
+
+        // Test setCreditCardAgreement and getCreditCardAgreement methods
+        response.setCreditCardAgreement(creditCardAgreement);
+        assertEquals(creditCardAgreement, response.getCreditCardAgreement());
+    }
+
+    @Test
+    void testToString() {
+        PartialUpdateCreditCardAgreementRs response = new PartialUpdateCreditCardAgreementRs();
+        
+        // Create mock objects for Status and CreditCardAgreement
+        Status status = new Status();
+        CreditCardAgreement creditCardAgreement = new CreditCardAgreement();
+        
+        response.setStatus(status);
+        response.setCreditCardAgreement(creditCardAgreement);
+
+        String expectedString = "com.td.api.mbcca.creditcard.response.PartialUpdateCreditCardAgreementRs@" + 
+            Integer.toHexString(response.hashCode()) + "[status=" + status + ",creditCardAgreement=" + creditCardAgreement + "]";
+
+        assertEquals(expectedString, response.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        PartialUpdateCreditCardAgreementRs response1 = new PartialUpdateCreditCardAgreementRs();
+        PartialUpdateCreditCardAgreementRs response2 = new PartialUpdateCreditCardAgreementRs();
+
+        Status status = new Status();
+        CreditCardAgreement creditCardAgreement = new CreditCardAgreement();
+
+        response1.setStatus(status);
+        response1.setCreditCardAgreement(creditCardAgreement);
+
+        response2.setStatus(status);
+        response2.setCreditCardAgreement(creditCardAgreement);
+
+        assertEquals(response1.hashCode(), response2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        PartialUpdateCreditCardAgreementRs response1 = new PartialUpdateCreditCardAgreementRs();
+        PartialUpdateCreditCardAgreementRs response2 = new PartialUpdateCreditCardAgreementRs();
+        PartialUpdateCreditCardAgreementRs response3 = new PartialUpdateCreditCardAgreementRs();
+
+        Status status = new Status();
+        CreditCardAgreement creditCardAgreement = new CreditCardAgreement();
+
+        response1.setStatus(status);
+        response1.setCreditCardAgreement(creditCardAgreement);
+
+        response2.setStatus(status);
+        response2.setCreditCardAgreement(creditCardAgreement);
+
+        response3.setStatus(null);
+        response3.setCreditCardAgreement(null);
+
+        // Equal comparison
+        assertTrue(response1.equals(response2));
+
+        // Comparing different objects
+        assertFalse(response1.equals(response3));
+
+        // Comparing with null
+        assertFalse(response1.equals(null));
+
+        // Comparing with different class type
+        assertFalse(response1.equals(new Object()));
+    }
+
+    @Test
+    void testEquals_SameObject() {
+        PartialUpdateCreditCardAgreementRs response = new PartialUpdateCreditCardAgreementRs();
+        Status status = new Status();
+        CreditCardAgreement creditCardAgreement = new CreditCardAgreement();
+        
+        response.setStatus(status);
+        response.setCreditCardAgreement(creditCardAgreement);
+
+        assertTrue(response.equals(response));
+    }
+
+}

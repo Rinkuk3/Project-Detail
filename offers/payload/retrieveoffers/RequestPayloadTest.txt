@@ -1,0 +1,68 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import com.td.mbna.msec.midtier.types.common.OfferInputPerAccountType;
+
+class RequestPayloadTest {
+
+    @Test
+    void testSetGetOfferInput() {
+        RequestPayload requestPayload = new RequestPayload();
+        OfferInputPerAccountType offerInput = new OfferInputPerAccountType();
+        
+        requestPayload.setOfferInput(offerInput);
+        assertEquals(offerInput, requestPayload.getOfferInput());
+
+        requestPayload.setOfferInput(null);
+        assertNull(requestPayload.getOfferInput());
+    }
+
+    @Test
+    void testToString() {
+        RequestPayload requestPayload = new RequestPayload();
+        OfferInputPerAccountType offerInput = new OfferInputPerAccountType();
+        
+        requestPayload.setOfferInput(offerInput);
+        String expectedString = "RequestPayload@" + Integer.toHexString(System.identityHashCode(requestPayload)) + "[offerInput=" + offerInput + "]";
+        assertEquals(expectedString, requestPayload.toString());
+
+        requestPayload.setOfferInput(null);
+        expectedString = "RequestPayload@" + Integer.toHexString(System.identityHashCode(requestPayload)) + "[offerInput=<null>]";
+        assertEquals(expectedString, requestPayload.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        RequestPayload requestPayload1 = new RequestPayload();
+        RequestPayload requestPayload2 = new RequestPayload();
+        OfferInputPerAccountType offerInput = new OfferInputPerAccountType();
+
+        requestPayload1.setOfferInput(offerInput);
+        requestPayload2.setOfferInput(offerInput);
+        
+        assertEquals(requestPayload1.hashCode(), requestPayload2.hashCode());
+
+        requestPayload2.setOfferInput(null);
+        assertNotEquals(requestPayload1.hashCode(), requestPayload2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        RequestPayload requestPayload1 = new RequestPayload();
+        RequestPayload requestPayload2 = new RequestPayload();
+        OfferInputPerAccountType offerInput = new OfferInputPerAccountType();
+
+        requestPayload1.setOfferInput(offerInput);
+        requestPayload2.setOfferInput(offerInput);
+        
+        assertEquals(requestPayload1, requestPayload2);
+
+        requestPayload2.setOfferInput(null);
+        assertNotEquals(requestPayload1, requestPayload2);
+
+        requestPayload1.setOfferInput(null);
+        requestPayload2.setOfferInput(null);
+        assertEquals(requestPayload1, requestPayload2);
+        
+        assertNotEquals(requestPayload1, new Object());
+    }
+}

@@ -1,0 +1,76 @@
+package com.td.api.mbalert.request.addalertevent;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ContactTest {
+
+    @Test
+    void testContact() {
+        // Create an instance of Contact
+        Contact contact = new Contact();
+
+        // Test the default value of the 'locator' list
+        assertNotNull(contact.getLocator());
+        assertTrue(contact.getLocator().isEmpty());
+
+        // Create a Locator object and add it to the 'locator' list
+        Locator locator = new Locator();
+        locator.setLocatorValue("locator1");
+        contact.getLocator().add(locator);
+
+        // Test that the locator is added to the list
+        assertEquals(1, contact.getLocator().size());
+        assertEquals("locator1", contact.getLocator().get(0).getLocatorValue());
+
+        // Test setting and getting a list of locators
+        List<Locator> locators = new ArrayList<>();
+        Locator locator2 = new Locator();
+        locator2.setLocatorValue("locator2");
+        locators.add(locator2);
+        contact.setLocator(locators);
+
+        // Verify the list was updated
+        assertEquals(1, contact.getLocator().size());
+        assertEquals("locator2", contact.getLocator().get(0).getLocatorValue());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        // Create two instances of Contact with the same list of locators
+        Contact contact1 = new Contact();
+        Locator locator1 = new Locator();
+        locator1.setLocatorValue("locator1");
+        contact1.getLocator().add(locator1);
+
+        Contact contact2 = new Contact();
+        Locator locator2 = new Locator();
+        locator2.setLocatorValue("locator1");
+        contact2.getLocator().add(locator2);
+
+        // Test equality method
+        assertTrue(contact1.equals(contact2));
+
+        // Test hashCode method
+        assertEquals(contact1.hashCode(), contact2.hashCode());
+
+        // Modify one object and test inequality
+        contact2.getLocator().get(0).setLocatorValue("locator2");
+        assertFalse(contact1.equals(contact2));
+    }
+
+    @Test
+    void testToString() {
+        // Create an instance of Contact
+        Contact contact = new Contact();
+        Locator locator = new Locator();
+        locator.setLocatorValue("locator1");
+        contact.getLocator().add(locator);
+
+        // Test toString method
+        String toStringResult = contact.toString();
+        assertTrue(toStringResult.contains("locator"));
+        assertTrue(toStringResult.contains("locator1"));
+    }
+}

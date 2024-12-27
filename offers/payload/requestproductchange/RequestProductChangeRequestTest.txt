@@ -1,0 +1,191 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestProductChangeRequestTest {
+
+    @Test
+    void testSetGetRequestPayload() {
+        RequestProductChangeRequest request = new RequestProductChangeRequest();
+        RequestPayload requestPayload = new RequestPayload(); // Assuming RequestPayload is another class
+        request.setRequestPayload(requestPayload);
+        
+        assertNotNull(request.getRequestPayload());
+        assertEquals(requestPayload, request.getRequestPayload());
+    }
+
+    @Test
+    void testToString() {
+        RequestProductChangeRequest request = new RequestProductChangeRequest();
+        request.setSessionInfo("SessionInfo");
+        request.setCustId("12345");
+        request.setAliasCustId("54321");
+        request.setAcctNum("9876543210");
+        request.setAcctType("Premium");
+        request.setLanguagePref("English");
+        request.setAuditInfo("AuditInfo");
+        request.setIsPrimaryUser("Yes");
+        request.setReserved1("ReservedData");
+        request.setCustInterface("Interface1");
+        
+        RequestPayload requestPayload = new RequestPayload(); // Assuming RequestPayload is another class
+        request.setRequestPayload(requestPayload);
+        
+        String expectedString = "RequestProductChangeRequest@" + Integer.toHexString(System.identityHashCode(request)) + 
+                "[sessionInfo=SessionInfo,custId=12345,aliasCustId=54321,acctNum=9876543210,acctType=Premium,languagePref=English,auditInfo=AuditInfo,isPrimaryUser=Yes,reserved1=ReservedData,custInterface=Interface1,requestPayload=" + requestPayload + "]";
+        
+        assertEquals(expectedString, request.toString());
+    }
+
+    @Test
+    void testEquals() {
+        RequestProductChangeRequest request1 = new RequestProductChangeRequest();
+        RequestProductChangeRequest request2 = new RequestProductChangeRequest();
+        
+        request1.setSessionInfo("Session1");
+        request2.setSessionInfo("Session1");
+        
+        assertEquals(request1, request2);
+        
+        request2.setSessionInfo("Session2");
+        assertNotEquals(request1, request2);
+        
+        request1.setSessionInfo(null);
+        request2.setSessionInfo(null);
+        assertEquals(request1, request2);
+        
+        request2.setSessionInfo("Session3");
+        assertNotEquals(request1, request2);
+    }
+
+    @Test
+    void testHashCode() {
+        RequestProductChangeRequest request1 = new RequestProductChangeRequest();
+        RequestProductChangeRequest request2 = new RequestProductChangeRequest();
+        
+        request1.setSessionInfo("Session1");
+        request2.setSessionInfo("Session1");
+        
+        assertEquals(request1.hashCode(), request2.hashCode());
+        
+        request2.setSessionInfo("Session2");
+        assertNotEquals(request1.hashCode(), request2.hashCode());
+        
+        request1.setSessionInfo(null);
+        request2.setSessionInfo(null);
+        
+        assertEquals(request1.hashCode(), request2.hashCode());
+        
+        request2.setSessionInfo("Session1");
+        assertNotEquals(request1.hashCode(), request2.hashCode());
+    }
+
+    @Test
+    void testSetGetSessionInfo() {
+        RequestProductChangeRequest request = new RequestProductChangeRequest();
+        request.setSessionInfo("Session123");
+        
+        assertEquals("Session123", request.getSessionInfo());
+        
+        request.setSessionInfo(null);
+        assertNull(request.getSessionInfo());
+    }
+
+    @Test
+    void testSetGetCustId() {
+        RequestProductChangeRequest request = new RequestProductChangeRequest();
+        request.setCustId("C12345");
+        
+        assertEquals("C12345", request.getCustId());
+        
+        request.setCustId(null);
+        assertNull(request.getCustId());
+    }
+
+    @Test
+    void testSetGetAliasCustId() {
+        RequestProductChangeRequest request = new RequestProductChangeRequest();
+        request.setAliasCustId("AC12345");
+        
+        assertEquals("AC12345", request.getAliasCustId());
+        
+        request.setAliasCustId(null);
+        assertNull(request.getAliasCustId());
+    }
+
+    @Test
+    void testSetGetAcctNum() {
+        RequestProductChangeRequest request = new RequestProductChangeRequest();
+        request.setAcctNum("9876543210");
+        
+        assertEquals("9876543210", request.getAcctNum());
+        
+        request.setAcctNum(null);
+        assertNull(request.getAcctNum());
+    }
+
+    @Test
+    void testSetGetAcctType() {
+        RequestProductChangeRequest request = new RequestProductChangeRequest();
+        request.setAcctType("Premium");
+        
+        assertEquals("Premium", request.getAcctType());
+        
+        request.setAcctType(null);
+        assertNull(request.getAcctType());
+    }
+
+    @Test
+    void testSetGetLanguagePref() {
+        RequestProductChangeRequest request = new RequestProductChangeRequest();
+        request.setLanguagePref("English");
+        
+        assertEquals("English", request.getLanguagePref());
+        
+        request.setLanguagePref(null);
+        assertNull(request.getLanguagePref());
+    }
+
+    @Test
+    void testSetGetAuditInfo() {
+        RequestProductChangeRequest request = new RequestProductChangeRequest();
+        request.setAuditInfo("Audit data");
+        
+        assertEquals("Audit data", request.getAuditInfo());
+        
+        request.setAuditInfo(null);
+        assertNull(request.getAuditInfo());
+    }
+
+    @Test
+    void testSetGetIsPrimaryUser() {
+        RequestProductChangeRequest request = new RequestProductChangeRequest();
+        request.setIsPrimaryUser("Yes");
+        
+        assertEquals("Yes", request.getIsPrimaryUser());
+        
+        request.setIsPrimaryUser(null);
+        assertNull(request.getIsPrimaryUser());
+    }
+
+    @Test
+    void testSetGetReserved1() {
+        RequestProductChangeRequest request = new RequestProductChangeRequest();
+        request.setReserved1("ReservedInfo");
+        
+        assertEquals("ReservedInfo", request.getReserved1());
+        
+        request.setReserved1(null);
+        assertNull(request.getReserved1());
+    }
+
+    @Test
+    void testSetGetCustInterface() {
+        RequestProductChangeRequest request = new RequestProductChangeRequest();
+        request.setCustInterface("InterfaceData");
+        
+        assertEquals("InterfaceData", request.getCustInterface());
+        
+        request.setCustInterface(null);
+        assertNull(request.getCustInterface());
+    }
+}

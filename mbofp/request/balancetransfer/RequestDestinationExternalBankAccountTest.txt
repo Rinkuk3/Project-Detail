@@ -1,0 +1,137 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestDestinationExternalBankAccountTest {
+
+    private RequestDestinationExternalBankAccount bankAccount;
+    private BranchAddress branchAddress;
+
+    @BeforeEach
+    void setUp() {
+        bankAccount = new RequestDestinationExternalBankAccount();
+        branchAddress = new BranchAddress();
+    }
+
+    @Test
+    void testGetAndSetBankNum() {
+        String bankNum = "111222";
+        bankAccount.setBankNum(bankNum);
+        assertEquals(bankNum, bankAccount.getBankNum());
+    }
+
+    @Test
+    void testGetAndSetBranchNum() {
+        String branchNum = "333444";
+        bankAccount.setBranchNum(branchNum);
+        assertEquals(branchNum, bankAccount.getBranchNum());
+    }
+
+    @Test
+    void testGetAndSetAccountNum() {
+        String accountNum = "555666";
+        bankAccount.setAccountNum(accountNum);
+        assertEquals(accountNum, bankAccount.getAccountNum());
+    }
+
+    @Test
+    void testGetAndSetBranchAddress() {
+        branchAddress.setAddressLine1("456 Elm St");
+        bankAccount.setBranchAddress(branchAddress);
+        assertEquals(branchAddress, bankAccount.getBranchAddress());
+    }
+
+    @Test
+    void testGetAndSetBankName() {
+        String bankName = "Some Bank";
+        bankAccount.setBankName(bankName);
+        assertEquals(bankName, bankAccount.getBankName());
+    }
+
+    @Test
+    void testGetAndSetAccountPurposeSubtypeCd() {
+        String accountPurposeSubtypeCd = "Savings";
+        bankAccount.setAccountPurposeSubtypeCd(accountPurposeSubtypeCd);
+        assertEquals(accountPurposeSubtypeCd, bankAccount.getAccountPurposeSubtypeCd());
+    }
+
+    @Test
+    void testToString() {
+        String bankNum = "111222";
+        String branchNum = "333444";
+        String accountNum = "555666";
+        String bankName = "Some Bank";
+        String accountPurposeSubtypeCd = "Savings";
+        branchAddress.setAddressLine1("456 Elm St");
+
+        bankAccount.setBankNum(bankNum);
+        bankAccount.setBranchNum(branchNum);
+        bankAccount.setAccountNum(accountNum);
+        bankAccount.setBankName(bankName);
+        bankAccount.setAccountPurposeSubtypeCd(accountPurposeSubtypeCd);
+        bankAccount.setBranchAddress(branchAddress);
+
+        String expected = "com.td.api.mbofp.request.balancetransfer.RequestDestinationExternalBankAccount@"
+            + Integer.toHexString(bankAccount.hashCode()) + "[bankNum=" + bankNum
+            + ",branchNum=" + branchNum
+            + ",accountNum=" + accountNum
+            + ",branchAddress=" + branchAddress
+            + ",bankName=" + bankName
+            + ",accountPurposeSubtypeCd=" + accountPurposeSubtypeCd + "]";
+
+        assertEquals(expected, bankAccount.toString());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        RequestDestinationExternalBankAccount otherBankAccount = new RequestDestinationExternalBankAccount();
+        String bankNum = "111222";
+        String branchNum = "333444";
+        String accountNum = "555666";
+        String bankName = "Some Bank";
+        String accountPurposeSubtypeCd = "Savings";
+        branchAddress.setAddressLine1("456 Elm St");
+
+        bankAccount.setBankNum(bankNum);
+        bankAccount.setBranchNum(branchNum);
+        bankAccount.setAccountNum(accountNum);
+        bankAccount.setBankName(bankName);
+        bankAccount.setAccountPurposeSubtypeCd(accountPurposeSubtypeCd);
+        bankAccount.setBranchAddress(branchAddress);
+
+        otherBankAccount.setBankNum(bankNum);
+        otherBankAccount.setBranchNum(branchNum);
+        otherBankAccount.setAccountNum(accountNum);
+        otherBankAccount.setBankName(bankName);
+        otherBankAccount.setAccountPurposeSubtypeCd(accountPurposeSubtypeCd);
+        otherBankAccount.setBranchAddress(branchAddress);
+
+        assertTrue(bankAccount.equals(otherBankAccount));
+        assertEquals(bankAccount.hashCode(), otherBankAccount.hashCode());
+    }
+
+    @Test
+    void testNotEquals() {
+        RequestDestinationExternalBankAccount otherBankAccount = new RequestDestinationExternalBankAccount();
+        bankAccount.setBankNum("111222");
+        otherBankAccount.setBankNum("999000");
+
+        assertFalse(bankAccount.equals(otherBankAccount));
+    }
+
+    @Test
+    void testNullEquals() {
+        assertFalse(bankAccount.equals(null));
+    }
+
+    @Test
+    void testSameObjectEquals() {
+        assertTrue(bankAccount.equals(bankAccount));
+    }
+
+    @Test
+    void testEqualsDifferentClass() {
+        assertFalse(bankAccount.equals(new Object()));
+    }
+}

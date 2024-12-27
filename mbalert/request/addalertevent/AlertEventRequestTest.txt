@@ -1,0 +1,51 @@
+package com.td.api.mbalert.request.addalertevent;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class AlertEventRequestTest {
+
+    @Test
+    void testAlertEventRequest() {
+        // Test the default value of alert
+        AlertEventRequest request = new AlertEventRequest();
+        assertNull(request.getAlert());
+
+        // Test setting and getting alert
+        Alert alert = new Alert();
+        request.setAlert(alert);
+        assertEquals(alert, request.getAlert());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        AlertEventRequest request1 = new AlertEventRequest();
+        request1.setAlert(new Alert());
+
+        AlertEventRequest request2 = new AlertEventRequest();
+        request2.setAlert(new Alert());
+
+        AlertEventRequest request3 = new AlertEventRequest();
+        request3.setAlert(new Alert());
+
+        // Test equality method
+        assertTrue(request1.equals(request2));
+        assertFalse(request1.equals(request3));
+
+        // Test hashCode method
+        assertEquals(request1.hashCode(), request2.hashCode());
+        assertNotEquals(request1.hashCode(), request3.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        AlertEventRequest request = new AlertEventRequest();
+        Alert alert = new Alert();
+        request.setAlert(alert);
+
+        String toStringResult = request.toString();
+
+        assertTrue(toStringResult.contains("alert"));
+    }
+}

@@ -1,0 +1,61 @@
+package com.td.api.mbna.msec.midtier.mbnaparty.payload;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.Date;
+
+public class PartyToPartyGroupTest {
+
+    private PartyToPartyGroup partyToPartyGroup;
+
+    @BeforeEach
+    public void setUp() {
+        partyToPartyGroup = new PartyToPartyGroup();
+    }
+
+    @Test
+    public void testGetSetPartyGroupCd() {
+        String partyGroupCd = "groupCode";
+        partyToPartyGroup.setPartyGroupCd(partyGroupCd);
+        assertEquals(partyGroupCd, partyToPartyGroup.getPartyGroupCd());
+    }
+
+    @Test
+    public void testGetSetStartDttm() {
+        Date startDttm = new Date();
+        partyToPartyGroup.setStartDttm(startDttm);
+        assertEquals(startDttm, partyToPartyGroup.getStartDttm());
+    }
+
+    @Test
+    public void testToString() {
+        String partyGroupCd = "groupCode";
+        Date startDttm = new Date();
+        partyToPartyGroup.setPartyGroupCd(partyGroupCd);
+        partyToPartyGroup.setStartDttm(startDttm);
+
+        String str = partyToPartyGroup.toString();
+        assertTrue(str.contains("partyGroupCd"));
+        assertTrue(str.contains("startDttm"));
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        PartyToPartyGroup partyToPartyGroup1 = new PartyToPartyGroup();
+        PartyToPartyGroup partyToPartyGroup2 = new PartyToPartyGroup();
+
+        partyToPartyGroup1.setPartyGroupCd("groupCode1");
+        partyToPartyGroup1.setStartDttm(new Date());
+
+        partyToPartyGroup2.setPartyGroupCd("groupCode1");
+        partyToPartyGroup2.setStartDttm(new Date());
+
+        assertEquals(partyToPartyGroup1, partyToPartyGroup2);
+        assertEquals(partyToPartyGroup1.hashCode(), partyToPartyGroup2.hashCode());
+
+        partyToPartyGroup2.setPartyGroupCd("groupCode2");
+        assertNotEquals(partyToPartyGroup1, partyToPartyGroup2);
+    }
+}

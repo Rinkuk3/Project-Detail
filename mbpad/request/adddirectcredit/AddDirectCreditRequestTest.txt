@@ -1,0 +1,49 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class AddDirectCreditRequestTest {
+
+    @Test
+    void testDirectCredit() {
+        AddDirectCreditRequest addDirectCreditRequest = new AddDirectCreditRequest();
+        
+        DirectCredit directCredit = new DirectCredit();
+        addDirectCreditRequest.setDirectCredit(directCredit);
+        
+        assertEquals(directCredit, addDirectCreditRequest.getDirectCredit());
+    }
+
+    @Test
+    void testSetterAndGetter() {
+        AddDirectCreditRequest addDirectCreditRequest = new AddDirectCreditRequest();
+        
+        DirectCredit directCredit = new DirectCredit();
+        addDirectCreditRequest.setDirectCredit(directCredit);
+        
+        assertNotNull(addDirectCreditRequest.getDirectCredit());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        AddDirectCreditRequest addDirectCreditRequest1 = new AddDirectCreditRequest();
+        AddDirectCreditRequest addDirectCreditRequest2 = new AddDirectCreditRequest();
+        
+        DirectCredit directCredit = new DirectCredit();
+        addDirectCreditRequest1.setDirectCredit(directCredit);
+        addDirectCreditRequest2.setDirectCredit(directCredit);
+        
+        assertEquals(addDirectCreditRequest1, addDirectCreditRequest2);
+        assertEquals(addDirectCreditRequest1.hashCode(), addDirectCreditRequest2.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        AddDirectCreditRequest addDirectCreditRequest = new AddDirectCreditRequest();
+        
+        DirectCredit directCredit = new DirectCredit();
+        addDirectCreditRequest.setDirectCredit(directCredit);
+        
+        String expectedString = "AddDirectCreditRequest(directCredit=" + directCredit + ")";
+        assertEquals(expectedString, addDirectCreditRequest.toString());
+    }
+}

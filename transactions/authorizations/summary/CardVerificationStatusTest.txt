@@ -1,0 +1,111 @@
+package com.td.api.mbcca.response.transactions.authorizations.summary;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class CardVerificationStatusTest {
+
+    private CardVerificationStatus cardVerificationStatus;
+
+    @Before
+    public void setUp() {
+        cardVerificationStatus = new CardVerificationStatus();
+    }
+
+    @Test
+    public void testGetAndSetOfflinePINVerificationDoneInd() {
+        Boolean expected = Boolean.TRUE;
+        cardVerificationStatus.setOfflinePINVerificationDoneInd(expected);
+        assertEquals(expected, cardVerificationStatus.getOfflinePINVerificationDoneInd());
+    }
+
+    @Test
+    public void testGetAndSetOfflinePINVerificationFailedInd() {
+        Boolean expected = Boolean.FALSE;
+        cardVerificationStatus.setOfflinePINVerificationFailedInd(expected);
+        assertEquals(expected, cardVerificationStatus.getOfflinePINVerificationFailedInd());
+    }
+
+    @Test
+    public void testGetAndSetPinTryLimitExceededInd() {
+        Boolean expected = Boolean.TRUE;
+        cardVerificationStatus.setPinTryLimitExceededInd(expected);
+        assertEquals(expected, cardVerificationStatus.getPinTryLimitExceededInd());
+    }
+
+    @Test
+    public void testToString() {
+        cardVerificationStatus.setOfflinePINVerificationDoneInd(Boolean.TRUE);
+        cardVerificationStatus.setOfflinePINVerificationFailedInd(Boolean.FALSE);
+        cardVerificationStatus.setPinTryLimitExceededInd(Boolean.TRUE);
+
+        String expected = "com.td.api.mbcca.response.transactions.authorizations.summary.CardVerificationStatus@" + 
+                          Integer.toHexString(System.identityHashCode(cardVerificationStatus)) +
+                          "[offlinePINVerificationDoneInd=true,offlinePINVerificationFailedInd=false,pinTryLimitExceededInd=true]";
+        
+        assertEquals(expected, cardVerificationStatus.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        cardVerificationStatus.setOfflinePINVerificationDoneInd(Boolean.TRUE);
+        cardVerificationStatus.setOfflinePINVerificationFailedInd(Boolean.FALSE);
+        cardVerificationStatus.setPinTryLimitExceededInd(Boolean.TRUE);
+
+        int expectedHashCode = 31 * (31 * (31 + (cardVerificationStatus.getPinTryLimitExceededInd() != null ? cardVerificationStatus.getPinTryLimitExceededInd().hashCode() : 0)) 
+                                      + (cardVerificationStatus.getOfflinePINVerificationDoneInd() != null ? cardVerificationStatus.getOfflinePINVerificationDoneInd().hashCode() : 0)) 
+                                      + (cardVerificationStatus.getOfflinePINVerificationFailedInd() != null ? cardVerificationStatus.getOfflinePINVerificationFailedInd().hashCode() : 0));
+        assertEquals(expectedHashCode, cardVerificationStatus.hashCode());
+    }
+
+    @Test
+    public void testEquals_withEqualObjects() {
+        cardVerificationStatus.setOfflinePINVerificationDoneInd(Boolean.TRUE);
+        cardVerificationStatus.setOfflinePINVerificationFailedInd(Boolean.FALSE);
+        cardVerificationStatus.setPinTryLimitExceededInd(Boolean.TRUE);
+
+        CardVerificationStatus other = new CardVerificationStatus();
+        other.setOfflinePINVerificationDoneInd(Boolean.TRUE);
+        other.setOfflinePINVerificationFailedInd(Boolean.FALSE);
+        other.setPinTryLimitExceededInd(Boolean.TRUE);
+
+        assertTrue(cardVerificationStatus.equals(other));
+    }
+
+    @Test
+    public void testEquals_withDifferentObjects() {
+        cardVerificationStatus.setOfflinePINVerificationDoneInd(Boolean.TRUE);
+        cardVerificationStatus.setOfflinePINVerificationFailedInd(Boolean.FALSE);
+        cardVerificationStatus.setPinTryLimitExceededInd(Boolean.TRUE);
+
+        CardVerificationStatus other = new CardVerificationStatus();
+        other.setOfflinePINVerificationDoneInd(Boolean.FALSE);
+        other.setOfflinePINVerificationFailedInd(Boolean.TRUE);
+        other.setPinTryLimitExceededInd(Boolean.FALSE);
+
+        assertFalse(cardVerificationStatus.equals(other));
+    }
+
+    @Test
+    public void testEquals_withNull() {
+        assertFalse(cardVerificationStatus.equals(null));
+    }
+
+    @Test
+    public void testEquals_withDifferentClass() {
+        String other = "Some String";
+        assertFalse(cardVerificationStatus.equals(other));
+    }
+
+    @Test
+    public void testEquals_withSameInstance() {
+        cardVerificationStatus.setOfflinePINVerificationDoneInd(Boolean.TRUE);
+        cardVerificationStatus.setOfflinePINVerificationFailedInd(Boolean.FALSE);
+        cardVerificationStatus.setPinTryLimitExceededInd(Boolean.TRUE);
+
+        assertTrue(cardVerificationStatus.equals(cardVerificationStatus));  // Comparing with itself
+    }
+
+}

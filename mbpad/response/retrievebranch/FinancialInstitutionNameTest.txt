@@ -1,0 +1,73 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class FinancialInstitutionNameTest {
+
+    @Test
+    void testText() {
+        FinancialInstitutionName institutionName = new FinancialInstitutionName();
+        
+        String text = "Bank of Canada";
+        institutionName.setText(text);
+        
+        assertEquals(text, institutionName.getText());
+    }
+
+    @Test
+    void testLanguageCd() {
+        FinancialInstitutionName institutionName = new FinancialInstitutionName();
+        
+        String languageCd = "EN";
+        institutionName.setLanguageCd(languageCd);
+        
+        assertEquals(languageCd, institutionName.getLanguageCd());
+    }
+
+    @Test
+    void testSetterAndGetter() {
+        FinancialInstitutionName institutionName = new FinancialInstitutionName();
+        
+        String text = "Bank of America";
+        String languageCd = "FR";
+        
+        institutionName.setText(text);
+        institutionName.setLanguageCd(languageCd);
+        
+        assertNotNull(institutionName.getText());
+        assertNotNull(institutionName.getLanguageCd());
+        assertEquals(text, institutionName.getText());
+        assertEquals(languageCd, institutionName.getLanguageCd());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        FinancialInstitutionName institutionName1 = new FinancialInstitutionName();
+        FinancialInstitutionName institutionName2 = new FinancialInstitutionName();
+        
+        String text = "Bank of England";
+        String languageCd = "EN";
+        
+        institutionName1.setText(text);
+        institutionName1.setLanguageCd(languageCd);
+        
+        institutionName2.setText(text);
+        institutionName2.setLanguageCd(languageCd);
+        
+        assertEquals(institutionName1, institutionName2);
+        assertEquals(institutionName1.hashCode(), institutionName2.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        FinancialInstitutionName institutionName = new FinancialInstitutionName();
+        
+        String text = "Royal Bank of Canada";
+        String languageCd = "EN";
+        
+        institutionName.setText(text);
+        institutionName.setLanguageCd(languageCd);
+        
+        String expectedString = "FinancialInstitutionName(text=" + text + ", languageCd=" + languageCd + ")";
+        assertEquals(expectedString, institutionName.toString());
+    }
+}

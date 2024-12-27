@@ -1,0 +1,82 @@
+package com.td.mbna.msec.midtier.pinmanagement;
+
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+
+import com.td.mbna.msec.midtier.pinmanagement.payload.unlockpin.UnblockPinRequest;
+import com.td.mbna.msec.midtier.pinmanagement.payload.unlockpin.UnblockPinResponse;
+import com.td.mbna.msec.midtier.mbnaad.MbnaAd;
+
+public class UnblockPinOperationTest {
+
+    @InjectMocks
+    private UnblockPinOperationImpl unblockPinOperation;
+
+    @Mock
+    private MbnaAd mbnaAd;
+
+    @Mock
+    private UnblockPinRequest unblockPinRequest;
+
+    @Mock
+    private UnblockPinResponse unblockPinResponse;
+
+    private String token;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        token = "sampleToken";
+
+        // Mocking responses
+        when(mbnaAd.unblockPin(anyString(), anyString(), anyString(), eq(token), anyString(), anyBoolean()))
+                .thenReturn(unblockPinResponse);
+    }
+
+    @Test
+    public void testInvokeService() {
+        UnblockPinResponse response = unblockPinOperation.invokeService(unblockPinRequest, token);
+        assertNotNull(response);
+        verify(mbnaAd).unblockPin(anyString(), anyString(), anyString(), eq(token), anyString(), anyBoolean());
+    }
+
+    @Test
+    public void testRequiresDisclosureConsent() {
+        assertFalse(unblockPinOperation.requiresDisclosureConsent());
+    }
+
+    @Test
+    public void testGetConsentDisclosureFailedMsgCode() {
+        assertNull(unblockPinOperation.getConsentDisclosureFailedMsgCode());
+    }
+
+    @Test
+    public void testGenerateAutoComment() {
+        assertTrue(unblockPinOperation.generateAutoComment());
+    }
+
+    @Test
+    public void testCreateAutoComment() {
+        BaseRequest baseRequest = mock(BaseRequest.class);
+        BaseResponse baseResponse = mock(BaseResponse.class);
+        List<String> commentList = unblockPinOperation.createAutoComment(baseRequest, baseResponse);
+        assertNotNull(commentList);
+        assertEquals(1, commentList.size());
+    }
+
+    @Test
+    public void testGetEmailInfoBean() {
+        BaseRequest baseRequest = mock(BaseRequest.class);
+        BaseResponse baseResponse = mock(BaseResponse.class);
+        assertNull(unblockPinOperation.getEmailInfoBean(baseRequest, baseResponse));
+    }
+
+    @Test
+    public void testGetValidator() {
+        assertNull(unblockPinOperation.getValidator());
+    }
+}

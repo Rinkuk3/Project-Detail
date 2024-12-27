@@ -1,0 +1,125 @@
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import com.td.api.rewards.request.getrewardssaml.Parameters;
+import com.td.api.rewards.request.getrewardssaml.RewardsSamlRequest;
+import com.td.api.rewards.response.getrewardssaml.RewardsSamlResponse;
+import com.td.mbna.msec.midtier.account.payload.getrewardssaml.GetRewardsSamlRequest;
+import com.td.mbna.msec.midtier.account.payload.getrewardssaml.GetRewardsSamlResponse;
+import java.util.Base64;
+
+public class GetRewardsSamlAdaptorTest {
+
+    private GetRewardsSamlAdaptor adaptor;
+
+    @BeforeEach
+    public void setUp() {
+        adaptor = new GetRewardsSamlAdaptor();
+    }
+
+    @Test
+    public void testGetResponseWithRewardsSamlResponseAndTimestamp() {
+        // Mocking RewardsSamlResponse
+        RewardsSamlResponse rsr = mock(RewardsSamlResponse.class);
+        when(rsr.getSsoToken()).thenReturn("encodedSamlAssertion");
+
+        String timestamp = "2024-12-26T12:34:56Z";
+
+        GetRewardsSamlResponse response = adaptor.getResponse(rsr, timestamp);
+        
+        assertNotNull(response);
+        assertNotNull(response.getResponsePayload().getSsoSaml());
+    }
+
+    @Test
+    public void testGetResponseWithNullSsoToken() {
+        RewardsSamlResponse rsr = mock(RewardsSamlResponse.class);
+        when(rsr.getSsoToken()).thenReturn(null);
+
+        GetRewardsSamlResponse response = adaptor.getResponse(rsr, "2024-12-26T12:34:56Z");
+
+        assertNotNull(response);
+        assertNull(response.getResponsePayload().getSsoSaml());
+    }
+
+    @Test
+    public void testGetResponseWithNullRewardsSamlResponse() {
+        GetRewardsSamlResponse response = adaptor.getResponse(null, "2024-12-26T12:34:56Z");
+
+        assertNotNull(response);
+        assertNull(response.getResponsePayload().getSsoSaml());
+    }
+
+    @Test
+    public void testConvertSamlResponse() {
+        String encodedSamlAssertion = Base64.getEncoder().encodeToString("<xml></xml>".getBytes());
+        String timestamp = "2024-12-26T12:34:56Z";
+        
+        String result = adaptor.convertSamlResponse(encodedSamlAssertion, timestamp);
+        
+        assertNotNull(result);
+        assertTrue(result.startsWith("<?xml"));
+    }
+
+    @Test
+    public void testConvertSamlResponseWithNullAssertion() {
+        String result = adaptor.convertSamlResponse(null, "2024-12-26T12:34:56Z");
+
+        assertNull(result);
+    }
+
+    @Test
+    public void testConvertSamlResponseWithEmptyAssertion() {
+        String result = adaptor.convertSamlResponse("", "2024-12-26T12:34:56Z");
+
+        assertNull(result);
+    }
+
+    @Test
+    public void testConvertSamlResponseWithInvalidAssertion() {
+        String invalidAssertion = "invalidBase64";
+        String result = adaptor.convertSamlResponse(invalidAssertion, "2024-12-26T12:34:56Z");
+
+        assertNull(result);
+    }
+
+    @Test
+    public void testGetRequest() {
+        // Mocking GetRewardsSamlRequest
+        GetRewardsSamlRequest getRewardsSamlRequest = mock(GetRewardsSamlRequest.class);
+        when(getRewardsSamlRequest.getAcctNum()).thenReturn("12345");
+        when(getRewardsSamlRequest.getLanguagePref()).thenReturn("EN");
+
+        RewardsSamlRequest request = adaptor.getRequest(getRewardsSamlRequest);
+
+        assertNotNull(request);
+        assertNotNull(request.getParameters());
+        assertEquals("12345", request.getParameters().getAccountId());
+        assertEquals("EN", request.getParameters().getLocale());
+        assertEquals("PING_CONNECT", request.getPingConnectionID());
+    }
+
+    @Test
+    public void testGetResponseWithoutSsoToken() {
+        RewardsSamlResponse rsr = mock(RewardsSamlResponse.class);
+        when(rsr.getSsoToken()).thenReturn(null);
+
+        GetRewardsSamlResponse response = adaptor.getResponse(rsr);
+
+        assertNotNull(response);
+        assertNull(response.getResponsePayload().getSsoSaml());
+    }
+
+    @Test
+    public void testGetResponseWithSsoToken() {
+        RewardsSamlResponse rsr = mock(RewardsSamlResponse.class);
+        when(rsr.getSsoToken()).thenReturn("someSsoToken");
+
+        GetRewardsSamlResponse response = adaptor.getResponse(rsr);
+
+        assertNotNull(response);
+        assertEquals("someSsoToken", response.getResponsePayload().getSsoSaml());
+    }
+}

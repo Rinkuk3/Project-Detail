@@ -1,0 +1,55 @@
+package com.td.api.mbna.msec.midtier.mbnaparty.payload;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+public class ContactResponseTest {
+
+    private ContactResponse contactResponse;
+
+    @BeforeEach
+    public void setUp() {
+        contactResponse = new ContactResponse();
+    }
+
+    @Test
+    public void testGetSetResponsePayloadContact() {
+        ResponsePayloadContact responsePayloadContact = new ResponsePayloadContact();
+        contactResponse.setResponsePayloadContact(responsePayloadContact);
+
+        assertEquals(responsePayloadContact, contactResponse.getResponsePayloadContact());
+    }
+
+    @Test
+    public void testGetSetStatus() {
+        Boolean status = true;
+        contactResponse.setStatus(status);
+
+        assertEquals(status, contactResponse.getStatus());
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        ContactResponse contactResponse1 = new ContactResponse();
+        ContactResponse contactResponse2 = new ContactResponse();
+
+        contactResponse1.setStatus(true);
+        contactResponse2.setStatus(true);
+
+        assertEquals(contactResponse1, contactResponse2);
+        assertEquals(contactResponse1.hashCode(), contactResponse2.hashCode());
+
+        contactResponse2.setStatus(false);
+        assertNotEquals(contactResponse1, contactResponse2);
+    }
+
+    @Test
+    public void testToString() {
+        contactResponse.setStatus(true);
+
+        String expectedString = "ContactResponse(responsePayloadContact=null, status=true)";
+        assertTrue(contactResponse.toString().contains("status=true"));
+    }
+}

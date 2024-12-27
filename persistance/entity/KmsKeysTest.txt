@@ -1,0 +1,140 @@
+package com.td.mbna.msec.midtier.persistance.entity;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class KmsKeysTest {
+
+    @Test
+    public void testSetAndGetEffectiveDate() {
+        KmsKeys kmsKeys = new KmsKeys();
+        Date date = new Date();
+        kmsKeys.setEffectiveDate(date);
+        assertEquals(date, kmsKeys.getEffectiveDate());
+    }
+
+    @Test
+    public void testSetAndGetLookupKey() {
+        KmsKeys kmsKeys = new KmsKeys();
+        kmsKeys.setLookupKey("LookupKey123");
+        assertEquals("LookupKey123", kmsKeys.getLookupKey());
+    }
+
+    @Test
+    public void testSetAndGetKeyAlias() {
+        KmsKeys kmsKeys = new KmsKeys();
+        kmsKeys.setKeyAlias("KeyAlias123");
+        assertEquals("KeyAlias123", kmsKeys.getKeyAlias());
+    }
+
+    @Test
+    public void testEqualsWithSameObject() {
+        KmsKeys kmsKeys = new KmsKeys();
+        assertTrue(kmsKeys.equals(kmsKeys));
+    }
+
+    @Test
+    public void testEqualsWithNullObject() {
+        KmsKeys kmsKeys = new KmsKeys();
+        assertFalse(kmsKeys.equals(null));
+    }
+
+    @Test
+    public void testEqualsWithDifferentClass() {
+        KmsKeys kmsKeys = new KmsKeys();
+        String otherClassObject = "String Object";
+        assertFalse(kmsKeys.equals(otherClassObject));
+    }
+
+    @Test
+    public void testEqualsWithDifferentEffectiveDate() {
+        KmsKeys kmsKeys1 = new KmsKeys();
+        KmsKeys kmsKeys2 = new KmsKeys();
+        
+        Date date1 = new Date();
+        Date date2 = new Date(date1.getTime() + 10000);
+        
+        kmsKeys1.setEffectiveDate(date1);
+        kmsKeys2.setEffectiveDate(date2);
+        
+        assertFalse(kmsKeys1.equals(kmsKeys2));
+    }
+
+    @Test
+    public void testEqualsWithNullEffectiveDate() {
+        KmsKeys kmsKeys1 = new KmsKeys();
+        KmsKeys kmsKeys2 = new KmsKeys();
+        
+        kmsKeys1.setEffectiveDate(null);
+        kmsKeys2.setEffectiveDate(new Date());
+        
+        assertFalse(kmsKeys1.equals(kmsKeys2));
+    }
+
+    @Test
+    public void testEqualsWithNullLookupKey() {
+        KmsKeys kmsKeys1 = new KmsKeys();
+        KmsKeys kmsKeys2 = new KmsKeys();
+        
+        kmsKeys1.setLookupKey(null);
+        kmsKeys2.setLookupKey("LookupKey123");
+        
+        assertFalse(kmsKeys1.equals(kmsKeys2));
+    }
+
+    @Test
+    public void testEqualsWithNullKeyAlias() {
+        KmsKeys kmsKeys1 = new KmsKeys();
+        KmsKeys kmsKeys2 = new KmsKeys();
+        
+        kmsKeys1.setKeyAlias(null);
+        kmsKeys2.setKeyAlias("KeyAlias123");
+        
+        assertFalse(kmsKeys1.equals(kmsKeys2));
+    }
+
+    @Test
+    public void testEqualsWithSameValues() {
+        KmsKeys kmsKeys1 = new KmsKeys();
+        KmsKeys kmsKeys2 = new KmsKeys();
+        
+        Date date = new Date();
+        kmsKeys1.setEffectiveDate(date);
+        kmsKeys1.setLookupKey("LookupKey123");
+        kmsKeys1.setKeyAlias("KeyAlias123");
+        
+        kmsKeys2.setEffectiveDate(date);
+        kmsKeys2.setLookupKey("LookupKey123");
+        kmsKeys2.setKeyAlias("KeyAlias123");
+        
+        assertTrue(kmsKeys1.equals(kmsKeys2));
+    }
+
+    @Test
+    public void testHashCode() {
+        KmsKeys kmsKeys1 = new KmsKeys();
+        kmsKeys1.setEffectiveDate(new Date());
+        kmsKeys1.setLookupKey("LookupKey123");
+        kmsKeys1.setKeyAlias("KeyAlias123");
+        
+        KmsKeys kmsKeys2 = new KmsKeys();
+        kmsKeys2.setEffectiveDate(new Date());
+        kmsKeys2.setLookupKey("LookupKey123");
+        kmsKeys2.setKeyAlias("KeyAlias123");
+        
+        assertEquals(kmsKeys1.hashCode(), kmsKeys2.hashCode());
+    }
+    
+    @Test
+    public void testHashCodeWithNullValues() {
+        KmsKeys kmsKeys = new KmsKeys();
+        kmsKeys.setEffectiveDate(null);
+        kmsKeys.setLookupKey(null);
+        kmsKeys.setKeyAlias(null);
+        
+        assertNotNull(kmsKeys.hashCode());
+    }
+}

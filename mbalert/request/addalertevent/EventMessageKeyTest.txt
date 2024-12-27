@@ -1,0 +1,72 @@
+package com.td.api.mbalert.request.addalertevent;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class EventMessageKeyTest {
+
+    @Test
+    void testEventMessageKey() {
+        // Create an instance of EventMessageKey
+        EventMessageKey eventMessageKey = new EventMessageKey();
+
+        // Test default values of fields
+        assertNull(eventMessageKey.getContactMessageId());
+        assertNull(eventMessageKey.getCaseId());
+        assertNull(eventMessageKey.getDraftId());
+
+        // Test setting and getting 'contactMessageId'
+        String contactMessageId = "MSG12345";
+        eventMessageKey.setContactMessageId(contactMessageId);
+        assertEquals(contactMessageId, eventMessageKey.getContactMessageId());
+
+        // Test setting and getting 'caseId'
+        String caseId = "CASE67890";
+        eventMessageKey.setCaseId(caseId);
+        assertEquals(caseId, eventMessageKey.getCaseId());
+
+        // Test setting and getting 'draftId'
+        String draftId = "DRAFT001";
+        eventMessageKey.setDraftId(draftId);
+        assertEquals(draftId, eventMessageKey.getDraftId());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        // Create two instances of EventMessageKey with the same properties
+        EventMessageKey eventMessageKey1 = new EventMessageKey();
+        eventMessageKey1.setContactMessageId("MSG12345");
+        eventMessageKey1.setCaseId("CASE67890");
+        eventMessageKey1.setDraftId("DRAFT001");
+
+        EventMessageKey eventMessageKey2 = new EventMessageKey();
+        eventMessageKey2.setContactMessageId("MSG12345");
+        eventMessageKey2.setCaseId("CASE67890");
+        eventMessageKey2.setDraftId("DRAFT001");
+
+        // Test equality
+        assertTrue(eventMessageKey1.equals(eventMessageKey2));
+
+        // Test hashCode
+        assertEquals(eventMessageKey1.hashCode(), eventMessageKey2.hashCode());
+
+        // Modify one object and test inequality
+        eventMessageKey2.setDraftId("DRAFT002");
+        assertFalse(eventMessageKey1.equals(eventMessageKey2));
+    }
+
+    @Test
+    void testToString() {
+        // Create an instance of EventMessageKey
+        EventMessageKey eventMessageKey = new EventMessageKey();
+        eventMessageKey.setContactMessageId("MSG12345");
+        eventMessageKey.setCaseId("CASE67890");
+        eventMessageKey.setDraftId("DRAFT001");
+
+        // Test the toString() method
+        String toStringResult = eventMessageKey.toString();
+        assertTrue(toStringResult.contains("contactMessageId"));
+        assertTrue(toStringResult.contains("caseId"));
+        assertTrue(toStringResult.contains("draftId"));
+    }
+}

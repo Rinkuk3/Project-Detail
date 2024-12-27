@@ -1,0 +1,94 @@
+package com.td.mbna.msec.midtier.disclosure.payload.consentdisclosure;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class ConsentDisclosureRequestTest {
+
+    private ConsentDisclosureRequest consentDisclosureRequest;
+    private RequestPayload requestPayload;
+
+    @BeforeEach
+    public void setUp() {
+        consentDisclosureRequest = new ConsentDisclosureRequest();
+        requestPayload = new RequestPayload();
+    }
+
+    @Test
+    public void testGetRequestPayload() {
+        consentDisclosureRequest.setRequestPayload(requestPayload);
+        assertNotNull(consentDisclosureRequest.getRequestPayload());
+    }
+
+    @Test
+    public void testSetRequestPayload() {
+        consentDisclosureRequest.setRequestPayload(requestPayload);
+        assertEquals(requestPayload, consentDisclosureRequest.getRequestPayload());
+    }
+
+    @Test
+    public void testToString() {
+        consentDisclosureRequest.setRequestPayload(requestPayload);
+        consentDisclosureRequest.setSessionInfo("session");
+        consentDisclosureRequest.setCustId("custId");
+        consentDisclosureRequest.setAliasCustId("aliasCustId");
+        consentDisclosureRequest.setAcctNum("acctNum");
+        consentDisclosureRequest.setAcctType("acctType");
+        consentDisclosureRequest.setLanguagePref("en");
+        consentDisclosureRequest.setAuditInfo("auditInfo");
+        consentDisclosureRequest.setIsPrimaryUser(true);
+        consentDisclosureRequest.setReserved1("reserved1");
+        consentDisclosureRequest.setCustInterface("interface");
+
+        String result = consentDisclosureRequest.toString();
+        assertNotNull(result);
+        assertTrue(result.contains("sessionInfo"));
+        assertTrue(result.contains("custId"));
+        assertTrue(result.contains("requestPayload"));
+    }
+
+    @Test
+    public void testHashCode() {
+        consentDisclosureRequest.setRequestPayload(requestPayload);
+        consentDisclosureRequest.setSessionInfo("session");
+        consentDisclosureRequest.setCustId("custId");
+        int hashCode = consentDisclosureRequest.hashCode();
+        assertTrue(hashCode != 0);
+    }
+
+    @Test
+    public void testEquals_SameObject() {
+        assertTrue(consentDisclosureRequest.equals(consentDisclosureRequest));
+    }
+
+    @Test
+    public void testEquals_Null() {
+        assertFalse(consentDisclosureRequest.equals(null));
+    }
+
+    @Test
+    public void testEquals_DifferentClass() {
+        assertFalse(consentDisclosureRequest.equals(new Object()));
+    }
+
+    @Test
+    public void testEquals_DifferentValues() {
+        ConsentDisclosureRequest another = new ConsentDisclosureRequest();
+        assertFalse(consentDisclosureRequest.equals(another));
+    }
+
+    @Test
+    public void testEquals_SameValues() {
+        ConsentDisclosureRequest another = new ConsentDisclosureRequest();
+        consentDisclosureRequest.setRequestPayload(requestPayload);
+        another.setRequestPayload(requestPayload);
+        assertTrue(consentDisclosureRequest.equals(another));
+    }
+
+    @Test
+    public void testGetRequestPayload_Default() {
+        assertNotNull(consentDisclosureRequest.getRequestPayload());
+    }
+}

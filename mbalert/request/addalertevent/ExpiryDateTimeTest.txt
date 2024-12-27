@@ -1,0 +1,66 @@
+package com.td.api.mbalert.request.addalertevent;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Date;
+
+class ExpiryDateTimeTest {
+
+    @Test
+    void testExpiryDateTime() {
+        // Create an instance of ExpiryDateTime
+        ExpiryDateTime expiryDateTime = new ExpiryDateTime();
+
+        // Test default values of fields
+        assertNull(expiryDateTime.getExpiryDttm());
+        assertNull(expiryDateTime.getTimeZoneCd());
+
+        // Test setting and getting 'expiryDttm'
+        Date expiryDate = new Date();
+        expiryDateTime.setExpiryDttm(expiryDate);
+        assertEquals(expiryDate, expiryDateTime.getExpiryDttm());
+
+        // Test setting and getting 'timeZoneCd'
+        String timeZoneCd = "PST";
+        expiryDateTime.setTimeZoneCd(timeZoneCd);
+        assertEquals(timeZoneCd, expiryDateTime.getTimeZoneCd());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        // Create two instances of ExpiryDateTime with the same properties
+        ExpiryDateTime expiryDateTime1 = new ExpiryDateTime();
+        Date expiryDate1 = new Date();
+        expiryDateTime1.setExpiryDttm(expiryDate1);
+        expiryDateTime1.setTimeZoneCd("PST");
+
+        ExpiryDateTime expiryDateTime2 = new ExpiryDateTime();
+        Date expiryDate2 = new Date();
+        expiryDateTime2.setExpiryDttm(expiryDate2);
+        expiryDateTime2.setTimeZoneCd("PST");
+
+        // Test equality
+        assertTrue(expiryDateTime1.equals(expiryDateTime2));
+
+        // Test hashCode
+        assertEquals(expiryDateTime1.hashCode(), expiryDateTime2.hashCode());
+
+        // Modify one object and test inequality
+        expiryDateTime2.setTimeZoneCd("EST");
+        assertFalse(expiryDateTime1.equals(expiryDateTime2));
+    }
+
+    @Test
+    void testToString() {
+        // Create an instance of ExpiryDateTime
+        ExpiryDateTime expiryDateTime = new ExpiryDateTime();
+        Date expiryDate = new Date();
+        expiryDateTime.setExpiryDttm(expiryDate);
+        expiryDateTime.setTimeZoneCd("PST");
+
+        // Test the toString() method
+        String toStringResult = expiryDateTime.toString();
+        assertTrue(toStringResult.contains("expiryDttm"));
+        assertTrue(toStringResult.contains("timeZoneCd"));
+    }
+}

@@ -1,0 +1,82 @@
+package com.td.mbna.msec.midtier.pinmanagement;
+
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+
+import com.td.mbna.msec.midtier.pinmanagement.payload.changepin.ChangePinRequest;
+import com.td.mbna.msec.midtier.pinmanagement.payload.changepin.ChangePinResponse;
+import com.td.mbna.msec.midtier.pinmanagement.payload.getpin.GetPinRequest;
+import com.td.mbna.msec.midtier.pinmanagement.payload.unlockpin.UnblockPinRequest;
+import com.td.mbna.msec.midtier.pinmanagement.payload.unlockpin.UnblockPinResponse;
+import com.td.mbna.msec.midtier.pinmanagement.payload.getpin.GetPinResponse;
+
+public class PinManagementServiceTest {
+
+    @InjectMocks
+    private PinManagementServiceImpl pinManagementService;
+
+    @Mock
+    private ChangePinOperationImpl changePinOperation;
+
+    @Mock
+    private ViewPinOperationImpl viewPinOperation;
+
+    @Mock
+    private UnblockPinOperationImpl unblockPinOperation;
+
+    @Mock
+    private ChangePinRequest changePinRequest;
+
+    @Mock
+    private ChangePinResponse changePinResponse;
+
+    @Mock
+    private GetPinRequest getPinRequest;
+
+    @Mock
+    private GetPinResponse getPinResponse;
+
+    @Mock
+    private UnblockPinRequest unblockPinRequest;
+
+    @Mock
+    private UnblockPinResponse unblockPinResponse;
+
+    private String token;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        token = "sampleToken";
+        
+        // Mock responses
+        when(changePinOperation.invokeService(any(ChangePinRequest.class), eq(token))).thenReturn(changePinResponse);
+        when(viewPinOperation.invokeService(any(GetPinRequest.class), eq(token))).thenReturn(getPinResponse);
+        when(unblockPinOperation.invokeService(any(UnblockPinRequest.class), eq(token))).thenReturn(unblockPinResponse);
+    }
+
+    @Test
+    public void testGetPin() {
+        GetPinResponse response = pinManagementService.getPin(getPinRequest, token);
+        assertNotNull(response);
+        verify(viewPinOperation).invokeService(eq(getPinRequest), eq(token));
+    }
+
+    @Test
+    public void testChangePin() {
+        ChangePinResponse response = pinManagementService.changePin(changePinRequest, token);
+        assertNotNull(response);
+        verify(changePinOperation).invokeService(eq(changePinRequest), eq(token));
+    }
+
+    @Test
+    public void testUnlockPin() {
+        UnblockPinResponse response = pinManagementService.unlockPin(unblockPinRequest, token);
+        assertNotNull(response);
+        verify(unblockPinOperation).invokeService(eq(unblockPinRequest), eq(token));
+    }
+}

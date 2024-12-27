@@ -1,0 +1,70 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestCashAdvanceRegistrationRequestTest {
+
+    @Test
+    void testSetGetRequestPayload() {
+        RequestCashAdvanceRegistrationRequest request = new RequestCashAdvanceRegistrationRequest();
+        RequestPayload payload = new RequestPayload();
+        request.setRequestPayload(payload);
+        assertEquals(payload, request.getRequestPayload());
+    }
+
+    @Test
+    void testToString() {
+        RequestCashAdvanceRegistrationRequest request = new RequestCashAdvanceRegistrationRequest();
+        request.setCustId("12345");
+        request.setAcctNum("67890");
+        request.setSessionInfo("sessionInfo");
+        request.setLanguagePref("en");
+        
+        String expectedString = "RequestCashAdvanceRegistrationRequest@" + Integer.toHexString(System.identityHashCode(request)) + 
+                "[sessionInfo=sessionInfo,custId=12345,aliasCustId=<null>,acctNum=67890,acctType=<null>,languagePref=en,auditInfo=<null>,isPrimaryUser=<null>,reserved1=<null>,custInterface=<null>,requestPayload=<null>]";
+        
+        assertEquals(expectedString, request.toString());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        RequestCashAdvanceRegistrationRequest request1 = new RequestCashAdvanceRegistrationRequest();
+        request1.setCustId("12345");
+        request1.setAcctNum("67890");
+        
+        RequestCashAdvanceRegistrationRequest request2 = new RequestCashAdvanceRegistrationRequest();
+        request2.setCustId("12345");
+        request2.setAcctNum("67890");
+        
+        assertEquals(request1, request2);
+        assertEquals(request1.hashCode(), request2.hashCode());
+    }
+
+    @Test
+    void testNotEquals() {
+        RequestCashAdvanceRegistrationRequest request1 = new RequestCashAdvanceRegistrationRequest();
+        request1.setCustId("12345");
+        request1.setAcctNum("67890");
+        
+        RequestCashAdvanceRegistrationRequest request2 = new RequestCashAdvanceRegistrationRequest();
+        request2.setCustId("54321");
+        request2.setAcctNum("98765");
+        
+        assertNotEquals(request1, request2);
+    }
+
+    @Test
+    void testDefaultValues() {
+        RequestCashAdvanceRegistrationRequest request = new RequestCashAdvanceRegistrationRequest();
+        
+        assertNull(request.getRequestPayload());
+        assertNull(request.getSessionInfo());
+        assertNull(request.getCustId());
+        assertNull(request.getAcctNum());
+        assertNull(request.getAcctType());
+        assertNull(request.getLanguagePref());
+        assertNull(request.getAuditInfo());
+        assertNull(request.getIsPrimaryUser());
+        assertNull(request.getReserved1());
+        assertNull(request.getCustInterface());
+    }
+}

@@ -1,0 +1,85 @@
+package com.td.mbna.msec.midtier.transfer.payload.getbalancetransfertocreditorsummary;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class GetBalanceTransferToCreditorSummaryRequestTest {
+
+    private GetBalanceTransferToCreditorSummaryRequest request;
+
+    @BeforeEach
+    void setUp() {
+        request = new GetBalanceTransferToCreditorSummaryRequest();
+    }
+
+    @Test
+    void testGetAndSetRequestPayload() {
+        RequestPayload requestPayload = new RequestPayload();
+        request.setRequestPayload(requestPayload);
+        assertEquals(requestPayload, request.getRequestPayload());
+    }
+
+    @Test
+    void testToString() {
+        RequestPayload requestPayload = new RequestPayload();
+        request.setRequestPayload(requestPayload);
+
+        String expectedString = "com.td.mbna.msec.midtier.transfer.payload.getbalancetransfertocreditorsummary.GetBalanceTransferToCreditorSummaryRequest@" +
+                                Integer.toHexString(request.hashCode()) + "[sessionInfo=<null>,custId=<null>,aliasCustId=<null>,acctNum=<null>,acctType=<null>,languagePref=<null>,auditInfo=<null>,isPrimaryUser=<null>,reserved1=<null>,custInterface=<null>,requestPayload=" + requestPayload + "]";
+        assertEquals(expectedString, request.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        GetBalanceTransferToCreditorSummaryRequest request2 = new GetBalanceTransferToCreditorSummaryRequest();
+        RequestPayload requestPayload = new RequestPayload();
+        request.setRequestPayload(requestPayload);
+
+        request2.setRequestPayload(requestPayload);
+
+        assertEquals(request.hashCode(), request2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        GetBalanceTransferToCreditorSummaryRequest request2 = new GetBalanceTransferToCreditorSummaryRequest();
+        RequestPayload requestPayload = new RequestPayload();
+        request.setRequestPayload(requestPayload);
+
+        request2.setRequestPayload(requestPayload);
+
+        assertTrue(request.equals(request2));
+
+        // Test equality with different object
+        assertFalse(request.equals(null));
+
+        // Test equality with different class
+        assertFalse(request.equals(new Object()));
+    }
+
+    @Test
+    void testEqualsWithDifferentRequestPayload() {
+        GetBalanceTransferToCreditorSummaryRequest request2 = new GetBalanceTransferToCreditorSummaryRequest();
+        request.setRequestPayload(new RequestPayload());
+        request2.setRequestPayload(new RequestPayload());
+
+        assertTrue(request.equals(request2));
+
+        // Test equality with different requestPayload
+        request.setRequestPayload(new RequestPayload());
+        request2.setRequestPayload(new RequestPayload());
+
+        assertTrue(request.equals(request2));
+    }
+
+    @Test
+    void testEqualsWithNullRequestPayload() {
+        GetBalanceTransferToCreditorSummaryRequest request2 = new GetBalanceTransferToCreditorSummaryRequest();
+        request.setRequestPayload(null);
+
+        request2.setRequestPayload(null);
+
+        assertTrue(request.equals(request2));
+    }
+}

@@ -1,0 +1,136 @@
+import org.junit.jupiter.api.Test;
+import java.math.BigDecimal;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class AgreementLimitInfoTest {
+
+    @Test
+    public void testGetSetCreditLimitChangeAmt() {
+        AgreementLimitInfo agreementLimitInfo = new AgreementLimitInfo();
+        BigDecimal creditLimitChangeAmt = new BigDecimal("1000");
+        agreementLimitInfo.setCreditLimitChangeAmt(creditLimitChangeAmt);
+        assertEquals(creditLimitChangeAmt, agreementLimitInfo.getCreditLimitChangeAmt());
+    }
+
+    @Test
+    public void testGetSetTsysExtension() {
+        AgreementLimitInfo agreementLimitInfo = new AgreementLimitInfo();
+        TsysExtension tsysExtension = new TsysExtension(); // Assuming TsysExtension is already defined
+        agreementLimitInfo.setTsysExtension(tsysExtension);
+        assertEquals(tsysExtension, agreementLimitInfo.getTsysExtension());
+    }
+
+    @Test
+    public void testGetSetCurrentCreditLimitAmt() {
+        AgreementLimitInfo agreementLimitInfo = new AgreementLimitInfo();
+        BigDecimal currentCreditLimitAmt = new BigDecimal("5000");
+        agreementLimitInfo.setCurrentCreditLimitAmt(currentCreditLimitAmt);
+        assertEquals(currentCreditLimitAmt, agreementLimitInfo.getCurrentCreditLimitAmt());
+    }
+
+    @Test
+    public void testGetSetNewCreditLimitCccyamt() {
+        AgreementLimitInfo agreementLimitInfo = new AgreementLimitInfo();
+        Cccyamt newCreditLimitCccyamt = new Cccyamt(); // Assuming Cccyamt is already defined
+        agreementLimitInfo.setNewCreditLimitCccyamt(newCreditLimitCccyamt);
+        assertEquals(newCreditLimitCccyamt, agreementLimitInfo.getNewCreditLimitCccyamt());
+    }
+
+    @Test
+    public void testGetSetCreditLimitStartDt() {
+        AgreementLimitInfo agreementLimitInfo = new AgreementLimitInfo();
+        String startDate = "2024-01-01";
+        agreementLimitInfo.setCreditLimitStartDt(startDate);
+        assertEquals(startDate, agreementLimitInfo.getCreditLimitStartDt());
+    }
+
+    @Test
+    public void testGetSetCreditLimitEndDt() {
+        AgreementLimitInfo agreementLimitInfo = new AgreementLimitInfo();
+        String endDate = "2024-12-31";
+        agreementLimitInfo.setCreditLimitEndDt(endDate);
+        assertEquals(endDate, agreementLimitInfo.getCreditLimitEndDt());
+    }
+
+    @Test
+    public void testGetSetDeleteFutureCreditLimitInd() {
+        AgreementLimitInfo agreementLimitInfo = new AgreementLimitInfo();
+        agreementLimitInfo.setDeleteFutureCreditLimitInd(true);
+        assertTrue(agreementLimitInfo.getDeleteFutureCreditLimitInd());
+    }
+
+    @Test
+    public void testGetSetDeleteTemporaryCreditLimitInd() {
+        AgreementLimitInfo agreementLimitInfo = new AgreementLimitInfo();
+        agreementLimitInfo.setDeleteTemporaryCreditLimitInd(false);
+        assertFalse(agreementLimitInfo.getDeleteTemporaryCreditLimitInd());
+    }
+
+    @Test
+    public void testGetSetCashAdvanceLimitCccyamt() {
+        AgreementLimitInfo agreementLimitInfo = new AgreementLimitInfo();
+        Cccyamt cashAdvanceLimitCccyamt = new Cccyamt(); // Assuming Cccyamt is already defined
+        agreementLimitInfo.setCashAdvanceLimitCccyamt(cashAdvanceLimitCccyamt);
+        assertEquals(cashAdvanceLimitCccyamt, agreementLimitInfo.getCashAdvanceLimitCccyamt());
+    }
+
+    @Test
+    public void testGetSetCashAdvanceLimitStartDt() {
+        AgreementLimitInfo agreementLimitInfo = new AgreementLimitInfo();
+        String cashAdvanceStartDate = "2024-01-01";
+        agreementLimitInfo.setCashAdvanceLimitStartDt(cashAdvanceStartDate);
+        assertEquals(cashAdvanceStartDate, agreementLimitInfo.getCashAdvanceLimitStartDt());
+    }
+
+    @Test
+    public void testGetSetCashAdvanceLimitEndDt() {
+        AgreementLimitInfo agreementLimitInfo = new AgreementLimitInfo();
+        String cashAdvanceEndDate = "2024-12-31";
+        agreementLimitInfo.setCashAdvanceLimitEndDt(cashAdvanceEndDate);
+        assertEquals(cashAdvanceEndDate, agreementLimitInfo.getCashAdvanceLimitEndDt());
+    }
+
+    @Test
+    public void testGetSetDeleteCashAdvanceLimitInd() {
+        AgreementLimitInfo agreementLimitInfo = new AgreementLimitInfo();
+        agreementLimitInfo.setDeleteCashAdvanceLimitInd(true);
+        assertTrue(agreementLimitInfo.getDeleteCashAdvanceLimitInd());
+    }
+
+    @Test
+    public void testToString() {
+        AgreementLimitInfo agreementLimitInfo = new AgreementLimitInfo();
+        agreementLimitInfo.setCreditLimitChangeAmt(new BigDecimal("1000"));
+        agreementLimitInfo.setTsysExtension(new TsysExtension());
+        agreementLimitInfo.setCurrentCreditLimitAmt(new BigDecimal("5000"));
+        agreementLimitInfo.setNewCreditLimitCccyamt(new Cccyamt());
+        agreementLimitInfo.setCreditLimitStartDt("2024-01-01");
+        agreementLimitInfo.setCreditLimitEndDt("2024-12-31");
+        agreementLimitInfo.setDeleteFutureCreditLimitInd(true);
+        agreementLimitInfo.setDeleteTemporaryCreditLimitInd(false);
+        agreementLimitInfo.setCashAdvanceLimitCccyamt(new Cccyamt());
+        agreementLimitInfo.setCashAdvanceLimitStartDt("2024-01-01");
+        agreementLimitInfo.setCashAdvanceLimitEndDt("2024-12-31");
+        agreementLimitInfo.setDeleteCashAdvanceLimitInd(true);
+
+        String result = agreementLimitInfo.toString();
+        assertNotNull(result);
+    }
+
+    @Test
+    public void testHashCode() {
+        AgreementLimitInfo agreementLimitInfo1 = new AgreementLimitInfo();
+        AgreementLimitInfo agreementLimitInfo2 = new AgreementLimitInfo();
+        assertEquals(agreementLimitInfo1.hashCode(), agreementLimitInfo2.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        AgreementLimitInfo agreementLimitInfo1 = new AgreementLimitInfo();
+        AgreementLimitInfo agreementLimitInfo2 = new AgreementLimitInfo();
+        assertTrue(agreementLimitInfo1.equals(agreementLimitInfo2));
+
+        agreementLimitInfo1.setCreditLimitChangeAmt(new BigDecimal("1000"));
+        assertFalse(agreementLimitInfo1.equals(agreementLimitInfo2));
+    }
+}

@@ -1,0 +1,28 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class RewardsBalanceItemTest {
+
+    private RewardsBalanceItem rewardsBalanceItem;
+
+    @BeforeEach
+    public void setUp() {
+        rewardsBalanceItem = new RewardsBalanceItem();
+    }
+
+    @Test
+    public void testGetSetLoyaltyUnitOfMeasureCd() {
+        String loyaltyUnitOfMeasureCd = "USD";
+        rewardsBalanceItem.setLoyaltyUnitOfMeasureCd(loyaltyUnitOfMeasureCd);
+        assertEquals(loyaltyUnitOfMeasureCd, rewardsBalanceItem.getLoyaltyUnitOfMeasureCd());
+    }
+
+    @Test
+    public void testGetSetAvailableBalanceQty() {
+        Long availableBalanceQty = 1000L;
+        rewardsBalanceItem.setAvailableBalanceQty(availableBalanceQty);
+        assertEquals(availableBalanceQty, rewardsBalanceItem.getAvailableBalanceQty());
+    }
+}

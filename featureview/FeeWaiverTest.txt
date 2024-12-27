@@ -1,0 +1,142 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+class FeeWaiverTest {
+
+    private FeeWaiver feeWaiver;
+    private AnnualFee annualFee;
+    private LateFee lateFee;
+    private OverLimitFee overLimitFee;
+    private FinanceChargeFee financeChargeFee;
+    private ForeignExchangeFee foreignExchangeFee;
+
+    @BeforeEach
+    void setUp() {
+        feeWaiver = new FeeWaiver();
+        annualFee = new AnnualFee();
+        lateFee = new LateFee();
+        overLimitFee = new OverLimitFee();
+        financeChargeFee = new FinanceChargeFee();
+        foreignExchangeFee = new ForeignExchangeFee();
+    }
+
+    @Test
+    void testGetSetAnnualFee() {
+        feeWaiver.setAnnualFee(annualFee);
+        assertEquals(annualFee, feeWaiver.getAnnualFee());
+    }
+
+    @Test
+    void testGetSetLateFee() {
+        feeWaiver.setLateFee(lateFee);
+        assertEquals(lateFee, feeWaiver.getLateFee());
+    }
+
+    @Test
+    void testGetSetOverLimitFee() {
+        feeWaiver.setOverLimitFee(overLimitFee);
+        assertEquals(overLimitFee, feeWaiver.getOverLimitFee());
+    }
+
+    @Test
+    void testGetSetFinanceChargeFee() {
+        feeWaiver.setFinanceChargeFee(financeChargeFee);
+        assertEquals(financeChargeFee, feeWaiver.getFinanceChargeFee());
+    }
+
+    @Test
+    void testGetSetForeignExchangeFee() {
+        feeWaiver.setForeignExchangeFee(foreignExchangeFee);
+        assertEquals(foreignExchangeFee, feeWaiver.getForeignExchangeFee());
+    }
+
+    @Test
+    void testToString() {
+        feeWaiver.setAnnualFee(annualFee);
+        feeWaiver.setLateFee(lateFee);
+        feeWaiver.setOverLimitFee(overLimitFee);
+        feeWaiver.setFinanceChargeFee(financeChargeFee);
+        feeWaiver.setForeignExchangeFee(foreignExchangeFee);
+
+        String result = feeWaiver.toString();
+        assertTrue(result.contains("annualFee"));
+        assertTrue(result.contains("lateFee"));
+        assertTrue(result.contains("overLimitFee"));
+        assertTrue(result.contains("financeChargeFee"));
+        assertTrue(result.contains("foreignExchangeFee"));
+    }
+
+    @Test
+    void testHashCode() {
+        feeWaiver.setAnnualFee(annualFee);
+        feeWaiver.setLateFee(lateFee);
+        feeWaiver.setOverLimitFee(overLimitFee);
+        feeWaiver.setFinanceChargeFee(financeChargeFee);
+        feeWaiver.setForeignExchangeFee(foreignExchangeFee);
+
+        int hashCode = feeWaiver.hashCode();
+        assertNotNull(hashCode);
+    }
+
+    @Test
+    void testEquals() {
+        FeeWaiver other = new FeeWaiver();
+        other.setAnnualFee(annualFee);
+        other.setLateFee(lateFee);
+        other.setOverLimitFee(overLimitFee);
+        other.setFinanceChargeFee(financeChargeFee);
+        other.setForeignExchangeFee(foreignExchangeFee);
+
+        feeWaiver.setAnnualFee(annualFee);
+        feeWaiver.setLateFee(lateFee);
+        feeWaiver.setOverLimitFee(overLimitFee);
+        feeWaiver.setFinanceChargeFee(financeChargeFee);
+        feeWaiver.setForeignExchangeFee(foreignExchangeFee);
+
+        assertTrue(feeWaiver.equals(other));
+    }
+
+    @Test
+    void testEquals_withNull() {
+        assertFalse(feeWaiver.equals(null));
+    }
+
+    @Test
+    void testEquals_withDifferentType() {
+        assertFalse(feeWaiver.equals("string"));
+    }
+
+    @Test
+    void testEquals_withDifferentValues() {
+        FeeWaiver other = new FeeWaiver();
+        other.setAnnualFee(annualFee);
+
+        feeWaiver.setAnnualFee(annualFee);
+        feeWaiver.setLateFee(lateFee);
+        feeWaiver.setOverLimitFee(overLimitFee);
+        feeWaiver.setFinanceChargeFee(financeChargeFee);
+        feeWaiver.setForeignExchangeFee(foreignExchangeFee);
+
+        assertFalse(feeWaiver.equals(other));
+    }
+
+    @Test
+    void testEquals_withNullFees() {
+        FeeWaiver other = new FeeWaiver();
+        other.setAnnualFee(null);
+        other.setLateFee(null);
+        other.setOverLimitFee(null);
+        other.setFinanceChargeFee(null);
+        other.setForeignExchangeFee(null);
+
+        feeWaiver.setAnnualFee(null);
+        feeWaiver.setLateFee(null);
+        feeWaiver.setOverLimitFee(null);
+        feeWaiver.setFinanceChargeFee(null);
+        feeWaiver.setForeignExchangeFee(null);
+
+        assertTrue(feeWaiver.equals(other));
+    }
+}

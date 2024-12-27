@@ -1,0 +1,149 @@
+import com.td.api.mbcca.response.account.RetailEvent;
+import com.td.api.mbcca.shared.Pagination;
+import com.td.api.mbcca.shared.Status;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class RetrieveCreditCardAgreementRetailEventListTest {
+
+    private RetrieveCreditCardAgreementRetailEventList retailEventList;
+
+    @BeforeEach
+    public void setUp() {
+        retailEventList = new RetrieveCreditCardAgreementRetailEventList();
+    }
+
+    @Test
+    public void testGetStatus() {
+        Status status = new Status();
+        retailEventList.setStatus(status);
+        assertEquals(status, retailEventList.getStatus());
+    }
+
+    @Test
+    public void testSetStatus() {
+        Status status = new Status();
+        retailEventList.setStatus(status);
+        assertEquals(status, retailEventList.getStatus());
+    }
+
+    @Test
+    public void testGetPagination() {
+        Pagination pagination = new Pagination();
+        retailEventList.setPagination(pagination);
+        assertEquals(pagination, retailEventList.getPagination());
+    }
+
+    @Test
+    public void testSetPagination() {
+        Pagination pagination = new Pagination();
+        retailEventList.setPagination(pagination);
+        assertEquals(pagination, retailEventList.getPagination());
+    }
+
+    @Test
+    public void testGetRetailEvent() {
+        List<RetailEvent> events = new ArrayList<>();
+        events.add(new RetailEvent());
+        retailEventList.setRetailEvent(events);
+        assertEquals(events, retailEventList.getRetailEvent());
+    }
+
+    @Test
+    public void testSetRetailEvent() {
+        List<RetailEvent> events = new ArrayList<>();
+        events.add(new RetailEvent());
+        retailEventList.setRetailEvent(events);
+        assertEquals(events, retailEventList.getRetailEvent());
+    }
+
+    @Test
+    public void testToString() {
+        Status status = new Status();
+        Pagination pagination = new Pagination();
+        List<RetailEvent> events = new ArrayList<>();
+        events.add(new RetailEvent());
+
+        retailEventList.setStatus(status);
+        retailEventList.setPagination(pagination);
+        retailEventList.setRetailEvent(events);
+
+        String expectedString = "com.td.api.mbcca.response.retailevents.RetrieveCreditCardAgreementRetailEventList@" 
+                                + Integer.toHexString(System.identityHashCode(retailEventList)) + 
+                                "[status=" + status + ",pagination=" + pagination + ",retailEvent=" + events + "]";
+
+        assertTrue(retailEventList.toString().contains("status=" + status));
+        assertTrue(retailEventList.toString().contains("pagination=" + pagination));
+        assertTrue(retailEventList.toString().contains("retailEvent=" + events));
+    }
+
+    @Test
+    public void testHashCode() {
+        Status status = new Status();
+        Pagination pagination = new Pagination();
+        List<RetailEvent> events = new ArrayList<>();
+        events.add(new RetailEvent());
+
+        retailEventList.setStatus(status);
+        retailEventList.setPagination(pagination);
+        retailEventList.setRetailEvent(events);
+
+        RetrieveCreditCardAgreementRetailEventList otherList = new RetrieveCreditCardAgreementRetailEventList();
+        otherList.setStatus(status);
+        otherList.setPagination(pagination);
+        otherList.setRetailEvent(events);
+
+        assertEquals(retailEventList.hashCode(), otherList.hashCode());
+
+        otherList.setRetailEvent(new ArrayList<>());
+        assertNotEquals(retailEventList.hashCode(), otherList.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        Status status = new Status();
+        Pagination pagination = new Pagination();
+        List<RetailEvent> events = new ArrayList<>();
+        events.add(new RetailEvent());
+
+        retailEventList.setStatus(status);
+        retailEventList.setPagination(pagination);
+        retailEventList.setRetailEvent(events);
+
+        RetrieveCreditCardAgreementRetailEventList otherList = new RetrieveCreditCardAgreementRetailEventList();
+        otherList.setStatus(status);
+        otherList.setPagination(pagination);
+        otherList.setRetailEvent(events);
+
+        assertTrue(retailEventList.equals(otherList));
+
+        otherList.setRetailEvent(new ArrayList<>());
+        assertFalse(retailEventList.equals(otherList));
+
+        otherList.setRetailEvent(events);
+        otherList.setPagination(new Pagination());
+        assertFalse(retailEventList.equals(otherList));
+
+        otherList.setPagination(pagination);
+        otherList.setStatus(new Status());
+        assertFalse(retailEventList.equals(otherList));
+    }
+
+    @Test
+    public void testEqualsNull() {
+        assertFalse(retailEventList.equals(null));
+    }
+
+    @Test
+    public void testEqualsDifferentClass() {
+        String someString = "RandomString";
+        assertFalse(retailEventList.equals(someString));
+    }
+
+    @Test
+    public void testEqualsSameInstance() {
+        assertTrue(retailEventList.equals(retailEventList));  // Same instance, should return true
+    }
+}

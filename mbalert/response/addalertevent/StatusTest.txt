@@ -1,0 +1,117 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+
+class StatusTest {
+
+    @Test
+    void testGetterAndSetterForServerStatusCode() {
+        Status status = new Status();
+        status.setServerStatusCode("OK");
+        assertEquals("OK", status.getServerStatusCode());
+    }
+
+    @Test
+    void testGetterAndSetterForSeverity() {
+        Status status = new Status();
+        status.setSeverity(Status.Severity.WARNING);
+        assertEquals(Status.Severity.WARNING, status.getSeverity());
+    }
+
+    @Test
+    void testGetterAndSetterForAdditionalStatus() {
+        Status status = new Status();
+        Additionalstatus additionalStatus = new Additionalstatus();
+        status.getAdditionalStatus().add(additionalStatus);
+        assertEquals(1, status.getAdditionalStatus().size());
+    }
+
+    @Test
+    void testSeverityEnumToString() {
+        assertEquals("Warning", Status.Severity.WARNING.toString());
+        assertEquals("Error", Status.Severity.ERROR.toString());
+    }
+
+    @Test
+    void testSeverityEnumValue() {
+        assertEquals("Warning", Status.Severity.WARNING.value());
+        assertEquals("Error", Status.Severity.ERROR.value());
+    }
+
+    @Test
+    void testSeverityEnumFromValue() {
+        assertEquals(Status.Severity.WARNING, Status.Severity.fromValue("Warning"));
+        assertEquals(Status.Severity.ERROR, Status.Severity.fromValue("Error"));
+    }
+
+    @Test
+    void testSeverityEnumFromValueWithInvalidValue() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            Status.Severity.fromValue("Invalid");
+        });
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        Status status1 = new Status();
+        status1.setServerStatusCode("OK");
+        status1.setSeverity(Status.Severity.WARNING);
+
+        Status status2 = new Status();
+        status2.setServerStatusCode("OK");
+        status2.setSeverity(Status.Severity.WARNING);
+
+        assertEquals(status1, status2);
+        assertEquals(status1.hashCode(), status2.hashCode());
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        Status status = new Status();
+        assertNotEquals(status, null);
+    }
+
+    @Test
+    void testEqualsWithDifferentType() {
+        Status status = new Status();
+        assertNotEquals(status, new Object());
+    }
+
+    @Test
+    void testHashCodeWithDifferentValues() {
+        Status status1 = new Status();
+        status1.setServerStatusCode("OK");
+        status1.setSeverity(Status.Severity.WARNING);
+
+        Status status2 = new Status();
+        status2.setServerStatusCode("ERROR");
+        status2.setSeverity(Status.Severity.ERROR);
+
+        assertNotEquals(status1.hashCode(), status2.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        Status status = new Status();
+        status.setServerStatusCode("OK");
+        status.setSeverity(Status.Severity.WARNING);
+        String expected = "Status(serverStatusCode=OK, severity=WARNING, additionalStatus=[])";
+        assertEquals(expected, status.toString());
+    }
+
+    @Test
+    void testEmptyAdditionalStatus() {
+        Status status = new Status();
+        assertTrue(status.getAdditionalStatus().isEmpty());
+    }
+
+    @Test
+    void testAdditionalStatusList() {
+        Status status = new Status();
+        Additionalstatus additionalStatus = new Additionalstatus();
+        status.getAdditionalStatus().add(additionalStatus);
+        List<Additionalstatus> additionalStatusList = status.getAdditionalStatus();
+        assertFalse(additionalStatusList.isEmpty());
+        assertEquals(1, additionalStatusList.size());
+    }
+}

@@ -1,0 +1,194 @@
+package com.td.mbna.msec.midtier.statement;
+
+import com.td.api.dms.request.DocumentRetrievalRequest;
+import com.td.api.dms.response.retrieval.DocumentRetrievalResponse;
+import com.td.mbna.msec.midtier.exception.SystemError;
+import com.td.mbna.msec.midtier.service.MsecMidtierCommonOperations;
+import com.td.mbna.msec.midtier.util.BackEndSrvcUtil;
+import com.td.mbna.msec.midtier.util.ExceptionUtil;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import com.td.mbna.msec.midtier.util.StatementUtil;
+import com.td.mbna.msec.midtier.util.services.JAXBJsonConverter;
+import com.td.mbna.msec.midtier.util.services.TDRestServiceUtil;
+import com.td.mbna.msec.midtier.statement.payload.getStatementFileFromId.GetStatementFileFromIdRequest;
+import com.td.mbna.msec.midtier.statement.payload.getStatementFileFromId.GetStatementFileFromIdResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class GetStatementFileFromIdOperationTest {
+
+    @Mock
+    private TDRestServiceUtil tdRestServiceUtil;
+
+    @InjectMocks
+    private GetStatementFileFromIdOperation getStatementFileFromIdOperation;
+
+    @Mock
+    private GetStatementFileFromIdRequest request;
+
+    @Mock
+    private GetStatementFileFromIdResponse response;
+
+    @Mock
+    private DocumentRetrievalResponse documentRetrievalResponse;
+
+    @Mock
+    private DocumentRetrievalRequest documentRetrievalRequest;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testInvokeService_Success() {
+        // Arrange
+        String docId = "doc123";
+        String folderName = "folder1";
+        String connectId = "user123";
+        String token = "testToken";
+
+        // Mock request
+        when(request.getRequestPayload().getDocumentId()).thenReturn(docId);
+        when(request.getRequestPayload().getFolder()).thenReturn(StatementUtil.DMS_MainStatement_Folder_Indicator);
+        when(request.getSessionInfo().getConnectId()).thenReturn(connectId);
+
+        // Mock document retrieval response
+        when(tdRestServiceUtil.invokeRestService(eq(BackEndSrvcUtil.TDOperation.TdDocuManagementService_retrieve),
+                any(DocumentRetrievalRequest.class), eq(DocumentRetrievalResponse.class), eq(token)))
+                .thenReturn(documentRetrievalResponse);
+        
+        // Simulate successful document retrieval response
+        when(documentRetrievalResponse.getDocument()).thenReturn(mock(DocumentRetrievalResponse.Document.class));
+        when(documentRetrievalResponse.getDocument().getContent()).thenReturn("sampleContent".getBytes());
+
+        // Act
+        GetStatementFileFromIdResponse result = getStatementFileFromIdOperation.invokeService(request, token);
+
+        // Assert
+        assertNotNull(result);
+        assertArrayEquals("sampleContent".getBytes(), result.getResponsePayload().getFileData());
+    }
+
+    @Test
+    void testInvokeService_DocumentIdIsNull() {
+        // Arrange
+        String token = "testToken";
+        when(request.getRequestPayload().getDocumentId()).thenReturn(null);
+
+        // Act & Assert
+        SystemError thrown = assertThrows(SystemError.class, () -> {
+            getStatementFileFromIdOperation.invokeService(request, token);
+        });
+        assertEquals("Document ID is null", thrown.getFaultInfo().getErrorDescription());
+    }
+
+    @Test
+    void testInvokeService_DocumentRetrievalFailed() {
+        // Arrange
+        String docId = "doc123";
+        String folderName = "folder1";
+        String connectId = "user123";
+        String token = "testToken";
+
+        // Mock request
+        when(request.getRequestPayload().getDocumentId()).thenReturn(docId);
+        when(request.getRequestPayload().getFolder()).thenReturn(StatementUtil.DMS_MainStatement_Folder_Indicator);
+        when(request.getSessionInfo().getConnectId()).thenReturn(connectId);
+
+        // Mock document retrieval response to return null (failure)
+        when(tdRestServiceUtil.invokeRestService(eq(BackEndSrvcUtil.TDOperation.TdDocuManagementService_retrieve),
+                any(DocumentRetrievalRequest.class), eq(DocumentRetrievalResponse.class), eq(token)))
+                .thenReturn(null);
+
+        // Act
+        GetStatementFileFromIdResponse result = getStatementFileFromIdOperation.invokeService(request, token);
+
+        // Assert
+        assertNotNull(result);
+        assertNotNull(result.getErrorMsgs());
+        assertTrue(result.getErrorMsgs().contains("MS601"));
+    }
+
+    @Test
+    void testInvokeService_ExceptionThrown() {
+        // Arrange
+        String docId = "doc123";
+        String folderName = "folder1";
+        String connectId = "user123";
+        String token = "testToken";
+
+        // Mock request
+        when(request.getRequestPayload().getDocumentId()).thenReturn(docId);
+        when(request.getRequestPayload().getFolder()).thenReturn(StatementUtil.DMS_MainStatement_Folder_Indicator);
+        when(request.getSessionInfo().getConnectId()).thenReturn(connectId);
+
+        // Simulate exception during document retrieval
+        when(tdRestServiceUtil.invokeRestService(eq(BackEndSrvcUtil.TDOperation.TdDocuManagementService_retrieve),
+                any(DocumentRetrievalRequest.class), eq(DocumentRetrievalResponse.class), eq(token)))
+                .thenThrow(new RuntimeException("Internal Server Error"));
+
+        // Act & Assert
+        assertThrows(RuntimeException.class, () -> getStatementFileFromIdOperation.invokeService(request, token));
+    }
+
+    @Test
+    void testRequiresDisclosureConsent() {
+        // Act
+        boolean result = getStatementFileFromIdOperation.requiresDisclosureConsent();
+
+        // Assert
+        assertFalse(result);
+    }
+
+    @Test
+    void testGetConsentDisclosureFailedMsgCode() {
+        // Act
+        String result = getStatementFileFromIdOperation.getConsentDisclosureFailedMsgCode();
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testGenerateAutoComment() {
+        // Act
+        boolean result = getStatementFileFromIdOperation.generateAutoComment();
+
+        // Assert
+        assertFalse(result);
+    }
+
+    @Test
+    void testCreateAutoComment() {
+        // Act
+        List<String> result = getStatementFileFromIdOperation.createAutoComment(mock(BaseRequest.class), mock(BaseResponse.class));
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testGetEmailInfoBean() {
+        // Act
+        EmailInfo result = getStatementFileFromIdOperation.getEmailInfoBean(mock(BaseRequest.class), mock(BaseResponse.class));
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testGetValidator() {
+        // Act
+        MsecValidator result = getStatementFileFromIdOperation.getValidator();
+
+        // Assert
+        assertNull(result);
+    }
+}

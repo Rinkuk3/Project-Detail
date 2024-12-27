@@ -1,0 +1,160 @@
+package com.td.mbna.msec.midtier.statement;
+
+import com.td.mbna.msec.midtier.statement.payload.updateStatementDeliveryPreferences.*;
+import com.td.mbna.msec.midtier.types.common.AuditInfo;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import com.td.mbna.msec.midtier.util.ParallelServiceCaller;
+import com.td.mbna.msec.midtier.util.ServiceCall;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class UpdateStatementDeliveryPreferencesOperationTest {
+
+    @InjectMocks
+    private UpdateStatementDeliveryPreferencesOperation operation;
+
+    @Mock
+    private UpdateStatementDeliveryPreferencesOperationReal operationReal;
+
+    @Mock
+    private MbnaLogger logger;
+
+    @Mock
+    private ParallelServiceCaller parallelServiceCaller;
+
+    @Mock
+    private UpdateStatementDeliveryPreferencesRequest request;
+
+    @Mock
+    private MultiAcctDeliveryPreferenceType multiAcctPref;
+
+    @Mock
+    private UpdateStatementDeliveryPreferencesResponse response;
+
+    @Mock
+    private UpdateStatementDeliveryPreferencesRequest updatedRequest;
+
+    @Mock
+    private ServiceCall<?> serviceCall;
+
+    @Mock
+    private UpdateStatementDeliveryPreferencesResponse multiAcctResponse;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testInvokeServiceWithMultiAcctDeliveryPref() throws Exception {
+        List<MultiAcctDeliveryPreferenceType> multiAcctDiveryPrefRq = new ArrayList<>();
+        multiAcctDiveryPrefRq.add(multiAcctPref);
+        when(request.getRequestPayload().getMultiAcctDiveryPrefRq()).thenReturn(multiAcctDiveryPrefRq);
+        when(operationReal.invokeService(any(), any())).thenReturn(response);
+
+        UpdateStatementDeliveryPreferencesResponse result = operation.invokeService(request, "dummyToken");
+
+        assertNotNull(result);
+        verify(operationReal, times(1)).invokeService(any(), any());
+    }
+
+    @Test
+    void testInvokeServiceWithoutMultiAcctDeliveryPref() throws Exception {
+        when(request.getRequestPayload().getMultiAcctDiveryPrefRq()).thenReturn(new ArrayList<>());
+        when(operationReal.invokeService(any(), any())).thenReturn(response);
+
+        UpdateStatementDeliveryPreferencesResponse result = operation.invokeService(request, "dummyToken");
+
+        assertNotNull(result);
+        verify(operationReal, times(1)).invokeService(any(), any());
+    }
+
+    @Test
+    void testInvokeServiceNoDisclosureInfo() throws Exception {
+        UpdateStatementDeliveryPreferencesRequest requestWithNoDisclosure = mock(UpdateStatementDeliveryPreferencesRequest.class);
+        when(requestWithNoDisclosure.getSessionInfo()).thenReturn(new SessionInfo());
+        when(requestWithNoDisclosure.getRequestPayload()).thenReturn(new RequestPayload());
+
+        Exception exception = assertThrows(com.td.mbna.msec.midtier.exceptions.BusinessException.class, () ->
+                operation.invokeService(requestWithNoDisclosure, "dummyToken"));
+        assertTrue(exception.getMessage().contains("no disclosure info"));
+    }
+
+    @Test
+    void testOperateMultiAcctStatementDeliveryPref() throws Exception {
+        when(request.getRequestPayload().getMultiAcctDiveryPrefRq()).thenReturn(new ArrayList<>());
+        when(operationReal.invokeService(any(), any())).thenReturn(response);
+
+        UpdateStatementDeliveryPreferencesResponse result = operation.operateMultiAcctStatementDeliveryPref(request, "dummyToken");
+
+        assertNotNull(result);
+        verify(parallelServiceCaller).sync();
+    }
+
+    @Test
+    void testScheduleServiceCall() throws Exception {
+        when(multiAcctPref.getAcctDeliveryPreference()).thenReturn(new AcctDeliveryPreferenceType());
+        when(request.getAcctNum()).thenReturn("123456");
+
+        operation.scheduleServiceCall(parallelServiceCaller, request, "dummyToken");
+
+        verify(parallelServiceCaller, times(1)).scheduleCall(eq("123456"), any());
+    }
+
+    @Test
+    void testGenerateRequest() {
+        MultiAcctDeliveryPreferenceType prefType = mock(MultiAcctDeliveryPreferenceType.class);
+        when(prefType.getAcctDeliveryPreference()).thenReturn(new AcctDeliveryPreferenceType());
+        when(request.getAuditInfo()).thenReturn(new AuditInfo());
+
+        UpdateStatementDeliveryPreferencesRequest result = operation.generateRequest(prefType, request);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testGenerateResponse() throws Exception {
+        when(multiAcctPref.getAcctDeliveryPreference()).thenReturn(new AcctDeliveryPreferenceType());
+        when(parallelServiceCaller.getResponse(eq("123456"), eq(UpdateStatementDeliveryPreferencesResponse.class)))
+                .thenReturn(multiAcctResponse);
+        when(multiAcctResponse.getResponsePayload()).thenReturn(new ResponsePayload());
+
+        UpdateStatementDeliveryPreferencesResponse result = operation.generateResponse(request, parallelServiceCaller);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testRequiresDisclosureConsent() {
+        assertTrue(operation.requiresDisclosureConsent());
+    }
+
+    @Test
+    void testCreateAutoComment() {
+        UpdateStatementDeliveryPreferencesRequest request = mock(UpdateStatementDeliveryPreferencesRequest.class);
+        when(request.getRequestPayload()).thenReturn(new RequestPayload());
+        List<String> result = operation.createAutoComment(request, new BaseResponse());
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testGetEmailInfoBean() {
+        EmailInfo result = operation.getEmailInfoBean(mock(UpdateStatementDeliveryPreferencesRequest.class), mock(UpdateStatementDeliveryPreferencesResponse.class));
+
+        assertNull(result);  // Based on the current implementation, it returns null
+    }
+
+    @Test
+    void testGetValidator() {
+        MsecValidator result = operation.getValidator();
+        assertNull(result);  // Based on the current implementation, it returns null
+    }
+}

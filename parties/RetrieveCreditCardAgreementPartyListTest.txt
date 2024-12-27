@@ -1,0 +1,79 @@
+package com.td.api.mbcca.response.account.parties;
+
+import com.td.api.mbcca.response.account.CreditCardAgreementToParty;
+import com.td.api.mbcca.shared.Status;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class RetrieveCreditCardAgreementPartyListTest {
+
+    private RetrieveCreditCardAgreementPartyList retrieveCreditCardAgreementPartyList;
+    private Status status;
+    private CreditCardAgreementToParty creditCardAgreementToParty;
+
+    @BeforeEach
+    public void setUp() {
+        retrieveCreditCardAgreementPartyList = new RetrieveCreditCardAgreementPartyList();
+        status = new Status();
+        creditCardAgreementToParty = new CreditCardAgreementToParty();
+    }
+
+    @Test
+    public void testGetStatus() {
+        retrieveCreditCardAgreementPartyList.setStatus(status);
+        assertEquals(status, retrieveCreditCardAgreementPartyList.getStatus());
+    }
+
+    @Test
+    public void testSetStatus() {
+        retrieveCreditCardAgreementPartyList.setStatus(status);
+        assertNotNull(retrieveCreditCardAgreementPartyList.getStatus());
+    }
+
+    @Test
+    public void testGetCreditCardAgreementToParty() {
+        retrieveCreditCardAgreementPartyList.setCreditCardAgreementToParty(Arrays.asList(creditCardAgreementToParty));
+        assertEquals(1, retrieveCreditCardAgreementPartyList.getCreditCardAgreementToParty().size());
+    }
+
+    @Test
+    public void testSetCreditCardAgreementToParty() {
+        retrieveCreditCardAgreementPartyList.setCreditCardAgreementToParty(Arrays.asList(creditCardAgreementToParty));
+        assertNotNull(retrieveCreditCardAgreementPartyList.getCreditCardAgreementToParty());
+    }
+
+    @Test
+    public void testToString() {
+        retrieveCreditCardAgreementPartyList.setStatus(status);
+        retrieveCreditCardAgreementPartyList.setCreditCardAgreementToParty(Arrays.asList(creditCardAgreementToParty));
+        assertNotNull(retrieveCreditCardAgreementPartyList.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        retrieveCreditCardAgreementPartyList.setStatus(status);
+        retrieveCreditCardAgreementPartyList.setCreditCardAgreementToParty(Arrays.asList(creditCardAgreementToParty));
+        int hashCode = retrieveCreditCardAgreementPartyList.hashCode();
+        assertTrue(hashCode != 0);
+    }
+
+    @Test
+    public void testEquals() {
+        RetrieveCreditCardAgreementPartyList another = new RetrieveCreditCardAgreementPartyList();
+        retrieveCreditCardAgreementPartyList.setStatus(status);
+        retrieveCreditCardAgreementPartyList.setCreditCardAgreementToParty(Arrays.asList(creditCardAgreementToParty));
+        another.setStatus(status);
+        another.setCreditCardAgreementToParty(Arrays.asList(creditCardAgreementToParty));
+        assertTrue(retrieveCreditCardAgreementPartyList.equals(another));
+    }
+
+    @Test
+    public void testEqualsNotEqual() {
+        RetrieveCreditCardAgreementPartyList another = new RetrieveCreditCardAgreementPartyList();
+        assertFalse(retrieveCreditCardAgreementPartyList.equals(another));
+    }
+}

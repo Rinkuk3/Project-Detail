@@ -1,0 +1,51 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class ValidoneResponseTest {
+
+    @Test
+    void testDepositTransactionAgreementAltkey() {
+        ValidoneResponse response = new ValidoneResponse();
+        
+        GenericAccountAltkey altkey = new GenericAccountAltkey();
+        response.setDepositTransactionAgreementAltkey(altkey);
+        
+        assertEquals(altkey, response.getDepositTransactionAgreementAltkey());
+    }
+
+    @Test
+    void testSetterAndGetter() {
+        ValidoneResponse response = new ValidoneResponse();
+        
+        GenericAccountAltkey altkey = new GenericAccountAltkey();
+        response.setDepositTransactionAgreementAltkey(altkey);
+        
+        assertNotNull(response.getDepositTransactionAgreementAltkey());
+        assertEquals(altkey, response.getDepositTransactionAgreementAltkey());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        ValidoneResponse response1 = new ValidoneResponse();
+        ValidoneResponse response2 = new ValidoneResponse();
+        
+        GenericAccountAltkey altkey = new GenericAccountAltkey();
+        
+        response1.setDepositTransactionAgreementAltkey(altkey);
+        response2.setDepositTransactionAgreementAltkey(altkey);
+        
+        assertEquals(response1, response2);
+        assertEquals(response1.hashCode(), response2.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        ValidoneResponse response = new ValidoneResponse();
+        
+        GenericAccountAltkey altkey = new GenericAccountAltkey();
+        response.setDepositTransactionAgreementAltkey(altkey);
+        
+        String expectedString = "ValidoneResponse(depositTransactionAgreementAltkey=" + altkey + ")";
+        assertEquals(expectedString, response.toString());
+    }
+}

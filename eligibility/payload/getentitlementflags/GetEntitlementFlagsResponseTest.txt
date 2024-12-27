@@ -1,0 +1,82 @@
+package com.td.mbna.msec.midtier.eligibility.payload.getentitlementflags;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class GetEntitlementFlagsResponseTest {
+
+    private GetEntitlementFlagsResponse response;
+    private ResponsePayload responsePayload;
+
+    @BeforeEach
+    void setUp() {
+        response = new GetEntitlementFlagsResponse();
+        responsePayload = new ResponsePayload();
+    }
+
+    @Test
+    void testGetSetResponsePayload() {
+        response.setResponsePayload(responsePayload);
+        assertEquals(responsePayload, response.getResponsePayload());
+    }
+
+    @Test
+    void testGetResponsePayloadWhenNull() {
+        // Ensure the responsePayload is initialized when accessed
+        assertNotNull(response.getResponsePayload());
+    }
+
+    @Test
+    void testToString() {
+        response.setStatus("status");
+        response.setErrorMessages("errorMsgs");
+        response.setResponsePayload(responsePayload);
+
+        String expected = "com.td.mbna.msec.midtier.eligibility.payload.getentitlementflags.GetEntitlementFlagsResponse@" +
+                Integer.toHexString(System.identityHashCode(response)) +
+                "[status=status,errorMsgs=errorMsgs,responsePayload=" + responsePayload.toString() + ",]";
+
+        assertEquals(expected, response.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        GetEntitlementFlagsResponse response1 = new GetEntitlementFlagsResponse();
+        response1.setStatus("status");
+        response1.setErrorMessages("errorMsgs");
+        response1.setResponsePayload(responsePayload);
+
+        GetEntitlementFlagsResponse response2 = new GetEntitlementFlagsResponse();
+        response2.setStatus("status");
+        response2.setErrorMessages("errorMsgs");
+        response2.setResponsePayload(responsePayload);
+
+        assertEquals(response1.hashCode(), response2.hashCode());
+
+        response2.setStatus("newStatus");
+        assertNotEquals(response1.hashCode(), response2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        GetEntitlementFlagsResponse response1 = new GetEntitlementFlagsResponse();
+        response1.setStatus("status");
+        response1.setErrorMessages("errorMsgs");
+        response1.setResponsePayload(responsePayload);
+
+        GetEntitlementFlagsResponse response2 = new GetEntitlementFlagsResponse();
+        response2.setStatus("status");
+        response2.setErrorMessages("errorMsgs");
+        response2.setResponsePayload(responsePayload);
+
+        assertTrue(response1.equals(response2));
+
+        response2.setStatus("newStatus");
+        assertFalse(response1.equals(response2));
+
+        assertFalse(response1.equals(null));
+        assertFalse(response1.equals(new Object()));
+    }
+}

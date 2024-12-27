@@ -1,0 +1,117 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class PartialUpdateCreditCardAgreementElectronicBillingServiceRequestTest {
+
+    private PartialUpdateCreditCardAgreementElectronicBillingServiceRequest request;
+
+    @BeforeEach
+    public void setUp() {
+        request = new PartialUpdateCreditCardAgreementElectronicBillingServiceRequest();
+    }
+
+    @Test
+    public void testGetDeactivationInd() {
+        request.setDeactivationInd(true);
+        assertTrue(request.getDeactivationInd());
+    }
+
+    @Test
+    public void testSetDeactivationInd() {
+        request.setDeactivationInd(false);
+        assertFalse(request.getDeactivationInd());
+    }
+
+    @Test
+    public void testGetStatementCycleCnt() {
+        request.setStatementCycleCnt(3);
+        assertEquals(3, request.getStatementCycleCnt());
+    }
+
+    @Test
+    public void testSetStatementCycleCnt() {
+        request.setStatementCycleCnt(5);
+        assertEquals(5, request.getStatementCycleCnt());
+    }
+
+    @Test
+    public void testToString() {
+        request.setDeactivationInd(true);
+        request.setStatementCycleCnt(3);
+
+        String expectedString = "com.td.api.mbcca.request.ebilling.PartialUpdateCreditCardAgreementElectronicBillingServiceRequest@" + Integer.toHexString(System.identityHashCode(request)) +
+                "[deactivationInd=true,statementCycleCnt=3]";
+        assertTrue(request.toString().contains("deactivationInd=true"));
+        assertTrue(request.toString().contains("statementCycleCnt=3"));
+    }
+
+    @Test
+    public void testHashCode() {
+        PartialUpdateCreditCardAgreementElectronicBillingServiceRequest request1 = new PartialUpdateCreditCardAgreementElectronicBillingServiceRequest();
+        request1.setDeactivationInd(true);
+        request1.setStatementCycleCnt(3);
+
+        PartialUpdateCreditCardAgreementElectronicBillingServiceRequest request2 = new PartialUpdateCreditCardAgreementElectronicBillingServiceRequest();
+        request2.setDeactivationInd(true);
+        request2.setStatementCycleCnt(3);
+
+        assertEquals(request1.hashCode(), request2.hashCode());
+
+        request2.setStatementCycleCnt(4);
+        assertNotEquals(request1.hashCode(), request2.hashCode());
+
+        request2.setStatementCycleCnt(3);
+        request2.setDeactivationInd(false);
+        assertNotEquals(request1.hashCode(), request2.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        PartialUpdateCreditCardAgreementElectronicBillingServiceRequest request1 = new PartialUpdateCreditCardAgreementElectronicBillingServiceRequest();
+        request1.setDeactivationInd(true);
+        request1.setStatementCycleCnt(3);
+
+        PartialUpdateCreditCardAgreementElectronicBillingServiceRequest request2 = new PartialUpdateCreditCardAgreementElectronicBillingServiceRequest();
+        request2.setDeactivationInd(true);
+        request2.setStatementCycleCnt(3);
+
+        assertTrue(request1.equals(request2));
+
+        request2.setStatementCycleCnt(4);
+        assertFalse(request1.equals(request2));
+
+        request2.setStatementCycleCnt(3);
+        request2.setDeactivationInd(false);
+        assertFalse(request1.equals(request2));
+    }
+
+    @Test
+    public void testEqualsNull() {
+        PartialUpdateCreditCardAgreementElectronicBillingServiceRequest request1 = new PartialUpdateCreditCardAgreementElectronicBillingServiceRequest();
+        request1.setDeactivationInd(true);
+        request1.setStatementCycleCnt(3);
+
+        assertFalse(request1.equals(null));
+    }
+
+    @Test
+    public void testEqualsDifferentClass() {
+        PartialUpdateCreditCardAgreementElectronicBillingServiceRequest request1 = new PartialUpdateCreditCardAgreementElectronicBillingServiceRequest();
+        request1.setDeactivationInd(true);
+        request1.setStatementCycleCnt(3);
+
+        String someString = "RandomString";
+        assertFalse(request1.equals(someString));
+    }
+
+    @Test
+    public void testEqualsSameInstance() {
+        PartialUpdateCreditCardAgreementElectronicBillingServiceRequest request1 = new PartialUpdateCreditCardAgreementElectronicBillingServiceRequest();
+        request1.setDeactivationInd(true);
+        request1.setStatementCycleCnt(3);
+
+        assertTrue(request1.equals(request1));  // Same instance, should return true
+    }
+}

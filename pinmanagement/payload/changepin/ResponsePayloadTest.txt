@@ -1,0 +1,82 @@
+package com.td.mbna.msec.midtier.pinmanagement.payload.changepin;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class ResponsePayloadTest {
+
+    @Test
+    public void testSetAndGetStatus() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatus(true);
+        assertTrue(responsePayload.getStatus());
+
+        responsePayload.setStatus(false);
+        assertFalse(responsePayload.getStatus());
+    }
+
+    @Test
+    public void testToString() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatus(true);
+        
+        String expectedString = "com.td.mbna.msec.midtier.pinmanagement.payload.changepin.ResponsePayload@" + 
+                                Integer.toHexString(System.identityHashCode(responsePayload)) + 
+                                "[status=true]";
+        assertEquals(expectedString, responsePayload.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        ResponsePayload responsePayload1 = new ResponsePayload();
+        responsePayload1.setStatus(true);
+
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        responsePayload2.setStatus(true);
+
+        assertEquals(responsePayload1.hashCode(), responsePayload2.hashCode());
+
+        ResponsePayload responsePayload3 = new ResponsePayload();
+        responsePayload3.setStatus(false);
+
+        assertNotEquals(responsePayload1.hashCode(), responsePayload3.hashCode());
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        ResponsePayload responsePayload1 = new ResponsePayload();
+        responsePayload1.setStatus(true);
+
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        responsePayload2.setStatus(true);
+
+        assertTrue(responsePayload1.equals(responsePayload2));
+        assertEquals(responsePayload1.hashCode(), responsePayload2.hashCode());
+    }
+
+    @Test
+    public void testEqualsWithNull() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatus(true);
+
+        assertFalse(responsePayload.equals(null));
+    }
+
+    @Test
+    public void testEqualsWithDifferentClass() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        assertFalse(responsePayload.equals("NonResponsePayload"));
+    }
+
+    @Test
+    public void testEqualsWithDifferentStatus() {
+        ResponsePayload responsePayload1 = new ResponsePayload();
+        responsePayload1.setStatus(true);
+
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        responsePayload2.setStatus(false);
+
+        assertFalse(responsePayload1.equals(responsePayload2));
+    }
+
+}

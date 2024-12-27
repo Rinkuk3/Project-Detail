@@ -1,0 +1,102 @@
+import com.td.mbna.msec.midtier.mbnaad.request.response.accesscard.Additionalstatus;
+import com.td.mbna.msec.midtier.mbnaad.request.response.accesscard.Additionalstatus.Severity;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class AdditionalstatusTest {
+
+    @Test
+    void testSetAndGetStatusCode() {
+        Additionalstatus status = new Additionalstatus();
+        status.setStatusCode(200);
+        assertEquals(200, status.getStatusCode());
+    }
+
+    @Test
+    void testSetAndGetServerStatusCode() {
+        Additionalstatus status = new Additionalstatus();
+        status.setServerStatusCode("200_OK");
+        assertEquals("200_OK", status.getServerStatusCode());
+    }
+
+    @Test
+    void testSetAndGetSeverity() {
+        Additionalstatus status = new Additionalstatus();
+        status.setSeverity(Severity.ERROR);
+        assertEquals(Severity.ERROR, status.getSeverity());
+    }
+
+    @Test
+    void testSetAndGetStatusDesc() {
+        Additionalstatus status = new Additionalstatus();
+        status.setStatusDesc("Description of the status");
+        assertEquals("Description of the status", status.getStatusDesc());
+    }
+
+    @Test
+    void testToString() {
+        Additionalstatus status = new Additionalstatus();
+        status.setStatusCode(200);
+        status.setServerStatusCode("200_OK");
+        status.setSeverity(Severity.WARNING);
+        status.setStatusDesc("Description of the status");
+        String expectedString = "com.td.mbna.msec.midtier.mbnaad.request.response.accesscard.Additionalstatus@" +
+                                Integer.toHexString(status.hashCode()) +
+                                "[statusCode=200,serverStatusCode=200_OK,severity=Warning,statusDesc=Description of the status]";
+        assertTrue(status.toString().contains("statusCode=200"));
+    }
+
+    @Test
+    void testHashCode() {
+        Additionalstatus status1 = new Additionalstatus();
+        status1.setStatusCode(200);
+        status1.setServerStatusCode("200_OK");
+        status1.setSeverity(Severity.INFO);
+        status1.setStatusDesc("Info status");
+        
+        Additionalstatus status2 = new Additionalstatus();
+        status2.setStatusCode(200);
+        status2.setServerStatusCode("200_OK");
+        status2.setSeverity(Severity.INFO);
+        status2.setStatusDesc("Info status");
+
+        assertEquals(status1.hashCode(), status2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        Additionalstatus status1 = new Additionalstatus();
+        status1.setStatusCode(200);
+        status1.setServerStatusCode("200_OK");
+        status1.setSeverity(Severity.INFO);
+        status1.setStatusDesc("Info status");
+
+        Additionalstatus status2 = new Additionalstatus();
+        status2.setStatusCode(200);
+        status2.setServerStatusCode("200_OK");
+        status2.setSeverity(Severity.INFO);
+        status2.setStatusDesc("Info status");
+
+        Additionalstatus status3 = new Additionalstatus();
+        status3.setStatusCode(400);
+        status3.setServerStatusCode("400_BAD_REQUEST");
+        status3.setSeverity(Severity.ERROR);
+        status3.setStatusDesc("Error status");
+
+        assertTrue(status1.equals(status2));
+        assertFalse(status1.equals(status3));
+    }
+
+    @Test
+    void testSeverityFromValue() {
+        assertEquals(Severity.INFO, Severity.fromValue("Info"));
+        assertEquals(Severity.WARNING, Severity.fromValue("Warning"));
+        assertEquals(Severity.ERROR, Severity.fromValue("Error"));
+    }
+
+    @Test
+    void testSeverityFromValueThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> Severity.fromValue("Invalid"));
+    }
+}

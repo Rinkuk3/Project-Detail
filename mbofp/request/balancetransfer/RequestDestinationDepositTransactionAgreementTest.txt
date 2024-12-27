@@ -1,0 +1,111 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestDestinationDepositTransactionAgreementTest {
+
+    private RequestDestinationDepositTransactionAgreement agreement;
+    private BranchAddress branchAddress;
+
+    @BeforeEach
+    void setUp() {
+        agreement = new RequestDestinationDepositTransactionAgreement();
+        branchAddress = new BranchAddress();
+    }
+
+    @Test
+    void testGetAndSetBranchNum() {
+        String branchNum = "12345";
+        agreement.setBranchNum(branchNum);
+        assertEquals(branchNum, agreement.getBranchNum());
+    }
+
+    @Test
+    void testGetAndSetAccountNum() {
+        String accountNum = "98765";
+        agreement.setAccountNum(accountNum);
+        assertEquals(accountNum, agreement.getAccountNum());
+    }
+
+    @Test
+    void testGetAndSetBranchAddress() {
+        branchAddress.setAddressLine1("123 Main St");
+        agreement.setBranchAddress(branchAddress);
+        assertEquals(branchAddress, agreement.getBranchAddress());
+    }
+
+    @Test
+    void testGetAndSetAgreementPurposeSubtypeCd() {
+        String agreementPurposeSubtypeCd = "Loan";
+        agreement.setAgreementPurposeSubtypeCd(agreementPurposeSubtypeCd);
+        assertEquals(agreementPurposeSubtypeCd, agreement.getAgreementPurposeSubtypeCd());
+    }
+
+    @Test
+    void testToString() {
+        String branchNum = "12345";
+        String accountNum = "98765";
+        String agreementPurposeSubtypeCd = "Loan";
+        branchAddress.setAddressLine1("123 Main St");
+
+        agreement.setBranchNum(branchNum);
+        agreement.setAccountNum(accountNum);
+        agreement.setAgreementPurposeSubtypeCd(agreementPurposeSubtypeCd);
+        agreement.setBranchAddress(branchAddress);
+
+        String expected = "com.td.api.mbofp.request.balancetransfer.RequestDestinationDepositTransactionAgreement@"
+            + Integer.toHexString(agreement.hashCode()) + "[branchNum=" + branchNum
+            + ",accountNum=" + accountNum
+            + ",branchAddress=" + branchAddress
+            + ",agreementPurposeSubtypeCd=" + agreementPurposeSubtypeCd + "]";
+
+        assertEquals(expected, agreement.toString());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        RequestDestinationDepositTransactionAgreement otherAgreement = new RequestDestinationDepositTransactionAgreement();
+        String branchNum = "12345";
+        String accountNum = "98765";
+        String agreementPurposeSubtypeCd = "Loan";
+        branchAddress.setAddressLine1("123 Main St");
+
+        agreement.setBranchNum(branchNum);
+        agreement.setAccountNum(accountNum);
+        agreement.setAgreementPurposeSubtypeCd(agreementPurposeSubtypeCd);
+        agreement.setBranchAddress(branchAddress);
+
+        otherAgreement.setBranchNum(branchNum);
+        otherAgreement.setAccountNum(accountNum);
+        otherAgreement.setAgreementPurposeSubtypeCd(agreementPurposeSubtypeCd);
+        otherAgreement.setBranchAddress(branchAddress);
+
+        assertTrue(agreement.equals(otherAgreement));
+        assertEquals(agreement.hashCode(), otherAgreement.hashCode());
+    }
+
+    @Test
+    void testNotEquals() {
+        RequestDestinationDepositTransactionAgreement otherAgreement = new RequestDestinationDepositTransactionAgreement();
+        agreement.setBranchNum("12345");
+        otherAgreement.setBranchNum("54321");
+
+        assertFalse(agreement.equals(otherAgreement));
+    }
+
+    @Test
+    void testNullEquals() {
+        assertFalse(agreement.equals(null));
+    }
+
+    @Test
+    void testSameObjectEquals() {
+        assertTrue(agreement.equals(agreement));
+    }
+
+    @Test
+    void testEqualsDifferentClass() {
+        assertFalse(agreement.equals(new Object()));
+    }
+}

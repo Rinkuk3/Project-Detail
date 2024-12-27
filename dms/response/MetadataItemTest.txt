@@ -1,0 +1,77 @@
+package com.td.api.dms.response;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class MetadataItemTest {
+
+    private MetadataItem metadataItem;
+
+    @BeforeEach
+    void setUp() {
+        metadataItem = new MetadataItem();
+    }
+
+    @Test
+    void testGetSetKeyName() {
+        String keyName = "Author";
+        metadataItem.setKeyName(keyName);
+        assertEquals(keyName, metadataItem.getKeyName());
+    }
+
+    @Test
+    void testGetSetValue() {
+        String value = "John Doe";
+        metadataItem.setValue(value);
+        assertEquals(value, metadataItem.getValue());
+    }
+
+    @Test
+    void testToString() {
+        metadataItem.setKeyName("Author");
+        metadataItem.setValue("John Doe");
+
+        String expected = "com.td.api.dms.response.MetadataItem@" + Integer.toHexString(System.identityHashCode(metadataItem)) + 
+                          "[keyName=Author,value=John Doe,]";
+        assertEquals(expected, metadataItem.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        MetadataItem item1 = new MetadataItem();
+        MetadataItem item2 = new MetadataItem();
+
+        item1.setKeyName("Author");
+        item1.setValue("John Doe");
+
+        item2.setKeyName("Author");
+        item2.setValue("John Doe");
+
+        assertEquals(item1.hashCode(), item2.hashCode());
+
+        item2.setValue("Jane Doe");
+        assertNotEquals(item1.hashCode(), item2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        MetadataItem item1 = new MetadataItem();
+        MetadataItem item2 = new MetadataItem();
+
+        item1.setKeyName("Author");
+        item1.setValue("John Doe");
+
+        item2.setKeyName("Author");
+        item2.setValue("John Doe");
+
+        assertTrue(item1.equals(item2));
+
+        item2.setValue("Jane Doe");
+        assertFalse(item1.equals(item2));
+
+        assertFalse(item1.equals(null));
+        assertFalse(item1.equals(new Object()));
+    }
+}

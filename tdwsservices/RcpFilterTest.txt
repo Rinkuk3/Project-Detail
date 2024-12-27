@@ -1,0 +1,88 @@
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class RcpFilterTest {
+
+    @Test
+    void testAddProfile() {
+        RcpFilter filter = new RcpFilter();
+        filter.addProfile();
+
+        assertTrue(filter.containsKey("dataTypeCd1"));
+        assertEquals("PROFILE", filter.get("dataTypeCd1"));
+    }
+
+    @Test
+    void testAddContacts() {
+        RcpFilter filter = new RcpFilter();
+        filter.addContacts();
+
+        assertTrue(filter.containsKey("dataTypeCd1"));
+        assertEquals("CONTACTS", filter.get("dataTypeCd1"));
+    }
+
+    @Test
+    void testAddPreferences() {
+        RcpFilter filter = new RcpFilter();
+        filter.addPreferences();
+
+        assertTrue(filter.containsKey("dataTypeCd1"));
+        assertEquals("PREFERENCES", filter.get("dataTypeCd1"));
+    }
+
+    @Test
+    void testAddRelationships() {
+        RcpFilter filter = new RcpFilter();
+        filter.addRelationships();
+
+        assertTrue(filter.containsKey("dataTypeCd1"));
+        assertEquals("RELATIONSHIPS", filter.get("dataTypeCd1"));
+    }
+
+    @Test
+    void testAddCardhistory() {
+        RcpFilter filter = new RcpFilter();
+        filter.addCardhistory();
+
+        assertTrue(filter.containsKey("dataTypeCd1"));
+        assertEquals("RELATIONSHIPS-CARDHISTORY", filter.get("dataTypeCd1"));
+    }
+
+    @Test
+    void testContainsFilter_True() {
+        RcpFilter filter1 = new RcpFilter();
+        filter1.addProfile().addContacts();
+
+        RcpFilter filter2 = new RcpFilter();
+        filter2.addProfile().addContacts();
+
+        assertTrue(filter1.containsFilter(filter2));
+    }
+
+    @Test
+    void testContainsFilter_False() {
+        RcpFilter filter1 = new RcpFilter();
+        filter1.addProfile().addContacts();
+
+        RcpFilter filter2 = new RcpFilter();
+        filter2.addProfile().addPreferences();
+
+        assertFalse(filter1.containsFilter(filter2));
+    }
+
+    @Test
+    void testStaticFilters() {
+        assertTrue(RcpFilter.ALL.containsKey("dataTypeCd1"));
+        assertTrue(RcpFilter.ALL_BUT_RELATIONSHIPS.containsKey("dataTypeCd1"));
+        assertTrue(RcpFilter.ALL_BUT_PREFERENCES.containsKey("dataTypeCd1"));
+        assertTrue(RcpFilter.PROFILE_AND_CONTACTS.containsKey("dataTypeCd1"));
+        assertTrue(RcpFilter.PROFILE.containsKey("dataTypeCd1"));
+        assertTrue(RcpFilter.CONTACTS.containsKey("dataTypeCd1"));
+        assertTrue(RcpFilter.PREFERENCES.containsKey("dataTypeCd1"));
+        assertTrue(RcpFilter.CONTACTS_AND_PREFERENCES.containsKey("dataTypeCd1"));
+        assertTrue(RcpFilter.RELATIONSHIPS.containsKey("dataTypeCd1"));
+        assertTrue(RcpFilter.RELATIONSHIPS_CARDHISTORY.containsKey("dataTypeCd1"));
+    }
+}

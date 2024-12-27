@@ -1,0 +1,55 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+
+class RetrieveBranchResponseTest {
+
+    @Test
+    void testBranch() {
+        RetrieveBranchResponse response = new RetrieveBranchResponse();
+        
+        Branch branch1 = new Branch();
+        Branch branch2 = new Branch();
+        response.setBranch(Arrays.asList(branch1, branch2));
+        
+        assertEquals(2, response.getBranch().size());
+        assertEquals(branch1, response.getBranch().get(0));
+        assertEquals(branch2, response.getBranch().get(1));
+    }
+
+    @Test
+    void testSetterAndGetter() {
+        RetrieveBranchResponse response = new RetrieveBranchResponse();
+        
+        Branch branch = new Branch();
+        response.setBranch(Arrays.asList(branch));
+        
+        assertNotNull(response.getBranch());
+        assertEquals(1, response.getBranch().size());
+        assertEquals(branch, response.getBranch().get(0));
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        RetrieveBranchResponse response1 = new RetrieveBranchResponse();
+        RetrieveBranchResponse response2 = new RetrieveBranchResponse();
+        
+        Branch branch = new Branch();
+        response1.setBranch(Arrays.asList(branch));
+        response2.setBranch(Arrays.asList(branch));
+        
+        assertEquals(response1, response2);
+        assertEquals(response1.hashCode(), response2.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        RetrieveBranchResponse response = new RetrieveBranchResponse();
+        
+        Branch branch = new Branch();
+        response.setBranch(Arrays.asList(branch));
+        
+        String expectedString = "RetrieveBranchResponse(branch=" + Arrays.asList(branch) + ")";
+        assertEquals(expectedString, response.toString());
+    }
+}

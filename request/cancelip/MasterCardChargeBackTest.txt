@@ -1,0 +1,135 @@
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+class MasterCardChargeBackTest {
+
+    @Test
+    void testGetAndSetReasonCd() {
+        MasterCardChargeBack chargeBack = new MasterCardChargeBack();
+        chargeBack.setReasonCd("reason1");
+        assertEquals("reason1", chargeBack.getReasonCd());
+    }
+
+    @Test
+    void testGetAndSetFunctionCd() {
+        MasterCardChargeBack chargeBack = new MasterCardChargeBack();
+        chargeBack.setFunctionCd("function1");
+        assertEquals("function1", chargeBack.getFunctionCd());
+    }
+
+    @Test
+    void testGetAndSetCardSequenceNum() {
+        MasterCardChargeBack chargeBack = new MasterCardChargeBack();
+        chargeBack.setCardSequenceNum("12345");
+        assertEquals("12345", chargeBack.getCardSequenceNum());
+    }
+
+    @Test
+    void testGetAndSetDocumentationStatusCd() {
+        MasterCardChargeBack chargeBack = new MasterCardChargeBack();
+        chargeBack.setDocumentationStatusCd("status1");
+        assertEquals("status1", chargeBack.getDocumentationStatusCd());
+    }
+
+    @Test
+    void testGetAndSetReferenceNum() {
+        MasterCardChargeBack chargeBack = new MasterCardChargeBack();
+        chargeBack.setReferenceNum("ref123");
+        assertEquals("ref123", chargeBack.getReferenceNum());
+    }
+
+    @Test
+    void testGetAndSetMemberMessageTxt() {
+        MasterCardChargeBack chargeBack = new MasterCardChargeBack();
+        chargeBack.setMemberMessageTxt("test message");
+        assertEquals("test message", chargeBack.getMemberMessageTxt());
+    }
+
+    @Test
+    void testGetAndSetTerminalChannelTypeSourceCd() {
+        MasterCardChargeBack chargeBack = new MasterCardChargeBack();
+        chargeBack.setTerminalChannelTypeSourceCd("sourceCd1");
+        assertEquals("sourceCd1", chargeBack.getTerminalChannelTypeSourceCd());
+    }
+
+    @Test
+    void testGetAndSetPointOfServiceTerminalCapabilityCd() {
+        MasterCardChargeBack chargeBack = new MasterCardChargeBack();
+        chargeBack.setPointOfServiceTerminalCapabilityCd("terminal1");
+        assertEquals("terminal1", chargeBack.getPointOfServiceTerminalCapabilityCd());
+    }
+
+    @Test
+    void testGetAndSetElectronicCommerceSecurityLevelCd() {
+        MasterCardChargeBack chargeBack = new MasterCardChargeBack();
+        chargeBack.setElectronicCommerceSecurityLevelCd("securityLevel1");
+        assertEquals("securityLevel1", chargeBack.getElectronicCommerceSecurityLevelCd());
+    }
+
+    @Test
+    void testGetAndSetWalletId() {
+        MasterCardChargeBack chargeBack = new MasterCardChargeBack();
+        chargeBack.setWalletId("wallet123");
+        assertEquals("wallet123", chargeBack.getWalletId());
+    }
+
+    @Test
+    void testGetAndSetOriginalAuthorizationEvent() {
+        MasterCardChargeBack chargeBack = new MasterCardChargeBack();
+        OriginalAuthorizationEvent__1 event = new OriginalAuthorizationEvent__1();
+        chargeBack.setOriginalAuthorizationEvent(event);
+        assertEquals(event, chargeBack.getOriginalAuthorizationEvent());
+    }
+
+    @Test
+    void testToString() {
+        MasterCardChargeBack chargeBack = new MasterCardChargeBack();
+        chargeBack.setReasonCd("reason1");
+        chargeBack.setFunctionCd("function1");
+        chargeBack.setCardSequenceNum("12345");
+        chargeBack.setDocumentationStatusCd("status1");
+        chargeBack.setReferenceNum("ref123");
+        chargeBack.setMemberMessageTxt("test message");
+        chargeBack.setTerminalChannelTypeSourceCd("sourceCd1");
+        chargeBack.setPointOfServiceTerminalCapabilityCd("terminal1");
+        chargeBack.setElectronicCommerceSecurityLevelCd("securityLevel1");
+        chargeBack.setWalletId("wallet123");
+        
+        String result = chargeBack.toString();
+        assertTrue(result.contains("reasonCd=reason1"));
+        assertTrue(result.contains("functionCd=function1"));
+        assertTrue(result.contains("cardSequenceNum=12345"));
+        assertTrue(result.contains("documentationStatusCd=status1"));
+        assertTrue(result.contains("referenceNum=ref123"));
+        assertTrue(result.contains("memberMessageTxt=test message"));
+        assertTrue(result.contains("terminalChannelTypeSourceCd=sourceCd1"));
+        assertTrue(result.contains("pointOfServiceTerminalCapabilityCd=terminal1"));
+        assertTrue(result.contains("electronicCommerceSecurityLevelCd=securityLevel1"));
+        assertTrue(result.contains("walletId=wallet123"));
+    }
+
+    @Test
+    void testHashCode() {
+        MasterCardChargeBack chargeBack1 = new MasterCardChargeBack();
+        chargeBack1.setReferenceNum("ref123");
+
+        MasterCardChargeBack chargeBack2 = new MasterCardChargeBack();
+        chargeBack2.setReferenceNum("ref123");
+
+        assertEquals(chargeBack1.hashCode(), chargeBack2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        MasterCardChargeBack chargeBack1 = new MasterCardChargeBack();
+        chargeBack1.setReferenceNum("ref123");
+
+        MasterCardChargeBack chargeBack2 = new MasterCardChargeBack();
+        chargeBack2.setReferenceNum("ref123");
+
+        assertTrue(chargeBack1.equals(chargeBack2));
+
+        chargeBack2.setReferenceNum("ref456");
+        assertFalse(chargeBack1.equals(chargeBack2));
+    }
+}

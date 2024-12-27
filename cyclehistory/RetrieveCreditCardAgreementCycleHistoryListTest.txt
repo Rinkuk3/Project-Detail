@@ -1,0 +1,145 @@
+package com.td.api.mbcca.response.account.cyclehistory;
+
+import com.td.api.mbcca.response.account.CycleInfo;
+import com.td.api.mbcca.shared.Status;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RetrieveCreditCardAgreementCycleHistoryListTest {
+
+    @Test
+    void testGettersAndSetters() {
+        RetrieveCreditCardAgreementCycleHistoryList cycleHistoryList = new RetrieveCreditCardAgreementCycleHistoryList();
+        
+        // Test set and get status
+        Status status = new Status();
+        status.setCode("SUCCESS");
+        status.setMessage("Cycle history retrieved successfully.");
+        
+        cycleHistoryList.setStatus(status);
+        assertEquals(status, cycleHistoryList.getStatus());
+
+        // Test set and get cycleInfo
+        CycleInfo cycleInfo1 = new CycleInfo();
+        cycleInfo1.setCycleDate("2024-01-01");
+        CycleInfo cycleInfo2 = new CycleInfo();
+        cycleInfo2.setCycleDate("2024-02-01");
+
+        cycleHistoryList.setCycleInfo(Arrays.asList(cycleInfo1, cycleInfo2));
+        assertEquals(Arrays.asList(cycleInfo1, cycleInfo2), cycleHistoryList.getCycleInfo());
+
+        // Test set status and cycleInfo to null
+        cycleHistoryList.setStatus(null);
+        cycleHistoryList.setCycleInfo(null);
+        assertNull(cycleHistoryList.getStatus());
+        assertNull(cycleHistoryList.getCycleInfo());
+    }
+
+    @Test
+    void testToString() {
+        RetrieveCreditCardAgreementCycleHistoryList cycleHistoryList = new RetrieveCreditCardAgreementCycleHistoryList();
+        
+        Status status = new Status();
+        status.setCode("SUCCESS");
+        status.setMessage("Cycle history retrieved successfully.");
+        
+        CycleInfo cycleInfo1 = new CycleInfo();
+        cycleInfo1.setCycleDate("2024-01-01");
+        CycleInfo cycleInfo2 = new CycleInfo();
+        cycleInfo2.setCycleDate("2024-02-01");
+        
+        cycleHistoryList.setStatus(status);
+        cycleHistoryList.setCycleInfo(Arrays.asList(cycleInfo1, cycleInfo2));
+
+        String expectedString = "com.td.api.mbcca.response.account.cyclehistory.RetrieveCreditCardAgreementCycleHistoryList@" +
+            Integer.toHexString(cycleHistoryList.hashCode()) + "[status=" + status + ",cycleInfo=[" + cycleInfo1 + ", " + cycleInfo2 + "]]";
+        
+        assertEquals(expectedString, cycleHistoryList.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        RetrieveCreditCardAgreementCycleHistoryList cycleHistoryList1 = new RetrieveCreditCardAgreementCycleHistoryList();
+        RetrieveCreditCardAgreementCycleHistoryList cycleHistoryList2 = new RetrieveCreditCardAgreementCycleHistoryList();
+        
+        Status status = new Status();
+        status.setCode("SUCCESS");
+        status.setMessage("Cycle history retrieved successfully.");
+        
+        CycleInfo cycleInfo1 = new CycleInfo();
+        cycleInfo1.setCycleDate("2024-01-01");
+        CycleInfo cycleInfo2 = new CycleInfo();
+        cycleInfo2.setCycleDate("2024-02-01");
+
+        cycleHistoryList1.setStatus(status);
+        cycleHistoryList1.setCycleInfo(Arrays.asList(cycleInfo1, cycleInfo2));
+
+        cycleHistoryList2.setStatus(status);
+        cycleHistoryList2.setCycleInfo(Arrays.asList(cycleInfo1, cycleInfo2));
+
+        assertEquals(cycleHistoryList1.hashCode(), cycleHistoryList2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        RetrieveCreditCardAgreementCycleHistoryList cycleHistoryList1 = new RetrieveCreditCardAgreementCycleHistoryList();
+        RetrieveCreditCardAgreementCycleHistoryList cycleHistoryList2 = new RetrieveCreditCardAgreementCycleHistoryList();
+        RetrieveCreditCardAgreementCycleHistoryList cycleHistoryList3 = new RetrieveCreditCardAgreementCycleHistoryList();
+        
+        Status status1 = new Status();
+        status1.setCode("SUCCESS");
+        status1.setMessage("Cycle history retrieved successfully.");
+        
+        Status status2 = new Status();
+        status2.setCode("FAILURE");
+        status2.setMessage("Error retrieving cycle history.");
+
+        CycleInfo cycleInfo1 = new CycleInfo();
+        cycleInfo1.setCycleDate("2024-01-01");
+        CycleInfo cycleInfo2 = new CycleInfo();
+        cycleInfo2.setCycleDate("2024-02-01");
+
+        cycleHistoryList1.setStatus(status1);
+        cycleHistoryList1.setCycleInfo(Arrays.asList(cycleInfo1, cycleInfo2));
+
+        cycleHistoryList2.setStatus(status1);
+        cycleHistoryList2.setCycleInfo(Arrays.asList(cycleInfo1, cycleInfo2));
+
+        cycleHistoryList3.setStatus(status2);
+        cycleHistoryList3.setCycleInfo(Arrays.asList(cycleInfo1));
+
+        // Equal comparison
+        assertTrue(cycleHistoryList1.equals(cycleHistoryList2));
+
+        // Different status and cycle info
+        assertFalse(cycleHistoryList1.equals(cycleHistoryList3));
+
+        // Comparing with null
+        assertFalse(cycleHistoryList1.equals(null));
+
+        // Comparing with different class type
+        assertFalse(cycleHistoryList1.equals(new Object()));
+    }
+
+    @Test
+    void testEquals_SameObject() {
+        RetrieveCreditCardAgreementCycleHistoryList cycleHistoryList = new RetrieveCreditCardAgreementCycleHistoryList();
+        
+        Status status = new Status();
+        status.setCode("SUCCESS");
+        status.setMessage("Cycle history retrieved successfully.");
+        
+        CycleInfo cycleInfo1 = new CycleInfo();
+        cycleInfo1.setCycleDate("2024-01-01");
+        CycleInfo cycleInfo2 = new CycleInfo();
+        cycleInfo2.setCycleDate("2024-02-01");
+        
+        cycleHistoryList.setStatus(status);
+        cycleHistoryList.setCycleInfo(Arrays.asList(cycleInfo1, cycleInfo2));
+
+        assertTrue(cycleHistoryList.equals(cycleHistoryList));
+    }
+}

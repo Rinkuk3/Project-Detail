@@ -1,0 +1,135 @@
+package com.td.mbna.msec.midtier.transfer.payload.getdeposittochequingpayees;
+
+import com.td.mbna.msec.midtier.transfer.payload.DepositToChequingPayeeType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+class ResponsePayloadTest {
+
+    private ResponsePayload responsePayload;
+
+    @BeforeEach
+    void setUp() {
+        responsePayload = new ResponsePayload();
+    }
+
+    @Test
+    void testGetAndSetPayee() {
+        List<DepositToChequingPayeeType> payees = new ArrayList<>();
+        DepositToChequingPayeeType payee = new DepositToChequingPayeeType();
+        payees.add(payee);
+        
+        responsePayload.setPayee(payees);
+        
+        assertEquals(payees, responsePayload.getPayee());
+    }
+
+    @Test
+    void testToString() {
+        List<DepositToChequingPayeeType> payees = new ArrayList<>();
+        DepositToChequingPayeeType payee = new DepositToChequingPayeeType();
+        payees.add(payee);
+        
+        responsePayload.setPayee(payees);
+        
+        String expectedString = "com.td.mbna.msec.midtier.transfer.payload.getdeposittochequingpayees.ResponsePayload@" +
+                                Integer.toHexString(responsePayload.hashCode()) + "[payee=" + payees + "]";
+        
+        assertEquals(expectedString, responsePayload.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        List<DepositToChequingPayeeType> payees = new ArrayList<>();
+        DepositToChequingPayeeType payee = new DepositToChequingPayeeType();
+        payees.add(payee);
+        
+        responsePayload.setPayee(payees);
+        
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        responsePayload2.setPayee(payees);
+        
+        assertEquals(responsePayload.hashCode(), responsePayload2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        List<DepositToChequingPayeeType> payees = new ArrayList<>();
+        DepositToChequingPayeeType payee = new DepositToChequingPayeeType();
+        payees.add(payee);
+        
+        responsePayload.setPayee(payees);
+        
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        responsePayload2.setPayee(payees);
+        
+        assertTrue(responsePayload.equals(responsePayload2));
+
+        // Test equality with different object
+        assertFalse(responsePayload.equals(null));
+
+        // Test equality with different class
+        assertFalse(responsePayload.equals(new Object()));
+    }
+
+    @Test
+    void testEqualsWithNullPayee() {
+        responsePayload.setPayee(null);
+        
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        responsePayload2.setPayee(null);
+        
+        assertTrue(responsePayload.equals(responsePayload2));
+    }
+
+    @Test
+    void testHashCodeWithNullPayee() {
+        responsePayload.setPayee(null);
+        
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        responsePayload2.setPayee(null);
+        
+        assertEquals(responsePayload.hashCode(), responsePayload2.hashCode());
+    }
+
+    @Test
+    void testHashCodeWithDifferentPayee() {
+        List<DepositToChequingPayeeType> payees1 = new ArrayList<>();
+        DepositToChequingPayeeType payee1 = new DepositToChequingPayeeType();
+        payees1.add(payee1);
+        
+        List<DepositToChequingPayeeType> payees2 = new ArrayList<>();
+        DepositToChequingPayeeType payee2 = new DepositToChequingPayeeType();
+        payees2.add(payee2);
+        
+        responsePayload.setPayee(payees1);
+        
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        responsePayload2.setPayee(payees2);
+        
+        assertNotEquals(responsePayload.hashCode(), responsePayload2.hashCode());
+    }
+
+    @Test
+    void testEqualsWithDifferentPayee() {
+        List<DepositToChequingPayeeType> payees1 = new ArrayList<>();
+        DepositToChequingPayeeType payee1 = new DepositToChequingPayeeType();
+        payees1.add(payee1);
+        
+        List<DepositToChequingPayeeType> payees2 = new ArrayList<>();
+        DepositToChequingPayeeType payee2 = new DepositToChequingPayeeType();
+        payees2.add(payee2);
+        
+        responsePayload.setPayee(payees1);
+        
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        responsePayload2.setPayee(payees2);
+        
+        assertFalse(responsePayload.equals(responsePayload2));
+    }
+}

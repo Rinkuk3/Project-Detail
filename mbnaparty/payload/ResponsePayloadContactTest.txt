@@ -1,0 +1,54 @@
+package com.td.api.mbna.msec.midtier.mbnaparty.payload;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+
+public class ResponsePayloadContactTest {
+
+    private ResponsePayloadContact responsePayloadContact;
+
+    @BeforeEach
+    public void setUp() {
+        responsePayloadContact = new ResponsePayloadContact();
+    }
+
+    @Test
+    public void testGetSetContact() {
+        ArrayList<Contact> contactList = new ArrayList<>();
+        contactList.add(new Contact());
+        responsePayloadContact.setContact(contactList);
+        assertEquals(contactList, responsePayloadContact.getContact());
+    }
+
+    @Test
+    public void testToString() {
+        ArrayList<Contact> contactList = new ArrayList<>();
+        contactList.add(new Contact());
+        responsePayloadContact.setContact(contactList);
+        
+        String str = responsePayloadContact.toString();
+        assertTrue(str.contains("contact"));
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        ResponsePayloadContact responsePayloadContact1 = new ResponsePayloadContact();
+        ResponsePayloadContact responsePayloadContact2 = new ResponsePayloadContact();
+
+        ArrayList<Contact> contactList = new ArrayList<>();
+        contactList.add(new Contact());
+
+        responsePayloadContact1.setContact(contactList);
+        responsePayloadContact2.setContact(contactList);
+
+        assertEquals(responsePayloadContact1, responsePayloadContact2);
+        assertEquals(responsePayloadContact1.hashCode(), responsePayloadContact2.hashCode());
+
+        responsePayloadContact2.setContact(new ArrayList<>());
+        assertNotEquals(responsePayloadContact1, responsePayloadContact2);
+    }
+}

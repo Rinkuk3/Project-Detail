@@ -1,0 +1,113 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class StreetAddressTest {
+
+    @Test
+    void testAddressLine1() {
+        StreetAddress streetAddress = new StreetAddress();
+        
+        String addressLine1 = "123 Main St";
+        streetAddress.setAddressLine1(addressLine1);
+        
+        assertEquals(addressLine1, streetAddress.getAddressLine1());
+    }
+
+    @Test
+    void testCity() {
+        StreetAddress streetAddress = new StreetAddress();
+        
+        String city = "Toronto";
+        streetAddress.setCity(city);
+        
+        assertEquals(city, streetAddress.getCity());
+    }
+
+    @Test
+    void testTerritory() {
+        StreetAddress streetAddress = new StreetAddress();
+        
+        String territory = "Ontario";
+        streetAddress.setTerritory(territory);
+        
+        assertEquals(territory, streetAddress.getTerritory());
+    }
+
+    @Test
+    void testPostalCode() {
+        StreetAddress streetAddress = new StreetAddress();
+        
+        String postalCode = "M5A 1A1";
+        streetAddress.setPostalCode(postalCode);
+        
+        assertEquals(postalCode, streetAddress.getPostalCode());
+    }
+
+    @Test
+    void testSetterAndGetter() {
+        StreetAddress streetAddress = new StreetAddress();
+        
+        String addressLine1 = "456 Oak St";
+        String city = "Ottawa";
+        String territory = "Ontario";
+        String postalCode = "K1A 0B1";
+        
+        streetAddress.setAddressLine1(addressLine1);
+        streetAddress.setCity(city);
+        streetAddress.setTerritory(territory);
+        streetAddress.setPostalCode(postalCode);
+        
+        assertNotNull(streetAddress.getAddressLine1());
+        assertNotNull(streetAddress.getCity());
+        assertNotNull(streetAddress.getTerritory());
+        assertNotNull(streetAddress.getPostalCode());
+        
+        assertEquals(addressLine1, streetAddress.getAddressLine1());
+        assertEquals(city, streetAddress.getCity());
+        assertEquals(territory, streetAddress.getTerritory());
+        assertEquals(postalCode, streetAddress.getPostalCode());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        StreetAddress streetAddress1 = new StreetAddress();
+        StreetAddress streetAddress2 = new StreetAddress();
+        
+        String addressLine1 = "789 Pine St";
+        String city = "Vancouver";
+        String territory = "British Columbia";
+        String postalCode = "V5K 0A1";
+        
+        streetAddress1.setAddressLine1(addressLine1);
+        streetAddress1.setCity(city);
+        streetAddress1.setTerritory(territory);
+        streetAddress1.setPostalCode(postalCode);
+        
+        streetAddress2.setAddressLine1(addressLine1);
+        streetAddress2.setCity(city);
+        streetAddress2.setTerritory(territory);
+        streetAddress2.setPostalCode(postalCode);
+        
+        assertEquals(streetAddress1, streetAddress2);
+        assertEquals(streetAddress1.hashCode(), streetAddress2.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        StreetAddress streetAddress = new StreetAddress();
+        
+        String addressLine1 = "101 Maple St";
+        String city = "Calgary";
+        String territory = "Alberta";
+        String postalCode = "T2P 0L4";
+        
+        streetAddress.setAddressLine1(addressLine1);
+        streetAddress.setCity(city);
+        streetAddress.setTerritory(territory);
+        streetAddress.setPostalCode(postalCode);
+        
+        String expectedString = "StreetAddress(addressLine1=" + addressLine1 + ", city=" + city + 
+                                ", territory=" + territory + ", postalCode=" + postalCode + ")";
+        assertEquals(expectedString, streetAddress.toString());
+    }
+}

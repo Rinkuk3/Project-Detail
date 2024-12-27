@@ -1,0 +1,69 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import com.td.mbna.msec.midtier.offers.payload.retrieveoffersforaccounts.RequestPayload;
+
+class RetrieveOffersForAccountsRequestTest {
+
+    @Test
+    void testSetGetRequestPayload() {
+        RetrieveOffersForAccountsRequest request = new RetrieveOffersForAccountsRequest();
+        RequestPayload requestPayload = new RequestPayload();
+        
+        request.setRequestPayload(requestPayload);
+        
+        assertEquals(requestPayload, request.getRequestPayload());
+
+        request.setRequestPayload(null);
+        assertNull(request.getRequestPayload());
+    }
+
+    @Test
+    void testToString() {
+        RetrieveOffersForAccountsRequest request = new RetrieveOffersForAccountsRequest();
+        RequestPayload requestPayload = new RequestPayload();
+        request.setRequestPayload(requestPayload);
+        
+        String expectedString = "RetrieveOffersForAccountsRequest@" + Integer.toHexString(System.identityHashCode(request)) + "[sessionInfo=<null>,custId=<null>,aliasCustId=<null>,acctNum=<null>,acctType=<null>,languagePref=<null>,auditInfo=<null>,isPrimaryUser=<null>,reserved1=<null>,custInterface=<null>,requestPayload=" + requestPayload + "]";
+        assertEquals(expectedString, request.toString());
+
+        request.setRequestPayload(null);
+        expectedString = "RetrieveOffersForAccountsRequest@" + Integer.toHexString(System.identityHashCode(request)) + "[sessionInfo=<null>,custId=<null>,aliasCustId=<null>,acctNum=<null>,acctType=<null>,languagePref=<null>,auditInfo=<null>,isPrimaryUser=<null>,reserved1=<null>,custInterface=<null>,requestPayload=<null>]";
+        assertEquals(expectedString, request.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        RetrieveOffersForAccountsRequest request1 = new RetrieveOffersForAccountsRequest();
+        RetrieveOffersForAccountsRequest request2 = new RetrieveOffersForAccountsRequest();
+        RequestPayload requestPayload = new RequestPayload();
+
+        request1.setRequestPayload(requestPayload);
+        request2.setRequestPayload(requestPayload);
+        
+        assertEquals(request1.hashCode(), request2.hashCode());
+
+        request2.setRequestPayload(null);
+        assertNotEquals(request1.hashCode(), request2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        RetrieveOffersForAccountsRequest request1 = new RetrieveOffersForAccountsRequest();
+        RetrieveOffersForAccountsRequest request2 = new RetrieveOffersForAccountsRequest();
+        RequestPayload requestPayload = new RequestPayload();
+
+        request1.setRequestPayload(requestPayload);
+        request2.setRequestPayload(requestPayload);
+        
+        assertEquals(request1, request2);
+
+        request2.setRequestPayload(null);
+        assertNotEquals(request1, request2);
+
+        request1.setRequestPayload(null);
+        request2.setRequestPayload(null);
+        assertEquals(request1, request2);
+        
+        assertNotEquals(request1, new Object());
+    }
+}

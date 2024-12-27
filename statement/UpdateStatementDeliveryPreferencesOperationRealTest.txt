@@ -1,0 +1,165 @@
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.td.mbna.msec.midtier.mbcca.MbnaCCA;
+import com.td.mbna.msec.midtier.statement.UpdateStatementDeliveryPreferencesOperationReal;
+import com.td.mbna.msec.midtier.statement.payload.updateStatementDeliveryPreferences.*;
+import com.td.mbna.msec.midtier.types.common.*;
+import com.td.mbna.msec.midtier.util.CustomerNotesUtil;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+
+import java.util.List;
+
+public class UpdateStatementDeliveryPreferencesOperationRealTest {
+
+    @Mock
+    private MbnaCCA mbnaCCA;
+
+    @Mock
+    private Executor midtierExecutor;
+
+    @Mock
+    private CustomerNotesUtil customerNotesUtil;
+
+    @InjectMocks
+    private UpdateStatementDeliveryPreferencesOperationReal operationReal;
+
+    private UpdateStatementDeliveryPreferencesRequest request;
+
+    private UpdateStatementDeliveryPreferencesResponse response;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+
+        // Create mock request and response
+        request = new UpdateStatementDeliveryPreferencesRequest();
+        response = new UpdateStatementDeliveryPreferencesResponse();
+
+        // Initialize payload with mock data
+        RequestPayload requestPayload = new RequestPayload();
+        AcctDeliveryPreference acctDeliveryPreference = new AcctDeliveryPreference();
+        acctDeliveryPreference.setAcctDeliveryPreference(DeliveryPreferenceType.ONLINE);
+        acctDeliveryPreference.setEnrollmentStatus("Active/Currently Enrolled");
+        requestPayload.setAcctDeliveryPreference(acctDeliveryPreference);
+
+        EmailNotificationInfoType emailNotificationInfoType = new EmailNotificationInfoType();
+        emailNotificationInfoType.setPrimaryUserEmailAddress("test@mbna.com");
+
+        requestPayload.setEmailNotificationInfo(emailNotificationInfoType);
+
+        request.setRequestPayload(requestPayload);
+        request.setAcctNum("123456");
+
+        // Initialize response payload
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setAcctDeliveryPreference(acctDeliveryPreference);
+        response.setResponsePayload(responsePayload);
+    }
+
+    @Test
+    void testInvokeService_Success() {
+        // Mock the behavior of the MBNA CCA system
+        doNothing().when(mbnaCCA).createElectronicBilling(anyString(), anyString(), anyBoolean(), anyString(), anyString());
+        doNothing().when(mbnaCCA).updateElectronicBilling(anyString(), anyBoolean(), anyString(), anyBoolean(), anyString());
+
+        // Call the method under test
+        UpdateStatementDeliveryPreferencesResponse result = operationReal.invokeService(request, "test-token");
+
+        // Verify interactions and assertions
+        assertNotNull(result);
+        assertEquals("Success", result.getStatus());
+        verify(mbnaCCA, times(1)).createElectronicBilling(anyString(), anyString(), anyBoolean(), anyString(), anyString());
+        verify(mbnaCCA, times(1)).updateElectronicBilling(anyString(), anyBoolean(), anyString(), anyBoolean(), anyString());
+        verify(midtierExecutor, times(1)).execute(any(Runnable.class)); // verify async comment creation
+    }
+
+    @Test
+    void testInvokeService_NullRequest() {
+        // Test with a null request (invalid input)
+        UpdateStatementDeliveryPreferencesResponse result = operationReal.invokeService(null, "test-token");
+        assertNull(result);
+    }
+
+    @Test
+    void testCreateAutoComment_Success() {
+        // Call the method under test
+        List<String> comments = operationReal.createAutoComment(request);
+
+        // Verify the result
+        assertNotNull(comments);
+        assertTrue(comments.size() > 0);
+        assertTrue(comments.get(0).contains("Opt-in eStatement"));
+    }
+
+    @Test
+    void testCreateAutoComment_OptOut() {
+        // Modify request to simulate "Opt-out" scenario
+        request.getRequestPayload().getAcctDeliveryPreference().setAcctDeliveryPreference(DeliveryPreferenceType.PAPER);
+
+        // Call the method under test
+        List<String> comments = operationReal.createAutoComment(request);
+
+        // Verify the result
+        assertNotNull(comments);
+        assertTrue(comments.size() > 0);
+        assertTrue(comments.get(0).contains("Opt-out eStatement"));
+    }
+
+    @Test
+    void testGetEmailInfoBean() {
+        // Mock behavior for email info
+        EmailInfoImpl emailInfoBean = mock(EmailInfoImpl.class);
+        when(mbnaCCA.createEmailInfoBean(any(), any())).thenReturn(emailInfoBean);
+
+        // Call the method under test
+        EmailInfo result = operationReal.getEmailInfoBean(request, response);
+
+        // Verify the result
+        assertNotNull(result);
+        assertTrue(result instanceof EmailInfoImpl);
+    }
+
+    @Test
+    void testGetEmailInfoBean_NoEmailNotificationInfo() {
+        // Set request with null email notification info
+        request.getRequestPayload().setEmailNotificationInfo(null);
+
+        // Call the method under test
+        EmailInfo result = operationReal.getEmailInfoBean(request, response);
+
+        // Verify the result
+        assertNull(result);
+    }
+
+    @Test
+    void testInvokeService_ExceptionHandling() {
+        // Simulate an exception during the MBNA CCA call
+        doThrow(new RuntimeException("Test Exception")).when(mbnaCCA).updateElectronicBilling(anyString(), anyBoolean(), anyString(), anyBoolean(), anyString());
+
+        // Call the method under test
+        assertThrows(RuntimeException.class, () -> {
+            operationReal.invokeService(request, "test-token");
+        });
+    }
+
+    @Test
+    void testRequiresDisclosureConsent() {
+        assertFalse(operationReal.requiresDisclosureConsent());
+    }
+
+    @Test
+    void testGenerateAutoComment() {
+        assertFalse(operationReal.generateAutoComment());
+    }
+
+    @Test
+    void testGetValidator() {
+        assertNull(operationReal.getValidator());
+    }
+}

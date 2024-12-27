@@ -1,0 +1,160 @@
+package com.td.mbna.msec.midtier.statement;
+
+import com.mbnaweb.xsd.types.common.CardNumHistoryType;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class CardHistoryComparableTest {
+
+    @Test
+    void testCompare_WithDifferentStartDate() throws Exception {
+        // Create mock objects
+        CardNumHistoryType card1 = Mockito.mock(CardNumHistoryType.class);
+        CardNumHistoryType card2 = Mockito.mock(CardNumHistoryType.class);
+
+        // Set mock start dates
+        XMLGregorianCalendar startDate1 = DatatypeFactory.newInstance().newXMLGregorianCalendar("2024-12-25T10:00:00");
+        XMLGregorianCalendar startDate2 = DatatypeFactory.newInstance().newXMLGregorianCalendar("2024-12-26T10:00:00");
+
+        Mockito.when(card1.getStartDate()).thenReturn(startDate1);
+        Mockito.when(card2.getStartDate()).thenReturn(startDate2);
+
+        // Create the comparator
+        CardHistoryComparable comparator = new CardHistoryComparable();
+
+        // Compare the two cards
+        int result = comparator.compare(card1, card2);
+
+        // Assert that the comparison is correct (card2 start date is later)
+        assertTrue(result < 0);
+    }
+
+    @Test
+    void testCompare_WithSameStartDate_DifferentEndDate() throws Exception {
+        // Create mock objects
+        CardNumHistoryType card1 = Mockito.mock(CardNumHistoryType.class);
+        CardNumHistoryType card2 = Mockito.mock(CardNumHistoryType.class);
+
+        // Set mock start dates (same start date)
+        XMLGregorianCalendar startDate = DatatypeFactory.newInstance().newXMLGregorianCalendar("2024-12-25T10:00:00");
+        Mockito.when(card1.getStartDate()).thenReturn(startDate);
+        Mockito.when(card2.getStartDate()).thenReturn(startDate);
+
+        // Set mock end dates (card1 has an earlier end date)
+        XMLGregorianCalendar endDate1 = DatatypeFactory.newInstance().newXMLGregorianCalendar("2024-12-26T10:00:00");
+        XMLGregorianCalendar endDate2 = DatatypeFactory.newInstance().newXMLGregorianCalendar("2024-12-27T10:00:00");
+        
+        Mockito.when(card1.getEndDate()).thenReturn(endDate1);
+        Mockito.when(card2.getEndDate()).thenReturn(endDate2);
+
+        // Create the comparator
+        CardHistoryComparable comparator = new CardHistoryComparable();
+
+        // Compare the two cards
+        int result = comparator.compare(card1, card2);
+
+        // Assert that the comparison is correct (card2 end date is later)
+        assertTrue(result < 0);
+    }
+
+    @Test
+    void testCompare_WithSameStartDate_SameEndDate() throws Exception {
+        // Create mock objects
+        CardNumHistoryType card1 = Mockito.mock(CardNumHistoryType.class);
+        CardNumHistoryType card2 = Mockito.mock(CardNumHistoryType.class);
+
+        // Set mock start and end dates (same dates)
+        XMLGregorianCalendar startDate = DatatypeFactory.newInstance().newXMLGregorianCalendar("2024-12-25T10:00:00");
+        XMLGregorianCalendar endDate = DatatypeFactory.newInstance().newXMLGregorianCalendar("2024-12-26T10:00:00");
+
+        Mockito.when(card1.getStartDate()).thenReturn(startDate);
+        Mockito.when(card1.getEndDate()).thenReturn(endDate);
+        Mockito.when(card2.getStartDate()).thenReturn(startDate);
+        Mockito.when(card2.getEndDate()).thenReturn(endDate);
+
+        // Create the comparator
+        CardHistoryComparable comparator = new CardHistoryComparable();
+
+        // Compare the two cards
+        int result = comparator.compare(card1, card2);
+
+        // Assert that the comparison is correct (both have the same start and end dates)
+        assertEquals(0, result);
+    }
+
+    @Test
+    void testCompare_WithNullEndDate() throws Exception {
+        // Create mock objects
+        CardNumHistoryType card1 = Mockito.mock(CardNumHistoryType.class);
+        CardNumHistoryType card2 = Mockito.mock(CardNumHistoryType.class);
+
+        // Set mock start dates (same start date)
+        XMLGregorianCalendar startDate = DatatypeFactory.newInstance().newXMLGregorianCalendar("2024-12-25T10:00:00");
+        Mockito.when(card1.getStartDate()).thenReturn(startDate);
+        Mockito.when(card2.getStartDate()).thenReturn(startDate);
+
+        // Set mock end date for card1 (null for card2)
+        XMLGregorianCalendar endDate1 = DatatypeFactory.newInstance().newXMLGregorianCalendar("2024-12-26T10:00:00");
+        Mockito.when(card1.getEndDate()).thenReturn(endDate1);
+        Mockito.when(card2.getEndDate()).thenReturn(null);
+
+        // Create the comparator
+        CardHistoryComparable comparator = new CardHistoryComparable();
+
+        // Compare the two cards
+        int result = comparator.compare(card1, card2);
+
+        // Assert that the comparison is correct (card1 has an end date, card2 does not)
+        assertTrue(result < 0);
+    }
+
+    @Test
+    void testCompare_WithNullStartDate() throws Exception {
+        // Create mock objects
+        CardNumHistoryType card1 = Mockito.mock(CardNumHistoryType.class);
+        CardNumHistoryType card2 = Mockito.mock(CardNumHistoryType.class);
+
+        // Set mock start date for card1 (null for card2)
+        XMLGregorianCalendar startDate1 = DatatypeFactory.newInstance().newXMLGregorianCalendar("2024-12-25T10:00:00");
+        Mockito.when(card1.getStartDate()).thenReturn(startDate1);
+        Mockito.when(card2.getStartDate()).thenReturn(null);
+
+        // Set mock end dates
+        XMLGregorianCalendar endDate1 = DatatypeFactory.newInstance().newXMLGregorianCalendar("2024-12-26T10:00:00");
+        XMLGregorianCalendar endDate2 = DatatypeFactory.newInstance().newXMLGregorianCalendar("2024-12-27T10:00:00");
+        
+        Mockito.when(card1.getEndDate()).thenReturn(endDate1);
+        Mockito.when(card2.getEndDate()).thenReturn(endDate2);
+
+        // Create the comparator
+        CardHistoryComparable comparator = new CardHistoryComparable();
+
+        // Compare the two cards
+        int result = comparator.compare(card1, card2);
+
+        // Assert that the comparison is correct (card1 has a start date, card2 does not)
+        assertTrue(result < 0);
+    }
+
+    @Test
+    void testCompare_WithException() throws Exception {
+        // Create mock objects
+        CardNumHistoryType card1 = Mockito.mock(CardNumHistoryType.class);
+        CardNumHistoryType card2 = Mockito.mock(CardNumHistoryType.class);
+
+        // Simulate an exception by setting up invalid data
+        Mockito.when(card1.getStartDate()).thenThrow(new RuntimeException("Simulated exception"));
+
+        // Create the comparator
+        CardHistoryComparable comparator = new CardHistoryComparable();
+
+        // Compare the two cards and assert that an exception is thrown
+        assertThrows(RuntimeException.class, () -> comparator.compare(card1, card2));
+    }
+}

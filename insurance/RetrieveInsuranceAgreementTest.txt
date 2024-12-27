@@ -1,0 +1,88 @@
+package com.td.api.mbcca.response.insurance;
+
+import com.td.api.mbcca.shared.Status;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RetrieveInsuranceAgreementTest {
+
+    private RetrieveInsuranceAgreement retrieveInsuranceAgreement;
+
+    @BeforeEach
+    void setUp() {
+        retrieveInsuranceAgreement = new RetrieveInsuranceAgreement();
+    }
+
+    @Test
+    void testSetAndGetStatus() {
+        Status status = new Status();
+        retrieveInsuranceAgreement.setStatus(status);
+        assertEquals(status, retrieveInsuranceAgreement.getStatus());
+    }
+
+    @Test
+    void testSetAndGetInsuranceAgreement() {
+        InsuranceAgreement insuranceAgreement = new InsuranceAgreement();
+        retrieveInsuranceAgreement.setInsuranceAgreement(insuranceAgreement);
+        assertEquals(insuranceAgreement, retrieveInsuranceAgreement.getInsuranceAgreement());
+    }
+
+    @Test
+    void testToString() {
+        Status status = new Status();
+        InsuranceAgreement insuranceAgreement = new InsuranceAgreement();
+
+        retrieveInsuranceAgreement.setStatus(status);
+        retrieveInsuranceAgreement.setInsuranceAgreement(insuranceAgreement);
+
+        String expectedToString = "com.td.api.mbcca.response.insurance.RetrieveInsuranceAgreement@" + Integer.toHexString(retrieveInsuranceAgreement.hashCode()) + "[status=" + status + ",insuranceAgreement=" + insuranceAgreement + "]";
+        assertEquals(expectedToString, retrieveInsuranceAgreement.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        RetrieveInsuranceAgreement agreement1 = new RetrieveInsuranceAgreement();
+        RetrieveInsuranceAgreement agreement2 = new RetrieveInsuranceAgreement();
+
+        assertEquals(agreement1.hashCode(), agreement2.hashCode());
+
+        Status status = new Status();
+        agreement1.setStatus(status);
+        agreement2.setStatus(status);
+
+        assertEquals(agreement1.hashCode(), agreement2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        RetrieveInsuranceAgreement agreement1 = new RetrieveInsuranceAgreement();
+        RetrieveInsuranceAgreement agreement2 = new RetrieveInsuranceAgreement();
+        assertTrue(agreement1.equals(agreement2));
+
+        Status status = new Status();
+        InsuranceAgreement insuranceAgreement = new InsuranceAgreement();
+        agreement1.setStatus(status);
+        agreement1.setInsuranceAgreement(insuranceAgreement);
+        agreement2.setStatus(status);
+        agreement2.setInsuranceAgreement(insuranceAgreement);
+        assertTrue(agreement1.equals(agreement2));
+
+        agreement2.setInsuranceAgreement(new InsuranceAgreement());
+        assertFalse(agreement1.equals(agreement2));
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        RetrieveInsuranceAgreement agreement = new RetrieveInsuranceAgreement();
+        assertFalse(agreement.equals(null));
+    }
+
+    @Test
+    void testEqualsWithDifferentClass() {
+        RetrieveInsuranceAgreement agreement = new RetrieveInsuranceAgreement();
+        String str = "DifferentClass";
+        assertFalse(agreement.equals(str));
+    }
+}

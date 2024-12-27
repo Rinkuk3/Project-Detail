@@ -1,0 +1,82 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestSourceCreditCardAgreementTest {
+
+    private RequestSourceCreditCardAgreement requestSourceCreditCardAgreement;
+
+    @BeforeEach
+    void setUp() {
+        requestSourceCreditCardAgreement = new RequestSourceCreditCardAgreement();
+    }
+
+    @Test
+    void testGetAndSetCardNum() {
+        String cardNum = "1234567890123456";
+        requestSourceCreditCardAgreement.setCardNum(cardNum);
+        assertEquals(cardNum, requestSourceCreditCardAgreement.getCardNum());
+    }
+
+    @Test
+    void testGetAndSetAgreementId() {
+        String agreementId = "agreement123";
+        requestSourceCreditCardAgreement.setAgreementId(agreementId);
+        assertEquals(agreementId, requestSourceCreditCardAgreement.getAgreementId());
+    }
+
+    @Test
+    void testToString() {
+        requestSourceCreditCardAgreement.setCardNum("1234567890123456");
+        requestSourceCreditCardAgreement.setAgreementId("agreement123");
+
+        String expected = "com.td.api.mbofp.request.balancetransfer.RequestSourceCreditCardAgreement@"
+            + Integer.toHexString(requestSourceCreditCardAgreement.hashCode()) + "[cardNum=1234567890123456,agreementId=agreement123]";
+
+        assertEquals(expected, requestSourceCreditCardAgreement.toString());
+    }
+
+    @Test
+    void testHashCodeAndEquals() {
+        RequestSourceCreditCardAgreement agreement1 = new RequestSourceCreditCardAgreement();
+        agreement1.setCardNum("1234567890123456");
+        agreement1.setAgreementId("agreement123");
+
+        RequestSourceCreditCardAgreement agreement2 = new RequestSourceCreditCardAgreement();
+        agreement2.setCardNum("1234567890123456");
+        agreement2.setAgreementId("agreement123");
+
+        assertTrue(agreement1.equals(agreement2));
+        assertEquals(agreement1.hashCode(), agreement2.hashCode());
+    }
+
+    @Test
+    void testHashCodeAndEqualsNotEqual() {
+        RequestSourceCreditCardAgreement agreement1 = new RequestSourceCreditCardAgreement();
+        agreement1.setCardNum("1234567890123456");
+        agreement1.setAgreementId("agreement123");
+
+        RequestSourceCreditCardAgreement agreement2 = new RequestSourceCreditCardAgreement();
+        agreement2.setCardNum("6543210987654321");
+        agreement2.setAgreementId("agreement456");
+
+        assertFalse(agreement1.equals(agreement2));
+        assertNotEquals(agreement1.hashCode(), agreement2.hashCode());
+    }
+
+    @Test
+    void testEqualsDifferentClass() {
+        assertFalse(requestSourceCreditCardAgreement.equals(new Object()));
+    }
+
+    @Test
+    void testNullEquals() {
+        assertFalse(requestSourceCreditCardAgreement.equals(null));
+    }
+
+    @Test
+    void testSameObjectEquals() {
+        assertTrue(requestSourceCreditCardAgreement.equals(requestSourceCreditCardAgreement));
+    }
+}

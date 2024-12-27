@@ -1,0 +1,58 @@
+package com.td.api.mbnaap.common;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class GenericAccountAltkeyTest {
+
+    @Test
+    void testGettersAndSetters() {
+        GenericAccountAltkey genericAccountAltkey = new GenericAccountAltkey();
+        
+        // Set test values
+        genericAccountAltkey.setBankNum("123456");
+        genericAccountAltkey.setBranchNum("654321");
+        genericAccountAltkey.setAccountNum("9876543210");
+        genericAccountAltkey.setAccountKey("key123");
+        
+        // Assertions to check getter values
+        assertEquals("123456", genericAccountAltkey.getBankNum());
+        assertEquals("654321", genericAccountAltkey.getBranchNum());
+        assertEquals("9876543210", genericAccountAltkey.getAccountNum());
+        assertEquals("key123", genericAccountAltkey.getAccountKey());
+    }
+
+    @Test
+    void testToString() {
+        GenericAccountAltkey genericAccountAltkey = new GenericAccountAltkey();
+        genericAccountAltkey.setBankNum("123456");
+        genericAccountAltkey.setBranchNum("654321");
+        genericAccountAltkey.setAccountNum("9876543210");
+        genericAccountAltkey.setAccountKey("key123");
+        
+        String expected = "GenericAccountAltkey(bankNum=123456, branchNum=654321, accountNum=9876543210, accountKey=key123)";
+        assertEquals(expected, genericAccountAltkey.toString());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        GenericAccountAltkey genericAccountAltkey1 = new GenericAccountAltkey();
+        genericAccountAltkey1.setBankNum("123456");
+        genericAccountAltkey1.setBranchNum("654321");
+        genericAccountAltkey1.setAccountNum("9876543210");
+        genericAccountAltkey1.setAccountKey("key123");
+
+        GenericAccountAltkey genericAccountAltkey2 = new GenericAccountAltkey();
+        genericAccountAltkey2.setBankNum("123456");
+        genericAccountAltkey2.setBranchNum("654321");
+        genericAccountAltkey2.setAccountNum("9876543210");
+        genericAccountAltkey2.setAccountKey("key123");
+
+        assertTrue(genericAccountAltkey1.equals(genericAccountAltkey2));
+        assertEquals(genericAccountAltkey1.hashCode(), genericAccountAltkey2.hashCode());
+
+        genericAccountAltkey2.setAccountKey("key124");
+        assertFalse(genericAccountAltkey1.equals(genericAccountAltkey2));
+    }
+}

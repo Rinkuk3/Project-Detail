@@ -1,0 +1,100 @@
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import java.util.Date;
+
+class OriginalAuthorizationEvent__1Test {
+
+    @Test
+    void testGetAndSetEventId() {
+        OriginalAuthorizationEvent__1 event = new OriginalAuthorizationEvent__1();
+        event.setEventId("event123");
+        assertEquals("event123", event.getEventId());
+    }
+
+    @Test
+    void testGetAndSetEventDttm() {
+        OriginalAuthorizationEvent__1 event = new OriginalAuthorizationEvent__1();
+        Date eventDate = new Date();
+        event.setEventDttm(eventDate);
+        assertEquals(eventDate, event.getEventDttm());
+    }
+
+    @Test
+    void testGetAndSetTransactionCccyamt() {
+        OriginalAuthorizationEvent__1 event = new OriginalAuthorizationEvent__1();
+        Cccyamt cccyamt = new Cccyamt();
+        event.setTransactionCccyamt(cccyamt);
+        assertEquals(cccyamt, event.getTransactionCccyamt());
+    }
+
+    @Test
+    void testGetAndSetTerminalChannelTypeCd() {
+        OriginalAuthorizationEvent__1 event = new OriginalAuthorizationEvent__1();
+        event.setTerminalChannelTypeCd("channel1");
+        assertEquals("channel1", event.getTerminalChannelTypeCd());
+    }
+
+    @Test
+    void testToString() {
+        OriginalAuthorizationEvent__1 event = new OriginalAuthorizationEvent__1();
+        event.setEventId("event123");
+        event.setEventDttm(new Date());
+        event.setTransactionCccyamt(new Cccyamt());
+        event.setTerminalChannelTypeCd("channel1");
+
+        String result = event.toString();
+        assertTrue(result.contains("eventId=event123"));
+        assertTrue(result.contains("eventDttm"));
+        assertTrue(result.contains("transactionCccyamt"));
+        assertTrue(result.contains("terminalChannelTypeCd=channel1"));
+    }
+
+    @Test
+    void testHashCode() {
+        OriginalAuthorizationEvent__1 event1 = new OriginalAuthorizationEvent__1();
+        event1.setEventId("event123");
+        event1.setEventDttm(new Date());
+        event1.setTransactionCccyamt(new Cccyamt());
+        event1.setTerminalChannelTypeCd("channel1");
+
+        OriginalAuthorizationEvent__1 event2 = new OriginalAuthorizationEvent__1();
+        event2.setEventId("event123");
+        event2.setEventDttm(new Date());
+        event2.setTransactionCccyamt(new Cccyamt());
+        event2.setTerminalChannelTypeCd("channel1");
+
+        assertEquals(event1.hashCode(), event2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        OriginalAuthorizationEvent__1 event1 = new OriginalAuthorizationEvent__1();
+        event1.setEventId("event123");
+        event1.setEventDttm(new Date());
+        event1.setTransactionCccyamt(new Cccyamt());
+        event1.setTerminalChannelTypeCd("channel1");
+
+        OriginalAuthorizationEvent__1 event2 = new OriginalAuthorizationEvent__1();
+        event2.setEventId("event123");
+        event2.setEventDttm(new Date());
+        event2.setTransactionCccyamt(new Cccyamt());
+        event2.setTerminalChannelTypeCd("channel1");
+
+        assertTrue(event1.equals(event2));
+
+        event2.setEventId("event124");
+        assertFalse(event1.equals(event2));
+
+        event2.setEventId("event123");
+        event2.setTerminalChannelTypeCd("channel2");
+        assertFalse(event1.equals(event2));
+
+        event2.setTerminalChannelTypeCd("channel1");
+        event2.setEventDttm(new Date(0));  // Changing date to ensure inequality
+        assertFalse(event1.equals(event2));
+
+        event2.setEventDttm(event1.getEventDttm());
+        event2.setTransactionCccyamt(new Cccyamt());  // Changing Cccyamt
+        assertFalse(event1.equals(event2));
+    }
+}

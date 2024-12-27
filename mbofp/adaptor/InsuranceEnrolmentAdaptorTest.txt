@@ -1,0 +1,70 @@
+package com.td.mbna.msec.midtier.mbofp.adaptor;
+
+import com.td.api.mbofp.request.insuranceenrolment.InsuranceEnrolmentRequest;
+import com.td.api.mbofp.request.insuranceenrolment.InsuranceEnrolmentEvent;
+import com.td.api.mbofp.request.insuranceenrolment.Individual;
+import com.td.api.mbofp.shared.AgreementAltkey;
+import com.td.api.mbofp.response.insuranceenrolment.InsuranceEnrolmentResponse;
+import com.td.mbna.msec.midtier.offers.payload.requestinsurance.RequestInsuranceResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class InsuranceEnrolmentAdaptorTest {
+
+    private InsuranceEnrolmentAdaptor insuranceEnrolmentAdaptor;
+
+    @BeforeEach
+    public void setUp() {
+        insuranceEnrolmentAdaptor = new InsuranceEnrolmentAdaptor();
+    }
+
+    @Test
+    public void testGetRequest() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("PARAM_CARD_NO", "123456789");
+        params.put("PARAM_CUSTOMER_ID", "cust123");
+        params.put("PARAM_SUBPRODUCT_ID", "subprod123");
+
+        InsuranceEnrolmentRequest request = insuranceEnrolmentAdaptor.getRequest(params);
+
+        assertNotNull(request);
+        assertNotNull(request.getInsuranceEnrolmentEvent());
+        assertNotNull(request.getInsuranceEnrolmentEvent().getAgreementAltkey());
+        assertNotNull(request.getInsuranceEnrolmentEvent().getIndividual());
+
+        assertEquals("123456789", request.getInsuranceEnrolmentEvent().getAgreementAltkey().getCardNum());
+        assertEquals("cust123", request.getInsuranceEnrolmentEvent().getIndividual().getPartyId());
+        assertEquals("subprod123", request.getInsuranceEnrolmentEvent().getProductId());
+        assertEquals("INTERNET_SECURE", request.getInsuranceEnrolmentEvent().getSolicitationChannelTypeCd());
+        assertEquals("ONLINE_SECURE_SITE", request.getInsuranceEnrolmentEvent().getAccessChannelTypeCd());
+    }
+
+    @Test
+    public void testGetResponse_withEventId() {
+        InsuranceEnrolmentResponse ier = new InsuranceEnrolmentResponse();
+        ier.setEventId("event123");
+
+        RequestInsuranceResponse response = insuranceEnrolmentAdaptor.getResponse(ier);
+
+        assertNotNull(response);
+        assertNotNull(response.getResponsePayload());
+        assertTrue(response.getResponsePayload().getStatus());
+    }
+
+    @Test
+    public void testGetResponse_withoutEventId() {
+        InsuranceEnrolmentResponse ier = new InsuranceEnrolmentResponse();
+        ier.setEventId(null);
+
+        RequestInsuranceResponse response = insuranceEnrolmentAdaptor.getResponse(ier);
+
+        assertNotNull(response);
+        assertNotNull(response.getResponsePayload());
+        assertFalse(response.getResponsePayload().getStatus());
+    }
+}

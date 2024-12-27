@@ -1,0 +1,119 @@
+package com.td.api.mbcca.response.account.electronicbilling;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ElectronicBillingServiceTest {
+
+    private ElectronicBillingService service;
+
+    @BeforeEach
+    void setUp() {
+        service = new ElectronicBillingService();
+    }
+
+    @Test
+    void testGetSetEnrolledDt() {
+        String enrolledDt = "2023-12-01";
+        service.setEnrolledDt(enrolledDt);
+        assertEquals(enrolledDt, service.getEnrolledDt());
+    }
+
+    @Test
+    void testGetSetLastMaintenanceDt() {
+        String lastMaintenanceDt = "2023-12-15";
+        service.setLastMaintenanceDt(lastMaintenanceDt);
+        assertEquals(lastMaintenanceDt, service.getLastMaintenanceDt());
+    }
+
+    @Test
+    void testGetSetEnrolmentStatusCd() {
+        String enrolmentStatusCd = "ENROLLED";
+        service.setEnrolmentStatusCd(enrolmentStatusCd);
+        assertEquals(enrolmentStatusCd, service.getEnrolmentStatusCd());
+    }
+
+    @Test
+    void testGetSetStatementCycleCnt() {
+        Integer statementCycleCnt = 12;
+        service.setStatementCycleCnt(statementCycleCnt);
+        assertEquals(statementCycleCnt, service.getStatementCycleCnt());
+    }
+
+    @Test
+    void testGetSetStatementFormatVal() {
+        String statementFormatVal = "PDF";
+        service.setStatementFormatVal(statementFormatVal);
+        assertEquals(statementFormatVal, service.getStatementFormatVal());
+    }
+
+    @Test
+    void testToString() {
+        String enrolledDt = "2023-12-01";
+        String lastMaintenanceDt = "2023-12-15";
+        String enrolmentStatusCd = "ENROLLED";
+        Integer statementCycleCnt = 12;
+        String statementFormatVal = "PDF";
+
+        service.setEnrolledDt(enrolledDt);
+        service.setLastMaintenanceDt(lastMaintenanceDt);
+        service.setEnrolmentStatusCd(enrolmentStatusCd);
+        service.setStatementCycleCnt(statementCycleCnt);
+        service.setStatementFormatVal(statementFormatVal);
+
+        String expected = "com.td.api.mbcca.response.account.electronicbilling.ElectronicBillingService@" +
+                Integer.toHexString(System.identityHashCode(service)) +
+                "[enrolledDt=2023-12-01,lastMaintenanceDt=2023-12-15,enrolmentStatusCd=ENROLLED," +
+                "statementCycleCnt=12,statementFormatVal=PDF,]";
+        assertEquals(expected, service.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        ElectronicBillingService service1 = new ElectronicBillingService();
+        service1.setEnrolledDt("2023-12-01");
+        service1.setLastMaintenanceDt("2023-12-15");
+        service1.setEnrolmentStatusCd("ENROLLED");
+        service1.setStatementCycleCnt(12);
+        service1.setStatementFormatVal("PDF");
+
+        ElectronicBillingService service2 = new ElectronicBillingService();
+        service2.setEnrolledDt("2023-12-01");
+        service2.setLastMaintenanceDt("2023-12-15");
+        service2.setEnrolmentStatusCd("ENROLLED");
+        service2.setStatementCycleCnt(12);
+        service2.setStatementFormatVal("PDF");
+
+        assertEquals(service1.hashCode(), service2.hashCode());
+
+        service2.setStatementCycleCnt(15);
+        assertNotEquals(service1.hashCode(), service2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        ElectronicBillingService service1 = new ElectronicBillingService();
+        service1.setEnrolledDt("2023-12-01");
+        service1.setLastMaintenanceDt("2023-12-15");
+        service1.setEnrolmentStatusCd("ENROLLED");
+        service1.setStatementCycleCnt(12);
+        service1.setStatementFormatVal("PDF");
+
+        ElectronicBillingService service2 = new ElectronicBillingService();
+        service2.setEnrolledDt("2023-12-01");
+        service2.setLastMaintenanceDt("2023-12-15");
+        service2.setEnrolmentStatusCd("ENROLLED");
+        service2.setStatementCycleCnt(12);
+        service2.setStatementFormatVal("PDF");
+
+        assertTrue(service1.equals(service2));
+
+        service2.setStatementCycleCnt(15);
+        assertFalse(service1.equals(service2));
+
+        assertFalse(service1.equals(null));
+        assertFalse(service1.equals(new Object()));
+    }
+}

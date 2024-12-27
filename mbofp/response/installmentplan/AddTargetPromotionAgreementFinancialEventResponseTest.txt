@@ -1,0 +1,82 @@
+import com.td.api.mbofp.shared.Status;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class AddTargetPromotionAgreementFinancialEventResponseTest {
+
+    private AddTargetPromotionAgreementFinancialEventResponse response;
+
+    @BeforeEach
+    void setUp() {
+        response = new AddTargetPromotionAgreementFinancialEventResponse();
+    }
+
+    @Test
+    void testGetAndSetStatus() {
+        Status status = new Status(); // Assuming Status is a class that has its own tests.
+        response.setStatus(status);
+        assertEquals(status, response.getStatus());
+    }
+
+    @Test
+    void testGetAndSetPromotionAgreementFinancialEventId() {
+        String eventId = "12345";
+        response.setPromotionAgreementFinancialEventId(eventId);
+        assertEquals(eventId, response.getPromotionAgreementFinancialEventId());
+    }
+
+    @Test
+    void testToString() {
+        Status status = new Status(); // Assuming Status is properly initialized elsewhere
+        response.setStatus(status);
+        response.setPromotionAgreementFinancialEventId("12345");
+
+        String expected = "com.td.api.mbofp.response.installmentplan.AddTargetPromotionAgreementFinancialEventResponse@" +
+                          Integer.toHexString(response.hashCode()) +
+                          "[status=" + status + "," +
+                          "promotionAgreementFinancialEventId=12345]";
+        assertEquals(expected, response.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        Status status = new Status(); // Assuming Status is properly initialized
+        response.setStatus(status);
+        response.setPromotionAgreementFinancialEventId("12345");
+
+        int expectedHashCode = 1;
+        expectedHashCode = 31 * expectedHashCode + (response.getPromotionAgreementFinancialEventId() == null ? 0 : response.getPromotionAgreementFinancialEventId().hashCode());
+        expectedHashCode = 31 * expectedHashCode + (response.getStatus() == null ? 0 : response.getStatus().hashCode());
+
+        assertEquals(expectedHashCode, response.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        Status status = new Status(); // Assuming Status is properly initialized
+        response.setStatus(status);
+        response.setPromotionAgreementFinancialEventId("12345");
+
+        // Test equality with same object
+        assertTrue(response.equals(response));
+
+        // Test equality with another object having the same fields
+        AddTargetPromotionAgreementFinancialEventResponse anotherResponse = new AddTargetPromotionAgreementFinancialEventResponse();
+        anotherResponse.setStatus(status);
+        anotherResponse.setPromotionAgreementFinancialEventId("12345");
+        assertTrue(response.equals(anotherResponse));
+
+        // Test inequality with different promotionAgreementFinancialEventId
+        AddTargetPromotionAgreementFinancialEventResponse differentResponse = new AddTargetPromotionAgreementFinancialEventResponse();
+        differentResponse.setStatus(status);
+        differentResponse.setPromotionAgreementFinancialEventId("67890");
+        assertFalse(response.equals(differentResponse));
+
+        // Test inequality with null
+        assertFalse(response.equals(null));
+
+        // Test inequality with an object of a different class
+        assertFalse(response.equals(new Object()));
+    }
+}

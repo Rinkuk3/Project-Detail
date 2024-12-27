@@ -1,0 +1,162 @@
+package com.td.api.kms.request;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class EncryptionEventTest {
+
+    private EncryptionEvent encryptionEvent;
+
+    @BeforeEach
+    void setUp() {
+        encryptionEvent = new EncryptionEvent();
+    }
+
+    @Test
+    void testSetAndGetParty() {
+        Party party = new Party();
+        encryptionEvent.setParty(party);
+        assertEquals(party, encryptionEvent.getParty());
+    }
+
+    @Test
+    void testSetAndGetEncryptionMethodCd() {
+        String encryptionMethodCd = "AES";
+        encryptionEvent.setEncryptionMethodCd(encryptionMethodCd);
+        assertEquals(encryptionMethodCd, encryptionEvent.getEncryptionMethodCd());
+    }
+
+    @Test
+    void testSetAndGetCryptographyKey() {
+        CryptographyKey cryptographyKey = new CryptographyKey();
+        encryptionEvent.setCryptographyKey(List.of(cryptographyKey));
+        assertEquals(List.of(cryptographyKey), encryptionEvent.getCryptographyKey());
+    }
+
+    @Test
+    void testSetAndGetData() {
+        Data data = new Data();
+        encryptionEvent.setData(data);
+        assertEquals(data, encryptionEvent.getData());
+    }
+
+    @Test
+    void testSetAndGetAdditionalAuthenticationData() {
+        AdditionalAuthenticationData additionalAuthenticationData = new AdditionalAuthenticationData();
+        encryptionEvent.setAdditionalAuthenticationData(additionalAuthenticationData);
+        assertEquals(additionalAuthenticationData, encryptionEvent.getAdditionalAuthenticationData());
+    }
+
+    @Test
+    void testSetAndGetKmsExtension() {
+        KmsExtension kmsExtension = new KmsExtension();
+        encryptionEvent.setKmsExtension(kmsExtension);
+        assertEquals(kmsExtension, encryptionEvent.getKmsExtension());
+    }
+
+    @Test
+    void testToString() {
+        Party party = new Party();
+        String encryptionMethodCd = "AES";
+        CryptographyKey cryptographyKey = new CryptographyKey();
+        Data data = new Data();
+        AdditionalAuthenticationData additionalAuthenticationData = new AdditionalAuthenticationData();
+        KmsExtension kmsExtension = new KmsExtension();
+
+        encryptionEvent.setParty(party);
+        encryptionEvent.setEncryptionMethodCd(encryptionMethodCd);
+        encryptionEvent.setCryptographyKey(List.of(cryptographyKey));
+        encryptionEvent.setData(data);
+        encryptionEvent.setAdditionalAuthenticationData(additionalAuthenticationData);
+        encryptionEvent.setKmsExtension(kmsExtension);
+
+        String expectedToString = "com.td.api.kms.request.EncryptionEvent@" + Integer.toHexString(encryptionEvent.hashCode()) +
+                "[party=" + party + ",encryptionMethodCd=" + encryptionMethodCd + 
+                ",cryptographyKey=" + List.of(cryptographyKey) + ",data=" + data + 
+                ",additionalAuthenticationData=" + additionalAuthenticationData + 
+                ",kmsExtension=" + kmsExtension + "]";
+        assertEquals(expectedToString, encryptionEvent.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        EncryptionEvent encryptionEvent1 = new EncryptionEvent();
+        EncryptionEvent encryptionEvent2 = new EncryptionEvent();
+        assertEquals(encryptionEvent1.hashCode(), encryptionEvent2.hashCode());
+
+        Party party = new Party();
+        String encryptionMethodCd = "AES";
+        CryptographyKey cryptographyKey = new CryptographyKey();
+        Data data = new Data();
+        AdditionalAuthenticationData additionalAuthenticationData = new AdditionalAuthenticationData();
+        KmsExtension kmsExtension = new KmsExtension();
+
+        encryptionEvent1.setParty(party);
+        encryptionEvent1.setEncryptionMethodCd(encryptionMethodCd);
+        encryptionEvent1.setCryptographyKey(List.of(cryptographyKey));
+        encryptionEvent1.setData(data);
+        encryptionEvent1.setAdditionalAuthenticationData(additionalAuthenticationData);
+        encryptionEvent1.setKmsExtension(kmsExtension);
+
+        encryptionEvent2.setParty(party);
+        encryptionEvent2.setEncryptionMethodCd(encryptionMethodCd);
+        encryptionEvent2.setCryptographyKey(List.of(cryptographyKey));
+        encryptionEvent2.setData(data);
+        encryptionEvent2.setAdditionalAuthenticationData(additionalAuthenticationData);
+        encryptionEvent2.setKmsExtension(kmsExtension);
+
+        assertEquals(encryptionEvent1.hashCode(), encryptionEvent2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        EncryptionEvent encryptionEvent1 = new EncryptionEvent();
+        EncryptionEvent encryptionEvent2 = new EncryptionEvent();
+        assertTrue(encryptionEvent1.equals(encryptionEvent2));
+
+        Party party = new Party();
+        String encryptionMethodCd = "AES";
+        CryptographyKey cryptographyKey = new CryptographyKey();
+        Data data = new Data();
+        AdditionalAuthenticationData additionalAuthenticationData = new AdditionalAuthenticationData();
+        KmsExtension kmsExtension = new KmsExtension();
+
+        encryptionEvent1.setParty(party);
+        encryptionEvent1.setEncryptionMethodCd(encryptionMethodCd);
+        encryptionEvent1.setCryptographyKey(List.of(cryptographyKey));
+        encryptionEvent1.setData(data);
+        encryptionEvent1.setAdditionalAuthenticationData(additionalAuthenticationData);
+        encryptionEvent1.setKmsExtension(kmsExtension);
+
+        encryptionEvent2.setParty(party);
+        encryptionEvent2.setEncryptionMethodCd(encryptionMethodCd);
+        encryptionEvent2.setCryptographyKey(List.of(cryptographyKey));
+        encryptionEvent2.setData(data);
+        encryptionEvent2.setAdditionalAuthenticationData(additionalAuthenticationData);
+        encryptionEvent2.setKmsExtension(kmsExtension);
+
+        assertTrue(encryptionEvent1.equals(encryptionEvent2));
+
+        encryptionEvent2.setEncryptionMethodCd("RSA");
+        assertFalse(encryptionEvent1.equals(encryptionEvent2));
+
+        encryptionEvent2.setEncryptionMethodCd(encryptionMethodCd);
+        encryptionEvent2.setParty(new Party());
+        assertFalse(encryptionEvent1.equals(encryptionEvent2));
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        EncryptionEvent encryptionEvent1 = new EncryptionEvent();
+        assertFalse(encryptionEvent1.equals(null));
+    }
+
+    @Test
+    void testEqualsWithDifferentClass() {
+        EncryptionEvent encryptionEvent1 = new EncryptionEvent();
+        String str = "DifferentClass";
+        assertFalse(encryptionEvent1.equals(str));
+    }
+}

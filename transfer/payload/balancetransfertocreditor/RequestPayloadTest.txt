@@ -1,0 +1,144 @@
+package com.td.mbna.msec.midtier.transfer.payload.balancetransfertocreditor;
+
+import com.td.mbna.msec.midtier.types.common.AcctContactInfoType;
+import com.td.mbna.msec.midtier.types.common.DisclosureInfoType;
+import com.td.mbna.msec.midtier.types.common.EmailNotificationInfoType;
+import com.td.mbna.msec.midtier.types.common.PromotionOfferType;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.*;
+
+public class RequestPayloadTest {
+
+    private RequestPayload requestPayload;
+
+    @Before
+    public void setUp() {
+        requestPayload = new RequestPayload();
+    }
+
+    @Test
+    public void testGetAndSetPaymentInfo() {
+        List<BalanceTransferToCreditorPaymentInfoType> paymentInfo = new ArrayList<>();
+        BalanceTransferToCreditorPaymentInfoType payment = new BalanceTransferToCreditorPaymentInfoType();
+        paymentInfo.add(payment);
+
+        requestPayload.setPaymentInfo(paymentInfo);
+        assertEquals(paymentInfo, requestPayload.getPaymentInfo());
+
+        requestPayload.setPaymentInfo(new ArrayList<>());
+        assertNotNull(requestPayload.getPaymentInfo());
+        assertTrue(requestPayload.getPaymentInfo().isEmpty());
+    }
+
+    @Test
+    public void testGetAndSetContactInfo() {
+        AcctContactInfoType contactInfo = new AcctContactInfoType();
+        requestPayload.setContactInfo(contactInfo);
+        assertEquals(contactInfo, requestPayload.getContactInfo());
+    }
+
+    @Test
+    public void testGetAndSetCreditAvail() {
+        BigDecimal creditAvail = new BigDecimal("1000.50");
+        requestPayload.setCreditAvail(creditAvail);
+        assertEquals(creditAvail, requestPayload.getCreditAvail());
+    }
+
+    @Test
+    public void testGetAndSetSelectedOffer() {
+        PromotionOfferType selectedOffer = new PromotionOfferType();
+        requestPayload.setSelectedOffer(selectedOffer);
+        assertEquals(selectedOffer, requestPayload.getSelectedOffer());
+    }
+
+    @Test
+    public void testGetAndSetRoleCD() {
+        String roleCD = "role1";
+        requestPayload.setRoleCD(roleCD);
+        assertEquals(roleCD, requestPayload.getRoleCD());
+    }
+
+    @Test
+    public void testGetAndSetDisclosureInfo() {
+        DisclosureInfoType disclosureInfo = new DisclosureInfoType();
+        requestPayload.setDisclosureInfo(disclosureInfo);
+        assertEquals(disclosureInfo, requestPayload.getDisclosureInfo());
+    }
+
+    @Test
+    public void testGetAndSetEmailNotificationInfo() {
+        EmailNotificationInfoType emailNotificationInfo = new EmailNotificationInfoType();
+        requestPayload.setEmailNotificationInfo(emailNotificationInfo);
+        assertEquals(emailNotificationInfo, requestPayload.getEmailNotificationInfo());
+    }
+
+    @Test
+    public void testGetAndSetConfirmed() {
+        requestPayload.setConfirmed(true);
+        assertTrue(requestPayload.getConfirmed());
+        requestPayload.setConfirmed(false);
+        assertFalse(requestPayload.getConfirmed());
+    }
+
+    @Test
+    public void testToString() {
+        List<BalanceTransferToCreditorPaymentInfoType> paymentInfo = new ArrayList<>();
+        BalanceTransferToCreditorPaymentInfoType payment = new BalanceTransferToCreditorPaymentInfoType();
+        paymentInfo.add(payment);
+        
+        requestPayload.setPaymentInfo(paymentInfo);
+        requestPayload.setRoleCD("role1");
+        requestPayload.setCreditAvail(new BigDecimal("1000.50"));
+        
+        String expectedString = "com.td.mbna.msec.midtier.transfer.payload.balancetransfertocreditor.RequestPayload@"
+                + Integer.toHexString(System.identityHashCode(requestPayload))
+                + "[paymentInfo=" + paymentInfo + ",contactInfo=null,creditAvail=1000.50,selectedOffer=null,roleCD=role1,disclosureInfo=null,emailNotificationInfo=null,confirmed=false]";
+        
+        assertEquals(expectedString, requestPayload.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        RequestPayload payload1 = new RequestPayload();
+        payload1.setRoleCD("role1");
+        payload1.setCreditAvail(new BigDecimal("1000.50"));
+        
+        RequestPayload payload2 = new RequestPayload();
+        payload2.setRoleCD("role1");
+        payload2.setCreditAvail(new BigDecimal("1000.50"));
+
+        assertEquals(payload1.hashCode(), payload2.hashCode());
+
+        RequestPayload payload3 = new RequestPayload();
+        payload3.setRoleCD("role2");
+        payload3.setCreditAvail(new BigDecimal("2000.50"));
+
+        assertNotEquals(payload1.hashCode(), payload3.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        RequestPayload payload1 = new RequestPayload();
+        payload1.setRoleCD("role1");
+        payload1.setCreditAvail(new BigDecimal("1000.50"));
+        
+        RequestPayload payload2 = new RequestPayload();
+        payload2.setRoleCD("role1");
+        payload2.setCreditAvail(new BigDecimal("1000.50"));
+
+        RequestPayload payload3 = new RequestPayload();
+        payload3.setRoleCD("role2");
+        payload3.setCreditAvail(new BigDecimal("2000.50"));
+
+        assertTrue(payload1.equals(payload2));
+        assertFalse(payload1.equals(payload3));
+        assertFalse(payload1.equals(null));
+        assertFalse(payload1.equals("String"));
+    }
+}

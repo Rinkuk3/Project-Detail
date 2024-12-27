@@ -1,0 +1,65 @@
+import com.td.mbna.msec.midtier.account.payload.getrewardsbalances.GetRewardsBalancesRequest;
+import com.td.mbna.msec.midtier.account.payload.getrewardsbalances.GetRewardsBalancesResponse;
+import com.td.mbna.msec.midtier.account.payload.getrewardssaml.GetRewardsSamlRequest;
+import com.td.mbna.msec.midtier.account.payload.getrewardssaml.GetRewardsSamlResponse;
+import com.td.mbna.msec.midtier.rewards.facade.MbnaRewardsFacade;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class MbnaRewardsTest {
+
+    @InjectMocks
+    private MbnaRewardsImpl mbnaRewardsImpl;
+
+    @Mock
+    private MbnaRewardsFacade mbnaRewardsFacade;
+
+    @Mock
+    private GetRewardsBalancesRequest getRewardsBalancesRequest;
+
+    @Mock
+    private GetRewardsBalancesResponse getRewardsBalancesResponse;
+
+    @Mock
+    private GetRewardsSamlRequest getRewardsSamlRequest;
+
+    @Mock
+    private GetRewardsSamlResponse getRewardsSamlResponse;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testGetRewardsBalances() {
+        String token = "validToken";
+
+        when(mbnaRewardsFacade.getRewardsBalanceInfo(getRewardsBalancesRequest, token))
+                .thenReturn(getRewardsBalancesResponse);
+
+        GetRewardsBalancesResponse response = mbnaRewardsImpl.getRewardsBalances(getRewardsBalancesRequest, token);
+
+        assertNotNull(response);
+        verify(mbnaRewardsFacade, times(1)).getRewardsBalanceInfo(getRewardsBalancesRequest, token);
+    }
+
+    @Test
+    public void testGetRewardsSaml() {
+        String token = "validToken";
+
+        when(mbnaRewardsFacade.getRewardsSaml(getRewardsSamlRequest, token))
+                .thenReturn(getRewardsSamlResponse);
+
+        GetRewardsSamlResponse response = mbnaRewardsImpl.getRewardsSaml(getRewardsSamlRequest, token);
+
+        assertNotNull(response);
+        verify(mbnaRewardsFacade, times(1)).getRewardsSaml(getRewardsSamlRequest, token);
+    }
+}

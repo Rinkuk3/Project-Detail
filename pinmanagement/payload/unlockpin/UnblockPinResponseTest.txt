@@ -1,0 +1,105 @@
+package com.td.mbna.msec.midtier.pinmanagement.payload.unlockpin;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class UnblockPinResponseTest {
+
+    @Test
+    public void testSetAndGetResponsePayload() {
+        UnblockPinResponse unblockPinResponse = new UnblockPinResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        unblockPinResponse.setResponsePayload(responsePayload);
+
+        assertEquals(responsePayload, unblockPinResponse.getResponsePayload());
+    }
+
+    @Test
+    public void testGetResponsePayloadWhenNull() {
+        UnblockPinResponse unblockPinResponse = new UnblockPinResponse();
+        ResponsePayload responsePayload = unblockPinResponse.getResponsePayload();
+
+        assertNotNull(responsePayload); // The responsePayload should be initialized when accessed for the first time.
+    }
+
+    @Test
+    public void testToString() {
+        UnblockPinResponse unblockPinResponse = new UnblockPinResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        unblockPinResponse.setResponsePayload(responsePayload);
+        
+        String expectedString = "com.td.mbna.msec.midtier.pinmanagement.payload.unlockpin.UnblockPinResponse@" +
+                                Integer.toHexString(System.identityHashCode(unblockPinResponse)) + 
+                                "[status=<null>,errorMsgs=<null>,responsePayload=" + responsePayload + "]";
+        assertEquals(expectedString, unblockPinResponse.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        UnblockPinResponse unblockPinResponse1 = new UnblockPinResponse();
+        UnblockPinResponse unblockPinResponse2 = new UnblockPinResponse();
+        
+        ResponsePayload responsePayload1 = new ResponsePayload();
+        unblockPinResponse1.setResponsePayload(responsePayload1);
+        unblockPinResponse2.setResponsePayload(responsePayload1);
+
+        assertEquals(unblockPinResponse1.hashCode(), unblockPinResponse2.hashCode());
+
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        unblockPinResponse2.setResponsePayload(responsePayload2);
+
+        assertNotEquals(unblockPinResponse1.hashCode(), unblockPinResponse2.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        UnblockPinResponse unblockPinResponse1 = new UnblockPinResponse();
+        UnblockPinResponse unblockPinResponse2 = new UnblockPinResponse();
+
+        ResponsePayload responsePayload1 = new ResponsePayload();
+        unblockPinResponse1.setResponsePayload(responsePayload1);
+        unblockPinResponse2.setResponsePayload(responsePayload1);
+
+        assertTrue(unblockPinResponse1.equals(unblockPinResponse2));
+
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        unblockPinResponse2.setResponsePayload(responsePayload2);
+
+        assertFalse(unblockPinResponse1.equals(unblockPinResponse2));
+    }
+
+    @Test
+    public void testEqualsWithNull() {
+        UnblockPinResponse unblockPinResponse = new UnblockPinResponse();
+
+        assertFalse(unblockPinResponse.equals(null));
+    }
+
+    @Test
+    public void testEqualsWithDifferentClass() {
+        UnblockPinResponse unblockPinResponse = new UnblockPinResponse();
+
+        assertFalse(unblockPinResponse.equals("NonUnblockPinResponse"));
+    }
+
+    @Test
+    public void testEqualsWithDifferentValues() {
+        UnblockPinResponse unblockPinResponse1 = new UnblockPinResponse();
+        UnblockPinResponse unblockPinResponse2 = new UnblockPinResponse();
+
+        ResponsePayload responsePayload1 = new ResponsePayload();
+        unblockPinResponse1.setResponsePayload(responsePayload1);
+
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        unblockPinResponse2.setResponsePayload(responsePayload2);
+
+        assertFalse(unblockPinResponse1.equals(unblockPinResponse2));
+    }
+
+    @Test
+    public void testEqualsWithSameObject() {
+        UnblockPinResponse unblockPinResponse = new UnblockPinResponse();
+        
+        assertTrue(unblockPinResponse.equals(unblockPinResponse));
+    }
+}

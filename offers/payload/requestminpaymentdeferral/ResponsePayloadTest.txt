@@ -1,0 +1,82 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class ResponsePayloadTest {
+
+    @Test
+    void testSetGetStatus() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatus(true);
+        
+        assertTrue(responsePayload.getStatus());
+        
+        responsePayload.setStatus(false);
+        assertFalse(responsePayload.getStatus());
+        
+        responsePayload.setStatus(null);
+        assertNull(responsePayload.getStatus());
+    }
+
+    @Test
+    void testToString() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatus(true);
+        
+        String expectedString = "ResponsePayload@" + Integer.toHexString(System.identityHashCode(responsePayload)) + 
+                "[status=true]";
+        assertEquals(expectedString, responsePayload.toString());
+        
+        responsePayload.setStatus(false);
+        expectedString = "ResponsePayload@" + Integer.toHexString(System.identityHashCode(responsePayload)) + 
+                "[status=false]";
+        assertEquals(expectedString, responsePayload.toString());
+        
+        responsePayload.setStatus(null);
+        expectedString = "ResponsePayload@" + Integer.toHexString(System.identityHashCode(responsePayload)) + 
+                "[status=<null>]";
+        assertEquals(expectedString, responsePayload.toString());
+    }
+
+    @Test
+    void testEquals() {
+        ResponsePayload responsePayload1 = new ResponsePayload();
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        
+        responsePayload1.setStatus(true);
+        responsePayload2.setStatus(true);
+        
+        assertEquals(responsePayload1, responsePayload2);
+        
+        responsePayload2.setStatus(false);
+        assertNotEquals(responsePayload1, responsePayload2);
+        
+        responsePayload1.setStatus(null);
+        responsePayload2.setStatus(null);
+        assertEquals(responsePayload1, responsePayload2);
+        
+        responsePayload2.setStatus(true);
+        assertNotEquals(responsePayload1, responsePayload2);
+    }
+
+    @Test
+    void testHashCode() {
+        ResponsePayload responsePayload1 = new ResponsePayload();
+        ResponsePayload responsePayload2 = new ResponsePayload();
+        
+        responsePayload1.setStatus(true);
+        responsePayload2.setStatus(true);
+        
+        assertEquals(responsePayload1.hashCode(), responsePayload2.hashCode());
+        
+        responsePayload2.setStatus(false);
+        assertNotEquals(responsePayload1.hashCode(), responsePayload2.hashCode());
+        
+        responsePayload1.setStatus(null);
+        responsePayload2.setStatus(null);
+        
+        assertEquals(responsePayload1.hashCode(), responsePayload2.hashCode());
+        
+        responsePayload2.setStatus(true);
+        assertNotEquals(responsePayload1.hashCode(), responsePayload2.hashCode());
+    }
+}

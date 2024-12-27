@@ -1,0 +1,79 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class PromotionOfferToAgreementTest {
+
+    private PromotionOfferToAgreement promotionOfferToAgreement;
+    private AgreementIdentification agreementIdentification;
+
+    @BeforeEach
+    void setUp() {
+        promotionOfferToAgreement = new PromotionOfferToAgreement();
+        agreementIdentification = new AgreementIdentification();
+    }
+
+    @Test
+    void testGetAndSetAgreementIdentification() {
+        agreementIdentification.setTypeCd("Type1");
+        agreementIdentification.setIdentifierVal("ID123");
+        promotionOfferToAgreement.setAgreementIdentification(agreementIdentification);
+        assertEquals(agreementIdentification, promotionOfferToAgreement.getAgreementIdentification());
+    }
+
+    @Test
+    void testToString() {
+        agreementIdentification.setTypeCd("Type1");
+        agreementIdentification.setIdentifierVal("ID123");
+        promotionOfferToAgreement.setAgreementIdentification(agreementIdentification);
+
+        String expected = "com.td.api.mbofp.request.updateofferdisposition.PromotionOfferToAgreement@" +
+                          Integer.toHexString(promotionOfferToAgreement.hashCode()) +
+                          "[agreementIdentification=com.td.api.mbofp.request.updateofferdisposition.AgreementIdentification@" +
+                          Integer.toHexString(agreementIdentification.hashCode()) + "[typeCd=Type1,identifierVal=ID123]]";
+        assertEquals(expected, promotionOfferToAgreement.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        agreementIdentification.setTypeCd("Type1");
+        agreementIdentification.setIdentifierVal("ID123");
+        promotionOfferToAgreement.setAgreementIdentification(agreementIdentification);
+
+        int expectedHashCode = 1;
+        expectedHashCode = 31 * expectedHashCode + (promotionOfferToAgreement.getAgreementIdentification() == null ? 0 : promotionOfferToAgreement.getAgreementIdentification().hashCode());
+        assertEquals(expectedHashCode, promotionOfferToAgreement.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        agreementIdentification.setTypeCd("Type1");
+        agreementIdentification.setIdentifierVal("ID123");
+        promotionOfferToAgreement.setAgreementIdentification(agreementIdentification);
+
+        // Test equality with same object
+        assertTrue(promotionOfferToAgreement.equals(promotionOfferToAgreement));
+
+        // Test equality with another object having the same fields
+        PromotionOfferToAgreement anotherPromotionOfferToAgreement = new PromotionOfferToAgreement();
+        AgreementIdentification anotherAgreementIdentification = new AgreementIdentification();
+        anotherAgreementIdentification.setTypeCd("Type1");
+        anotherAgreementIdentification.setIdentifierVal("ID123");
+        anotherPromotionOfferToAgreement.setAgreementIdentification(anotherAgreementIdentification);
+        assertTrue(promotionOfferToAgreement.equals(anotherPromotionOfferToAgreement));
+
+        // Test inequality with a different PromotionOfferToAgreement
+        PromotionOfferToAgreement differentPromotionOfferToAgreement = new PromotionOfferToAgreement();
+        AgreementIdentification differentAgreementIdentification = new AgreementIdentification();
+        differentAgreementIdentification.setTypeCd("DifferentType");
+        differentAgreementIdentification.setIdentifierVal("DifferentID");
+        differentPromotionOfferToAgreement.setAgreementIdentification(differentAgreementIdentification);
+        assertFalse(promotionOfferToAgreement.equals(differentPromotionOfferToAgreement));
+
+        // Test inequality with null
+        assertFalse(promotionOfferToAgreement.equals(null));
+
+        // Test inequality with an object of a different class
+        assertFalse(promotionOfferToAgreement.equals(new Object()));
+    }
+}

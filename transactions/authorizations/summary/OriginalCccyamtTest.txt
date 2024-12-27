@@ -1,0 +1,113 @@
+package com.td.api.mbcca.response.transactions.authorizations.summary;
+
+import com.td.api.mbcca.shared.TsysExtensionCurrencyNumericCd;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.math.BigDecimal;
+
+import static org.junit.Assert.*;
+
+public class OriginalCccyamtTest {
+
+    private OriginalCccyamt originalCccyamt;
+    private TsysExtensionCurrencyNumericCd tsysExtension;
+
+    @Before
+    public void setUp() {
+        originalCccyamt = new OriginalCccyamt();
+        tsysExtension = new TsysExtensionCurrencyNumericCd();
+    }
+
+    @Test
+    public void testGetAndSetAmount() {
+        BigDecimal expectedAmount = new BigDecimal("100.50");
+        originalCccyamt.setAmount(expectedAmount);
+        assertEquals(expectedAmount, originalCccyamt.getAmount());
+    }
+
+    @Test
+    public void testGetAndSetCurrencyCd() {
+        String expectedCurrencyCd = "USD";
+        originalCccyamt.setCurrencyCd(expectedCurrencyCd);
+        assertEquals(expectedCurrencyCd, originalCccyamt.getCurrencyCd());
+    }
+
+    @Test
+    public void testGetAndSetTsysExtension() {
+        originalCccyamt.setTsysExtension(tsysExtension);
+        assertEquals(tsysExtension, originalCccyamt.getTsysExtension());
+    }
+
+    @Test
+    public void testToString() {
+        originalCccyamt.setAmount(new BigDecimal("100.50"));
+        originalCccyamt.setCurrencyCd("USD");
+        originalCccyamt.setTsysExtension(tsysExtension);
+
+        String expectedString = "com.td.api.mbcca.response.transactions.authorizations.summary.OriginalCccyamt@" + 
+                                Integer.toHexString(System.identityHashCode(originalCccyamt)) +
+                                "[amount=100.50,currencyCd=USD,tsysExtension=" + tsysExtension + "]";
+        assertEquals(expectedString, originalCccyamt.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        originalCccyamt.setAmount(new BigDecimal("100.50"));
+        originalCccyamt.setCurrencyCd("USD");
+        originalCccyamt.setTsysExtension(tsysExtension);
+
+        int expectedHashCode = 31 * (31 * (31 + (originalCccyamt.getAmount() != null ? originalCccyamt.getAmount().hashCode() : 0))
+                                      + (originalCccyamt.getCurrencyCd() != null ? originalCccyamt.getCurrencyCd().hashCode() : 0)) 
+                                      + (originalCccyamt.getTsysExtension() != null ? originalCccyamt.getTsysExtension().hashCode() : 0));
+        assertEquals(expectedHashCode, originalCccyamt.hashCode());
+    }
+
+    @Test
+    public void testEquals_withEqualObjects() {
+        originalCccyamt.setAmount(new BigDecimal("100.50"));
+        originalCccyamt.setCurrencyCd("USD");
+        originalCccyamt.setTsysExtension(tsysExtension);
+
+        OriginalCccyamt other = new OriginalCccyamt();
+        other.setAmount(new BigDecimal("100.50"));
+        other.setCurrencyCd("USD");
+        other.setTsysExtension(tsysExtension);
+
+        assertTrue(originalCccyamt.equals(other));
+    }
+
+    @Test
+    public void testEquals_withDifferentObjects() {
+        originalCccyamt.setAmount(new BigDecimal("100.50"));
+        originalCccyamt.setCurrencyCd("USD");
+        originalCccyamt.setTsysExtension(tsysExtension);
+
+        OriginalCccyamt other = new OriginalCccyamt();
+        other.setAmount(new BigDecimal("200.00"));
+        other.setCurrencyCd("CAD");
+        other.setTsysExtension(tsysExtension);
+
+        assertFalse(originalCccyamt.equals(other));
+    }
+
+    @Test
+    public void testEquals_withNull() {
+        assertFalse(originalCccyamt.equals(null));
+    }
+
+    @Test
+    public void testEquals_withDifferentClass() {
+        String other = "Some String";
+        assertFalse(originalCccyamt.equals(other));
+    }
+
+    @Test
+    public void testEquals_withSameInstance() {
+        originalCccyamt.setAmount(new BigDecimal("100.50"));
+        originalCccyamt.setCurrencyCd("USD");
+        originalCccyamt.setTsysExtension(tsysExtension);
+
+        assertTrue(originalCccyamt.equals(originalCccyamt));  // Comparing with itself
+    }
+}

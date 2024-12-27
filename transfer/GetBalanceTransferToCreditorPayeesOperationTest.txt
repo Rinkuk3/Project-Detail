@@ -1,0 +1,184 @@
+package com.td.mbna.msec.midtier.transfer;
+
+import com.td.mbna.msec.midtier.persistance.entity.BtDestinations;
+import com.td.mbna.msec.midtier.persistance.entity.Creditors;
+import com.td.mbna.msec.midtier.persistance.mybatis.DBMybatisService;
+import com.td.mbna.msec.midtier.transfer.payload.BalanceTransferToCreditorPayeeType;
+import com.td.mbna.msec.midtier.transfer.payload.getbalancetransfertocreditorpayees.GetBalanceTransferToCreditorPayeesRequest;
+import com.td.mbna.msec.midtier.transfer.payload.getbalancetransfertocreditorpayees.GetBalanceTransferToCreditorPayeesResponse;
+import com.td.mbna.msec.midtier.transfer.payload.getbalancetransfertocreditorpayees.ResponsePayload;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class GetBalanceTransferToCreditorPayeesOperationTest {
+
+    @InjectMocks
+    private GetBalanceTransferToCreditorPayeesOperation getBalanceTransferToCreditorPayeesOperation;
+
+    @Mock
+    private DBMybatisService dbMybatisService;
+
+    @Mock
+    private GetBalanceTransferToCreditorPayeesRequest getBalanceTransferToCreditorPayeesRequest;
+
+    @Mock
+    private GetBalanceTransferToCreditorPayeesResponse getBalanceTransferToCreditorPayeesResponse;
+
+    @Mock
+    private ResponsePayload responsePayload;
+
+    @Mock
+    private BtDestinations btDestinations;
+
+    @Mock
+    private Creditors creditors;
+
+    @Mock
+    private MbnaLogger mbnaLogger;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testInvokeService_Success() {
+        // Arrange
+        String customerId = "customer123";
+        when(getBalanceTransferToCreditorPayeesRequest.getCustId()).thenReturn(customerId);
+
+        List<BtDestinations> btDestinationsList = new ArrayList<>();
+        BtDestinations btDest = new BtDestinations();
+        btDest.setBtDestinationId(1);
+        btDest.setNickname("Payee 1");
+        btDest.setCreditorId(101);
+        btDest.setAccountNumber("123456789");
+
+        btDestinationsList.add(btDest);
+        when(dbMybatisService.findBtDestinationsByCustomerId(customerId)).thenReturn(btDestinationsList);
+
+        Creditors creditor = new Creditors();
+        creditor.setMerchantId("merchant123");
+        creditor.setName_EN("Creditor 1");
+        when(dbMybatisService.getCreditorById(101)).thenReturn(creditor);
+
+        // Act
+        GetBalanceTransferToCreditorPayeesResponse response = getBalanceTransferToCreditorPayeesOperation.invokeService(getBalanceTransferToCreditorPayeesRequest);
+
+        // Assert
+        assertNotNull(response);
+        assertNotNull(response.getResponsePayload());
+        assertFalse(response.getResponsePayload().getPayee().isEmpty());
+        assertEquals("Payee 1", response.getResponsePayload().getPayee().get(0).getNickName());
+        verify(dbMybatisService).findBtDestinationsByCustomerId(customerId);
+        verify(dbMybatisService).getCreditorById(101);
+    }
+
+    @Test
+    void testInvokeService_CreditorNotFound() {
+        // Arrange
+        String customerId = "customer123";
+        when(getBalanceTransferToCreditorPayeesRequest.getCustId()).thenReturn(customerId);
+
+        List<BtDestinations> btDestinationsList = new ArrayList<>();
+        BtDestinations btDest = new BtDestinations();
+        btDest.setBtDestinationId(1);
+        btDest.setNickname("Payee 1");
+        btDest.setCreditorId(101);
+        btDest.setAccountNumber("123456789");
+
+        btDestinationsList.add(btDest);
+        when(dbMybatisService.findBtDestinationsByCustomerId(customerId)).thenReturn(btDestinationsList);
+
+        when(dbMybatisService.getCreditorById(101)).thenReturn(null); // Simulate creditor not found
+
+        // Act
+        GetBalanceTransferToCreditorPayeesResponse response = getBalanceTransferToCreditorPayeesOperation.invokeService(getBalanceTransferToCreditorPayeesRequest);
+
+        // Assert
+        assertNotNull(response);
+        assertNotNull(response.getResponsePayload());
+        assertTrue(response.getResponsePayload().getPayee().isEmpty()); // No payee should be added if creditor not found
+        verify(dbMybatisService).findBtDestinationsByCustomerId(customerId);
+        verify(dbMybatisService).getCreditorById(101);
+    }
+
+    @Test
+    void testInvokeService_NoPayeesFound() {
+        // Arrange
+        String customerId = "customer123";
+        when(getBalanceTransferToCreditorPayeesRequest.getCustId()).thenReturn(customerId);
+        when(dbMybatisService.findBtDestinationsByCustomerId(customerId)).thenReturn(new ArrayList<>()); // No payees found
+
+        // Act
+        GetBalanceTransferToCreditorPayeesResponse response = getBalanceTransferToCreditorPayeesOperation.invokeService(getBalanceTransferToCreditorPayeesRequest);
+
+        // Assert
+        assertNotNull(response);
+        assertNotNull(response.getResponsePayload());
+        assertTrue(response.getResponsePayload().getPayee().isEmpty()); // No payees to return
+        verify(dbMybatisService).findBtDestinationsByCustomerId(customerId);
+    }
+
+    @Test
+    void testRequiresDisclosureConsent() {
+        // Act
+        boolean result = getBalanceTransferToCreditorPayeesOperation.requiresDisclosureConsent();
+
+        // Assert
+        assertFalse(result);
+    }
+
+    @Test
+    void testGetConsentDisclosureFailedMsgCode() {
+        // Act
+        String result = getBalanceTransferToCreditorPayeesOperation.getConsentDisclosureFailedMsgCode();
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testGenerateAutoComment() {
+        // Act
+        boolean result = getBalanceTransferToCreditorPayeesOperation.generateAutoComment();
+
+        // Assert
+        assertFalse(result);
+    }
+
+    @Test
+    void testCreateAutoComment() {
+        // Act
+        List<String> result = getBalanceTransferToCreditorPayeesOperation.createAutoComment(null, null);
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testGetEmailInfoBean() {
+        // Act
+        EmailInfo result = getBalanceTransferToCreditorPayeesOperation.getEmailInfoBean(null, null);
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testGetValidator() {
+        // Act
+        MsecValidator result = getBalanceTransferToCreditorPayeesOperation.getValidator();
+
+        // Assert
+        assertNull(result);
+    }
+}

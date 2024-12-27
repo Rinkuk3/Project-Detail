@@ -1,0 +1,112 @@
+package com.td.api.kms.request;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class CipherDataTest {
+
+    private CipherData cipherData;
+
+    @BeforeEach
+    void setUp() {
+        cipherData = new CipherData();
+    }
+
+    @Test
+    void testSetAndGetEncodingSchemeTypeCd() {
+        String encodingSchemeTypeCd = "Scheme1";
+        cipherData.setEncodingSchemeTypeCd(encodingSchemeTypeCd);
+        assertEquals(encodingSchemeTypeCd, cipherData.getEncodingSchemeTypeCd());
+    }
+
+    @Test
+    void testSetAndGetCipherTxt() {
+        String cipherTxt = "EncryptedText";
+        cipherData.setCipherTxt(cipherTxt);
+        assertEquals(cipherTxt, cipherData.getCipherTxt());
+    }
+
+    @Test
+    void testSetAndGetLengthCnt() {
+        Integer lengthCnt = 10;
+        cipherData.setLengthCnt(lengthCnt);
+        assertEquals(lengthCnt, cipherData.getLengthCnt());
+    }
+
+    @Test
+    void testToString() {
+        String encodingSchemeTypeCd = "Scheme1";
+        String cipherTxt = "EncryptedText";
+        Integer lengthCnt = 10;
+        cipherData.setEncodingSchemeTypeCd(encodingSchemeTypeCd);
+        cipherData.setCipherTxt(cipherTxt);
+        cipherData.setLengthCnt(lengthCnt);
+
+        String expectedToString = "com.td.api.kms.request.CipherData@" + Integer.toHexString(cipherData.hashCode()) +
+                "[encodingSchemeTypeCd=" + encodingSchemeTypeCd + ",cipherTxt=" + cipherTxt + ",lengthCnt=" + lengthCnt + "]";
+        assertEquals(expectedToString, cipherData.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        CipherData data1 = new CipherData();
+        CipherData data2 = new CipherData();
+        assertEquals(data1.hashCode(), data2.hashCode());
+
+        String encodingSchemeTypeCd = "Scheme1";
+        String cipherTxt = "EncryptedText";
+        Integer lengthCnt = 10;
+        data1.setEncodingSchemeTypeCd(encodingSchemeTypeCd);
+        data1.setCipherTxt(cipherTxt);
+        data1.setLengthCnt(lengthCnt);
+        data2.setEncodingSchemeTypeCd(encodingSchemeTypeCd);
+        data2.setCipherTxt(cipherTxt);
+        data2.setLengthCnt(lengthCnt);
+
+        assertEquals(data1.hashCode(), data2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        CipherData data1 = new CipherData();
+        CipherData data2 = new CipherData();
+        assertTrue(data1.equals(data2));
+
+        String encodingSchemeTypeCd = "Scheme1";
+        String cipherTxt = "EncryptedText";
+        Integer lengthCnt = 10;
+        data1.setEncodingSchemeTypeCd(encodingSchemeTypeCd);
+        data1.setCipherTxt(cipherTxt);
+        data1.setLengthCnt(lengthCnt);
+        data2.setEncodingSchemeTypeCd(encodingSchemeTypeCd);
+        data2.setCipherTxt(cipherTxt);
+        data2.setLengthCnt(lengthCnt);
+        assertTrue(data1.equals(data2));
+
+        data2.setCipherTxt("DifferentText");
+        assertFalse(data1.equals(data2));
+
+        data2.setCipherTxt(cipherTxt);
+        data2.setLengthCnt(20);
+        assertFalse(data1.equals(data2));
+
+        data2.setLengthCnt(lengthCnt);
+        data2.setEncodingSchemeTypeCd("Scheme2");
+        assertFalse(data1.equals(data2));
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        CipherData data = new CipherData();
+        assertFalse(data.equals(null));
+    }
+
+    @Test
+    void testEqualsWithDifferentClass() {
+        CipherData data = new CipherData();
+        String str = "DifferentClass";
+        assertFalse(data.equals(str));
+    }
+}

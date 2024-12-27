@@ -1,0 +1,106 @@
+package com.td.api.dms.response;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class DocumentTest {
+
+    private Document document;
+
+    @BeforeEach
+    void setUp() {
+        document = new Document();
+    }
+
+    @Test
+    void testGetSetDocumentId() {
+        document.setDocumentId("doc123");
+        assertEquals("doc123", document.getDocumentId());
+    }
+
+    @Test
+    void testGetSetFormat() {
+        document.setFormat("PDF");
+        assertEquals("PDF", document.getFormat());
+    }
+
+    @Test
+    void testGetSetMetadataItem() {
+        MetadataItem metadata = new MetadataItem();
+        metadata.setKey("key1");
+        metadata.setValue("value1");
+        document.setMetadataItem(Arrays.asList(metadata));
+
+        assertEquals(1, document.getMetadataItem().size());
+        assertEquals("key1", document.getMetadataItem().get(0).getKey());
+        assertEquals("value1", document.getMetadataItem().get(0).getValue());
+    }
+
+    @Test
+    void testToString() {
+        MetadataItem metadata = new MetadataItem();
+        metadata.setKey("key1");
+        metadata.setValue("value1");
+
+        document.setDocumentId("doc123");
+        document.setFormat("PDF");
+        document.setMetadataItem(Arrays.asList(metadata));
+
+        String expected = "com.td.api.dms.response.Document@" + Integer.toHexString(System.identityHashCode(document)) + 
+                          "[documentId=doc123,format=PDF,metadataItem=[MetadataItem{key=key1,value=value1},],]";
+        assertEquals(expected, document.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        Document doc1 = new Document();
+        Document doc2 = new Document();
+
+        MetadataItem metadata = new MetadataItem();
+        metadata.setKey("key1");
+        metadata.setValue("value1");
+
+        doc1.setDocumentId("doc123");
+        doc1.setFormat("PDF");
+        doc1.setMetadataItem(Arrays.asList(metadata));
+
+        doc2.setDocumentId("doc123");
+        doc2.setFormat("PDF");
+        doc2.setMetadataItem(Arrays.asList(metadata));
+
+        assertEquals(doc1.hashCode(), doc2.hashCode());
+
+        doc2.setFormat("DOCX");
+        assertNotEquals(doc1.hashCode(), doc2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        Document doc1 = new Document();
+        Document doc2 = new Document();
+
+        MetadataItem metadata = new MetadataItem();
+        metadata.setKey("key1");
+        metadata.setValue("value1");
+
+        doc1.setDocumentId("doc123");
+        doc1.setFormat("PDF");
+        doc1.setMetadataItem(Arrays.asList(metadata));
+
+        doc2.setDocumentId("doc123");
+        doc2.setFormat("PDF");
+        doc2.setMetadataItem(Arrays.asList(metadata));
+
+        assertTrue(doc1.equals(doc2));
+
+        doc2.setFormat("DOCX");
+        assertFalse(doc1.equals(doc2));
+
+        assertFalse(doc1.equals(null));
+        assertFalse(doc1.equals(new Object()));
+    }
+}

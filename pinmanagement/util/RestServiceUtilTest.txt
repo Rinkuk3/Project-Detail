@@ -1,0 +1,61 @@
+package com.td.mbna.msec.midtier.pinmanagement.util;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.td.api.kms.request.AddDecryptionJobRq;
+import com.td.api.kms.request.AddEncryptionJobRq;
+import com.td.api.kms.request.CipherData;
+import com.td.api.kms.request.CryptographyKey;
+import com.td.api.kms.request.Data;
+import com.td.api.kms.request.DecryptionEvent;
+import com.td.api.kms.request.EncryptionEvent;
+import com.td.mbna.msec.midtier.util.services.MSECConstants;
+
+public class RestServiceUtilTest {
+
+    private Map<String, Object> paramValues;
+
+    @BeforeEach
+    public void setUp() {
+        paramValues = new HashMap<>();
+        paramValues.put(MSECConstants.SINGLE_USER_KEY, "singleUserKey");
+        paramValues.put(MSECConstants.CDV, "cdv");
+        paramValues.put(MSECConstants.ZPK_ALIAS, "zonePinKey");
+        paramValues.put(MSECConstants.WTK_ALIAS, "webTransportKey");
+        paramValues.put(MSECConstants.PIN_BLOCK, "pinBlock");
+        paramValues.put(MSECConstants.TSYSPinBlock, "encryptedPinBlock");
+    }
+
+    @Test
+    public void testCreateEncryptRequest() {
+        AddEncryptionJobRq encryptionJobRequest = RestServiceUtil.createEncryptRequest(paramValues);
+
+        assertNotNull(encryptionJobRequest);
+        assertNotNull(encryptionJobRequest.getEncryptionEvent());
+        assertNotNull(encryptionJobRequest.getEncryptionEvent().getCryptographyKey());
+        assertEquals(3, encryptionJobRequest.getEncryptionEvent().getCryptographyKey().size());
+        assertEquals("singleUserKey", encryptionJobRequest.getEncryptionEvent().getCryptographyKey().get(0).getKeyVal());
+        assertEquals("zonePinKey", encryptionJobRequest.getEncryptionEvent().getCryptographyKey().get(1).getKeyId());
+        assertEquals("webTransportKey", encryptionJobRequest.getEncryptionEvent().getCryptographyKey().get(2).getKeyId());
+        assertEquals("pinBlock", encryptionJobRequest.getEncryptionEvent().getData().getPlainTxt());
+    }
+
+    @Test
+    public void testCreateDecryptRequest() {
+        AddDecryptionJobRq decryptionJobRequest = RestServiceUtil.createDecryptRequest(paramValues);
+
+        assertNotNull(decryptionJobRequest);
+        assertNotNull(decryptionJobRequest.getDecryptionEvent());
+        assertNotNull(decryptionJobRequest.getDecryptionEvent().getCryptographyKey());
+        assertEquals(2, decryptionJobRequest.getDecryptionEvent().getCryptographyKey().size());
+        assertEquals("zonePinKey", decryptionJobRequest.getDecryptionEvent().getCryptographyKey().get(0).getKeyId());
+        assertEquals("webTransportKey", decryptionJobRequest.getDecryptionEvent().getCryptographyKey().get(1).getKeyId());
+        assertEquals("encryptedPinBlock", decryptionJobRequest.getDecryptionEvent().getCipherData().getCipherTxt());
+    }
+}

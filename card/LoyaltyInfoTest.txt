@@ -1,0 +1,86 @@
+package com.td.api.mbcca.response.card;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class LoyaltyInfoTest {
+
+    @Test
+    void testGettersAndSetters() {
+        LoyaltyInfo loyaltyInfo = new LoyaltyInfo();
+
+        loyaltyInfo.setProgramCd("Loyalty123");
+        assertEquals("Loyalty123", loyaltyInfo.getProgramCd());
+
+        loyaltyInfo.setAccountNum("987654321");
+        assertEquals("987654321", loyaltyInfo.getAccountNum());
+    }
+
+    @Test
+    void testToString() {
+        LoyaltyInfo loyaltyInfo = new LoyaltyInfo();
+        loyaltyInfo.setProgramCd("Loyalty123");
+        loyaltyInfo.setAccountNum("987654321");
+
+        String toStringOutput = loyaltyInfo.toString();
+        assertTrue(toStringOutput.contains("programCd=Loyalty123"));
+        assertTrue(toStringOutput.contains("accountNum=987654321"));
+    }
+
+    @Test
+    void testHashCode() {
+        LoyaltyInfo loyaltyInfo1 = new LoyaltyInfo();
+        loyaltyInfo1.setProgramCd("Loyalty123");
+        loyaltyInfo1.setAccountNum("987654321");
+
+        LoyaltyInfo loyaltyInfo2 = new LoyaltyInfo();
+        loyaltyInfo2.setProgramCd("Loyalty123");
+        loyaltyInfo2.setAccountNum("987654321");
+
+        assertEquals(loyaltyInfo1.hashCode(), loyaltyInfo2.hashCode());
+    }
+
+    @Test
+    void testEquals_SameObject() {
+        LoyaltyInfo loyaltyInfo = new LoyaltyInfo();
+        assertTrue(loyaltyInfo.equals(loyaltyInfo));
+    }
+
+    @Test
+    void testEquals_DifferentObjectSameValues() {
+        LoyaltyInfo loyaltyInfo1 = new LoyaltyInfo();
+        loyaltyInfo1.setProgramCd("Loyalty123");
+        loyaltyInfo1.setAccountNum("987654321");
+
+        LoyaltyInfo loyaltyInfo2 = new LoyaltyInfo();
+        loyaltyInfo2.setProgramCd("Loyalty123");
+        loyaltyInfo2.setAccountNum("987654321");
+
+        assertTrue(loyaltyInfo1.equals(loyaltyInfo2));
+    }
+
+    @Test
+    void testEquals_DifferentValues() {
+        LoyaltyInfo loyaltyInfo1 = new LoyaltyInfo();
+        loyaltyInfo1.setProgramCd("Loyalty123");
+        loyaltyInfo1.setAccountNum("987654321");
+
+        LoyaltyInfo loyaltyInfo2 = new LoyaltyInfo();
+        loyaltyInfo2.setProgramCd("OtherProgram");
+        loyaltyInfo2.setAccountNum("123456789");
+
+        assertFalse(loyaltyInfo1.equals(loyaltyInfo2));
+    }
+
+    @Test
+    void testEquals_Null() {
+        LoyaltyInfo loyaltyInfo = new LoyaltyInfo();
+        assertFalse(loyaltyInfo.equals(null));
+    }
+
+    @Test
+    void testEquals_DifferentClass() {
+        LoyaltyInfo loyaltyInfo = new LoyaltyInfo();
+        assertFalse(loyaltyInfo.equals("SomeOtherClass"));
+    }
+}

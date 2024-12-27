@@ -1,0 +1,178 @@
+import com.td.mbna.msec.midtier.offers.payload.retrieveoffers.RetrieveOffersResponse;
+import com.td.mbna.msec.midtier.offers.payload.retrieveoffersforaccounts.RetrieveOffersForAccountsRequest;
+import com.td.mbna.msec.midtier.offers.payload.retrieveoffersforaccounts.RetrieveOffersForAccountsResponse;
+import com.td.mbna.msec.midtier.mbofp.MbnaOFP;
+import com.td.mbna.msec.midtier.util.MidtierUtilHelper;
+import com.td.mbna.msec.midtier.util.ParallelServiceCaller;
+import com.td.mbna.msec.midtier.util.ServiceCall;
+import com.td.mbna.msec.midtier.util.services.MSECConstants;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+@RunWith(MockitoJUnitRunner.class)
+public class RetrieveOffersForAccountsOperationTest {
+
+    @Mock
+    private MbnaOFP mbnaOFP;
+
+    @Mock
+    private ParallelServiceCaller parallelServiceCaller;
+
+    @InjectMocks
+    private RetrieveOffersForAccountsOperation retrieveOffersForAccountsOperation;
+
+    private RetrieveOffersForAccountsRequest request;
+    private String token = "test-token";
+
+    @Before
+    public void setUp() {
+        request = mock(RetrieveOffersForAccountsRequest.class);
+    }
+
+    @Test
+    public void testInvokeService_Success() throws Exception {
+        // Arrange
+        List<AccountOfferInputType> accountOfferInputList = new ArrayList<>();
+        AccountOfferInputType accountOfferInput = mock(AccountOfferInputType.class);
+        when(accountOfferInput.getAcctNum()).thenReturn("123456");
+        when(request.getRequestPayload()).thenReturn(mockRequestPayload(accountOfferInput));
+        when(mbnaOFP.retrieveOfferList(any(), eq(token))).thenReturn(mock(RetrieveOffersResponse.class));
+
+        // Act
+        RetrieveOffersForAccountsResponse response = retrieveOffersForAccountsOperation.invokeService(request, token);
+
+        // Assert
+        verify(mbnaOFP, times(1)).retrieveOfferList(any(), eq(token));
+        verify(parallelServiceCaller, times(1)).scheduleCall(any(), any());
+        assert(response != null);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testInvokeService_Exception() throws Exception {
+        // Arrange
+        List<AccountOfferInputType> accountOfferInputList = new ArrayList<>();
+        AccountOfferInputType accountOfferInput = mock(AccountOfferInputType.class);
+        when(accountOfferInput.getAcctNum()).thenReturn("123456");
+        when(request.getRequestPayload()).thenReturn(mockRequestPayload(accountOfferInput));
+        when(mbnaOFP.retrieveOfferList(any(), eq(token))).thenThrow(new RuntimeException("Error"));
+
+        // Act
+        retrieveOffersForAccountsOperation.invokeService(request, token);
+    }
+
+    @Test
+    public void testScheduleRetrieveOffersForAccounts() throws Exception {
+        // Arrange
+        String connectId = "connectId";
+        String custId = "custId";
+        com.mbnaweb.xsd.msgs.account.GetAccountOverviewsResponse acctOverviewsRes = mock(com.mbnaweb.xsd.msgs.account.GetAccountOverviewsResponse.class);
+        ParallelServiceCaller rtrOffersCaller = mock(ParallelServiceCaller.class);
+        List<com.mbnaweb.xsd.types.common.AcctOverviewType> acctOverviews = new ArrayList<>();
+        com.mbnaweb.xsd.types.common.AcctOverviewType acctOverview = mock(com.mbnaweb.xsd.types.common.AcctOverviewType.class);
+        when(acctOverview.getAcctNum()).thenReturn("123456");
+        when(acctOverviewsRes.getResponsePayload()).thenReturn(mock(com.mbnaweb.xsd.msgs.account.GetAccountOverviewsResponse.ResponsePayload.class));
+        when(acctOverviewsRes.getResponsePayload().getCustAccts()).thenReturn(acctOverviews);
+
+        // Act
+        retrieveOffersForAccountsOperation.scheduleRetrieveOffersForAccounts(connectId, custId, acctOverviewsRes, rtrOffersCaller, token);
+
+        // Assert
+        verify(rtrOffersCaller, times(1)).scheduleCall(any(), any());
+    }
+
+    @Test
+    public void testGetRetrieveOffersForAccountsResult() throws Exception {
+        // Arrange
+        List<String> acctNumbers = new ArrayList<>();
+        acctNumbers.add("123456");
+        ParallelServiceCaller rtrOffersCaller = mock(ParallelServiceCaller.class);
+        RetrieveOffersResponse retrieveOffersResponse = mock(RetrieveOffersResponse.class);
+        when(rtrOffersCaller.getResponse(any(), eq(RetrieveOffersResponse.class))).thenReturn(retrieveOffersResponse);
+
+        // Act
+        RetrieveOffersForAccountsResponse response = retrieveOffersForAccountsOperation.getRetrieveOffersForAccountsResult(acctNumbers, rtrOffersCaller);
+
+        // Assert
+        assert(response != null);
+    }
+
+    @Test
+    public void testRequiresDisclosureConsent() {
+        // Act
+        boolean result = retrieveOffersForAccountsOperation.requiresDisclosureConsent();
+
+        // Assert
+        assert(result == false);
+    }
+
+    @Test
+    public void testGetConsentDisclosureFailedMsgCode() {
+        // Act
+        String result = retrieveOffersForAccountsOperation.getConsentDisclosureFailedMsgCode();
+
+        // Assert
+        assert(result == null);
+    }
+
+    @Test
+    public void testGenerateAutoComment() {
+        // Act
+        boolean result = retrieveOffersForAccountsOperation.generateAutoComment();
+
+        // Assert
+        assert(result == false);
+    }
+
+    @Test
+    public void testCreateAutoComment() {
+        // Arrange
+        BaseRequest baseRequest = mock(BaseRequest.class);
+        BaseResponse baseResponse = mock(BaseResponse.class);
+
+        // Act
+        List<String> result = retrieveOffersForAccountsOperation.createAutoComment(baseRequest, baseResponse);
+
+        // Assert
+        assert(result == null);
+    }
+
+    @Test
+    public void testGetEmailInfoBean() {
+        // Act
+        EmailInfo result = retrieveOffersForAccountsOperation.getEmailInfoBean(null, null);
+
+        // Assert
+        assert(result == null);
+    }
+
+    @Test
+    public void testGetValidator() {
+        // Act
+        MsecValidator result = retrieveOffersForAccountsOperation.getValidator();
+
+        // Assert
+        assert(result == null);
+    }
+
+    private com.td.mbna.msec.midtier.offers.payload.retrieveoffersforaccounts.RequestPayload mockRequestPayload(AccountOfferInputType... accountOfferInputTypes) {
+        com.td.mbna.msec.midtier.offers.payload.retrieveoffersforaccounts.RequestPayload payload = mock(com.td.mbna.msec.midtier.offers.payload.retrieveoffersforaccounts.RequestPayload.class);
+        List<AccountOfferInputType> accountOfferInputList = new ArrayList<>();
+        for (AccountOfferInputType accountOfferInput : accountOfferInputTypes) {
+            accountOfferInputList.add(accountOfferInput);
+        }
+        when(payload.getAccountOfferInput()).thenReturn(accountOfferInputList);
+        return payload;
+    }
+}

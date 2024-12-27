@@ -1,0 +1,74 @@
+package com.td.api.mbcca.response.cancelip;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import com.td.api.mbcca.shared.Status;
+import org.junit.jupiter.api.Test;
+
+class PartialUpdateCreditCardAgreementRetailEventGracePeriodEndDateResponseTest {
+
+    @Test
+    void testGettersAndSetters() {
+        PartialUpdateCreditCardAgreementRetailEventGracePeriodEndDateResponse response = new PartialUpdateCreditCardAgreementRetailEventGracePeriodEndDateResponse();
+
+        Status status = new Status();
+        String reasonCd = "EARLY_EXPIRATION";
+        Boolean refundInd = true;
+
+        response.setStatus(status);
+        response.setEarlyExpirationReasonCd(reasonCd);
+        response.setInstalmentPlanFeeRefundInd(refundInd);
+
+        assertEquals(status, response.getStatus());
+        assertEquals(reasonCd, response.getEarlyExpirationReasonCd());
+        assertEquals(refundInd, response.getInstalmentPlanFeeRefundInd());
+    }
+
+    @Test
+    void testToString() {
+        PartialUpdateCreditCardAgreementRetailEventGracePeriodEndDateResponse response = new PartialUpdateCreditCardAgreementRetailEventGracePeriodEndDateResponse();
+        response.setStatus(null);
+        response.setEarlyExpirationReasonCd(null);
+        response.setInstalmentPlanFeeRefundInd(null);
+
+        String expectedToString = PartialUpdateCreditCardAgreementRetailEventGracePeriodEndDateResponse.class.getName() + "@" + Integer.toHexString(System.identityHashCode(response)) + "[status=<null>,earlyExpirationReasonCd=<null>,instalmentPlanFeeRefundInd=<null>";
+        assertTrue(response.toString().contains(expectedToString));
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        PartialUpdateCreditCardAgreementRetailEventGracePeriodEndDateResponse response1 = new PartialUpdateCreditCardAgreementRetailEventGracePeriodEndDateResponse();
+        PartialUpdateCreditCardAgreementRetailEventGracePeriodEndDateResponse response2 = new PartialUpdateCreditCardAgreementRetailEventGracePeriodEndDateResponse();
+
+        Status status = new Status();
+        String reasonCd = "EARLY_EXPIRATION";
+        Boolean refundInd = true;
+
+        response1.setStatus(status);
+        response1.setEarlyExpirationReasonCd(reasonCd);
+        response1.setInstalmentPlanFeeRefundInd(refundInd);
+
+        response2.setStatus(status);
+        response2.setEarlyExpirationReasonCd(reasonCd);
+        response2.setInstalmentPlanFeeRefundInd(refundInd);
+
+        assertEquals(response1, response2);
+        assertEquals(response1.hashCode(), response2.hashCode());
+
+        response2.setInstalmentPlanFeeRefundInd(false);
+        assertNotEquals(response1, response2);
+        assertNotEquals(response1.hashCode(), response2.hashCode());
+    }
+
+    @Test
+    void testNotEqualsDifferentType() {
+        PartialUpdateCreditCardAgreementRetailEventGracePeriodEndDateResponse response = new PartialUpdateCreditCardAgreementRetailEventGracePeriodEndDateResponse();
+        assertNotEquals(response, new Object());
+    }
+
+    @Test
+    void testNotEqualsNull() {
+        PartialUpdateCreditCardAgreementRetailEventGracePeriodEndDateResponse response = new PartialUpdateCreditCardAgreementRetailEventGracePeriodEndDateResponse();
+        assertNotEquals(response, null);
+    }
+}

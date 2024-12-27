@@ -1,0 +1,52 @@
+package com.td.mbna.msec.midtier.statement.payload.updateStatementDeliveryPreferences;
+
+import com.td.mbna.msec.midtier.statement.payload.AcctDeliveryPreferenceType;
+import com.td.mbna.msec.midtier.statement.payload.MultiAcctDeliveryPreferenceType;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ResponsePayloadTest {
+
+    @Test
+    void testSetAndGetAcctDeliveryPreference() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        AcctDeliveryPreferenceType acctDeliveryPreference = new AcctDeliveryPreferenceType(); // Mocking AcctDeliveryPreferenceType
+        responsePayload.setAcctDeliveryPreference(acctDeliveryPreference);
+        assertEquals(acctDeliveryPreference, responsePayload.getAcctDeliveryPreference());
+    }
+
+    @Test
+    void testSetAndGetMultiAcctDiveryPrefRs() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        List<MultiAcctDeliveryPreferenceType> multiAcctDiveryPrefRs = new ArrayList<>();
+        MultiAcctDeliveryPreferenceType multiAcctPref = new MultiAcctDeliveryPreferenceType(); // Mocking MultiAcctDeliveryPreferenceType
+        multiAcctDiveryPrefRs.add(multiAcctPref);
+        responsePayload.setMultiAcctDiveryPrefRs(multiAcctDiveryPrefRs);
+        assertEquals(multiAcctDiveryPrefRs, responsePayload.getMultiAcctDiveryPrefRs());
+    }
+
+    @Test
+    void testGetMultiAcctDiveryPrefRsDefault() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        assertNotNull(responsePayload.getMultiAcctDiveryPrefRs());
+        assertTrue(responsePayload.getMultiAcctDiveryPrefRs().isEmpty());
+    }
+
+    @Test
+    void testSetMultiAcctDiveryPrefRsNull() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setMultiAcctDiveryPrefRs(null);
+        assertNull(responsePayload.getMultiAcctDiveryPrefRs());
+    }
+
+    @Test
+    void testSetAcctDeliveryPreferenceNull() {
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setAcctDeliveryPreference(null);
+        assertNull(responsePayload.getAcctDeliveryPreference());
+    }
+}

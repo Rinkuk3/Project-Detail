@@ -1,0 +1,174 @@
+package com.td.mbna.msec.midtier.mbofp.adaptor;
+
+import com.td.api.mbofp.response.retrieveofferlist.*;
+import com.td.mbna.msec.midtier.offers.payload.retrieveoffers.*;
+import com.td.mbna.msec.midtier.types.common.*;
+import com.td.mbna.msec.midtier.util.services.MSECConstants;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+public class OffersRetrievalAdaptorTest {
+
+    @Test
+    public void testGetResponse_NoOffers() {
+        OffersRetrievalAdaptor adaptor = new OffersRetrievalAdaptor();
+        RetrieveOfferListRs offerListRs = new RetrieveOfferListRs();
+        Map<String, String> params = new HashMap<>();
+
+        RetrieveOffersResponse response = adaptor.getResponse(offerListRs, params);
+        assertNotNull(response);
+        assertTrue(response.getResponsePayload().getPromotionOffer().isEmpty());
+    }
+
+    @Test
+    public void testGetResponse_WithValidOffers() {
+        OffersRetrievalAdaptor adaptor = new OffersRetrievalAdaptor();
+        RetrieveOfferListRs offerListRs = new RetrieveOfferListRs();
+
+        Offer offer = mock(Offer.class);
+        Promotion promotion = mock(Promotion.class);
+        PromotionOfferDispositionCd disposition = mock(PromotionOfferDispositionCd.class);
+        List<Offer> offerList = new ArrayList<>();
+        offerList.add(offer);
+
+        when(offer.getOfferId()).thenReturn("12345");
+        when(offer.getOfferDesc()).thenReturn("Sample Offer");
+        when(offer.getPromotion()).thenReturn(promotion);
+        when(promotion.getPromotionType()).thenReturn(mock(PromotionType.class));
+        when(offer.getPromotionOfferDispositionCd()).thenReturn(disposition);
+        when(offer.getPromotionOfferDispositionCd().getCode()).thenReturn("DISPOSITION_CODE");
+
+        offerListRs.setOffer(offerList);
+
+        Map<String, String> params = new HashMap<>();
+        params.put(MSECConstants.TD_OFP_API_CREDIT_LIMIT, "1000");
+
+        RetrieveOffersResponse response = adaptor.getResponse(offerListRs, params);
+        assertNotNull(response);
+        assertFalse(response.getResponsePayload().getPromotionOffer().isEmpty());
+        assertEquals(1, response.getResponsePayload().getPromotionOffer().size());
+    }
+
+    @Test
+    public void testGetResponse_WithFilteredOutOffers() {
+        OffersRetrievalAdaptor adaptor = new OffersRetrievalAdaptor();
+        RetrieveOfferListRs offerListRs = new RetrieveOfferListRs();
+
+        Offer offer = mock(Offer.class);
+        when(offer.getOfferId()).thenReturn(null); // This will trigger filter out
+        List<Offer> offerList = new ArrayList<>();
+        offerList.add(offer);
+        offerListRs.setOffer(offerList);
+
+        Map<String, String> params = new HashMap<>();
+        RetrieveOffersResponse response = adaptor.getResponse(offerListRs, params);
+
+        assertNotNull(response);
+        assertTrue(response.getResponsePayload().getPromotionOffer().isEmpty());
+    }
+
+    @Test
+    public void testToFilterOut_WithNullOffer() {
+        OffersRetrievalAdaptor adaptor = new OffersRetrievalAdaptor();
+        boolean result = adaptor.toFilterOut(null);
+        assertTrue(result);
+    }
+
+    @Test
+    public void testToFilterOut_WithInvalidOfferType() {
+        OffersRetrievalAdaptor adaptor = new OffersRetrievalAdaptor();
+        Offer offer = mock(Offer.class);
+        Promotion promotion = mock(Promotion.class);
+        PromotionType promotionType = mock(PromotionType.class);
+        when(offer.getOfferId()).thenReturn("12345");
+        when(offer.getPromotion()).thenReturn(promotion);
+        when(promotion.getPromotionType()).thenReturn(promotionType);
+        when(promotionType.getTypeCd()).thenReturn("INVALID_TYPE");
+
+        boolean result = adaptor.toFilterOut(offer);
+        assertTrue(result);
+    }
+
+    @Test
+    public void testToFilterOut_WithValidOffer() {
+        OffersRetrievalAdaptor adaptor = new OffersRetrievalAdaptor();
+        Offer offer = mock(Offer.class);
+        Promotion promotion = mock(Promotion.class);
+        PromotionType promotionType = mock(PromotionType.class);
+        List<String> disclosureTemplateId = new ArrayList<>();
+        disclosureTemplateId.add("DISCLOSURE_ID");
+
+        when(offer.getOfferId()).thenReturn("12345");
+        when(offer.getPromotion()).thenReturn(promotion);
+        when(promotion.getPromotionType()).thenReturn(promotionType);
+        when(promotionType.getTypeCd()).thenReturn("BALANCE-TRANSFER");
+        when(promotion.getDisclosureTemplateId()).thenReturn(disclosureTemplateId);
+
+        boolean result = adaptor.toFilterOut(offer);
+        assertFalse(result);
+    }
+
+    @Test
+    public void testGetResponse_WithExpiredRate() throws ParseException {
+        OffersRetrievalAdaptor adaptor = new OffersRetrievalAdaptor();
+        RetrieveOfferListRs offerListRs = new RetrieveOfferListRs();
+
+        Offer offer = mock(Offer.class);
+        Promotion promotion = mock(Promotion.class);
+        FeatureGroup featureGroup = mock(FeatureGroup.class);
+        Rate rate = mock(Rate.class);
+        List<Rate> rateList = new ArrayList<>();
+        rateList.add(rate);
+        when(rate.getFixedRate()).thenReturn(new BigDecimal("5.0"));
+        when(rate.getPromotionTerm()).thenReturn(mock(PromotionTerm.class));
+        when(rate.getPromotionTerm().getFixedEndDt()).thenReturn("2024-12-31");
+        when(offer.getOfferId()).thenReturn("12345");
+        when(offer.getPromotion()).thenReturn(promotion);
+        when(promotion.getFeatureGroup()).thenReturn(featureGroup);
+        when(featureGroup.getRate()).thenReturn(rateList);
+
+        List<Offer> offerList = new ArrayList<>();
+        offerList.add(offer);
+        offerListRs.setOffer(offerList);
+
+        Map<String, String> params = new HashMap<>();
+        params.put(MSECConstants.TD_OFP_API_CREDIT_LIMIT, "1000");
+
+        RetrieveOffersResponse response = adaptor.getResponse(offerListRs, params);
+        assertNotNull(response);
+        assertFalse(response.getResponsePayload().getPromotionOffer().isEmpty());
+    }
+
+    @Test
+    public void testGetResponse_WithNoRate() {
+        OffersRetrievalAdaptor adaptor = new OffersRetrievalAdaptor();
+        RetrieveOfferListRs offerListRs = new RetrieveOfferListRs();
+
+        Offer offer = mock(Offer.class);
+        Promotion promotion = mock(Promotion.class);
+        FeatureGroup featureGroup = mock(FeatureGroup.class);
+        List<Rate> rateList = new ArrayList<>();
+        when(offer.getOfferId()).thenReturn("12345");
+        when(offer.getPromotion()).thenReturn(promotion);
+        when(promotion.getFeatureGroup()).thenReturn(featureGroup);
+        when(featureGroup.getRate()).thenReturn(rateList);
+
+        List<Offer> offerList = new ArrayList<>();
+        offerList.add(offer);
+        offerListRs.setOffer(offerList);
+
+        Map<String, String> params = new HashMap<>();
+        params.put(MSECConstants.TD_OFP_API_CREDIT_LIMIT, "1000");
+
+        RetrieveOffersResponse response = adaptor.getResponse(offerListRs, params);
+        assertNotNull(response);
+        assertFalse(response.getResponsePayload().getPromotionOffer().isEmpty());
+    }
+}

@@ -1,0 +1,35 @@
+package com.td.mbna.msec.midtier.statement.payload.getStatementWithActivity;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class GetStatementWithActivityRequestTest {
+
+    @Test
+    void testGetAndSetRequestPayload() {
+        // Create a new instance of GetStatementWithActivityRequest
+        GetStatementWithActivityRequest request = new GetStatementWithActivityRequest();
+        
+        // Create a mock RequestPayload object
+        RequestPayload mockRequestPayload = new RequestPayload();
+        
+        // Set the RequestPayload
+        request.setRequestPayload(mockRequestPayload);
+        
+        // Assert that the getter returns the same object that was set
+        assertNotNull(request.getRequestPayload());
+        assertSame(mockRequestPayload, request.getRequestPayload());
+    }
+
+    @Test
+    void testSetRequestPayloadToNull() {
+        GetStatementWithActivityRequest request = new GetStatementWithActivityRequest();
+        
+        // Set the RequestPayload to null
+        request.setRequestPayload(null);
+        
+        // Assert that the getter returns null
+        assertNull(request.getRequestPayload());
+    }
+}

@@ -1,0 +1,98 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+
+class RequestPayloadTest {
+
+    @Test
+    void testSetGetDisclosureInfo() {
+        RequestPayload requestPayload = new RequestPayload();
+        DisclosureInfoType disclosureInfoType = new DisclosureInfoType();
+        requestPayload.setDisclosureInfo(Arrays.asList(disclosureInfoType));
+        assertEquals(Arrays.asList(disclosureInfoType), requestPayload.getDisclosureInfo());
+    }
+
+    @Test
+    void testSetGetLanguagePref() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setLanguagePref("EN");
+        assertEquals("EN", requestPayload.getLanguagePref());
+    }
+
+    @Test
+    void testSetGetRoleCD() {
+        RequestPayload requestPayload = new RequestPayload();
+        requestPayload.setRoleCD("Admin");
+        assertEquals("Admin", requestPayload.getRoleCD());
+    }
+
+    @Test
+    void testSetGetSelectedOffer() {
+        RequestPayload requestPayload = new RequestPayload();
+        PromotionOfferType offer = new PromotionOfferType();
+        requestPayload.setSelectedOffer(offer);
+        assertEquals(offer, requestPayload.getSelectedOffer());
+    }
+
+    @Test
+    void testToString() {
+        RequestPayload requestPayload = new RequestPayload();
+        DisclosureInfoType disclosureInfoType = new DisclosureInfoType();
+        requestPayload.setDisclosureInfo(Arrays.asList(disclosureInfoType));
+        requestPayload.setLanguagePref("EN");
+        requestPayload.setRoleCD("Admin");
+        PromotionOfferType offer = new PromotionOfferType();
+        requestPayload.setSelectedOffer(offer);
+
+        String expectedString = "RequestPayload@" + Integer.toHexString(System.identityHashCode(requestPayload)) + 
+                "[disclosureInfo=" + Arrays.asList(disclosureInfoType) + 
+                ",languagePref=EN,roleCD=Admin,selectedOffer=" + offer + "]";
+        
+        assertEquals(expectedString, requestPayload.toString());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        RequestPayload requestPayload1 = new RequestPayload();
+        DisclosureInfoType disclosureInfoType1 = new DisclosureInfoType();
+        requestPayload1.setDisclosureInfo(Arrays.asList(disclosureInfoType1));
+        requestPayload1.setLanguagePref("EN");
+        requestPayload1.setRoleCD("Admin");
+        PromotionOfferType offer1 = new PromotionOfferType();
+        requestPayload1.setSelectedOffer(offer1);
+
+        RequestPayload requestPayload2 = new RequestPayload();
+        DisclosureInfoType disclosureInfoType2 = new DisclosureInfoType();
+        requestPayload2.setDisclosureInfo(Arrays.asList(disclosureInfoType2));
+        requestPayload2.setLanguagePref("EN");
+        requestPayload2.setRoleCD("Admin");
+        PromotionOfferType offer2 = new PromotionOfferType();
+        requestPayload2.setSelectedOffer(offer2);
+
+        assertEquals(requestPayload1, requestPayload2);
+        assertEquals(requestPayload1.hashCode(), requestPayload2.hashCode());
+    }
+
+    @Test
+    void testNotEquals() {
+        RequestPayload requestPayload1 = new RequestPayload();
+        requestPayload1.setLanguagePref("EN");
+        requestPayload1.setRoleCD("Admin");
+
+        RequestPayload requestPayload2 = new RequestPayload();
+        requestPayload2.setLanguagePref("FR");
+        requestPayload2.setRoleCD("User");
+
+        assertNotEquals(requestPayload1, requestPayload2);
+    }
+
+    @Test
+    void testDefaultValues() {
+        RequestPayload requestPayload = new RequestPayload();
+        
+        assertNull(requestPayload.getLanguagePref());
+        assertNull(requestPayload.getRoleCD());
+        assertNull(requestPayload.getDisclosureInfo());
+        assertNull(requestPayload.getSelectedOffer());
+    }
+}

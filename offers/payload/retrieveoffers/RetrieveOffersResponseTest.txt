@@ -1,0 +1,67 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class RetrieveOffersResponseTest {
+
+    @Test
+    void testSetGetResponsePayload() {
+        RetrieveOffersResponse response = new RetrieveOffersResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        response.setResponsePayload(responsePayload);
+        
+        assertEquals(responsePayload, response.getResponsePayload());
+
+        response.setResponsePayload(null);
+        assertNull(response.getResponsePayload());
+    }
+
+    @Test
+    void testToString() {
+        RetrieveOffersResponse response = new RetrieveOffersResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        response.setResponsePayload(responsePayload);
+        
+        String expectedString = "RetrieveOffersResponse@" + Integer.toHexString(System.identityHashCode(response)) + "[status=<null>,errorMsgs=<null>,responsePayload=" + responsePayload + "]";
+        assertEquals(expectedString, response.toString());
+
+        response.setResponsePayload(null);
+        expectedString = "RetrieveOffersResponse@" + Integer.toHexString(System.identityHashCode(response)) + "[status=<null>,errorMsgs=<null>,responsePayload=<null>]";
+        assertEquals(expectedString, response.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        RetrieveOffersResponse response1 = new RetrieveOffersResponse();
+        RetrieveOffersResponse response2 = new RetrieveOffersResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+
+        response1.setResponsePayload(responsePayload);
+        response2.setResponsePayload(responsePayload);
+        
+        assertEquals(response1.hashCode(), response2.hashCode());
+
+        response2.setResponsePayload(null);
+        assertNotEquals(response1.hashCode(), response2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        RetrieveOffersResponse response1 = new RetrieveOffersResponse();
+        RetrieveOffersResponse response2 = new RetrieveOffersResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+
+        response1.setResponsePayload(responsePayload);
+        response2.setResponsePayload(responsePayload);
+        
+        assertEquals(response1, response2);
+
+        response2.setResponsePayload(null);
+        assertNotEquals(response1, response2);
+
+        response1.setResponsePayload(null);
+        response2.setResponsePayload(null);
+        assertEquals(response1, response2);
+        
+        assertNotEquals(response1, new Object());
+    }
+}

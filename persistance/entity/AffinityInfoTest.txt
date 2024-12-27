@@ -1,0 +1,215 @@
+package com.td.mbna.msec.midtier.persistance.entity;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class AffinityInfoTest {
+
+    @Test
+    public void testGetProductCodes() {
+        AffinityInfo affinityInfo = new AffinityInfo();
+        affinityInfo.setProductCodes("P12345");
+        assertEquals("P12345", affinityInfo.getProductCodes());
+    }
+
+    @Test
+    public void testSetProductCodes() {
+        AffinityInfo affinityInfo = new AffinityInfo();
+        affinityInfo.setProductCodes("P12345");
+        assertEquals("P12345", affinityInfo.getProductCodes());
+    }
+
+    @Test
+    public void testGetLanguage() {
+        AffinityInfo affinityInfo = new AffinityInfo();
+        affinityInfo.setLanguage("EN");
+        assertEquals("EN", affinityInfo.getLanguage());
+    }
+
+    @Test
+    public void testSetLanguage() {
+        AffinityInfo affinityInfo = new AffinityInfo();
+        affinityInfo.setLanguage("EN");
+        assertEquals("EN", affinityInfo.getLanguage());
+    }
+
+    @Test
+    public void testGetShortName() {
+        AffinityInfo affinityInfo = new AffinityInfo();
+        affinityInfo.setShortName("Short");
+        assertEquals("Short", affinityInfo.getShortName());
+    }
+
+    @Test
+    public void testSetShortName() {
+        AffinityInfo affinityInfo = new AffinityInfo();
+        affinityInfo.setShortName("Short");
+        assertEquals("Short", affinityInfo.getShortName());
+    }
+
+    @Test
+    public void testGetLongName() {
+        AffinityInfo affinityInfo = new AffinityInfo();
+        affinityInfo.setLongName("Long Description");
+        assertEquals("Long Description", affinityInfo.getLongName());
+    }
+
+    @Test
+    public void testSetLongName() {
+        AffinityInfo affinityInfo = new AffinityInfo();
+        affinityInfo.setLongName("Long Description");
+        assertEquals("Long Description", affinityInfo.getLongName());
+    }
+
+    @Test
+    public void testGetLogoId() {
+        AffinityInfo affinityInfo = new AffinityInfo();
+        affinityInfo.setLogoId("L12345");
+        assertEquals("L12345", affinityInfo.getLogoId());
+    }
+
+    @Test
+    public void testSetLogoId() {
+        AffinityInfo affinityInfo = new AffinityInfo();
+        affinityInfo.setLogoId("L12345");
+        assertEquals("L12345", affinityInfo.getLogoId());
+    }
+
+    @Test
+    public void testGetCptDescription() {
+        AffinityInfo affinityInfo = new AffinityInfo();
+        affinityInfo.setCptDescription("CPT Description");
+        assertEquals("CPT Description", affinityInfo.getCptDescription());
+    }
+
+    @Test
+    public void testSetCptDescription() {
+        AffinityInfo affinityInfo = new AffinityInfo();
+        affinityInfo.setCptDescription("CPT Description");
+        assertEquals("CPT Description", affinityInfo.getCptDescription());
+    }
+
+    @Test
+    public void testGetPoCode() {
+        AffinityInfo affinityInfo = new AffinityInfo();
+        affinityInfo.setPoCode("PO12345");
+        assertEquals("PO12345", affinityInfo.getPoCode());
+    }
+
+    @Test
+    public void testSetPoCode() {
+        AffinityInfo affinityInfo = new AffinityInfo();
+        affinityInfo.setPoCode("PO12345");
+        assertEquals("PO12345", affinityInfo.getPoCode());
+    }
+
+    @Test
+    public void testToString() {
+        AffinityInfo affinityInfo = new AffinityInfo();
+        affinityInfo.setProductCodes("P12345");
+        affinityInfo.setLanguage("EN");
+        affinityInfo.setShortName("Short");
+        affinityInfo.setLongName("Long Description");
+        affinityInfo.setLogoId("L12345");
+        affinityInfo.setCptDescription("CPT Description");
+        affinityInfo.setPoCode("PO12345");
+
+        String result = affinityInfo.toString();
+        assertNotNull(result);
+        assertTrue(result.contains("productCodes"));
+        assertTrue(result.contains("language"));
+        assertTrue(result.contains("shortName"));
+        assertTrue(result.contains("longName"));
+        assertTrue(result.contains("logoId"));
+        assertTrue(result.contains("cptDescription"));
+        assertTrue(result.contains("poCode"));
+    }
+
+    @Test
+    public void testEquals_SameObject() {
+        AffinityInfo affinityInfo = new AffinityInfo();
+        affinityInfo.setProductCodes("P12345");
+        affinityInfo.setLanguage("EN");
+        affinityInfo.setShortName("Short");
+        affinityInfo.setLongName("Long Description");
+        affinityInfo.setLogoId("L12345");
+        affinityInfo.setCptDescription("CPT Description");
+        affinityInfo.setPoCode("PO12345");
+
+        assertTrue(affinityInfo.equals(affinityInfo));
+    }
+
+    @Test
+    public void testEquals_Null() {
+        AffinityInfo affinityInfo = new AffinityInfo();
+        assertFalse(affinityInfo.equals(null));
+    }
+
+    @Test
+    public void testEquals_DifferentClass() {
+        AffinityInfo affinityInfo = new AffinityInfo();
+        assertFalse(affinityInfo.equals(new Object()));
+    }
+
+    @Test
+    public void testEquals_SameValues() {
+        AffinityInfo affinityInfo1 = new AffinityInfo();
+        affinityInfo1.setProductCodes("P12345");
+        affinityInfo1.setLanguage("EN");
+        affinityInfo1.setShortName("Short");
+        affinityInfo1.setLongName("Long Description");
+        affinityInfo1.setLogoId("L12345");
+        affinityInfo1.setCptDescription("CPT Description");
+        affinityInfo1.setPoCode("PO12345");
+
+        AffinityInfo affinityInfo2 = new AffinityInfo();
+        affinityInfo2.setProductCodes("P12345");
+        affinityInfo2.setLanguage("EN");
+        affinityInfo2.setShortName("Short");
+        affinityInfo2.setLongName("Long Description");
+        affinityInfo2.setLogoId("L12345");
+        affinityInfo2.setCptDescription("CPT Description");
+        affinityInfo2.setPoCode("PO12345");
+
+        assertTrue(affinityInfo1.equals(affinityInfo2));
+    }
+
+    @Test
+    public void testEquals_DifferentValues() {
+        AffinityInfo affinityInfo1 = new AffinityInfo();
+        affinityInfo1.setProductCodes("P12345");
+        affinityInfo1.setLanguage("EN");
+        affinityInfo1.setShortName("Short");
+        affinityInfo1.setLongName("Long Description");
+        affinityInfo1.setLogoId("L12345");
+        affinityInfo1.setCptDescription("CPT Description");
+        affinityInfo1.setPoCode("PO12345");
+
+        AffinityInfo affinityInfo2 = new AffinityInfo();
+        affinityInfo2.setProductCodes("P12346");
+        affinityInfo2.setLanguage("FR");
+        affinityInfo2.setShortName("Short");
+        affinityInfo2.setLongName("Long Description");
+        affinityInfo2.setLogoId("L12346");
+        affinityInfo2.setCptDescription("CPT Description");
+        affinityInfo2.setPoCode("PO12346");
+
+        assertFalse(affinityInfo1.equals(affinityInfo2));
+    }
+
+    @Test
+    public void testHashCode() {
+        AffinityInfo affinityInfo = new AffinityInfo();
+        affinityInfo.setProductCodes("P12345");
+        affinityInfo.setLanguage("EN");
+        affinityInfo.setShortName("Short");
+        affinityInfo.setLongName("Long Description");
+        affinityInfo.setLogoId("L12345");
+        affinityInfo.setCptDescription("CPT Description");
+        affinityInfo.setPoCode("PO12345");
+
+        int hashCode = affinityInfo.hashCode();
+        assertNotEquals(0, hashCode);
+    }
+}

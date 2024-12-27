@@ -1,0 +1,54 @@
+package com.td.mbna.msec.midtier.statement.payload.getStatementActivity;
+
+import com.td.mbna.msec.midtier.types.common.CardHolderInfo;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestPayloadTest {
+
+    @Test
+    void testGetAndSetStatementClosingDate() {
+        RequestPayload requestPayload = new RequestPayload();
+        
+        String statementClosingDate = "2024-12-31";
+        requestPayload.setStatementClosingDate(statementClosingDate);
+        
+        assertEquals(statementClosingDate, requestPayload.getStatementClosingDate());
+    }
+
+    @Test
+    void testGetAndSetStatementPaymentDueDate() {
+        RequestPayload requestPayload = new RequestPayload();
+        
+        String statementPaymentDueDate = "2025-01-15";
+        requestPayload.setStatementPaymentDueDate(statementPaymentDueDate);
+        
+        assertEquals(statementPaymentDueDate, requestPayload.getStatementPaymentDueDate());
+    }
+
+    @Test
+    void testGetAndSetCardHolderInfos() {
+        RequestPayload requestPayload = new RequestPayload();
+        
+        List<CardHolderInfo> cardHolderInfos = new ArrayList<>();
+        CardHolderInfo cardHolderInfo = new CardHolderInfo();
+        cardHolderInfos.add(cardHolderInfo);
+        
+        requestPayload.setCardHolderInfos(cardHolderInfos);
+        
+        assertEquals(cardHolderInfos, requestPayload.getCardHolderInfos());
+    }
+
+    @Test
+    void testSetCardHolderInfosToNull() {
+        RequestPayload requestPayload = new RequestPayload();
+        
+        requestPayload.setCardHolderInfos(null);
+        
+        assertNull(requestPayload.getCardHolderInfos());
+    }
+}

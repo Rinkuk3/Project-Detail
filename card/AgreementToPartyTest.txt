@@ -1,0 +1,77 @@
+package com.td.api.mbcca.response.card;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class AgreementToPartyTest {
+
+    @Test
+    public void testGettersAndSetters() {
+        AgreementToParty agreementToParty = new AgreementToParty();
+
+        agreementToParty.setPartyKey("partyKey1");
+        agreementToParty.setRoleCd("roleCd1");
+        agreementToParty.setRoleStatusCd("roleStatusCd1");
+        agreementToParty.setPartyIdentificationNum("partyIdentificationNum1");
+
+        assertEquals("partyKey1", agreementToParty.getPartyKey());
+        assertEquals("roleCd1", agreementToParty.getRoleCd());
+        assertEquals("roleStatusCd1", agreementToParty.getRoleStatusCd());
+        assertEquals("partyIdentificationNum1", agreementToParty.getPartyIdentificationNum());
+    }
+
+    @Test
+    public void testToString() {
+        AgreementToParty agreementToParty = new AgreementToParty();
+        agreementToParty.setPartyKey("partyKey1");
+        agreementToParty.setRoleCd("roleCd1");
+        agreementToParty.setRoleStatusCd("roleStatusCd1");
+        agreementToParty.setPartyIdentificationNum("partyIdentificationNum1");
+
+        String expected = AgreementToParty.class.getName() + "@" + Integer.toHexString(System.identityHashCode(agreementToParty)) + "[" +
+                          "partyKey=partyKey1," +
+                          "roleCd=roleCd1," +
+                          "roleStatusCd=roleStatusCd1," +
+                          "partyIdentificationNum=partyIdentificationNum1]";
+
+        assertEquals(expected, agreementToParty.toString());
+    }
+
+    @Test
+    public void testEqualsAndHashCode() {
+        AgreementToParty agreementToParty1 = new AgreementToParty();
+        agreementToParty1.setPartyKey("partyKey1");
+        agreementToParty1.setRoleCd("roleCd1");
+        agreementToParty1.setRoleStatusCd("roleStatusCd1");
+        agreementToParty1.setPartyIdentificationNum("partyIdentificationNum1");
+
+        AgreementToParty agreementToParty2 = new AgreementToParty();
+        agreementToParty2.setPartyKey("partyKey1");
+        agreementToParty2.setRoleCd("roleCd1");
+        agreementToParty2.setRoleStatusCd("roleStatusCd1");
+        agreementToParty2.setPartyIdentificationNum("partyIdentificationNum1");
+
+        AgreementToParty agreementToParty3 = new AgreementToParty();
+        agreementToParty3.setPartyKey("partyKey2");
+        agreementToParty3.setRoleCd("roleCd2");
+        agreementToParty3.setRoleStatusCd("roleStatusCd2");
+        agreementToParty3.setPartyIdentificationNum("partyIdentificationNum2");
+
+        assertEquals(agreementToParty1, agreementToParty2);
+        assertEquals(agreementToParty1.hashCode(), agreementToParty2.hashCode());
+        assertNotEquals(agreementToParty1, agreementToParty3);
+        assertNotEquals(agreementToParty1.hashCode(), agreementToParty3.hashCode());
+    }
+
+    @Test
+    public void testEqualsWithDifferentObjectTypes() {
+        AgreementToParty agreementToParty = new AgreementToParty();
+        agreementToParty.setPartyKey("partyKey1");
+        agreementToParty.setRoleCd("roleCd1");
+        agreementToParty.setRoleStatusCd("roleStatusCd1");
+        agreementToParty.setPartyIdentificationNum("partyIdentificationNum1");
+
+        assertNotEquals(agreementToParty, new Object());
+        assertNotEquals(agreementToParty, null);
+    }
+}

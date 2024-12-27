@@ -1,0 +1,64 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class PartyTest {
+
+    private Party party;
+
+    @BeforeEach
+    void setUp() {
+        party = new Party();
+    }
+
+    @Test
+    void testGetAndSetRoleCd() {
+        String roleCd = "Admin";
+        party.setRoleCd(roleCd);
+        assertEquals(roleCd, party.getRoleCd());
+    }
+
+    @Test
+    void testToString() {
+        party.setRoleCd("Admin");
+        
+        String expected = "com.td.api.mbofp.request.updateofferdisposition.Party@" +
+                          Integer.toHexString(party.hashCode()) +
+                          "[roleCd=Admin]";
+        assertEquals(expected, party.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        party.setRoleCd("Admin");
+
+        int expectedHashCode = 1;
+        expectedHashCode = 31 * expectedHashCode + (party.getRoleCd() == null ? 0 : party.getRoleCd().hashCode());
+        
+        assertEquals(expectedHashCode, party.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        party.setRoleCd("Admin");
+
+        // Test equality with same object
+        assertTrue(party.equals(party));
+
+        // Test equality with another object having the same roleCd
+        Party anotherParty = new Party();
+        anotherParty.setRoleCd("Admin");
+        assertTrue(party.equals(anotherParty));
+
+        // Test inequality with different roleCd
+        Party differentParty = new Party();
+        differentParty.setRoleCd("User");
+        assertFalse(party.equals(differentParty));
+
+        // Test inequality with null
+        assertFalse(party.equals(null));
+
+        // Test inequality with an object of a different class
+        assertFalse(party.equals(new Object()));
+    }
+}

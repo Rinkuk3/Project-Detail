@@ -1,0 +1,149 @@
+package com.td.mbna.msec.midtier.transfer.util;
+
+import com.td.mbna.msec.midtier.persistance.entity.BtDestinations;
+import com.td.mbna.msec.midtier.persistance.entity.Creditors;
+import com.td.mbna.msec.midtier.transfer.payload.BalanceTransferToCreditorPayeeType;
+import com.td.mbna.msec.midtier.util.ConfigUtil;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springmodules.validation.valang.functions.Function;
+
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+class BalanceTransferToCreditorValidatorTest {
+
+    private BalanceTransferToCreditorValidator validator;
+
+    @BeforeEach
+    void setUp() {
+        validator = new BalanceTransferToCreditorValidator();
+    }
+
+    @Test
+    void testValidateTotal() throws Exception {
+        // Arrange
+        Function[] arguments = new Function[1];
+        arguments[0] = mock(Function.class);
+        com.td.mbna.msec.midtier.transfer.payload.balancetransfertocreditor.RequestPayload requestPayload = mock(com.td.mbna.msec.midtier.transfer.payload.balancetransfertocreditor.RequestPayload.class);
+        when(arguments[0].getResult(any())).thenReturn(requestPayload);
+        when(requestPayload.getCreditAvail()).thenReturn(new BigDecimal("500.00"));
+        when(TotalUtil.getbalanceTransferToCreditorTotal(requestPayload)).thenReturn(new BigDecimal("300.00"));
+
+        BalanceTransferToCreditorValidator.ValidateTotal validateTotal = new BalanceTransferToCreditorValidator.ValidateTotal(arguments, 1, 1);
+
+        // Act
+        Object result = validateTotal.doGetResult(new Object());
+
+        // Assert
+        assertTrue((Boolean) result);
+    }
+
+    @Test
+    void testValidPayeeMerchantCardNum() throws Exception {
+        // Arrange
+        Function[] arguments = new Function[1];
+        arguments[0] = mock(Function.class);
+        BalanceTransferToCreditorPayeeType payee = mock(BalanceTransferToCreditorPayeeType.class);
+        when(arguments[0].getResult(any())).thenReturn(payee);
+        when(CardNumUtil.isValidMerchantCardNum(payee)).thenReturn(true);
+
+        BalanceTransferToCreditorValidator.ValidPayeeMerchantCardNum validPayeeMerchantCardNum = new BalanceTransferToCreditorValidator.ValidPayeeMerchantCardNum(arguments, 1, 1);
+
+        // Act
+        Object result = validPayeeMerchantCardNum.doGetResult(new Object());
+
+        // Assert
+        assertTrue((Boolean) result);
+    }
+
+    @Test
+    void testValidateMerchantId() throws Exception {
+        // Arrange
+        Function[] arguments = new Function[1];
+        arguments[0] = mock(Function.class);
+        String merchantId = "12345";
+        when(arguments[0].getResult(any())).thenReturn(merchantId);
+
+        Creditors creditor = mock(Creditors.class);
+        when(DBMybatisService.getCreditorByMerchantId(merchantId)).thenReturn(creditor);
+
+        BalanceTransferToCreditorValidator.ValidateMerchantId validateMerchantId = new BalanceTransferToCreditorValidator.ValidateMerchantId(arguments, 1, 1);
+
+        // Act
+        Object result = validateMerchantId.doGetResult(new Object());
+
+        // Assert
+        assertTrue((Boolean) result);
+    }
+
+    @Test
+    void testIsNewPayeeNickname() throws Exception {
+        // Arrange
+        Function[] arguments = new Function[2];
+        arguments[0] = mock(Function.class);
+        arguments[1] = mock(Function.class);
+        String nickname = "newNickname";
+        String customerId = "customerId";
+        when(arguments[0].getResult(any())).thenReturn(nickname);
+        when(arguments[1].getResult(any())).thenReturn(customerId);
+
+        List<BtDestinations> payees = Arrays.asList(mock(BtDestinations.class));
+        when(DBMybatisService.findBtDestinationsByNickname(customerId, nickname)).thenReturn(payees);
+
+        BalanceTransferToCreditorValidator.IsNewPayeeNickname isNewPayeeNickname = new BalanceTransferToCreditorValidator.IsNewPayeeNickname(arguments, 1, 1);
+
+        // Act
+        Object result = isNewPayeeNickname.doGetResult(new Object());
+
+        // Assert
+        assertFalse((Boolean) result);
+    }
+
+    @Test
+    void testIsNewOrSamePayeeNickname() throws Exception {
+        // Arrange
+        Function[] arguments = new Function[3];
+        arguments[0] = mock(Function.class);
+        arguments[1] = mock(Function.class);
+        arguments[2] = mock(Function.class);
+        String nickname = "newNickname";
+        String curNickname = "currentNickname";
+        String customerId = "customerId";
+        when(arguments[0].getResult(any())).thenReturn(nickname);
+        when(arguments[1].getResult(any())).thenReturn(curNickname);
+        when(arguments[2].getResult(any())).thenReturn(customerId);
+
+        List<BtDestinations> payees = Arrays.asList(mock(BtDestinations.class));
+        when(DBMybatisService.findBtDestinationsByNickname(customerId, nickname)).thenReturn(payees);
+
+        BalanceTransferToCreditorValidator.IsNewOrSamePayeeNickname isNewOrSamePayeeNickname = new BalanceTransferToCreditorValidator.IsNewOrSamePayeeNickname(arguments, 1, 1);
+
+        // Act
+        Object result = isNewOrSamePayeeNickname.doGetResult(new Object());
+
+        // Assert
+        assertTrue((Boolean) result);
+    }
+
+    @Test
+    void testExceedsMaxTransferAmount() throws Exception {
+        // Arrange
+        Function[] arguments = new Function[1];
+        arguments[0] = mock(Function.class);
+        BigDecimal transferAmt = new BigDecimal("1000.00");
+        when(arguments[0].getResult(any())).thenReturn(transferAmt);
+
+        BalanceTransferToCreditorValidator.ExceedsMaxTransferAmount exceedsMaxTransferAmount = new BalanceTransferToCreditorValidator.ExceedsMaxTransferAmount(arguments, 1, 1);
+
+        // Act
+        Object result = exceedsMaxTransferAmount.doGetResult(new Object());
+
+        // Assert
+        assertTrue((Boolean) result);
+    }
+}

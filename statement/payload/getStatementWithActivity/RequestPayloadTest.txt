@@ -1,0 +1,63 @@
+package com.td.mbna.msec.midtier.statement.payload.getStatementWithActivity;
+
+import com.td.mbna.msec.midtier.statement.payload.InsertListType;
+import com.td.mbna.msec.midtier.types.common.CardHolderInfo;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestPayloadTest {
+
+    @Test
+    void testSetAndGetStatementClosingDate() {
+        RequestPayload requestPayload = new RequestPayload();
+        String closingDate = "2024-12-31";
+        requestPayload.setStatementClosingDate(closingDate);
+        assertEquals(closingDate, requestPayload.getStatementClosingDate());
+    }
+
+    @Test
+    void testSetAndGetStatementPaymentDueDate() {
+        RequestPayload requestPayload = new RequestPayload();
+        String paymentDueDate = "2025-01-15";
+        requestPayload.setStatementPaymentDueDate(paymentDueDate);
+        assertEquals(paymentDueDate, requestPayload.getStatementPaymentDueDate());
+    }
+
+    @Test
+    void testSetAndGetWithAvailableList() {
+        RequestPayload requestPayload = new RequestPayload();
+        Boolean withAvailableList = true;
+        requestPayload.setWithAvailableList(withAvailableList);
+        assertEquals(withAvailableList, requestPayload.getWithAvailableList());
+    }
+
+    @Test
+    void testSetAndGetInsertIdList() {
+        RequestPayload requestPayload = new RequestPayload();
+        InsertListType insertListType = new InsertListType(); // Mocking the InsertListType object
+        requestPayload.setInsertIdList(insertListType);
+        assertEquals(insertListType, requestPayload.getInsertIdList());
+    }
+
+    @Test
+    void testSetAndGetCardHolderInfos() {
+        RequestPayload requestPayload = new RequestPayload();
+        List<CardHolderInfo> cardHolderInfos = new ArrayList<>();
+        CardHolderInfo cardHolderInfo = new CardHolderInfo(); // Mocking the CardHolderInfo object
+        cardHolderInfos.add(cardHolderInfo);
+        requestPayload.setCardHolderInfos(cardHolderInfos);
+        assertEquals(cardHolderInfos, requestPayload.getCardHolderInfos());
+    }
+
+    @Test
+    void testAddCardHolderInfo() {
+        RequestPayload requestPayload = new RequestPayload();
+        CardHolderInfo cardHolderInfo = new CardHolderInfo(); // Mocking the CardHolderInfo object
+        requestPayload.getCardHolderInfos().add(cardHolderInfo);
+        assertTrue(requestPayload.getCardHolderInfos().contains(cardHolderInfo));
+    }
+}

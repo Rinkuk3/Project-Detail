@@ -1,0 +1,164 @@
+import com.td.mbna.msec.midtier.cardservice.payload.activatecard.ActivateCardResponse;
+import com.td.mbna.msec.midtier.cardservice.payload.activatecard.ResponsePayload;
+import com.td.mbna.msec.midtier.util.services.MSECConstants;
+import com.td.mbna.msec.midtier.util.services.TDRestServiceUtil;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class CardActivationSrvTest {
+
+    @Mock
+    private RestTemplate restTemplate;
+
+    @InjectMocks
+    private CardActivationSrv cardActivationSrv;
+
+    @Test
+    void testActivateCard_Success() {
+        // Arrange
+        String connectId = "connectId";
+        String cardNumber = "1234567890";
+        String partyKey = "partyKey";
+        String token = "token";
+
+        // Mock the response from RestTemplate
+        ActivateCardResponse mockResponse = new ActivateCardResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatus(true);
+        mockResponse.setResponsePayload(responsePayload);
+        ResponseEntity<ActivateCardResponse> mockResponseEntity = new ResponseEntity<>(mockResponse, HttpStatus.OK);
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl("mockUrl");
+
+        when(restTemplate.exchange(eq("mockUrl"), eq(HttpMethod.POST), any(HttpEntity.class), eq(ActivateCardResponse.class)))
+                .thenReturn(mockResponseEntity);
+
+        // Act
+        ActivateCardResponse result = cardActivationSrv.activateCard(connectId, cardNumber, partyKey, token);
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.getResponsePayload().getStatus());
+    }
+
+    @Test
+    void testActivateCard_Failure() {
+        // Arrange
+        String connectId = "connectId";
+        String cardNumber = "1234567890";
+        String partyKey = "partyKey";
+        String token = "token";
+
+        // Mock the response from RestTemplate (null body)
+        ResponseEntity<ActivateCardResponse> mockResponseEntity = new ResponseEntity<>(HttpStatus.OK);
+
+        when(restTemplate.exchange(eq("mockUrl"), eq(HttpMethod.POST), any(HttpEntity.class), eq(ActivateCardResponse.class)))
+                .thenReturn(mockResponseEntity);
+
+        // Act
+        ActivateCardResponse result = cardActivationSrv.activateCard(connectId, cardNumber, partyKey, token);
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testActivateCard_Exception() {
+        // Arrange
+        String connectId = "connectId";
+        String cardNumber = "1234567890";
+        String partyKey = "partyKey";
+        String token = "token";
+
+        // Mock exception thrown by RestTemplate
+        when(restTemplate.exchange(eq("mockUrl"), eq(HttpMethod.POST), any(HttpEntity.class), eq(ActivateCardResponse.class)))
+                .thenThrow(new RuntimeException("Error"));
+
+        // Act
+        ActivateCardResponse result = cardActivationSrv.activateCard(connectId, cardNumber, partyKey, token);
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testActivateCard_EmptyResponse() {
+        // Arrange
+        String connectId = "connectId";
+        String cardNumber = "1234567890";
+        String partyKey = "partyKey";
+        String token = "token";
+
+        // Mock an empty response body
+        ResponseEntity<ActivateCardResponse> mockResponseEntity = new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        when(restTemplate.exchange(eq("mockUrl"), eq(HttpMethod.POST), any(HttpEntity.class), eq(ActivateCardResponse.class)))
+                .thenReturn(mockResponseEntity);
+
+        // Act
+        ActivateCardResponse result = cardActivationSrv.activateCard(connectId, cardNumber, partyKey, token);
+
+        // Assert
+        assertNull(result);
+    }
+
+    @Test
+    void testActivateCard_LogsCorrectly() {
+        // Arrange
+        String connectId = "connectId";
+        String cardNumber = "1234567890";
+        String partyKey = "partyKey";
+        String token = "token";
+
+        // Mock the response from RestTemplate
+        ActivateCardResponse mockResponse = new ActivateCardResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatus(true);
+        mockResponse.setResponsePayload(responsePayload);
+        ResponseEntity<ActivateCardResponse> mockResponseEntity = new ResponseEntity<>(mockResponse, HttpStatus.OK);
+
+        when(restTemplate.exchange(eq("mockUrl"), eq(HttpMethod.POST), any(HttpEntity.class), eq(ActivateCardResponse.class)))
+                .thenReturn(mockResponseEntity);
+
+        // Act
+        cardActivationSrv.activateCard(connectId, cardNumber, partyKey, token);
+
+        // Verify if logger.debug() and logger.error() are invoked
+        verifyStatic(MbnaLogger.class);
+        MbnaLogger.debug(Mockito.anyString(), Mockito.anyString());
+    }
+
+    @Test
+    void testActivateCard_BuildUri() {
+        // Arrange
+        String connectId = "connectId";
+        String cardNumber = "1234567890";
+        String partyKey = "partyKey";
+        String token = "token";
+
+        // Mock the response from RestTemplate
+        ActivateCardResponse mockResponse = new ActivateCardResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        responsePayload.setStatus(true);
+        mockResponse.setResponsePayload(responsePayload);
+        ResponseEntity<ActivateCardResponse> mockResponseEntity = new ResponseEntity<>(mockResponse, HttpStatus.OK);
+
+        when(restTemplate.exchange(eq("mockUrl"), eq(HttpMethod.POST), any(HttpEntity.class), eq(ActivateCardResponse.class)))
+                .thenReturn(mockResponseEntity);
+
+        // Act
+        cardActivationSrv.activateCard(connectId, cardNumber, partyKey, token);
+
+        // Verify Uri building
+        verify(restTemplate).exchange(eq("mockUrl"), eq(HttpMethod.POST), any(HttpEntity.class), eq(ActivateCardResponse.class));
+    }
+}

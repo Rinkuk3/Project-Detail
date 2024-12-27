@@ -1,0 +1,74 @@
+package com.td.api.kms.request;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class AddEncryptionJobRqTest {
+
+    private AddEncryptionJobRq addEncryptionJobRq;
+
+    @BeforeEach
+    void setUp() {
+        addEncryptionJobRq = new AddEncryptionJobRq();
+    }
+
+    @Test
+    void testSetAndGetEncryptionEvent() {
+        EncryptionEvent encryptionEvent = new EncryptionEvent();
+        addEncryptionJobRq.setEncryptionEvent(encryptionEvent);
+        assertEquals(encryptionEvent, addEncryptionJobRq.getEncryptionEvent());
+    }
+
+    @Test
+    void testToString() {
+        EncryptionEvent encryptionEvent = new EncryptionEvent();
+        addEncryptionJobRq.setEncryptionEvent(encryptionEvent);
+
+        String expectedToString = "com.td.api.kms.request.AddEncryptionJobRq@" + Integer.toHexString(addEncryptionJobRq.hashCode()) + "[encryptionEvent=" + encryptionEvent + "]";
+        assertEquals(expectedToString, addEncryptionJobRq.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        AddEncryptionJobRq rq1 = new AddEncryptionJobRq();
+        AddEncryptionJobRq rq2 = new AddEncryptionJobRq();
+
+        assertEquals(rq1.hashCode(), rq2.hashCode());
+
+        EncryptionEvent encryptionEvent = new EncryptionEvent();
+        rq1.setEncryptionEvent(encryptionEvent);
+        rq2.setEncryptionEvent(encryptionEvent);
+
+        assertEquals(rq1.hashCode(), rq2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        AddEncryptionJobRq rq1 = new AddEncryptionJobRq();
+        AddEncryptionJobRq rq2 = new AddEncryptionJobRq();
+        assertTrue(rq1.equals(rq2));
+
+        EncryptionEvent encryptionEvent = new EncryptionEvent();
+        rq1.setEncryptionEvent(encryptionEvent);
+        rq2.setEncryptionEvent(encryptionEvent);
+        assertTrue(rq1.equals(rq2));
+
+        rq2.setEncryptionEvent(new EncryptionEvent());
+        assertFalse(rq1.equals(rq2));
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        AddEncryptionJobRq rq = new AddEncryptionJobRq();
+        assertFalse(rq.equals(null));
+    }
+
+    @Test
+    void testEqualsWithDifferentClass() {
+        AddEncryptionJobRq rq = new AddEncryptionJobRq();
+        String str = "DifferentClass";
+        assertFalse(rq.equals(str));
+    }
+}

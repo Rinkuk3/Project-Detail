@@ -1,0 +1,122 @@
+import com.td.mbna.msec.midtier.disclosure.GetDisclosureOperation;
+import com.td.mbna.msec.midtier.disclosure.payload.getdisclosure.GetDisclosureRequest;
+import com.td.mbna.msec.midtier.disclosure.payload.getdisclosure.GetDisclosureResponse;
+import com.td.mbna.msec.midtier.disclosure.payload.getdisclosure.RequestPayload;
+import com.td.mbna.msec.midtier.types.common.DisclosureInfoType;
+import com.td.mbna.msec.midtier.types.common.TrackingInfoType;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
+
+@RunWith(MockitoJUnitRunner.class)
+public class StaticDisclosureCacheCmdTest {
+
+    @Mock
+    private GetDisclosureOperation getDisclosureOperation;
+
+    @InjectMocks
+    private StaticDisclosureCacheCmd staticDisclosureCacheCmd;
+
+    private String languageId = "en";
+    private String disclosureId = "disclosure123";
+
+    @Before
+    public void setUp() {
+        staticDisclosureCacheCmd = new StaticDisclosureCacheCmd(getDisclosureOperation, languageId, disclosureId);
+    }
+
+    @Test
+    public void testIsReadyToCallExecute() {
+        // Act
+        boolean result = staticDisclosureCacheCmd.isReadyToCallExecute();
+
+        // Assert
+        assert(result == true);
+    }
+
+    @Test
+    public void testIsReadyToCallExecute_WithNullLanguageId() {
+        // Arrange
+        staticDisclosureCacheCmd = new StaticDisclosureCacheCmd(getDisclosureOperation, null, disclosureId);
+
+        // Act
+        boolean result = staticDisclosureCacheCmd.isReadyToCallExecute();
+
+        // Assert
+        assert(result == false);
+    }
+
+    @Test
+    public void testPerformExecute_Success() throws Exception {
+        // Arrange
+        GetDisclosureResponse mockResponse = mock(GetDisclosureResponse.class);
+        RequestPayload mockPayload = mock(RequestPayload.class);
+        DisclosureInfoType mockDisclosureInfo = mock(DisclosureInfoType.class);
+
+        when(getDisclosureOperation.invokeService(any(GetDisclosureRequest.class), eq(""))).thenReturn(mockResponse);
+        when(mockResponse.getResponsePayload()).thenReturn(mockPayload);
+        when(mockPayload.getContent()).thenReturn("Disclosure Text");
+        when(mockPayload.getDisclosureInfo()).thenReturn(mockDisclosureInfo);
+
+        // Act
+        staticDisclosureCacheCmd.performExecute();
+
+        // Assert
+        verify(getDisclosureOperation, times(1)).invokeService(any(GetDisclosureRequest.class), eq(""));
+        assert("Disclosure Text".equals(staticDisclosureCacheCmd.getDisclosureText()));
+        assert(mockDisclosureInfo.equals(staticDisclosureCacheCmd.getDisclosureInfoType()));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testPerformExecute_Failure() throws Exception {
+        // Arrange
+        when(getDisclosureOperation.invokeService(any(GetDisclosureRequest.class), eq(""))).thenThrow(new RuntimeException("Error"));
+
+        // Act
+        staticDisclosureCacheCmd.performExecute();
+    }
+
+    @Test
+    public void testGetDisclosureText() {
+        // Act
+        String result = staticDisclosureCacheCmd.getDisclosureText();
+
+        // Assert
+        assert(result == null);  // Initially, it's null.
+    }
+
+    @Test
+    public void testGetDisclosureInfoType() {
+        // Act
+        DisclosureInfoType result = staticDisclosureCacheCmd.getDisclosureInfoType();
+
+        // Assert
+        assert(result == null);  // Initially, it's null.
+    }
+
+    @Test
+    public void testGetDisclosureId() {
+        // Act
+        String result = staticDisclosureCacheCmd.getDisclosureId();
+
+        // Assert
+        assert(result.equals(disclosureId));
+    }
+
+    @Test
+    public void testGetLanguageId() {
+        // Act
+        String result = staticDisclosureCacheCmd.getLanguageId();
+
+        // Assert
+        assert(result.equals(languageId));
+    }
+}

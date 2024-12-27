@@ -1,0 +1,85 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestDestinationExternalCreditorAccountTest {
+
+    private RequestDestinationExternalCreditorAccount creditorAccount;
+
+    @BeforeEach
+    void setUp() {
+        creditorAccount = new RequestDestinationExternalCreditorAccount();
+    }
+
+    @Test
+    void testGetAndSetAccountNum() {
+        String accountNum = "123456789";
+        creditorAccount.setAccountNum(accountNum);
+        assertEquals(accountNum, creditorAccount.getAccountNum());
+    }
+
+    @Test
+    void testGetAndSetCreditorPartyIdentificationNum() {
+        String creditorPartyIdentificationNum = "987654321";
+        creditorAccount.setCreditorPartyIdentificationNum(creditorPartyIdentificationNum);
+        assertEquals(creditorPartyIdentificationNum, creditorAccount.getCreditorPartyIdentificationNum());
+    }
+
+    @Test
+    void testToString() {
+        String accountNum = "123456789";
+        String creditorPartyIdentificationNum = "987654321";
+        
+        creditorAccount.setAccountNum(accountNum);
+        creditorAccount.setCreditorPartyIdentificationNum(creditorPartyIdentificationNum);
+
+        String expected = "com.td.api.mbofp.request.balancetransfer.RequestDestinationExternalCreditorAccount@"
+            + Integer.toHexString(creditorAccount.hashCode()) + "[accountNum=" + accountNum
+            + ",creditorPartyIdentificationNum=" + creditorPartyIdentificationNum + "]";
+
+        assertEquals(expected, creditorAccount.toString());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        RequestDestinationExternalCreditorAccount otherCreditorAccount = new RequestDestinationExternalCreditorAccount();
+        
+        String accountNum = "123456789";
+        String creditorPartyIdentificationNum = "987654321";
+        
+        creditorAccount.setAccountNum(accountNum);
+        creditorAccount.setCreditorPartyIdentificationNum(creditorPartyIdentificationNum);
+
+        otherCreditorAccount.setAccountNum(accountNum);
+        otherCreditorAccount.setCreditorPartyIdentificationNum(creditorPartyIdentificationNum);
+
+        assertTrue(creditorAccount.equals(otherCreditorAccount));
+        assertEquals(creditorAccount.hashCode(), otherCreditorAccount.hashCode());
+    }
+
+    @Test
+    void testNotEquals() {
+        RequestDestinationExternalCreditorAccount otherCreditorAccount = new RequestDestinationExternalCreditorAccount();
+        
+        creditorAccount.setAccountNum("123456789");
+        otherCreditorAccount.setAccountNum("987654321");
+
+        assertFalse(creditorAccount.equals(otherCreditorAccount));
+    }
+
+    @Test
+    void testNullEquals() {
+        assertFalse(creditorAccount.equals(null));
+    }
+
+    @Test
+    void testSameObjectEquals() {
+        assertTrue(creditorAccount.equals(creditorAccount));
+    }
+
+    @Test
+    void testEqualsDifferentClass() {
+        assertFalse(creditorAccount.equals(new Object()));
+    }
+}

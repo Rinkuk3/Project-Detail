@@ -1,0 +1,130 @@
+package com.td.api.kms.request;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class DecryptionEventTest {
+
+    private DecryptionEvent decryptionEvent;
+
+    @BeforeEach
+    void setUp() {
+        decryptionEvent = new DecryptionEvent();
+    }
+
+    @Test
+    void testSetAndGetParty() {
+        Party party = new Party();
+        decryptionEvent.setParty(party);
+        assertEquals(party, decryptionEvent.getParty());
+    }
+
+    @Test
+    void testSetAndGetEncryptionMethodCd() {
+        String encryptionMethodCd = "AES";
+        decryptionEvent.setEncryptionMethodCd(encryptionMethodCd);
+        assertEquals(encryptionMethodCd, decryptionEvent.getEncryptionMethodCd());
+    }
+
+    @Test
+    void testSetAndGetCryptographyKey() {
+        CryptographyKey cryptographyKey = new CryptographyKey();
+        decryptionEvent.setCryptographyKey(List.of(cryptographyKey));
+        assertEquals(List.of(cryptographyKey), decryptionEvent.getCryptographyKey());
+    }
+
+    @Test
+    void testSetAndGetCipherData() {
+        CipherData cipherData = new CipherData();
+        decryptionEvent.setCipherData(cipherData);
+        assertEquals(cipherData, decryptionEvent.getCipherData());
+    }
+
+    @Test
+    void testToString() {
+        Party party = new Party();
+        String encryptionMethodCd = "AES";
+        CryptographyKey cryptographyKey = new CryptographyKey();
+        CipherData cipherData = new CipherData();
+
+        decryptionEvent.setParty(party);
+        decryptionEvent.setEncryptionMethodCd(encryptionMethodCd);
+        decryptionEvent.setCryptographyKey(List.of(cryptographyKey));
+        decryptionEvent.setCipherData(cipherData);
+
+        String expectedToString = "com.td.api.kms.request.DecryptionEvent@" + Integer.toHexString(decryptionEvent.hashCode()) +
+                "[party=" + party + ",encryptionMethodCd=" + encryptionMethodCd + 
+                ",cryptographyKey=" + List.of(cryptographyKey) + ",cipherData=" + cipherData + "]";
+        assertEquals(expectedToString, decryptionEvent.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        DecryptionEvent decryptionEvent1 = new DecryptionEvent();
+        DecryptionEvent decryptionEvent2 = new DecryptionEvent();
+        assertEquals(decryptionEvent1.hashCode(), decryptionEvent2.hashCode());
+
+        Party party = new Party();
+        String encryptionMethodCd = "AES";
+        CryptographyKey cryptographyKey = new CryptographyKey();
+        CipherData cipherData = new CipherData();
+
+        decryptionEvent1.setParty(party);
+        decryptionEvent1.setEncryptionMethodCd(encryptionMethodCd);
+        decryptionEvent1.setCryptographyKey(List.of(cryptographyKey));
+        decryptionEvent1.setCipherData(cipherData);
+
+        decryptionEvent2.setParty(party);
+        decryptionEvent2.setEncryptionMethodCd(encryptionMethodCd);
+        decryptionEvent2.setCryptographyKey(List.of(cryptographyKey));
+        decryptionEvent2.setCipherData(cipherData);
+
+        assertEquals(decryptionEvent1.hashCode(), decryptionEvent2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        DecryptionEvent decryptionEvent1 = new DecryptionEvent();
+        DecryptionEvent decryptionEvent2 = new DecryptionEvent();
+        assertTrue(decryptionEvent1.equals(decryptionEvent2));
+
+        Party party = new Party();
+        String encryptionMethodCd = "AES";
+        CryptographyKey cryptographyKey = new CryptographyKey();
+        CipherData cipherData = new CipherData();
+
+        decryptionEvent1.setParty(party);
+        decryptionEvent1.setEncryptionMethodCd(encryptionMethodCd);
+        decryptionEvent1.setCryptographyKey(List.of(cryptographyKey));
+        decryptionEvent1.setCipherData(cipherData);
+
+        decryptionEvent2.setParty(party);
+        decryptionEvent2.setEncryptionMethodCd(encryptionMethodCd);
+        decryptionEvent2.setCryptographyKey(List.of(cryptographyKey));
+        decryptionEvent2.setCipherData(cipherData);
+
+        assertTrue(decryptionEvent1.equals(decryptionEvent2));
+
+        decryptionEvent2.setEncryptionMethodCd("RSA");
+        assertFalse(decryptionEvent1.equals(decryptionEvent2));
+
+        decryptionEvent2.setEncryptionMethodCd(encryptionMethodCd);
+        decryptionEvent2.setParty(new Party());
+        assertFalse(decryptionEvent1.equals(decryptionEvent2));
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        DecryptionEvent decryptionEvent1 = new DecryptionEvent();
+        assertFalse(decryptionEvent1.equals(null));
+    }
+
+    @Test
+    void testEqualsWithDifferentClass() {
+        DecryptionEvent decryptionEvent1 = new DecryptionEvent();
+        String str = "DifferentClass";
+        assertFalse(decryptionEvent1.equals(str));
+    }
+}

@@ -1,0 +1,36 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class RewardsBalanceDTOTest {
+
+    private RewardsBalanceDTO rewardsBalanceDTO;
+
+    @BeforeEach
+    public void setUp() {
+        rewardsBalanceDTO = new RewardsBalanceDTO();
+    }
+
+    @Test
+    public void testGetSetValue() {
+        Long value = 100L;
+        rewardsBalanceDTO.setValue(value);
+        assertEquals(value, rewardsBalanceDTO.getValue());
+    }
+
+    @Test
+    public void testGetSetRewardscurrency() {
+        String currency = "USD";
+        rewardsBalanceDTO.setRewardscurrency(currency);
+        assertEquals(currency, rewardsBalanceDTO.getRewardscurrency());
+    }
+
+    @Test
+    public void testToString() {
+        rewardsBalanceDTO.setValue(100L);
+        rewardsBalanceDTO.setRewardscurrency("USD");
+        String expectedString = "RewardsBalanceDTO [value=100, rewardscurrency=USD]";
+        assertEquals(expectedString, rewardsBalanceDTO.toString());
+    }
+}

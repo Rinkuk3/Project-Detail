@@ -1,0 +1,74 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class RequestInsuranceResponseTest {
+
+    @Test
+    void testSetGetResponsePayload() {
+        RequestInsuranceResponse requestInsuranceResponse = new RequestInsuranceResponse();
+        ResponsePayload responsePayload = new ResponsePayload();
+        requestInsuranceResponse.setResponsePayload(responsePayload);
+        
+        assertEquals(responsePayload, requestInsuranceResponse.getResponsePayload());
+    }
+
+    @Test
+    void testToString() {
+        RequestInsuranceResponse requestInsuranceResponse = new RequestInsuranceResponse();
+        requestInsuranceResponse.setStatus("success");
+        requestInsuranceResponse.setErrorMessages("No Errors");
+        requestInsuranceResponse.setResponsePayload(new ResponsePayload());
+
+        String expectedString = "RequestInsuranceResponse@" + Integer.toHexString(System.identityHashCode(requestInsuranceResponse)) + "[" +
+                "status=success," +
+                "errorMsgs=No Errors," +
+                "responsePayload=" + requestInsuranceResponse.getResponsePayload() +
+                "]";
+
+        assertEquals(expectedString, requestInsuranceResponse.toString());
+    }
+
+    @Test
+    void testEquals() {
+        RequestInsuranceResponse requestInsuranceResponse1 = new RequestInsuranceResponse();
+        RequestInsuranceResponse requestInsuranceResponse2 = new RequestInsuranceResponse();
+        
+        requestInsuranceResponse1.setStatus("success");
+        requestInsuranceResponse2.setStatus("success");
+
+        assertEquals(requestInsuranceResponse1, requestInsuranceResponse2);
+
+        requestInsuranceResponse2.setStatus("failure");
+        assertNotEquals(requestInsuranceResponse1, requestInsuranceResponse2);
+    }
+
+    @Test
+    void testHashCode() {
+        RequestInsuranceResponse requestInsuranceResponse1 = new RequestInsuranceResponse();
+        RequestInsuranceResponse requestInsuranceResponse2 = new RequestInsuranceResponse();
+
+        requestInsuranceResponse1.setStatus("success");
+        requestInsuranceResponse2.setStatus("success");
+
+        assertEquals(requestInsuranceResponse1.hashCode(), requestInsuranceResponse2.hashCode());
+
+        requestInsuranceResponse2.setStatus("failure");
+        assertNotEquals(requestInsuranceResponse1.hashCode(), requestInsuranceResponse2.hashCode());
+    }
+
+    @Test
+    void testSetGetStatus() {
+        RequestInsuranceResponse requestInsuranceResponse = new RequestInsuranceResponse();
+        requestInsuranceResponse.setStatus("success");
+
+        assertEquals("success", requestInsuranceResponse.getStatus());
+    }
+
+    @Test
+    void testSetGetErrorMessages() {
+        RequestInsuranceResponse requestInsuranceResponse = new RequestInsuranceResponse();
+        requestInsuranceResponse.setErrorMessages("No Errors");
+
+        assertEquals("No Errors", requestInsuranceResponse.getErrorMessages());
+    }
+}

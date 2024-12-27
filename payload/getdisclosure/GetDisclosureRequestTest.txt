@@ -1,0 +1,90 @@
+package com.td.mbna.msec.midtier.disclosure.payload.getdisclosure;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class GetDisclosureRequestTest {
+
+    @Test
+    public void testToString() {
+        GetDisclosureRequest getDisclosureRequest = new GetDisclosureRequest();
+        getDisclosureRequest.setSessionInfo("Session Info");
+        getDisclosureRequest.setCustId("12345");
+        getDisclosureRequest.setAliasCustId("54321");
+        getDisclosureRequest.setAcctNum("987654321");
+        getDisclosureRequest.setAcctType("Checking");
+        getDisclosureRequest.setLanguagePref("EN");
+        getDisclosureRequest.setAuditInfo("Audit Info");
+        getDisclosureRequest.setIsPrimaryUser(true);
+        getDisclosureRequest.setReserved1("Reserved");
+        getDisclosureRequest.setCustInterface("Interface");
+        
+        String result = getDisclosureRequest.toString();
+        assertNotNull(result);
+        assertTrue(result.contains("sessionInfo"));
+        assertTrue(result.contains("custId"));
+    }
+
+    @Test
+    public void testGetRequestPayload() {
+        GetDisclosureRequest getDisclosureRequest = new GetDisclosureRequest();
+        RequestPayload requestPayload = new RequestPayload();
+        getDisclosureRequest.setRequestPayload(requestPayload);
+
+        assertEquals(requestPayload, getDisclosureRequest.getRequestPayload());
+    }
+
+    @Test
+    public void testSetRequestPayload() {
+        GetDisclosureRequest getDisclosureRequest = new GetDisclosureRequest();
+        RequestPayload requestPayload = new RequestPayload();
+        getDisclosureRequest.setRequestPayload(requestPayload);
+
+        assertEquals(requestPayload, getDisclosureRequest.getRequestPayload());
+    }
+
+    @Test
+    public void testHashCode() {
+        GetDisclosureRequest getDisclosureRequest = new GetDisclosureRequest();
+        int hashCode = getDisclosureRequest.hashCode();
+        assertNotEquals(0, hashCode);
+    }
+
+    @Test
+    public void testEquals_SameObject() {
+        GetDisclosureRequest getDisclosureRequest = new GetDisclosureRequest();
+        assertTrue(getDisclosureRequest.equals(getDisclosureRequest));
+    }
+
+    @Test
+    public void testEquals_Null() {
+        GetDisclosureRequest getDisclosureRequest = new GetDisclosureRequest();
+        assertFalse(getDisclosureRequest.equals(null));
+    }
+
+    @Test
+    public void testEquals_DifferentClass() {
+        GetDisclosureRequest getDisclosureRequest = new GetDisclosureRequest();
+        assertFalse(getDisclosureRequest.equals(new Object()));
+    }
+
+    @Test
+    public void testEquals_SameValues() {
+        GetDisclosureRequest getDisclosureRequest1 = new GetDisclosureRequest();
+        GetDisclosureRequest getDisclosureRequest2 = new GetDisclosureRequest();
+        getDisclosureRequest1.setSessionInfo("Session Info");
+        getDisclosureRequest2.setSessionInfo("Session Info");
+
+        assertTrue(getDisclosureRequest1.equals(getDisclosureRequest2));
+    }
+
+    @Test
+    public void testEquals_DifferentValues() {
+        GetDisclosureRequest getDisclosureRequest1 = new GetDisclosureRequest();
+        GetDisclosureRequest getDisclosureRequest2 = new GetDisclosureRequest();
+        getDisclosureRequest1.setSessionInfo("Session Info");
+        getDisclosureRequest2.setSessionInfo("Different Info");
+
+        assertFalse(getDisclosureRequest1.equals(getDisclosureRequest2));
+    }
+}

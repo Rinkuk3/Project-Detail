@@ -1,0 +1,155 @@
+package com.td.mbna.msec.midtier.statement;
+
+import com.td.mbna.msec.midtier.statement.payload.getIpEligibleTransactions.GetIpEligibleTransactionsRequest;
+import com.td.mbna.msec.midtier.statement.payload.getIpEligibleTransactions.GetIpEligibleTransactionsResponse;
+import com.td.mbna.msec.midtier.statement.payload.getAvailableStatementList.GetAvailableStatementListRequest;
+import com.td.mbna.msec.midtier.statement.payload.getAvailableStatementList.GetAvailableStatementListResponse;
+import com.td.mbna.msec.midtier.statement.payload.getStatementActivity.GetStatementActivityRequest;
+import com.td.mbna.msec.midtier.statement.payload.getStatementActivity.GetStatementActivityResponse;
+import com.td.mbna.msec.midtier.statement.payload.getStatementFileFromId.GetStatementFileFromIdRequest;
+import com.td.mbna.msec.midtier.statement.payload.getStatementFileFromId.GetStatementFileFromIdResponse;
+import com.td.mbna.msec.midtier.statement.payload.getStatementListForYear.GetStatementListForYearRequest;
+import com.td.mbna.msec.midtier.statement.payload.getStatementListForYear.GetStatementListForYearResponse;
+import com.td.mbna.msec.midtier.statement.payload.getStatementWithActivity.GetStatementWithActivityRequest;
+import com.td.mbna.msec.midtier.statement.payload.getStatementWithActivity.GetStatementWithActivityResponse;
+import com.td.mbna.msec.midtier.statement.payload.updateStatementDeliveryPreferences.UpdateStatementDeliveryPreferencesRequest;
+import com.td.mbna.msec.midtier.statement.payload.updateStatementDeliveryPreferences.UpdateStatementDeliveryPreferencesResponse;
+import com.td.mbna.msec.midtier.util.perf.ProfileLog;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class StatementServiceTest {
+
+    @InjectMocks
+    private StatementServiceImpl statementService;
+
+    @Mock
+    private GetAvailableStatementListOperation getAvailableStatementListOperation;
+
+    @Mock
+    private GetStatementActivityOperation getStatementActivityOperation;
+
+    @Mock
+    private GetStatementWithActivityOperation getStatementWithActivityOperation;
+
+    @Mock
+    private GetStatementFileFromIdOperation getStatementFileFromIdOperation;
+
+    @Mock
+    private GetStatementListForYearOperation getStatementListForYearOperation;
+
+    @Mock
+    private UpdateStatementDeliveryPreferencesOperation updateStatementDeliveryPreferencesOperation;
+
+    @Mock
+    private GetIpEligibleTransactionsOperation getIpEligibleTransactionsOperation;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testGetAvailableStatementList() {
+        GetAvailableStatementListRequest request = mock(GetAvailableStatementListRequest.class);
+        GetAvailableStatementListResponse response = mock(GetAvailableStatementListResponse.class);
+        String token = "dummyToken";
+
+        when(getAvailableStatementListOperation.invokeService(request, token)).thenReturn(response);
+
+        GetAvailableStatementListResponse result = statementService.getAvailableStatementList(request, token);
+
+        assertNotNull(result);
+        verify(getAvailableStatementListOperation).invokeService(request, token);
+    }
+
+    @Test
+    void testGetStatementActivity() {
+        GetStatementActivityRequest request = mock(GetStatementActivityRequest.class);
+        GetStatementActivityResponse response = mock(GetStatementActivityResponse.class);
+        String token = "dummyToken";
+
+        when(getStatementActivityOperation.invokeService(request, token)).thenReturn(response);
+
+        GetStatementActivityResponse result = statementService.getStatementActivity(request, token);
+
+        assertNotNull(result);
+        verify(getStatementActivityOperation).invokeService(request, token);
+    }
+
+    @Test
+    void testGetStatementWithActivity() {
+        GetStatementWithActivityRequest request = mock(GetStatementWithActivityRequest.class);
+        GetStatementWithActivityResponse response = mock(GetStatementWithActivityResponse.class);
+        String token = "dummyToken";
+
+        when(getStatementWithActivityOperation.invokeService(request, token)).thenReturn(response);
+
+        GetStatementWithActivityResponse result = statementService.getStatementWithActivity(request, token);
+
+        assertNotNull(result);
+        verify(getStatementWithActivityOperation).invokeService(request, token);
+    }
+
+    @Test
+    void testGetStatementFileFromId() {
+        GetStatementFileFromIdRequest request = mock(GetStatementFileFromIdRequest.class);
+        GetStatementFileFromIdResponse response = mock(GetStatementFileFromIdResponse.class);
+        String token = "dummyToken";
+
+        when(getStatementFileFromIdOperation.invokeService(request, token)).thenReturn(response);
+
+        GetStatementFileFromIdResponse result = statementService.getStatementFileFromId(request, token);
+
+        assertNotNull(result);
+        verify(getStatementFileFromIdOperation).invokeService(request, token);
+    }
+
+    @Test
+    void testGetStatementListForYear() {
+        GetStatementListForYearRequest request = mock(GetStatementListForYearRequest.class);
+        GetStatementListForYearResponse response = mock(GetStatementListForYearResponse.class);
+        String token = "dummyToken";
+
+        when(getStatementListForYearOperation.invokeService(request, token)).thenReturn(response);
+
+        GetStatementListForYearResponse result = statementService.getStatementListForYear(request, token);
+
+        assertNotNull(result);
+        verify(getStatementListForYearOperation).invokeService(request, token);
+    }
+
+    @Test
+    void testUpdateStatementDeliveryPreferences() {
+        UpdateStatementDeliveryPreferencesRequest request = mock(UpdateStatementDeliveryPreferencesRequest.class);
+        UpdateStatementDeliveryPreferencesResponse response = mock(UpdateStatementDeliveryPreferencesResponse.class);
+        String token = "dummyToken";
+
+        when(updateStatementDeliveryPreferencesOperation.invokeService(request, token)).thenReturn(response);
+
+        UpdateStatementDeliveryPreferencesResponse result = statementService.updateStatementDeliveryPreferences(request, token);
+
+        assertNotNull(result);
+        verify(updateStatementDeliveryPreferencesOperation).invokeService(request, token);
+    }
+
+    @Test
+    void testGetIpEligibleTransactions() {
+        GetIpEligibleTransactionsRequest request = mock(GetIpEligibleTransactionsRequest.class);
+        GetIpEligibleTransactionsResponse response = mock(GetIpEligibleTransactionsResponse.class);
+        String token = "dummyToken";
+
+        when(getIpEligibleTransactionsOperation.invokeService(request, token)).thenReturn(response);
+
+        GetIpEligibleTransactionsResponse result = statementService.getIpEligibleTransactions(request, token);
+
+        assertNotNull(result);
+        verify(getIpEligibleTransactionsOperation).invokeService(request, token);
+    }
+}

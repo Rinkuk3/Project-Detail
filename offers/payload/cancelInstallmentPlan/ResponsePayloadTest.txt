@@ -1,0 +1,75 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class ResponsePayloadTest {
+
+    @Test
+    void testSetGetCancelStatus() {
+        ResponsePayload payload = new ResponsePayload();
+        payload.setCancelStatus(true);
+        assertTrue(payload.getCancelStatus());
+        
+        payload.setCancelStatus(false);
+        assertFalse(payload.getCancelStatus());
+    }
+
+    @Test
+    void testSetGetRefundStatus() {
+        ResponsePayload payload = new ResponsePayload();
+        payload.setRefundStatus(ResponsePayload.RefundStatus.PASSED);
+        assertEquals(ResponsePayload.RefundStatus.PASSED, payload.getRefundStatus());
+        
+        payload.setRefundStatus(ResponsePayload.RefundStatus.FAILED);
+        assertEquals(ResponsePayload.RefundStatus.FAILED, payload.getRefundStatus());
+        
+        payload.setRefundStatus(ResponsePayload.RefundStatus.NOT_ELIGIBLE);
+        assertEquals(ResponsePayload.RefundStatus.NOT_ELIGIBLE, payload.getRefundStatus());
+    }
+
+    @Test
+    void testToString() {
+        ResponsePayload payload = new ResponsePayload();
+        payload.setCancelStatus(true);
+        payload.setRefundStatus(ResponsePayload.RefundStatus.PASSED);
+        
+        String expectedString = "ResponsePayload{cancelStatus=true, refundStatus=PASSED}";
+        assertEquals(expectedString, payload.toString());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        ResponsePayload payload1 = new ResponsePayload();
+        ResponsePayload payload2 = new ResponsePayload();
+        
+        payload1.setCancelStatus(true);
+        payload1.setRefundStatus(ResponsePayload.RefundStatus.PASSED);
+        
+        payload2.setCancelStatus(true);
+        payload2.setRefundStatus(ResponsePayload.RefundStatus.PASSED);
+        
+        assertEquals(payload1, payload2);
+        assertEquals(payload1.hashCode(), payload2.hashCode());
+    }
+
+    @Test
+    void testNotEquals() {
+        ResponsePayload payload1 = new ResponsePayload();
+        ResponsePayload payload2 = new ResponsePayload();
+        
+        payload1.setCancelStatus(true);
+        payload1.setRefundStatus(ResponsePayload.RefundStatus.PASSED);
+        
+        payload2.setCancelStatus(false);
+        payload2.setRefundStatus(ResponsePayload.RefundStatus.FAILED);
+        
+        assertNotEquals(payload1, payload2);
+    }
+
+    @Test
+    void testDefaultValues() {
+        ResponsePayload payload = new ResponsePayload();
+        
+        assertFalse(payload.getCancelStatus());
+        assertEquals(ResponsePayload.RefundStatus.NOT_ELIGIBLE, payload.getRefundStatus());
+    }
+}
