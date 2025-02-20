@@ -1,0 +1,90 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+
+public class FeatureGroup__3Test {
+
+    private FeatureGroup__3 featureGroup;
+
+    @BeforeEach
+    public void setUp() {
+        featureGroup = new FeatureGroup__3();
+    }
+
+    @Test
+    public void testSetAndGetRate() {
+        Rate rate = new Rate();
+        featureGroup.setRate(rate);
+        assertEquals(rate, featureGroup.getRate());
+    }
+
+    @Test
+    public void testSetAndGetFee() {
+        Fee fee = new Fee();
+        featureGroup.setFee(Arrays.asList(fee));
+        assertEquals(Arrays.asList(fee), featureGroup.getFee());
+    }
+
+    @Test
+    public void testSetAndGetMerchantCategory() {
+        MerchantCategory merchantCategory = new MerchantCategory();
+        featureGroup.setMerchantCategory(Arrays.asList(merchantCategory));
+        assertEquals(Arrays.asList(merchantCategory), featureGroup.getMerchantCategory());
+    }
+
+    @Test
+    public void testToString() {
+        Rate rate = new Rate();
+        Fee fee = new Fee();
+        MerchantCategory merchantCategory = new MerchantCategory();
+
+        featureGroup.setRate(rate);
+        featureGroup.setFee(Arrays.asList(fee));
+        featureGroup.setMerchantCategory(Arrays.asList(merchantCategory));
+
+        String expected = "com.td.api.mbofp.response.retrievecampaign.FeatureGroup__3@" 
+                + Integer.toHexString(System.identityHashCode(featureGroup)) 
+                + "[rate=" + rate + ",fee=[" + fee + "],merchantCategory=[" + merchantCategory + "]]";
+        
+        assertEquals(expected, featureGroup.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        Rate rate = new Rate();
+        Fee fee = new Fee();
+        MerchantCategory merchantCategory = new MerchantCategory();
+
+        featureGroup.setRate(rate);
+        featureGroup.setFee(Arrays.asList(fee));
+        featureGroup.setMerchantCategory(Arrays.asList(merchantCategory));
+
+        int expectedHashCode = 31 * (31 * (31 + (rate == null ? 0 : rate.hashCode())) 
+                + (fee == null ? 0 : fee.hashCode())) 
+                + (merchantCategory == null ? 0 : merchantCategory.hashCode());
+
+        assertEquals(expectedHashCode, featureGroup.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        Rate rate = new Rate();
+        Fee fee = new Fee();
+        MerchantCategory merchantCategory = new MerchantCategory();
+
+        featureGroup.setRate(rate);
+        featureGroup.setFee(Arrays.asList(fee));
+        featureGroup.setMerchantCategory(Arrays.asList(merchantCategory));
+
+        FeatureGroup__3 anotherFeatureGroup = new FeatureGroup__3();
+        anotherFeatureGroup.setRate(rate);
+        anotherFeatureGroup.setFee(Arrays.asList(fee));
+        anotherFeatureGroup.setMerchantCategory(Arrays.asList(merchantCategory));
+
+        assertTrue(featureGroup.equals(anotherFeatureGroup));
+        
+        anotherFeatureGroup.setRate(new Rate());
+        assertFalse(featureGroup.equals(anotherFeatureGroup));
+    }
+}

@@ -1,0 +1,119 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CardImageTest {
+
+    private CardImage cardImage;
+
+    @BeforeEach
+    public void setUp() {
+        cardImage = new CardImage();
+    }
+
+    @Test
+    public void testSetAndGetCardImageId() {
+        String cardImageId = "IMG001";
+        cardImage.setCardImageId(cardImageId);
+        assertEquals(cardImageId, cardImage.getCardImageId());
+    }
+
+    @Test
+    public void testSetAndGetTypeCd() {
+        String typeCd = "T001";
+        cardImage.setTypeCd(typeCd);
+        assertEquals(typeCd, cardImage.getTypeCd());
+    }
+
+    @Test
+    public void testSetAndGetCardImageDesc() {
+        String cardImageDesc = "Card Image Description";
+        cardImage.setCardImageDesc(cardImageDesc);
+        assertEquals(cardImageDesc, cardImage.getCardImageDesc());
+    }
+
+    @Test
+    public void testSetAndGetLanguageCd() {
+        String languageCd = "EN";
+        cardImage.setLanguageCd(languageCd);
+        assertEquals(languageCd, cardImage.getLanguageCd());
+    }
+
+    @Test
+    public void testToString() {
+        String cardImageId = "IMG001";
+        String typeCd = "T001";
+        String cardImageDesc = "Card Image Description";
+        String languageCd = "EN";
+
+        cardImage.setCardImageId(cardImageId);
+        cardImage.setTypeCd(typeCd);
+        cardImage.setCardImageDesc(cardImageDesc);
+        cardImage.setLanguageCd(languageCd);
+
+        String expected = "com.td.api.mbofp.response.retrieveofferlist.CardImage@" 
+                + Integer.toHexString(System.identityHashCode(cardImage)) 
+                + "[cardImageId=" + cardImageId + ",typeCd=" + typeCd + ",cardImageDesc=" + cardImageDesc 
+                + ",languageCd=" + languageCd + "]";
+
+        assertEquals(expected, cardImage.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        String cardImageId = "IMG001";
+        String typeCd = "T001";
+        String cardImageDesc = "Card Image Description";
+        String languageCd = "EN";
+
+        cardImage.setCardImageId(cardImageId);
+        cardImage.setTypeCd(typeCd);
+        cardImage.setCardImageDesc(cardImageDesc);
+        cardImage.setLanguageCd(languageCd);
+
+        int expectedHashCode = 31 + (cardImageId == null ? 0 : cardImageId.hashCode())
+                + (typeCd == null ? 0 : typeCd.hashCode())
+                + (cardImageDesc == null ? 0 : cardImageDesc.hashCode())
+                + (languageCd == null ? 0 : languageCd.hashCode());
+
+        assertEquals(expectedHashCode, cardImage.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        String cardImageId = "IMG001";
+        String typeCd = "T001";
+        String cardImageDesc = "Card Image Description";
+        String languageCd = "EN";
+
+        cardImage.setCardImageId(cardImageId);
+        cardImage.setTypeCd(typeCd);
+        cardImage.setCardImageDesc(cardImageDesc);
+        cardImage.setLanguageCd(languageCd);
+
+        CardImage anotherCardImage = new CardImage();
+        anotherCardImage.setCardImageId(cardImageId);
+        anotherCardImage.setTypeCd(typeCd);
+        anotherCardImage.setCardImageDesc(cardImageDesc);
+        anotherCardImage.setLanguageCd(languageCd);
+
+        assertTrue(cardImage.equals(anotherCardImage));
+
+        anotherCardImage.setCardImageId("IMG002");
+        assertFalse(cardImage.equals(anotherCardImage));
+
+        anotherCardImage.setCardImageId(cardImageId);
+        anotherCardImage.setCardImageDesc("Different Description");
+        assertFalse(cardImage.equals(anotherCardImage));
+
+        anotherCardImage.setCardImageDesc(cardImageDesc);
+        anotherCardImage.setLanguageCd("FR");
+        assertFalse(cardImage.equals(anotherCardImage));
+
+        anotherCardImage.setLanguageCd(languageCd);
+        assertTrue(cardImage.equals(anotherCardImage));
+
+        assertFalse(cardImage.equals(null));
+        assertFalse(cardImage.equals(new Object()));
+    }
+}

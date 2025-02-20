@@ -1,0 +1,65 @@
+package com.td.api.mbofp.response.retrievecampaign;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class CreditCardProductPackageTest {
+
+    @Test
+    void testGettersAndSetters() {
+        CreditCardProductPackage packageObj = new CreditCardProductPackage();
+        
+        packageObj.setProductPackageNum("12345");
+        packageObj.setProductPackageDesc("Premium Package");
+        FeatureGroup featureGroup = new FeatureGroup();
+        packageObj.setFeatureGroup(featureGroup);
+
+        assertEquals("12345", packageObj.getProductPackageNum());
+        assertEquals("Premium Package", packageObj.getProductPackageDesc());
+        assertEquals(featureGroup, packageObj.getFeatureGroup());
+    }
+
+    @Test
+    void testToString() {
+        CreditCardProductPackage packageObj = new CreditCardProductPackage();
+        packageObj.setProductPackageNum("12345");
+        packageObj.setProductPackageDesc("Premium Package");
+
+        String result = packageObj.toString();
+        assertTrue(result.contains("productPackageNum=12345"));
+        assertTrue(result.contains("productPackageDesc=Premium Package"));
+    }
+
+    @Test
+    void testHashCode() {
+        CreditCardProductPackage package1 = new CreditCardProductPackage();
+        package1.setProductPackageNum("12345");
+        package1.setProductPackageDesc("Premium Package");
+
+        CreditCardProductPackage package2 = new CreditCardProductPackage();
+        package2.setProductPackageNum("12345");
+        package2.setProductPackageDesc("Premium Package");
+
+        assertEquals(package1.hashCode(), package2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        CreditCardProductPackage package1 = new CreditCardProductPackage();
+        package1.setProductPackageNum("12345");
+        package1.setProductPackageDesc("Premium Package");
+
+        CreditCardProductPackage package2 = new CreditCardProductPackage();
+        package2.setProductPackageNum("12345");
+        package2.setProductPackageDesc("Premium Package");
+
+        CreditCardProductPackage package3 = new CreditCardProductPackage();
+        package3.setProductPackageNum("67890");
+        package3.setProductPackageDesc("Basic Package");
+
+        assertEquals(package1, package2);
+        assertNotEquals(package1, package3);
+        assertNotEquals(package1, null);
+        assertNotEquals(package1, new Object());
+    }
+}

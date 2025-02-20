@@ -1,0 +1,75 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CreditLimitTest {
+
+    private CreditLimit creditLimit;
+
+    @BeforeEach
+    public void setUp() {
+        creditLimit = new CreditLimit();
+    }
+
+    @Test
+    public void testSetAndGetFeatureClassificationCd() {
+        String featureClassificationCd = "CLASS_A";
+        creditLimit.setFeatureClassificationCd(featureClassificationCd);
+        assertEquals(featureClassificationCd, creditLimit.getFeatureClassificationCd());
+    }
+
+    @Test
+    public void testSetAndGetCreditLimitAmt() {
+        BigDecimal creditLimitAmt = new BigDecimal("5000.00");
+        creditLimit.setCreditLimitAmt(creditLimitAmt);
+        assertEquals(creditLimitAmt, creditLimit.getCreditLimitAmt());
+    }
+
+    @Test
+    public void testToString() {
+        creditLimit.setFeatureClassificationCd("CLASS_A");
+        creditLimit.setCreditLimitAmt(new BigDecimal("5000.00"));
+        
+        String expected = "com.td.api.mbofp.response.retrieveofferlist.CreditLimit@" 
+                + Integer.toHexString(System.identityHashCode(creditLimit)) 
+                + "[featureClassificationCd=CLASS_A,creditLimitAmt=5000.00]";
+        
+        assertEquals(expected, creditLimit.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        creditLimit.setFeatureClassificationCd("CLASS_A");
+        creditLimit.setCreditLimitAmt(new BigDecimal("5000.00"));
+        
+        int expectedHashCode = 31 + 
+                (creditLimit.getCreditLimitAmt() == null ? 0 : creditLimit.getCreditLimitAmt().hashCode()) +
+                (creditLimit.getFeatureClassificationCd() == null ? 0 : creditLimit.getFeatureClassificationCd().hashCode());
+
+        assertEquals(expectedHashCode, creditLimit.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        creditLimit.setFeatureClassificationCd("CLASS_A");
+        creditLimit.setCreditLimitAmt(new BigDecimal("5000.00"));
+
+        CreditLimit anotherCreditLimit = new CreditLimit();
+        anotherCreditLimit.setFeatureClassificationCd("CLASS_A");
+        anotherCreditLimit.setCreditLimitAmt(new BigDecimal("5000.00"));
+
+        assertTrue(creditLimit.equals(anotherCreditLimit));
+
+        anotherCreditLimit.setFeatureClassificationCd("CLASS_B");
+        assertFalse(creditLimit.equals(anotherCreditLimit));
+
+        anotherCreditLimit.setFeatureClassificationCd("CLASS_A");
+        anotherCreditLimit.setCreditLimitAmt(new BigDecimal("6000.00"));
+        assertFalse(creditLimit.equals(anotherCreditLimit));
+
+        assertFalse(creditLimit.equals(null));
+        assertFalse(creditLimit.equals(new Object()));
+    }
+}

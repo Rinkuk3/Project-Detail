@@ -1,0 +1,52 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class PlasticEmbossingTest {
+
+    private PlasticEmbossing plasticEmbossing;
+
+    @BeforeEach
+    public void setUp() {
+        plasticEmbossing = new PlasticEmbossing();
+    }
+
+    @Test
+    public void testSetAndGetBrandLevelCd() {
+        plasticEmbossing.setBrandLevelCd("High");
+        assertEquals("High", plasticEmbossing.getBrandLevelCd());
+    }
+
+    @Test
+    public void testToString() {
+        plasticEmbossing.setBrandLevelCd("High");
+
+        String expected = "com.td.api.mbofp.response.retrievecampaign.PlasticEmbossing@" 
+                + Integer.toHexString(System.identityHashCode(plasticEmbossing)) 
+                + "[brandLevelCd=High]";
+        
+        assertEquals(expected, plasticEmbossing.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        plasticEmbossing.setBrandLevelCd("High");
+
+        int expectedHashCode = 31 + (plasticEmbossing.getBrandLevelCd() == null ? 0 : plasticEmbossing.getBrandLevelCd().hashCode());
+
+        assertEquals(expectedHashCode, plasticEmbossing.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        plasticEmbossing.setBrandLevelCd("High");
+
+        PlasticEmbossing anotherPlasticEmbossing = new PlasticEmbossing();
+        anotherPlasticEmbossing.setBrandLevelCd("High");
+
+        assertTrue(plasticEmbossing.equals(anotherPlasticEmbossing));
+
+        anotherPlasticEmbossing.setBrandLevelCd("Low");
+        assertFalse(plasticEmbossing.equals(anotherPlasticEmbossing));
+    }
+}

@@ -1,0 +1,64 @@
+package com.td.api.mbofp.response.retrievecampaign;
+
+import org.junit.jupiter.api.Test;
+import java.util.ArrayList;
+import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
+
+class FeatureGroup__1Test {
+
+    @Test
+    void testGettersAndSetters() {
+        FeatureGroup__1 featureGroup = new FeatureGroup__1();
+        
+        BonusReward bonusReward = new BonusReward();
+        List<DelinquencyPolicy> delinquencyPolicies = new ArrayList<>();
+        List<Rate> rates = new ArrayList<>();
+        List<Fee> fees = new ArrayList<>();
+        MinimumPayment minimumPayment = new MinimumPayment();
+
+        featureGroup.setBonusReward(bonusReward);
+        featureGroup.setDelinquencyPolicy(delinquencyPolicies);
+        featureGroup.setRate(rates);
+        featureGroup.setFee(fees);
+        featureGroup.setMinimumPayment(minimumPayment);
+
+        assertEquals(bonusReward, featureGroup.getBonusReward());
+        assertEquals(delinquencyPolicies, featureGroup.getDelinquencyPolicy());
+        assertEquals(rates, featureGroup.getRate());
+        assertEquals(fees, featureGroup.getFee());
+        assertEquals(minimumPayment, featureGroup.getMinimumPayment());
+    }
+
+    @Test
+    void testToString() {
+        FeatureGroup__1 featureGroup = new FeatureGroup__1();
+        featureGroup.setBonusReward(new BonusReward());
+        featureGroup.setDelinquencyPolicy(new ArrayList<>());
+        
+        String result = featureGroup.toString();
+        assertTrue(result.contains("bonusReward="));
+        assertTrue(result.contains("delinquencyPolicy="));
+    }
+
+    @Test
+    void testHashCode() {
+        FeatureGroup__1 feature1 = new FeatureGroup__1();
+        FeatureGroup__1 feature2 = new FeatureGroup__1();
+
+        assertEquals(feature1.hashCode(), feature2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        FeatureGroup__1 feature1 = new FeatureGroup__1();
+        FeatureGroup__1 feature2 = new FeatureGroup__1();
+        FeatureGroup__1 feature3 = new FeatureGroup__1();
+        feature3.setBonusReward(new BonusReward());
+
+        assertEquals(feature1, feature2);
+        assertNotEquals(feature1, feature3);
+        assertNotEquals(feature1, null);
+        assertNotEquals(feature1, new Object());
+    }
+}

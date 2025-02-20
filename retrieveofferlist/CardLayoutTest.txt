@@ -1,0 +1,141 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Arrays;
+
+public class CardLayoutTest {
+
+    private CardLayout cardLayout;
+    private CardImage cardImage;
+
+    @BeforeEach
+    public void setUp() {
+        cardLayout = new CardLayout();
+        cardImage = new CardImage();
+        cardImage.setCardImageId("IMG001");
+        cardImage.setTypeCd("T001");
+        cardImage.setCardImageDesc("Card Image Description");
+        cardImage.setLanguageCd("EN");
+    }
+
+    @Test
+    public void testSetAndGetCardLayoutId() {
+        String cardLayoutId = "CL001";
+        cardLayout.setCardLayoutId(cardLayoutId);
+        assertEquals(cardLayoutId, cardLayout.getCardLayoutId());
+    }
+
+    @Test
+    public void testSetAndGetCardLayoutDesc() {
+        String cardLayoutDesc = "Card Layout Description";
+        cardLayout.setCardLayoutDesc(cardLayoutDesc);
+        assertEquals(cardLayoutDesc, cardLayout.getCardLayoutDesc());
+    }
+
+    @Test
+    public void testSetAndGetPriorityCd() {
+        String priorityCd = "P001";
+        cardLayout.setPriorityCd(priorityCd);
+        assertEquals(priorityCd, cardLayout.getPriorityCd());
+    }
+
+    @Test
+    public void testSetAndGetLanguageCd() {
+        String languageCd = "EN";
+        cardLayout.setLanguageCd(languageCd);
+        assertEquals(languageCd, cardLayout.getLanguageCd());
+    }
+
+    @Test
+    public void testSetAndGetCardImage() {
+        cardLayout.setCardImage(Arrays.asList(cardImage));
+        assertEquals(1, cardLayout.getCardImage().size());
+        assertEquals(cardImage, cardLayout.getCardImage().get(0));
+    }
+
+    @Test
+    public void testToString() {
+        String cardLayoutId = "CL001";
+        String cardLayoutDesc = "Card Layout Description";
+        String priorityCd = "P001";
+        String languageCd = "EN";
+        cardLayout.setCardLayoutId(cardLayoutId);
+        cardLayout.setCardLayoutDesc(cardLayoutDesc);
+        cardLayout.setPriorityCd(priorityCd);
+        cardLayout.setLanguageCd(languageCd);
+        cardLayout.setCardImage(Arrays.asList(cardImage));
+
+        String expected = "com.td.api.mbofp.response.retrieveofferlist.CardLayout@" 
+                + Integer.toHexString(System.identityHashCode(cardLayout)) 
+                + "[cardLayoutId=" + cardLayoutId + ",cardLayoutDesc=" + cardLayoutDesc 
+                + ",priorityCd=" + priorityCd + ",languageCd=" + languageCd 
+                + ",cardImage=" + Arrays.asList(cardImage) + "]";
+
+        assertEquals(expected, cardLayout.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        String cardLayoutId = "CL001";
+        String cardLayoutDesc = "Card Layout Description";
+        String priorityCd = "P001";
+        String languageCd = "EN";
+        cardLayout.setCardLayoutId(cardLayoutId);
+        cardLayout.setCardLayoutDesc(cardLayoutDesc);
+        cardLayout.setPriorityCd(priorityCd);
+        cardLayout.setLanguageCd(languageCd);
+        cardLayout.setCardImage(Arrays.asList(cardImage));
+
+        int expectedHashCode = 31 + (cardLayoutId == null ? 0 : cardLayoutId.hashCode())
+                + (cardLayoutDesc == null ? 0 : cardLayoutDesc.hashCode())
+                + (cardImage == null ? 0 : cardImage.hashCode())
+                + (languageCd == null ? 0 : languageCd.hashCode())
+                + (priorityCd == null ? 0 : priorityCd.hashCode());
+
+        assertEquals(expectedHashCode, cardLayout.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        String cardLayoutId = "CL001";
+        String cardLayoutDesc = "Card Layout Description";
+        String priorityCd = "P001";
+        String languageCd = "EN";
+        cardLayout.setCardLayoutId(cardLayoutId);
+        cardLayout.setCardLayoutDesc(cardLayoutDesc);
+        cardLayout.setPriorityCd(priorityCd);
+        cardLayout.setLanguageCd(languageCd);
+        cardLayout.setCardImage(Arrays.asList(cardImage));
+
+        CardLayout anotherCardLayout = new CardLayout();
+        anotherCardLayout.setCardLayoutId(cardLayoutId);
+        anotherCardLayout.setCardLayoutDesc(cardLayoutDesc);
+        anotherCardLayout.setPriorityCd(priorityCd);
+        anotherCardLayout.setLanguageCd(languageCd);
+        anotherCardLayout.setCardImage(Arrays.asList(cardImage));
+
+        assertTrue(cardLayout.equals(anotherCardLayout));
+
+        anotherCardLayout.setCardLayoutId("CL002");
+        assertFalse(cardLayout.equals(anotherCardLayout));
+
+        anotherCardLayout.setCardLayoutId(cardLayoutId);
+        anotherCardLayout.setCardLayoutDesc("Different Description");
+        assertFalse(cardLayout.equals(anotherCardLayout));
+
+        anotherCardLayout.setCardLayoutDesc(cardLayoutDesc);
+        anotherCardLayout.setPriorityCd("P002");
+        assertFalse(cardLayout.equals(anotherCardLayout));
+
+        anotherCardLayout.setPriorityCd(priorityCd);
+        anotherCardLayout.setLanguageCd("FR");
+        assertFalse(cardLayout.equals(anotherCardLayout));
+
+        anotherCardLayout.setLanguageCd(languageCd);
+        assertTrue(cardLayout.equals(anotherCardLayout));
+
+        assertFalse(cardLayout.equals(null));
+        assertFalse(cardLayout.equals(new Object()));
+    }
+}

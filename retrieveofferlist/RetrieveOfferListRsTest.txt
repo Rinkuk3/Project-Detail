@@ -1,0 +1,71 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class RetrieveOfferListRsTest {
+
+    private RetrieveOfferListRs retrieveOfferListRs;
+
+    @BeforeEach
+    public void setUp() {
+        retrieveOfferListRs = new RetrieveOfferListRs();
+    }
+
+    @Test
+    public void testSetAndGetOffer() {
+        List<Offer> offers = new ArrayList<>();
+        Offer offer = new Offer();
+        offers.add(offer);
+        retrieveOfferListRs.setOffer(offers);
+
+        assertEquals(offers, retrieveOfferListRs.getOffer());
+    }
+
+    @Test
+    public void testToString() {
+        List<Offer> offers = new ArrayList<>();
+        Offer offer = new Offer();
+        offers.add(offer);
+        retrieveOfferListRs.setOffer(offers);
+
+        String expected = "com.td.api.mbofp.response.retrieveofferlist.RetrieveOfferListRs@"
+                + Integer.toHexString(System.identityHashCode(retrieveOfferListRs))
+                + "[offer=" + offers + "]";
+        assertEquals(expected, retrieveOfferListRs.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        List<Offer> offers = new ArrayList<>();
+        Offer offer = new Offer();
+        offers.add(offer);
+        retrieveOfferListRs.setOffer(offers);
+
+        int expectedHashCode = 1;
+        expectedHashCode = (expectedHashCode * 31) + (retrieveOfferListRs.getOffer() == null ? 0 : retrieveOfferListRs.getOffer().hashCode());
+
+        assertEquals(expectedHashCode, retrieveOfferListRs.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        List<Offer> offers = new ArrayList<>();
+        Offer offer = new Offer();
+        offers.add(offer);
+        retrieveOfferListRs.setOffer(offers);
+
+        RetrieveOfferListRs anotherRetrieveOfferListRs = new RetrieveOfferListRs();
+        anotherRetrieveOfferListRs.setOffer(offers);
+
+        assertTrue(retrieveOfferListRs.equals(anotherRetrieveOfferListRs));
+
+        anotherRetrieveOfferListRs.setOffer(new ArrayList<>());
+        assertFalse(retrieveOfferListRs.equals(anotherRetrieveOfferListRs));
+
+        assertFalse(retrieveOfferListRs.equals(null));
+        assertFalse(retrieveOfferListRs.equals(new Object()));
+    }
+}

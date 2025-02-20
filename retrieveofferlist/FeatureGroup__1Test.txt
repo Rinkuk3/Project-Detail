@@ -1,0 +1,67 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class FeatureGroup__1Test {
+
+    private FeatureGroup__1 featureGroup;
+
+    @BeforeEach
+    public void setUp() {
+        featureGroup = new FeatureGroup__1();
+    }
+
+    @Test
+    public void testSetAndGetCardLayout() {
+        List<CardLayout> cardLayouts = new ArrayList<>();
+        CardLayout cardLayout = new CardLayout();
+        cardLayouts.add(cardLayout);
+        featureGroup.setCardLayout(cardLayouts);
+        assertEquals(cardLayouts, featureGroup.getCardLayout());
+    }
+
+    @Test
+    public void testToString() {
+        List<CardLayout> cardLayouts = new ArrayList<>();
+        CardLayout cardLayout = new CardLayout();
+        cardLayouts.add(cardLayout);
+        featureGroup.setCardLayout(cardLayouts);
+        String expected = "com.td.api.mbofp.response.retrieveofferlist.FeatureGroup__1@" 
+                + Integer.toHexString(System.identityHashCode(featureGroup))
+                + "[cardLayout=" + cardLayouts + "]";
+        assertEquals(expected, featureGroup.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        List<CardLayout> cardLayouts = new ArrayList<>();
+        CardLayout cardLayout = new CardLayout();
+        cardLayouts.add(cardLayout);
+        featureGroup.setCardLayout(cardLayouts);
+        int expectedHashCode = 31 * (31 + (featureGroup.getCardLayout() == null ? 0 : featureGroup.getCardLayout().hashCode()));
+        assertEquals(expectedHashCode, featureGroup.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        List<CardLayout> cardLayouts = new ArrayList<>();
+        CardLayout cardLayout = new CardLayout();
+        cardLayouts.add(cardLayout);
+        featureGroup.setCardLayout(cardLayouts);
+
+        FeatureGroup__1 anotherFeatureGroup = new FeatureGroup__1();
+        anotherFeatureGroup.setCardLayout(cardLayouts);
+
+        assertTrue(featureGroup.equals(anotherFeatureGroup));
+
+        anotherFeatureGroup.setCardLayout(new ArrayList<CardLayout>());
+        assertFalse(featureGroup.equals(anotherFeatureGroup));
+
+        assertFalse(featureGroup.equals(null));
+        assertFalse(featureGroup.equals(new Object()));
+    }
+}

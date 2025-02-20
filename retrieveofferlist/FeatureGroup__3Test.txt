@@ -1,0 +1,120 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class FeatureGroup__3Test {
+
+    private FeatureGroup__3 featureGroup;
+
+    @BeforeEach
+    public void setUp() {
+        featureGroup = new FeatureGroup__3();
+    }
+
+    @Test
+    public void testSetAndGetBonusReward() {
+        BonusReward bonusReward = new BonusReward();
+        featureGroup.setBonusReward(bonusReward);
+        assertEquals(bonusReward, featureGroup.getBonusReward());
+    }
+
+    @Test
+    public void testSetAndGetDelinquencyPolicy() {
+        List<DelinquencyPolicy> delinquencyPolicies = new ArrayList<>();
+        DelinquencyPolicy delinquencyPolicy = new DelinquencyPolicy();
+        delinquencyPolicies.add(delinquencyPolicy);
+        featureGroup.setDelinquencyPolicy(delinquencyPolicies);
+        assertEquals(delinquencyPolicies, featureGroup.getDelinquencyPolicy());
+    }
+
+    @Test
+    public void testSetAndGetTowTerm() {
+        TowTerm towTerm = new TowTerm();
+        featureGroup.setTowTerm(towTerm);
+        assertEquals(towTerm, featureGroup.getTowTerm());
+    }
+
+    @Test
+    public void testSetAndGetFeeDiscountCd() {
+        String feeDiscountCd = "ABC123";
+        featureGroup.setFeeDiscountCd(feeDiscountCd);
+        assertEquals(feeDiscountCd, featureGroup.getFeeDiscountCd());
+    }
+
+    @Test
+    public void testToString() {
+        BonusReward bonusReward = new BonusReward();
+        List<DelinquencyPolicy> delinquencyPolicies = new ArrayList<>();
+        DelinquencyPolicy delinquencyPolicy = new DelinquencyPolicy();
+        delinquencyPolicies.add(delinquencyPolicy);
+        TowTerm towTerm = new TowTerm();
+        String feeDiscountCd = "ABC123";
+
+        featureGroup.setBonusReward(bonusReward);
+        featureGroup.setDelinquencyPolicy(delinquencyPolicies);
+        featureGroup.setTowTerm(towTerm);
+        featureGroup.setFeeDiscountCd(feeDiscountCd);
+
+        String expected = "com.td.api.mbofp.response.retrieveofferlist.FeatureGroup__3@"
+                + Integer.toHexString(System.identityHashCode(featureGroup))
+                + "[bonusReward=" + bonusReward + ",delinquencyPolicy=" + delinquencyPolicies
+                + ",towTerm=" + towTerm + ",feeDiscountCd=" + feeDiscountCd + "]";
+        assertEquals(expected, featureGroup.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        BonusReward bonusReward = new BonusReward();
+        List<DelinquencyPolicy> delinquencyPolicies = new ArrayList<>();
+        DelinquencyPolicy delinquencyPolicy = new DelinquencyPolicy();
+        delinquencyPolicies.add(delinquencyPolicy);
+        TowTerm towTerm = new TowTerm();
+        String feeDiscountCd = "ABC123";
+
+        featureGroup.setBonusReward(bonusReward);
+        featureGroup.setDelinquencyPolicy(delinquencyPolicies);
+        featureGroup.setTowTerm(towTerm);
+        featureGroup.setFeeDiscountCd(feeDiscountCd);
+
+        int expectedHashCode = 1;
+        expectedHashCode = (expectedHashCode * 31) + (featureGroup.getBonusReward() == null ? 0 : featureGroup.getBonusReward().hashCode());
+        expectedHashCode = (expectedHashCode * 31) + (featureGroup.getTowTerm() == null ? 0 : featureGroup.getTowTerm().hashCode());
+        expectedHashCode = (expectedHashCode * 31) + (featureGroup.getDelinquencyPolicy() == null ? 0 : featureGroup.getDelinquencyPolicy().hashCode());
+        expectedHashCode = (expectedHashCode * 31) + (featureGroup.getFeeDiscountCd() == null ? 0 : featureGroup.getFeeDiscountCd().hashCode());
+
+        assertEquals(expectedHashCode, featureGroup.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        BonusReward bonusReward = new BonusReward();
+        List<DelinquencyPolicy> delinquencyPolicies = new ArrayList<>();
+        DelinquencyPolicy delinquencyPolicy = new DelinquencyPolicy();
+        delinquencyPolicies.add(delinquencyPolicy);
+        TowTerm towTerm = new TowTerm();
+        String feeDiscountCd = "ABC123";
+
+        featureGroup.setBonusReward(bonusReward);
+        featureGroup.setDelinquencyPolicy(delinquencyPolicies);
+        featureGroup.setTowTerm(towTerm);
+        featureGroup.setFeeDiscountCd(feeDiscountCd);
+
+        FeatureGroup__3 anotherFeatureGroup = new FeatureGroup__3();
+        anotherFeatureGroup.setBonusReward(bonusReward);
+        anotherFeatureGroup.setDelinquencyPolicy(delinquencyPolicies);
+        anotherFeatureGroup.setTowTerm(towTerm);
+        anotherFeatureGroup.setFeeDiscountCd(feeDiscountCd);
+
+        assertTrue(featureGroup.equals(anotherFeatureGroup));
+
+        anotherFeatureGroup.setFeeDiscountCd("XYZ789");
+        assertFalse(featureGroup.equals(anotherFeatureGroup));
+
+        assertFalse(featureGroup.equals(null));
+        assertFalse(featureGroup.equals(new Object()));
+    }
+}

@@ -1,0 +1,140 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class OfferTest {
+
+    private Offer offer;
+
+    @BeforeEach
+    public void setUp() {
+        offer = new Offer();
+    }
+
+    @Test
+    public void testSetAndGetOfferId() {
+        String offerId = "OFFER123";
+        offer.setOfferId(offerId);
+        assertEquals(offerId, offer.getOfferId());
+    }
+
+    @Test
+    public void testSetAndGetOfferDesc() {
+        String offerDesc = "Special Offer";
+        offer.setOfferDesc(offerDesc);
+        assertEquals(offerDesc, offer.getOfferDesc());
+    }
+
+    @Test
+    public void testSetAndGetTypeCd() {
+        String typeCd = "TYPE01";
+        offer.setTypeCd(typeCd);
+        assertEquals(typeCd, offer.getTypeCd());
+    }
+
+    @Test
+    public void testSetAndGetPromotion() {
+        Promotion promotion = new Promotion();
+        offer.setPromotion(promotion);
+        assertEquals(promotion, offer.getPromotion());
+    }
+
+    @Test
+    public void testSetAndGetFeatureGroup() {
+        FeatureGroup__3 featureGroup = new FeatureGroup__3();
+        offer.setFeatureGroup(featureGroup);
+        assertEquals(featureGroup, offer.getFeatureGroup());
+    }
+
+    @Test
+    public void testSetAndGetPromotionOfferDispositionCd() {
+        String promotionOfferDispositionCd = "DISPOSITION01";
+        offer.setPromotionOfferDispositionCd(promotionOfferDispositionCd);
+        assertEquals(promotionOfferDispositionCd, offer.getPromotionOfferDispositionCd());
+    }
+
+    @Test
+    public void testToString() {
+        Promotion promotion = new Promotion();
+        FeatureGroup__3 featureGroup = new FeatureGroup__3();
+        String offerId = "OFFER123";
+        String offerDesc = "Special Offer";
+        String typeCd = "TYPE01";
+        String promotionOfferDispositionCd = "DISPOSITION01";
+
+        offer.setOfferId(offerId);
+        offer.setOfferDesc(offerDesc);
+        offer.setTypeCd(typeCd);
+        offer.setPromotion(promotion);
+        offer.setFeatureGroup(featureGroup);
+        offer.setPromotionOfferDispositionCd(promotionOfferDispositionCd);
+
+        String expected = "com.td.api.mbofp.response.retrieveofferlist.Offer@"
+                + Integer.toHexString(System.identityHashCode(offer))
+                + "[offerId=" + offerId + ",offerDesc=" + offerDesc + ",typeCd=" + typeCd
+                + ",promotion=" + promotion + ",featureGroup=" + featureGroup
+                + ",promotionOfferDispositionCd=" + promotionOfferDispositionCd + "]";
+        assertEquals(expected, offer.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        Promotion promotion = new Promotion();
+        FeatureGroup__3 featureGroup = new FeatureGroup__3();
+        String offerId = "OFFER123";
+        String offerDesc = "Special Offer";
+        String typeCd = "TYPE01";
+        String promotionOfferDispositionCd = "DISPOSITION01";
+
+        offer.setOfferId(offerId);
+        offer.setOfferDesc(offerDesc);
+        offer.setTypeCd(typeCd);
+        offer.setPromotion(promotion);
+        offer.setFeatureGroup(featureGroup);
+        offer.setPromotionOfferDispositionCd(promotionOfferDispositionCd);
+
+        int expectedHashCode = 1;
+        expectedHashCode = (expectedHashCode * 31) + (offer.getOfferDesc() == null ? 0 : offer.getOfferDesc().hashCode());
+        expectedHashCode = (expectedHashCode * 31) + (offer.getTypeCd() == null ? 0 : offer.getTypeCd().hashCode());
+        expectedHashCode = (expectedHashCode * 31) + (offer.getFeatureGroup() == null ? 0 : offer.getFeatureGroup().hashCode());
+        expectedHashCode = (expectedHashCode * 31) + (offer.getOfferId() == null ? 0 : offer.getOfferId().hashCode());
+        expectedHashCode = (expectedHashCode * 31) + (offer.getPromotion() == null ? 0 : offer.getPromotion().hashCode());
+        expectedHashCode = (expectedHashCode * 31) + (offer.getPromotionOfferDispositionCd() == null ? 0 : offer.getPromotionOfferDispositionCd().hashCode());
+
+        assertEquals(expectedHashCode, offer.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        Promotion promotion = new Promotion();
+        FeatureGroup__3 featureGroup = new FeatureGroup__3();
+        String offerId = "OFFER123";
+        String offerDesc = "Special Offer";
+        String typeCd = "TYPE01";
+        String promotionOfferDispositionCd = "DISPOSITION01";
+
+        offer.setOfferId(offerId);
+        offer.setOfferDesc(offerDesc);
+        offer.setTypeCd(typeCd);
+        offer.setPromotion(promotion);
+        offer.setFeatureGroup(featureGroup);
+        offer.setPromotionOfferDispositionCd(promotionOfferDispositionCd);
+
+        Offer anotherOffer = new Offer();
+        anotherOffer.setOfferId(offerId);
+        anotherOffer.setOfferDesc(offerDesc);
+        anotherOffer.setTypeCd(typeCd);
+        anotherOffer.setPromotion(promotion);
+        anotherOffer.setFeatureGroup(featureGroup);
+        anotherOffer.setPromotionOfferDispositionCd(promotionOfferDispositionCd);
+
+        assertTrue(offer.equals(anotherOffer));
+
+        anotherOffer.setOfferDesc("Different Offer");
+        assertFalse(offer.equals(anotherOffer));
+
+        assertFalse(offer.equals(null));
+        assertFalse(offer.equals(new Object()));
+    }
+}

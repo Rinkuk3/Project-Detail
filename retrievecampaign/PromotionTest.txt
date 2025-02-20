@@ -1,0 +1,86 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class PromotionTest {
+
+    private Promotion promotion;
+
+    @BeforeEach
+    public void setUp() {
+        promotion = new Promotion();
+    }
+
+    @Test
+    public void testSetAndGetPromotionId() {
+        promotion.setPromotionId("PROMO123");
+        assertEquals("PROMO123", promotion.getPromotionId());
+    }
+
+    @Test
+    public void testSetAndGetPromotionType() {
+        PromotionType promotionType = new PromotionType();
+        promotion.setPromotionType(promotionType);
+        assertEquals(promotionType, promotion.getPromotionType());
+    }
+
+    @Test
+    public void testSetAndGetFeatureGroup() {
+        FeatureGroup__3 featureGroup = new FeatureGroup__3();
+        promotion.setFeatureGroup(featureGroup);
+        assertEquals(featureGroup, promotion.getFeatureGroup());
+    }
+
+    @Test
+    public void testToString() {
+        promotion.setPromotionId("PROMO123");
+        PromotionType promotionType = new PromotionType();
+        promotion.setPromotionType(promotionType);
+        FeatureGroup__3 featureGroup = new FeatureGroup__3();
+        promotion.setFeatureGroup(featureGroup);
+
+        String expected = "com.td.api.mbofp.response.retrievecampaign.Promotion@" 
+                + Integer.toHexString(System.identityHashCode(promotion)) 
+                + "[promotionId=PROMO123,promotionType=" + promotionType + ",featureGroup=" + featureGroup + "]";
+        
+        assertEquals(expected, promotion.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        promotion.setPromotionId("PROMO123");
+        PromotionType promotionType = new PromotionType();
+        promotion.setPromotionType(promotionType);
+        FeatureGroup__3 featureGroup = new FeatureGroup__3();
+        promotion.setFeatureGroup(featureGroup);
+
+        int expectedHashCode = 31 * (31 * (31 + (promotion.getPromotionType() == null ? 0 : promotion.getPromotionType().hashCode())) 
+                + (promotion.getPromotionId() == null ? 0 : promotion.getPromotionId().hashCode())) 
+                + (promotion.getFeatureGroup() == null ? 0 : promotion.getFeatureGroup().hashCode());
+
+        assertEquals(expectedHashCode, promotion.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        promotion.setPromotionId("PROMO123");
+        PromotionType promotionType = new PromotionType();
+        promotion.setPromotionType(promotionType);
+        FeatureGroup__3 featureGroup = new FeatureGroup__3();
+        promotion.setFeatureGroup(featureGroup);
+
+        Promotion anotherPromotion = new Promotion();
+        anotherPromotion.setPromotionId("PROMO123");
+        anotherPromotion.setPromotionType(promotionType);
+        anotherPromotion.setFeatureGroup(featureGroup);
+
+        assertTrue(promotion.equals(anotherPromotion));
+
+        anotherPromotion.setPromotionId("PROMO456");
+        assertFalse(promotion.equals(anotherPromotion));
+
+        anotherPromotion.setPromotionId("PROMO123");
+        anotherPromotion.setFeatureGroup(new FeatureGroup__3());
+        assertFalse(promotion.equals(anotherPromotion));
+    }
+}

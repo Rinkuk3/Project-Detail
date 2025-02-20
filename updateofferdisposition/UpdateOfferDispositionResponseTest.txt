@@ -1,0 +1,57 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class UpdateOfferDispositionResponseTest {
+
+    private UpdateOfferDispositionResponse updateOfferDispositionResponse;
+    private PartyResponse partyResponse;
+
+    @BeforeEach
+    public void setUp() {
+        updateOfferDispositionResponse = new UpdateOfferDispositionResponse();
+        partyResponse = new PartyResponse();
+    }
+
+    @Test
+    public void testSetAndGetPartyResponse() {
+        updateOfferDispositionResponse.setPartyResponse(partyResponse);
+        assertEquals(partyResponse, updateOfferDispositionResponse.getPartyResponse());
+    }
+
+    @Test
+    public void testToString() {
+        updateOfferDispositionResponse.setPartyResponse(partyResponse);
+
+        String expected = "com.td.api.mbofp.response.updateofferdisposition.UpdateOfferDispositionResponse@"
+                + Integer.toHexString(System.identityHashCode(updateOfferDispositionResponse)) + "[partyResponse=" + partyResponse + ",]";
+        assertEquals(expected, updateOfferDispositionResponse.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        updateOfferDispositionResponse.setPartyResponse(partyResponse);
+
+        int expectedHashCode = 1;
+        expectedHashCode = (expectedHashCode * 31) + (partyResponse == null ? 0 : partyResponse.hashCode());
+
+        assertEquals(expectedHashCode, updateOfferDispositionResponse.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        updateOfferDispositionResponse.setPartyResponse(partyResponse);
+
+        UpdateOfferDispositionResponse anotherUpdateOfferDispositionResponse = new UpdateOfferDispositionResponse();
+        anotherUpdateOfferDispositionResponse.setPartyResponse(partyResponse);
+
+        assertTrue(updateOfferDispositionResponse.equals(anotherUpdateOfferDispositionResponse));
+
+        PartyResponse anotherPartyResponse = new PartyResponse();
+        anotherUpdateOfferDispositionResponse.setPartyResponse(anotherPartyResponse);
+        assertFalse(updateOfferDispositionResponse.equals(anotherUpdateOfferDispositionResponse));
+
+        assertFalse(updateOfferDispositionResponse.equals(null));
+        assertFalse(updateOfferDispositionResponse.equals(new Object()));
+    }
+}

@@ -1,0 +1,53 @@
+package com.td.api.mbofp.response.retrievecampaign;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class FeatureGroupTest {
+
+    @Test
+    void testGettersAndSetters() {
+        FeatureGroup featureGroup = new FeatureGroup();
+        
+        CardLayout cardLayout = new CardLayout();
+        PlasticEmbossing plasticEmbossing = new PlasticEmbossing();
+
+        featureGroup.setCardLayout(cardLayout);
+        featureGroup.setPlasticEmbossing(plasticEmbossing);
+
+        assertEquals(cardLayout, featureGroup.getCardLayout());
+        assertEquals(plasticEmbossing, featureGroup.getPlasticEmbossing());
+    }
+
+    @Test
+    void testToString() {
+        FeatureGroup featureGroup = new FeatureGroup();
+        featureGroup.setCardLayout(new CardLayout());
+        featureGroup.setPlasticEmbossing(new PlasticEmbossing());
+
+        String result = featureGroup.toString();
+        assertTrue(result.contains("cardLayout="));
+        assertTrue(result.contains("plasticEmbossing="));
+    }
+
+    @Test
+    void testHashCode() {
+        FeatureGroup feature1 = new FeatureGroup();
+        FeatureGroup feature2 = new FeatureGroup();
+
+        assertEquals(feature1.hashCode(), feature2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        FeatureGroup feature1 = new FeatureGroup();
+        FeatureGroup feature2 = new FeatureGroup();
+        FeatureGroup feature3 = new FeatureGroup();
+        feature3.setCardLayout(new CardLayout());
+
+        assertEquals(feature1, feature2);
+        assertNotEquals(feature1, feature3);
+        assertNotEquals(feature1, null);
+        assertNotEquals(feature1, new Object());
+    }
+}

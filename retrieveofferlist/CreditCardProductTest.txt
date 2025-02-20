@@ -1,0 +1,154 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Arrays;
+
+public class CreditCardProductTest {
+
+    private CreditCardProduct creditCardProduct;
+    private CardAssociationType cardAssociationType;
+    private ProductGroup productGroup;
+    private FeatureGroup__2 featureGroup;
+    private RelatedLoyaltyProgram relatedLoyaltyProgram;
+    private ProductEligibility productEligibility;
+    private CustomAttribute customAttribute;
+
+    @BeforeEach
+    public void setUp() {
+        creditCardProduct = new CreditCardProduct();
+        
+        cardAssociationType = new CardAssociationType();
+        cardAssociationType.setTypeCd("VISA");
+        cardAssociationType.setTypeDesc("Visa Card");
+        
+        productGroup = new ProductGroup();
+        
+        featureGroup = new FeatureGroup__2();
+        
+        relatedLoyaltyProgram = new RelatedLoyaltyProgram();
+        
+        productEligibility = new ProductEligibility();
+        
+        customAttribute = new CustomAttribute();
+    }
+
+    @Test
+    public void testSetAndGetProductDesc() {
+        String productDesc = "Credit Card Product Description";
+        creditCardProduct.setProductDesc(productDesc);
+        assertEquals(productDesc, creditCardProduct.getProductDesc());
+    }
+
+    @Test
+    public void testSetAndGetCardAssociationType() {
+        creditCardProduct.setCardAssociationType(cardAssociationType);
+        assertEquals(cardAssociationType, creditCardProduct.getCardAssociationType());
+    }
+
+    @Test
+    public void testSetAndGetProductGroup() {
+        creditCardProduct.setProductGroup(Arrays.asList(productGroup));
+        assertEquals(1, creditCardProduct.getProductGroup().size());
+        assertEquals(productGroup, creditCardProduct.getProductGroup().get(0));
+    }
+
+    @Test
+    public void testSetAndGetFeatureGroup() {
+        creditCardProduct.setFeatureGroup(featureGroup);
+        assertEquals(featureGroup, creditCardProduct.getFeatureGroup());
+    }
+
+    @Test
+    public void testSetAndGetRelatedLoyaltyProgram() {
+        creditCardProduct.setRelatedLoyaltyProgram(relatedLoyaltyProgram);
+        assertEquals(relatedLoyaltyProgram, creditCardProduct.getRelatedLoyaltyProgram());
+    }
+
+    @Test
+    public void testSetAndGetProductEligibility() {
+        creditCardProduct.setProductEligibility(Arrays.asList(productEligibility));
+        assertEquals(1, creditCardProduct.getProductEligibility().size());
+        assertEquals(productEligibility, creditCardProduct.getProductEligibility().get(0));
+    }
+
+    @Test
+    public void testSetAndGetCustomAttribute() {
+        creditCardProduct.setCustomAttribute(Arrays.asList(customAttribute));
+        assertEquals(1, creditCardProduct.getCustomAttribute().size());
+        assertEquals(customAttribute, creditCardProduct.getCustomAttribute().get(0));
+    }
+
+    @Test
+    public void testToString() {
+        creditCardProduct.setProductDesc("Credit Card Product Description");
+        creditCardProduct.setCardAssociationType(cardAssociationType);
+        creditCardProduct.setProductGroup(Arrays.asList(productGroup));
+        creditCardProduct.setFeatureGroup(featureGroup);
+        creditCardProduct.setRelatedLoyaltyProgram(relatedLoyaltyProgram);
+        creditCardProduct.setProductEligibility(Arrays.asList(productEligibility));
+        creditCardProduct.setCustomAttribute(Arrays.asList(customAttribute));
+
+        String expected = "com.td.api.mbofp.response.retrieveofferlist.CreditCardProduct@" 
+                + Integer.toHexString(System.identityHashCode(creditCardProduct)) 
+                + "[productDesc=Credit Card Product Description,cardAssociationType=" + cardAssociationType 
+                + ",productGroup=" + Arrays.asList(productGroup) + ",featureGroup=" + featureGroup 
+                + ",relatedLoyaltyProgram=" + relatedLoyaltyProgram + ",productEligibility=" 
+                + Arrays.asList(productEligibility) + ",customAttribute=" + Arrays.asList(customAttribute) + "]";
+
+        assertEquals(expected, creditCardProduct.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        creditCardProduct.setProductDesc("Credit Card Product Description");
+        creditCardProduct.setCardAssociationType(cardAssociationType);
+        creditCardProduct.setProductGroup(Arrays.asList(productGroup));
+        creditCardProduct.setFeatureGroup(featureGroup);
+        creditCardProduct.setRelatedLoyaltyProgram(relatedLoyaltyProgram);
+        creditCardProduct.setProductEligibility(Arrays.asList(productEligibility));
+        creditCardProduct.setCustomAttribute(Arrays.asList(customAttribute));
+
+        int expectedHashCode = 31 + (creditCardProduct.getProductDesc() == null ? 0 : creditCardProduct.getProductDesc().hashCode())
+                + (creditCardProduct.getCardAssociationType() == null ? 0 : creditCardProduct.getCardAssociationType().hashCode())
+                + (creditCardProduct.getProductGroup() == null ? 0 : creditCardProduct.getProductGroup().hashCode())
+                + (creditCardProduct.getFeatureGroup() == null ? 0 : creditCardProduct.getFeatureGroup().hashCode())
+                + (creditCardProduct.getRelatedLoyaltyProgram() == null ? 0 : creditCardProduct.getRelatedLoyaltyProgram().hashCode())
+                + (creditCardProduct.getProductEligibility() == null ? 0 : creditCardProduct.getProductEligibility().hashCode())
+                + (creditCardProduct.getCustomAttribute() == null ? 0 : creditCardProduct.getCustomAttribute().hashCode());
+
+        assertEquals(expectedHashCode, creditCardProduct.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        creditCardProduct.setProductDesc("Credit Card Product Description");
+        creditCardProduct.setCardAssociationType(cardAssociationType);
+        creditCardProduct.setProductGroup(Arrays.asList(productGroup));
+        creditCardProduct.setFeatureGroup(featureGroup);
+        creditCardProduct.setRelatedLoyaltyProgram(relatedLoyaltyProgram);
+        creditCardProduct.setProductEligibility(Arrays.asList(productEligibility));
+        creditCardProduct.setCustomAttribute(Arrays.asList(customAttribute));
+
+        CreditCardProduct anotherCreditCardProduct = new CreditCardProduct();
+        anotherCreditCardProduct.setProductDesc("Credit Card Product Description");
+        anotherCreditCardProduct.setCardAssociationType(cardAssociationType);
+        anotherCreditCardProduct.setProductGroup(Arrays.asList(productGroup));
+        anotherCreditCardProduct.setFeatureGroup(featureGroup);
+        anotherCreditCardProduct.setRelatedLoyaltyProgram(relatedLoyaltyProgram);
+        anotherCreditCardProduct.setProductEligibility(Arrays.asList(productEligibility));
+        anotherCreditCardProduct.setCustomAttribute(Arrays.asList(customAttribute));
+
+        assertTrue(creditCardProduct.equals(anotherCreditCardProduct));
+
+        anotherCreditCardProduct.setProductDesc("Different Description");
+        assertFalse(creditCardProduct.equals(anotherCreditCardProduct));
+
+        anotherCreditCardProduct.setProductDesc("Credit Card Product Description");
+        anotherCreditCardProduct.setCardAssociationType(new CardAssociationType());
+        assertFalse(creditCardProduct.equals(anotherCreditCardProduct));
+
+        assertFalse(creditCardProduct.equals(null));
+        assertFalse(creditCardProduct.equals(new Object()));
+    }
+}

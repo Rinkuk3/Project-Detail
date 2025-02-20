@@ -1,0 +1,133 @@
+import com.td.api.mbofp.shared.PromotionType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class PromotionTest {
+
+    private Promotion promotion;
+
+    @BeforeEach
+    public void setUp() {
+        promotion = new Promotion();
+    }
+
+    @Test
+    public void testSetAndGetPromotionId() {
+        String promotionId = "PROMO123";
+        promotion.setPromotionId(promotionId);
+        assertEquals(promotionId, promotion.getPromotionId());
+    }
+
+    @Test
+    public void testSetAndGetPromotionType() {
+        PromotionType promotionType = PromotionType.DISCOUNT;
+        promotion.setPromotionType(promotionType);
+        assertEquals(promotionType, promotion.getPromotionType());
+    }
+
+    @Test
+    public void testSetAndGetProductChangeTypeCd() {
+        String productChangeTypeCd = "CHANGE01";
+        promotion.setProductChangeTypeCd(productChangeTypeCd);
+        assertEquals(productChangeTypeCd, promotion.getProductChangeTypeCd());
+    }
+
+    @Test
+    public void testSetAndGetDisclosureTemplateId() {
+        promotion.setDisclosureTemplateId(Arrays.asList("template1", "template2"));
+        assertEquals(Arrays.asList("template1", "template2"), promotion.getDisclosureTemplateId());
+    }
+
+    @Test
+    public void testSetAndGetFeatureGroup() {
+        FeatureGroup featureGroup = new FeatureGroup();
+        promotion.setFeatureGroup(featureGroup);
+        assertEquals(featureGroup, promotion.getFeatureGroup());
+    }
+
+    @Test
+    public void testSetAndGetCreditCardProductPackage() {
+        CreditCardProductPackage creditCardProductPackage = new CreditCardProductPackage();
+        promotion.setCreditCardProductPackage(creditCardProductPackage);
+        assertEquals(creditCardProductPackage, promotion.getCreditCardProductPackage());
+    }
+
+    @Test
+    public void testToString() {
+        PromotionType promotionType = PromotionType.DISCOUNT;
+        FeatureGroup featureGroup = new FeatureGroup();
+        CreditCardProductPackage creditCardProductPackage = new CreditCardProductPackage();
+
+        promotion.setPromotionId("PROMO123");
+        promotion.setPromotionType(promotionType);
+        promotion.setProductChangeTypeCd("CHANGE01");
+        promotion.setDisclosureTemplateId(Arrays.asList("template1", "template2"));
+        promotion.setFeatureGroup(featureGroup);
+        promotion.setCreditCardProductPackage(creditCardProductPackage);
+
+        String expected = "com.td.api.mbofp.response.retrieveofferlist.Promotion@"
+                + Integer.toHexString(System.identityHashCode(promotion))
+                + "[promotionId=PROMO123,promotionType=DISCOUNT,productChangeTypeCd=CHANGE01,"
+                + "disclosureTemplateId=[template1, template2],featureGroup=" + featureGroup
+                + ",creditCardProductPackage=" + creditCardProductPackage + "]";
+        assertEquals(expected, promotion.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        PromotionType promotionType = PromotionType.DISCOUNT;
+        FeatureGroup featureGroup = new FeatureGroup();
+        CreditCardProductPackage creditCardProductPackage = new CreditCardProductPackage();
+
+        promotion.setPromotionId("PROMO123");
+        promotion.setPromotionType(promotionType);
+        promotion.setProductChangeTypeCd("CHANGE01");
+        promotion.setDisclosureTemplateId(Arrays.asList("template1", "template2"));
+        promotion.setFeatureGroup(featureGroup);
+        promotion.setCreditCardProductPackage(creditCardProductPackage);
+
+        int expectedHashCode = 1;
+        expectedHashCode = (expectedHashCode * 31) + (promotion.getCreditCardProductPackage() == null ? 0 : promotion.getCreditCardProductPackage().hashCode());
+        expectedHashCode = (expectedHashCode * 31) + (promotion.getPromotionType() == null ? 0 : promotion.getPromotionType().hashCode());
+        expectedHashCode = (expectedHashCode * 31) + (promotion.getFeatureGroup() == null ? 0 : promotion.getFeatureGroup().hashCode());
+        expectedHashCode = (expectedHashCode * 31) + (promotion.getDisclosureTemplateId() == null ? 0 : promotion.getDisclosureTemplateId().hashCode());
+        expectedHashCode = (expectedHashCode * 31) + (promotion.getPromotionId() == null ? 0 : promotion.getPromotionId().hashCode());
+        expectedHashCode = (expectedHashCode * 31) + (promotion.getProductChangeTypeCd() == null ? 0 : promotion.getProductChangeTypeCd().hashCode());
+
+        assertEquals(expectedHashCode, promotion.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        PromotionType promotionType = PromotionType.DISCOUNT;
+        FeatureGroup featureGroup = new FeatureGroup();
+        CreditCardProductPackage creditCardProductPackage = new CreditCardProductPackage();
+
+        promotion.setPromotionId("PROMO123");
+        promotion.setPromotionType(promotionType);
+        promotion.setProductChangeTypeCd("CHANGE01");
+        promotion.setDisclosureTemplateId(Arrays.asList("template1", "template2"));
+        promotion.setFeatureGroup(featureGroup);
+        promotion.setCreditCardProductPackage(creditCardProductPackage);
+
+        Promotion anotherPromotion = new Promotion();
+        anotherPromotion.setPromotionId("PROMO123");
+        anotherPromotion.setPromotionType(promotionType);
+        anotherPromotion.setProductChangeTypeCd("CHANGE01");
+        anotherPromotion.setDisclosureTemplateId(Arrays.asList("template1", "template2"));
+        anotherPromotion.setFeatureGroup(featureGroup);
+        anotherPromotion.setCreditCardProductPackage(creditCardProductPackage);
+
+        assertTrue(promotion.equals(anotherPromotion));
+
+        anotherPromotion.setPromotionId("PROMO124");
+        assertFalse(promotion.equals(anotherPromotion));
+
+        assertFalse(promotion.equals(null));
+        assertFalse(promotion.equals(new Object()));
+    }
+}

@@ -1,0 +1,73 @@
+package com.td.api.mbofp.response.retrievecampaign;
+
+import org.junit.jupiter.api.Test;
+import java.math.BigDecimal;
+import static org.junit.jupiter.api.Assertions.*;
+
+class DelinquencyPolicyTest {
+
+    @Test
+    void testGettersAndSetters() {
+        DelinquencyPolicy policy = new DelinquencyPolicy();
+
+        policy.setPolicyTypeCd("TYPE_A");
+        policy.setFeatureClassificationCd("CLASS_B");
+        policy.setRepricingTypeCd("REPRICE_1");
+        policy.setRepricingRate(new BigDecimal("3.75"));
+        policy.setTriggerCycleCnt(5);
+        policy.setDelinquencyLevelCd("LEVEL_2");
+        policy.setMinimumDelinquencyCnt(2);
+
+        assertEquals("TYPE_A", policy.getPolicyTypeCd());
+        assertEquals("CLASS_B", policy.getFeatureClassificationCd());
+        assertEquals("REPRICE_1", policy.getRepricingTypeCd());
+        assertEquals(new BigDecimal("3.75"), policy.getRepricingRate());
+        assertEquals(5, policy.getTriggerCycleCnt());
+        assertEquals("LEVEL_2", policy.getDelinquencyLevelCd());
+        assertEquals(2, policy.getMinimumDelinquencyCnt());
+    }
+
+    @Test
+    void testToString() {
+        DelinquencyPolicy policy = new DelinquencyPolicy();
+        policy.setPolicyTypeCd("TYPE_A");
+        policy.setFeatureClassificationCd("CLASS_B");
+
+        String result = policy.toString();
+        assertTrue(result.contains("policyTypeCd=TYPE_A"));
+        assertTrue(result.contains("featureClassificationCd=CLASS_B"));
+    }
+
+    @Test
+    void testHashCode() {
+        DelinquencyPolicy policy1 = new DelinquencyPolicy();
+        policy1.setPolicyTypeCd("TYPE_A");
+        policy1.setFeatureClassificationCd("CLASS_B");
+
+        DelinquencyPolicy policy2 = new DelinquencyPolicy();
+        policy2.setPolicyTypeCd("TYPE_A");
+        policy2.setFeatureClassificationCd("CLASS_B");
+
+        assertEquals(policy1.hashCode(), policy2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        DelinquencyPolicy policy1 = new DelinquencyPolicy();
+        policy1.setPolicyTypeCd("TYPE_A");
+        policy1.setFeatureClassificationCd("CLASS_B");
+
+        DelinquencyPolicy policy2 = new DelinquencyPolicy();
+        policy2.setPolicyTypeCd("TYPE_A");
+        policy2.setFeatureClassificationCd("CLASS_B");
+
+        DelinquencyPolicy policy3 = new DelinquencyPolicy();
+        policy3.setPolicyTypeCd("TYPE_X");
+        policy3.setFeatureClassificationCd("CLASS_Y");
+
+        assertEquals(policy1, policy2);
+        assertNotEquals(policy1, policy3);
+        assertNotEquals(policy1, null);
+        assertNotEquals(policy1, new Object());
+    }
+}

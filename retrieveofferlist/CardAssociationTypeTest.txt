@@ -1,0 +1,84 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CardAssociationTypeTest {
+
+    private CardAssociationType cardAssociationType;
+
+    @BeforeEach
+    public void setUp() {
+        cardAssociationType = new CardAssociationType();
+    }
+
+    @Test
+    public void testSetAndGetTypeCd() {
+        String typeCd = "T001";
+        cardAssociationType.setTypeCd(typeCd);
+        assertEquals(typeCd, cardAssociationType.getTypeCd());
+    }
+
+    @Test
+    public void testSetAndGetTypeDesc() {
+        String typeDesc = "Card Association Type Description";
+        cardAssociationType.setTypeDesc(typeDesc);
+        assertEquals(typeDesc, cardAssociationType.getTypeDesc());
+    }
+
+    @Test
+    public void testToString() {
+        String typeCd = "T001";
+        String typeDesc = "Card Association Type Description";
+        
+        cardAssociationType.setTypeCd(typeCd);
+        cardAssociationType.setTypeDesc(typeDesc);
+        
+        String expected = "com.td.api.mbofp.response.retrieveofferlist.CardAssociationType@" 
+                + Integer.toHexString(System.identityHashCode(cardAssociationType)) 
+                + "[typeCd=" + typeCd + ",typeDesc=" + typeDesc + "]";
+        
+        assertEquals(expected, cardAssociationType.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        String typeCd = "T001";
+        String typeDesc = "Card Association Type Description";
+        
+        cardAssociationType.setTypeCd(typeCd);
+        cardAssociationType.setTypeDesc(typeDesc);
+        
+        int expectedHashCode = 31 + (typeCd == null ? 0 : typeCd.hashCode())
+                + (typeDesc == null ? 0 : typeDesc.hashCode());
+        
+        assertEquals(expectedHashCode, cardAssociationType.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        String typeCd = "T001";
+        String typeDesc = "Card Association Type Description";
+        
+        cardAssociationType.setTypeCd(typeCd);
+        cardAssociationType.setTypeDesc(typeDesc);
+
+        CardAssociationType anotherCardAssociationType = new CardAssociationType();
+        anotherCardAssociationType.setTypeCd(typeCd);
+        anotherCardAssociationType.setTypeDesc(typeDesc);
+
+        assertTrue(cardAssociationType.equals(anotherCardAssociationType));
+
+        anotherCardAssociationType.setTypeCd("T002");
+        assertFalse(cardAssociationType.equals(anotherCardAssociationType));
+
+        anotherCardAssociationType.setTypeCd(typeCd);
+        anotherCardAssociationType.setTypeDesc("Different Description");
+        assertFalse(cardAssociationType.equals(anotherCardAssociationType));
+
+        anotherCardAssociationType.setTypeDesc(typeDesc);
+        assertTrue(cardAssociationType.equals(anotherCardAssociationType));
+
+        assertFalse(cardAssociationType.equals(null));
+        assertFalse(cardAssociationType.equals(new Object()));
+    }
+}

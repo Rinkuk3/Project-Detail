@@ -1,0 +1,167 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class FeatureGroupTest {
+
+    private FeatureGroup featureGroup;
+
+    @BeforeEach
+    public void setUp() {
+        featureGroup = new FeatureGroup();
+    }
+
+    @Test
+    public void testSetAndGetFeatureGroupId() {
+        String featureGroupId = "FG123";
+        featureGroup.setFeatureGroupId(featureGroupId);
+        assertEquals(featureGroupId, featureGroup.getFeatureGroupId());
+    }
+
+    @Test
+    public void testSetAndGetCreditLimit() {
+        List<CreditLimit> creditLimits = new ArrayList<>();
+        CreditLimit creditLimit = new CreditLimit();
+        creditLimit.setFeatureClassificationCd("CLASS_A");
+        creditLimit.setCreditLimitAmt(new BigDecimal("1000"));
+        creditLimits.add(creditLimit);
+        featureGroup.setCreditLimit(creditLimits);
+        assertEquals(creditLimits, featureGroup.getCreditLimit());
+    }
+
+    @Test
+    public void testSetAndGetRate() {
+        List<Rate> rates = new ArrayList<>();
+        Rate rate = new Rate();
+        rates.add(rate);
+        featureGroup.setRate(rates);
+        assertEquals(rates, featureGroup.getRate());
+    }
+
+    @Test
+    public void testSetAndGetFee() {
+        Fee fee = new Fee();
+        featureGroup.setFee(fee);
+        assertEquals(fee, featureGroup.getFee());
+    }
+
+    @Test
+    public void testSetAndGetMerchantCategory() {
+        List<MerchantCategory> merchantCategories = new ArrayList<>();
+        MerchantCategory merchantCategory = new MerchantCategory();
+        merchantCategories.add(merchantCategory);
+        featureGroup.setMerchantCategory(merchantCategories);
+        assertEquals(merchantCategories, featureGroup.getMerchantCategory());
+    }
+
+    @Test
+    public void testToString() {
+        List<CreditLimit> creditLimits = new ArrayList<>();
+        CreditLimit creditLimit = new CreditLimit();
+        creditLimit.setFeatureClassificationCd("CLASS_A");
+        creditLimit.setCreditLimitAmt(new BigDecimal("1000"));
+        creditLimits.add(creditLimit);
+
+        List<Rate> rates = new ArrayList<>();
+        Rate rate = new Rate();
+        rates.add(rate);
+
+        List<MerchantCategory> merchantCategories = new ArrayList<>();
+        MerchantCategory merchantCategory = new MerchantCategory();
+        merchantCategories.add(merchantCategory);
+
+        Fee fee = new Fee();
+
+        featureGroup.setFeatureGroupId("FG123");
+        featureGroup.setCreditLimit(creditLimits);
+        featureGroup.setRate(rates);
+        featureGroup.setFee(fee);
+        featureGroup.setMerchantCategory(merchantCategories);
+
+        String expected = "com.td.api.mbofp.response.retrieveofferlist.FeatureGroup@" 
+                + Integer.toHexString(System.identityHashCode(featureGroup))
+                + "[featureGroupId=FG123,creditLimit=[" + creditLimits + "],rate=[" + rates + "],fee=" + fee + ",merchantCategory=[" + merchantCategories + "]]";
+
+        assertEquals(expected, featureGroup.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        List<CreditLimit> creditLimits = new ArrayList<>();
+        CreditLimit creditLimit = new CreditLimit();
+        creditLimit.setFeatureClassificationCd("CLASS_A");
+        creditLimit.setCreditLimitAmt(new BigDecimal("1000"));
+        creditLimits.add(creditLimit);
+
+        List<Rate> rates = new ArrayList<>();
+        Rate rate = new Rate();
+        rates.add(rate);
+
+        List<MerchantCategory> merchantCategories = new ArrayList<>();
+        MerchantCategory merchantCategory = new MerchantCategory();
+        merchantCategories.add(merchantCategory);
+
+        Fee fee = new Fee();
+
+        featureGroup.setFeatureGroupId("FG123");
+        featureGroup.setCreditLimit(creditLimits);
+        featureGroup.setRate(rates);
+        featureGroup.setFee(fee);
+        featureGroup.setMerchantCategory(merchantCategories);
+
+        int expectedHashCode = 31 * (31 * (31 * (31 * (31 * (31 * (31 * (31 + (featureGroup.getFeatureGroupId() == null ? 0 : featureGroup.getFeatureGroupId().hashCode())) +
+                (featureGroup.getCreditLimit() == null ? 0 : featureGroup.getCreditLimit().hashCode())) +
+                (featureGroup.getMerchantCategory() == null ? 0 : featureGroup.getMerchantCategory().hashCode())) +
+                (featureGroup.getRate() == null ? 0 : featureGroup.getRate().hashCode())) +
+                (featureGroup.getFee() == null ? 0 : featureGroup.getFee().hashCode()));
+
+        assertEquals(expectedHashCode, featureGroup.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        featureGroup.setFeatureGroupId("FG123");
+        List<CreditLimit> creditLimits = new ArrayList<>();
+        CreditLimit creditLimit = new CreditLimit();
+        creditLimit.setFeatureClassificationCd("CLASS_A");
+        creditLimit.setCreditLimitAmt(new BigDecimal("1000"));
+        creditLimits.add(creditLimit);
+        featureGroup.setCreditLimit(creditLimits);
+
+        List<Rate> rates = new ArrayList<>();
+        Rate rate = new Rate();
+        rates.add(rate);
+        featureGroup.setRate(rates);
+
+        Fee fee = new Fee();
+        featureGroup.setFee(fee);
+
+        List<MerchantCategory> merchantCategories = new ArrayList<>();
+        MerchantCategory merchantCategory = new MerchantCategory();
+        merchantCategories.add(merchantCategory);
+        featureGroup.setMerchantCategory(merchantCategories);
+
+        FeatureGroup anotherFeatureGroup = new FeatureGroup();
+        anotherFeatureGroup.setFeatureGroupId("FG123");
+        anotherFeatureGroup.setCreditLimit(creditLimits);
+        anotherFeatureGroup.setRate(rates);
+        anotherFeatureGroup.setFee(fee);
+        anotherFeatureGroup.setMerchantCategory(merchantCategories);
+
+        assertTrue(featureGroup.equals(anotherFeatureGroup));
+
+        anotherFeatureGroup.setFeatureGroupId("FG124");
+        assertFalse(featureGroup.equals(anotherFeatureGroup));
+
+        anotherFeatureGroup.setFeatureGroupId("FG123");
+        anotherFeatureGroup.setFee(new Fee());
+        assertFalse(featureGroup.equals(anotherFeatureGroup));
+
+        assertFalse(featureGroup.equals(null));
+        assertFalse(featureGroup.equals(new Object()));
+    }
+}

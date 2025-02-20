@@ -1,0 +1,127 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class FeatureGroup__2Test {
+
+    private FeatureGroup__2 featureGroup;
+
+    @BeforeEach
+    public void setUp() {
+        featureGroup = new FeatureGroup__2();
+    }
+
+    @Test
+    public void testSetAndGetRate() {
+        List<Rate> rates = new ArrayList<>();
+        Rate rate = new Rate();
+        rates.add(rate);
+        featureGroup.setRate(rates);
+        assertEquals(rates, featureGroup.getRate());
+    }
+
+    @Test
+    public void testSetAndGetFee() {
+        List<Fee> fees = new ArrayList<>();
+        Fee fee = new Fee();
+        fees.add(fee);
+        featureGroup.setFee(fees);
+        assertEquals(fees, featureGroup.getFee());
+    }
+
+    @Test
+    public void testSetAndGetMinimumPayment() {
+        MinimumPayment minimumPayment = new MinimumPayment();
+        featureGroup.setMinimumPayment(minimumPayment);
+        assertEquals(minimumPayment, featureGroup.getMinimumPayment());
+    }
+
+    @Test
+    public void testSetAndGetInactiveLimitMonthCnt() {
+        Integer inactiveLimitMonthCnt = 12;
+        featureGroup.setInactiveLimitMonthCnt(inactiveLimitMonthCnt);
+        assertEquals(inactiveLimitMonthCnt, featureGroup.getInactiveLimitMonthCnt());
+    }
+
+    @Test
+    public void testToString() {
+        List<Rate> rates = new ArrayList<>();
+        Rate rate = new Rate();
+        rates.add(rate);
+
+        List<Fee> fees = new ArrayList<>();
+        Fee fee = new Fee();
+        fees.add(fee);
+
+        MinimumPayment minimumPayment = new MinimumPayment();
+        featureGroup.setRate(rates);
+        featureGroup.setFee(fees);
+        featureGroup.setMinimumPayment(minimumPayment);
+        featureGroup.setInactiveLimitMonthCnt(12);
+
+        String expected = "com.td.api.mbofp.response.retrieveofferlist.FeatureGroup__2@" 
+                + Integer.toHexString(System.identityHashCode(featureGroup))
+                + "[rate=" + rates + ",fee=" + fees + ",minimumPayment=" + minimumPayment 
+                + ",inactiveLimitMonthCnt=" + 12 + "]";
+        assertEquals(expected, featureGroup.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        List<Rate> rates = new ArrayList<>();
+        Rate rate = new Rate();
+        rates.add(rate);
+
+        List<Fee> fees = new ArrayList<>();
+        Fee fee = new Fee();
+        fees.add(fee);
+
+        MinimumPayment minimumPayment = new MinimumPayment();
+        featureGroup.setRate(rates);
+        featureGroup.setFee(fees);
+        featureGroup.setMinimumPayment(minimumPayment);
+        featureGroup.setInactiveLimitMonthCnt(12);
+
+        int expectedHashCode = 31;
+        expectedHashCode = (expectedHashCode * 31) + (featureGroup.getInactiveLimitMonthCnt() == null ? 0 : featureGroup.getInactiveLimitMonthCnt().hashCode());
+        expectedHashCode = (expectedHashCode * 31) + (featureGroup.getRate() == null ? 0 : featureGroup.getRate().hashCode());
+        expectedHashCode = (expectedHashCode * 31) + (featureGroup.getFee() == null ? 0 : featureGroup.getFee().hashCode());
+        expectedHashCode = (expectedHashCode * 31) + (featureGroup.getMinimumPayment() == null ? 0 : featureGroup.getMinimumPayment().hashCode());
+        assertEquals(expectedHashCode, featureGroup.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        List<Rate> rates = new ArrayList<>();
+        Rate rate = new Rate();
+        rates.add(rate);
+
+        List<Fee> fees = new ArrayList<>();
+        Fee fee = new Fee();
+        fees.add(fee);
+
+        MinimumPayment minimumPayment = new MinimumPayment();
+        featureGroup.setRate(rates);
+        featureGroup.setFee(fees);
+        featureGroup.setMinimumPayment(minimumPayment);
+        featureGroup.setInactiveLimitMonthCnt(12);
+
+        FeatureGroup__2 anotherFeatureGroup = new FeatureGroup__2();
+        anotherFeatureGroup.setRate(rates);
+        anotherFeatureGroup.setFee(fees);
+        anotherFeatureGroup.setMinimumPayment(minimumPayment);
+        anotherFeatureGroup.setInactiveLimitMonthCnt(12);
+
+        assertTrue(featureGroup.equals(anotherFeatureGroup));
+
+        anotherFeatureGroup.setInactiveLimitMonthCnt(13);
+        assertFalse(featureGroup.equals(anotherFeatureGroup));
+
+        assertFalse(featureGroup.equals(null));
+        assertFalse(featureGroup.equals(new Object()));
+    }
+}
