@@ -1,0 +1,135 @@
+package com.td.api.mbcca.response.account;
+
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.td.api.mbcca.shared.Cccyamt;
+
+class CurrentBalanceInfoTest {
+
+    private CurrentBalanceInfo currentBalanceInfo;
+
+    @BeforeEach
+    void setUp() {
+        currentBalanceInfo = new CurrentBalanceInfo();
+    }
+
+    @Test
+    void testGettersAndSetters() {
+        currentBalanceInfo.setTransactionCategoryCd("123");
+        assertEquals("123", currentBalanceInfo.getTransactionCategoryCd());
+
+        currentBalanceInfo.setTermBalanceCd("ABC");
+        assertEquals("ABC", currentBalanceInfo.getTermBalanceCd());
+
+        Cccyamt amount = new Cccyamt();
+        currentBalanceInfo.setOutstandingBalanceCccyamt(amount);
+        assertEquals(amount, currentBalanceInfo.getOutstandingBalanceCccyamt());
+
+        currentBalanceInfo.setPreviousCycleUnpaidBalanceCccyamt(amount);
+        assertEquals(amount, currentBalanceInfo.getPreviousCycleUnpaidBalanceCccyamt());
+
+        currentBalanceInfo.setFinanceChargeOutstandingCccyamt(amount);
+        assertEquals(amount, currentBalanceInfo.getFinanceChargeOutstandingCccyamt());
+
+        currentBalanceInfo.setFinanceChargeTypeCd("FC123");
+        assertEquals("FC123", currentBalanceInfo.getFinanceChargeTypeCd());
+
+        currentBalanceInfo.setMinimumPaymentDeferredInd(true);
+        assertTrue(currentBalanceInfo.getMinimumPaymentDeferredInd());
+
+        currentBalanceInfo.setFinanceChargeDeferredInd(false);
+        assertFalse(currentBalanceInfo.getFinanceChargeDeferredInd());
+
+        currentBalanceInfo.setBilledBalanceOutstandingInd(true);
+        assertTrue(currentBalanceInfo.getBilledBalanceOutstandingInd());
+
+        currentBalanceInfo.setBalanceSubjectToFinanceChargeInd(false);
+        assertFalse(currentBalanceInfo.getBalanceSubjectToFinanceChargeInd());
+
+        currentBalanceInfo.setPrinciplePaymentDueCccyamt(amount);
+        assertEquals(amount, currentBalanceInfo.getPrinciplePaymentDueCccyamt());
+
+        currentBalanceInfo.setPreviousPrincipleBalanceCccyamt(amount);
+        assertEquals(amount, currentBalanceInfo.getPreviousPrincipleBalanceCccyamt());
+
+        currentBalanceInfo.setPreviousFinanceChargeBalanceCccyamt(amount);
+        assertEquals(amount, currentBalanceInfo.getPreviousFinanceChargeBalanceCccyamt());
+
+        currentBalanceInfo.setDeferredFinanceChargeCccyamt(amount);
+        assertEquals(amount, currentBalanceInfo.getDeferredFinanceChargeCccyamt());
+
+        currentBalanceInfo.setBalanceSegmentInDisputeCccyamt(amount);
+        assertEquals(amount, currentBalanceInfo.getBalanceSegmentInDisputeCccyamt());
+
+        currentBalanceInfo.setCycleToDateAppliedCreditsCccyamt(amount);
+        assertEquals(amount, currentBalanceInfo.getCycleToDateAppliedCreditsCccyamt());
+
+        currentBalanceInfo.setCycleToDateAppliedDebitsCccyamt(amount);
+        assertEquals(amount, currentBalanceInfo.getCycleToDateAppliedDebitsCccyamt());
+
+        currentBalanceInfo.setCycleToDateAppliedPaymentsCccyamt(amount);
+        assertEquals(amount, currentBalanceInfo.getCycleToDateAppliedPaymentsCccyamt());
+
+        currentBalanceInfo.setCycleToDatePostedDebitsCccyamt(amount);
+        assertEquals(amount, currentBalanceInfo.getCycleToDatePostedDebitsCccyamt());
+
+        currentBalanceInfo.setCycleToDatePostedDebitsCnt(10);
+        assertEquals(10, currentBalanceInfo.getCycleToDatePostedDebitsCnt());
+
+        currentBalanceInfo.setCycleToDatePostedCreditsCccyamt(amount);
+        assertEquals(amount, currentBalanceInfo.getCycleToDatePostedCreditsCccyamt());
+
+        currentBalanceInfo.setCycleToDatePostedCreditsCnt(5);
+        assertEquals(5, currentBalanceInfo.getCycleToDatePostedCreditsCnt());
+
+        currentBalanceInfo.setCycleToDatePostedDebitAdjustmentCccyamt(amount);
+        assertEquals(amount, currentBalanceInfo.getCycleToDatePostedDebitAdjustmentCccyamt());
+
+        currentBalanceInfo.setCycleToDatePostedDebitAdjustmentCnt(3);
+        assertEquals(3, currentBalanceInfo.getCycleToDatePostedDebitAdjustmentCnt());
+
+        currentBalanceInfo.setCycleToDatePostedCreditAdjustmentCccyamt(amount);
+        assertEquals(amount, currentBalanceInfo.getCycleToDatePostedCreditAdjustmentCccyamt());
+
+        currentBalanceInfo.setCycleToDatePostedCreditAdjustmentCnt(2);
+        assertEquals(2, currentBalanceInfo.getCycleToDatePostedCreditAdjustmentCnt());
+
+        currentBalanceInfo.setTransactionCategorySpecialProcessingExpiryDt("2025-12-31");
+        assertEquals("2025-12-31", currentBalanceInfo.getTransactionCategorySpecialProcessingExpiryDt());
+
+        currentBalanceInfo.setForeignExchangeFeeCccyamt(amount);
+        assertEquals(amount, currentBalanceInfo.getForeignExchangeFeeCccyamt());
+
+        currentBalanceInfo.setTransactionCategoryDesc("Test Desc");
+        assertEquals("Test Desc", currentBalanceInfo.getTransactionCategoryDesc());
+
+        currentBalanceInfo.setNewTransactionCategoryCd("NTC123");
+        assertEquals("NTC123", currentBalanceInfo.getNewTransactionCategoryCd());
+
+        currentBalanceInfo.setNewTermBalanceCd("NTB456");
+        assertEquals("NTB456", currentBalanceInfo.getNewTermBalanceCd());
+
+        currentBalanceInfo.setNewTransactionCategoryDesc("New Desc");
+        assertEquals("New Desc", currentBalanceInfo.getNewTransactionCategoryDesc());
+
+        currentBalanceInfo.setPromotionId("PROMO123");
+        assertEquals("PROMO123", currentBalanceInfo.getPromotionId());
+
+        currentBalanceInfo.setTermCodeDesc("Term Desc");
+        assertEquals("Term Desc", currentBalanceInfo.getTermCodeDesc());
+
+        currentBalanceInfo.setRetailTransactionInd(true);
+        assertTrue(currentBalanceInfo.getRetailTransactionInd());
+
+        currentBalanceInfo.setTotalOutstandingBalanceCccyamt(amount);
+        assertEquals(amount, currentBalanceInfo.getTotalOutstandingBalanceCccyamt());
+
+        currentBalanceInfo.setPreviousCycleOutstandingBalanceCccyamt(amount);
+        assertEquals(amount, currentBalanceInfo.getPreviousCycleOutstandingBalanceCccyamt());
+
+        currentBalanceInfo.setCurrentDayPendingTermTransferCccyamt(amount);
+        assertEquals(amount, currentBalanceInfo.getCurrentDayPendingTermTransferCccyamt());
+    }
+}
