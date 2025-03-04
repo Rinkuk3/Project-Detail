@@ -1,0 +1,51 @@
+package com.td.mbna.msec.midtier.serializers;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class GsonDateSerializerTest {
+
+    private final GsonDateSerializer gsonDateSerializer = new GsonDateSerializer();
+
+    @Test
+    void testSerializeWithValidTimestamp() {
+        Long timestamp = 1677801600000L;  // Sample timestamp for "2025-03-03"
+        
+        JsonElement expected = new JsonPrimitive(1677801600000L);
+        JsonElement actual = gsonDateSerializer.serialize(timestamp, Long.class, null);
+        
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testSerializeWithNullTimestamp() {
+        Long timestamp = null;
+
+        JsonElement actual = gsonDateSerializer.serialize(timestamp, Long.class, null);
+
+        assertNull(actual);
+    }
+
+    @Test
+    void testSerializeWithDifferentTimestamp() {
+        Long timestamp = 1609459200000L;  // Sample timestamp for "2021-01-01"
+        
+        JsonElement expected = new JsonPrimitive(1609459200000L);
+        JsonElement actual = gsonDateSerializer.serialize(timestamp, Long.class, null);
+        
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testSerializeWithEdgeCaseTimestamp() {
+        Long timestamp = 0L;  // Epoch time (1970-01-01)
+
+        JsonElement expected = new JsonPrimitive(0L);
+        JsonElement actual = gsonDateSerializer.serialize(timestamp, Long.class, null);
+
+        assertEquals(expected, actual);
+    }
+}

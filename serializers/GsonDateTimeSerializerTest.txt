@@ -1,0 +1,55 @@
+package com.td.mbna.msec.midtier.serializers;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.Type;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class GsonDateTimeSerializerTest {
+
+    private final GsonDateTimeSerializer gsonDateTimeSerializer = new GsonDateTimeSerializer();
+
+    @Test
+    void testSerializeWithValidDate() {
+        Long inputDate = 1677801600000L; // Date in milliseconds
+        String expectedDateString = "2025-03-03T00:00:00.000"; // Expected formatted date
+
+        JsonElement actual = gsonDateTimeSerializer.serialize(inputDate, Long.class, null);
+
+        assertEquals(new JsonPrimitive(expectedDateString), actual);
+    }
+
+    @Test
+    void testSerializeWithNullDate() {
+        Long inputDate = null;
+
+        JsonElement actual = gsonDateTimeSerializer.serialize(inputDate, Long.class, null);
+
+        assertNull(actual);
+    }
+
+    @Test
+    void testSerializeWithEdgeCaseDate() {
+        Long inputDate = 0L; // Edge case (epoch date)
+
+        String expectedDateString = "1970-01-01T00:00:00.000"; // Expected formatted date for epoch
+
+        JsonElement actual = gsonDateTimeSerializer.serialize(inputDate, Long.class, null);
+
+        assertEquals(new JsonPrimitive(expectedDateString), actual);
+    }
+
+    @Test
+    void testSerializeWithLargeDate() {
+        Long inputDate = 999999999999L; // A large date value
+
+        String expectedDateString = "2001-09-09T01:46:39.999"; // Corresponding formatted date
+
+        JsonElement actual = gsonDateTimeSerializer.serialize(inputDate, Long.class, null);
+
+        assertEquals(new JsonPrimitive(expectedDateString), actual);
+    }
+}
