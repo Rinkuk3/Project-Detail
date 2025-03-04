@@ -1,0 +1,105 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+
+public class StatusTest {
+
+    @Test
+    public void testSetGetServerStatusCode() {
+        Status status = new Status();
+        status.setServerStatusCode("200");
+        assertEquals("200", status.getServerStatusCode());
+    }
+
+    @Test
+    public void testSetGetSeverity() {
+        Status status = new Status();
+        status.setSeverity(Status.Severity.WARNING);
+        assertEquals(Status.Severity.WARNING, status.getSeverity());
+    }
+
+    @Test
+    public void testSetGetAdditionalStatus() {
+        Status status = new Status();
+        Additionalstatus additionalstatus = new Additionalstatus();
+        status.setAdditionalStatus(Arrays.asList(additionalstatus));
+        assertEquals(1, status.getAdditionalStatus().size());
+    }
+
+    @Test
+    public void testToString() {
+        Status status = new Status();
+        status.setServerStatusCode("200");
+        status.setSeverity(Status.Severity.ERROR);
+        Additionalstatus additionalstatus = new Additionalstatus();
+        status.setAdditionalStatus(Arrays.asList(additionalstatus));
+
+        String expectedString = "com.td.api.mbcca.shared.Status@" + Integer.toHexString(status.hashCode()) + "[serverStatusCode=200,severity=Error,additionalStatus=[<null>],]";
+        assertEquals(expectedString, status.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        Status status1 = new Status();
+        status1.setServerStatusCode("200");
+        status1.setSeverity(Status.Severity.WARNING);
+        status1.setAdditionalStatus(Arrays.asList(new Additionalstatus()));
+
+        Status status2 = new Status();
+        status2.setServerStatusCode("200");
+        status2.setSeverity(Status.Severity.WARNING);
+        status2.setAdditionalStatus(Arrays.asList(new Additionalstatus()));
+
+        assertEquals(status1.hashCode(), status2.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        Status status1 = new Status();
+        status1.setServerStatusCode("200");
+        status1.setSeverity(Status.Severity.ERROR);
+        status1.setAdditionalStatus(Arrays.asList(new Additionalstatus()));
+
+        Status status2 = new Status();
+        status2.setServerStatusCode("200");
+        status2.setSeverity(Status.Severity.ERROR);
+        status2.setAdditionalStatus(Arrays.asList(new Additionalstatus()));
+
+        assertTrue(status1.equals(status2));
+    }
+
+    @Test
+    public void testNotEquals() {
+        Status status1 = new Status();
+        status1.setServerStatusCode("200");
+        status1.setSeverity(Status.Severity.WARNING);
+        status1.setAdditionalStatus(Arrays.asList(new Additionalstatus()));
+
+        Status status2 = new Status();
+        status2.setServerStatusCode("500");
+        status2.setSeverity(Status.Severity.ERROR);
+        status2.setAdditionalStatus(Arrays.asList(new Additionalstatus()));
+
+        assertFalse(status1.equals(status2));
+    }
+
+    @Test
+    public void testSeverityEnumFromValue() {
+        assertEquals(Status.Severity.WARNING, Status.Severity.fromValue("Warning"));
+        assertEquals(Status.Severity.ERROR, Status.Severity.fromValue("Error"));
+    }
+
+    @Test
+    public void testSeverityEnumFromValueIllegalArgument() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            Status.Severity.fromValue("Invalid");
+        });
+    }
+
+    @Test
+    public void testSeverityEnumToString() {
+        assertEquals("Warning", Status.Severity.WARNING.toString());
+        assertEquals("Error", Status.Severity.ERROR.toString());
+    }
+
+}

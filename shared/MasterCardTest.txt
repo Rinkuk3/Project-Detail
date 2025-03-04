@@ -1,0 +1,161 @@
+package com.td.api.mbcca.shared;
+
+import com.td.api.mbcca.response.account.OriginalAuthorizationEvent__1;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class MasterCardTest {
+
+    @Test
+    void testSetAndGetLifeCycleValidationCd() {
+        MasterCard masterCard = new MasterCard();
+        String lifeCycleValidationCd = "1234";
+        masterCard.setLifeCycleValidationCd(lifeCycleValidationCd);
+        assertEquals(lifeCycleValidationCd, masterCard.getLifeCycleValidationCd());
+    }
+
+    @Test
+    void testSetAndGetSecurityLevelIndicatorCd() {
+        MasterCard masterCard = new MasterCard();
+        String securityLevelIndicatorCd = "A";
+        masterCard.setSecurityLevelIndicatorCd(securityLevelIndicatorCd);
+        assertEquals(securityLevelIndicatorCd, masterCard.getSecurityLevelIndicatorCd());
+    }
+
+    @Test
+    void testSetAndGetPointOfServiceTerminalCapabilityCd() {
+        MasterCard masterCard = new MasterCard();
+        String pointOfServiceTerminalCapabilityCd = "B";
+        masterCard.setPointOfServiceTerminalCapabilityCd(pointOfServiceTerminalCapabilityCd);
+        assertEquals(pointOfServiceTerminalCapabilityCd, masterCard.getPointOfServiceTerminalCapabilityCd());
+    }
+
+    @Test
+    void testSetAndGetCardSequenceNum() {
+        MasterCard masterCard = new MasterCard();
+        String cardSequenceNum = "001";
+        masterCard.setCardSequenceNum(cardSequenceNum);
+        assertEquals(cardSequenceNum, masterCard.getCardSequenceNum());
+    }
+
+    @Test
+    void testSetAndGetWalletId() {
+        MasterCard masterCard = new MasterCard();
+        String walletId = "wallet123";
+        masterCard.setWalletId(walletId);
+        assertEquals(walletId, masterCard.getWalletId());
+    }
+
+    @Test
+    void testSetAndGetOriginalAuthorizationEvent() {
+        MasterCard masterCard = new MasterCard();
+        OriginalAuthorizationEvent__1 event = new OriginalAuthorizationEvent__1();
+        masterCard.setOriginalAuthorizationEvent(event);
+        assertEquals(event, masterCard.getOriginalAuthorizationEvent());
+    }
+
+    @Test
+    void testSetAndGetProgramParticipationTypeCd() {
+        MasterCard masterCard = new MasterCard();
+        String programParticipationTypeCd = "TypeA";
+        masterCard.setProgramParticipationTypeCd(programParticipationTypeCd);
+        assertEquals(programParticipationTypeCd, masterCard.getProgramParticipationTypeCd());
+    }
+
+    @Test
+    void testSetAndGetAcquiringFinancialInstitutionBankNum() {
+        MasterCard masterCard = new MasterCard();
+        String acquiringFinancialInstitutionBankNum = "Bank123";
+        masterCard.setAcquiringFinancialInstitutionBankNum(acquiringFinancialInstitutionBankNum);
+        assertEquals(acquiringFinancialInstitutionBankNum, masterCard.getAcquiringFinancialInstitutionBankNum());
+    }
+
+    @Test
+    void testSetAndGetAuditControlNum() {
+        MasterCard masterCard = new MasterCard();
+        String auditControlNum = "Audit123";
+        masterCard.setAuditControlNum(auditControlNum);
+        assertEquals(auditControlNum, masterCard.getAuditControlNum());
+    }
+
+    @Test
+    void testSetAndGetCardVerificationCodeInvalidIndicatorCd() {
+        MasterCard masterCard = new MasterCard();
+        String cardVerificationCodeInvalidIndicatorCd = "Invalid";
+        masterCard.setCardVerificationCodeInvalidIndicatorCd(cardVerificationCodeInvalidIndicatorCd);
+        assertEquals(cardVerificationCodeInvalidIndicatorCd, masterCard.getCardVerificationCodeInvalidIndicatorCd());
+    }
+
+    @Test
+    void testSetAndGetProcessingCd() {
+        MasterCard masterCard = new MasterCard();
+        String processingCd = "Processing";
+        masterCard.setProcessingCd(processingCd);
+        assertEquals(processingCd, masterCard.getProcessingCd());
+    }
+
+    @Test
+    void testSetAndGetSecureCd() {
+        MasterCard masterCard = new MasterCard();
+        String secureCd = "Secure";
+        masterCard.setSecureCd(secureCd);
+        assertEquals(secureCd, masterCard.getSecureCd());
+    }
+
+    @Test
+    void testToString() {
+        MasterCard masterCard = new MasterCard();
+        masterCard.setLifeCycleValidationCd("1234");
+        masterCard.setSecurityLevelIndicatorCd("A");
+        masterCard.setPointOfServiceTerminalCapabilityCd("B");
+        masterCard.setCardSequenceNum("001");
+        masterCard.setWalletId("wallet123");
+
+        String toString = masterCard.toString();
+        assertTrue(toString.contains("lifeCycleValidationCd=1234"));
+        assertTrue(toString.contains("securityLevelIndicatorCd=A"));
+        assertTrue(toString.contains("pointOfServiceTerminalCapabilityCd=B"));
+        assertTrue(toString.contains("cardSequenceNum=001"));
+        assertTrue(toString.contains("walletId=wallet123"));
+    }
+
+    @Test
+    void testHashCode() {
+        MasterCard masterCard1 = new MasterCard();
+        masterCard1.setWalletId("wallet123");
+        masterCard1.setCardSequenceNum("001");
+
+        MasterCard masterCard2 = new MasterCard();
+        masterCard2.setWalletId("wallet123");
+        masterCard2.setCardSequenceNum("001");
+
+        assertEquals(masterCard1.hashCode(), masterCard2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        MasterCard masterCard1 = new MasterCard();
+        masterCard1.setWalletId("wallet123");
+        masterCard1.setCardSequenceNum("001");
+
+        MasterCard masterCard2 = new MasterCard();
+        masterCard2.setWalletId("wallet123");
+        masterCard2.setCardSequenceNum("001");
+
+        assertTrue(masterCard1.equals(masterCard2));
+    }
+
+    @Test
+    void testNotEquals() {
+        MasterCard masterCard1 = new MasterCard();
+        masterCard1.setWalletId("wallet123");
+        masterCard1.setCardSequenceNum("001");
+
+        MasterCard masterCard2 = new MasterCard();
+        masterCard2.setWalletId("wallet124");
+        masterCard2.setCardSequenceNum("002");
+
+        assertFalse(masterCard1.equals(masterCard2));
+    }
+}

@@ -1,0 +1,101 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class PinTest {
+
+    @Test
+    public void testSetGetLastRequestDt() {
+        Pin pin = new Pin();
+        pin.setLastRequestDt("2025-03-03");
+        assertEquals("2025-03-03", pin.getLastRequestDt());
+    }
+
+    @Test
+    public void testSetGetLastIssueDt() {
+        Pin pin = new Pin();
+        pin.setLastIssueDt("2025-03-02");
+        assertEquals("2025-03-02", pin.getLastIssueDt());
+    }
+
+    @Test
+    public void testSetGetLastRequestReasonCd() {
+        Pin pin = new Pin();
+        pin.setLastRequestReasonCd("Reason1");
+        assertEquals("Reason1", pin.getLastRequestReasonCd());
+    }
+
+    @Test
+    public void testSetGetLastRequestOperatorPartyId() {
+        Pin pin = new Pin();
+        pin.setLastRequestOperatorPartyId("Operator1");
+        assertEquals("Operator1", pin.getLastRequestOperatorPartyId());
+    }
+
+    @Test
+    public void testSetGetRequestStatusCd() {
+        Pin pin = new Pin();
+        pin.setRequestStatusCd("Active");
+        assertEquals("Active", pin.getRequestStatusCd());
+    }
+
+    @Test
+    public void testSetGetPartyIdentificationNum() {
+        Pin pin = new Pin();
+        pin.setPartyIdentificationNum("12345");
+        assertEquals("12345", pin.getPartyIdentificationNum());
+    }
+
+    @Test
+    public void testToString() {
+        Pin pin = new Pin();
+        pin.setLastRequestDt("2025-03-03");
+        pin.setLastIssueDt("2025-03-02");
+        pin.setLastRequestReasonCd("Reason1");
+        pin.setLastRequestOperatorPartyId("Operator1");
+        pin.setRequestStatusCd("Active");
+        pin.setPartyIdentificationNum("12345");
+
+        String expectedString = "com.td.api.mbcca.shared.Pin@" + Integer.toHexString(pin.hashCode()) + "[lastRequestDt=2025-03-03,lastIssueDt=2025-03-02,lastRequestReasonCd=Reason1,lastRequestOperatorPartyId=Operator1,requestStatusCd=Active,partyIdentificationNum=12345,]";
+
+        assertEquals(expectedString, pin.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        Pin pin1 = new Pin();
+        pin1.setLastRequestDt("2025-03-03");
+        pin1.setLastRequestReasonCd("Reason1");
+
+        Pin pin2 = new Pin();
+        pin2.setLastRequestDt("2025-03-03");
+        pin2.setLastRequestReasonCd("Reason1");
+
+        assertEquals(pin1.hashCode(), pin2.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        Pin pin1 = new Pin();
+        pin1.setLastRequestDt("2025-03-03");
+        pin1.setRequestStatusCd("Active");
+
+        Pin pin2 = new Pin();
+        pin2.setLastRequestDt("2025-03-03");
+        pin2.setRequestStatusCd("Active");
+
+        assertTrue(pin1.equals(pin2));
+    }
+
+    @Test
+    public void testNotEquals() {
+        Pin pin1 = new Pin();
+        pin1.setLastRequestDt("2025-03-03");
+        pin1.setRequestStatusCd("Active");
+
+        Pin pin2 = new Pin();
+        pin2.setLastRequestDt("2025-03-04");
+        pin2.setRequestStatusCd("Inactive");
+
+        assertFalse(pin1.equals(pin2));
+    }
+}
