@@ -1,0 +1,98 @@
+package com.td.api.mbcca.response.account;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class TieredWatchTest {
+
+    private TieredWatch tieredWatch;
+
+    @BeforeEach
+    void setUp() {
+        tieredWatch = new TieredWatch();
+    }
+
+    @Test
+    void testGetAndSetStatusCd() {
+        String statusCd = "Active";
+        tieredWatch.setStatusCd(statusCd);
+        assertEquals(statusCd, tieredWatch.getStatusCd());
+    }
+
+    @Test
+    void testGetAndSetStartDt() {
+        String startDt = "2025-03-01";
+        tieredWatch.setStartDt(startDt);
+        assertEquals(startDt, tieredWatch.getStartDt());
+    }
+
+    @Test
+    void testGetAndSetEndDt() {
+        String endDt = "2025-12-31";
+        tieredWatch.setEndDt(endDt);
+        assertEquals(endDt, tieredWatch.getEndDt());
+    }
+
+    @Test
+    void testToString() {
+        tieredWatch.setStatusCd("Active");
+        tieredWatch.setStartDt("2025-03-01");
+        tieredWatch.setEndDt("2025-12-31");
+        
+        String result = tieredWatch.toString();
+        assertTrue(result.contains("statusCd=Active"));
+        assertTrue(result.contains("startDt=2025-03-01"));
+        assertTrue(result.contains("endDt=2025-12-31"));
+    }
+
+    @Test
+    void testHashCode() {
+        tieredWatch.setStatusCd("Active");
+        tieredWatch.setStartDt("2025-03-01");
+        tieredWatch.setEndDt("2025-12-31");
+        
+        int hashCode = tieredWatch.hashCode();
+        assertNotEquals(0, hashCode);
+    }
+
+    @Test
+    void testEquals() {
+        TieredWatch tieredWatch1 = new TieredWatch();
+        tieredWatch1.setStatusCd("Active");
+        tieredWatch1.setStartDt("2025-03-01");
+        tieredWatch1.setEndDt("2025-12-31");
+
+        TieredWatch tieredWatch2 = new TieredWatch();
+        tieredWatch2.setStatusCd("Active");
+        tieredWatch2.setStartDt("2025-03-01");
+        tieredWatch2.setEndDt("2025-12-31");
+
+        assertTrue(tieredWatch1.equals(tieredWatch2));
+
+        tieredWatch2.setEndDt("2026-12-31");
+        assertFalse(tieredWatch1.equals(tieredWatch2));
+    }
+
+    @Test
+    void testNotEqualsDifferentObject() {
+        assertFalse(tieredWatch.equals(new Object()));
+    }
+
+    @Test
+    void testEqualsNull() {
+        assertFalse(tieredWatch.equals(null));
+    }
+
+    @Test
+    void testEqualsDifferentStatusCd() {
+        TieredWatch tieredWatch1 = new TieredWatch();
+        tieredWatch1.setStatusCd("Active");
+        
+        TieredWatch tieredWatch2 = new TieredWatch();
+        tieredWatch2.setStatusCd("Inactive");
+        
+        assertFalse(tieredWatch1.equals(tieredWatch2));
+    }
+}

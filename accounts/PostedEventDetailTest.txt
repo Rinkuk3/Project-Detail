@@ -1,0 +1,153 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class PostedEventDetailTest {
+
+    private PostedEventDetail postedEventDetail;
+
+    @BeforeEach
+    void setUp() {
+        postedEventDetail = new PostedEventDetail();
+    }
+
+    @Test
+    void testGetAndSetPaymentNetworkTransactionId() {
+        String paymentNetworkTransactionId = "txn123";
+        postedEventDetail.setPaymentNetworkTransactionId(paymentNetworkTransactionId);
+        assertEquals(paymentNetworkTransactionId, postedEventDetail.getPaymentNetworkTransactionId());
+    }
+
+    @Test
+    void testGetAndSetForeignExchangeInfo() {
+        ForeignExchangeInfo foreignExchangeInfo = new ForeignExchangeInfo();
+        postedEventDetail.setForeignExchangeInfo(foreignExchangeInfo);
+        assertEquals(foreignExchangeInfo, postedEventDetail.getForeignExchangeInfo());
+    }
+
+    @Test
+    void testGetAndSetConversionRate() {
+        BigDecimal conversionRate = new BigDecimal("1.23");
+        postedEventDetail.setConversionRate(conversionRate);
+        assertEquals(conversionRate, postedEventDetail.getConversionRate());
+    }
+
+    @Test
+    void testGetAndSetInverseRate() {
+        BigDecimal inverseRate = new BigDecimal("0.81");
+        postedEventDetail.setInverseRate(inverseRate);
+        assertEquals(inverseRate, postedEventDetail.getInverseRate());
+    }
+
+    @Test
+    void testGetAndSetCardNumMasked() {
+        String cardNumMasked = "**** **** **** 1234";
+        postedEventDetail.setCardNumMasked(cardNumMasked);
+        assertEquals(cardNumMasked, postedEventDetail.getCardNumMasked());
+    }
+
+    @Test
+    void testGetAndSetApplicationCryptogram() {
+        String applicationCryptogram = "12345";
+        postedEventDetail.setApplicationCryptogram(applicationCryptogram);
+        assertEquals(applicationCryptogram, postedEventDetail.getApplicationCryptogram());
+    }
+
+    @Test
+    void testGetAndSetUnpredictableNum() {
+        String unpredictableNum = "98765";
+        postedEventDetail.setUnpredictableNum(unpredictableNum);
+        assertEquals(unpredictableNum, postedEventDetail.getUnpredictableNum());
+    }
+
+    @Test
+    void testGetAndSetRetailEventStartDttm() {
+        Date retailEventStartDttm = new Date();
+        postedEventDetail.setRetailEventStartDttm(retailEventStartDttm);
+        assertEquals(retailEventStartDttm, postedEventDetail.getRetailEventStartDttm());
+    }
+
+    @Test
+    void testGetAndSetRetailEventTypeCd() {
+        String retailEventTypeCd = "Sale";
+        postedEventDetail.setRetailEventTypeCd(retailEventTypeCd);
+        assertEquals(retailEventTypeCd, postedEventDetail.getRetailEventTypeCd());
+    }
+
+    @Test
+    void testGetAndSetRetailEventCountryCd() {
+        String retailEventCountryCd = "US";
+        postedEventDetail.setRetailEventCountryCd(retailEventCountryCd);
+        assertEquals(retailEventCountryCd, postedEventDetail.getRetailEventCountryCd());
+    }
+
+    @Test
+    void testHashCode() {
+        PostedEventDetail anotherPostedEventDetail = new PostedEventDetail();
+        postedEventDetail.setPaymentNetworkTransactionId("txn123");
+        postedEventDetail.setRetailEventTypeCd("Sale");
+
+        anotherPostedEventDetail.setPaymentNetworkTransactionId("txn123");
+        anotherPostedEventDetail.setRetailEventTypeCd("Sale");
+
+        assertEquals(postedEventDetail.hashCode(), anotherPostedEventDetail.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        PostedEventDetail anotherPostedEventDetail = new PostedEventDetail();
+        postedEventDetail.setPaymentNetworkTransactionId("txn123");
+        postedEventDetail.setRetailEventTypeCd("Sale");
+
+        anotherPostedEventDetail.setPaymentNetworkTransactionId("txn123");
+        anotherPostedEventDetail.setRetailEventTypeCd("Sale");
+
+        assertTrue(postedEventDetail.equals(anotherPostedEventDetail));
+    }
+
+    @Test
+    void testEqualsWithDifferentPaymentNetworkTransactionId() {
+        PostedEventDetail anotherPostedEventDetail = new PostedEventDetail();
+        postedEventDetail.setPaymentNetworkTransactionId("txn123");
+        postedEventDetail.setRetailEventTypeCd("Sale");
+
+        anotherPostedEventDetail.setPaymentNetworkTransactionId("txn124");
+        anotherPostedEventDetail.setRetailEventTypeCd("Sale");
+
+        assertFalse(postedEventDetail.equals(anotherPostedEventDetail));
+    }
+
+    @Test
+    void testEqualsWithDifferentRetailEventTypeCd() {
+        PostedEventDetail anotherPostedEventDetail = new PostedEventDetail();
+        postedEventDetail.setPaymentNetworkTransactionId("txn123");
+        postedEventDetail.setRetailEventTypeCd("Sale");
+
+        anotherPostedEventDetail.setPaymentNetworkTransactionId("txn123");
+        anotherPostedEventDetail.setRetailEventTypeCd("Refund");
+
+        assertFalse(postedEventDetail.equals(anotherPostedEventDetail));
+    }
+
+    @Test
+    void testEqualsWithNullPaymentNetworkTransactionId() {
+        PostedEventDetail anotherPostedEventDetail = new PostedEventDetail();
+        postedEventDetail.setPaymentNetworkTransactionId(null);
+        postedEventDetail.setRetailEventTypeCd("Sale");
+
+        anotherPostedEventDetail.setPaymentNetworkTransactionId(null);
+        anotherPostedEventDetail.setRetailEventTypeCd("Sale");
+
+        assertTrue(postedEventDetail.equals(anotherPostedEventDetail));
+    }
+
+    @Test
+    void testEqualsWithDifferentClass() {
+        String notAPostedEventDetail = "Not a PostedEventDetail";
+        assertFalse(postedEventDetail.equals(notAPostedEventDetail));
+    }
+}

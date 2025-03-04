@@ -1,0 +1,158 @@
+package com.td.api.mbcca.response.account;
+
+import com.td.api.mbcca.shared.Cccyamt;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class TransactionCategoryBalanceTest {
+
+    private TransactionCategoryBalance transactionCategoryBalance;
+
+    @BeforeEach
+    void setUp() {
+        transactionCategoryBalance = new TransactionCategoryBalance();
+    }
+
+    @Test
+    void testGetAndSetTransactionCategoryCd() {
+        String transactionCategoryCd = "TC001";
+        transactionCategoryBalance.setTransactionCategoryCd(transactionCategoryCd);
+        assertEquals(transactionCategoryCd, transactionCategoryBalance.getTransactionCategoryCd());
+    }
+
+    @Test
+    void testGetAndSetTermBalanceCd() {
+        String termBalanceCd = "TB001";
+        transactionCategoryBalance.setTermBalanceCd(termBalanceCd);
+        assertEquals(termBalanceCd, transactionCategoryBalance.getTermBalanceCd());
+    }
+
+    @Test
+    void testGetAndSetTermBalanceDesc() {
+        String termBalanceDesc = "Term Balance Description";
+        transactionCategoryBalance.setTermBalanceDesc(termBalanceDesc);
+        assertEquals(termBalanceDesc, transactionCategoryBalance.getTermBalanceDesc());
+    }
+
+    @Test
+    void testGetAndSetFinanceChargeTypeCd() {
+        String financeChargeTypeCd = "FC001";
+        transactionCategoryBalance.setFinanceChargeTypeCd(financeChargeTypeCd);
+        assertEquals(financeChargeTypeCd, transactionCategoryBalance.getFinanceChargeTypeCd());
+    }
+
+    @Test
+    void testGetAndSetOutstandingBalancePaymentCccyamt() {
+        Cccyamt outstandingBalancePayment = new Cccyamt();
+        transactionCategoryBalance.setOutstandingBalancePaymentCccyamt(outstandingBalancePayment);
+        assertEquals(outstandingBalancePayment, transactionCategoryBalance.getOutstandingBalancePaymentCccyamt());
+    }
+
+    @Test
+    void testGetAndSetPreviousPrincipleBalanceCccyamt() {
+        Cccyamt previousPrincipleBalance = new Cccyamt();
+        transactionCategoryBalance.setPreviousPrincipleBalanceCccyamt(previousPrincipleBalance);
+        assertEquals(previousPrincipleBalance, transactionCategoryBalance.getPreviousPrincipleBalanceCccyamt());
+    }
+
+    @Test
+    void testGetAndSetOutstandingBalanceCccyamt() {
+        Cccyamt outstandingBalance = new Cccyamt();
+        transactionCategoryBalance.setOutstandingBalanceCccyamt(outstandingBalance);
+        assertEquals(outstandingBalance, transactionCategoryBalance.getOutstandingBalanceCccyamt());
+    }
+
+    @Test
+    void testGetAndSetOutstandingBalancePlusPreviousCycleCccyamt() {
+        Cccyamt outstandingBalancePlusPreviousCycle = new Cccyamt();
+        transactionCategoryBalance.setOutstandingBalancePlusPreviousCycleCccyamt(outstandingBalancePlusPreviousCycle);
+        assertEquals(outstandingBalancePlusPreviousCycle, transactionCategoryBalance.getOutstandingBalancePlusPreviousCycleCccyamt());
+    }
+
+    @Test
+    void testGetAndSetAverageDailyBalanceCccyamt() {
+        Cccyamt averageDailyBalance = new Cccyamt();
+        transactionCategoryBalance.setAverageDailyBalanceCccyamt(averageDailyBalance);
+        assertEquals(averageDailyBalance, transactionCategoryBalance.getAverageDailyBalanceCccyamt());
+    }
+
+    @Test
+    void testGetAndSetAverageDailyBalancePlusPreviousCycleCccyamt() {
+        Cccyamt averageDailyBalancePlusPreviousCycle = new Cccyamt();
+        transactionCategoryBalance.setAverageDailyBalancePlusPreviousCycleCccyamt(averageDailyBalancePlusPreviousCycle);
+        assertEquals(averageDailyBalancePlusPreviousCycle, transactionCategoryBalance.getAverageDailyBalancePlusPreviousCycleCccyamt());
+    }
+
+    @Test
+    void testGetAndSetAverageDailyBalanceSubjectToChargeInd() {
+        Boolean subjectToChargeInd = true;
+        transactionCategoryBalance.setAverageDailyBalanceSubjectToChargeInd(subjectToChargeInd);
+        assertEquals(subjectToChargeInd, transactionCategoryBalance.getAverageDailyBalanceSubjectToChargeInd());
+    }
+
+    @Test
+    void testToString() {
+        transactionCategoryBalance.setTransactionCategoryCd("TC001");
+        transactionCategoryBalance.setTermBalanceCd("TB001");
+        transactionCategoryBalance.setTermBalanceDesc("Test Term Balance Description");
+        transactionCategoryBalance.setFinanceChargeTypeCd("FC001");
+        transactionCategoryBalance.setOutstandingBalancePaymentCccyamt(new Cccyamt());
+        transactionCategoryBalance.setPreviousPrincipleBalanceCccyamt(new Cccyamt());
+        transactionCategoryBalance.setOutstandingBalanceCccyamt(new Cccyamt());
+        transactionCategoryBalance.setOutstandingBalancePlusPreviousCycleCccyamt(new Cccyamt());
+
+        String result = transactionCategoryBalance.toString();
+        assertTrue(result.contains("transactionCategoryCd=TC001"));
+        assertTrue(result.contains("termBalanceCd=TB001"));
+    }
+
+    @Test
+    void testHashCode() {
+        transactionCategoryBalance.setTransactionCategoryCd("TC001");
+        transactionCategoryBalance.setTermBalanceCd("TB001");
+        transactionCategoryBalance.setTermBalanceDesc("Test Term Balance Description");
+        transactionCategoryBalance.setFinanceChargeTypeCd("FC001");
+
+        int hashCode = transactionCategoryBalance.hashCode();
+        assertNotEquals(0, hashCode);
+    }
+
+    @Test
+    void testEquals() {
+        TransactionCategoryBalance transactionCategoryBalance1 = new TransactionCategoryBalance();
+        transactionCategoryBalance1.setTransactionCategoryCd("TC001");
+        transactionCategoryBalance1.setTermBalanceCd("TB001");
+
+        TransactionCategoryBalance transactionCategoryBalance2 = new TransactionCategoryBalance();
+        transactionCategoryBalance2.setTransactionCategoryCd("TC001");
+        transactionCategoryBalance2.setTermBalanceCd("TB001");
+
+        assertTrue(transactionCategoryBalance1.equals(transactionCategoryBalance2));
+
+        transactionCategoryBalance2.setTransactionCategoryCd("TC002");
+        assertFalse(transactionCategoryBalance1.equals(transactionCategoryBalance2));
+    }
+
+    @Test
+    void testNotEqualsDifferentObject() {
+        assertFalse(transactionCategoryBalance.equals(new Object()));
+    }
+
+    @Test
+    void testEqualsNull() {
+        assertFalse(transactionCategoryBalance.equals(null));
+    }
+
+    @Test
+    void testEqualsDifferentTransactionCategoryCd() {
+        TransactionCategoryBalance transactionCategoryBalance1 = new TransactionCategoryBalance();
+        transactionCategoryBalance1.setTransactionCategoryCd("TC001");
+
+        TransactionCategoryBalance transactionCategoryBalance2 = new TransactionCategoryBalance();
+        transactionCategoryBalance2.setTransactionCategoryCd("TC002");
+
+        assertFalse(transactionCategoryBalance1.equals(transactionCategoryBalance2));
+    }
+}

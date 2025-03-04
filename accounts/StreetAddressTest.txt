@@ -1,0 +1,187 @@
+package com.td.api.mbcca.response.account;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Date;
+
+public class StreetAddressTest {
+
+    @Test
+    public void testGetSetStartDt() {
+        StreetAddress address = new StreetAddress();
+        String startDt = "2025-03-03";
+        address.setStartDt(startDt);
+        assertEquals(startDt, address.getStartDt());
+    }
+
+    @Test
+    public void testGetSetEndDt() {
+        StreetAddress address = new StreetAddress();
+        String endDt = "2025-03-04";
+        address.setEndDt(endDt);
+        assertEquals(endDt, address.getEndDt());
+    }
+
+    @Test
+    public void testGetSetStartDttm() {
+        StreetAddress address = new StreetAddress();
+        Date startDttm = new Date();
+        address.setStartDttm(startDttm);
+        assertEquals(startDttm, address.getStartDttm());
+    }
+
+    @Test
+    public void testGetSetEndDttm() {
+        StreetAddress address = new StreetAddress();
+        Date endDttm = new Date();
+        address.setEndDttm(endDttm);
+        assertEquals(endDttm, address.getEndDttm());
+    }
+
+    @Test
+    public void testGetSetAddressLine1() {
+        StreetAddress address = new StreetAddress();
+        String addressLine1 = "123 Main St";
+        address.setAddressLine1(addressLine1);
+        assertEquals(addressLine1, address.getAddressLine1());
+    }
+
+    @Test
+    public void testGetSetAddressLine2() {
+        StreetAddress address = new StreetAddress();
+        String addressLine2 = "Apt 101";
+        address.setAddressLine2(addressLine2);
+        assertEquals(addressLine2, address.getAddressLine2());
+    }
+
+    @Test
+    public void testGetSetAddressLine3() {
+        StreetAddress address = new StreetAddress();
+        String addressLine3 = "Building 5";
+        address.setAddressLine3(addressLine3);
+        assertEquals(addressLine3, address.getAddressLine3());
+    }
+
+    @Test
+    public void testGetSetCity() {
+        StreetAddress address = new StreetAddress();
+        String city = "Toronto";
+        address.setCity(city);
+        assertEquals(city, address.getCity());
+    }
+
+    @Test
+    public void testGetSetTerritory() {
+        StreetAddress address = new StreetAddress();
+        String territory = "Ontario";
+        address.setTerritory(territory);
+        assertEquals(territory, address.getTerritory());
+    }
+
+    @Test
+    public void testGetSetPostalCode() {
+        StreetAddress address = new StreetAddress();
+        String postalCode = "M1A 1A1";
+        address.setPostalCode(postalCode);
+        assertEquals(postalCode, address.getPostalCode());
+    }
+
+    @Test
+    public void testGetSetCountry() {
+        StreetAddress address = new StreetAddress();
+        String country = "Canada";
+        address.setCountry(country);
+        assertEquals(country, address.getCountry());
+    }
+
+    @Test
+    public void testGetSetCountryCd() {
+        StreetAddress address = new StreetAddress();
+        String countryCd = "CA";
+        address.setCountryCd(countryCd);
+        assertEquals(countryCd, address.getCountryCd());
+    }
+
+    @Test
+    public void testGetSetDesc() {
+        StreetAddress address = new StreetAddress();
+        String desc = "Home Address";
+        address.setDesc(desc);
+        assertEquals(desc, address.getDesc());
+    }
+
+    @Test
+    public void testGetSetLastUpdateDttm() {
+        StreetAddress address = new StreetAddress();
+        Date lastUpdateDttm = new Date();
+        address.setLastUpdateDttm(lastUpdateDttm);
+        assertEquals(lastUpdateDttm, address.getLastUpdateDttm());
+    }
+
+    @Test
+    public void testGetSetValidatedIndicatorCd() {
+        StreetAddress address = new StreetAddress();
+        String validatedIndicatorCd = "Y";
+        address.setValidatedIndicatorCd(validatedIndicatorCd);
+        assertEquals(validatedIndicatorCd, address.getValidatedIndicatorCd());
+    }
+
+    @Test
+    public void testGetSetOverriddenInd() {
+        StreetAddress address = new StreetAddress();
+        Boolean overriddenInd = true;
+        address.setOverriddenInd(overriddenInd);
+        assertEquals(overriddenInd, address.getOverriddenInd());
+    }
+
+    @Test
+    public void testGetSetKey() {
+        StreetAddress address = new StreetAddress();
+        String key = "123ABC";
+        address.setKey(key);
+        assertEquals(key, address.getKey());
+    }
+
+    @Test
+    public void testToString() {
+        StreetAddress address = new StreetAddress();
+        address.setStartDt("2025-03-03");
+        address.setEndDt("2025-03-04");
+        address.setAddressLine1("123 Main St");
+        address.setCity("Toronto");
+        address.setPostalCode("M1A 1A1");
+        String result = address.toString();
+        assertTrue(result.contains("startDt=2025-03-03"));
+        assertTrue(result.contains("endDt=2025-03-04"));
+    }
+
+    @Test
+    public void testHashCode() {
+        StreetAddress address1 = new StreetAddress();
+        address1.setStartDt("2025-03-03");
+        address1.setCity("Toronto");
+        
+        StreetAddress address2 = new StreetAddress();
+        address2.setStartDt("2025-03-03");
+        address2.setCity("Toronto");
+        
+        assertEquals(address1.hashCode(), address2.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        StreetAddress address1 = new StreetAddress();
+        address1.setStartDt("2025-03-03");
+        address1.setCity("Toronto");
+        
+        StreetAddress address2 = new StreetAddress();
+        address2.setStartDt("2025-03-03");
+        address2.setCity("Toronto");
+        
+        assertTrue(address1.equals(address2));
+        
+        address2.setCity("Vancouver");
+        assertFalse(address1.equals(address2));
+    }
+}

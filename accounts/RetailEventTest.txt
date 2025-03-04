@@ -1,0 +1,81 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class RetailEventTest {
+
+    private RetailEvent retailEvent;
+
+    @BeforeEach
+    public void setUp() {
+        retailEvent = new RetailEvent();
+        retailEvent.setTermBalanceCd("TB001");
+        retailEvent.setCategoryInfo(new CategoryInfo());
+        retailEvent.setOutstandingCccyamt(new Cccyamt());
+        retailEvent.setFinanceChargeCccyamt(new Cccyamt());
+        retailEvent.setStatementDataDt("2025-03-01");
+        retailEvent.setEventDttm(new Date());
+        retailEvent.setTransactionLevelProcessingTypeCd("TLPT001");
+        retailEvent.setAcquirerReferenceNum("AR001");
+        retailEvent.setPaidInFullPadCccyamt(new Cccyamt());
+        retailEvent.setDeferredOutstandingBalanceCccyamt(new Cccyamt());
+        retailEvent.setDisputedInd(true);
+        retailEvent.setEventTransactionCccyamt(new Cccyamt());
+        retailEvent.setEventId("EVT001");
+        retailEvent.setCurrentCycleInfo(new CurrentCycleInfo());
+        retailEvent.setPreviousCycleInfo(new PreviousCycleInfo());
+        retailEvent.setBilledFinanceChargeCccyamt(new Cccyamt());
+        retailEvent.setTransactionLevelProcessingReferenceNum("TLPR001");
+        retailEvent.setTransactionLevelProcessingPromotionId("TLPP001");
+        retailEvent.setInstalmentTransactionInd(true);
+        retailEvent.setMerchantDoingBusinessAsName("Merchant");
+        retailEvent.setPaymentOption(new PaymentOption());
+        retailEvent.setPaymentDueCccyamt(new Cccyamt());
+        retailEvent.setSpecialProcessingExpiryPayOffCccyamt(new Cccyamt());
+        retailEvent.setPaidInFullRemainingPaymentCnt(5);
+        retailEvent.setNextPaymentDueDt("2025-04-01");
+        retailEvent.setEventEndDt("2025-04-10");
+        retailEvent.setPostedDttm(new Date());
+        retailEvent.setPostedDt("2025-03-01");
+        retailEvent.setPostedTimeVal("14:00");
+    }
+
+    @Test
+    public void testToString() {
+        String expectedToString = "RetailEvent@<hash_code>[termBalanceCd=TB001,categoryInfo=<CategoryInfo>,outstandingCccyamt=<Cccyamt>,financeChargeCccyamt=<Cccyamt>,statementDataDt=2025-03-01,eventDttm=<Date>,transactionLevelProcessingTypeCd=TLPT001,acquirerReferenceNum=AR001,paidInFullPadCccyamt=<Cccyamt>,deferredOutstandingBalanceCccyamt=<Cccyamt>,disputedInd=true,eventTransactionCccyamt=<Cccyamt>,eventId=EVT001,currentCycleInfo=<CurrentCycleInfo>,previousCycleInfo=<PreviousCycleInfo>,billedFinanceChargeCccyamt=<Cccyamt>,transactionLevelProcessingReferenceNum=TLPR001,transactionLevelProcessingPromotionId=TLPP001,instalmentTransactionInd=true,merchantDoingBusinessAsName=Merchant,paymentOption=<PaymentOption>,paymentDueCccyamt=<Cccyamt>,specialProcessingExpiryPayOffCccyamt=<Cccyamt>,paidInFullRemainingPaymentCnt=5,nextPaymentDueDt=2025-04-01,eventEndDt=2025-04-10,postedDttm=<Date>,postedDt=2025-03-01,postedTimeVal=14:00]";
+        String actualToString = retailEvent.toString();
+        assertTrue(actualToString.contains("RetailEvent"));
+        assertTrue(actualToString.contains("termBalanceCd=TB001"));
+        assertTrue(actualToString.contains("eventId=EVT001"));
+        assertTrue(actualToString.contains("postedDt=2025-03-01"));
+        assertTrue(actualToString.contains("postedTimeVal=14:00"));
+    }
+
+    @Test
+    public void testHashCode() {
+        int expectedHashCode = retailEvent.hashCode();
+        RetailEvent anotherRetailEvent = new RetailEvent();
+        anotherRetailEvent.setTermBalanceCd("TB001");
+        anotherRetailEvent.setCategoryInfo(new CategoryInfo());
+        anotherRetailEvent.setOutstandingCccyamt(new Cccyamt());
+        // Add other setters for the fields to match the original object
+        assertEquals(expectedHashCode, anotherRetailEvent.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        RetailEvent equalRetailEvent = new RetailEvent();
+        equalRetailEvent.setTermBalanceCd("TB001");
+        equalRetailEvent.setCategoryInfo(new CategoryInfo());
+        equalRetailEvent.setOutstandingCccyamt(new Cccyamt());
+        // Add other setters for the fields to match the original object
+        assertTrue(retailEvent.equals(equalRetailEvent));
+
+        RetailEvent notEqualRetailEvent = new RetailEvent();
+        notEqualRetailEvent.setTermBalanceCd("TB002");
+        assertFalse(retailEvent.equals(notEqualRetailEvent));
+    }
+}

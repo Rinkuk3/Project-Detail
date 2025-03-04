@@ -1,0 +1,130 @@
+package com.td.api.mbcca.response.account;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CardWatchTest {
+
+    private CardWatch cardWatch;
+
+    @BeforeEach
+    public void setUp() {
+        cardWatch = new CardWatch();
+    }
+
+    @Test
+    public void testGetSetStatusCd() {
+        String statusCd = "ACTIVE";
+        cardWatch.setStatusCd(statusCd);
+        assertEquals(statusCd, cardWatch.getStatusCd());
+    }
+
+    @Test
+    public void testGetSetStartDt() {
+        String startDt = "2025-01-01";
+        cardWatch.setStartDt(startDt);
+        assertEquals(startDt, cardWatch.getStartDt());
+    }
+
+    @Test
+    public void testGetSetEndDt() {
+        String endDt = "2025-12-31";
+        cardWatch.setEndDt(endDt);
+        assertEquals(endDt, cardWatch.getEndDt());
+    }
+
+    @Test
+    public void testToString() {
+        cardWatch.setStatusCd("ACTIVE");
+        cardWatch.setStartDt("2025-01-01");
+        cardWatch.setEndDt("2025-12-31");
+
+        String expectedToString = "com.td.api.mbcca.response.account.CardWatch@" + Integer.toHexString(System.identityHashCode(cardWatch)) +
+                "[statusCd=ACTIVE,startDt=2025-01-01,endDt=2025-12-31]";
+        assertEquals(expectedToString, cardWatch.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        cardWatch.setStatusCd("ACTIVE");
+        cardWatch.setStartDt("2025-01-01");
+        cardWatch.setEndDt("2025-12-31");
+
+        int expectedHashCode = 31 * (31 * (31 + "2025-01-01".hashCode()) + "2025-12-31".hashCode()) + "ACTIVE".hashCode();
+        assertEquals(expectedHashCode, cardWatch.hashCode());
+    }
+
+    @Test
+    public void testEquals_SameObject() {
+        cardWatch.setStatusCd("ACTIVE");
+        cardWatch.setStartDt("2025-01-01");
+        cardWatch.setEndDt("2025-12-31");
+        assertTrue(cardWatch.equals(cardWatch));
+    }
+
+    @Test
+    public void testEquals_DifferentObjectType() {
+        cardWatch.setStatusCd("ACTIVE");
+        cardWatch.setStartDt("2025-01-01");
+        cardWatch.setEndDt("2025-12-31");
+        assertFalse(cardWatch.equals("Some String"));
+    }
+
+    @Test
+    public void testEquals_DifferentValues() {
+        CardWatch other = new CardWatch();
+        cardWatch.setStatusCd("ACTIVE");
+        cardWatch.setStartDt("2025-01-01");
+        cardWatch.setEndDt("2025-12-31");
+
+        other.setStatusCd("INACTIVE");
+        other.setStartDt("2025-01-02");
+        other.setEndDt("2025-12-30");
+
+        assertFalse(cardWatch.equals(other));
+    }
+
+    @Test
+    public void testEquals_SameValues() {
+        CardWatch other = new CardWatch();
+        cardWatch.setStatusCd("ACTIVE");
+        cardWatch.setStartDt("2025-01-01");
+        cardWatch.setEndDt("2025-12-31");
+
+        other.setStatusCd("ACTIVE");
+        other.setStartDt("2025-01-01");
+        other.setEndDt("2025-12-31");
+
+        assertTrue(cardWatch.equals(other));
+    }
+
+    @Test
+    public void testHashCode_Equality() {
+        cardWatch.setStatusCd("ACTIVE");
+        cardWatch.setStartDt("2025-01-01");
+        cardWatch.setEndDt("2025-12-31");
+
+        CardWatch other = new CardWatch();
+        other.setStatusCd("ACTIVE");
+        other.setStartDt("2025-01-01");
+        other.setEndDt("2025-12-31");
+
+        assertEquals(cardWatch.hashCode(), other.hashCode());
+    }
+
+    @Test
+    public void testHashCode_Inequality() {
+        cardWatch.setStatusCd("ACTIVE");
+        cardWatch.setStartDt("2025-01-01");
+        cardWatch.setEndDt("2025-12-31");
+
+        CardWatch other = new CardWatch();
+        other.setStatusCd("INACTIVE");
+        other.setStartDt("2025-01-02");
+        other.setEndDt("2025-12-30");
+
+        assertNotEquals(cardWatch.hashCode(), other.hashCode());
+    }
+}

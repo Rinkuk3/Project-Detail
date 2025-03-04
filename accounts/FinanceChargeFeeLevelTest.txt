@@ -1,0 +1,129 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.math.BigDecimal;
+
+class FinanceChargeFeeLevelTest {
+
+    private FinanceChargeFeeLevel financeChargeFeeLevel;
+
+    @BeforeEach
+    void setUp() {
+        financeChargeFeeLevel = new FinanceChargeFeeLevel();
+    }
+
+    @Test
+    void testGetAndSetTermBalanceCd() {
+        financeChargeFeeLevel.setTermBalanceCd("Term123");
+        assertEquals("Term123", financeChargeFeeLevel.getTermBalanceCd());
+    }
+
+    @Test
+    void testGetAndSetAprRate() {
+        financeChargeFeeLevel.setAprRate(new BigDecimal("12.5"));
+        assertEquals(new BigDecimal("12.5"), financeChargeFeeLevel.getAprRate());
+    }
+
+    @Test
+    void testGetAndSetAprTypeCd() {
+        financeChargeFeeLevel.setAprTypeCd("APR123");
+        assertEquals("APR123", financeChargeFeeLevel.getAprTypeCd());
+    }
+
+    @Test
+    void testGetAndSetSpreadRate() {
+        financeChargeFeeLevel.setSpreadRate(new BigDecimal("5.5"));
+        assertEquals(new BigDecimal("5.5"), financeChargeFeeLevel.getSpreadRate());
+    }
+
+    @Test
+    void testGetAndSetUpperLimitRate() {
+        financeChargeFeeLevel.setUpperLimitRate(new BigDecimal("25.0"));
+        assertEquals(new BigDecimal("25.0"), financeChargeFeeLevel.getUpperLimitRate());
+    }
+
+    @Test
+    void testGetAndSetLowerLimitRate() {
+        financeChargeFeeLevel.setLowerLimitRate(new BigDecimal("1.0"));
+        assertEquals(new BigDecimal("1.0"), financeChargeFeeLevel.getLowerLimitRate());
+    }
+
+    @Test
+    void testGetAndSetInterestIndexRate() {
+        financeChargeFeeLevel.setInterestIndexRate(new BigDecimal("3.0"));
+        assertEquals(new BigDecimal("3.0"), financeChargeFeeLevel.getInterestIndexRate());
+    }
+
+    @Test
+    void testGetAndSetInterestCalculationTypeCd() {
+        financeChargeFeeLevel.setInterestCalculationTypeCd("TypeA");
+        assertEquals("TypeA", financeChargeFeeLevel.getInterestCalculationTypeCd());
+    }
+
+    @Test
+    void testGetAndSetTermBalanceDesc() {
+        financeChargeFeeLevel.setTermBalanceDesc("Balance description");
+        assertEquals("Balance description", financeChargeFeeLevel.getTermBalanceDesc());
+    }
+
+    @Test
+    void testGetAndSetMinimumFinancialChargeCccyamt() {
+        Cccyamt minimumFinancialCharge = new Cccyamt();
+        financeChargeFeeLevel.setMinimumFinancialChargeCccyamt(minimumFinancialCharge);
+        assertEquals(minimumFinancialCharge, financeChargeFeeLevel.getMinimumFinancialChargeCccyamt());
+    }
+
+    @Test
+    void testGetAndSetLastStatementAPRRate() {
+        financeChargeFeeLevel.setLastStatementAPRRate(new BigDecimal("15.0"));
+        assertEquals(new BigDecimal("15.0"), financeChargeFeeLevel.getLastStatementAPRRate());
+    }
+
+    @Test
+    void testGetAndSetFutureAPRRate() {
+        financeChargeFeeLevel.setFutureAPRRate(new BigDecimal("17.5"));
+        assertEquals(new BigDecimal("17.5"), financeChargeFeeLevel.getFutureAPRRate());
+    }
+
+    @Test
+    void testGetAndSetPeriodicRate() {
+        financeChargeFeeLevel.setPeriodicRate(new BigDecimal("2.5"));
+        assertEquals(new BigDecimal("2.5"), financeChargeFeeLevel.getPeriodicRate());
+    }
+
+    @Test
+    void testToString() {
+        financeChargeFeeLevel.setTermBalanceCd("Term123");
+        financeChargeFeeLevel.setAprRate(new BigDecimal("12.5"));
+        financeChargeFeeLevel.setAprTypeCd("APR123");
+        String expectedString = "com.td.api.mbcca.response.account.FinanceChargeFeeLevel@" + 
+                Integer.toHexString(System.identityHashCode(financeChargeFeeLevel)) + 
+                "[termBalanceCd=Term123,aprRate=12.5,aprTypeCd=APR123,spreadRate=<null>,upperLimitRate=<null>,lowerLimitRate=<null>,interestIndexRate=<null>,interestCalculationTypeCd=<null>,termBalanceDesc=<null>,minimumFinancialChargeCccyamt=<null>,lastStatementAPRRate=<null>,futureAPRRate=<null>,periodicRate=<null>]";
+        assertEquals(expectedString, financeChargeFeeLevel.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        financeChargeFeeLevel.setTermBalanceCd("Term123");
+        financeChargeFeeLevel.setAprRate(new BigDecimal("12.5"));
+        FinanceChargeFeeLevel anotherLevel = new FinanceChargeFeeLevel();
+        anotherLevel.setTermBalanceCd("Term123");
+        anotherLevel.setAprRate(new BigDecimal("12.5"));
+        assertEquals(financeChargeFeeLevel.hashCode(), anotherLevel.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        financeChargeFeeLevel.setTermBalanceCd("Term123");
+        financeChargeFeeLevel.setAprRate(new BigDecimal("12.5"));
+        
+        FinanceChargeFeeLevel anotherLevel = new FinanceChargeFeeLevel();
+        anotherLevel.setTermBalanceCd("Term123");
+        anotherLevel.setAprRate(new BigDecimal("12.5"));
+        
+        assertTrue(financeChargeFeeLevel.equals(anotherLevel));
+
+        anotherLevel.setTermBalanceCd("Term456");
+        assertFalse(financeChargeFeeLevel.equals(anotherLevel));
+    }
+}

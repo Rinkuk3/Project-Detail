@@ -1,0 +1,121 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Date;
+
+class InternetProtocolAddressTest {
+
+    private InternetProtocolAddress ipAddress;
+
+    @BeforeEach
+    void setUp() {
+        ipAddress = new InternetProtocolAddress();
+    }
+
+    @Test
+    void testGetAndSetStartDt() {
+        String startDt = "2025-03-01";
+        ipAddress.setStartDt(startDt);
+        assertEquals(startDt, ipAddress.getStartDt());
+    }
+
+    @Test
+    void testGetAndSetEndDt() {
+        String endDt = "2025-03-31";
+        ipAddress.setEndDt(endDt);
+        assertEquals(endDt, ipAddress.getEndDt());
+    }
+
+    @Test
+    void testGetAndSetStartDttm() {
+        Date startDttm = new Date();
+        ipAddress.setStartDttm(startDttm);
+        assertEquals(startDttm, ipAddress.getStartDttm());
+    }
+
+    @Test
+    void testGetAndSetEndDttm() {
+        Date endDttm = new Date();
+        ipAddress.setEndDttm(endDttm);
+        assertEquals(endDttm, ipAddress.getEndDttm());
+    }
+
+    @Test
+    void testGetAndSetText() {
+        String text = "Sample text";
+        ipAddress.setText(text);
+        assertEquals(text, ipAddress.getText());
+    }
+
+    @Test
+    void testGetAndSetDomainName() {
+        String domainName = "example.com";
+        ipAddress.setDomainName(domainName);
+        assertEquals(domainName, ipAddress.getDomainName());
+    }
+
+    @Test
+    void testGetAndSetNum() {
+        String num = "12345";
+        ipAddress.setNum(num);
+        assertEquals(num, ipAddress.getNum());
+    }
+
+    @Test
+    void testGetAndSetNetworkName() {
+        String networkName = "Network1";
+        ipAddress.setNetworkName(networkName);
+        assertEquals(networkName, ipAddress.getNetworkName());
+    }
+
+    @Test
+    void testToString() {
+        String expectedString = "com.td.api.mbcca.response.account.InternetProtocolAddress@" + 
+                Integer.toHexString(System.identityHashCode(ipAddress)) + 
+                "[startDt=<null>,endDt=<null>,startDttm=<null>,endDttm=<null>,text=<null>,domainName=<null>,num=<null>,networkName=<null>]";
+        assertEquals(expectedString, ipAddress.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        ipAddress.setStartDt("2025-03-01");
+        ipAddress.setEndDt("2025-03-31");
+        ipAddress.setText("Sample text");
+        ipAddress.setDomainName("example.com");
+        ipAddress.setNum("12345");
+        ipAddress.setNetworkName("Network1");
+
+        InternetProtocolAddress anotherIpAddress = new InternetProtocolAddress();
+        anotherIpAddress.setStartDt("2025-03-01");
+        anotherIpAddress.setEndDt("2025-03-31");
+        anotherIpAddress.setText("Sample text");
+        anotherIpAddress.setDomainName("example.com");
+        anotherIpAddress.setNum("12345");
+        anotherIpAddress.setNetworkName("Network1");
+
+        assertEquals(ipAddress.hashCode(), anotherIpAddress.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        ipAddress.setStartDt("2025-03-01");
+        ipAddress.setEndDt("2025-03-31");
+        ipAddress.setText("Sample text");
+        ipAddress.setDomainName("example.com");
+        ipAddress.setNum("12345");
+        ipAddress.setNetworkName("Network1");
+
+        InternetProtocolAddress anotherIpAddress = new InternetProtocolAddress();
+        anotherIpAddress.setStartDt("2025-03-01");
+        anotherIpAddress.setEndDt("2025-03-31");
+        anotherIpAddress.setText("Sample text");
+        anotherIpAddress.setDomainName("example.com");
+        anotherIpAddress.setNum("12345");
+        anotherIpAddress.setNetworkName("Network1");
+
+        assertTrue(ipAddress.equals(anotherIpAddress));
+
+        anotherIpAddress.setNum("54321");
+        assertFalse(ipAddress.equals(anotherIpAddress));
+    }
+}

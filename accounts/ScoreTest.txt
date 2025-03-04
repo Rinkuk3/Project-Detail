@@ -1,0 +1,91 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class ScoreTest {
+
+    private Score score;
+
+    @BeforeEach
+    public void setUp() {
+        score = new Score();
+        score.setTypeCd("FICO");
+        score.setVal("750");
+        score.setSourceId("BUREAU1");
+        score.setStartDttm(new Date());
+        score.setDesc("Good credit score");
+        score.setReason(Arrays.asList(new Reason(), new Reason()));
+        score.setReportingPartyName("TD Bank");
+    }
+
+    @Test
+    public void testGettersAndSetters() {
+        assertEquals("FICO", score.getTypeCd());
+        assertEquals("750", score.getVal());
+        assertEquals("BUREAU1", score.getSourceId());
+        assertNotNull(score.getStartDttm());
+        assertEquals("Good credit score", score.getDesc());
+        assertEquals(2, score.getReason().size());
+        assertEquals("TD Bank", score.getReportingPartyName());
+    }
+
+    @Test
+    public void testToString() {
+        String expectedToString = "com.td.api.mbcca.response.account.Score@" + Integer.toHexString(System.identityHashCode(score)) +
+                "[typeCd=" + score.getTypeCd() +
+                ",val=" + score.getVal() +
+                ",sourceId=" + score.getSourceId() +
+                ",startDttm=" + score.getStartDttm() +
+                ",desc=" + score.getDesc() +
+                ",reason=" + score.getReason() +
+                ",reportingPartyName=" + score.getReportingPartyName() +
+                "]";
+        
+        assertTrue(score.toString().contains("com.td.api.mbcca.response.account.Score"));
+        assertTrue(score.toString().contains("typeCd"));
+        assertTrue(score.toString().contains("val"));
+        assertTrue(score.toString().contains("sourceId"));
+        assertTrue(score.toString().contains("startDttm"));
+        assertTrue(score.toString().contains("desc"));
+        assertTrue(score.toString().contains("reason"));
+        assertTrue(score.toString().contains("reportingPartyName"));
+    }
+
+    @Test
+    public void testHashCode() {
+        int expectedHashCode = score.hashCode();
+
+        Score anotherScore = new Score();
+        anotherScore.setTypeCd("FICO");
+        anotherScore.setVal("750");
+        anotherScore.setSourceId("BUREAU1");
+        anotherScore.setStartDttm(new Date());
+        anotherScore.setDesc("Good credit score");
+        anotherScore.setReason(Arrays.asList(new Reason(), new Reason()));
+        anotherScore.setReportingPartyName("TD Bank");
+
+        assertEquals(expectedHashCode, anotherScore.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        Score equalScore = new Score();
+        equalScore.setTypeCd("FICO");
+        equalScore.setVal("750");
+        equalScore.setSourceId("BUREAU1");
+        equalScore.setStartDttm(new Date());
+        equalScore.setDesc("Good credit score");
+        equalScore.setReason(Arrays.asList(new Reason(), new Reason()));
+        equalScore.setReportingPartyName("TD Bank");
+
+        assertTrue(score.equals(equalScore));
+
+        Score notEqualScore = new Score();
+        notEqualScore.setTypeCd("VANTAGE");
+        assertFalse(score.equals(notEqualScore));
+    }
+}

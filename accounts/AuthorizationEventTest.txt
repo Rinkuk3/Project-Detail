@@ -1,0 +1,72 @@
+package com.td.api.mbcca.response.account;
+
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+public class AuthorizationEventTest {
+
+    private AuthorizationEvent authorizationEvent;
+
+    @Before
+    public void setUp() {
+        authorizationEvent = new AuthorizationEvent();
+    }
+
+    @Test
+    public void testHashCode() {
+        authorizationEvent.setEventId("123");
+        int expectedHashCode = authorizationEvent.hashCode();
+        AuthorizationEvent anotherAuthorizationEvent = new AuthorizationEvent();
+        anotherAuthorizationEvent.setEventId("123");
+        assertEquals(expectedHashCode, anotherAuthorizationEvent.hashCode());
+    }
+
+    @Test
+    public void testEquals() {
+        authorizationEvent.setEventId("123");
+        AuthorizationEvent anotherAuthorizationEvent = new AuthorizationEvent();
+        anotherAuthorizationEvent.setEventId("123");
+        assertTrue(authorizationEvent.equals(anotherAuthorizationEvent));
+    }
+
+    @Test
+    public void testNotEquals() {
+        authorizationEvent.setEventId("123");
+        AuthorizationEvent anotherAuthorizationEvent = new AuthorizationEvent();
+        anotherAuthorizationEvent.setEventId("456");
+        assertFalse(authorizationEvent.equals(anotherAuthorizationEvent));
+    }
+
+    @Test
+    public void testToString() {
+        authorizationEvent.setEventId("123");
+        authorizationEvent.setEventDescriptionTxt("Event Description");
+        String expectedString = "AuthorizationEvent{eventId='123', eventDescriptionTxt='Event Description', ...}";
+        assertTrue(authorizationEvent.toString().contains("eventId='123'"));
+    }
+
+    @Test
+    public void testGettersAndSetters() {
+        authorizationEvent.setEventId("123");
+        assertEquals("123", authorizationEvent.getEventId());
+
+        authorizationEvent.setEventDescriptionTxt("Test Event");
+        assertEquals("Test Event", authorizationEvent.getEventDescriptionTxt());
+
+        authorizationEvent.setStatusCd("Active");
+        assertEquals("Active", authorizationEvent.getStatusCd());
+
+        authorizationEvent.setAmt(BigDecimal.TEN);
+        assertEquals(BigDecimal.TEN, authorizationEvent.getAmt());
+
+        authorizationEvent.setDebitCreditCd("Debit");
+        assertEquals("Debit", authorizationEvent.getDebitCreditCd());
+
+        authorizationEvent.setEventDttm(new Date());
+        assertNotNull(authorizationEvent.getEventDttm());
+    }
+}

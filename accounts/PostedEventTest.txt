@@ -1,0 +1,158 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class PostedEventTest {
+
+    private PostedEvent postedEvent;
+
+    @BeforeEach
+    void setUp() {
+        postedEvent = new PostedEvent();
+    }
+
+    @Test
+    void testGetAndSetEventId() {
+        String eventId = "event123";
+        postedEvent.setEventId(eventId);
+        assertEquals(eventId, postedEvent.getEventId());
+    }
+
+    @Test
+    void testGetAndSetEventDescriptionTxt() {
+        String eventDescriptionTxt = "Transaction Successful";
+        postedEvent.setEventDescriptionTxt(eventDescriptionTxt);
+        assertEquals(eventDescriptionTxt, postedEvent.getEventDescriptionTxt());
+    }
+
+    @Test
+    void testGetAndSetStatusCd() {
+        String statusCd = "Completed";
+        postedEvent.setStatusCd(statusCd);
+        assertEquals(statusCd, postedEvent.getStatusCd());
+    }
+
+    @Test
+    void testGetAndSetEventDttm() {
+        Date eventDttm = new Date();
+        postedEvent.setEventDttm(eventDttm);
+        assertEquals(eventDttm, postedEvent.getEventDttm());
+    }
+
+    @Test
+    void testGetAndSetDebitCreditCd() {
+        String debitCreditCd = "Debit";
+        postedEvent.setDebitCreditCd(debitCreditCd);
+        assertEquals(debitCreditCd, postedEvent.getDebitCreditCd());
+    }
+
+    @Test
+    void testGetAndSetAmt() {
+        BigDecimal amt = new BigDecimal("100.00");
+        postedEvent.setAmt(amt);
+        assertEquals(amt, postedEvent.getAmt());
+    }
+
+    @Test
+    void testGetAndSetMerchantInfo() {
+        MerchantInfo merchantInfo = new MerchantInfo();
+        postedEvent.setMerchantInfo(merchantInfo);
+        assertEquals(merchantInfo, postedEvent.getMerchantInfo());
+    }
+
+    @Test
+    void testGetAndSetActivityTypeCd() {
+        String activityTypeCd = "Payment";
+        postedEvent.setActivityTypeCd(activityTypeCd);
+        assertEquals(activityTypeCd, postedEvent.getActivityTypeCd());
+    }
+
+    @Test
+    void testGetAndSetActivityTypeDesc() {
+        String activityTypeDesc = "Payment Made";
+        postedEvent.setActivityTypeDesc(activityTypeDesc);
+        assertEquals(activityTypeDesc, postedEvent.getActivityTypeDesc());
+    }
+
+    @Test
+    void testHashCode() {
+        PostedEvent anotherPostedEvent = new PostedEvent();
+        postedEvent.setEventId("event123");
+        postedEvent.setEventDescriptionTxt("Transaction Successful");
+
+        anotherPostedEvent.setEventId("event123");
+        anotherPostedEvent.setEventDescriptionTxt("Transaction Successful");
+
+        assertEquals(postedEvent.hashCode(), anotherPostedEvent.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        PostedEvent anotherPostedEvent = new PostedEvent();
+        postedEvent.setEventId("event123");
+        postedEvent.setEventDescriptionTxt("Transaction Successful");
+
+        anotherPostedEvent.setEventId("event123");
+        anotherPostedEvent.setEventDescriptionTxt("Transaction Successful");
+
+        assertTrue(postedEvent.equals(anotherPostedEvent));
+    }
+
+    @Test
+    void testEqualsWithDifferentEventId() {
+        PostedEvent anotherPostedEvent = new PostedEvent();
+        postedEvent.setEventId("event123");
+        postedEvent.setEventDescriptionTxt("Transaction Successful");
+
+        anotherPostedEvent.setEventId("event124");
+        anotherPostedEvent.setEventDescriptionTxt("Transaction Successful");
+
+        assertFalse(postedEvent.equals(anotherPostedEvent));
+    }
+
+    @Test
+    void testEqualsWithDifferentEventDescriptionTxt() {
+        PostedEvent anotherPostedEvent = new PostedEvent();
+        postedEvent.setEventId("event123");
+        postedEvent.setEventDescriptionTxt("Transaction Successful");
+
+        anotherPostedEvent.setEventId("event123");
+        anotherPostedEvent.setEventDescriptionTxt("Transaction Failed");
+
+        assertFalse(postedEvent.equals(anotherPostedEvent));
+    }
+
+    @Test
+    void testEqualsWithNullEventId() {
+        PostedEvent anotherPostedEvent = new PostedEvent();
+        postedEvent.setEventId(null);
+        postedEvent.setEventDescriptionTxt("Transaction Successful");
+
+        anotherPostedEvent.setEventId(null);
+        anotherPostedEvent.setEventDescriptionTxt("Transaction Successful");
+
+        assertTrue(postedEvent.equals(anotherPostedEvent));
+    }
+
+    @Test
+    void testEqualsWithNullEventDescriptionTxt() {
+        PostedEvent anotherPostedEvent = new PostedEvent();
+        postedEvent.setEventId("event123");
+        postedEvent.setEventDescriptionTxt(null);
+
+        anotherPostedEvent.setEventId("event123");
+        anotherPostedEvent.setEventDescriptionTxt(null);
+
+        assertTrue(postedEvent.equals(anotherPostedEvent));
+    }
+
+    @Test
+    void testEqualsWithDifferentClass() {
+        String notAPostedEvent = "Not a PostedEvent";
+        assertFalse(postedEvent.equals(notAPostedEvent));
+    }
+}

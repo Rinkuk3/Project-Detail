@@ -1,0 +1,85 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class LoyaltyInfoTest {
+
+    private LoyaltyInfo loyaltyInfo;
+
+    @BeforeEach
+    void setUp() {
+        loyaltyInfo = new LoyaltyInfo();
+    }
+
+    @Test
+    void testGetAndSetProgramCd() {
+        String programCd = "ABC123";
+        loyaltyInfo.setProgramCd(programCd);
+        assertEquals(programCd, loyaltyInfo.getProgramCd());
+    }
+
+    @Test
+    void testGetAndSetAccountNum() {
+        String accountNum = "123456789";
+        loyaltyInfo.setAccountNum(accountNum);
+        assertEquals(accountNum, loyaltyInfo.getAccountNum());
+    }
+
+    @Test
+    void testToString() {
+        String expectedString = "com.td.api.mbcca.response.account.LoyaltyInfo@" + 
+                Integer.toHexString(System.identityHashCode(loyaltyInfo)) + 
+                "[programCd=<null>,accountNum=<null>]";
+        assertEquals(expectedString, loyaltyInfo.toString());
+
+        loyaltyInfo.setProgramCd("ABC123");
+        loyaltyInfo.setAccountNum("123456789");
+
+        expectedString = "com.td.api.mbcca.response.account.LoyaltyInfo@" + 
+                Integer.toHexString(System.identityHashCode(loyaltyInfo)) + 
+                "[programCd=ABC123,accountNum=123456789]";
+        assertEquals(expectedString, loyaltyInfo.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        loyaltyInfo.setProgramCd("ABC123");
+        loyaltyInfo.setAccountNum("123456789");
+
+        LoyaltyInfo anotherLoyaltyInfo = new LoyaltyInfo();
+        anotherLoyaltyInfo.setProgramCd("ABC123");
+        anotherLoyaltyInfo.setAccountNum("123456789");
+
+        assertEquals(loyaltyInfo.hashCode(), anotherLoyaltyInfo.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        loyaltyInfo.setProgramCd("ABC123");
+        loyaltyInfo.setAccountNum("123456789");
+
+        LoyaltyInfo anotherLoyaltyInfo = new LoyaltyInfo();
+        anotherLoyaltyInfo.setProgramCd("ABC123");
+        anotherLoyaltyInfo.setAccountNum("123456789");
+
+        assertTrue(loyaltyInfo.equals(anotherLoyaltyInfo));
+
+        anotherLoyaltyInfo.setAccountNum("987654321");
+        assertFalse(loyaltyInfo.equals(anotherLoyaltyInfo));
+    }
+
+    @Test
+    void testEqualsNull() {
+        assertFalse(loyaltyInfo.equals(null));
+    }
+
+    @Test
+    void testEqualsSameObject() {
+        assertTrue(loyaltyInfo.equals(loyaltyInfo));
+    }
+
+    @Test
+    void testEqualsDifferentClass() {
+        assertFalse(loyaltyInfo.equals(new Object()));
+    }
+}

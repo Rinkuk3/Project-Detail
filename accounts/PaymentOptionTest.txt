@@ -1,0 +1,131 @@
+import com.td.api.mbcca.shared.Cccyamt;
+import com.td.api.mbcca.shared.InstalmentFeeAssessmentFrequencyCd;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class PaymentOptionTest {
+
+    private PaymentOption paymentOption;
+
+    @BeforeEach
+    void setUp() {
+        paymentOption = new PaymentOption();
+    }
+
+    @Test
+    void testGetAndSetInstalmentFeeCccyamt() {
+        Cccyamt cccyamt = new Cccyamt();
+        paymentOption.setInstalmentFeeCccyamt(cccyamt);
+        assertEquals(cccyamt, paymentOption.getInstalmentFeeCccyamt());
+    }
+
+    @Test
+    void testGetAndSetInstalmentFeeAssessmentFrequencyCd() {
+        InstalmentFeeAssessmentFrequencyCd feeAssessmentFrequencyCd = InstalmentFeeAssessmentFrequencyCd.MONTHLY;
+        paymentOption.setInstalmentFeeAssessmentFrequencyCd(feeAssessmentFrequencyCd);
+        assertEquals(feeAssessmentFrequencyCd, paymentOption.getInstalmentFeeAssessmentFrequencyCd());
+    }
+
+    @Test
+    void testToString() {
+        Cccyamt cccyamt = new Cccyamt();
+        InstalmentFeeAssessmentFrequencyCd feeAssessmentFrequencyCd = InstalmentFeeAssessmentFrequencyCd.MONTHLY;
+        paymentOption.setInstalmentFeeCccyamt(cccyamt);
+        paymentOption.setInstalmentFeeAssessmentFrequencyCd(feeAssessmentFrequencyCd);
+
+        String expectedToString = "com.td.api.mbcca.response.account.PaymentOption@" +
+                Integer.toHexString(System.identityHashCode(paymentOption)) +
+                "[instalmentFeeCccyamt=" + cccyamt + "," +
+                "instalmentFeeAssessmentFrequencyCd=" + feeAssessmentFrequencyCd + ",]";
+
+        assertEquals(expectedToString, paymentOption.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        Cccyamt cccyamt = new Cccyamt();
+        InstalmentFeeAssessmentFrequencyCd feeAssessmentFrequencyCd = InstalmentFeeAssessmentFrequencyCd.MONTHLY;
+        paymentOption.setInstalmentFeeCccyamt(cccyamt);
+        paymentOption.setInstalmentFeeAssessmentFrequencyCd(feeAssessmentFrequencyCd);
+
+        PaymentOption anotherPaymentOption = new PaymentOption();
+        anotherPaymentOption.setInstalmentFeeCccyamt(cccyamt);
+        anotherPaymentOption.setInstalmentFeeAssessmentFrequencyCd(feeAssessmentFrequencyCd);
+
+        assertEquals(paymentOption.hashCode(), anotherPaymentOption.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        Cccyamt cccyamt = new Cccyamt();
+        InstalmentFeeAssessmentFrequencyCd feeAssessmentFrequencyCd = InstalmentFeeAssessmentFrequencyCd.MONTHLY;
+        paymentOption.setInstalmentFeeCccyamt(cccyamt);
+        paymentOption.setInstalmentFeeAssessmentFrequencyCd(feeAssessmentFrequencyCd);
+
+        PaymentOption anotherPaymentOption = new PaymentOption();
+        anotherPaymentOption.setInstalmentFeeCccyamt(cccyamt);
+        anotherPaymentOption.setInstalmentFeeAssessmentFrequencyCd(feeAssessmentFrequencyCd);
+
+        assertTrue(paymentOption.equals(anotherPaymentOption));
+    }
+
+    @Test
+    void testEqualsWithNullInstalmentFeeCccyamt() {
+        InstalmentFeeAssessmentFrequencyCd feeAssessmentFrequencyCd = InstalmentFeeAssessmentFrequencyCd.MONTHLY;
+        paymentOption.setInstalmentFeeCccyamt(null);
+        paymentOption.setInstalmentFeeAssessmentFrequencyCd(feeAssessmentFrequencyCd);
+
+        PaymentOption anotherPaymentOption = new PaymentOption();
+        anotherPaymentOption.setInstalmentFeeCccyamt(null);
+        anotherPaymentOption.setInstalmentFeeAssessmentFrequencyCd(feeAssessmentFrequencyCd);
+
+        assertTrue(paymentOption.equals(anotherPaymentOption));
+    }
+
+    @Test
+    void testEqualsWithNullInstalmentFeeAssessmentFrequencyCd() {
+        Cccyamt cccyamt = new Cccyamt();
+        paymentOption.setInstalmentFeeCccyamt(cccyamt);
+        paymentOption.setInstalmentFeeAssessmentFrequencyCd(null);
+
+        PaymentOption anotherPaymentOption = new PaymentOption();
+        anotherPaymentOption.setInstalmentFeeCccyamt(cccyamt);
+        anotherPaymentOption.setInstalmentFeeAssessmentFrequencyCd(null);
+
+        assertTrue(paymentOption.equals(anotherPaymentOption));
+    }
+
+    @Test
+    void testEqualsWithDifferentInstalmentFeeAssessmentFrequencyCd() {
+        Cccyamt cccyamt = new Cccyamt();
+        InstalmentFeeAssessmentFrequencyCd feeAssessmentFrequencyCd1 = InstalmentFeeAssessmentFrequencyCd.MONTHLY;
+        InstalmentFeeAssessmentFrequencyCd feeAssessmentFrequencyCd2 = InstalmentFeeAssessmentFrequencyCd.QUARTERLY;
+
+        paymentOption.setInstalmentFeeCccyamt(cccyamt);
+        paymentOption.setInstalmentFeeAssessmentFrequencyCd(feeAssessmentFrequencyCd1);
+
+        PaymentOption anotherPaymentOption = new PaymentOption();
+        anotherPaymentOption.setInstalmentFeeCccyamt(cccyamt);
+        anotherPaymentOption.setInstalmentFeeAssessmentFrequencyCd(feeAssessmentFrequencyCd2);
+
+        assertFalse(paymentOption.equals(anotherPaymentOption));
+    }
+
+    @Test
+    void testEqualsWithDifferentInstalmentFeeCccyamt() {
+        InstalmentFeeAssessmentFrequencyCd feeAssessmentFrequencyCd = InstalmentFeeAssessmentFrequencyCd.MONTHLY;
+        Cccyamt cccyamt1 = new Cccyamt();
+        Cccyamt cccyamt2 = new Cccyamt();
+
+        paymentOption.setInstalmentFeeCccyamt(cccyamt1);
+        paymentOption.setInstalmentFeeAssessmentFrequencyCd(feeAssessmentFrequencyCd);
+
+        PaymentOption anotherPaymentOption = new PaymentOption();
+        anotherPaymentOption.setInstalmentFeeCccyamt(cccyamt2);
+        anotherPaymentOption.setInstalmentFeeAssessmentFrequencyCd(feeAssessmentFrequencyCd);
+
+        assertFalse(paymentOption.equals(anotherPaymentOption));
+    }
+}

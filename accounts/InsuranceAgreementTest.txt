@@ -1,0 +1,104 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+
+class InsuranceAgreementTest {
+
+    private InsuranceAgreement insuranceAgreement;
+    private ProductFeature productFeature;
+
+    @BeforeEach
+    void setUp() {
+        insuranceAgreement = new InsuranceAgreement();
+        productFeature = new ProductFeature(); // assuming ProductFeature is another class with proper constructor
+    }
+
+    @Test
+    void testGetAndSetStatusCd() {
+        String statusCd = "ACTIVE";
+        insuranceAgreement.setStatusCd(statusCd);
+        assertEquals(statusCd, insuranceAgreement.getStatusCd());
+    }
+
+    @Test
+    void testGetAndSetCancellationStatusReasonCd() {
+        String cancellationStatusReasonCd = "USER_REQUESTED";
+        insuranceAgreement.setCancellationStatusReasonCd(cancellationStatusReasonCd);
+        assertEquals(cancellationStatusReasonCd, insuranceAgreement.getCancellationStatusReasonCd());
+    }
+
+    @Test
+    void testGetAndSetSignedDt() {
+        String signedDt = "2023-03-01";
+        insuranceAgreement.setSignedDt(signedDt);
+        assertEquals(signedDt, insuranceAgreement.getSignedDt());
+    }
+
+    @Test
+    void testGetAndSetProductFeature() {
+        insuranceAgreement.setProductFeature(Arrays.asList(productFeature));
+        assertEquals(1, insuranceAgreement.getProductFeature().size());
+    }
+
+    @Test
+    void testGetAndSetLastMaintenanceDt() {
+        String lastMaintenanceDt = "2025-01-01";
+        insuranceAgreement.setLastMaintenanceDt(lastMaintenanceDt);
+        assertEquals(lastMaintenanceDt, insuranceAgreement.getLastMaintenanceDt());
+    }
+
+    @Test
+    void testToString() {
+        insuranceAgreement.setStatusCd("ACTIVE");
+        insuranceAgreement.setCancellationStatusReasonCd("USER_REQUESTED");
+        insuranceAgreement.setSignedDt("2023-03-01");
+        insuranceAgreement.setProductFeature(Arrays.asList(productFeature));
+        insuranceAgreement.setLastMaintenanceDt("2025-01-01");
+
+        String expectedString = "com.td.api.mbcca.response.account.InsuranceAgreement@" + 
+                Integer.toHexString(System.identityHashCode(insuranceAgreement)) + 
+                "[statusCd=ACTIVE,cancellationStatusReasonCd=USER_REQUESTED,signedDt=2023-03-01,productFeature=[<ProductFeatureObject>],lastMaintenanceDt=2025-01-01]";
+
+        assertEquals(expectedString, insuranceAgreement.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        insuranceAgreement.setStatusCd("ACTIVE");
+        insuranceAgreement.setCancellationStatusReasonCd("USER_REQUESTED");
+        insuranceAgreement.setSignedDt("2023-03-01");
+        insuranceAgreement.setProductFeature(Arrays.asList(productFeature));
+        insuranceAgreement.setLastMaintenanceDt("2025-01-01");
+
+        InsuranceAgreement anotherAgreement = new InsuranceAgreement();
+        anotherAgreement.setStatusCd("ACTIVE");
+        anotherAgreement.setCancellationStatusReasonCd("USER_REQUESTED");
+        anotherAgreement.setSignedDt("2023-03-01");
+        anotherAgreement.setProductFeature(Arrays.asList(productFeature));
+        anotherAgreement.setLastMaintenanceDt("2025-01-01");
+
+        assertEquals(insuranceAgreement.hashCode(), anotherAgreement.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        insuranceAgreement.setStatusCd("ACTIVE");
+        insuranceAgreement.setCancellationStatusReasonCd("USER_REQUESTED");
+        insuranceAgreement.setSignedDt("2023-03-01");
+        insuranceAgreement.setProductFeature(Arrays.asList(productFeature));
+        insuranceAgreement.setLastMaintenanceDt("2025-01-01");
+
+        InsuranceAgreement anotherAgreement = new InsuranceAgreement();
+        anotherAgreement.setStatusCd("ACTIVE");
+        anotherAgreement.setCancellationStatusReasonCd("USER_REQUESTED");
+        anotherAgreement.setSignedDt("2023-03-01");
+        anotherAgreement.setProductFeature(Arrays.asList(productFeature));
+        anotherAgreement.setLastMaintenanceDt("2025-01-01");
+
+        assertTrue(insuranceAgreement.equals(anotherAgreement));
+
+        anotherAgreement.setStatusCd("INACTIVE");
+        assertFalse(insuranceAgreement.equals(anotherAgreement));
+    }
+}

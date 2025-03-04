@@ -1,0 +1,52 @@
+package com.td.api.mbcca.response.account;
+
+import com.td.api.mbcca.response.account.electronicbilling.ElectronicBillingService;
+import com.td.api.mbcca.response.account.featureview.FeatureView;
+import com.td.api.mbcca.response.insurance.InsuranceAgreement;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class AccountOverviewTest {
+
+    @Test
+    void testGettersAndSetters() {
+        AccountOverview accountOverview = new AccountOverview();
+
+        RetrieveCreditCardAgreement retrieveCreditCardAgreement = new RetrieveCreditCardAgreement();
+        ElectronicBillingService electronicBillingService = new ElectronicBillingService();
+        FeatureView featureView = new FeatureView();
+        InsuranceAgreement insuranceAgreement = new InsuranceAgreement();
+
+        accountOverview.setRetrieveCreditCardAgreement(retrieveCreditCardAgreement);
+        accountOverview.setElectronicBillingService(electronicBillingService);
+        accountOverview.setFeatureView(featureView);
+        accountOverview.setInsuranceAgreement(insuranceAgreement);
+
+        assertEquals(retrieveCreditCardAgreement, accountOverview.getRetrieveCreditCardAgreement());
+        assertEquals(electronicBillingService, accountOverview.getElectronicBillingService());
+        assertEquals(featureView, accountOverview.getFeatureView());
+        assertEquals(insuranceAgreement, accountOverview.getInsuranceAgreement());
+    }
+
+    @Test
+    void testToString() {
+        AccountOverview accountOverview = new AccountOverview();
+        RetrieveCreditCardAgreement retrieveCreditCardAgreement = new RetrieveCreditCardAgreement();
+        ElectronicBillingService electronicBillingService = new ElectronicBillingService();
+        FeatureView featureView = new FeatureView();
+        InsuranceAgreement insuranceAgreement = new InsuranceAgreement();
+
+        accountOverview.setRetrieveCreditCardAgreement(retrieveCreditCardAgreement);
+        accountOverview.setElectronicBillingService(electronicBillingService);
+        accountOverview.setFeatureView(featureView);
+        accountOverview.setInsuranceAgreement(insuranceAgreement);
+
+        String result = accountOverview.toString();
+
+        assertTrue(result.contains("retrieveCreditCardAgreement"));
+        assertTrue(result.contains("electronicBillingService"));
+        assertTrue(result.contains("featureView"));
+        assertTrue(result.contains("insuranceAgreement"));
+    }
+}

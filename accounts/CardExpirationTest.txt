@@ -1,0 +1,108 @@
+package com.td.api.mbcca.response.account;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CardExpirationTest {
+
+    private CardExpiration cardExpiration;
+
+    @BeforeEach
+    public void setUp() {
+        cardExpiration = new CardExpiration();
+    }
+
+    @Test
+    public void testGetSetExpirationYm() {
+        String expirationYm = "2025-12";
+        cardExpiration.setExpirationYm(expirationYm);
+        assertEquals(expirationYm, cardExpiration.getExpirationYm());
+    }
+
+    @Test
+    public void testGetSetNeverExpiresInd() {
+        Boolean neverExpiresInd = true;
+        cardExpiration.setNeverExpiresInd(neverExpiresInd);
+        assertEquals(neverExpiresInd, cardExpiration.getNeverExpiresInd());
+    }
+
+    @Test
+    public void testToString() {
+        cardExpiration.setExpirationYm("2025-12");
+        cardExpiration.setNeverExpiresInd(true);
+        String expectedToString = "com.td.api.mbcca.response.account.CardExpiration@" + Integer.toHexString(System.identityHashCode(cardExpiration)) + "[expirationYm=2025-12,neverExpiresInd=true]";
+        assertEquals(expectedToString, cardExpiration.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        cardExpiration.setExpirationYm("2025-12");
+        cardExpiration.setNeverExpiresInd(true);
+        int expectedHashCode = 31 * (31 + "2025-12".hashCode()) + Boolean.hashCode(true);
+        assertEquals(expectedHashCode, cardExpiration.hashCode());
+    }
+
+    @Test
+    public void testEquals_SameObject() {
+        cardExpiration.setExpirationYm("2025-12");
+        cardExpiration.setNeverExpiresInd(true);
+        assertTrue(cardExpiration.equals(cardExpiration));
+    }
+
+    @Test
+    public void testEquals_DifferentObjectType() {
+        cardExpiration.setExpirationYm("2025-12");
+        cardExpiration.setNeverExpiresInd(true);
+        assertFalse(cardExpiration.equals("Some String"));
+    }
+
+    @Test
+    public void testEquals_DifferentValues() {
+        CardExpiration other = new CardExpiration();
+        cardExpiration.setExpirationYm("2025-12");
+        cardExpiration.setNeverExpiresInd(true);
+
+        other.setExpirationYm("2026-01");
+        other.setNeverExpiresInd(false);
+
+        assertFalse(cardExpiration.equals(other));
+    }
+
+    @Test
+    public void testEquals_SameValues() {
+        CardExpiration other = new CardExpiration();
+        cardExpiration.setExpirationYm("2025-12");
+        cardExpiration.setNeverExpiresInd(true);
+
+        other.setExpirationYm("2025-12");
+        other.setNeverExpiresInd(true);
+
+        assertTrue(cardExpiration.equals(other));
+    }
+
+    @Test
+    public void testHashCode_Equality() {
+        cardExpiration.setExpirationYm("2025-12");
+        cardExpiration.setNeverExpiresInd(true);
+
+        CardExpiration other = new CardExpiration();
+        other.setExpirationYm("2025-12");
+        other.setNeverExpiresInd(true);
+
+        assertEquals(cardExpiration.hashCode(), other.hashCode());
+    }
+
+    @Test
+    public void testHashCode_Inequality() {
+        cardExpiration.setExpirationYm("2025-12");
+        cardExpiration.setNeverExpiresInd(true);
+
+        CardExpiration other = new CardExpiration();
+        other.setExpirationYm("2026-01");
+        other.setNeverExpiresInd(false);
+
+        assertNotEquals(cardExpiration.hashCode(), other.hashCode());
+    }
+}

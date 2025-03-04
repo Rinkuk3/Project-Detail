@@ -1,0 +1,123 @@
+package com.td.api.mbcca.response.account;
+
+import com.td.api.mbcca.shared.Cccyamt;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class TransactionCategoryTest {
+
+    private TransactionCategory transactionCategory;
+
+    @BeforeEach
+    void setUp() {
+        transactionCategory = new TransactionCategory();
+    }
+
+    @Test
+    void testGetAndSetTypeCd() {
+        String typeCd = "Credit";
+        transactionCategory.setTypeCd(typeCd);
+        assertEquals(typeCd, transactionCategory.getTypeCd());
+    }
+
+    @Test
+    void testGetAndSetCycleToDateBalanceCccyamt() {
+        Cccyamt cycleToDateBalance = new Cccyamt();
+        transactionCategory.setCycleToDateBalanceCccyamt(cycleToDateBalance);
+        assertEquals(cycleToDateBalance, transactionCategory.getCycleToDateBalanceCccyamt());
+    }
+
+    @Test
+    void testGetAndSetAverageDailyBalanceCccyamt() {
+        Cccyamt averageDailyBalance = new Cccyamt();
+        transactionCategory.setAverageDailyBalanceCccyamt(averageDailyBalance);
+        assertEquals(averageDailyBalance, transactionCategory.getAverageDailyBalanceCccyamt());
+    }
+
+    @Test
+    void testGetAndSetOutstandingFinanceChargeCccyamt() {
+        Cccyamt outstandingFinanceCharge = new Cccyamt();
+        transactionCategory.setOutstandingFinanceChargeCccyamt(outstandingFinanceCharge);
+        assertEquals(outstandingFinanceCharge, transactionCategory.getOutstandingFinanceChargeCccyamt());
+    }
+
+    @Test
+    void testGetAndSetTransactionSpecialProcessingExpiryDt() {
+        String expiryDate = "2025-12-31";
+        transactionCategory.setTransactionSpecialProcessingExpiryDt(expiryDate);
+        assertEquals(expiryDate, transactionCategory.getTransactionSpecialProcessingExpiryDt());
+    }
+
+    @Test
+    void testGetAndSetTermBalance() {
+        TermBalance termBalance = new TermBalance();
+        transactionCategory.setTermBalance(termBalance);
+        assertEquals(termBalance, transactionCategory.getTermBalance());
+    }
+
+    @Test
+    void testToString() {
+        transactionCategory.setTypeCd("Credit");
+        transactionCategory.setTransactionSpecialProcessingExpiryDt("2025-12-31");
+        transactionCategory.setCycleToDateBalanceCccyamt(new Cccyamt());
+        transactionCategory.setAverageDailyBalanceCccyamt(new Cccyamt());
+        transactionCategory.setOutstandingFinanceChargeCccyamt(new Cccyamt());
+        transactionCategory.setTermBalance(new TermBalance());
+
+        String result = transactionCategory.toString();
+        assertTrue(result.contains("typeCd=Credit"));
+        assertTrue(result.contains("transactionSpecialProcessingExpiryDt=2025-12-31"));
+    }
+
+    @Test
+    void testHashCode() {
+        transactionCategory.setTypeCd("Credit");
+        transactionCategory.setTransactionSpecialProcessingExpiryDt("2025-12-31");
+        transactionCategory.setCycleToDateBalanceCccyamt(new Cccyamt());
+        transactionCategory.setAverageDailyBalanceCccyamt(new Cccyamt());
+        transactionCategory.setOutstandingFinanceChargeCccyamt(new Cccyamt());
+        transactionCategory.setTermBalance(new TermBalance());
+
+        int hashCode = transactionCategory.hashCode();
+        assertNotEquals(0, hashCode);
+    }
+
+    @Test
+    void testEquals() {
+        TransactionCategory transactionCategory1 = new TransactionCategory();
+        transactionCategory1.setTypeCd("Credit");
+        transactionCategory1.setTransactionSpecialProcessingExpiryDt("2025-12-31");
+
+        TransactionCategory transactionCategory2 = new TransactionCategory();
+        transactionCategory2.setTypeCd("Credit");
+        transactionCategory2.setTransactionSpecialProcessingExpiryDt("2025-12-31");
+
+        assertTrue(transactionCategory1.equals(transactionCategory2));
+
+        transactionCategory2.setTransactionSpecialProcessingExpiryDt("2026-12-31");
+        assertFalse(transactionCategory1.equals(transactionCategory2));
+    }
+
+    @Test
+    void testNotEqualsDifferentObject() {
+        assertFalse(transactionCategory.equals(new Object()));
+    }
+
+    @Test
+    void testEqualsNull() {
+        assertFalse(transactionCategory.equals(null));
+    }
+
+    @Test
+    void testEqualsDifferentTypeCd() {
+        TransactionCategory transactionCategory1 = new TransactionCategory();
+        transactionCategory1.setTypeCd("Credit");
+
+        TransactionCategory transactionCategory2 = new TransactionCategory();
+        transactionCategory2.setTypeCd("Debit");
+
+        assertFalse(transactionCategory1.equals(transactionCategory2));
+    }
+}

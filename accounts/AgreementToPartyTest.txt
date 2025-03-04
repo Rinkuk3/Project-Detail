@@ -1,0 +1,108 @@
+package com.td.api.mbcca.response.account;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class AgreementToPartyTest {
+
+    private AgreementToParty agreementToParty;
+
+    @BeforeEach
+    void setUp() {
+        agreementToParty = new AgreementToParty();
+    }
+
+    @Test
+    void testGetPartyKey() {
+        agreementToParty.setPartyKey("partyKey123");
+        assertEquals("partyKey123", agreementToParty.getPartyKey());
+    }
+
+    @Test
+    void testSetPartyKey() {
+        agreementToParty.setPartyKey("partyKey123");
+        assertEquals("partyKey123", agreementToParty.getPartyKey());
+    }
+
+    @Test
+    void testGetRoleCd() {
+        agreementToParty.setRoleCd("roleCd123");
+        assertEquals("roleCd123", agreementToParty.getRoleCd());
+    }
+
+    @Test
+    void testSetRoleCd() {
+        agreementToParty.setRoleCd("roleCd123");
+        assertEquals("roleCd123", agreementToParty.getRoleCd());
+    }
+
+    @Test
+    void testGetRoleStatusCd() {
+        agreementToParty.setRoleStatusCd("roleStatusCd123");
+        assertEquals("roleStatusCd123", agreementToParty.getRoleStatusCd());
+    }
+
+    @Test
+    void testSetRoleStatusCd() {
+        agreementToParty.setRoleStatusCd("roleStatusCd123");
+        assertEquals("roleStatusCd123", agreementToParty.getRoleStatusCd());
+    }
+
+    @Test
+    void testGetPartyIdentificationNum() {
+        agreementToParty.setPartyIdentificationNum("partyId123");
+        assertEquals("partyId123", agreementToParty.getPartyIdentificationNum());
+    }
+
+    @Test
+    void testSetPartyIdentificationNum() {
+        agreementToParty.setPartyIdentificationNum("partyId123");
+        assertEquals("partyId123", agreementToParty.getPartyIdentificationNum());
+    }
+
+    @Test
+    void testToString() {
+        agreementToParty.setPartyKey("partyKey123");
+        agreementToParty.setRoleCd("roleCd123");
+        agreementToParty.setRoleStatusCd("roleStatusCd123");
+        agreementToParty.setPartyIdentificationNum("partyId123");
+        assertNotNull(agreementToParty.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        AgreementToParty agreementToParty2 = new AgreementToParty();
+        agreementToParty.setPartyKey("partyKey123");
+        agreementToParty.setRoleCd("roleCd123");
+        agreementToParty.setRoleStatusCd("roleStatusCd123");
+        agreementToParty.setPartyIdentificationNum("partyId123");
+
+        agreementToParty2.setPartyKey("partyKey123");
+        agreementToParty2.setRoleCd("roleCd123");
+        agreementToParty2.setRoleStatusCd("roleStatusCd123");
+        agreementToParty2.setPartyIdentificationNum("partyId123");
+
+        assertEquals(agreementToParty.hashCode(), agreementToParty2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        AgreementToParty agreementToParty2 = new AgreementToParty();
+        agreementToParty.setPartyKey("partyKey123");
+        agreementToParty.setRoleCd("roleCd123");
+        agreementToParty.setRoleStatusCd("roleStatusCd123");
+        agreementToParty.setPartyIdentificationNum("partyId123");
+
+        agreementToParty2.setPartyKey("partyKey123");
+        agreementToParty2.setRoleCd("roleCd123");
+        agreementToParty2.setRoleStatusCd("roleStatusCd123");
+        agreementToParty2.setPartyIdentificationNum("partyId123");
+
+        assertTrue(agreementToParty.equals(agreementToParty2));
+
+        agreementToParty2.setPartyKey("partyKey456");
+        assertFalse(agreementToParty.equals(agreementToParty2));
+    }
+}

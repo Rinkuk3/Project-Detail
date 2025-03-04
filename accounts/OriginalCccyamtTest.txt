@@ -1,0 +1,162 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.math.BigDecimal;
+
+class OriginalCccyamtTest {
+
+    private OriginalCccyamt originalCccyamt;
+    private TsysExtensionCurrencyNumericCd tsysExtensionCurrencyNumericCd;
+
+    @BeforeEach
+    void setUp() {
+        originalCccyamt = new OriginalCccyamt();
+        tsysExtensionCurrencyNumericCd = new TsysExtensionCurrencyNumericCd();
+    }
+
+    @Test
+    void testGetAndSetAmount() {
+        originalCccyamt.setAmount(new BigDecimal("100.50"));
+        assertEquals(new BigDecimal("100.50"), originalCccyamt.getAmount());
+    }
+
+    @Test
+    void testGetAndSetCurrencyCd() {
+        originalCccyamt.setCurrencyCd("USD");
+        assertEquals("USD", originalCccyamt.getCurrencyCd());
+    }
+
+    @Test
+    void testGetAndSetTsysExtension() {
+        originalCccyamt.setTsysExtension(tsysExtensionCurrencyNumericCd);
+        assertEquals(tsysExtensionCurrencyNumericCd, originalCccyamt.getTsysExtension());
+    }
+
+    @Test
+    void testToString() {
+        originalCccyamt.setAmount(new BigDecimal("100.50"));
+        originalCccyamt.setCurrencyCd("USD");
+        originalCccyamt.setTsysExtension(tsysExtensionCurrencyNumericCd);
+
+        String expectedToString = "com.td.api.mbcca.response.account.OriginalCccyamt@" +
+                Integer.toHexString(System.identityHashCode(originalCccyamt)) +
+                "[amount=100.50,currencyCd=USD,tsysExtension=" + tsysExtensionCurrencyNumericCd + ",]";
+
+        assertEquals(expectedToString, originalCccyamt.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        originalCccyamt.setAmount(new BigDecimal("100.50"));
+        originalCccyamt.setCurrencyCd("USD");
+        originalCccyamt.setTsysExtension(tsysExtensionCurrencyNumericCd);
+
+        OriginalCccyamt anotherOriginalCccyamt = new OriginalCccyamt();
+        anotherOriginalCccyamt.setAmount(new BigDecimal("100.50"));
+        anotherOriginalCccyamt.setCurrencyCd("USD");
+        anotherOriginalCccyamt.setTsysExtension(tsysExtensionCurrencyNumericCd);
+
+        assertEquals(originalCccyamt.hashCode(), anotherOriginalCccyamt.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        originalCccyamt.setAmount(new BigDecimal("100.50"));
+        originalCccyamt.setCurrencyCd("USD");
+        originalCccyamt.setTsysExtension(tsysExtensionCurrencyNumericCd);
+
+        OriginalCccyamt anotherOriginalCccyamt = new OriginalCccyamt();
+        anotherOriginalCccyamt.setAmount(new BigDecimal("100.50"));
+        anotherOriginalCccyamt.setCurrencyCd("USD");
+        anotherOriginalCccyamt.setTsysExtension(tsysExtensionCurrencyNumericCd);
+
+        assertTrue(originalCccyamt.equals(anotherOriginalCccyamt));
+    }
+
+    @Test
+    void testEqualsWithDifferentAmount() {
+        originalCccyamt.setAmount(new BigDecimal("100.50"));
+        originalCccyamt.setCurrencyCd("USD");
+        originalCccyamt.setTsysExtension(tsysExtensionCurrencyNumericCd);
+
+        OriginalCccyamt anotherOriginalCccyamt = new OriginalCccyamt();
+        anotherOriginalCccyamt.setAmount(new BigDecimal("200.75"));
+        anotherOriginalCccyamt.setCurrencyCd("USD");
+        anotherOriginalCccyamt.setTsysExtension(tsysExtensionCurrencyNumericCd);
+
+        assertFalse(originalCccyamt.equals(anotherOriginalCccyamt));
+    }
+
+    @Test
+    void testEqualsWithNullAmount() {
+        originalCccyamt.setAmount(null);
+        originalCccyamt.setCurrencyCd("USD");
+        originalCccyamt.setTsysExtension(tsysExtensionCurrencyNumericCd);
+
+        OriginalCccyamt anotherOriginalCccyamt = new OriginalCccyamt();
+        anotherOriginalCccyamt.setAmount(null);
+        anotherOriginalCccyamt.setCurrencyCd("USD");
+        anotherOriginalCccyamt.setTsysExtension(tsysExtensionCurrencyNumericCd);
+
+        assertTrue(originalCccyamt.equals(anotherOriginalCccyamt));
+    }
+
+    @Test
+    void testEqualsWithDifferentCurrencyCd() {
+        originalCccyamt.setAmount(new BigDecimal("100.50"));
+        originalCccyamt.setCurrencyCd("USD");
+        originalCccyamt.setTsysExtension(tsysExtensionCurrencyNumericCd);
+
+        OriginalCccyamt anotherOriginalCccyamt = new OriginalCccyamt();
+        anotherOriginalCccyamt.setAmount(new BigDecimal("100.50"));
+        anotherOriginalCccyamt.setCurrencyCd("EUR");
+        anotherOriginalCccyamt.setTsysExtension(tsysExtensionCurrencyNumericCd);
+
+        assertFalse(originalCccyamt.equals(anotherOriginalCccyamt));
+    }
+
+    @Test
+    void testEqualsWithNullCurrencyCd() {
+        originalCccyamt.setAmount(new BigDecimal("100.50"));
+        originalCccyamt.setCurrencyCd(null);
+        originalCccyamt.setTsysExtension(tsysExtensionCurrencyNumericCd);
+
+        OriginalCccyamt anotherOriginalCccyamt = new OriginalCccyamt();
+        anotherOriginalCccyamt.setAmount(new BigDecimal("100.50"));
+        anotherOriginalCccyamt.setCurrencyCd(null);
+        anotherOriginalCccyamt.setTsysExtension(tsysExtensionCurrencyNumericCd);
+
+        assertTrue(originalCccyamt.equals(anotherOriginalCccyamt));
+    }
+
+    @Test
+    void testEqualsWithNullTsysExtension() {
+        originalCccyamt.setAmount(new BigDecimal("100.50"));
+        originalCccyamt.setCurrencyCd("USD");
+        originalCccyamt.setTsysExtension(null);
+
+        OriginalCccyamt anotherOriginalCccyamt = new OriginalCccyamt();
+        anotherOriginalCccyamt.setAmount(new BigDecimal("100.50"));
+        anotherOriginalCccyamt.setCurrencyCd("USD");
+        anotherOriginalCccyamt.setTsysExtension(null);
+
+        assertTrue(originalCccyamt.equals(anotherOriginalCccyamt));
+    }
+
+    @Test
+    void testEqualsWithDifferentTsysExtension() {
+        originalCccyamt.setAmount(new BigDecimal("100.50"));
+        originalCccyamt.setCurrencyCd("USD");
+        originalCccyamt.setTsysExtension(tsysExtensionCurrencyNumericCd);
+
+        TsysExtensionCurrencyNumericCd anotherTsysExtension = new TsysExtensionCurrencyNumericCd();
+        OriginalCccyamt anotherOriginalCccyamt = new OriginalCccyamt();
+        anotherOriginalCccyamt.setAmount(new BigDecimal("100.50"));
+        anotherOriginalCccyamt.setCurrencyCd("USD");
+        anotherOriginalCccyamt.setTsysExtension(anotherTsysExtension);
+
+        assertFalse(originalCccyamt.equals(anotherOriginalCccyamt));
+    }
+}

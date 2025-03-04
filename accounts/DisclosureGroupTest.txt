@@ -1,0 +1,131 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class DisclosureGroupTest {
+
+    private DisclosureGroup disclosureGroup;
+
+    @BeforeEach
+    void setUp() {
+        disclosureGroup = new DisclosureGroup();
+    }
+
+    @Test
+    void testGetAndSetTypeCd() {
+        disclosureGroup.setTypeCd("type1");
+        assertEquals("type1", disclosureGroup.getTypeCd());
+    }
+
+    @Test
+    void testGetAndSetGroupCd() {
+        disclosureGroup.setGroupCd("group1");
+        assertEquals("group1", disclosureGroup.getGroupCd());
+    }
+
+    @Test
+    void testGetAndSetDesc() {
+        disclosureGroup.setDesc("description");
+        assertEquals("description", disclosureGroup.getDesc());
+    }
+
+    @Test
+    void testGetAndSetActiveInd() {
+        disclosureGroup.setActiveInd(true);
+        assertTrue(disclosureGroup.getActiveInd());
+    }
+
+    @Test
+    void testGetAndSetStartDt() {
+        disclosureGroup.setStartDt("2025-01-01");
+        assertEquals("2025-01-01", disclosureGroup.getStartDt());
+    }
+
+    @Test
+    void testGetAndSetEndDt() {
+        disclosureGroup.setEndDt("2025-12-31");
+        assertEquals("2025-12-31", disclosureGroup.getEndDt());
+    }
+
+    @Test
+    void testGetAndSetNeverEndInd() {
+        disclosureGroup.setNeverEndInd(true);
+        assertTrue(disclosureGroup.getNeverEndInd());
+    }
+
+    @Test
+    void testGetAndSetLastUpdateDt() {
+        disclosureGroup.setLastUpdateDt("2025-02-01");
+        assertEquals("2025-02-01", disclosureGroup.getLastUpdateDt());
+    }
+
+    @Test
+    void testToString() {
+        disclosureGroup.setTypeCd("type1");
+        disclosureGroup.setGroupCd("group1");
+        disclosureGroup.setDesc("description");
+        disclosureGroup.setActiveInd(true);
+        disclosureGroup.setStartDt("2025-01-01");
+        disclosureGroup.setEndDt("2025-12-31");
+        disclosureGroup.setNeverEndInd(false);
+        disclosureGroup.setLastUpdateDt("2025-02-01");
+        
+        String expectedString = "com.td.api.mbcca.response.account.DisclosureGroup@" + 
+                Integer.toHexString(System.identityHashCode(disclosureGroup)) + 
+                "[typeCd=type1,groupCd=group1,desc=description,activeInd=true,startDt=2025-01-01,endDt=2025-12-31,neverEndInd=false,lastUpdateDt=2025-02-01]";
+        
+        assertEquals(expectedString, disclosureGroup.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        disclosureGroup.setTypeCd("type1");
+        disclosureGroup.setGroupCd("group1");
+        disclosureGroup.setDesc("description");
+        disclosureGroup.setActiveInd(true);
+        disclosureGroup.setStartDt("2025-01-01");
+        disclosureGroup.setEndDt("2025-12-31");
+        disclosureGroup.setNeverEndInd(false);
+        disclosureGroup.setLastUpdateDt("2025-02-01");
+
+        // Use the default hashCode method to assert equality
+        DisclosureGroup anotherDisclosureGroup = new DisclosureGroup();
+        anotherDisclosureGroup.setTypeCd("type1");
+        anotherDisclosureGroup.setGroupCd("group1");
+        anotherDisclosureGroup.setDesc("description");
+        anotherDisclosureGroup.setActiveInd(true);
+        anotherDisclosureGroup.setStartDt("2025-01-01");
+        anotherDisclosureGroup.setEndDt("2025-12-31");
+        anotherDisclosureGroup.setNeverEndInd(false);
+        anotherDisclosureGroup.setLastUpdateDt("2025-02-01");
+
+        assertEquals(disclosureGroup.hashCode(), anotherDisclosureGroup.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        DisclosureGroup anotherDisclosureGroup = new DisclosureGroup();
+        disclosureGroup.setTypeCd("type1");
+        disclosureGroup.setGroupCd("group1");
+        disclosureGroup.setDesc("description");
+        disclosureGroup.setActiveInd(true);
+        disclosureGroup.setStartDt("2025-01-01");
+        disclosureGroup.setEndDt("2025-12-31");
+        disclosureGroup.setNeverEndInd(false);
+        disclosureGroup.setLastUpdateDt("2025-02-01");
+
+        anotherDisclosureGroup.setTypeCd("type1");
+        anotherDisclosureGroup.setGroupCd("group1");
+        anotherDisclosureGroup.setDesc("description");
+        anotherDisclosureGroup.setActiveInd(true);
+        anotherDisclosureGroup.setStartDt("2025-01-01");
+        anotherDisclosureGroup.setEndDt("2025-12-31");
+        anotherDisclosureGroup.setNeverEndInd(false);
+        anotherDisclosureGroup.setLastUpdateDt("2025-02-01");
+
+        assertTrue(disclosureGroup.equals(anotherDisclosureGroup));
+        
+        anotherDisclosureGroup.setTypeCd("type2");
+        assertFalse(disclosureGroup.equals(anotherDisclosureGroup));
+    }
+}

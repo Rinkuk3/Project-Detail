@@ -1,0 +1,132 @@
+package com.td.api.mbcca.response.account;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class ChipCardTest {
+
+    private ChipCard chipCard;
+
+    @BeforeEach
+    public void setUp() {
+        chipCard = new ChipCard();
+    }
+
+    @Test
+    public void testGetSetSequenceNum() {
+        String sequenceNum = "12345";
+        chipCard.setSequenceNum(sequenceNum);
+        assertEquals(sequenceNum, chipCard.getSequenceNum());
+    }
+
+    @Test
+    public void testGetSetCardVerificationStatus() {
+        CardVerificationStatus cardVerificationStatus = CardVerificationStatus.PASSED;
+        chipCard.setCardVerificationStatus(cardVerificationStatus);
+        assertEquals(cardVerificationStatus, chipCard.getCardVerificationStatus());
+    }
+
+    @Test
+    public void testGetSetTerminalVerificationStatus() {
+        TerminalVerificationStatus terminalVerificationStatus = TerminalVerificationStatus.PASSED;
+        chipCard.setTerminalVerificationStatus(terminalVerificationStatus);
+        assertEquals(terminalVerificationStatus, chipCard.getTerminalVerificationStatus());
+    }
+
+    @Test
+    public void testToString() {
+        chipCard.setSequenceNum("12345");
+        chipCard.setCardVerificationStatus(CardVerificationStatus.PASSED);
+        chipCard.setTerminalVerificationStatus(TerminalVerificationStatus.PASSED);
+
+        String expectedToString = "com.td.api.mbcca.response.account.ChipCard@" + Integer.toHexString(System.identityHashCode(chipCard)) +
+                "[sequenceNum=12345,cardVerificationStatus=PASSED,terminalVerificationStatus=PASSED]";
+        assertEquals(expectedToString, chipCard.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        chipCard.setSequenceNum("12345");
+        chipCard.setCardVerificationStatus(CardVerificationStatus.PASSED);
+        chipCard.setTerminalVerificationStatus(TerminalVerificationStatus.PASSED);
+
+        int expectedHashCode = 31 * (31 * (31 + "12345".hashCode()) + CardVerificationStatus.PASSED.hashCode()) + TerminalVerificationStatus.PASSED.hashCode();
+        assertEquals(expectedHashCode, chipCard.hashCode());
+    }
+
+    @Test
+    public void testEquals_SameObject() {
+        chipCard.setSequenceNum("12345");
+        chipCard.setCardVerificationStatus(CardVerificationStatus.PASSED);
+        chipCard.setTerminalVerificationStatus(TerminalVerificationStatus.PASSED);
+
+        assertTrue(chipCard.equals(chipCard));
+    }
+
+    @Test
+    public void testEquals_DifferentObjectType() {
+        chipCard.setSequenceNum("12345");
+        chipCard.setCardVerificationStatus(CardVerificationStatus.PASSED);
+        chipCard.setTerminalVerificationStatus(TerminalVerificationStatus.PASSED);
+
+        assertFalse(chipCard.equals("Some String"));
+    }
+
+    @Test
+    public void testEquals_DifferentValues() {
+        ChipCard other = new ChipCard();
+        chipCard.setSequenceNum("12345");
+        chipCard.setCardVerificationStatus(CardVerificationStatus.PASSED);
+        chipCard.setTerminalVerificationStatus(TerminalVerificationStatus.PASSED);
+
+        other.setSequenceNum("54321");
+        other.setCardVerificationStatus(CardVerificationStatus.FAILED);
+        other.setTerminalVerificationStatus(TerminalVerificationStatus.FAILED);
+
+        assertFalse(chipCard.equals(other));
+    }
+
+    @Test
+    public void testEquals_SameValues() {
+        ChipCard other = new ChipCard();
+        chipCard.setSequenceNum("12345");
+        chipCard.setCardVerificationStatus(CardVerificationStatus.PASSED);
+        chipCard.setTerminalVerificationStatus(TerminalVerificationStatus.PASSED);
+
+        other.setSequenceNum("12345");
+        other.setCardVerificationStatus(CardVerificationStatus.PASSED);
+        other.setTerminalVerificationStatus(TerminalVerificationStatus.PASSED);
+
+        assertTrue(chipCard.equals(other));
+    }
+
+    @Test
+    public void testHashCode_Equality() {
+        chipCard.setSequenceNum("12345");
+        chipCard.setCardVerificationStatus(CardVerificationStatus.PASSED);
+        chipCard.setTerminalVerificationStatus(TerminalVerificationStatus.PASSED);
+
+        ChipCard other = new ChipCard();
+        other.setSequenceNum("12345");
+        other.setCardVerificationStatus(CardVerificationStatus.PASSED);
+        other.setTerminalVerificationStatus(TerminalVerificationStatus.PASSED);
+
+        assertEquals(chipCard.hashCode(), other.hashCode());
+    }
+
+    @Test
+    public void testHashCode_Inequality() {
+        chipCard.setSequenceNum("12345");
+        chipCard.setCardVerificationStatus(CardVerificationStatus.PASSED);
+        chipCard.setTerminalVerificationStatus(TerminalVerificationStatus.PASSED);
+
+        ChipCard other = new ChipCard();
+        other.setSequenceNum("54321");
+        other.setCardVerificationStatus(CardVerificationStatus.FAILED);
+        other.setTerminalVerificationStatus(TerminalVerificationStatus.FAILED);
+
+        assertNotEquals(chipCard.hashCode(), other.hashCode());
+    }
+}

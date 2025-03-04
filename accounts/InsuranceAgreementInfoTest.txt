@@ -1,0 +1,54 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+
+class InsuranceAgreementInfoTest {
+
+    private InsuranceAgreementInfo insuranceAgreementInfo;
+    private FeatureGroup featureGroup;
+
+    @BeforeEach
+    void setUp() {
+        insuranceAgreementInfo = new InsuranceAgreementInfo();
+        featureGroup = new FeatureGroup(); // assuming FeatureGroup is another class with proper constructor
+    }
+
+    @Test
+    void testGetAndSetFeatureGroup() {
+        insuranceAgreementInfo.setFeatureGroup(Arrays.asList(featureGroup));
+        assertEquals(1, insuranceAgreementInfo.getFeatureGroup().size());
+    }
+
+    @Test
+    void testToString() {
+        insuranceAgreementInfo.setFeatureGroup(Arrays.asList(featureGroup));
+        String expectedString = "com.td.api.mbcca.response.account.InsuranceAgreementInfo@" + 
+                Integer.toHexString(System.identityHashCode(insuranceAgreementInfo)) + 
+                "[featureGroup=[" + featureGroup.toString() + "]]";
+        assertEquals(expectedString, insuranceAgreementInfo.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        insuranceAgreementInfo.setFeatureGroup(Arrays.asList(featureGroup));
+
+        InsuranceAgreementInfo anotherInfo = new InsuranceAgreementInfo();
+        anotherInfo.setFeatureGroup(Arrays.asList(featureGroup));
+
+        assertEquals(insuranceAgreementInfo.hashCode(), anotherInfo.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        insuranceAgreementInfo.setFeatureGroup(Arrays.asList(featureGroup));
+
+        InsuranceAgreementInfo anotherInfo = new InsuranceAgreementInfo();
+        anotherInfo.setFeatureGroup(Arrays.asList(featureGroup));
+
+        assertTrue(insuranceAgreementInfo.equals(anotherInfo));
+
+        anotherInfo.setFeatureGroup(Arrays.asList(new FeatureGroup())); // different feature group
+        assertFalse(insuranceAgreementInfo.equals(anotherInfo));
+    }
+}

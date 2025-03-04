@@ -1,0 +1,117 @@
+package com.td.api.mbcca.response.account;
+
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+
+public class AltkeyTest {
+
+    private Altkey altkey;
+
+    @Before
+    public void setUp() {
+        altkey = new Altkey();
+    }
+
+    @Test
+    public void testSetGetCardNum() {
+        String cardNum = "1234567890123456";
+        altkey.setCardNum(cardNum);
+        assertEquals(cardNum, altkey.getCardNum());
+    }
+
+    @Test
+    public void testSetGetCardNumMasked() {
+        String cardNumMasked = "****567890123456";
+        altkey.setCardNumMasked(cardNumMasked);
+        assertEquals(cardNumMasked, altkey.getCardNumMasked());
+    }
+
+    @Test
+    public void testSetGetAccountNum() {
+        String accountNum = "987654321";
+        altkey.setAccountNum(accountNum);
+        assertEquals(accountNum, altkey.getAccountNum());
+    }
+
+    @Test
+    public void testSetGetKey() {
+        String key = "key123";
+        altkey.setKey(key);
+        assertEquals(key, altkey.getKey());
+    }
+
+    @Test
+    public void testToString() {
+        altkey.setCardNum("1234567890123456");
+        altkey.setCardNumMasked("****567890123456");
+        altkey.setAccountNum("987654321");
+        altkey.setKey("key123");
+
+        String expected = "com.td.api.mbcca.response.account.Altkey@" + Integer.toHexString(System.identityHashCode(altkey)) + "[cardNum=1234567890123456,cardNumMasked=****567890123456,accountNum=987654321,key=key123]";
+        assertEquals(expected, altkey.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        altkey.setCardNum("1234567890123456");
+        altkey.setCardNumMasked("****567890123456");
+        altkey.setAccountNum("987654321");
+        altkey.setKey("key123");
+
+        int expectedHashCode = (31 * (31 * (31 * (31 + "1234567890123456".hashCode()) + "987654321".hashCode()) + "****567890123456".hashCode()) + "key123".hashCode());
+        assertEquals(expectedHashCode, altkey.hashCode());
+    }
+
+    @Test
+    public void testEquals_SameObject() {
+        altkey.setCardNum("1234567890123456");
+        altkey.setCardNumMasked("****567890123456");
+        altkey.setAccountNum("987654321");
+        altkey.setKey("key123");
+
+        assertTrue(altkey.equals(altkey));
+    }
+
+    @Test
+    public void testEquals_DifferentClass() {
+        assertFalse(altkey.equals("Some other class"));
+    }
+
+    @Test
+    public void testEquals_NullObject() {
+        assertFalse(altkey.equals(null));
+    }
+
+    @Test
+    public void testEquals_DifferentValues() {
+        Altkey anotherAltkey = new Altkey();
+        anotherAltkey.setCardNum("1234567890123457");
+        anotherAltkey.setCardNumMasked("****567890123457");
+        anotherAltkey.setAccountNum("987654322");
+        anotherAltkey.setKey("key124");
+
+        altkey.setCardNum("1234567890123456");
+        altkey.setCardNumMasked("****567890123456");
+        altkey.setAccountNum("987654321");
+        altkey.setKey("key123");
+
+        assertFalse(altkey.equals(anotherAltkey));
+    }
+
+    @Test
+    public void testEquals_SameValues() {
+        Altkey anotherAltkey = new Altkey();
+        anotherAltkey.setCardNum("1234567890123456");
+        anotherAltkey.setCardNumMasked("****567890123456");
+        anotherAltkey.setAccountNum("987654321");
+        anotherAltkey.setKey("key123");
+
+        altkey.setCardNum("1234567890123456");
+        altkey.setCardNumMasked("****567890123456");
+        altkey.setAccountNum("987654321");
+        altkey.setKey("key123");
+
+        assertTrue(altkey.equals(anotherAltkey));
+    }
+}

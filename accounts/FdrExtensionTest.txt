@@ -1,0 +1,51 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class FdrExtensionTest {
+
+    private FdrExtension fdrExtension;
+
+    @BeforeEach
+    void setUp() {
+        fdrExtension = new FdrExtension();
+    }
+
+    @Test
+    void testGetAndSetBirthDt() {
+        fdrExtension.setBirthDt("1990-01-01");
+        assertEquals("1990-01-01", fdrExtension.getBirthDt());
+    }
+
+    @Test
+    void testToString() {
+        fdrExtension.setBirthDt("1990-01-01");
+        String expectedString = "com.td.api.mbcca.response.account.FdrExtension@" + 
+                Integer.toHexString(System.identityHashCode(fdrExtension)) + 
+                "[birthDt=1990-01-01]";
+        assertEquals(expectedString, fdrExtension.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        fdrExtension.setBirthDt("1990-01-01");
+
+        FdrExtension anotherFdrExtension = new FdrExtension();
+        anotherFdrExtension.setBirthDt("1990-01-01");
+
+        assertEquals(fdrExtension.hashCode(), anotherFdrExtension.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        fdrExtension.setBirthDt("1990-01-01");
+
+        FdrExtension anotherFdrExtension = new FdrExtension();
+        anotherFdrExtension.setBirthDt("1990-01-01");
+
+        assertTrue(fdrExtension.equals(anotherFdrExtension));
+
+        anotherFdrExtension.setBirthDt("1991-01-01");
+        assertFalse(fdrExtension.equals(anotherFdrExtension));
+    }
+}

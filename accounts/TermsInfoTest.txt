@@ -1,0 +1,125 @@
+package com.td.api.mbcca.response.account;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class TermsInfoTest {
+
+    private TermsInfo termsInfo;
+
+    @BeforeEach
+    void setUp() {
+        termsInfo = new TermsInfo();
+    }
+
+    @Test
+    void testGetAndSetFinanceChargeFeeLevel() {
+        FinanceChargeFeeLevel feeLevel = new FinanceChargeFeeLevel();
+        termsInfo.setFinanceChargeFeeLevel(Arrays.asList(feeLevel));
+        assertTrue(termsInfo.getFinanceChargeFeeLevel().contains(feeLevel));
+    }
+
+    @Test
+    void testGetAndSetMinimumPaymentAmt() {
+        BigDecimal minimumPaymentAmt = new BigDecimal("100.00");
+        termsInfo.setMinimumPaymentAmt(minimumPaymentAmt);
+        assertEquals(minimumPaymentAmt, termsInfo.getMinimumPaymentAmt());
+    }
+
+    @Test
+    void testGetAndSetMinimumPaymentPct() {
+        BigDecimal minimumPaymentPct = new BigDecimal("5.00");
+        termsInfo.setMinimumPaymentPct(minimumPaymentPct);
+        assertEquals(minimumPaymentPct, termsInfo.getMinimumPaymentPct());
+    }
+
+    @Test
+    void testGetAndSetSubjectToChangeInTermsInd() {
+        termsInfo.setSubjectToChangeInTermsInd(true);
+        assertTrue(termsInfo.getSubjectToChangeInTermsInd());
+    }
+
+    @Test
+    void testGetAndSetChangeInTermsDesc() {
+        String changeInTermsDesc = "Terms may change.";
+        termsInfo.setChangeInTermsDesc(changeInTermsDesc);
+        assertEquals(changeInTermsDesc, termsInfo.getChangeInTermsDesc());
+    }
+
+    @Test
+    void testGetAndSetCheckReturnFeeDesc() {
+        String checkReturnFeeDesc = "Fee for returned check.";
+        termsInfo.setCheckReturnFeeDesc(checkReturnFeeDesc);
+        assertEquals(checkReturnFeeDesc, termsInfo.getCheckReturnFeeDesc());
+    }
+
+    @Test
+    void testGetAndSetCheckReturnFeeCccyamt() {
+        Cccyamt checkReturnFeeCccyamt = new Cccyamt();
+        termsInfo.setCheckReturnFeeCccyamt(checkReturnFeeCccyamt);
+        assertEquals(checkReturnFeeCccyamt, termsInfo.getCheckReturnFeeCccyamt());
+    }
+
+    @Test
+    void testGetAndSetPaidInFullBalanceCccyamt() {
+        Cccyamt paidInFullBalanceCccyamt = new Cccyamt();
+        termsInfo.setPaidInFullBalanceCccyamt(paidInFullBalanceCccyamt);
+        assertEquals(paidInFullBalanceCccyamt, termsInfo.getPaidInFullBalanceCccyamt());
+    }
+
+    @Test
+    void testGetAndSetMembershipSingleFee() {
+        MembershipSingleFee membershipSingleFee = new MembershipSingleFee();
+        termsInfo.setMembershipSingleFee(membershipSingleFee);
+        assertEquals(membershipSingleFee, termsInfo.getMembershipSingleFee());
+    }
+
+    @Test
+    void testGetAndSetAnnualMembershipFeeNextChargeDt() {
+        String annualMembershipFeeNextChargeDt = "2025-01-01";
+        termsInfo.setAnnualMembershipFeeNextChargeDt(annualMembershipFeeNextChargeDt);
+        assertEquals(annualMembershipFeeNextChargeDt, termsInfo.getAnnualMembershipFeeNextChargeDt());
+    }
+
+    @Test
+    void testToString() {
+        termsInfo.setCheckReturnFeeDesc("Fee");
+        String result = termsInfo.toString();
+        assertTrue(result.contains("checkReturnFeeDesc=Fee"));
+    }
+
+    @Test
+    void testHashCode() {
+        termsInfo.setCheckReturnFeeDesc("Fee");
+        assertNotEquals(0, termsInfo.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        TermsInfo termsInfo1 = new TermsInfo();
+        termsInfo1.setCheckReturnFeeDesc("Fee");
+
+        TermsInfo termsInfo2 = new TermsInfo();
+        termsInfo2.setCheckReturnFeeDesc("Fee");
+
+        assertTrue(termsInfo1.equals(termsInfo2));
+
+        termsInfo2.setCheckReturnFeeDesc("Different Fee");
+        assertFalse(termsInfo1.equals(termsInfo2));
+    }
+
+    @Test
+    void testNotEqualsDifferentObject() {
+        assertFalse(termsInfo.equals(new Object()));
+    }
+
+    @Test
+    void testEqualsNull() {
+        assertFalse(termsInfo.equals(null));
+    }
+}

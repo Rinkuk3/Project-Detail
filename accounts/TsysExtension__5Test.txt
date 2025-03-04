@@ -1,0 +1,78 @@
+package com.td.api.mbcca.response.account;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class TsysExtension__5Test {
+
+    @Test
+    void testSettersAndGetters() {
+        TsysExtension__5 tsysExtension = new TsysExtension__5();
+
+        tsysExtension.setFullFICOReasonDesc("Test Description");
+        assertEquals("Test Description", tsysExtension.getFullFICOReasonDesc());
+
+        tsysExtension.setFullFICOReasonDesc(null);
+        assertNull(tsysExtension.getFullFICOReasonDesc());
+    }
+
+    @Test
+    void testToString() {
+        TsysExtension__5 tsysExtension = new TsysExtension__5();
+        tsysExtension.setFullFICOReasonDesc("Test Description");
+
+        String expectedToString = "com.td.api.mbcca.response.account.TsysExtension__5@" + Integer.toHexString(System.identityHashCode(tsysExtension)) +
+                "[fullFICOReasonDesc=Test Description]";
+
+        assertTrue(tsysExtension.toString().startsWith("com.td.api.mbcca.response.account.TsysExtension__5@"));
+        assertTrue(tsysExtension.toString().contains("fullFICOReasonDesc=Test Description"));
+    }
+
+    @Test
+    void testHashCode() {
+        TsysExtension__5 tsysExtension1 = new TsysExtension__5();
+        tsysExtension1.setFullFICOReasonDesc("Test Description");
+
+        TsysExtension__5 tsysExtension2 = new TsysExtension__5();
+        tsysExtension2.setFullFICOReasonDesc("Different Description");
+
+        TsysExtension__5 tsysExtension3 = new TsysExtension__5();
+        tsysExtension3.setFullFICOReasonDesc("Test Description");
+
+        assertEquals(tsysExtension1.hashCode(), tsysExtension3.hashCode());
+        assertNotEquals(tsysExtension1.hashCode(), tsysExtension2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        TsysExtension__5 tsysExtension1 = new TsysExtension__5();
+        tsysExtension1.setFullFICOReasonDesc("Test Description");
+
+        TsysExtension__5 tsysExtension2 = new TsysExtension__5();
+        tsysExtension2.setFullFICOReasonDesc("Different Description");
+
+        TsysExtension__5 tsysExtension3 = new TsysExtension__5();
+        tsysExtension3.setFullFICOReasonDesc("Test Description");
+
+        assertTrue(tsysExtension1.equals(tsysExtension3));
+        assertFalse(tsysExtension1.equals(tsysExtension2));
+        assertFalse(tsysExtension1.equals(null));
+        assertFalse(tsysExtension1.equals(new Object()));
+    }
+
+    @Test
+    void testEqualsWithNullValue() {
+        TsysExtension__5 tsysExtension1 = new TsysExtension__5();
+        tsysExtension1.setFullFICOReasonDesc(null);
+
+        TsysExtension__5 tsysExtension2 = new TsysExtension__5();
+        tsysExtension2.setFullFICOReasonDesc(null);
+
+        TsysExtension__5 tsysExtension3 = new TsysExtension__5();
+        tsysExtension3.setFullFICOReasonDesc("Test Description");
+
+        assertTrue(tsysExtension1.equals(tsysExtension2));
+        assertFalse(tsysExtension1.equals(tsysExtension3));
+    }
+}

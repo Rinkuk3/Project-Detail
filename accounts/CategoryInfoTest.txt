@@ -1,0 +1,209 @@
+package com.td.api.mbcca.response.account;
+
+import com.td.api.mbcca.shared.Cccyamt;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CategoryInfoTest {
+
+    private CategoryInfo categoryInfo;
+
+    @BeforeEach
+    public void setUp() {
+        categoryInfo = new CategoryInfo();
+    }
+
+    @Test
+    public void testGetSetReassignedCategoryCd() {
+        String reassignedCategoryCd = "Category1";
+        categoryInfo.setReassignedCategoryCd(reassignedCategoryCd);
+        assertEquals(reassignedCategoryCd, categoryInfo.getReassignedCategoryCd());
+    }
+
+    @Test
+    public void testGetSetNewCategoryCd() {
+        String newCategoryCd = "Category2";
+        categoryInfo.setNewCategoryCd(newCategoryCd);
+        assertEquals(newCategoryCd, categoryInfo.getNewCategoryCd());
+    }
+
+    @Test
+    public void testGetSetNewTermBalanceCd() {
+        String newTermBalanceCd = "Balance1";
+        categoryInfo.setNewTermBalanceCd(newTermBalanceCd);
+        assertEquals(newTermBalanceCd, categoryInfo.getNewTermBalanceCd());
+    }
+
+    @Test
+    public void testGetSetExpiryDt() {
+        String expiryDt = "2025-12-31";
+        categoryInfo.setExpiryDt(expiryDt);
+        assertEquals(expiryDt, categoryInfo.getExpiryDt());
+    }
+
+    @Test
+    public void testGetSetCptExpiredInd() {
+        Boolean cptExpiredInd = true;
+        categoryInfo.setCptExpiredInd(cptExpiredInd);
+        assertEquals(cptExpiredInd, categoryInfo.getCptExpiredInd());
+    }
+
+    @Test
+    public void testGetSetOriginalCategoryCd() {
+        String originalCategoryCd = "OriginalCategory";
+        categoryInfo.setOriginalCategoryCd(originalCategoryCd);
+        assertEquals(originalCategoryCd, categoryInfo.getOriginalCategoryCd());
+    }
+
+    @Test
+    public void testGetSetCptExpirationRemainingBalanceCccyamt() {
+        Cccyamt cptExpirationRemainingBalanceCccyamt = new Cccyamt();
+        categoryInfo.setCptExpirationRemainingBalanceCccyamt(cptExpirationRemainingBalanceCccyamt);
+        assertEquals(cptExpirationRemainingBalanceCccyamt, categoryInfo.getCptExpirationRemainingBalanceCccyamt());
+    }
+
+    @Test
+    public void testToString() {
+        categoryInfo.setReassignedCategoryCd("Category1");
+        categoryInfo.setNewCategoryCd("Category2");
+        categoryInfo.setNewTermBalanceCd("Balance1");
+        categoryInfo.setExpiryDt("2025-12-31");
+        categoryInfo.setCptExpiredInd(true);
+        categoryInfo.setOriginalCategoryCd("OriginalCategory");
+        categoryInfo.setCptExpirationRemainingBalanceCccyamt(new Cccyamt());
+
+        String expectedToString = "com.td.api.mbcca.response.account.CategoryInfo@" + Integer.toHexString(System.identityHashCode(categoryInfo)) +
+                "[reassignedCategoryCd=Category1,newCategoryCd=Category2,newTermBalanceCd=Balance1,expiryDt=2025-12-31,cptExpiredInd=true,originalCategoryCd=OriginalCategory,cptExpirationRemainingBalanceCccyamt=" + categoryInfo.getCptExpirationRemainingBalanceCccyamt() + "]";
+        assertEquals(expectedToString, categoryInfo.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        categoryInfo.setReassignedCategoryCd("Category1");
+        categoryInfo.setNewCategoryCd("Category2");
+        categoryInfo.setNewTermBalanceCd("Balance1");
+        categoryInfo.setExpiryDt("2025-12-31");
+        categoryInfo.setCptExpiredInd(true);
+        categoryInfo.setOriginalCategoryCd("OriginalCategory");
+        categoryInfo.setCptExpirationRemainingBalanceCccyamt(new Cccyamt());
+
+        int expectedHashCode = 31 * (31 * (31 * (31 * (31 * (31 * (31 + "Category1".hashCode()) + "Category2".hashCode()) + "Balance1".hashCode()) + "2025-12-31".hashCode()) + Boolean.hashCode(true)) + "OriginalCategory".hashCode()) + categoryInfo.getCptExpirationRemainingBalanceCccyamt().hashCode();
+        assertEquals(expectedHashCode, categoryInfo.hashCode());
+    }
+
+    @Test
+    public void testEquals_SameObject() {
+        categoryInfo.setReassignedCategoryCd("Category1");
+        categoryInfo.setNewCategoryCd("Category2");
+        categoryInfo.setNewTermBalanceCd("Balance1");
+        categoryInfo.setExpiryDt("2025-12-31");
+        categoryInfo.setCptExpiredInd(true);
+        categoryInfo.setOriginalCategoryCd("OriginalCategory");
+        categoryInfo.setCptExpirationRemainingBalanceCccyamt(new Cccyamt());
+
+        assertTrue(categoryInfo.equals(categoryInfo));
+    }
+
+    @Test
+    public void testEquals_DifferentObjectType() {
+        categoryInfo.setReassignedCategoryCd("Category1");
+        categoryInfo.setNewCategoryCd("Category2");
+        categoryInfo.setNewTermBalanceCd("Balance1");
+        categoryInfo.setExpiryDt("2025-12-31");
+        categoryInfo.setCptExpiredInd(true);
+        categoryInfo.setOriginalCategoryCd("OriginalCategory");
+        categoryInfo.setCptExpirationRemainingBalanceCccyamt(new Cccyamt());
+
+        assertFalse(categoryInfo.equals("Some String"));
+    }
+
+    @Test
+    public void testEquals_DifferentValues() {
+        CategoryInfo other = new CategoryInfo();
+        categoryInfo.setReassignedCategoryCd("Category1");
+        categoryInfo.setNewCategoryCd("Category2");
+        categoryInfo.setNewTermBalanceCd("Balance1");
+        categoryInfo.setExpiryDt("2025-12-31");
+        categoryInfo.setCptExpiredInd(true);
+        categoryInfo.setOriginalCategoryCd("OriginalCategory");
+        categoryInfo.setCptExpirationRemainingBalanceCccyamt(new Cccyamt());
+
+        other.setReassignedCategoryCd("Category3");
+        other.setNewCategoryCd("Category4");
+        other.setNewTermBalanceCd("Balance2");
+        other.setExpiryDt("2025-11-30");
+        other.setCptExpiredInd(false);
+        other.setOriginalCategoryCd("OriginalCategory2");
+        other.setCptExpirationRemainingBalanceCccyamt(new Cccyamt());
+
+        assertFalse(categoryInfo.equals(other));
+    }
+
+    @Test
+    public void testEquals_SameValues() {
+        CategoryInfo other = new CategoryInfo();
+        categoryInfo.setReassignedCategoryCd("Category1");
+        categoryInfo.setNewCategoryCd("Category2");
+        categoryInfo.setNewTermBalanceCd("Balance1");
+        categoryInfo.setExpiryDt("2025-12-31");
+        categoryInfo.setCptExpiredInd(true);
+        categoryInfo.setOriginalCategoryCd("OriginalCategory");
+        categoryInfo.setCptExpirationRemainingBalanceCccyamt(new Cccyamt());
+
+        other.setReassignedCategoryCd("Category1");
+        other.setNewCategoryCd("Category2");
+        other.setNewTermBalanceCd("Balance1");
+        other.setExpiryDt("2025-12-31");
+        other.setCptExpiredInd(true);
+        other.setOriginalCategoryCd("OriginalCategory");
+        other.setCptExpirationRemainingBalanceCccyamt(new Cccyamt());
+
+        assertTrue(categoryInfo.equals(other));
+    }
+
+    @Test
+    public void testHashCode_Equality() {
+        categoryInfo.setReassignedCategoryCd("Category1");
+        categoryInfo.setNewCategoryCd("Category2");
+        categoryInfo.setNewTermBalanceCd("Balance1");
+        categoryInfo.setExpiryDt("2025-12-31");
+        categoryInfo.setCptExpiredInd(true);
+        categoryInfo.setOriginalCategoryCd("OriginalCategory");
+        categoryInfo.setCptExpirationRemainingBalanceCccyamt(new Cccyamt());
+
+        CategoryInfo other = new CategoryInfo();
+        other.setReassignedCategoryCd("Category1");
+        other.setNewCategoryCd("Category2");
+        other.setNewTermBalanceCd("Balance1");
+        other.setExpiryDt("2025-12-31");
+        other.setCptExpiredInd(true);
+        other.setOriginalCategoryCd("OriginalCategory");
+        other.setCptExpirationRemainingBalanceCccyamt(new Cccyamt());
+
+        assertEquals(categoryInfo.hashCode(), other.hashCode());
+    }
+
+    @Test
+    public void testHashCode_Inequality() {
+        categoryInfo.setReassignedCategoryCd("Category1");
+        categoryInfo.setNewCategoryCd("Category2");
+        categoryInfo.setNewTermBalanceCd("Balance1");
+        categoryInfo.setExpiryDt("2025-12-31");
+        categoryInfo.setCptExpiredInd(true);
+        categoryInfo.setOriginalCategoryCd("OriginalCategory");
+        categoryInfo.setCptExpirationRemainingBalanceCccyamt(new Cccyamt());
+
+        CategoryInfo other = new CategoryInfo();
+        other.setReassignedCategoryCd("Category3");
+        other.setNewCategoryCd("Category4");
+        other.setNewTermBalanceCd("Balance2");
+        other.setExpiryDt("2025-11-30");
+        other.setCptExpiredInd(false);
+        other.setOriginalCategoryCd("OriginalCategory2");
+        other.setCptExpirationRemainingBalanceCccyamt(new Cccyamt());
+
+        assertNotEquals(categoryInfo.hashCode(), other.hashCode());
+    }
+}

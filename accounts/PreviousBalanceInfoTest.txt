@@ -1,0 +1,116 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class PreviousBalanceInfoTest {
+
+    private PreviousBalanceInfo previousBalanceInfo;
+
+    @BeforeEach
+    void setUp() {
+        previousBalanceInfo = new PreviousBalanceInfo();
+    }
+
+    @Test
+    void testGetAndSetCycleDt() {
+        String cycleDt = "2025-03-03";
+        previousBalanceInfo.setCycleDt(cycleDt);
+        assertEquals(cycleDt, previousBalanceInfo.getCycleDt());
+    }
+
+    @Test
+    void testGetAndSetTransactionCategoryBalance() {
+        List<TransactionCategoryBalance> transactionCategoryBalance = new ArrayList<>();
+        transactionCategoryBalance.add(new TransactionCategoryBalance());
+        previousBalanceInfo.setTransactionCategoryBalance(transactionCategoryBalance);
+        assertEquals(transactionCategoryBalance, previousBalanceInfo.getTransactionCategoryBalance());
+    }
+
+    @Test
+    void testToString() {
+        previousBalanceInfo.setCycleDt("2025-03-03");
+        List<TransactionCategoryBalance> transactionCategoryBalance = new ArrayList<>();
+        transactionCategoryBalance.add(new TransactionCategoryBalance());
+        previousBalanceInfo.setTransactionCategoryBalance(transactionCategoryBalance);
+        String expected = "com.td.api.mbcca.response.account.PreviousBalanceInfo@" + Integer.toHexString(previousBalanceInfo.hashCode()) + "[cycleDt=2025-03-03,transactionCategoryBalance=" + transactionCategoryBalance + "]";
+        assertEquals(expected, previousBalanceInfo.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        PreviousBalanceInfo anotherPreviousBalanceInfo = new PreviousBalanceInfo();
+        previousBalanceInfo.setCycleDt("2025-03-03");
+        List<TransactionCategoryBalance> transactionCategoryBalance = new ArrayList<>();
+        transactionCategoryBalance.add(new TransactionCategoryBalance());
+        previousBalanceInfo.setTransactionCategoryBalance(transactionCategoryBalance);
+
+        anotherPreviousBalanceInfo.setCycleDt("2025-03-03");
+        anotherPreviousBalanceInfo.setTransactionCategoryBalance(transactionCategoryBalance);
+
+        assertEquals(previousBalanceInfo.hashCode(), anotherPreviousBalanceInfo.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        PreviousBalanceInfo anotherPreviousBalanceInfo = new PreviousBalanceInfo();
+        previousBalanceInfo.setCycleDt("2025-03-03");
+        List<TransactionCategoryBalance> transactionCategoryBalance = new ArrayList<>();
+        transactionCategoryBalance.add(new TransactionCategoryBalance());
+        previousBalanceInfo.setTransactionCategoryBalance(transactionCategoryBalance);
+
+        anotherPreviousBalanceInfo.setCycleDt("2025-03-03");
+        anotherPreviousBalanceInfo.setTransactionCategoryBalance(transactionCategoryBalance);
+
+        assertTrue(previousBalanceInfo.equals(anotherPreviousBalanceInfo));
+    }
+
+    @Test
+    void testEqualsWithDifferentCycleDt() {
+        PreviousBalanceInfo anotherPreviousBalanceInfo = new PreviousBalanceInfo();
+        previousBalanceInfo.setCycleDt("2025-03-03");
+        previousBalanceInfo.setTransactionCategoryBalance(new ArrayList<>());
+
+        anotherPreviousBalanceInfo.setCycleDt("2025-03-04");
+        anotherPreviousBalanceInfo.setTransactionCategoryBalance(new ArrayList<>());
+
+        assertFalse(previousBalanceInfo.equals(anotherPreviousBalanceInfo));
+    }
+
+    @Test
+    void testEqualsWithDifferentTransactionCategoryBalance() {
+        PreviousBalanceInfo anotherPreviousBalanceInfo = new PreviousBalanceInfo();
+        previousBalanceInfo.setCycleDt("2025-03-03");
+        List<TransactionCategoryBalance> transactionCategoryBalance1 = new ArrayList<>();
+        transactionCategoryBalance1.add(new TransactionCategoryBalance());
+        previousBalanceInfo.setTransactionCategoryBalance(transactionCategoryBalance1);
+
+        List<TransactionCategoryBalance> transactionCategoryBalance2 = new ArrayList<>();
+        transactionCategoryBalance2.add(new TransactionCategoryBalance());
+        anotherPreviousBalanceInfo.setCycleDt("2025-03-03");
+        anotherPreviousBalanceInfo.setTransactionCategoryBalance(transactionCategoryBalance2);
+
+        assertTrue(previousBalanceInfo.equals(anotherPreviousBalanceInfo));
+    }
+
+    @Test
+    void testEqualsWithNullCycleDt() {
+        PreviousBalanceInfo anotherPreviousBalanceInfo = new PreviousBalanceInfo();
+        previousBalanceInfo.setCycleDt(null);
+        previousBalanceInfo.setTransactionCategoryBalance(new ArrayList<>());
+
+        anotherPreviousBalanceInfo.setCycleDt(null);
+        anotherPreviousBalanceInfo.setTransactionCategoryBalance(new ArrayList<>());
+
+        assertTrue(previousBalanceInfo.equals(anotherPreviousBalanceInfo));
+    }
+
+    @Test
+    void testEqualsWithDifferentClass() {
+        String notAPreviousBalanceInfo = "Not a PreviousBalanceInfo";
+        assertFalse(previousBalanceInfo.equals(notAPreviousBalanceInfo));
+    }
+}

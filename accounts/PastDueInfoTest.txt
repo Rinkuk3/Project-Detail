@@ -1,0 +1,168 @@
+import com.td.api.mbcca.shared.Cccyamt;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class PastDueInfoTest {
+
+    private PastDueInfo pastDueInfo;
+
+    @BeforeEach
+    void setUp() {
+        pastDueInfo = new PastDueInfo();
+    }
+
+    @Test
+    void testGetAndSetCategoryCd() {
+        pastDueInfo.setCategoryCd("Category1");
+        assertEquals("Category1", pastDueInfo.getCategoryCd());
+    }
+
+    @Test
+    void testGetAndSetCccyamt() {
+        Cccyamt cccyamt = new Cccyamt();
+        pastDueInfo.setCccyamt(cccyamt);
+        assertEquals(cccyamt, pastDueInfo.getCccyamt());
+    }
+
+    @Test
+    void testGetAndSetTimesCnt() {
+        pastDueInfo.setTimesCnt(5);
+        assertEquals(5, pastDueInfo.getTimesCnt());
+    }
+
+    @Test
+    void testToString() {
+        Cccyamt cccyamt = new Cccyamt();
+        pastDueInfo.setCategoryCd("Category1");
+        pastDueInfo.setCccyamt(cccyamt);
+        pastDueInfo.setTimesCnt(5);
+
+        String expectedToString = "com.td.api.mbcca.response.account.PastDueInfo@" +
+                Integer.toHexString(System.identityHashCode(pastDueInfo)) +
+                "[categoryCd=Category1,cccyamt=" + cccyamt + ",timesCnt=5,]";
+
+        assertEquals(expectedToString, pastDueInfo.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        Cccyamt cccyamt = new Cccyamt();
+        pastDueInfo.setCategoryCd("Category1");
+        pastDueInfo.setCccyamt(cccyamt);
+        pastDueInfo.setTimesCnt(5);
+
+        PastDueInfo anotherPastDueInfo = new PastDueInfo();
+        anotherPastDueInfo.setCategoryCd("Category1");
+        anotherPastDueInfo.setCccyamt(cccyamt);
+        anotherPastDueInfo.setTimesCnt(5);
+
+        assertEquals(pastDueInfo.hashCode(), anotherPastDueInfo.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        Cccyamt cccyamt = new Cccyamt();
+        pastDueInfo.setCategoryCd("Category1");
+        pastDueInfo.setCccyamt(cccyamt);
+        pastDueInfo.setTimesCnt(5);
+
+        PastDueInfo anotherPastDueInfo = new PastDueInfo();
+        anotherPastDueInfo.setCategoryCd("Category1");
+        anotherPastDueInfo.setCccyamt(cccyamt);
+        anotherPastDueInfo.setTimesCnt(5);
+
+        assertTrue(pastDueInfo.equals(anotherPastDueInfo));
+    }
+
+    @Test
+    void testEqualsWithDifferentCategoryCd() {
+        Cccyamt cccyamt = new Cccyamt();
+        pastDueInfo.setCategoryCd("Category1");
+        pastDueInfo.setCccyamt(cccyamt);
+        pastDueInfo.setTimesCnt(5);
+
+        PastDueInfo anotherPastDueInfo = new PastDueInfo();
+        anotherPastDueInfo.setCategoryCd("Category2");
+        anotherPastDueInfo.setCccyamt(cccyamt);
+        anotherPastDueInfo.setTimesCnt(5);
+
+        assertFalse(pastDueInfo.equals(anotherPastDueInfo));
+    }
+
+    @Test
+    void testEqualsWithDifferentTimesCnt() {
+        Cccyamt cccyamt = new Cccyamt();
+        pastDueInfo.setCategoryCd("Category1");
+        pastDueInfo.setCccyamt(cccyamt);
+        pastDueInfo.setTimesCnt(5);
+
+        PastDueInfo anotherPastDueInfo = new PastDueInfo();
+        anotherPastDueInfo.setCategoryCd("Category1");
+        anotherPastDueInfo.setCccyamt(cccyamt);
+        anotherPastDueInfo.setTimesCnt(10);
+
+        assertFalse(pastDueInfo.equals(anotherPastDueInfo));
+    }
+
+    @Test
+    void testEqualsWithDifferentCccyamt() {
+        Cccyamt cccyamt1 = new Cccyamt();
+        Cccyamt cccyamt2 = new Cccyamt();
+        pastDueInfo.setCategoryCd("Category1");
+        pastDueInfo.setCccyamt(cccyamt1);
+        pastDueInfo.setTimesCnt(5);
+
+        PastDueInfo anotherPastDueInfo = new PastDueInfo();
+        anotherPastDueInfo.setCategoryCd("Category1");
+        anotherPastDueInfo.setCccyamt(cccyamt2);
+        anotherPastDueInfo.setTimesCnt(5);
+
+        assertFalse(pastDueInfo.equals(anotherPastDueInfo));
+    }
+
+    @Test
+    void testEqualsWithNullCategoryCd() {
+        Cccyamt cccyamt = new Cccyamt();
+        pastDueInfo.setCategoryCd(null);
+        pastDueInfo.setCccyamt(cccyamt);
+        pastDueInfo.setTimesCnt(5);
+
+        PastDueInfo anotherPastDueInfo = new PastDueInfo();
+        anotherPastDueInfo.setCategoryCd(null);
+        anotherPastDueInfo.setCccyamt(cccyamt);
+        anotherPastDueInfo.setTimesCnt(5);
+
+        assertTrue(pastDueInfo.equals(anotherPastDueInfo));
+    }
+
+    @Test
+    void testEqualsWithNullTimesCnt() {
+        Cccyamt cccyamt = new Cccyamt();
+        pastDueInfo.setCategoryCd("Category1");
+        pastDueInfo.setCccyamt(cccyamt);
+        pastDueInfo.setTimesCnt(null);
+
+        PastDueInfo anotherPastDueInfo = new PastDueInfo();
+        anotherPastDueInfo.setCategoryCd("Category1");
+        anotherPastDueInfo.setCccyamt(cccyamt);
+        anotherPastDueInfo.setTimesCnt(null);
+
+        assertTrue(pastDueInfo.equals(anotherPastDueInfo));
+    }
+
+    @Test
+    void testEqualsWithNullCccyamt() {
+        pastDueInfo.setCategoryCd("Category1");
+        pastDueInfo.setCccyamt(null);
+        pastDueInfo.setTimesCnt(5);
+
+        PastDueInfo anotherPastDueInfo = new PastDueInfo();
+        anotherPastDueInfo.setCategoryCd("Category1");
+        anotherPastDueInfo.setCccyamt(null);
+        anotherPastDueInfo.setTimesCnt(5);
+
+        assertTrue(pastDueInfo.equals(anotherPastDueInfo));
+    }
+}

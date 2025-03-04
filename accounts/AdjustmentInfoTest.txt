@@ -1,0 +1,107 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class AdjustmentInfoTest {
+
+    @Test
+    void testGetSetAccountingFunctionCd() {
+        AdjustmentInfo adjustmentInfo = new AdjustmentInfo();
+        String value = "FunctionCode1";
+        
+        // Test setter
+        adjustmentInfo.setAccountingFunctionCd(value);
+        // Test getter
+        assertEquals(value, adjustmentInfo.getAccountingFunctionCd());
+    }
+
+    @Test
+    void testGetSetActivityTypeCd() {
+        AdjustmentInfo adjustmentInfo = new AdjustmentInfo();
+        String value = "ActivityCode1";
+        
+        // Test setter
+        adjustmentInfo.setActivityTypeCd(value);
+        // Test getter
+        assertEquals(value, adjustmentInfo.getActivityTypeCd());
+    }
+
+    @Test
+    void testGetSetGlMainAccountVal() {
+        AdjustmentInfo adjustmentInfo = new AdjustmentInfo();
+        String value = "AccountValue1";
+        
+        // Test setter
+        adjustmentInfo.setGlMainAccountVal(value);
+        // Test getter
+        assertEquals(value, adjustmentInfo.getGlMainAccountVal());
+    }
+
+    @Test
+    void testGetSetEventTxt() {
+        AdjustmentInfo adjustmentInfo = new AdjustmentInfo();
+        String value = "EventText1";
+        
+        // Test setter
+        adjustmentInfo.setEventTxt(value);
+        // Test getter
+        assertEquals(value, adjustmentInfo.getEventTxt());
+    }
+
+    @Test
+    void testToString() {
+        AdjustmentInfo adjustmentInfo = new AdjustmentInfo();
+        adjustmentInfo.setAccountingFunctionCd("FunctionCode1");
+        adjustmentInfo.setActivityTypeCd("ActivityCode1");
+        adjustmentInfo.setGlMainAccountVal("AccountValue1");
+        adjustmentInfo.setEventTxt("EventText1");
+        
+        String result = adjustmentInfo.toString();
+        assertTrue(result.contains("accountingFunctionCd=FunctionCode1"));
+        assertTrue(result.contains("activityTypeCd=ActivityCode1"));
+        assertTrue(result.contains("glMainAccountVal=AccountValue1"));
+        assertTrue(result.contains("eventTxt=EventText1"));
+    }
+
+    @Test
+    void testHashCode() {
+        AdjustmentInfo adjustmentInfo1 = new AdjustmentInfo();
+        adjustmentInfo1.setAccountingFunctionCd("FunctionCode1");
+        adjustmentInfo1.setActivityTypeCd("ActivityCode1");
+        adjustmentInfo1.setGlMainAccountVal("AccountValue1");
+        adjustmentInfo1.setEventTxt("EventText1");
+
+        AdjustmentInfo adjustmentInfo2 = new AdjustmentInfo();
+        adjustmentInfo2.setAccountingFunctionCd("FunctionCode1");
+        adjustmentInfo2.setActivityTypeCd("ActivityCode1");
+        adjustmentInfo2.setGlMainAccountVal("AccountValue1");
+        adjustmentInfo2.setEventTxt("EventText1");
+
+        assertEquals(adjustmentInfo1.hashCode(), adjustmentInfo2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        AdjustmentInfo adjustmentInfo1 = new AdjustmentInfo();
+        adjustmentInfo1.setAccountingFunctionCd("FunctionCode1");
+        adjustmentInfo1.setActivityTypeCd("ActivityCode1");
+        adjustmentInfo1.setGlMainAccountVal("AccountValue1");
+        adjustmentInfo1.setEventTxt("EventText1");
+
+        AdjustmentInfo adjustmentInfo2 = new AdjustmentInfo();
+        adjustmentInfo2.setAccountingFunctionCd("FunctionCode1");
+        adjustmentInfo2.setActivityTypeCd("ActivityCode1");
+        adjustmentInfo2.setGlMainAccountVal("AccountValue1");
+        adjustmentInfo2.setEventTxt("EventText1");
+
+        AdjustmentInfo adjustmentInfo3 = new AdjustmentInfo();
+        adjustmentInfo3.setAccountingFunctionCd("FunctionCode2");
+        adjustmentInfo3.setActivityTypeCd("ActivityCode2");
+        adjustmentInfo3.setGlMainAccountVal("AccountValue2");
+        adjustmentInfo3.setEventTxt("EventText2");
+
+        assertTrue(adjustmentInfo1.equals(adjustmentInfo2)); // Equal objects
+        assertFalse(adjustmentInfo1.equals(adjustmentInfo3)); // Different objects
+        assertFalse(adjustmentInfo1.equals(null)); // Compare with null
+        assertFalse(adjustmentInfo1.equals(new Object())); // Compare with different class
+    }
+}

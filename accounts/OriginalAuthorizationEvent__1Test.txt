@@ -1,0 +1,81 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class OriginalAuthorizationEvent__1Test {
+
+    private OriginalAuthorizationEvent__1 originalAuthorizationEvent__1;
+
+    @BeforeEach
+    void setUp() {
+        originalAuthorizationEvent__1 = new OriginalAuthorizationEvent__1();
+    }
+
+    @Test
+    void testGetAndSetTerminalChannelTypeCd() {
+        originalAuthorizationEvent__1.setTerminalChannelTypeCd("Terminal1");
+        assertEquals("Terminal1", originalAuthorizationEvent__1.getTerminalChannelTypeCd());
+    }
+
+    @Test
+    void testGetAndSetTransactionDetailAvailableTypeCd() {
+        originalAuthorizationEvent__1.setTransactionDetailAvailableTypeCd("DetailType1");
+        assertEquals("DetailType1", originalAuthorizationEvent__1.getTransactionDetailAvailableTypeCd());
+    }
+
+    @Test
+    void testGetAndSetMerchantPointOfServiceTerminalCapabilityCd() {
+        originalAuthorizationEvent__1.setMerchantPointOfServiceTerminalCapabilityCd("Capability1");
+        assertEquals("Capability1", originalAuthorizationEvent__1.getMerchantPointOfServiceTerminalCapabilityCd());
+    }
+
+    @Test
+    void testGetAndSetMerchantPointOfServiceTerminalEntryCd() {
+        originalAuthorizationEvent__1.setMerchantPointOfServiceTerminalEntryCd("Entry1");
+        assertEquals("Entry1", originalAuthorizationEvent__1.getMerchantPointOfServiceTerminalEntryCd());
+    }
+
+    @Test
+    void testToString() {
+        originalAuthorizationEvent__1.setTerminalChannelTypeCd("Terminal1");
+        originalAuthorizationEvent__1.setTransactionDetailAvailableTypeCd("DetailType1");
+        originalAuthorizationEvent__1.setMerchantPointOfServiceTerminalCapabilityCd("Capability1");
+        originalAuthorizationEvent__1.setMerchantPointOfServiceTerminalEntryCd("Entry1");
+
+        String expectedToString = "com.td.api.mbcca.response.account.OriginalAuthorizationEvent__1@" +
+                Integer.toHexString(System.identityHashCode(originalAuthorizationEvent__1)) +
+                "[terminalChannelTypeCd=Terminal1,transactionDetailAvailableTypeCd=DetailType1," +
+                "merchantPointOfServiceTerminalCapabilityCd=Capability1," +
+                "merchantPointOfServiceTerminalEntryCd=Entry1,]";
+
+        assertEquals(expectedToString, originalAuthorizationEvent__1.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        originalAuthorizationEvent__1.setTerminalChannelTypeCd("Terminal1");
+        originalAuthorizationEvent__1.setTransactionDetailAvailableTypeCd("DetailType1");
+        originalAuthorizationEvent__1.setMerchantPointOfServiceTerminalCapabilityCd("Capability1");
+        originalAuthorizationEvent__1.setMerchantPointOfServiceTerminalEntryCd("Entry1");
+
+        // Use Java's built-in hashCode method for the test
+        assertEquals(originalAuthorizationEvent__1.hashCode(), originalAuthorizationEvent__1.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        OriginalAuthorizationEvent__1 anotherEvent = new OriginalAuthorizationEvent__1();
+        originalAuthorizationEvent__1.setTerminalChannelTypeCd("Terminal1");
+        originalAuthorizationEvent__1.setTransactionDetailAvailableTypeCd("DetailType1");
+        originalAuthorizationEvent__1.setMerchantPointOfServiceTerminalCapabilityCd("Capability1");
+        originalAuthorizationEvent__1.setMerchantPointOfServiceTerminalEntryCd("Entry1");
+
+        anotherEvent.setTerminalChannelTypeCd("Terminal1");
+        anotherEvent.setTransactionDetailAvailableTypeCd("DetailType1");
+        anotherEvent.setMerchantPointOfServiceTerminalCapabilityCd("Capability1");
+        anotherEvent.setMerchantPointOfServiceTerminalEntryCd("Entry1");
+
+        assertTrue(originalAuthorizationEvent__1.equals(anotherEvent));
+    }
+}

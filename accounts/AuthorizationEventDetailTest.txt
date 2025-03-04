@@ -1,0 +1,143 @@
+package com.td.api.mbcca.response.account;
+
+import com.td.api.mbcca.shared.Cccyamt;
+import com.td.api.mbcca.shared.MerchantInfo;
+import com.td.api.mbcca.shared.TsysExtensionCurrencyNumericCd;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class AuthorizationEventDetailTest {
+
+    private AuthorizationEventDetail authorizationEventDetail;
+    private Cccyamt transactionCccyamt;
+    private Cccyamt cashBackCccyamt;
+    private Cccyamt beforeTransactionCreditAvailableCccyamt;
+    private Cccyamt beforeTransactionCashAvailableCccyamt;
+    private MerchantInfo merchantInfo;
+    private TsysExtensionCurrencyNumericCd tsysExtension;
+    private ChipCard chipCard;
+
+    @BeforeEach
+    public void setUp() {
+        authorizationEventDetail = new AuthorizationEventDetail();
+        transactionCccyamt = new Cccyamt(); // Mock or create a new Cccyamt object
+        cashBackCccyamt = new Cccyamt(); // Mock or create a new Cccyamt object
+        beforeTransactionCreditAvailableCccyamt = new Cccyamt(); // Mock or create a new Cccyamt object
+        beforeTransactionCashAvailableCccyamt = new Cccyamt(); // Mock or create a new Cccyamt object
+        merchantInfo = new MerchantInfo(); // Mock or create a new MerchantInfo object
+        tsysExtension = new TsysExtensionCurrencyNumericCd(); // Mock or create a new TsysExtensionCurrencyNumericCd object
+        chipCard = new ChipCard(); // Mock or create a new ChipCard object
+    }
+
+    @Test
+    public void testGetSetEventDttm() {
+        Date eventDttm = new Date();
+        authorizationEventDetail.setEventDttm(eventDttm);
+        assertEquals(eventDttm, authorizationEventDetail.getEventDttm());
+    }
+
+    @Test
+    public void testGetSetSourceTransactionId() {
+        String sourceTransactionId = "12345";
+        authorizationEventDetail.setSourceTransactionId(sourceTransactionId);
+        assertEquals(sourceTransactionId, authorizationEventDetail.getSourceTransactionId());
+    }
+
+    @Test
+    public void testGetSetActivityTypeCd() {
+        String activityTypeCd = "ACTIVITY_CODE";
+        authorizationEventDetail.setActivityTypeCd(activityTypeCd);
+        assertEquals(activityTypeCd, authorizationEventDetail.getActivityTypeCd());
+    }
+
+    @Test
+    public void testGetSetActivityTypeDesc() {
+        String activityTypeDesc = "Activity Description";
+        authorizationEventDetail.setActivityTypeDesc(activityTypeDesc);
+        assertEquals(activityTypeDesc, authorizationEventDetail.getActivityTypeDesc());
+    }
+
+    @Test
+    public void testGetSetApprovalCd() {
+        String approvalCd = "APPROVAL_CODE";
+        authorizationEventDetail.setApprovalCd(approvalCd);
+        assertEquals(approvalCd, authorizationEventDetail.getApprovalCd());
+    }
+
+    @Test
+    public void testGetSetAuthorizationRequestCd() {
+        String authorizationRequestCd = "AUTH_REQUEST_CODE";
+        authorizationEventDetail.setAuthorizationRequestCd(authorizationRequestCd);
+        assertEquals(authorizationRequestCd, authorizationEventDetail.getAuthorizationRequestCd());
+    }
+
+    @Test
+    public void testGetSetAuthorizationRequestTypeDesc() {
+        String authorizationRequestTypeDesc = "Authorization Request Type Description";
+        authorizationEventDetail.setAuthorizationRequestTypeDesc(authorizationRequestTypeDesc);
+        assertEquals(authorizationRequestTypeDesc, authorizationEventDetail.getAuthorizationRequestTypeDesc());
+    }
+
+    @Test
+    public void testGetSetAuthorizationResponseCd() {
+        String authorizationResponseCd = "AUTH_RESPONSE_CODE";
+        authorizationEventDetail.setAuthorizationResponseCd(authorizationResponseCd);
+        assertEquals(authorizationResponseCd, authorizationEventDetail.getAuthorizationResponseCd());
+    }
+
+    @Test
+    public void testGetSetDeclineStatusReasonCd() {
+        String declineStatusReasonCd = "DECLINE_REASON";
+        authorizationEventDetail.setDeclineStatusReasonCd(declineStatusReasonCd);
+        assertEquals(declineStatusReasonCd, authorizationEventDetail.getDeclineStatusReasonCd());
+    }
+
+    @Test
+    public void testGetSetStandInProcessingReasonCd() {
+        String standInProcessingReasonCd = "STAND_IN_REASON";
+        authorizationEventDetail.setStandInProcessingReasonCd(standInProcessingReasonCd);
+        assertEquals(standInProcessingReasonCd, authorizationEventDetail.getStandInProcessingReasonCd());
+    }
+
+    @Test
+    public void testGetSetCardSecurityCodeVerificationVal() {
+        String cardSecurityCodeVerificationVal = "CARD_SECURITY_CODE";
+        authorizationEventDetail.setCardSecurityCodeVerificationVal(cardSecurityCodeVerificationVal);
+        assertEquals(cardSecurityCodeVerificationVal, authorizationEventDetail.getCardSecurityCodeVerificationVal());
+    }
+
+    @Test
+    public void testGetSetCardVerificationMismatchStatusReasonCd() {
+        String cardVerificationMismatchStatusReasonCd = "VERIFICATION_MISMATCH_REASON";
+        authorizationEventDetail.setCardVerificationMismatchStatusReasonCd(cardVerificationMismatchStatusReasonCd);
+        assertEquals(cardVerificationMismatchStatusReasonCd, authorizationEventDetail.getCardVerificationMismatchStatusReasonCd());
+    }
+
+    @Test
+    public void testGetSetChipCardVerificationIndicatorVerifiedInd() {
+        Boolean chipCardVerificationIndicatorVerifiedInd = true;
+        authorizationEventDetail.setChipCardVerificationIndicatorVerifiedInd(chipCardVerificationIndicatorVerifiedInd);
+        assertEquals(chipCardVerificationIndicatorVerifiedInd, authorizationEventDetail.getChipCardVerificationIndicatorVerifiedInd());
+    }
+
+    @Test
+    public void testGetSetCardVerificationIndicatorVerificationVal() {
+        String cardVerificationIndicatorVerificationVal = "VERIFICATION_VALUE";
+        authorizationEventDetail.setCardVerificationIndicatorVerificationVal(cardVerificationIndicatorVerificationVal);
+        assertEquals(cardVerificationIndicatorVerificationVal, authorizationEventDetail.getCardVerificationIndicatorVerificationVal());
+    }
+
+    @Test
+    public void testGetSetVirtualCardNum() {
+        String virtualCardNum = "VIRTUAL_CARD_NUMBER";
+        authorizationEventDetail.setVirtualCardNum(virtualCardNum);
+        assertEquals(virtualCardNum, authorizationEventDetail.getVirtualCardNum());
+    }
+
+    @Test
+    public void testGetSetVirtualCardDeclineReferralStatusReasonCd() {
+        String virtualCardDeclineReferralStatusReaso

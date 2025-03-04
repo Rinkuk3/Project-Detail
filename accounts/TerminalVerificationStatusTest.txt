@@ -1,0 +1,62 @@
+package com.td.api.mbcca.response.account;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class TerminalVerificationStatusTest {
+
+    private TerminalVerificationStatus terminalVerificationStatus;
+
+    @BeforeEach
+    void setUp() {
+        terminalVerificationStatus = new TerminalVerificationStatus();
+    }
+
+    @Test
+    void testGetAndSetPinPadNotPresentInd() {
+        Boolean pinPadNotPresentInd = true;
+        terminalVerificationStatus.setPinPadNotPresentInd(pinPadNotPresentInd);
+        assertEquals(pinPadNotPresentInd, terminalVerificationStatus.getPinPadNotPresentInd());
+    }
+
+    @Test
+    void testToString() {
+        terminalVerificationStatus.setPinPadNotPresentInd(true);
+        String expectedString = "com.td.api.mbcca.response.account.TerminalVerificationStatus@" 
+                + Integer.toHexString(terminalVerificationStatus.hashCode()) + "[pinPadNotPresentInd=true]";
+        assertTrue(terminalVerificationStatus.toString().contains("pinPadNotPresentInd=true"));
+    }
+
+    @Test
+    void testHashCode() {
+        terminalVerificationStatus.setPinPadNotPresentInd(true);
+        int hashCode = terminalVerificationStatus.hashCode();
+        assertNotNull(hashCode);
+    }
+
+    @Test
+    void testEquals() {
+        TerminalVerificationStatus terminalVerificationStatus1 = new TerminalVerificationStatus();
+        terminalVerificationStatus1.setPinPadNotPresentInd(true);
+
+        TerminalVerificationStatus terminalVerificationStatus2 = new TerminalVerificationStatus();
+        terminalVerificationStatus2.setPinPadNotPresentInd(true);
+
+        assertTrue(terminalVerificationStatus1.equals(terminalVerificationStatus2));
+
+        terminalVerificationStatus2.setPinPadNotPresentInd(false);
+        assertFalse(terminalVerificationStatus1.equals(terminalVerificationStatus2));
+    }
+
+    @Test
+    void testNotEqualsDifferentObject() {
+        assertFalse(terminalVerificationStatus.equals(new Object()));
+    }
+
+    @Test
+    void testEqualsNull() {
+        assertFalse(terminalVerificationStatus.equals(null));
+    }
+}

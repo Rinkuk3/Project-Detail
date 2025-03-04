@@ -1,0 +1,51 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class FeatureGroupTest {
+
+    private FeatureGroup featureGroup;
+
+    @BeforeEach
+    void setUp() {
+        featureGroup = new FeatureGroup();
+    }
+
+    @Test
+    void testGetAndSetGroupId() {
+        featureGroup.setGroupId("group123");
+        assertEquals("group123", featureGroup.getGroupId());
+    }
+
+    @Test
+    void testToString() {
+        featureGroup.setGroupId("group123");
+        String expectedString = "com.td.api.mbcca.response.account.FeatureGroup@" + 
+                Integer.toHexString(System.identityHashCode(featureGroup)) + 
+                "[groupId=group123]";
+        assertEquals(expectedString, featureGroup.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        featureGroup.setGroupId("group123");
+
+        FeatureGroup anotherFeatureGroup = new FeatureGroup();
+        anotherFeatureGroup.setGroupId("group123");
+
+        assertEquals(featureGroup.hashCode(), anotherFeatureGroup.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        featureGroup.setGroupId("group123");
+
+        FeatureGroup anotherFeatureGroup = new FeatureGroup();
+        anotherFeatureGroup.setGroupId("group123");
+
+        assertTrue(featureGroup.equals(anotherFeatureGroup));
+
+        anotherFeatureGroup.setGroupId("group456");
+        assertFalse(featureGroup.equals(anotherFeatureGroup));
+    }
+}

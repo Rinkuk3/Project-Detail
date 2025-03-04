@@ -1,0 +1,106 @@
+package com.td.api.mbcca.response.account;
+
+import com.td.api.mbcca.shared.MasterCard;
+import com.td.api.mbcca.shared.Visa;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class TsysExtension__3Test {
+
+    @Test
+    void testSettersAndGetters() {
+        TsysExtension__3 tsysExtension = new TsysExtension__3();
+
+        Visa visa = new Visa();
+        MasterCard masterCard = new MasterCard();
+
+        tsysExtension.setVisa(visa);
+        tsysExtension.setMasterCard(masterCard);
+
+        assertEquals(visa, tsysExtension.getVisa());
+        assertEquals(masterCard, tsysExtension.getMasterCard());
+    }
+
+    @Test
+    void testToString() {
+        TsysExtension__3 tsysExtension = new TsysExtension__3();
+        Visa visa = new Visa();
+        MasterCard masterCard = new MasterCard();
+
+        tsysExtension.setVisa(visa);
+        tsysExtension.setMasterCard(masterCard);
+
+        String expectedToString = "com.td.api.mbcca.response.account.TsysExtension__3@" + Integer.toHexString(System.identityHashCode(tsysExtension)) +
+                "[visa=" + visa + ",masterCard=" + masterCard + "]";
+
+        assertTrue(tsysExtension.toString().startsWith("com.td.api.mbcca.response.account.TsysExtension__3@"));
+        assertTrue(tsysExtension.toString().contains("visa=" + visa));
+        assertTrue(tsysExtension.toString().contains("masterCard=" + masterCard));
+    }
+
+    @Test
+    void testHashCode() {
+        Visa visa1 = new Visa();
+        MasterCard masterCard1 = new MasterCard();
+        TsysExtension__3 tsysExtension1 = new TsysExtension__3();
+        tsysExtension1.setVisa(visa1);
+        tsysExtension1.setMasterCard(masterCard1);
+
+        Visa visa2 = new Visa();
+        MasterCard masterCard2 = new MasterCard();
+        TsysExtension__3 tsysExtension2 = new TsysExtension__3();
+        tsysExtension2.setVisa(visa2);
+        tsysExtension2.setMasterCard(masterCard2);
+
+        TsysExtension__3 tsysExtension3 = new TsysExtension__3();
+        tsysExtension3.setVisa(visa1);
+        tsysExtension3.setMasterCard(masterCard1);
+
+        assertEquals(tsysExtension1.hashCode(), tsysExtension3.hashCode());
+        assertNotEquals(tsysExtension1.hashCode(), tsysExtension2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        Visa visa1 = new Visa();
+        MasterCard masterCard1 = new MasterCard();
+        TsysExtension__3 tsysExtension1 = new TsysExtension__3();
+        tsysExtension1.setVisa(visa1);
+        tsysExtension1.setMasterCard(masterCard1);
+
+        Visa visa2 = new Visa();
+        MasterCard masterCard2 = new MasterCard();
+        TsysExtension__3 tsysExtension2 = new TsysExtension__3();
+        tsysExtension2.setVisa(visa2);
+        tsysExtension2.setMasterCard(masterCard2);
+
+        TsysExtension__3 tsysExtension3 = new TsysExtension__3();
+        tsysExtension3.setVisa(visa1);
+        tsysExtension3.setMasterCard(masterCard1);
+
+        assertTrue(tsysExtension1.equals(tsysExtension3));
+        assertFalse(tsysExtension1.equals(tsysExtension2));
+        assertFalse(tsysExtension1.equals(null));
+        assertFalse(tsysExtension1.equals(new Object()));
+    }
+
+    @Test
+    void testEqualsWithNullValues() {
+        TsysExtension__3 tsysExtension1 = new TsysExtension__3();
+        tsysExtension1.setVisa(null);
+        tsysExtension1.setMasterCard(null);
+
+        TsysExtension__3 tsysExtension2 = new TsysExtension__3();
+        tsysExtension2.setVisa(null);
+        tsysExtension2.setMasterCard(null);
+
+        TsysExtension__3 tsysExtension3 = new TsysExtension__3();
+        Visa visa = new Visa();
+        tsysExtension3.setVisa(visa);
+        tsysExtension3.setMasterCard(null);
+
+        assertTrue(tsysExtension1.equals(tsysExtension2));
+        assertFalse(tsysExtension1.equals(tsysExtension3));
+    }
+}

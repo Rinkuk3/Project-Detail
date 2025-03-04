@@ -1,0 +1,226 @@
+package com.td.api.mbcca.response.account;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CreditCardAgreementToPartyTest {
+
+    private CreditCardAgreementToParty creditCardAgreementToParty;
+    private Role role;
+    private Contact contact;
+    private TsysExtension tsysExtension;
+    private FdrExtension fdrExtension;
+    private PartyToTransferEvent partyToTransferEvent;
+
+    @BeforeEach
+    public void setUp() {
+        creditCardAgreementToParty = new CreditCardAgreementToParty();
+        role = new Role(); // Assuming Role is a valid class
+        contact = new Contact(); // Assuming Contact is a valid class
+        tsysExtension = new TsysExtension(); // Assuming TsysExtension is a valid class
+        fdrExtension = new FdrExtension(); // Assuming FdrExtension is a valid class
+        partyToTransferEvent = new PartyToTransferEvent(); // Assuming PartyToTransferEvent is a valid class
+    }
+
+    @Test
+    public void testGetSetKey() {
+        creditCardAgreementToParty.setKey("key123");
+        assertEquals("key123", creditCardAgreementToParty.getKey());
+    }
+
+    @Test
+    public void testGetSetTypeCd() {
+        creditCardAgreementToParty.setTypeCd("type123");
+        assertEquals("type123", creditCardAgreementToParty.getTypeCd());
+    }
+
+    @Test
+    public void testGetSetRole() {
+        List<Role> roles = new ArrayList<>();
+        roles.add(role);
+        creditCardAgreementToParty.setRole(roles);
+        assertEquals(roles, creditCardAgreementToParty.getRole());
+    }
+
+    @Test
+    public void testGetSetFullName() {
+        creditCardAgreementToParty.setFullName("John Doe");
+        assertEquals("John Doe", creditCardAgreementToParty.getFullName());
+    }
+
+    @Test
+    public void testGetSetContact() {
+        List<Contact> contacts = new ArrayList<>();
+        contacts.add(contact);
+        creditCardAgreementToParty.setContact(contacts);
+        assertEquals(contacts, creditCardAgreementToParty.getContact());
+    }
+
+    @Test
+    public void testGetSetLanguageCd() {
+        creditCardAgreementToParty.setLanguageCd("EN");
+        assertEquals("EN", creditCardAgreementToParty.getLanguageCd());
+    }
+
+    @Test
+    public void testGetSetTsysExtension() {
+        creditCardAgreementToParty.setTsysExtension(tsysExtension);
+        assertEquals(tsysExtension, creditCardAgreementToParty.getTsysExtension());
+    }
+
+    @Test
+    public void testGetSetFdrExtension() {
+        creditCardAgreementToParty.setFdrExtension(fdrExtension);
+        assertEquals(fdrExtension, creditCardAgreementToParty.getFdrExtension());
+    }
+
+    @Test
+    public void testGetSetNameTypeCd() {
+        creditCardAgreementToParty.setNameTypeCd("nameType123");
+        assertEquals("nameType123", creditCardAgreementToParty.getNameTypeCd());
+    }
+
+    @Test
+    public void testGetSetStatusCd() {
+        creditCardAgreementToParty.setStatusCd("active");
+        assertEquals("active", creditCardAgreementToParty.getStatusCd());
+    }
+
+    @Test
+    public void testGetSetOnCardName() {
+        creditCardAgreementToParty.setOnCardName("John Doe");
+        assertEquals("John Doe", creditCardAgreementToParty.getOnCardName());
+    }
+
+    @Test
+    public void testGetSetPartyToTransferEvent() {
+        creditCardAgreementToParty.setPartyToTransferEvent(partyToTransferEvent);
+        assertEquals(partyToTransferEvent, creditCardAgreementToParty.getPartyToTransferEvent());
+    }
+
+    @Test
+    public void testToString() {
+        List<Role> roles = new ArrayList<>();
+        roles.add(role);
+        List<Contact> contacts = new ArrayList<>();
+        contacts.add(contact);
+
+        creditCardAgreementToParty.setKey("key123");
+        creditCardAgreementToParty.setTypeCd("type123");
+        creditCardAgreementToParty.setRole(roles);
+        creditCardAgreementToParty.setFullName("John Doe");
+        creditCardAgreementToParty.setContact(contacts);
+        creditCardAgreementToParty.setLanguageCd("EN");
+        creditCardAgreementToParty.setTsysExtension(tsysExtension);
+        creditCardAgreementToParty.setFdrExtension(fdrExtension);
+        creditCardAgreementToParty.setNameTypeCd("nameType123");
+        creditCardAgreementToParty.setStatusCd("active");
+        creditCardAgreementToParty.setOnCardName("John Doe");
+        creditCardAgreementToParty.setPartyToTransferEvent(partyToTransferEvent);
+
+        String expectedToString = "com.td.api.mbcca.response.account.CreditCardAgreementToParty@" +
+                Integer.toHexString(System.identityHashCode(creditCardAgreementToParty)) +
+                "[key=key123,typeCd=type123,role=" + roles +
+                ",fullName=John Doe,contact=" + contacts +
+                ",languageCd=EN,tsysExtension=" + tsysExtension +
+                ",fdrExtension=" + fdrExtension + ",nameTypeCd=nameType123,statusCd=active,onCardName=John Doe,partyToTransferEvent=" + partyToTransferEvent + "]";
+        assertEquals(expectedToString, creditCardAgreementToParty.toString());
+    }
+
+    @Test
+    public void testHashCode() {
+        List<Role> roles = new ArrayList<>();
+        roles.add(role);
+        List<Contact> contacts = new ArrayList<>();
+        contacts.add(contact);
+
+        creditCardAgreementToParty.setKey("key123");
+        creditCardAgreementToParty.setTypeCd("type123");
+        creditCardAgreementToParty.setRole(roles);
+        creditCardAgreementToParty.setFullName("John Doe");
+        creditCardAgreementToParty.setContact(contacts);
+        creditCardAgreementToParty.setLanguageCd("EN");
+        creditCardAgreementToParty.setTsysExtension(tsysExtension);
+        creditCardAgreementToParty.setFdrExtension(fdrExtension);
+        creditCardAgreementToParty.setNameTypeCd("nameType123");
+        creditCardAgreementToParty.setStatusCd("active");
+        creditCardAgreementToParty.setOnCardName("John Doe");
+        creditCardAgreementToParty.setPartyToTransferEvent(partyToTransferEvent);
+
+        int expectedHashCode = 31 * (31 * (31 * (31 * (31 * (31 * (31 * (31 * (31 * (31 * (31 + "key123".hashCode()) + "type123".hashCode()) +
+                roles.hashCode()) + "John Doe".hashCode()) + contacts.hashCode()) + "EN".hashCode()) +
+                tsysExtension.hashCode()) + fdrExtension.hashCode()) + "nameType123".hashCode()) +
+                "active".hashCode()) + "John Doe".hashCode()) + partyToTransferEvent.hashCode());
+        assertEquals(expectedHashCode, creditCardAgreementToParty.hashCode());
+    }
+
+    @Test
+    public void testEquals_SameObject() {
+        creditCardAgreementToParty.setKey("key123");
+        creditCardAgreementToParty.setTypeCd("type123");
+        creditCardAgreementToParty.setFullName("John Doe");
+
+        assertTrue(creditCardAgreementToParty.equals(creditCardAgreementToParty));
+    }
+
+    @Test
+    public void testEquals_DifferentObjectType() {
+        creditCardAgreementToParty.setKey("key123");
+        creditCardAgreementToParty.setTypeCd("type123");
+
+        assertFalse(creditCardAgreementToParty.equals("Some String"));
+    }
+
+    @Test
+    public void testEquals_DifferentValues() {
+        CreditCardAgreementToParty other = new CreditCardAgreementToParty();
+        creditCardAgreementToParty.setKey("key123");
+        creditCardAgreementToParty.setTypeCd("type123");
+
+        other.setKey("key124");
+        other.setTypeCd("type124");
+
+        assertFalse(creditCardAgreementToParty.equals(other));
+    }
+
+    @Test
+    public void testEquals_SameValues() {
+        CreditCardAgreementToParty other = new CreditCardAgreementToParty();
+        creditCardAgreementToParty.setKey("key123");
+        creditCardAgreementToParty.setTypeCd("type123");
+
+        other.setKey("key123");
+        other.setTypeCd("type123");
+
+        assertTrue(creditCardAgreementToParty.equals(other));
+    }
+
+    @Test
+    public void testHashCode_Equality() {
+        creditCardAgreementToParty.setKey("key123");
+        creditCardAgreementToParty.setTypeCd("type123");
+
+        CreditCardAgreementToParty other = new CreditCardAgreementToParty();
+        other.setKey("key123");
+        other.setTypeCd("type123");
+
+        assertEquals(creditCardAgreementToParty.hashCode(), other.hashCode());
+    }
+
+    @Test
+    public void testHashCode_Inequality() {
+        creditCardAgreementToParty.setKey("key123");
+        creditCardAgreementToParty.setTypeCd("type123");
+
+        CreditCardAgreementToParty other = new CreditCardAgreementToParty();
+        other.setKey("key124");
+        other.setTypeCd("type124");
+
+        assertNotEquals(creditCardAgreementToParty.hashCode(), other.hashCode());
+    }
+}

@@ -1,0 +1,116 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.math.BigDecimal;
+
+class ForeignExchangeInfoTest {
+
+    private ForeignExchangeInfo foreignExchangeInfo;
+
+    @BeforeEach
+    void setUp() {
+        foreignExchangeInfo = new ForeignExchangeInfo();
+    }
+
+    @Test
+    void testGetAndSetForeignTransactionInd() {
+        foreignExchangeInfo.setForeignTransactionInd(true);
+        assertTrue(foreignExchangeInfo.getForeignTransactionInd());
+        foreignExchangeInfo.setForeignTransactionInd(false);
+        assertFalse(foreignExchangeInfo.getForeignTransactionInd());
+    }
+
+    @Test
+    void testGetAndSetExchangeMarkupFeeCccyamt() {
+        Cccyamt exchangeMarkupFee = new Cccyamt();
+        foreignExchangeInfo.setExchangeMarkupFeeCccyamt(exchangeMarkupFee);
+        assertEquals(exchangeMarkupFee, foreignExchangeInfo.getExchangeMarkupFeeCccyamt());
+    }
+
+    @Test
+    void testGetAndSetMarkupChargeCd() {
+        String markupChargeCd = "ABC";
+        foreignExchangeInfo.setMarkupChargeCd(markupChargeCd);
+        assertEquals(markupChargeCd, foreignExchangeInfo.getMarkupChargeCd());
+    }
+
+    @Test
+    void testGetAndSetConversionMarkupRate() {
+        BigDecimal conversionMarkupRate = new BigDecimal("0.05");
+        foreignExchangeInfo.setConversionMarkupRate(conversionMarkupRate);
+        assertEquals(conversionMarkupRate, foreignExchangeInfo.getConversionMarkupRate());
+    }
+
+    @Test
+    void testGetAndSetFromCccyamt() {
+        FromCccyamt fromCccyamt = new FromCccyamt();
+        foreignExchangeInfo.setFromCccyamt(fromCccyamt);
+        assertEquals(fromCccyamt, foreignExchangeInfo.getFromCccyamt());
+    }
+
+    @Test
+    void testToString() {
+        Cccyamt exchangeMarkupFee = new Cccyamt();
+        FromCccyamt fromCccyamt = new FromCccyamt();
+        BigDecimal conversionMarkupRate = new BigDecimal("0.05");
+
+        foreignExchangeInfo.setForeignTransactionInd(true);
+        foreignExchangeInfo.setExchangeMarkupFeeCccyamt(exchangeMarkupFee);
+        foreignExchangeInfo.setMarkupChargeCd("ABC");
+        foreignExchangeInfo.setConversionMarkupRate(conversionMarkupRate);
+        foreignExchangeInfo.setFromCccyamt(fromCccyamt);
+
+        String expectedString = "com.td.api.mbcca.response.account.ForeignExchangeInfo@" + 
+                Integer.toHexString(System.identityHashCode(foreignExchangeInfo)) + 
+                "[foreignTransactionInd=true,exchangeMarkupFeeCccyamt=" + exchangeMarkupFee + 
+                ",markupChargeCd=ABC,conversionMarkupRate=0.05,fromCccyamt=" + fromCccyamt + "]";
+        assertEquals(expectedString, foreignExchangeInfo.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        Cccyamt exchangeMarkupFee = new Cccyamt();
+        FromCccyamt fromCccyamt = new FromCccyamt();
+        BigDecimal conversionMarkupRate = new BigDecimal("0.05");
+
+        foreignExchangeInfo.setForeignTransactionInd(true);
+        foreignExchangeInfo.setExchangeMarkupFeeCccyamt(exchangeMarkupFee);
+        foreignExchangeInfo.setMarkupChargeCd("ABC");
+        foreignExchangeInfo.setConversionMarkupRate(conversionMarkupRate);
+        foreignExchangeInfo.setFromCccyamt(fromCccyamt);
+
+        ForeignExchangeInfo anotherInfo = new ForeignExchangeInfo();
+        anotherInfo.setForeignTransactionInd(true);
+        anotherInfo.setExchangeMarkupFeeCccyamt(exchangeMarkupFee);
+        anotherInfo.setMarkupChargeCd("ABC");
+        anotherInfo.setConversionMarkupRate(conversionMarkupRate);
+        anotherInfo.setFromCccyamt(fromCccyamt);
+
+        assertEquals(foreignExchangeInfo.hashCode(), anotherInfo.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        Cccyamt exchangeMarkupFee = new Cccyamt();
+        FromCccyamt fromCccyamt = new FromCccyamt();
+        BigDecimal conversionMarkupRate = new BigDecimal("0.05");
+
+        foreignExchangeInfo.setForeignTransactionInd(true);
+        foreignExchangeInfo.setExchangeMarkupFeeCccyamt(exchangeMarkupFee);
+        foreignExchangeInfo.setMarkupChargeCd("ABC");
+        foreignExchangeInfo.setConversionMarkupRate(conversionMarkupRate);
+        foreignExchangeInfo.setFromCccyamt(fromCccyamt);
+
+        ForeignExchangeInfo anotherInfo = new ForeignExchangeInfo();
+        anotherInfo.setForeignTransactionInd(true);
+        anotherInfo.setExchangeMarkupFeeCccyamt(exchangeMarkupFee);
+        anotherInfo.setMarkupChargeCd("ABC");
+        anotherInfo.setConversionMarkupRate(conversionMarkupRate);
+        anotherInfo.setFromCccyamt(fromCccyamt);
+
+        assertTrue(foreignExchangeInfo.equals(anotherInfo));
+
+        anotherInfo.setMarkupChargeCd("XYZ");
+        assertFalse(foreignExchangeInfo.equals(anotherInfo));
+    }
+}

@@ -1,0 +1,191 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class PromotionTransactionCategoryInfoTest {
+
+    private PromotionTransactionCategoryInfo promotionTransactionCategoryInfo;
+
+    @BeforeEach
+    void setUp() {
+        promotionTransactionCategoryInfo = new PromotionTransactionCategoryInfo();
+    }
+
+    @Test
+    void testGetAndSetTransactionCategoryCd() {
+        String transactionCategoryCd = "TC123";
+        promotionTransactionCategoryInfo.setTransactionCategoryCd(transactionCategoryCd);
+        assertEquals(transactionCategoryCd, promotionTransactionCategoryInfo.getTransactionCategoryCd());
+    }
+
+    @Test
+    void testGetAndSetTermBalanceCd() {
+        String termBalanceCd = "TB123";
+        promotionTransactionCategoryInfo.setTermBalanceCd(termBalanceCd);
+        assertEquals(termBalanceCd, promotionTransactionCategoryInfo.getTermBalanceCd());
+    }
+
+    @Test
+    void testGetAndSetEarlyExpirationRemainingBalanceCccyamt() {
+        Cccyamt earlyExpirationRemainingBalanceCccyamt = new Cccyamt();
+        promotionTransactionCategoryInfo.setEarlyExpirationRemainingBalanceCccyamt(earlyExpirationRemainingBalanceCccyamt);
+        assertEquals(earlyExpirationRemainingBalanceCccyamt, promotionTransactionCategoryInfo.getEarlyExpirationRemainingBalanceCccyamt());
+    }
+
+    @Test
+    void testGetAndSetTransactionCategoryDesc() {
+        String transactionCategoryDesc = "Category Description";
+        promotionTransactionCategoryInfo.setTransactionCategoryDesc(transactionCategoryDesc);
+        assertEquals(transactionCategoryDesc, promotionTransactionCategoryInfo.getTransactionCategoryDesc());
+    }
+
+    @Test
+    void testGetAndSetTermBalanceDesc() {
+        String termBalanceDesc = "Term Balance Description";
+        promotionTransactionCategoryInfo.setTermBalanceDesc(termBalanceDesc);
+        assertEquals(termBalanceDesc, promotionTransactionCategoryInfo.getTermBalanceDesc());
+    }
+
+    @Test
+    void testGetAndSetReasonCd() {
+        String reasonCd = "Reason123";
+        promotionTransactionCategoryInfo.setReasonCd(reasonCd);
+        assertEquals(reasonCd, promotionTransactionCategoryInfo.getReasonCd());
+    }
+
+    @Test
+    void testGetAndSetPromotionEndDt() {
+        String promotionEndDt = "2025-03-01";
+        promotionTransactionCategoryInfo.setPromotionEndDt(promotionEndDt);
+        assertEquals(promotionEndDt, promotionTransactionCategoryInfo.getPromotionEndDt());
+    }
+
+    @Test
+    void testGetAndSetPromotionEarlyExpirationDt() {
+        String promotionEarlyExpirationDt = "2025-02-01";
+        promotionTransactionCategoryInfo.setPromotionEarlyExpirationDt(promotionEarlyExpirationDt);
+        assertEquals(promotionEarlyExpirationDt, promotionTransactionCategoryInfo.getPromotionEarlyExpirationDt());
+    }
+
+    @Test
+    void testGetAndSetExpirationToTermBalanceCd() {
+        String expirationToTermBalanceCd = "ExpirationTC123";
+        promotionTransactionCategoryInfo.setExpirationToTermBalanceCd(expirationToTermBalanceCd);
+        assertEquals(expirationToTermBalanceCd, promotionTransactionCategoryInfo.getExpirationToTermBalanceCd());
+    }
+
+    @Test
+    void testGetAndSetFeatureClassificationCd() {
+        String featureClassificationCd = "Feature123";
+        promotionTransactionCategoryInfo.setFeatureClassificationCd(featureClassificationCd);
+        assertEquals(featureClassificationCd, promotionTransactionCategoryInfo.getFeatureClassificationCd());
+    }
+
+    @Test
+    void testGetAndSetStatementDataDt() {
+        String statementDataDt = "2025-03-01";
+        promotionTransactionCategoryInfo.setStatementDataDt(statementDataDt);
+        assertEquals(statementDataDt, promotionTransactionCategoryInfo.getStatementDataDt());
+    }
+
+    @Test
+    void testGetAndSetPostedDttm() {
+        Date postedDttm = new Date();
+        promotionTransactionCategoryInfo.setPostedDttm(postedDttm);
+        assertEquals(postedDttm, promotionTransactionCategoryInfo.getPostedDttm());
+    }
+
+    @Test
+    void testGetAndSetReinstatedInd() {
+        Boolean reinstatedInd = true;
+        promotionTransactionCategoryInfo.setReinstatedInd(reinstatedInd);
+        assertEquals(reinstatedInd, promotionTransactionCategoryInfo.getReinstatedInd());
+    }
+
+    @Test
+    void testToString() {
+        String transactionCategoryCd = "TC123";
+        String termBalanceCd = "TB123";
+        Cccyamt earlyExpirationRemainingBalanceCccyamt = new Cccyamt();
+        String transactionCategoryDesc = "Category Description";
+        String termBalanceDesc = "Term Balance Description";
+        String reasonCd = "Reason123";
+        String promotionEndDt = "2025-03-01";
+        String promotionEarlyExpirationDt = "2025-02-01";
+        String expirationToTermBalanceCd = "ExpirationTC123";
+        String featureClassificationCd = "Feature123";
+        String statementDataDt = "2025-03-01";
+        Date postedDttm = new Date();
+        Boolean reinstatedInd = true;
+
+        promotionTransactionCategoryInfo.setTransactionCategoryCd(transactionCategoryCd);
+        promotionTransactionCategoryInfo.setTermBalanceCd(termBalanceCd);
+        promotionTransactionCategoryInfo.setEarlyExpirationRemainingBalanceCccyamt(earlyExpirationRemainingBalanceCccyamt);
+        promotionTransactionCategoryInfo.setTransactionCategoryDesc(transactionCategoryDesc);
+        promotionTransactionCategoryInfo.setTermBalanceDesc(termBalanceDesc);
+        promotionTransactionCategoryInfo.setReasonCd(reasonCd);
+        promotionTransactionCategoryInfo.setPromotionEndDt(promotionEndDt);
+        promotionTransactionCategoryInfo.setPromotionEarlyExpirationDt(promotionEarlyExpirationDt);
+        promotionTransactionCategoryInfo.setExpirationToTermBalanceCd(expirationToTermBalanceCd);
+        promotionTransactionCategoryInfo.setFeatureClassificationCd(featureClassificationCd);
+        promotionTransactionCategoryInfo.setStatementDataDt(statementDataDt);
+        promotionTransactionCategoryInfo.setPostedDttm(postedDttm);
+        promotionTransactionCategoryInfo.setReinstatedInd(reinstatedInd);
+
+        String expected = "com.td.api.mbcca.response.account.PromotionTransactionCategoryInfo@" +
+                Integer.toHexString(promotionTransactionCategoryInfo.hashCode()) +
+                "[transactionCategoryCd=" + transactionCategoryCd +
+                ",termBalanceCd=" + termBalanceCd +
+                ",earlyExpirationRemainingBalanceCccyamt=" + earlyExpirationRemainingBalanceCccyamt +
+                ",transactionCategoryDesc=" + transactionCategoryDesc +
+                ",termBalanceDesc=" + termBalanceDesc +
+                ",reasonCd=" + reasonCd +
+                ",promotionEndDt=" + promotionEndDt +
+                ",promotionEarlyExpirationDt=" + promotionEarlyExpirationDt +
+                ",expirationToTermBalanceCd=" + expirationToTermBalanceCd +
+                ",featureClassificationCd=" + featureClassificationCd +
+                ",statementDataDt=" + statementDataDt +
+                ",postedDttm=" + postedDttm +
+                ",reinstatedInd=" + reinstatedInd + "]";
+        assertEquals(expected, promotionTransactionCategoryInfo.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        PromotionTransactionCategoryInfo anotherInfo = new PromotionTransactionCategoryInfo();
+        String transactionCategoryCd = "TC123";
+        promotionTransactionCategoryInfo.setTransactionCategoryCd(transactionCategoryCd);
+        anotherInfo.setTransactionCategoryCd(transactionCategoryCd);
+        assertEquals(promotionTransactionCategoryInfo.hashCode(), anotherInfo.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        PromotionTransactionCategoryInfo anotherInfo = new PromotionTransactionCategoryInfo();
+        String transactionCategoryCd = "TC123";
+        promotionTransactionCategoryInfo.setTransactionCategoryCd(transactionCategoryCd);
+        anotherInfo.setTransactionCategoryCd(transactionCategoryCd);
+        assertTrue(promotionTransactionCategoryInfo.equals(anotherInfo));
+    }
+
+    @Test
+    void testEqualsWithDifferentValues() {
+        PromotionTransactionCategoryInfo anotherInfo = new PromotionTransactionCategoryInfo();
+        promotionTransactionCategoryInfo.setTransactionCategoryCd("TC123");
+        anotherInfo.setTransactionCategoryCd("TC124");
+        assertFalse(promotionTransactionCategoryInfo.equals(anotherInfo));
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        assertFalse(promotionTransactionCategoryInfo.equals(null));
+    }
+
+    @Test
+    void testEqualsWithDifferentClass() {
+        assertFalse(promotionTransactionCategoryInfo.equals("Not a PromotionTransactionCategoryInfo"));
+    }
+}

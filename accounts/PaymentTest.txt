@@ -1,0 +1,78 @@
+import com.td.api.mbcca.shared.Cccyamt;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class PaymentTest {
+
+    private Payment payment;
+
+    @BeforeEach
+    void setUp() {
+        payment = new Payment();
+    }
+
+    @Test
+    void testGetAndSetInterestFreePaidInFullCccyamt() {
+        Cccyamt cccyamt = new Cccyamt();
+        payment.setInterestFreePaidInFullCccyamt(cccyamt);
+        assertEquals(cccyamt, payment.getInterestFreePaidInFullCccyamt());
+    }
+
+    @Test
+    void testToString() {
+        Cccyamt cccyamt = new Cccyamt();
+        payment.setInterestFreePaidInFullCccyamt(cccyamt);
+
+        String expectedToString = "com.td.api.mbcca.response.account.Payment@" +
+                Integer.toHexString(System.identityHashCode(payment)) +
+                "[interestFreePaidInFullCccyamt=" + cccyamt + ",]";
+
+        assertEquals(expectedToString, payment.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        Cccyamt cccyamt = new Cccyamt();
+        payment.setInterestFreePaidInFullCccyamt(cccyamt);
+
+        Payment anotherPayment = new Payment();
+        anotherPayment.setInterestFreePaidInFullCccyamt(cccyamt);
+
+        assertEquals(payment.hashCode(), anotherPayment.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        Cccyamt cccyamt = new Cccyamt();
+        payment.setInterestFreePaidInFullCccyamt(cccyamt);
+
+        Payment anotherPayment = new Payment();
+        anotherPayment.setInterestFreePaidInFullCccyamt(cccyamt);
+
+        assertTrue(payment.equals(anotherPayment));
+    }
+
+    @Test
+    void testEqualsWithNullInterestFreePaidInFullCccyamt() {
+        payment.setInterestFreePaidInFullCccyamt(null);
+
+        Payment anotherPayment = new Payment();
+        anotherPayment.setInterestFreePaidInFullCccyamt(null);
+
+        assertTrue(payment.equals(anotherPayment));
+    }
+
+    @Test
+    void testEqualsWithDifferentInterestFreePaidInFullCccyamt() {
+        Cccyamt cccyamt1 = new Cccyamt();
+        Cccyamt cccyamt2 = new Cccyamt();
+
+        payment.setInterestFreePaidInFullCccyamt(cccyamt1);
+        Payment anotherPayment = new Payment();
+        anotherPayment.setInterestFreePaidInFullCccyamt(cccyamt2);
+
+        assertFalse(payment.equals(anotherPayment));
+    }
+}

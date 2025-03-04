@@ -1,0 +1,107 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class AccountstatusTest {
+
+    @Test
+    void testGetSetCd() {
+        Accountstatus status = new Accountstatus();
+        String value = "Active";
+        
+        // Test setter
+        status.setCd(value);
+        // Test getter
+        assertEquals(value, status.getCd());
+    }
+
+    @Test
+    void testGetSetReasonCd() {
+        Accountstatus status = new Accountstatus();
+        String value = "Reason1";
+        
+        // Test setter
+        status.setReasonCd(value);
+        // Test getter
+        assertEquals(value, status.getReasonCd());
+    }
+
+    @Test
+    void testGetSetReasonDesc() {
+        Accountstatus status = new Accountstatus();
+        String value = "Reason Description";
+        
+        // Test setter
+        status.setReasonDesc(value);
+        // Test getter
+        assertEquals(value, status.getReasonDesc());
+    }
+
+    @Test
+    void testGetSetStartDt() {
+        Accountstatus status = new Accountstatus();
+        String value = "2025-03-03";
+        
+        // Test setter
+        status.setStartDt(value);
+        // Test getter
+        assertEquals(value, status.getStartDt());
+    }
+
+    @Test
+    void testToString() {
+        Accountstatus status = new Accountstatus();
+        status.setCd("Active");
+        status.setReasonCd("Reason1");
+        status.setReasonDesc("Reason Description");
+        status.setStartDt("2025-03-03");
+        
+        String result = status.toString();
+        assertTrue(result.contains("cd=Active"));
+        assertTrue(result.contains("reasonCd=Reason1"));
+        assertTrue(result.contains("reasonDesc=Reason Description"));
+        assertTrue(result.contains("startDt=2025-03-03"));
+    }
+
+    @Test
+    void testHashCode() {
+        Accountstatus status1 = new Accountstatus();
+        status1.setCd("Active");
+        status1.setReasonCd("Reason1");
+        status1.setReasonDesc("Reason Description");
+        status1.setStartDt("2025-03-03");
+        
+        Accountstatus status2 = new Accountstatus();
+        status2.setCd("Active");
+        status2.setReasonCd("Reason1");
+        status2.setReasonDesc("Reason Description");
+        status2.setStartDt("2025-03-03");
+        
+        assertEquals(status1.hashCode(), status2.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        Accountstatus status1 = new Accountstatus();
+        status1.setCd("Active");
+        status1.setReasonCd("Reason1");
+        status1.setReasonDesc("Reason Description");
+        status1.setStartDt("2025-03-03");
+
+        Accountstatus status2 = new Accountstatus();
+        status2.setCd("Active");
+        status2.setReasonCd("Reason1");
+        status2.setReasonDesc("Reason Description");
+        status2.setStartDt("2025-03-03");
+
+        Accountstatus status3 = new Accountstatus();
+        status3.setCd("Inactive");
+        status3.setReasonCd("Reason2");
+        status3.setReasonDesc("Another Description");
+        status3.setStartDt("2025-03-04");
+
+        assertTrue(status1.equals(status2)); // Equal objects
+        assertFalse(status1.equals(status3)); // Different objects
+        assertFalse(status1.equals(null)); // Compare with null
+        assertFalse(status1.equals(new Object())); // Compare with different class
+    }
+}

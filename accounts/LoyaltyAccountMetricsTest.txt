@@ -1,0 +1,77 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.math.BigDecimal;
+
+class LoyaltyAccountMetricsTest {
+
+    private LoyaltyAccountMetrics loyaltyAccountMetrics;
+
+    @BeforeEach
+    void setUp() {
+        loyaltyAccountMetrics = new LoyaltyAccountMetrics();
+    }
+
+    @Test
+    void testGetAndSetRewardPointsOutstandingBalanceAmt() {
+        BigDecimal balance = new BigDecimal("1000.00");
+        loyaltyAccountMetrics.setRewardPointsOutstandingBalanceAmt(balance);
+        assertEquals(balance, loyaltyAccountMetrics.getRewardPointsOutstandingBalanceAmt());
+    }
+
+    @Test
+    void testToString() {
+        String expectedString = "com.td.api.mbcca.response.account.LoyaltyAccountMetrics@" + 
+                Integer.toHexString(System.identityHashCode(loyaltyAccountMetrics)) + 
+                "[rewardPointsOutstandingBalanceAmt=<null>]";
+        assertEquals(expectedString, loyaltyAccountMetrics.toString());
+
+        BigDecimal balance = new BigDecimal("1000.00");
+        loyaltyAccountMetrics.setRewardPointsOutstandingBalanceAmt(balance);
+
+        expectedString = "com.td.api.mbcca.response.account.LoyaltyAccountMetrics@" + 
+                Integer.toHexString(System.identityHashCode(loyaltyAccountMetrics)) + 
+                "[rewardPointsOutstandingBalanceAmt=1000.00]";
+        assertEquals(expectedString, loyaltyAccountMetrics.toString());
+    }
+
+    @Test
+    void testHashCode() {
+        BigDecimal balance = new BigDecimal("1000.00");
+        loyaltyAccountMetrics.setRewardPointsOutstandingBalanceAmt(balance);
+
+        LoyaltyAccountMetrics anotherMetrics = new LoyaltyAccountMetrics();
+        anotherMetrics.setRewardPointsOutstandingBalanceAmt(balance);
+
+        assertEquals(loyaltyAccountMetrics.hashCode(), anotherMetrics.hashCode());
+    }
+
+    @Test
+    void testEquals() {
+        BigDecimal balance = new BigDecimal("1000.00");
+        loyaltyAccountMetrics.setRewardPointsOutstandingBalanceAmt(balance);
+
+        LoyaltyAccountMetrics anotherMetrics = new LoyaltyAccountMetrics();
+        anotherMetrics.setRewardPointsOutstandingBalanceAmt(balance);
+
+        assertTrue(loyaltyAccountMetrics.equals(anotherMetrics));
+
+        anotherMetrics.setRewardPointsOutstandingBalanceAmt(new BigDecimal("2000.00"));
+        assertFalse(loyaltyAccountMetrics.equals(anotherMetrics));
+    }
+
+    @Test
+    void testEqualsNull() {
+        assertFalse(loyaltyAccountMetrics.equals(null));
+    }
+
+    @Test
+    void testEqualsSameObject() {
+        assertTrue(loyaltyAccountMetrics.equals(loyaltyAccountMetrics));
+    }
+
+    @Test
+    void testEqualsDifferentClass() {
+        assertFalse(loyaltyAccountMetrics.equals(new Object()));
+    }
+}
