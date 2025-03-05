@@ -1,0 +1,150 @@
+package com.td.mbna.msec.midtier.util;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+
+import com.mbnaweb.xsd.types.common.AcctOverviewType;
+import com.mbnaweb.xsd.types.common.AffinityInfoType;
+import com.mbnaweb.xsd.types.common.AffinityInfoTypeLanguageSpecific;
+import com.mbnaweb.xsd.types.common.AffinitySpecType;
+import com.mbnaweb.xsd.types.common.CustAcctType;
+import com.td.mbna.msec.midtier.persistance.entity.AffinityInfo;
+import com.td.mbna.msec.midtier.persistance.entity.PlasticsCode;
+import com.td.mbna.msec.midtier.persistance.mybatis.DBMybatisService;
+import com.td.mbna.msec.midtier.services.IMBNAConstants;
+
+class AffinityInfoUtilTest {
+
+    private static final String PRODUCT_CODE = "TEST_PROD";
+    private static final String PO_CODE = "PO123";
+    private static final String ARQ_CODE = "ARQ123";
+    private static final String EN = "EN";
+    private static final String FR = "FR";
+
+    private AffinityInfo affinityInfo;
+    private PlasticsCode plasticsCode;
+    private CustAcctType custAcctType;
+    private AcctOverviewType acctOverviewType;
+
+    @BeforeEach
+    void setUp() {
+        affinityInfo = new AffinityInfo();
+        affinityInfo.setProductCodes(PRODUCT_CODE);
+        affinityInfo.setLongName("Test Long Name");
+        affinityInfo.setShortName("Test Short Name");
+        affinityInfo.setCptDescription("Test CPT Description");
+        affinityInfo.setLogoId("TestLogo");
+
+        plasticsCode = new PlasticsCode();
+        plasticsCode.setPictureId("TestPicture");
+
+        custAcctType = new CustAcctType();
+        acctOverviewType = new AcctOverviewType();
+        acctOverviewType.setProductCodes(PRODUCT_CODE + "-ClientCode-BranchCode");
+        acctOverviewType.setPoCode(PO_CODE);
+        acctOverviewType.setArqCode(ARQ_CODE);
+    }
+
+    @Test
+    void testGetAffinityInfo() throws Exception {
+        try (MockedStatic<DBMybatisService> mockedService = Mockito.mockStatic(DBMybatisService.class);
+             MockedStatic<ContentUtil> mockedContentUtil = Mockito.mockStatic(ContentUtil.class)) {
+
+            mockedService.when(() -> DBMybatisService.getAffinityInfo(PRODUCT_CODE, ARQ_CODE, EN, PO_CODE))
+                    .thenReturn(affinityInfo);
+            mockedService.when(() -> DBMybatisService.getAffinityInfo(PRODUCT_CODE, ARQ_CODE, FR, PO_CODE))
+                    .thenReturn(affinityInfo);
+            mockedService.when(() -> DBMybatisService.getPlasticsCode(PRODUCT_CODE, ARQ_CODE, EN, PO_CODE))
+                    .thenReturn(plasticsCode);
+            mockedService.when(() -> DBMybatisService.getPlasticsCode(PRODUCT_CODE, ARQ_CODE, FR, PO_CODE))
+                    .thenReturn(plasticsCode);
+
+            mockedContentUtil.when(() -> ContentUtil.getImgLink(anyString(), anyString(), anyString()))
+                    .thenReturn("MockedImageUrl");
+
+            AffinityInfoType affinityInfoType = AffinityInfoUtil.getAffinityInfo(PRODUCT_CODE, PO_CODE, ARQ_CODE);
+
+            assertNotNull(affinityInfoType);
+            assertEquals(PRODUCT_CODE, affinityInfoType.getAffinityCode());
+            assertEquals(PRODUCT_CODE, affinityInfoType.getProductCodes());
+
+            AffinityInfoTypeLanguageSpecific englishInfo = affinityInfoType.getEnglishInfo();
+            assertNotNull(englishInfo);
+            assertEquals("Test Long Name", englishInfo.getLongDesc());
+            assertEquals("MockedImageUrl", englishInfo.getCardPicture());
+
+            AffinityInfoTypeLanguageSpecific frenchInfo = affinityInfoType.getFrenchInfo();
+            assertNotNull(frenchInfo);
+            assertEquals("Test Long Name", frenchInfo.getLongDesc());
+            assertEquals("MockedImageUrl", frenchInfo.getCardPicture());
+        }
+    }
+
+    @Test
+    void testSetAccountAffinityRelatedInfo() throws Exception {
+        try (MockedStatic<AffinityInfoUtil> mockedUtil = Mockito.mockStatic(AffinityInfoUtil.class)) {
+            mockedUtil.when(() -> AffinityInfoUtil.getAffinityInfo(PRODUCT_CODE, PO_CODE, ARQ_CODE))
+                    .thenReturn(new AffinityInfoType());
+
+            AffinityInfoUtil.setAccountAffinityRelatedInfo(custAcctType, acctOverviewType);
+
+            assertNotNull(custAcctType.getAffinity());
+            assertNotNull(custAcctType.getAffinitySpec());
+
+            AffinitySpecType affSpec = custAcctType.getAffinitySpec();
+            assertEquals("TEST_PROD", affSpec.getTsysProductCode());
+            assertEquals("ClientCode", affSpec.getClientProductCode());
+            assertEquals("BranchCode", affSpec.getMiscInfo());
+        }
+    }
+
+    @Test
+    void testSetAffinityRelatedValues() {
+        CustAcctType targetAcct = new CustAcctType();
+        AffinityInfoUtil.setAffinityRelatedValues(custAcctType, targetAcct);
+
+        assertEquals(custAcctType.getAffinity(), targetAcct.getAffinity());
+        assertEquals(custAcctType.getAffinitySpec(), targetAcct.getAffinitySpec());
+        assertEquals(custAcctType.getProductCodes(), targetAcct.getProductCodes());
+        assertEquals(custAcctType.getPoCode(), targetAcct.getPoCode());
+        assertEquals(custAcctType.getArqCode(), targetAcct.getArqCode());
+    }
+
+    @Test
+    void testSetCardAffinityInfo() {
+        AffinityInfoTypeLanguageSpecific info = new AffinityInfoTypeLanguageSpecific();
+
+        try (MockedStatic<ContentUtil> mockedContentUtil = Mockito.mockStatic(ContentUtil.class)) {
+            mockedContentUtil.when(() -> ContentUtil.getImgLink(anyString(), anyString(), anyString()))
+                    .thenReturn("MockedLogoUrl");
+
+            AffinityInfoUtil.setCardAffinityInfo(affinityInfo, info, IMBNAConstants.ENGLISH_LOCALE);
+
+            assertEquals("Test Long Name", info.getLongDesc());
+            assertEquals("Test Short Name", info.getShortDesc());
+            assertEquals("MockedLogoUrl", info.getLogo());
+        }
+    }
+
+    @Test
+    void testSetCardPicture() {
+        AffinityInfoTypeLanguageSpecific info = new AffinityInfoTypeLanguageSpecific();
+
+        try (MockedStatic<ContentUtil> mockedContentUtil = Mockito.mockStatic(ContentUtil.class)) {
+            mockedContentUtil.when(() -> ContentUtil.getImgLink(anyString(), anyString(), anyString()))
+                    .thenReturn("MockedImageUrl");
+
+            AffinityInfoUtil.setCardPicture(plasticsCode, info, IMBNAConstants.ENGLISH_LOCALE, false);
+            assertEquals("MockedImageUrl", info.getCardPicture());
+
+            AffinityInfoUtil.setCardPicture(plasticsCode, info, IMBNAConstants.ENGLISH_LOCALE, true);
+            assertEquals("MockedImageUrl", info.getMobileCardPicture());
+        }
+    }
+}
