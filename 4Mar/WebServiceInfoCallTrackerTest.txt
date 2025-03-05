@@ -1,0 +1,78 @@
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+public class WebServiceInfoCallTrackerTest {
+
+    @Test
+    public void testSetErrorInfoAndGetErrorInfo_inDevMode() {
+        // Simulate that we are in development mode
+        Mockito.mockStatic(ConfigUtil.class);
+        Mockito.when(ConfigUtil.inDevMode()).thenReturn(true);
+
+        String expectedErrorInfo = "Sample SOAP Fault Response";
+        WebServiceInfoCallTracker.setErrorInfo(expectedErrorInfo);
+
+        assertEquals("[" + Thread.currentThread().getName() + "] " + expectedErrorInfo, WebServiceInfoCallTracker.getErrorInfo());
+    }
+
+    @Test
+    public void testSetErrorInfoAndGetErrorInfo_notInDevMode() {
+        // Simulate that we are in production mode
+        Mockito.mockStatic(ConfigUtil.class);
+        Mockito.when(ConfigUtil.inDevMode()).thenReturn(false);
+
+        String expectedErrorInfo = "Sample SOAP Fault Response";
+        WebServiceInfoCallTracker.setErrorInfo(expectedErrorInfo);
+
+        assertNull(WebServiceInfoCallTracker.getErrorInfo());
+    }
+
+    @Test
+    public void testSetSoapFaultEncounteredAndGetSoapFaultEncountered_inDevMode() {
+        // Simulate that we are in development mode
+        Mockito.mockStatic(ConfigUtil.class);
+        Mockito.when(ConfigUtil.inDevMode()).thenReturn(true);
+
+        WebServiceInfoCallTracker.setSoapFaultEncountered(true);
+        assertTrue(WebServiceInfoCallTracker.getSoapFaultEncountered());
+    }
+
+    @Test
+    public void testSetSoapFaultEncounteredAndGetSoapFaultEncountered_notInDevMode() {
+        // Simulate that we are in production mode
+        Mockito.mockStatic(ConfigUtil.class);
+        Mockito.when(ConfigUtil.inDevMode()).thenReturn(false);
+
+        WebServiceInfoCallTracker.setSoapFaultEncountered(true);
+        assertFalse(WebServiceInfoCallTracker.getSoapFaultEncountered());
+    }
+
+    @Test
+    public void testClear_inDevMode() {
+        // Simulate that we are in development mode
+        Mockito.mockStatic(ConfigUtil.class);
+        Mockito.when(ConfigUtil.inDevMode()).thenReturn(true);
+
+        WebServiceInfoCallTracker.setErrorInfo("Sample SOAP Fault Response");
+        WebServiceInfoCallTracker.setSoapFaultEncountered(true);
+        WebServiceInfoCallTracker.clear();
+
+        assertNull(WebServiceInfoCallTracker.getErrorInfo());
+        assertFalse(WebServiceInfoCallTracker.getSoapFaultEncountered());
+    }
+
+    @Test
+    public void testClear_notInDevMode() {
+        // Simulate that we are in production mode
+        Mockito.mockStatic(ConfigUtil.class);
+        Mockito.when(ConfigUtil.inDevMode()).thenReturn(false);
+
+        WebServiceInfoCallTracker.setErrorInfo("Sample SOAP Fault Response");
+        WebServiceInfoCallTracker.setSoapFaultEncountered(true);
+        WebServiceInfoCallTracker.clear();
+
+        assertNull(WebServiceInfoCallTracker.getErrorInfo());
+        assertFalse(WebServiceInfoCallTracker.getSoapFaultEncountered());
+    }
+}

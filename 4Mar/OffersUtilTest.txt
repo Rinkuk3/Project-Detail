@@ -1,0 +1,91 @@
+package com.td.mbna.msec.midtier.util;
+
+import com.mbnaweb.xsd.types.common.BTOfferType;
+import org.junit.Test;
+
+import java.math.BigDecimal;
+
+import static org.junit.Assert.*;
+
+public class OffersUtilTest {
+
+    @Test
+    public void testMarshalBtOfferWithNullBtOffer() {
+        OffersUtil.marshalBtOffer(null, BigDecimal.valueOf(10), BigDecimal.valueOf(20));
+        // No assertion needed, as it should simply return without throwing any exception
+    }
+
+    @Test
+    public void testMarshalBtOfferWithNullRate() {
+        BTOfferType btOffer = new BTOfferType();
+        btOffer.setRate(null);
+
+        OffersUtil.marshalBtOffer(btOffer, BigDecimal.valueOf(10), BigDecimal.valueOf(20));
+
+        assertNull(btOffer.getRate());  // rate should remain null
+    }
+
+    @Test
+    public void testMarshalBtOfferWithValidRate() {
+        BTOfferType btOffer = new BTOfferType();
+        btOffer.setRate(BigDecimal.valueOf(10.5678));
+
+        OffersUtil.marshalBtOffer(btOffer, BigDecimal.valueOf(10), BigDecimal.valueOf(20));
+
+        assertEquals(new BigDecimal("10.57"), btOffer.getRate());  // rate should be rounded to two decimal places
+    }
+
+    @Test
+    public void testMarshalBtOfferWithMinimumFee() {
+        BTOfferType btOffer = new BTOfferType();
+        btOffer.setMinimumFeeAmount(BigDecimal.valueOf(10));
+
+        OffersUtil.marshalBtOffer(btOffer, BigDecimal.valueOf(10), BigDecimal.valueOf(20));
+
+        assertNull(btOffer.getMinimumFeeAmount());  // minimumFeeAmount should be set to null as it equals AltNullMin
+    }
+
+    @Test
+    public void testMarshalBtOfferWithMaximumFee() {
+        BTOfferType btOffer = new BTOfferType();
+        btOffer.setMaximumFeeAmount(BigDecimal.ZERO);
+
+        OffersUtil.marshalBtOffer(btOffer, BigDecimal.valueOf(10), BigDecimal.valueOf(20));
+
+        assertNull(btOffer.getMaximumFeeAmount());  // maximumFeeAmount should be set to null as it is zero
+    }
+
+    @Test
+    public void testMarshalBtOfferWithFixedFeeAmountNull() {
+        BTOfferType btOffer = new BTOfferType();
+        btOffer.setFixedFeeAmount(null);
+        btOffer.setFeePercentage(BigDecimal.valueOf(5));
+
+        OffersUtil.marshalBtOffer(btOffer, BigDecimal.valueOf(10), BigDecimal.valueOf(20));
+
+        assertNull(btOffer.getFixedFeeAmount());  // fixedFeeAmount should be null as feePercentage is not null
+    }
+
+    @Test
+    public void testMarshalBtOfferWithFixedFeeAmountZero() {
+        BTOfferType btOffer = new BTOfferType();
+        btOffer.setFixedFeeAmount(BigDecimal.ZERO);
+        btOffer.setFeePercentage(null);
+
+        OffersUtil.marshalBtOffer(btOffer, BigDecimal.valueOf(10), BigDecimal.valueOf(20));
+
+        assertEquals(BigDecimal.ZERO, btOffer.getFixedFeeAmount());  // fixedFeeAmount should remain zero as feePercentage is null
+    }
+
+    @Test
+    public void testMarshalBtOfferWithNonZeroFixedFeeAmount() {
+        BTOfferType btOffer = new BTOfferType();
+        btOffer.setFixedFeeAmount(BigDecimal.valueOf(5));
+        btOffer.setFeePercentage(null);
+
+        OffersUtil.marshalBtOffer(btOffer, BigDecimal.valueOf(10), BigDecimal.valueOf(20));
+
+        assertEquals(BigDecimal.valueOf(5), btOffer.getFixedFeeAmount());  // fixedFeeAmount should remain unchanged as feePercentage is null
+    }
+
+}

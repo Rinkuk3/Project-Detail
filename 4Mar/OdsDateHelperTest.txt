@@ -1,0 +1,65 @@
+package com.td.mbna.msec.midtier.util.ods;
+
+import com.td.mbna.msec.midtier.util.DateUtil;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+public class OdsDateHelperTest {
+
+    @Mock
+    private DateUtil dateUtilMock;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testIsCurrentWithOdsStartTimestamp() throws Exception {
+        String odsStartTimestamp = "2025-03-04T12:34:56.789";
+        when(DateUtil.beforeNow(odsStartTimestamp, OdsDateHelper.OdsTimestampFmt)).thenReturn(true);
+
+        boolean result = OdsDateHelper.isCurrent(odsStartTimestamp);
+        assertTrue(result);
+
+        when(DateUtil.beforeNow(odsStartTimestamp, OdsDateHelper.OdsTimestampFmt)).thenReturn(false);
+        result = OdsDateHelper.isCurrent(odsStartTimestamp);
+        assertFalse(result);
+    }
+
+    @Test
+    public void testIsCurrentWithOdsStartDateAndEndDate() throws Exception {
+        String odsStartDate = "2025-03-04";
+        String odsEndDate = null;
+
+        when(DateUtil.beforeNow(odsStartDate, OdsDateHelper.OdsDateFmt)).thenReturn(true);
+
+        boolean result = OdsDateHelper.isCurrent(odsStartDate, odsEndDate);
+        assertTrue(result);
+
+        odsEndDate = "2025-03-05";
+        result = OdsDateHelper.isCurrent(odsStartDate, odsEndDate);
+        assertFalse(result);
+
+        odsEndDate = null;
+        when(DateUtil.beforeNow(odsStartDate, OdsDateHelper.OdsDateFmt)).thenReturn(false);
+        result = OdsDateHelper.isCurrent(odsStartDate, odsEndDate);
+        assertFalse(result);
+    }
+
+    @Test
+    public void testFormatDate() {
+        String date = "2025-03-04";
+        String result = OdsDateHelper.formatDate(date);
+        assertEquals("2025-03", result);
+
+        date = "2025-03";
+        result = OdsDateHelper.formatDate(date);
+        assertEquals("2025-03", result);
+    }
+}

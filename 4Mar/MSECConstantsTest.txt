@@ -1,0 +1,104 @@
+package com.td.mbna.msec.midtier.util.services;
+
+import com.td.mbna.msec.midtier.util.ConfigUtil;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+public class MSECConstantsTest {
+
+    @Mock
+    private ConfigUtil configUtilMock;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testAPIConstants() {
+        when(ConfigUtil.getProperty("mbna.api.cache.expiry", "30")).thenReturn("60");
+        when(ConfigUtil.getProperty("mbna.api.cache.enabled", "true")).thenReturn("false");
+        when(ConfigUtil.getProperty("mbna.api.cache.initial", "1000")).thenReturn("2000");
+        when(ConfigUtil.getProperty("addaccount.mock.party.api.error", "false")).thenReturn("true");
+
+        assertEquals(60, MSECConstants.API_CACHE_EXPIRY);
+        assertFalse(MSECConstants.API_CACHE_ENABLED);
+        assertEquals(2000, MSECConstants.API_CACHE_INITIAL);
+        assertTrue(MSECConstants.MOCK_PARTY_API_ERROR);
+    }
+
+    @Test
+    public void testAPIConstantsDefaultValues() {
+        when(ConfigUtil.getProperty("mbna.api.cache.expiry", "30")).thenReturn("30");
+        when(ConfigUtil.getProperty("mbna.api.cache.enabled", "true")).thenReturn("true");
+        when(ConfigUtil.getProperty("mbna.api.cache.initial", "1000")).thenReturn("1000");
+        when(ConfigUtil.getProperty("addaccount.mock.party.api.error", "false")).thenReturn("false");
+
+        assertEquals(30, MSECConstants.API_CACHE_EXPIRY);
+        assertTrue(MSECConstants.API_CACHE_ENABLED);
+        assertEquals(1000, MSECConstants.API_CACHE_INITIAL);
+        assertFalse(MSECConstants.MOCK_PARTY_API_ERROR);
+    }
+
+    @Test
+    public void testAPIConstantsProperties() {
+        assertEquals("ConsumerApplication.From.ReferenceParameters.wsOriginalConsumer", MSECConstants.CONSUMER_REFERENCE_PARAMETER);
+        assertEquals("TD_CS_HEADER_WSA_AddressValue", MSECConstants.TD_CS_HEADER_WSA_AddressValue);
+        assertEquals("client-application-platform-cd", MSECConstants.CLIENT_APPLICATION_PLATFORM_HEADER);
+        assertEquals("MSEC", MSECConstants.CLIENT_APPLICATION_MSEC);
+        assertEquals("MBNA", MSECConstants.CLIENT_APPLICATION_MBNA);
+    }
+
+    @Test
+    public void testPropertyNames() {
+        assertEquals("cache", MSECConstants.CLEAR_CACHE);
+        assertEquals("messageid", MSECConstants.MESSAGE_ID_HEADER);
+        assertEquals("Accept-Language", MSECConstants.ACCEPT_LANGUAGE_HEADER);
+        assertEquals("Clear-Site-Data", MSECConstants.CLEAR_SITE_DATA_HEADER);
+    }
+
+    @Test
+    public void testEndpointProperties() {
+        assertEquals("TD_KEYMANAGEMENT_ENCRYPT_ENDPT", MSECConstants.TD_KEYMANAGEMENT_ENCRYPT_ENDPT);
+        assertEquals("TD_KEYMANAGEMENT_DECRYPT_ENDPT", MSECConstants.TD_KEYMANAGEMENT_DECRYPT_ENDPT);
+        assertEquals("TD_PAYEEMANAGEMENT_VALIDATE_PAYEE_ENDPT", MSECConstants.TD_PAYEEMANAGEMENT_VALIDATE_PAYEE_ENDPT);
+        assertEquals("TD_VALET_API_ENDPT", MSECConstants.TD_VALET_API_ENDPT);
+    }
+
+    @Test
+    public void testSecurityProperties() {
+        assertEquals("zpkAlias", MSECConstants.ZPK_ALIAS);
+        assertEquals("wtkAlias", MSECConstants.WTK_ALIAS);
+        assertEquals("TSYSPinBlock", MSECConstants.TSYSPinBlock);
+        assertEquals("PIN Encryption Key", MSECConstants.PIN_Encryption_Key);
+    }
+
+    @Test
+    public void testApiEndpoints() {
+        assertEquals("TD_DM_API_ENDPT", MSECConstants.TD_DM_API_ENDPT);
+        assertEquals("TD_REWARDS_BAL_API_ENDPT", MSECConstants.TD_REWARDS_BAL_API_ENDPT);
+        assertEquals("TD_REWARDS_SAML_API_ENDPT", MSECConstants.TD_REWARDS_SAML_API_ENDPT);
+        assertEquals("TD_OFP_API_ENDPT", MSECConstants.TD_OFP_API_ENDPT);
+    }
+
+    @Test
+    public void testMockErrors() {
+        assertFalse(MSECConstants.MOCK_MBCCA_API_ERROR);
+        assertTrue(MSECConstants.MOCK_ENROLLMENT_API_ERROR);
+        assertTrue(MSECConstants.MOCK_OFM_API_ERROR);
+        assertTrue(MSECConstants.MOCK_MBADA_API_ERROR);
+    }
+
+    @Test
+    public void testServiceParams() {
+        assertEquals("TD_MBCCA_API_ENDPT", MSECConstants.TD_MBCCA_API_ENDPT);
+        assertEquals("TD_OFM_API_ENDPT", MSECConstants.TD_OFM_API_ENDPT);
+        assertEquals("TD_CAPD_ENDPT", MSECConstants.TD_CAPD_ENDPT);
+        assertEquals("TD_MBADA_API_ENDPT", MSECConstants.TD_MBADA_API_ENDPT);
+    }
+}

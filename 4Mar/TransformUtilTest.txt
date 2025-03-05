@@ -1,0 +1,147 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.*;
+
+import javax.xml.transform.*;
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class TransformUtilTest {
+
+    private Templates mockTemplates;
+    private Map<String, Object> mockParamValues;
+    private Source mockSource;
+    private Result mockResult;
+
+    @BeforeEach
+    public void setUp() {
+        mockTemplates = mock(Templates.class);
+        mockParamValues = new HashMap<>();
+        mockSource = mock(Source.class);
+        mockResult = mock(Result.class);
+    }
+
+    @Test
+    public void testGetRqTemplate() throws Exception {
+        Templates template = TransformUtil.getRqTemplate("retrieveCreditCardAccount");
+        assertNotNull(template);
+    }
+
+    @Test
+    public void testGetRsTemplate() throws Exception {
+        Templates template = TransformUtil.getRsTemplate("retrieveCreditCardAccount");
+        assertNotNull(template);
+    }
+
+    @Test
+    public void testGetTemplate() throws Exception {
+        Templates template = TransformUtil.getTemplate("retrieveCreditCardAccountRq.xsl");
+        assertNotNull(template);
+    }
+
+    @Test
+    public void testTransformRequestWithTemplateAndSource() throws Exception {
+        when(mockTemplates.newTransformer()).thenReturn(mock(Transformer.class));
+        TransformUtil.transformRequest(mockTemplates, mockSource, mockParamValues, mockResult);
+        verify(mockTemplates).newTransformer();
+    }
+
+    @Test
+    public void testTransformRequestWithJaxbType() throws Exception {
+        when(mockTemplates.newTransformer()).thenReturn(mock(Transformer.class));
+        String result = TransformUtil.transformRequest(mockTemplates, mockSource, mockParamValues);
+        assertNotNull(result);
+    }
+
+    @Test
+    public void testRetrieve() {
+        Map<String, Object> paramValues = new HashMap<>();
+        paramValues.put("user", "John");
+        String result = TransformUtil.retrieve(paramValues, "user");
+        assertEquals("John", result);
+    }
+
+    @Test
+    public void testSetValue() {
+        Map<String, String> outValues = new HashMap<>();
+        String result = TransformUtil.setValue(outValues, "key", "value");
+        assertEquals("value", result);
+        assertTrue(outValues.containsKey("key"));
+    }
+
+    @Test
+    public void testGetFieldValue() throws Exception {
+        TestClass testClass = new TestClass("John", "Doe");
+        String result = TransformUtil.getFieldValue(testClass, "firstName");
+        assertEquals("John", result);
+    }
+
+    @Test
+    public void testReadFile() throws Exception {
+        String result = TransformUtil.readFile("user", "testFile.txt");
+        assertNotNull(result);
+    }
+
+    @Test
+    public void testGetFileInConfig() {
+        String result = TransformUtil.getFileInConfig("user", "testFile.txt");
+        assertNotNull(result);
+    }
+
+    @Test
+    public void testDecodeBase64() {
+        String base64String = "SGVsbG8gd29ybGQ=";
+        String result = TransformUtil.decodeBase64(base64String);
+        assertEquals("Hello world", result);
+    }
+
+    @Test
+    public void testEncodeBase64() {
+        String result = TransformUtil.encodeBase64("Hello world");
+        assertEquals("SGVsbG8gd29ybGQ=", result);
+    }
+
+    @Test
+    public void testNextDateCycle() throws Exception {
+        String result = TransformUtil.nextDateCycle("10");
+        assertNotNull(result);
+    }
+
+    @Test
+    public void testGenCurrentXsdDateTimeString() {
+        String result = TransformUtil.genCurrentXsdDateTimeString();
+        assertNotNull(result);
+    }
+
+    @Test
+    public void testGetTdRqStubXml() throws Exception {
+        InputStream result = TransformUtil.getTdRqStubXml("retrieveCreditCardAccount");
+        assertNotNull(result);
+    }
+
+    @Test
+    public void testMyResolver() throws Exception {
+        TransformUtil.MyResolver resolver = new TransformUtil.MyResolver();
+        Source source = resolver.resolve("includes/someXslFile.xsl", "");
+        assertNotNull(source);
+    }
+
+    private static class TestClass {
+        private String firstName;
+        private String lastName;
+
+        public TestClass(String firstName, String lastName) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+        }
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
+    }
+}

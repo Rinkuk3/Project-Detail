@@ -1,0 +1,67 @@
+package com.td.mbna.msec.midtier.framework;
+
+import com.td.mbna.msec.midtier.types.common.FieldErrorType;
+import com.td.mbna.msec.midtier.types.common.ValidationException;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.validation.BindException;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
+import org.springmodules.validation.valang.ValangValidator;
+
+import java.util.List;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+public class MsecVlangValidatorTest {
+
+    @Mock
+    private ValangValidator valangValidatorMock;
+
+    @InjectMocks
+    private MsecVlangValidator msecVlangValidator;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testValidateWithErrors() {
+        Object request = new Object();
+        Errors vErrors = new BindException(request, "target");
+        
+        // Simulate a validation error
+        ObjectError error = new ObjectError("field", "error message");
+        vErrors.rejectValue("field", "errorCode", "error message");
+
+        when(valangValidatorMock.validate(eq(request), any(Errors.class))).thenAnswer(invocation -> {
+            ((Errors) invocation.getArguments()[1]).addError(error);
+            return null;
+        });
+
+        ValidationException validationException = msecVlangValidator.validate(request);
+        assertNotNull(validationException);
+        List<FieldErrorType> fieldErrors = validationException.getFieldError();
+        assertEquals(1, fieldErrors.size());
+        assertEquals("field", fieldErrors.get(0).getField());
+        assertEquals("error message", fieldErrors.get(0).getErrorCode());
+        assertEquals("field", fieldErrors.get(0).getErrorDescription());
+        assertEquals("ERROR", fieldErrors.get(0).getSeverity());
+    }
+
+    @Test
+    public void testValidateWithoutErrors() {
+        Object request = new Object();
+        Errors vErrors = new BindException(request, "target");
+
+        when(valangValidatorMock.validate(eq(request), any(Errors.class))).thenAnswer(invocation -> null);
+
+        ValidationException validationException = msecVlangValidator.validate(request);
+        assertNull(validationException);
+    }
+}

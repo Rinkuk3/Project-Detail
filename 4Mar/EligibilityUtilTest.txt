@@ -1,0 +1,63 @@
+package com.td.mbna.msec.midtier.util;
+
+import com.mbnaweb.xsd.types.common.EligIdType;
+import com.mbnaweb.xsd.types.eligibility.EligType;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class EligibilityUtilTest {
+
+    private static List<EligType> mockEligList;
+    private static EligType mockEligType;
+
+    @BeforeAll
+    static void setUp() {
+        mockEligList = new ArrayList<>();
+        mockEligType = mock(EligType.class);
+        when(mockEligType.getEligId()).thenReturn(EligIdType.SOME_ELIG_ID);
+        when(mockEligType.isEligValue()).thenReturn(true);
+        mockEligList.add(mockEligType);
+    }
+
+    @Test
+    void testIsAllowed_ValidEligibility() {
+        assertTrue(EligibilityUtil.isAllowed(mockEligList, EligIdType.SOME_ELIG_ID));
+    }
+
+    @Test
+    void testIsAllowed_InvalidEligibility() {
+        assertFalse(EligibilityUtil.isAllowed(mockEligList, EligIdType.ANOTHER_ELIG_ID));
+    }
+
+    @Test
+    void testIsAllowed_NullList() {
+        assertFalse(EligibilityUtil.isAllowed(null, EligIdType.SOME_ELIG_ID));
+    }
+
+    @Test
+    void testIsAllowed_NullEligId() {
+        when(mockEligType.getEligId()).thenReturn(null);
+        assertFalse(EligibilityUtil.isAllowed(mockEligList, EligIdType.SOME_ELIG_ID));
+    }
+
+    @Test
+    void testIsValidEligId_ValidId() {
+        assertTrue(EligibilityUtil.isValidEligId(EligIdType.SOME_ELIG_ID.value()));
+    }
+
+    @Test
+    void testIsValidEligId_InvalidId() {
+        assertFalse(EligibilityUtil.isValidEligId("INVALID_ID"));
+    }
+
+    @Test
+    void testIsValidEligId_NullId() {
+        assertFalse(EligibilityUtil.isValidEligId(null));
+    }
+}

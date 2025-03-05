@@ -1,0 +1,59 @@
+package com.td.mbna.msec.midtier.util;
+
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class IncomeUtilTest {
+
+    @Test
+    void testConvertIncomeYearly() {
+        BigDecimal income = new BigDecimal("50000");
+        BigDecimal result = IncomeUtil.convertIncome(IncomeUtil.YEARLY, income);
+        assertEquals(new BigDecimal("50000"), result);
+    }
+
+    @Test
+    void testConvertIncomeMonthly() {
+        BigDecimal income = new BigDecimal("50000");
+        BigDecimal result = IncomeUtil.convertIncome(IncomeUtil.MONTHLY, income);
+        assertEquals(new BigDecimal("600000"), result);
+    }
+
+    @Test
+    void testConvertIncomeBiWeekly() {
+        BigDecimal income = new BigDecimal("50000");
+        BigDecimal result = IncomeUtil.convertIncome(IncomeUtil.BIWEEKLY, income);
+        assertEquals(new BigDecimal("1300000"), result);
+    }
+
+    @Test
+    void testConvertIncomeWeekly() {
+        BigDecimal income = new BigDecimal("50000");
+        BigDecimal result = IncomeUtil.convertIncome(IncomeUtil.WEEKLY, income);
+        assertEquals(new BigDecimal("2600000"), result);
+    }
+
+    @Test
+    void testConvertIncomeNullFrequency() {
+        BigDecimal income = new BigDecimal("50000");
+        BigDecimal result = IncomeUtil.convertIncome(null, income);
+        assertEquals(new BigDecimal("50000"), result);
+    }
+
+    @Test
+    void testConvertIncomeEmptyFrequency() {
+        BigDecimal income = new BigDecimal("50000");
+        BigDecimal result = IncomeUtil.convertIncome("", income);
+        assertEquals(new BigDecimal("50000"), result);
+    }
+
+    @Test
+    void testConvertIncomeInvalidFrequency() {
+        BigDecimal income = new BigDecimal("50000");
+        BigDecimal result = IncomeUtil.convertIncome("INVALID", income);
+        assertEquals(new BigDecimal("50000"), result);
+    }
+}

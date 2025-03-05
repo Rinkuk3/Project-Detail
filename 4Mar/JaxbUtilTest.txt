@@ -1,0 +1,110 @@
+package com.td.mbna.msec.midtier.util;
+
+import org.junit.jupiter.api.Test;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.util.JAXBResult;
+import static org.junit.jupiter.api.Assertions.*;
+import java.lang.reflect.Field;
+
+public class JaxbUtilTest {
+
+    @Test
+    void testGetJaxbContextFromObject() throws JAXBException {
+        // Test getting JAXBContext from a class object
+        YourJAXBClass jaxbObj = new YourJAXBClass();
+        JAXBContext result = JaxbUtil.getJaxbContext(jaxbObj);
+        assertNotNull(result);
+    }
+
+    @Test
+    void testGetJaxbContextFromClass() throws JAXBException {
+        // Test getting JAXBContext from a class type
+        JAXBContext result = JaxbUtil.getJaxbContext(YourJAXBClass.class);
+        assertNotNull(result);
+    }
+
+    @Test
+    void testGetJaxbContextFromString() throws JAXBException {
+        // Test getting JAXBContext using a context path string
+        JAXBContext result = JaxbUtil.getJaxbContext("com.td.mbna.msec.midtier.util");
+        assertNotNull(result);
+    }
+
+    @Test
+    void testGenJaxbElement() {
+        // Test generating a JAXBElement from a class object
+        YourJAXBClass jaxbObj = new YourJAXBClass();
+        JAXBElement<YourJAXBClass> result = JaxbUtil.genJaxbElement(jaxbObj);
+        assertNotNull(result);
+        assertEquals("YourJAXBClass", result.getName().getLocalPart());
+    }
+
+    @Test
+    void testGetResultValueWithValidClass() throws Exception {
+        // Test extracting result value from JAXBResult with the correct class type
+        YourJAXBClass jaxbObj = new YourJAXBClass();
+        JAXBResult jaxbResult = new JAXBResult(JAXBContext.newInstance(YourJAXBClass.class));
+        jaxbResult.setResult(jaxbObj);
+        YourJAXBClass result = JaxbUtil.getResultValue(jaxbResult, YourJAXBClass.class);
+        assertNotNull(result);
+    }
+
+    @Test
+    void testGetResultValueWithInvalidClass() throws Exception {
+        // Test extracting result value from JAXBResult with an invalid class type
+        YourJAXBClass jaxbObj = new YourJAXBClass();
+        JAXBResult jaxbResult = new JAXBResult(JAXBContext.newInstance(YourJAXBClass.class));
+        jaxbResult.setResult(jaxbObj);
+        Exception exception = assertThrows(ClassCastException.class, () -> {
+            JaxbUtil.getResultValue(jaxbResult, AnotherJAXBClass.class);
+        });
+        assertTrue(exception.getMessage().contains("java.lang.ClassCastException"));
+    }
+
+    @Test
+    void testGetJaxbContextCacheBehavior() throws JAXBException {
+        // Test that the JaxbContext is cached properly
+        YourJAXBClass jaxbObj = new YourJAXBClass();
+        JAXBContext firstCall = JaxbUtil.getJaxbContext(jaxbObj);
+        JAXBContext secondCall = JaxbUtil.getJaxbContext(jaxbObj);
+        assertSame(firstCall, secondCall); // The second call should return the cached JAXBContext
+    }
+
+    @Test
+    void testGetJaxbContextWithMultipleClasses() throws JAXBException {
+        // Test getting JAXBContext for different classes
+        JAXBContext context1 = JaxbUtil.getJaxbContext(YourJAXBClass.class);
+        JAXBContext context2 = JaxbUtil.getJaxbContext(AnotherJAXBClass.class);
+        assertNotSame(context1, context2); // Different classes should return different JAXBContexts
+    }
+
+    @Test
+    void testSyncGetJaxbContext() throws JAXBException {
+        // Test synchronized JaxbContext retrieval
+        JAXBContext result = JaxbUtil.getJaxbContext(YourJAXBClass.class);
+        assertNotNull(result);
+    }
+    
+    // Additional test case for caching and handling multiple threads
+    @Test
+    void testJaxbContextCacheConcurrency() throws Exception {
+        // Simulate multiple threads calling getJaxbContext concurrently
+        Runnable task = () -> {
+            try {
+                JAXBContext context = JaxbUtil.getJaxbContext(YourJAXBClass.class);
+                assertNotNull(context);
+            } catch (JAXBException e) {
+                fail("Exception occurred while getting JAXBContext");
+            }
+        };
+
+        Thread thread1 = new Thread(task);
+        Thread thread2 = new Thread(task);
+        thread1.start();
+        thread2.start();
+        thread1.join();
+        thread2.join();
+    }
+}

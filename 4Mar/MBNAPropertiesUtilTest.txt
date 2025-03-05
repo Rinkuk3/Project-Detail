@@ -1,0 +1,85 @@
+package com.td.mbna.msec.midtier.util;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+public class MBNAPropertiesUtilTest {
+
+    @Mock
+    private MbnaLogger mockLogger;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        MBNAPropertiesUtil.logger = mockLogger;
+    }
+
+    @Test
+    public void testGetMBNAProperties() {
+        Map<String, String> properties = MBNAPropertiesUtil.getMBNAProperties();
+        assertNotNull(properties);
+    }
+
+    @Test
+    public void testGetMBNAPropertyValue() {
+        String key = "occupation.Professional52.key";
+        String expectedValue = "52";
+        when(MBNAPropertiesUtil.getMBNAPropertyValue(key)).thenReturn(expectedValue);
+
+        String actualValue = MBNAPropertiesUtil.getMBNAPropertyValue(key);
+        assertEquals(expectedValue, actualValue);
+    }
+
+    @Test
+    public void testGetAllKeysForValue() {
+        String value = "Accountants (CPA, CGA, CMA)";
+        List<String> keys = MBNAPropertiesUtil.getAllKeysForValue(value);
+        assertNotNull(keys);
+        assertTrue(keys.size() > 0);
+    }
+
+    @Test
+    public void testGetAllKeysFromValueWithKeysStartingWith() {
+        String value = "52";
+        String keyPrefix = "occupation.";
+        String expectedKey = "occupation.Professional52.key";
+        
+        when(MBNAPropertiesUtil.getAllKeysFromValueWithKeysStartingWith(value, keyPrefix))
+            .thenReturn(expectedKey);
+        
+        String actualKey = MBNAPropertiesUtil.getAllKeysFromValueWithKeysStartingWith(value, keyPrefix);
+        assertEquals(expectedKey, actualKey);
+    }
+
+    @Test
+    public void testGetMBNADescriptionForMDMKey() {
+        String mdmValue = "52";
+        String keyStart = "occupation.";
+        String keyEnd = ".key";
+        String expectedDescription = "Accountants (CPA, CGA, CMA)";
+        
+        when(MBNAPropertiesUtil.getMBNADescriptionForMDMKey(mdmValue, keyStart, keyEnd))
+            .thenReturn(expectedDescription);
+        
+        String actualDescription = MBNAPropertiesUtil.getMBNADescriptionForMDMKey(mdmValue, keyStart, keyEnd);
+        assertEquals(expectedDescription, actualDescription);
+    }
+    
+    @Test
+    public void testConstructorExceptionHandling() {
+        try {
+            MBNAPropertiesUtil util = new MBNAPropertiesUtil();
+            assertNotNull(util);
+        } catch (Exception e) {
+            fail("Exception during initialization: " + e.getMessage());
+        }
+    }
+}

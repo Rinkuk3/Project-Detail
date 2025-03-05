@@ -1,0 +1,67 @@
+package com.td.mbna.msec.midtier.util;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.springframework.core.env.Environment;
+
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+public class ProfileLoggerTest {
+
+    @InjectMocks
+    private ProfileLogger profileLogger;
+
+    @Mock
+    private Environment environment;
+
+    @Mock
+    private MbnaLogger mbnaLogger;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void testRunWithActiveProfiles() throws Exception {
+        // Prepare mock values
+        String[] activeProfiles = {"dev", "test"};
+        when(environment.getActiveProfiles()).thenReturn(activeProfiles);
+        when(environment.getProperty("server.port")).thenReturn("8080");
+        when(environment.getProperty("debug")).thenReturn("true");
+        when(environment.getProperty("spring.main.allow-bean-definition-overriding")).thenReturn("true");
+
+        // Call the run method
+        profileLogger.run();
+
+        // Verify logger calls
+        verify(mbnaLogger).debug("Active Spring profile(s): [dev, test]");
+        verify(mbnaLogger).debug("Server port: 8080");
+        verify(mbnaLogger).debug("Debug: true");
+        verify(mbnaLogger).debug("Allow bean definition overriding: true");
+    }
+
+    @Test
+    public void testRunWithEmptyActiveProfiles() throws Exception {
+        // Prepare mock values
+        String[] activeProfiles = {};
+        when(environment.getActiveProfiles()).thenReturn(activeProfiles);
+        when(environment.getProperty("server.port")).thenReturn("8080");
+        when(environment.getProperty("debug")).thenReturn("true");
+        when(environment.getProperty("spring.main.allow-bean-definition-overriding")).thenReturn("true");
+
+        // Call the run method
+        profileLogger.run();
+
+        // Verify logger calls
+        verify(mbnaLogger).debug("Active Spring profile(s): []");
+        verify(mbnaLogger).debug("Server port: 8080");
+        verify(mbnaLogger).debug("Debug: true");
+        verify(mbnaLogger).debug("Allow bean definition overriding: true");
+    }
+}

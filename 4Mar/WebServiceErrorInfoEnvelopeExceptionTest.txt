@@ -1,0 +1,26 @@
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+public class WebServiceErrorInfoEnvelopeExceptionTest {
+
+    @Test
+    public void testConstructorAndGetErrorInfo() {
+        String expectedErrorInfo = "Sample error information";
+        Exception cause = new Exception("Sample cause exception");
+        
+        WebServiceErrorInfoEnvelopeException exception = new WebServiceErrorInfoEnvelopeException(cause, expectedErrorInfo);
+        
+        assertEquals(expectedErrorInfo, exception.getErrorInfo());
+        assertEquals(cause, exception.getCause());
+    }
+    
+    @Test
+    public void testGetErrorInfo_nullValue() {
+        String expectedErrorInfo = null;
+        Exception cause = new Exception("Sample cause exception");
+        
+        WebServiceErrorInfoEnvelopeException exception = new WebServiceErrorInfoEnvelopeException(cause, expectedErrorInfo);
+        
+        assertNull(exception.getErrorInfo());
+    }
+}

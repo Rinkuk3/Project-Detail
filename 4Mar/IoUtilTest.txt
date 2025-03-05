@@ -1,0 +1,46 @@
+package com.td.mbna.msec.midtier.util;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+public class IoUtilTest {
+
+    @Test
+    void testCloseIgnoreExceptionInputStream() {
+        InputStream is = new ByteArrayInputStream("Test".getBytes());
+        IoUtil.closeIgnoreException(is); // Should not throw any exception
+    }
+
+    @Test
+    void testCloseQuietlyOutputStream() {
+        OutputStream os = new ByteArrayOutputStream();
+        IoUtil.closeQuietly(os); // Should not throw any exception
+    }
+
+    @Test
+    void testReadFully() throws IOException {
+        String testString = "Hello, world!";
+        InputStream is = new ByteArrayInputStream(testString.getBytes());
+        byte[] result = IoUtil.readFully(is);
+        assertArrayEquals(testString.getBytes(), result);
+    }
+
+    @Test
+    void testReadFullyEmptyStream() throws IOException {
+        InputStream is = new ByteArrayInputStream(new byte[0]);
+        byte[] result = IoUtil.readFully(is);
+        assertArrayEquals(new byte[0], result);
+    }
+
+    @Test
+    void testReadFullyNullStream() throws IOException {
+        InputStream is = null;
+        byte[] result = IoUtil.readFully(is);
+        assertNull(result); // should return null or empty byte array as per method design
+    }
+}

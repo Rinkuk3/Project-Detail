@@ -1,0 +1,21 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class UuidUtilTest {
+
+    @Test
+    public void testGenUuid() {
+        String uuid = UuidUtil.genUuid();
+        assertNotNull(uuid);
+        assertTrue(uuid.matches("^[a-f0-9\\-]{36}$"));  // UUID pattern
+    }
+
+    @Test
+    public void testGenUuidPair() {
+        String[] uuidPair = UuidUtil.genUuidPair();
+        assertNotNull(uuidPair);
+        assertEquals(2, uuidPair.length);
+        assertTrue(uuidPair[0].matches("^[a-f0-9\\-]{36}$"));
+        assertTrue(uuidPair[1].matches("^[a-f0-9\\-]{36}$"));
+    }
+}

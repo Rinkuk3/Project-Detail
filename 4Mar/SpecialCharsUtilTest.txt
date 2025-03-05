@@ -1,0 +1,63 @@
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Map;
+
+public class SpecialCharsUtilTest {
+
+    private SpecialCharsUtil specialCharsUtil;
+
+    @Before
+    public void setUp() {
+        specialCharsUtil = new SpecialCharsUtil();
+    }
+
+    @Test
+    public void testInitFrenchSpecialCharsCodeMap() {
+        // Ensure the map is initialized and contains elements
+        Map<String, String> frenchSpecialCharsCodeMap = specialCharsUtil.getFrenchSpecialCharsCodeMap();
+        assertNotNull("The frenchSpecialCharsCodeMap should not be null", frenchSpecialCharsCodeMap);
+        assertTrue("The frenchSpecialCharsCodeMap should contain mappings", frenchSpecialCharsCodeMap.size() > 0);
+    }
+
+    @Test
+    public void testFrenchSpecialCharsMapping() {
+        // Test a few known mappings
+        Map<String, String> frenchSpecialCharsCodeMap = specialCharsUtil.getFrenchSpecialCharsCodeMap();
+        assertEquals("The mapping for '\u00E0' should be 'E0'", "E0", frenchSpecialCharsCodeMap.get("\u00E0"));
+        assertEquals("The mapping for '\u00E1' should be 'E1'", "E1", frenchSpecialCharsCodeMap.get("\u00E1"));
+        assertEquals("The mapping for '\u00E2' should be 'E2'", "E2", frenchSpecialCharsCodeMap.get("\u00E2"));
+        assertEquals("The mapping for '\u00E3' should be 'E3'", "E3", frenchSpecialCharsCodeMap.get("\u00E3"));
+        assertEquals("The mapping for '\u00E4' should be 'E4'", "E4", frenchSpecialCharsCodeMap.get("\u00E4"));
+        assertEquals("The mapping for '\u00E5' should be 'E5'", "E5", frenchSpecialCharsCodeMap.get("\u00E5"));
+        assertEquals("The mapping for '\u00E6' should be 'E6'", "E6", frenchSpecialCharsCodeMap.get("\u00E6"));
+        assertEquals("The mapping for '\u00E7' should be 'E7'", "E7", frenchSpecialCharsCodeMap.get("\u00E7"));
+        assertEquals("The mapping for '\u00E8' should be 'E8'", "E8", frenchSpecialCharsCodeMap.get("\u00E8"));
+        assertEquals("The mapping for '\u00E9' should be 'E9'", "E9", frenchSpecialCharsCodeMap.get("\u00E9"));
+        
+        assertEquals("The mapping for '\u00EA' should be 'H0'", "H0", frenchSpecialCharsCodeMap.get("\u00EA"));
+        assertEquals("The mapping for '\u00EB' should be 'H1'", "H1", frenchSpecialCharsCodeMap.get("\u00EB"));
+        
+        assertEquals("The mapping for '\u00F0' should be 'F0'", "F0", frenchSpecialCharsCodeMap.get("\u00F0"));
+        assertEquals("The mapping for '\u00F1' should be 'F1'", "F1", frenchSpecialCharsCodeMap.get("\u00F1"));
+
+        assertEquals("The mapping for '\u00FA' should be 'K0'", "K0", frenchSpecialCharsCodeMap.get("\u00FA"));
+        assertEquals("The mapping for '\u00FB' should be 'K1'", "K1", frenchSpecialCharsCodeMap.get("\u00FB"));
+
+        assertEquals("The mapping for '\u00C0' should be 'C0'", "C0", frenchSpecialCharsCodeMap.get("\u00C0"));
+        assertEquals("The mapping for '\u00C1' should be 'C1'", "C1", frenchSpecialCharsCodeMap.get("\u00C1"));
+        
+        assertEquals("The mapping for '\u00CA' should be 'S0'", "S0", frenchSpecialCharsCodeMap.get("\u00CA"));
+        assertEquals("The mapping for '\u00CB' should be 'S1'", "S1", frenchSpecialCharsCodeMap.get("\u00CB"));
+
+        assertEquals("The mapping for '\u00D0' should be 'D0'", "D0", frenchSpecialCharsCodeMap.get("\u00D0"));
+        assertEquals("The mapping for '\u00D1' should be 'D1'", "D1", frenchSpecialCharsCodeMap.get("\u00D1"));
+
+        assertEquals("The mapping for '\u00DA' should be 'Z0'", "Z0", frenchSpecialCharsCodeMap.get("\u00DA"));
+        assertEquals("The mapping for '\u00DB' should be 'Z1'", "Z1", frenchSpecialCharsCodeMap.get("\u00DB"));
+
+        // Special character check for apostrophe
+        assertEquals("The mapping for '\u2019' should be '\''", "'", frenchSpecialCharsCodeMap.get("\u2019"));
+    }
+}

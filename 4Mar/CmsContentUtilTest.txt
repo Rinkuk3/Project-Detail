@@ -1,0 +1,112 @@
+package com.td.mbna.msec.midtier.util;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.w3c.dom.Document;
+
+import com.td.mbna.msec.midtier.content.payload.LinkContentType;
+import com.td.mbna.msec.midtier.content.payload.PageDisplayStyleType;
+
+@ExtendWith(MockitoExtension.class)
+class CmsContentUtilTest {
+
+    private static final String TEST_XML = """
+            <txnAppFeeds>
+                <txnAppFeed>
+                    <title>Test Title</title>
+                    <ContentBody>
+                        <Content>Test Content</Content>
+                        <ToDisplay>Test Display</ToDisplay>
+                        <ContentTablet>Tablet Content</ContentTablet>
+                        <ContentMobile>Mobile Content</ContentMobile>
+                        <DesktopImage>desktop.jpg</DesktopImage>
+                        <TabletImage>tablet.jpg</TabletImage>
+                        <MobileImage>mobile.jpg</MobileImage>
+                    </ContentBody>
+                </txnAppFeed>
+            </txnAppFeeds>""";
+
+    @BeforeEach
+    void setUp() {
+        try (MockedStatic<ConfigUtil> configUtilMock = Mockito.mockStatic(ConfigUtil.class)) {
+            configUtilMock.when(() -> ConfigUtil.getProperty(anyString())).thenReturn("test-value");
+        }
+    }
+
+    @Test
+    void testGetPageTitleAndContent() throws Exception {
+        Document doc = createXmlDocument(TEST_XML);
+        try (MockedStatic<CmsContentUtil> utilMock = Mockito.mockStatic(CmsContentUtil.class)) {
+            utilMock.when(() -> CmsContentUtil.parse(any(byte[].class))).thenReturn(doc);
+            utilMock.when(() -> CmsContentUtil.readUrlContent(anyString())).thenReturn(TEST_XML.getBytes());
+            
+            String[] result = CmsContentUtil.getPageTitleAndContent("pageId", PageDisplayStyleType.DESKTOP, "en_CA");
+            assertEquals("Test Title", result[0]);
+            assertEquals("Test Content", result[2]);
+            assertEquals("Test Display", result[3]);
+            assertEquals("desktop.jpg", result[6]);
+        }
+    }
+
+    @Test
+    void testGetLinkContent() throws Exception {
+        List<LinkContentType> result = CmsContentUtil.getLinkContent("imageKey", "en_CA", "path");
+        assertNotNull(result);
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void testGetImgLink() {
+        String result = CmsContentUtil.getImgLink("logoId", "en_CA", "secondaryPath");
+        assertTrue(result.contains("test-value"));
+    }
+
+    @Test
+    void testGetOffersBanner() {
+        String largeBanner = CmsContentUtil.getOffersBanner("offerId", "en_CA", "large");
+        assertTrue(largeBanner.contains("_banner_large"));
+    }
+
+    @Test
+    void testReadUrlContent() throws Exception {
+        InputStream inputStream = new ByteArrayInputStream("test data".getBytes());
+        URLConnection urlConnection = mock(URLConnection.class);
+        when(urlConnection.getInputStream()).thenReturn(inputStream);
+        when(urlConnection.getContentLength()).thenReturn(-1);
+        URL url = mock(URL.class);
+        when(url.openConnection()).thenReturn(urlConnection);
+
+        try (MockedStatic<URL> urlMock = Mockito.mockStatic(URL.class)) {
+            urlMock.when(() -> new URL(anyString())).thenReturn(url);
+            byte[] data = CmsContentUtil.readUrlContent("http://test.com");
+            assertNotNull(data);
+        }
+    }
+
+    @Test
+    void testGetLoadFromCms() {
+        assertNotNull(CmsContentUtil.getLoadfromcms());
+    }
+
+    private Document createXmlDocument(String xml) throws Exception {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        return builder.parse(new ByteArrayInputStream(xml.getBytes()));
+    }
+}

@@ -1,0 +1,178 @@
+package com.td.mbna.msec.midtier.services;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class IMBNAConstantsTest {
+
+    @Test
+    void testLangEnglish() {
+        assertEquals("English", IMBNAConstants.LANG_ENGLISH);
+    }
+
+    @Test
+    void testLangFrench() {
+        assertEquals("French", IMBNAConstants.LANG_FRENCH);
+    }
+
+    @Test
+    void testEnglishLocale() {
+        assertEquals("en_CA", IMBNAConstants.ENGLISH_LOCALE);
+    }
+
+    @Test
+    void testFrenchLocale() {
+        assertEquals("fr_CA", IMBNAConstants.FRENCH_LOCALE);
+    }
+
+    @Test
+    void testDeliveryOnline() {
+        assertEquals("Opt-in of eStatements", IMBNAConstants.DELIVERY_ONLINE);
+    }
+
+    @Test
+    void testEstatementOptIn() {
+        assertEquals("OptIneStatement", IMBNAConstants.ESTATEMENT_OPT_IN);
+    }
+
+    @Test
+    void testDeliveryPaper() {
+        assertEquals("Opt-out of eStatements", IMBNAConstants.DELIVERY_PAPER);
+    }
+
+    @Test
+    void testEstatementOptOut() {
+        assertEquals("OptOuteStatement", IMBNAConstants.ESTATEMENT_OPT_OUT);
+    }
+
+    @Test
+    void testUserPrincipal() {
+        assertEquals("Principal Card Holder", IMBNAConstants.USER_PRINCIPAL);
+    }
+
+    @Test
+    void testUserPrincipalFrench() {
+        assertEquals("Titulaire principal de la carte", IMBNAConstants.USER_PRINCIPAL_FRENCH);
+    }
+
+    @Test
+    void testUserAuthorized() {
+        assertEquals("Authorized User", IMBNAConstants.USER_AUTHORIZED);
+    }
+
+    @Test
+    void testUserAuthorizedFrench() {
+        assertEquals("Utilisateurs autoris�s", IMBNAConstants.USER_AUTHORIZED_FRENCH);
+    }
+
+    @Test
+    void testBusinessEventIdActivateCardRequest() {
+        assertEquals("CardActivated", IMBNAConstants.BUSINESSEVENT_ID_ACTIVATECARDREQUEST);
+    }
+
+    @Test
+    void testBusinessEventIdAddAuthorizedUserRequest() {
+        assertEquals("AuthorizedUserAdded", IMBNAConstants.BUSINESSEVENT_ID_ADDAUTHORIZEDUSERREQUEST);
+    }
+
+    @Test
+    void testBusinessEventIdRequestChequeRequest() {
+        assertEquals("AccessCheque", IMBNAConstants.BUSINESSEVENT_ID_REQUESTCHEQUEREQUEST);
+    }
+
+    @Test
+    void testBusinessEventIdReplaceCardRequest() {
+        assertEquals("CardReplaceRequest", IMBNAConstants.BUSINESSEVENT_ID_REPLACECARDREQUEST);
+    }
+
+    @Test
+    void testBusinessEventIdDecreaseCardLimitRequest() {
+        assertEquals("CreditLimitDecrease", IMBNAConstants.BUSINESSEVENT_ID_DECREASECARDLIMITREQUEST);
+    }
+
+    @Test
+    void testBusinessEventIdIncreaseCardLimitRequest() {
+        assertEquals("CreditLimitIncrease", IMBNAConstants.BUSINESSEVENT_ID_INCREASECARDLIMITREQUEST);
+    }
+
+    @Test
+    void testBusinessEventIdIncreaseCardLimitRequestOffer() {
+        assertEquals("CLIApproved", IMBNAConstants.BUSINESSEVENT_ID_INCREASECARDLIMITREQUEST_OFFER);
+    }
+
+    @Test
+    void testBusinessEventIdUpdateStatementDeliveryPreferencesRequest() {
+        assertEquals("StatementPreference", IMBNAConstants.BUSINESSEVENT_ID_UPDATESTATEMENTDELIVERYPREFERENCESREQUEST);
+    }
+
+    @Test
+    void testBusinessEventIdOrderHardCopyStatementsRequest() {
+        assertEquals("StatementReprint", IMBNAConstants.BUSINESSEVENT_ID_ORDERHARDCOPYSTATEMENTSREQUEST);
+    }
+
+    @Test
+    void testBusinessEventIdUpdateCustomerAddressRequest() {
+        assertEquals("AddressUpdate", IMBNAConstants.BUSINESSEVENT_ID_UPDATECUSTOMER_ADDRESS_REQUEST);
+    }
+
+    @Test
+    void testBusinessEventIdUpdateCustomerPhoneRequest() {
+        assertEquals("PhoneUpdate", IMBNAConstants.BUSINESSEVENT_ID_UPDATECUSTOMER_PHONE_REQUEST);
+    }
+
+    @Test
+    void testBusinessEventIdUpdateCustomerEmailRequest() {
+        assertEquals("EmailAddressIpdate", IMBNAConstants.BUSINESSEVENT_ID_UPDATECUSTOMER_EMAIL_REQUEST);
+    }
+
+    @Test
+    void testBusinessEventIdBalanceTransferToCreditorRequest() {
+        assertEquals("BalanceTransfer", IMBNAConstants.BUSINESSEVENT_ID_BALANCETRANSFERTOCREDITORREQUEST);
+    }
+
+    @Test
+    void testBusinessEventIdDepositToCheckingRequest() {
+        assertEquals("TransferToChequing", IMBNAConstants.BUSINESSEVENT_ID_TTC);
+    }
+
+    @Test
+    void testBusinessEventIdKycUpdateProfileRequest() {
+        assertEquals("KycUpdateProfile", IMBNAConstants.BUSINESSEVENT_ID_KYC_UPDATE_PROFILE_REQUEST);
+    }
+
+    @Test
+    void testBusinessEventIdBalanceProtectionInsurance() {
+        assertEquals("BalanceProtectionInsurance", IMBNAConstants.BUSINESSEVENT_ID_BALANCE_PROTECTION_INSURANCE);
+    }
+
+    @Test
+    void testBusinessEventIdIpEnrollment() {
+        assertEquals("IpEnrollment", IMBNAConstants.BUSINESSEVENT_ID_IP_ENROLLMENT);
+    }
+
+    @Test
+    void testAlertTypeCdBalanceTransfer() {
+        assertEquals("MBNA_INTEG_BALANCETRANSFER", IMBNAConstants.ALERT_TYPE_CD_BALANCETRANSFER);
+    }
+
+    @Test
+    void testAlertTypeCdEstatement() {
+        assertEquals("MBNA_INTEG_ESTATEMENT", IMBNAConstants.ALERT_TYPE_CD_ESTATEMENT);
+    }
+
+    @Test
+    void testAlertTypeCdIpEnrollment() {
+        assertEquals("MBNA_INTEG_IPENROLLMENT", IMBNAConstants.ALERT_TYPE_CD_IPENROLLMENT);
+    }
+
+    @Test
+    void testAlertTypeCdProductChange() {
+        assertEquals("MBNA_INTEG_PRODUCTCHANGE", IMBNAConstants.ALERT_TYPE_CD_PRODUCTCHANGE);
+    }
+
+    @Test
+    void testAlertTypeCdSecureGeneric() {
+        assertEquals("MBNA_INTEG_SECUREGENERIC", IMBNAConstants.ALERT_TYPE_CD_SECUREGENERIC);
+    }
+}

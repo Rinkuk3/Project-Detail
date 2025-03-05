@@ -1,0 +1,80 @@
+package com.td.mbna.msec.midtier.util;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.io.InputStream;
+
+import static org.mockito.Mockito.*;
+
+public class ServerConfigUtilTest {
+
+    @Mock
+    private InputStream mockInputStream;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void testIsTest() {
+        System.setProperty(ServerConfigUtil.SYSTEM_PROPERTY_TEST, "true");
+        assert(ServerConfigUtil.isTest());
+        System.setProperty(ServerConfigUtil.SYSTEM_PROPERTY_TEST, "false");
+        assert(!ServerConfigUtil.isTest());
+    }
+
+    @Test
+    public void testGetConfigDirectory() {
+        System.setProperty(ServerConfigUtil.SYSTEM_PROPERTY_CONFIG_DIR, "/test/config/dir");
+        assert(ServerConfigUtil.getConfigDirectory().equals("/test/config/dir/"));
+    }
+
+    @Test
+    public void testInit() {
+        // Mock InetAddress to avoid actual network calls
+        try {
+            String mockHostName = "localhost";
+            InetAddress mockInetAddress = mock(InetAddress.class);
+            when(mockInetAddress.getHostName()).thenReturn(mockHostName);
+            System.setProperty("hostName", mockHostName);
+
+            ServerConfigUtil.init();
+
+            assert(System.getProperty("hostName").equals(mockHostName));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testGetPropertyWithKey() {
+        System.setProperty(ServerConfigUtil.SYSTEM_PROPERTY_CONFIG_DIR, "/test/config/dir");
+        assert(ServerConfigUtil.getProperty(ServerConfigUtil.SYSTEM_PROPERTY_CONFIG_DIR).equals("/test/config/dir"));
+    }
+
+    @Test
+    public void testSetProperty() {
+        System.setProperty(ServerConfigUtil.SYSTEM_PROPERTY_CONFIG_DIR, "/test/config/dir");
+        ServerConfigUtil.setProperty(ServerConfigUtil.SYSTEM_PROPERTY_CONFIG_DIR, "/new/test/config/dir");
+        assert(ServerConfigUtil.getProperty(ServerConfigUtil.SYSTEM_PROPERTY_CONFIG_DIR).equals("/new/test/config/dir"));
+    }
+
+    @Test
+    public void testGetPropertyWithDefaultValue() {
+        String defaultValue = "default";
+        assert(ServerConfigUtil.getProperty("nonExistentProperty", defaultValue).equals(defaultValue));
+    }
+
+    @Test
+    public void testInDevMode() {
+        System.setProperty(ServerConfigUtil.SYSTEM_PROPERTY_DEV_MODE, "true");
+        assert(ServerConfigUtil.inDevMode());
+        System.setProperty(ServerConfigUtil.SYSTEM_PROPERTY_DEV_MODE, "false");
+        assert(!ServerConfigUtil.inDevMode());
+    }
+}

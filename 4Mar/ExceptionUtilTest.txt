@@ -1,0 +1,112 @@
+package com.td.mbna.msec.midtier.util;
+
+import com.mbnaweb.xsd.types.common.ExceptionInfo;
+import com.td.mbna.msec.midtier.exception.BusinessError;
+import com.td.mbna.msec.midtier.exception.SystemError;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.springframework.remoting.jaxws.JaxWsSoapFaultException;
+
+import javax.xml.soap.SOAPFaultException;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class ExceptionUtilTest {
+
+    @Test
+    void testGenRuntimeException() {
+        Throwable throwable = new Exception("Test Exception");
+        RuntimeException result = ExceptionUtil.genRuntimeException(throwable);
+        assertTrue(result instanceof RuntimeException);
+        assertEquals("Test Exception", result.getCause().getMessage());
+    }
+
+    @Test
+    void testGenBusinessException() {
+        com.td.mbna.msec.midtier.exceptions.BusinessException result = ExceptionUtil.genBusinessException("Custom error message");
+        assertNotNull(result);
+        assertEquals("business exception:Custom error message", result.getMessage());
+        assertEquals("MS601", result.getFaultInfo().getErrorCode());
+        assertEquals("Custom error message", result.getFaultInfo().getErrorDescription());
+    }
+
+    @Test
+    void testGetExceptionInfoBusinessError() {
+        SOAPFaultException soapFaultException = Mockito.mock(SOAPFaultException.class);
+        SOAPFault soapFault = Mockito.mock(SOAPFault.class);
+        Mockito.when(soapFaultException.getFault()).thenReturn(soapFault);
+        Mockito.when(soapFaultException.getMessage()).thenReturn(BusinessError.class.getSimpleName());
+        ExceptionInfo exceptionInfo = ExceptionUtil.getExceptionInfo(soapFaultException);
+        assertTrue(exceptionInfo instanceof com.mbnaweb.xsd.types.common.BusinessException);
+    }
+
+    @Test
+    void testGetExceptionInfoSystemError() {
+        SOAPFaultException soapFaultException = Mockito.mock(SOAPFaultException.class);
+        SOAPFault soapFault = Mockito.mock(SOAPFault.class);
+        Mockito.when(soapFaultException.getFault()).thenReturn(soapFault);
+        Mockito.when(soapFaultException.getMessage()).thenReturn(SystemError.class.getSimpleName());
+        ExceptionInfo exceptionInfo = ExceptionUtil.getExceptionInfo(soapFaultException);
+        assertTrue(exceptionInfo instanceof com.mbnaweb.xsd.types.common.SystemException);
+    }
+
+    @Test
+    void testIgnoreError() {
+        JaxWsSoapFaultException jaxWsSoapFaultException = Mockito.mock(JaxWsSoapFaultException.class);
+        Mockito.when(jaxWsSoapFaultException.getMessage()).thenReturn("No Privacy Preference found for the given UCID");
+        assertTrue(ExceptionUtil.ignoreError(jaxWsSoapFaultException));
+    }
+
+    @Test
+    void testIsMDMPhoneExceptionTrue() {
+        SoapFaultTriggeredException soapFaultTriggeredException = Mockito.mock(SoapFaultTriggeredException.class);
+        Mockito.when(soapFaultTriggeredException.getSoapFaultSrcResponse()).thenReturn("Phone Number Standardization Failed");
+        assertTrue(ExceptionUtil.isMDMPhoneException(soapFaultTriggeredException));
+    }
+
+    @Test
+    void testIsMDMPhoneExceptionFalse() {
+        SoapFaultTriggeredException soapFaultTriggeredException = Mockito.mock(SoapFaultTriggeredException.class);
+        Mockito.when(soapFaultTriggeredException.getSoapFaultSrcResponse()).thenReturn("Other Error");
+        assertFalse(ExceptionUtil.isMDMPhoneException(soapFaultTriggeredException));
+    }
+
+    @Test
+    void testExtractErrorCode() {
+        SOAPFaultException soapFaultException = Mockito.mock(SOAPFaultException.class);
+        SOAPFault soapFault = Mockito.mock(SOAPFault.class);
+        Detail detail = Mockito.mock(Detail.class);
+        DetailEntry detailEntry = Mockito.mock(DetailEntry.class);
+
+        Mockito.when(soapFaultException.getCause()).thenReturn(soapFaultException);
+        Mockito.when(soapFault.getDetail()).thenReturn(detail);
+        Mockito.when(detail.getDetailEntries()).thenReturn(java.util.Collections.singletonList(detailEntry).iterator());
+        Mockito.when(detailEntry.getLocalName()).thenReturn("errorCode");
+        Mockito.when(detailEntry.getValue()).thenReturn("12345");
+
+        String errorCode = ExceptionUtil.extractErrorCode(soapFaultException);
+        assertEquals("12345", errorCode);
+    }
+
+    @Test
+    void testSetExceptionInfo() {
+        SOAPFault soapFault = Mockito.mock(SOAPFault.class);
+        Detail detail = Mockito.mock(Detail.class);
+        DetailEntry errorCodeEntry = Mockito.mock(DetailEntry.class);
+        DetailEntry errorDescriptionEntry = Mockito.mock(DetailEntry.class);
+        ExceptionInfo faultInfo = new com.mbnaweb.xsd.types.common.BusinessException();
+
+        Mockito.when(soapFault.getDetail()).thenReturn(detail);
+        Mockito.when(detail.getDetailEntries()).thenReturn(java.util.Collections.singletonList(errorCodeEntry).iterator());
+        Mockito.when(errorCodeEntry.getLocalName()).thenReturn("errorCode");
+        Mockito.when(errorCodeEntry.getTextContent()).thenReturn("12345");
+
+        Mockito.when(detail.getDetailEntries()).thenReturn(java.util.Collections.singletonList(errorDescriptionEntry).iterator());
+        Mockito.when(errorDescriptionEntry.getLocalName()).thenReturn("errorDescription");
+        Mockito.when(errorDescriptionEntry.getTextContent()).thenReturn("Sample error description");
+
+        ExceptionUtil.setExceptionInfo(soapFault, faultInfo);
+        assertEquals("12345", faultInfo.getErrorCode());
+        assertEquals("Sample error description", faultInfo.getErrorDescription());
+    }
+}

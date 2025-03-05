@@ -1,0 +1,60 @@
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+
+public class WSDLFilterTest {
+
+    private WSDLFilter wsdlFilter;
+    private ServletRequest request;
+    private ServletResponse response;
+    private FilterChain chain;
+    private PrintWriter writer;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        wsdlFilter = new WSDLFilter();
+        request = mock(ServletRequest.class);
+        response = mock(HttpServletResponse.class);
+        chain = mock(FilterChain.class);
+        writer = mock(PrintWriter.class);
+
+        when(response.getWriter()).thenReturn(writer);
+    }
+
+    @Test
+    public void testDoFilter() throws IOException, ServletException {
+        wsdlFilter.doFilter(request, response, chain);
+
+        verify(response, times(1)).getWriter();
+        verify(writer, times(1)).print("Access to WSDL is not allowed");
+        verify(writer, times(1)).flush();
+        verify(writer, times(1)).close();
+    }
+
+    @Test
+    public void testInit() throws ServletException {
+        FilterConfig filterConfig = mock(FilterConfig.class);
+        wsdlFilter.init(filterConfig);
+        // No specific behavior to verify for init, test ensures no exceptions
+    }
+
+    @Test
+    public void testDestroy() {
+        wsdlFilter.destroy();
+        // No specific behavior to verify for destroy, test ensures no exceptions
+    }
+}

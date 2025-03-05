@@ -1,0 +1,150 @@
+package com.td.mbna.msec.midtier.util;
+
+import com.td.mbna.msec.midtier.content.payload.LinkContentType;
+import com.td.mbna.msec.midtier.content.payload.PageDisplayStyleType;
+import org.junit.jupiter.api.Test;
+
+import javax.xml.xpath.XPathExpressionException;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class LocalContentUtilTest {
+
+    @Test
+    void testGetLinkContentForPdf() throws Exception {
+        String linkContentId = "sample.pdf";
+        String langId = "en_CA";
+        List<LinkContentType> result = LocalContentUtil.getLinkContent(linkContentId, langId);
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertNotNull(result.get(0).getLink());
+        assertNotNull(result.get(0).getAltText());
+    }
+
+    @Test
+    void testGetLinkContentForImage() throws Exception {
+        String linkContentId = "imageSample";
+        String langId = "en_CA";
+        List<LinkContentType> result = LocalContentUtil.getLinkContent(linkContentId, langId);
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertNotNull(result.get(0).getLink());
+    }
+
+    @Test
+    void testGetPdfLinkContent() throws Exception {
+        String pdfKey = "sample.pdf";
+        String langId = "en_CA";
+        LinkContentType result = LocalContentUtil.getPdfLinkContent(pdfKey, langId);
+        assertNotNull(result);
+        assertNotNull(result.getLink());
+        assertNotNull(result.getAltText());
+    }
+
+    @Test
+    void testGetImageLinkContent() throws Exception {
+        String imageKey = "imageSample";
+        String langId = "en_CA";
+        List<LinkContentType> result = LocalContentUtil.getImageLinkContent(imageKey, langId);
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertNotNull(result.get(0).getLink());
+    }
+
+    @Test
+    void testGetImgLink() {
+        String logoId = "logo";
+        String langId = "en_CA";
+        String result = LocalContentUtil.getImgLink(logoId, langId);
+        assertNotNull(result);
+        assertTrue(result.contains("images/en_CA/logo"));
+    }
+
+    @Test
+    void testGetPageTitleAndContent() throws Exception {
+        String pageId = "page1";
+        PageDisplayStyleType pageDisplayStyle = PageDisplayStyleType.DEFAULT;
+        String langId = "en_CA";
+        String[] result = LocalContentUtil.getPageTitleAndContent(pageId, pageDisplayStyle, langId);
+        assertNotNull(result);
+        assertEquals(9, result.length);  // 9 elements should be returned
+    }
+
+    @Test
+    void testGetPageXmlFileName() {
+        String pageId = "page1";
+        PageDisplayStyleType pageDisplayStyle = PageDisplayStyleType.DEFAULT;
+        String langId = "en_CA";
+        String result = LocalContentUtil.getPageXmlFileName(pageId, pageDisplayStyle, langId);
+        assertNotNull(result);
+        assertTrue(result.contains("xml"));
+        assertTrue(result.contains("page1.xml"));
+    }
+
+    @Test
+    void testGetPageXml() throws Exception {
+        String pageId = "page1";
+        PageDisplayStyleType pageDisplayStyle = PageDisplayStyleType.DEFAULT;
+        String langId = "en_CA";
+        Document result = LocalContentUtil.getPageXml(pageId, pageDisplayStyle, langId);
+        assertNotNull(result);
+    }
+
+    @Test
+    void testGetPdfXmlFileName() {
+        String pdfKey = "sample.pdf";
+        String langId = "en_CA";
+        String result = LocalContentUtil.getPdfXmlFileName(pdfKey, langId);
+        assertNotNull(result);
+        assertTrue(result.contains("pdf"));
+        assertTrue(result.contains("sample.xml"));
+    }
+
+    @Test
+    void testGetPdfXml() throws Exception {
+        String pdfKey = "sample.pdf";
+        String langId = "en_CA";
+        Document result = LocalContentUtil.getPdfXml(pdfKey, langId);
+        assertNotNull(result);
+    }
+
+    @Test
+    void testGetLinkContentWithInvalidPdfKey() throws Exception {
+        String linkContentId = "invalid.pdf";
+        String langId = "en_CA";
+        List<LinkContentType> result = LocalContentUtil.getLinkContent(linkContentId, langId);
+        assertNotNull(result);
+        assertTrue(result.isEmpty());  // Assuming the handling of invalid content id returns an empty list
+    }
+
+    @Test
+    void testGetLinkContentWithInvalidImageKey() throws Exception {
+        String linkContentId = "invalidImage";
+        String langId = "en_CA";
+        List<LinkContentType> result = LocalContentUtil.getLinkContent(linkContentId, langId);
+        assertNotNull(result);
+        assertTrue(result.isEmpty());  // Assuming the handling of invalid content id returns an empty list
+    }
+
+    @Test
+    void testGetPageXmlWithInvalidPageId() throws Exception {
+        String pageId = "invalidPage";
+        PageDisplayStyleType pageDisplayStyle = PageDisplayStyleType.DEFAULT;
+        String langId = "en_CA";
+        Exception exception = assertThrows(Exception.class, () -> {
+            LocalContentUtil.getPageXml(pageId, pageDisplayStyle, langId);
+        });
+        assertTrue(exception.getMessage().contains("Error parsing page XML"));
+    }
+
+    @Test
+    void testGetPdfXmlWithInvalidPdfKey() throws Exception {
+        String pdfKey = "invalidPdf.pdf";
+        String langId = "en_CA";
+        Exception exception = assertThrows(Exception.class, () -> {
+            LocalContentUtil.getPdfXml(pdfKey, langId);
+        });
+        assertTrue(exception.getMessage().contains("Error parsing PDF XML"));
+    }
+}

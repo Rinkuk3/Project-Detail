@@ -1,0 +1,96 @@
+package com.td.mbna.msec.midtier.util;
+
+import com.td.mbna.msec.midtier.content.payload.LinkContentType;
+import com.td.mbna.msec.midtier.content.payload.PageDisplayStyleType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class ContentUtilTest {
+
+    private static final String MOCK_LINK_ID = "mockLink";
+    private static final String MOCK_LANG_ID = "en_CA";
+    private static final String MOCK_PATH = "mockPath";
+    private static final String MOCK_PAGE_ID = "mockPage";
+    private static final String MOCK_LOGO_ID = "mockLogo";
+    private static final PageDisplayStyleType MOCK_DISPLAY_STYLE = PageDisplayStyleType.STANDARD;
+
+    private MockedStatic<CmsContentUtil> cmsMock;
+    private MockedStatic<LocalContentUtil> localMock;
+
+    @BeforeEach
+    void setUp() {
+        cmsMock = mockStatic(CmsContentUtil.class);
+        localMock = mockStatic(LocalContentUtil.class);
+    }
+
+    @Test
+    void testGetLinkContent_LoadFromCmsTrue() throws Exception {
+        List<LinkContentType> expected = Arrays.asList(new LinkContentType());
+        cmsMock.when(() -> CmsContentUtil.getLoadfromcms()).thenReturn(true);
+        cmsMock.when(() -> CmsContentUtil.getLinkContent(MOCK_LINK_ID, MOCK_LANG_ID, MOCK_PATH)).thenReturn(expected);
+        
+        List<LinkContentType> result = ContentUtil.getLinkContent(MOCK_LINK_ID, MOCK_LANG_ID, MOCK_PATH);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void testGetLinkContent_LoadFromCmsFalse() throws Exception {
+        List<LinkContentType> expected = Arrays.asList(new LinkContentType());
+        cmsMock.when(() -> CmsContentUtil.getLoadfromcms()).thenReturn(false);
+        localMock.when(() -> LocalContentUtil.getLinkContent(MOCK_LINK_ID, MOCK_LANG_ID)).thenReturn(expected);
+        
+        List<LinkContentType> result = ContentUtil.getLinkContent(MOCK_LINK_ID, MOCK_LANG_ID, MOCK_PATH);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void testGetPageTitleAndContent_LoadFromCmsTrue() throws Exception {
+        String[] expected = {"Title", "Content"};
+        cmsMock.when(() -> CmsContentUtil.getLoadfromcms()).thenReturn(true);
+        cmsMock.when(() -> CmsContentUtil.getPageTitleAndContent(MOCK_PAGE_ID, MOCK_DISPLAY_STYLE, MOCK_LANG_ID)).thenReturn(expected);
+        
+        String[] result = ContentUtil.getPageTitleAndContent(MOCK_PAGE_ID, MOCK_DISPLAY_STYLE, MOCK_LANG_ID);
+        assertArrayEquals(expected, result);
+    }
+
+    @Test
+    void testGetPageTitleAndContent_LoadFromCmsFalse() throws Exception {
+        String[] expected = {"Title", "Content"};
+        cmsMock.when(() -> CmsContentUtil.getLoadfromcms()).thenReturn(false);
+        localMock.when(() -> LocalContentUtil.getPageTitleAndContent(MOCK_PAGE_ID, MOCK_DISPLAY_STYLE, MOCK_LANG_ID)).thenReturn(expected);
+        
+        String[] result = ContentUtil.getPageTitleAndContent(MOCK_PAGE_ID, MOCK_DISPLAY_STYLE, MOCK_LANG_ID);
+        assertArrayEquals(expected, result);
+    }
+
+    @Test
+    void testGetImgLink_LoadFromCmsTrue() {
+        String expected = "mockImageUrl";
+        cmsMock.when(() -> CmsContentUtil.getLoadfromcms()).thenReturn(true);
+        cmsMock.when(() -> CmsContentUtil.getImgLink(MOCK_LOGO_ID, MOCK_LANG_ID, MOCK_PATH)).thenReturn(expected);
+        
+        String result = ContentUtil.getImgLink(MOCK_LOGO_ID, MOCK_LANG_ID, MOCK_PATH);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void testGetImgLink_LoadFromCmsFalse() {
+        String expected = "mockImageUrl";
+        cmsMock.when(() -> CmsContentUtil.getLoadfromcms()).thenReturn(false);
+        localMock.when(() -> LocalContentUtil.getImgLink(MOCK_LOGO_ID, MOCK_LANG_ID)).thenReturn(expected);
+        
+        String result = ContentUtil.getImgLink(MOCK_LOGO_ID, MOCK_LANG_ID, MOCK_PATH);
+        assertEquals(expected, result);
+    }
+}

@@ -1,0 +1,83 @@
+package com.td.mbna.msec.midtier.util;
+
+import com.mbnaweb.xsd.types.common.BaseRequest;
+import com.td.mbna.msec.midtier.types.common.BaseRequest as MidTierBaseRequest;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+public class RequestUtilTest {
+
+    @Mock
+    private BaseRequest srcReq;
+
+    @Mock
+    private BaseRequest tgtReq;
+
+    @Mock
+    private MidTierBaseRequest midTierSrcReq;
+
+    @Mock
+    private MidTierBaseRequest midTierTgtReq;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void testCopyHeaderForBaseRequest() {
+        // Prepare mock values
+        when(srcReq.getSessionInfo()).thenReturn("session");
+        when(srcReq.getAuditInfo()).thenReturn("audit");
+        when(srcReq.getCustId()).thenReturn("cust123");
+        when(srcReq.isIsPrimaryUser()).thenReturn(true);
+        when(srcReq.getLanguagePref()).thenReturn("EN");
+        when(srcReq.getAcctNum()).thenReturn("acct123");
+        when(srcReq.getAcctType()).thenReturn("type1");
+        when(srcReq.getCustInterface()).thenReturn("interface1");
+
+        // Call the copyHeader method
+        RequestUtil.copyHeader(srcReq, tgtReq);
+
+        // Verify that the appropriate methods were called on tgtReq
+        verify(tgtReq).setSessionInfo("session");
+        verify(tgtReq).setAuditInfo("audit");
+        verify(tgtReq).setCustId("cust123");
+        verify(tgtReq).setIsPrimaryUser(true);
+        verify(tgtReq).setLanguagePref("EN");
+        verify(tgtReq).setAcctNum("acct123");
+        verify(tgtReq).setAcctType("type1");
+        verify(tgtReq).setCustInterface("interface1");
+    }
+
+    @Test
+    public void testCopyHeaderForMidTierBaseRequest() {
+        // Prepare mock values
+        when(midTierSrcReq.getSessionInfo()).thenReturn("session");
+        when(midTierSrcReq.getAuditInfo()).thenReturn("audit");
+        when(midTierSrcReq.getCustId()).thenReturn("cust123");
+        when(midTierSrcReq.isIsPrimaryUser()).thenReturn(true);
+        when(midTierSrcReq.getLanguagePref()).thenReturn("EN");
+        when(midTierSrcReq.getAcctNum()).thenReturn("acct123");
+        when(midTierSrcReq.getAcctType()).thenReturn("type1");
+        when(midTierSrcReq.getCustInterface()).thenReturn("interface1");
+
+        // Call the copyHeader method
+        RequestUtil.copyHeader(midTierSrcReq, midTierTgtReq);
+
+        // Verify that the appropriate methods were called on midTierTgtReq
+        verify(midTierTgtReq).setSessionInfo("session");
+        verify(midTierTgtReq).setAuditInfo("audit");
+        verify(midTierTgtReq).setCustId("cust123");
+        verify(midTierTgtReq).setIsPrimaryUser(true);
+        verify(midTierTgtReq).setLanguagePref("EN");
+        verify(midTierTgtReq).setAcctNum("acct123");
+        verify(midTierTgtReq).setAcctType("type1");
+        verify(midTierTgtReq).setCustInterface("interface1");
+    }
+}

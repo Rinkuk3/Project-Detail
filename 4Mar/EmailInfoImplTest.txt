@@ -1,0 +1,82 @@
+package com.td.mbna.msec.midtier.services;
+
+import com.td.mbna.msec.midtier.types.common.PrimaryCardMemberInfo;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class EmailInfoImplTest {
+    private EmailInfoImpl emailInfo;
+
+    @BeforeEach
+    void setUp() {
+        emailInfo = new EmailInfoImpl();
+    }
+
+    @Test
+    void testDefaultValues() {
+        assertFalse(emailInfo.isTriggerEmailNotification());
+        assertEquals("", emailInfo.getBusinessEventID());
+        assertEquals("", emailInfo.getPrimaryEmailAddress());
+        assertEquals("", emailInfo.getPrimaryLanguagePref());
+        assertNull(emailInfo.getPrimaryUserInfo());
+    }
+
+    @Test
+    void testSetAndGetValues() {
+        emailInfo.setTriggerEmailNotification(true);
+        assertTrue(emailInfo.isTriggerEmailNotification());
+
+        emailInfo.setBusinessEventID("1234");
+        assertEquals("1234", emailInfo.getBusinessEventID());
+
+        emailInfo.setPrimaryEmailAddress("test@example.com");
+        assertEquals("test@example.com", emailInfo.getPrimaryEmailAddress());
+
+        emailInfo.setPrimaryLanguagePref("EN");
+        assertEquals("EN", emailInfo.getPrimaryLanguagePref());
+
+        PrimaryCardMemberInfo primaryUser = new PrimaryCardMemberInfo();
+        emailInfo.setPrimaryUserInfo(primaryUser);
+        assertEquals(primaryUser, emailInfo.getPrimaryUserInfo());
+    }
+
+    @Test
+    void testAttributesManagement() {
+        emailInfo.addAttribute("key1", "value1");
+        assertEquals("value1", emailInfo.getAttribute("key1"));
+        
+        Map<String, Object> expectedMap = new HashMap<>();
+        expectedMap.put("key1", "value1");
+        assertEquals(expectedMap, emailInfo.getAttributes());
+    }
+
+    @Test
+    void testRetryLogic() {
+        Consumer<String> retryMock = mock(Consumer.class);
+        emailInfo.setRetryLogic(retryMock);
+
+        assertNotNull(emailInfo.getRetryLogic());
+        emailInfo.getRetryLogic().accept("test");
+        verify(retryMock, times(1)).accept("test");
+    }
+
+    @Test
+    void testConfirmationNumbers() {
+        emailInfo.setConfirmationNumber("CONF123");
+        assertEquals("CONF123", emailInfo.getConfirmationNumber());
+        
+        emailInfo.setConfirmationNumbers(Collections.singletonList("CONF456"));
+        assertEquals(Collections.singletonList("CONF456"), emailInfo.getConfirmationNumbers());
+    }
+
+    @Test
+    void testToStringNotNull() {
+        assertNotNull(emailInfo.toString());
+    }
+}

@@ -1,0 +1,89 @@
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.junit.jupiter.api.Test;
+
+class DateUtilTest {
+
+    @Test
+    void testBeforeNow() throws Exception {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String pastDate = format.format(new Date(System.currentTimeMillis() - 10000));
+        assertTrue(DateUtil.beforeNow(pastDate, "yyyy-MM-dd HH:mm:ss"));
+        
+        String futureDate = format.format(new Date(System.currentTimeMillis() + 100000));
+        assertFalse(DateUtil.beforeNow(futureDate, "yyyy-MM-dd HH:mm:ss"));
+    }
+
+    @Test
+    void testIsDateWithinDays() throws Exception {
+        GregorianCalendar cal = new GregorianCalendar();
+        XMLGregorianCalendar xmlCal = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
+        assertTrue(DateUtil.isDateWithinDays(xmlCal, 1, false));
+
+        cal.add(Calendar.DATE, -2);
+        xmlCal = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
+        assertFalse(DateUtil.isDateWithinDays(xmlCal, 1, false));
+    }
+
+    @Test
+    void testIsDateWithinHours() {
+        long now = System.currentTimeMillis();
+        assertTrue(DateUtil.isDateWithinHours(now, 1, false));
+        assertFalse(DateUtil.isDateWithinHours(now - 7200000, 1, false));
+    }
+
+    @Test
+    void testConvertToLocalDate() {
+        Date date = new Date();
+        LocalDate localDate = DateUtil.convertToLocalDate(date);
+        assertNotNull(localDate);
+    }
+
+    @Test
+    void testAsLocalDate() {
+        Date date = new Date();
+        LocalDate localDate = DateUtil.asLocalDate(date);
+        assertNotNull(localDate);
+    }
+
+    @Test
+    void testAsLocalDateTime() {
+        Date date = new Date();
+        LocalDateTime localDateTime = DateUtil.asLocalDateTime(date);
+        assertNotNull(localDateTime);
+    }
+
+    @Test
+    void testAsUtilDate() {
+        LocalDate localDate = LocalDate.now();
+        Date date = DateUtil.asUtilDate(localDate);
+        assertNotNull(date);
+    }
+
+    @Test
+    void testAsInstant() {
+        Date date = new Date();
+        Instant instant = DateUtil.asInstant(date);
+        assertNotNull(instant);
+    }
+
+    @Test
+    void testAsZonedDateTime() {
+        Date date = new Date();
+        ZonedDateTime zonedDateTime = DateUtil.asZonedDateTime(date);
+        assertNotNull(zonedDateTime);
+    }
+}

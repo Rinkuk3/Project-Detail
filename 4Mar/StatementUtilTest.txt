@@ -1,0 +1,83 @@
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+import org.junit.Before;
+import org.junit.Test;
+import java.util.Arrays;
+import java.util.List;
+import com.mbnaweb.xsd.types.statement.AvailableStatementListType;
+
+public class StatementUtilTest {
+
+    private StatementUtil statementUtil;
+
+    @Before
+    public void setUp() {
+        statementUtil = new StatementUtil();
+    }
+
+    @Test
+    public void testIsValidLegalInsertId_ValidPattern() {
+        // Mocking ConfigUtil to return a valid pattern
+        String insertId = "L12345";
+        String pattern = "L.+";
+        when(ConfigUtil.getProperty(StatementUtil.DMS_LegalInsert_Match_Pattern_External_Property_Key, StatementUtil.DMS_LegalInsert_Match_Pattern_Default)).thenReturn(pattern);
+        
+        assertTrue("The insert ID should match the legal insert pattern", StatementUtil.isValidLegalInsertId(insertId));
+    }
+
+    @Test
+    public void testIsValidLegalInsertId_InvalidPattern() {
+        // Mocking ConfigUtil to return a valid pattern
+        String insertId = "X12345";
+        String pattern = "L.+";
+        when(ConfigUtil.getProperty(StatementUtil.DMS_LegalInsert_Match_Pattern_External_Property_Key, StatementUtil.DMS_LegalInsert_Match_Pattern_Default)).thenReturn(pattern);
+
+        assertFalse("The insert ID should not match the legal insert pattern", StatementUtil.isValidLegalInsertId(insertId));
+    }
+
+    @Test
+    public void testGetFormId() {
+        String insertId = "12345";
+        // Test if the form id is the same as the insert id (no changes as per the implementation)
+        assertEquals("The form ID should be the same as the insert ID", insertId, StatementUtil.getFormId(insertId));
+    }
+
+    @Test
+    public void testLimitCycles_ValidCase() {
+        AvailableStatementListType availStmtList = mock(AvailableStatementListType.class);
+        List<String> statementEndDates = Arrays.asList("2021-12-01", "2021-11-01", "2021-10-01", "2021-09-01", "2021-08-01", "2021-07-01");
+        List<String> statementActivityStatuses = Arrays.asList("ACTIVE", "ACTIVE", "ACTIVE", "ACTIVE", "ACTIVE", "ACTIVE");
+
+        when(availStmtList.getStatementEndDate()).thenReturn(statementEndDates);
+        when(availStmtList.getStatementActivityStatus()).thenReturn(statementActivityStatuses);
+
+        StatementUtil.limitCycles(availStmtList);
+
+        // The number of cycles should not exceed MAX_NUMBER_OF_CYCLES_DISPLAYED
+        assertTrue("The number of cycles should not exceed the MAX_NUMBER_OF_CYCLES_DISPLAYED", availStmtList.getStatementEndDate().size() <= StatementUtil.MAX_NUMBER_OF_CYCLES_DISPLAYED);
+        assertTrue("The statement activity status list should match the end date size", availStmtList.getStatementActivityStatus().size() == availStmtList.getStatementEndDate().size());
+    }
+
+    @Test
+    public void testLimitCycles_ExceedsMaxCycles() {
+        AvailableStatementListType availStmtList = mock(AvailableStatementListType.class);
+        List<String> statementEndDates = Arrays.asList(
+            "2021-12-01", "2021-11-01", "2021-10-01", "2021-09-01", "2021-08-01", "2021-07-01",
+            "2021-06-01", "2021-05-01", "2021-04-01", "2021-03-01", "2021-02-01", "2021-01-01", "2020-12-01"
+        );
+        List<String> statementActivityStatuses = Arrays.asList(
+            "ACTIVE", "ACTIVE", "ACTIVE", "ACTIVE", "ACTIVE", "ACTIVE",
+            "ACTIVE", "ACTIVE", "ACTIVE", "ACTIVE", "ACTIVE", "ACTIVE", "ACTIVE"
+        );
+
+        when(availStmtList.getStatementEndDate()).thenReturn(statementEndDates);
+        when(availStmtList.getStatementActivityStatus()).thenReturn(statementActivityStatuses);
+
+        StatementUtil.limitCycles(availStmtList);
+
+        // The number of cycles should be limited to MAX_NUMBER_OF_CYCLES_DISPLAYED
+        assertTrue("The number of cycles should be limited to the MAX_NUMBER_OF_CYCLES_DISPLAYED", availStmtList.getStatementEndDate().size() <= StatementUtil.MAX_NUMBER_OF_CYCLES_DISPLAYED);
+        assertTrue("The statement activity status list should match the end date size", availStmtList.getStatementActivityStatus().size() == availStmtList.getStatementEndDate().size());
+    }
+}

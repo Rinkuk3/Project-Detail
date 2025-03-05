@@ -1,0 +1,146 @@
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+import java.io.File;
+import java.util.Scanner;
+
+import org.junit.Before;
+import org.junit.Test;
+
+public class StubUtilTest {
+
+    @Before
+    public void setUp() {
+        // Any setup required for the tests
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testGenStubFileNameInProdMode() {
+        // Mocking the scenario where the application is not in development mode
+        try {
+            StubUtil.genStubFileName(Object.class, "userId");
+        } catch (UnsupportedOperationException e) {
+            assertEquals("Stub operation disabled in production mode", e.getMessage());
+            throw e;
+        }
+    }
+
+    @Test
+    public void testGenStubFileNameInDevMode() {
+        // Mocking ConfigUtil to return true for Dev Mode
+        StubUtil.setInDevMode(true); // assuming setter is available or use reflection to set
+
+        String fileName = StubUtil.genStubFileName(Object.class, "userId");
+        assertNotNull(fileName);
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testGenTdRqStubXmlFileNameInProdMode() {
+        try {
+            StubUtil.genTdRqStubXmlFileName("tdOp", "userId", "acctNum");
+        } catch (UnsupportedOperationException e) {
+            assertEquals("Stub operation disabled in production mode", e.getMessage());
+            throw e;
+        }
+    }
+
+    @Test
+    public void testGenTdRqStubXmlFileNameInDevMode() {
+        StubUtil.setInDevMode(true);
+
+        String fileName = StubUtil.genTdRqStubXmlFileName("tdOp", "userId", "acctNum");
+        assertNotNull(fileName);
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testGenTdRsStubXmlFileNameInProdMode() {
+        try {
+            StubUtil.genTdRsStubXmlFileName("tdOp", "userId", "acctNum");
+        } catch (UnsupportedOperationException e) {
+            assertEquals("Stub operation disabled in production mode", e.getMessage());
+            throw e;
+        }
+    }
+
+    @Test
+    public void testGenTdRsStubXmlFileNameInDevMode() {
+        StubUtil.setInDevMode(true);
+
+        String fileName = StubUtil.genTdRsStubXmlFileName("tdOp", "userId", "acctNum");
+        assertNotNull(fileName);
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testGetStubDirNameInProdMode() {
+        try {
+            StubUtil.getStubDirName("userId", "acctNum");
+        } catch (UnsupportedOperationException e) {
+            assertEquals("Stub operation disabled in production mode", e.getMessage());
+            throw e;
+        }
+    }
+
+    @Test
+    public void testGetStubDirNameInDevMode() {
+        StubUtil.setInDevMode(true);
+
+        String dirName = StubUtil.getStubDirName("userId", "acctNum");
+        assertNotNull(dirName);
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testGetParentDirInProdMode() {
+        try {
+            StubUtil.getParentDir("dirName");
+        } catch (UnsupportedOperationException e) {
+            assertEquals("Stub operation disabled in production mode", e.getMessage());
+            throw e;
+        }
+    }
+
+    @Test
+    public void testGetParentDirInDevMode() {
+        StubUtil.setInDevMode(true);
+
+        String parentDir = StubUtil.getParentDir("dirName");
+        assertNotNull(parentDir);
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testGetTdRqStubXmlFileContentInProdMode() {
+        try {
+            StubUtil.getTdRqStubXmlFileContent("tdOp", "userId", "acctNum");
+        } catch (UnsupportedOperationException e) {
+            assertEquals("Stub operation disabled in production mode", e.getMessage());
+            throw e;
+        }
+    }
+
+    @Test
+    public void testGetTdRqStubXmlFileContentInDevMode() {
+        StubUtil.setInDevMode(true);
+
+        // Assuming a file exists in the path
+        String content = StubUtil.getTdRqStubXmlFileContent("tdOp", "userId", "acctNum");
+        assertNotNull(content);
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testGetTdRsStubXmlFileContentInProdMode() {
+        try {
+            StubUtil.getTdRsStubXmlFileContent("tdOp", "userId", "acctNum");
+        } catch (UnsupportedOperationException e) {
+            assertEquals("Stub operation disabled in production mode", e.getMessage());
+            throw e;
+        }
+    }
+
+    @Test
+    public void testGetTdRsStubXmlFileContentInDevMode() {
+        StubUtil.setInDevMode(true);
+
+        // Assuming a file exists in the path
+        String content = StubUtil.getTdRsStubXmlFileContent("tdOp", "userId", "acctNum");
+        assertNotNull(content);
+    }
+}

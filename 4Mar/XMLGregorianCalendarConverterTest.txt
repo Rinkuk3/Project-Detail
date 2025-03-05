@@ -1,0 +1,77 @@
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.lang.reflect.Type;
+import java.util.GregorianCalendar;
+
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonSerializationContext;
+
+public class XMLGregorianCalendarConverterTest {
+
+    private XMLGregorianCalendarConverter.Serializer serializer;
+    private XMLGregorianCalendarConverter.Deserializer deserializer;
+    private XMLGregorianCalendar xmlGregorianCalendar;
+    private JsonSerializationContext jsonSerializationContext;
+    private JsonElement jsonElement;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        serializer = new XMLGregorianCalendarConverter.Serializer();
+        deserializer = new XMLGregorianCalendarConverter.Deserializer();
+        xmlGregorianCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar());
+        jsonSerializationContext = mock(JsonSerializationContext.class);
+        jsonElement = mock(JsonElement.class);
+    }
+
+    @Test
+    public void testSerializer() {
+        try {
+            JsonPrimitive result = (JsonPrimitive) serializer.serialize(xmlGregorianCalendar, XMLGregorianCalendar.class, jsonSerializationContext);
+            assertNotNull(result);
+            assertTrue(result.isNumber());
+        } catch (Exception e) {
+            fail("Serialization failed");
+        }
+    }
+
+    @Test
+    public void testDeserializer() {
+        Long dateLong = xmlGregorianCalendar.toGregorianCalendar().getTimeInMillis();
+        JsonPrimitive jsonPrimitive = new JsonPrimitive(dateLong);
+        try {
+            XMLGregorianCalendar result = deserializer.deserialize(jsonPrimitive, XMLGregorianCalendar.class, null);
+            assertNotNull(result);
+            assertEquals(dateLong, result.toGregorianCalendar().getTimeInMillis());
+        } catch (Exception e) {
+            fail("Deserialization failed");
+        }
+    }
+
+    @Test
+    public void testDeserializerNull() {
+        JsonElement nullElement = null;
+        XMLGregorianCalendar result = deserializer.deserialize(nullElement, XMLGregorianCalendar.class, null);
+        assertNull(result);
+    }
+
+    @Test
+    public void testDeserializerWithInvalidString() {
+        JsonObject invalidJsonObject = mock(JsonObject.class);
+        when(jsonElement.getAsJsonObject()).thenReturn(invalidJsonObject);
+        when(invalidJsonObject.getAsJsonObject()).thenReturn(invalidJsonObject);
+
+        XMLGregorianCalendar result = deserializer.deserialize(jsonElement, XMLGregorianCalendar.class, null);
+        assertNull(result);
+    }
+}

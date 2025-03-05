@@ -1,0 +1,153 @@
+package com.td.mbna.msec.midtier.util;
+
+import org.junit.Test;
+import org.mockito.Mockito;
+import java.util.concurrent.CompletableFuture;
+
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+
+public class ParallelServiceCallerTest {
+
+    @Test
+    public void testExecutorIdentity() {
+        String executorIdentity = ParallelServiceCaller.executorIdentity();
+        assertNotNull(executorIdentity);
+    }
+
+    @Test
+    public void testActiveThreads() {
+        int activeThreads = ParallelServiceCaller.activeThreads();
+        assertTrue(activeThreads >= 0);
+    }
+
+    @Test
+    public void testScheduleCallWithAsync() throws Exception {
+        ParallelServiceCaller serviceCaller = new ParallelServiceCaller();
+        ServiceCall<Object> mockServiceCall = Mockito.mock(ServiceCall.class);
+
+        serviceCaller.scheduleCall("123", mockServiceCall);
+
+        assertEquals(1, serviceCaller.size());
+    }
+
+    @Test
+    public void testScheduleCallWithSync() throws Exception {
+        ParallelServiceCaller serviceCaller = new ParallelServiceCaller();
+        serviceCaller.useSynchrousCall();
+        ServiceCall<Object> mockServiceCall = Mockito.mock(ServiceCall.class);
+
+        serviceCaller.scheduleCall("123", mockServiceCall);
+
+        assertEquals(1, serviceCaller.size());
+    }
+
+    @Test
+    public void testSyncMethodWithNoPendingCalls() throws Exception {
+        ParallelServiceCaller serviceCaller = new ParallelServiceCaller();
+        serviceCaller.sync();  // Should not throw any exception
+    }
+
+    @Test
+    public void testSyncMethodWithPendingCalls() throws Exception {
+        ParallelServiceCaller serviceCaller = new ParallelServiceCaller();
+        serviceCaller.useSynchrousCall();
+        ServiceCall<Object> mockServiceCall = Mockito.mock(ServiceCall.class);
+        Mockito.doNothing().when(mockServiceCall).call();
+
+        serviceCaller.scheduleCall("123", mockServiceCall);
+        serviceCaller.sync();  // Should complete successfully
+    }
+
+    @Test
+    public void testProcessSucceededCall() {
+        ParallelServiceCaller serviceCaller = new ParallelServiceCaller();
+        ServiceCall<Object> mockServiceCall = Mockito.mock(ServiceCall.class);
+        Mockito.when(mockServiceCall.getResponse()).thenReturn("Success");
+
+        serviceCaller.processSucceededCall("Success", "responseKey");
+
+        assertEquals("Success", serviceCaller.getResponse("123", String.class));
+    }
+
+    @Test
+    public void testProcessFailedCall() {
+        ParallelServiceCaller serviceCaller = new ParallelServiceCaller();
+        Throwable throwable = new Throwable("Test exception");
+
+        serviceCaller.processFailedCall(throwable);
+
+        // We are not asserting any state change for the failed call, just ensuring no errors are thrown
+    }
+
+    @Test
+    public void testProcessFinishedCallWithException() {
+        ParallelServiceCaller serviceCaller = new ParallelServiceCaller();
+        ServiceCall<Object> mockServiceCall = Mockito.mock(ServiceCall.class);
+        Mockito.when(mockServiceCall.getException()).thenReturn(new Exception("Test Exception"));
+
+        serviceCaller.processFinishedCall(mockServiceCall);
+
+        assertEquals(1, serviceCaller.size());
+    }
+
+    @Test
+    public void testProcessFinishedCallWithResponse() {
+        ParallelServiceCaller serviceCaller = new ParallelServiceCaller();
+        ServiceCall<Object> mockServiceCall = Mockito.mock(ServiceCall.class);
+        Mockito.when(mockServiceCall.getException()).thenReturn(null);
+        Mockito.when(mockServiceCall.getResponse()).thenReturn("Response");
+
+        serviceCaller.processFinishedCall(mockServiceCall);
+
+        assertEquals("Response", serviceCaller.getResponse("123", String.class));
+    }
+
+    @Test
+    public void testGenResponseKey() {
+        String responseKey = ParallelServiceCaller.genResponseKey("123", "TestResponse");
+        assertNotNull(responseKey);
+        assertEquals("123-TestResponse", responseKey);
+    }
+
+    @Test
+    public void testGetResponse() {
+        ParallelServiceCaller serviceCaller = new ParallelServiceCaller();
+        serviceCaller.processSucceededCall("Response", "123-TestResponse");
+
+        String response = serviceCaller.getResponse("123", String.class);
+        assertEquals("Response", response);
+    }
+
+    @Test
+    public void testIsAsync() {
+        ParallelServiceCaller serviceCaller = new ParallelServiceCaller();
+        assertTrue(serviceCaller.isAsync());
+    }
+
+    @Test
+    public void testUseAsynchronousCall() {
+        ParallelServiceCaller serviceCaller = new ParallelServiceCaller();
+        serviceCaller.useAsynchrousCall();
+        assertTrue(serviceCaller.isAsync());
+    }
+
+    @Test
+    public void testUseSynchronousCall() {
+        ParallelServiceCaller serviceCaller = new ParallelServiceCaller();
+        serviceCaller.useSynchrousCall();
+        assertFalse(serviceCaller.isAsync());
+    }
+
+    @Test
+    public void testGlobalAsync() {
+        ParallelServiceCaller.useGlobalAsynchrousCall();
+        assertTrue(ParallelServiceCaller.isGloablAsync());
+    }
+
+    @Test
+    public void testGlobalSync() {
+        ParallelServiceCaller.useGlobalSynchrousCall();
+        assertFalse(ParallelServiceCaller.isGloablAsync());
+    }
+}

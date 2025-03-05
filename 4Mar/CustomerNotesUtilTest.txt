@@ -1,0 +1,82 @@
+package com.td.mbna.msec.midtier.util;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import com.td.mbna.msec.midtier.types.common.BaseRequest;
+import com.td.mbna.msec.midtier.types.common.SessionInfo;
+
+class CustomerNotesUtilTest {
+
+    @Mock
+    private BaseRequest baseRequest;
+
+    @Mock
+    private SessionInfo sessionInfo;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        when(baseRequest.getSessionInfo()).thenReturn(sessionInfo);
+        when(sessionInfo.getFirstName()).thenReturn("John");
+        when(sessionInfo.getLastName()).thenReturn("Doe");
+    }
+
+    @Test
+    void testGetHeaderContentForPrimaryUser() {
+        when(baseRequest.getIsPrimaryUser()).thenReturn(true);
+        String actionPerformed = "Login";
+
+        String result = CustomerNotesUtil.getHeaderContent(baseRequest, actionPerformed);
+
+        assertTrue(result.contains("Primary"));
+        assertTrue(result.contains("John Doe"));
+        assertTrue(result.contains("Login"));
+    }
+
+    @Test
+    void testGetHeaderContentForAuthorizedUser() {
+        when(baseRequest.getIsPrimaryUser()).thenReturn(false);
+        String actionPerformed = "Transaction";
+
+        String result = CustomerNotesUtil.getHeaderContent(baseRequest, actionPerformed);
+
+        assertTrue(result.contains("Authorized"));
+        assertTrue(result.contains("John Doe"));
+        assertTrue(result.contains("Transaction"));
+    }
+
+    @Test
+    void testMaskCardNumWithDash() {
+        String maskedCard = CustomerNotesUtil.maskCardNum("1234567812345678", true);
+        assertEquals("****-****-****-5678", maskedCard);
+    }
+
+    @Test
+    void testMaskCardNumWithoutDash() {
+        String maskedCard = CustomerNotesUtil.maskCardNum("1234567812345678", false);
+        assertEquals("************5678", maskedCard);
+    }
+
+    @Test
+    void testMaskCardNumShortNumber() {
+        String maskedCard = CustomerNotesUtil.maskCardNum("5678", true);
+        assertEquals("5678", maskedCard);
+    }
+
+    @Test
+    void testMaskCardNumVariousLengths() {
+        assertEquals("****-5678", CustomerNotesUtil.maskCardNum("12345678", true));
+        assertEquals("****5678", CustomerNotesUtil.maskCardNum("12345678", false));
+        assertEquals("**-5678", CustomerNotesUtil.maskCardNum("125678", true));
+        assertEquals("**5678", CustomerNotesUtil.maskCardNum("125678", false));
+    }
+}

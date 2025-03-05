@@ -1,0 +1,133 @@
+import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Properties;
+
+import javax.xml.soap.SOAPFault;
+
+import org.apache.commons.lang3.StringUtils;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.*;
+
+import com.td.api.dms.request.DocumentRetrievalRequest;
+import com.td.api.dms.request.DocumentSearchRequest;
+import com.td.api.kms.request.AddDecryptionJobRq;
+import com.td.api.kms.request.AddEncryptionJobRq;
+import com.td.mbna.msec.midtier.util.BackEndSrvcUtil;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import com.td.mbna.msec.midtier.util.services.TDRestServiceUtil;
+
+public class TDRestServiceUtilTest {
+
+    @Mock
+    private TdKeyManagementService tdKeyManagementService;
+    
+    @Mock
+    private TdDocumentManagementApi tdDocumentManagementApi;
+
+    @InjectMocks
+    private TDRestServiceUtil tdRestServiceUtil;
+
+    @Mock
+    private SOAPFault soapFault;
+
+    @Mock
+    private BackEndSrvcUtil.TDOperation tdOperation;
+
+    @Mock
+    private AddEncryptionJobRq addEncryptionJobRq;
+
+    @Mock
+    private AddDecryptionJobRq addDecryptionJobRq;
+
+    @Mock
+    private DocumentSearchRequest documentSearchRequest;
+
+    @Mock
+    private DocumentRetrievalRequest documentRetrievalRequest;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void testGetTDServiceParam() {
+        Properties properties = mock(Properties.class);
+        when(properties.getProperty("someParam")).thenReturn("someValue");
+        TDRestServiceUtil.endPtProps = properties;
+
+        String result = TDRestServiceUtil.getTDServiceParam("someParam");
+
+        assertEquals("someValue", result);
+    }
+
+    @Test
+    public void testInvokeRestServiceEncrypt() throws Exception {
+        when(tdOperation).thenReturn(BackEndSrvcUtil.TDOperation.TdKeyManagementService_encrypt);
+        when(tdKeyManagementService.encrypt(any(AddEncryptionJobRq.class), anyString())).thenReturn("encryptedResponse");
+
+        Object response = tdRestServiceUtil.invokeRestService(tdOperation, addEncryptionJobRq, String.class, "token");
+
+        assertEquals("encryptedResponse", response);
+    }
+
+    @Test
+    public void testInvokeRestServiceDecrypt() throws Exception {
+        when(tdOperation).thenReturn(BackEndSrvcUtil.TDOperation.TdKeyManagementService_decrypt);
+        when(tdKeyManagementService.decrypt(any(AddDecryptionJobRq.class), anyString())).thenReturn("decryptedResponse");
+
+        Object response = tdRestServiceUtil.invokeRestService(tdOperation, addDecryptionJobRq, String.class, "token");
+
+        assertEquals("decryptedResponse", response);
+    }
+
+    @Test
+    public void testInvokeRestServiceSearch() throws Exception {
+        when(tdOperation).thenReturn(BackEndSrvcUtil.TDOperation.TdDocuManagementService_search);
+        when(tdDocumentManagementApi.searchDocuments(any(DocumentSearchRequest.class), anyString())).thenReturn("searchResponse");
+
+        Object response = tdRestServiceUtil.invokeRestService(tdOperation, documentSearchRequest, String.class, "token");
+
+        assertEquals("searchResponse", response);
+    }
+
+    @Test
+    public void testInvokeRestServiceRetrieve() throws Exception {
+        when(tdOperation).thenReturn(BackEndSrvcUtil.TDOperation.TdDocuManagementService_retrieve);
+        when(tdDocumentManagementApi.retrieveDocument(any(DocumentRetrievalRequest.class), anyString())).thenReturn("retrieveResponse");
+
+        Object response = tdRestServiceUtil.invokeRestService(tdOperation, documentRetrievalRequest, String.class, "token");
+
+        assertEquals("retrieveResponse", response);
+    }
+
+    @Test
+    public void testGetSoapErrorMessage() {
+        when(soapFault.getDetail()).thenReturn(mock(org.w3c.dom.Element.class));
+        when(soapFault.getDetail().getFirstChild()).thenReturn(mock(org.w3c.dom.Node.class));
+        when(soapFault.getDetail().getFirstChild().getTextContent()).thenReturn("SOAP Fault");
+
+        String errorMessage = TDRestServiceUtil.getSoapErrorMessage("method", soapFault, "generalError");
+
+        assertEquals("SOAP Fault", errorMessage);
+    }
+
+    @Test
+    public void testReadLineByLineJava8() throws IOException {
+        String filePath = "testFile.txt";
+        List<String> fileLines = List.of("Line 1", "Line 2", "Line 3");
+
+        ClassPathResource resource = mock(ClassPathResource.class);
+        when(resource.getFile()).thenReturn(new File(filePath));
+        when(Files.readAllLines(resource.getFile().toPath())).thenReturn(fileLines);
+
+        String result = TDRestServiceUtil.readLineByLineJava8(filePath);
+
+        assertNotNull(result);
+        assertEquals("Line 1Line 2Line 3", result);
+    }
+}

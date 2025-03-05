@@ -1,0 +1,73 @@
+package com.td.mbna.msec.midtier.util;
+
+import com.td.mbna.msec.midtier.configuration.beans.ConsentDocBaseDetail;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class ConsentDetailTest {
+
+    private static final String VALID_XML_RESPONSE = """
+            <CustomerAgreementServiceResponse>
+                <c:CustomerAgreement>
+                    <c:DocumentBase>
+                        <c:DocumentCreateDT>2023-01-01T10:00:00</c:DocumentCreateDT>
+                        <c:DocumentTypeCD>AGREEMENT</c:DocumentTypeCD>
+                    </c:DocumentBase>
+                </c:CustomerAgreement>
+            </CustomerAgreementServiceResponse>
+            """;
+
+    private static final String INVALID_XML_RESPONSE = """
+            <InvalidResponse>
+                <SomeOtherTag>Test</SomeOtherTag>
+            </InvalidResponse>
+            """;
+
+    private XMLGregorianCalendar mockXmlGregorianCalendar;
+
+    @BeforeEach
+    void setUp() throws DatatypeConfigurationException {
+        mockXmlGregorianCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar("2023-01-01T10:00:00");
+    }
+
+    @Test
+    void testGetDetailsOfDisclosureDocuments_validXml() {
+        List<ConsentDocBaseDetail> details = ConsentDetail.getDetailsOfDisclosureDocuments(VALID_XML_RESPONSE);
+        assertNotNull(details);
+        assertEquals(1, details.size());
+        assertEquals("AGREEMENT", details.get(0).getDocTypeCode());
+    }
+
+    @Test
+    void testGetDetailsOfDisclosureDocuments_invalidXml() {
+        List<ConsentDocBaseDetail> details = ConsentDetail.getDetailsOfDisclosureDocuments(INVALID_XML_RESPONSE);
+        assertNotNull(details);
+        assertTrue(details.isEmpty());
+    }
+
+    @Test
+    void testParseDateFromXml_validDate() {
+        try (MockedStatic<DatatypeFactory> factoryMock = Mockito.mockStatic(DatatypeFactory.class)) {
+            factoryMock.when(DatatypeFactory::newInstance).thenReturn(DatatypeFactory.newInstance());
+
+            XMLGregorianCalendar result = ConsentDetail.parseDateFromXml("2023-01-01T10:00:00");
+            assertNotNull(result);
+        }
+    }
+
+    @Test
+    void testParseDateFromXml_invalidDate() {
+        XMLGregorianCalendar result = ConsentDetail.parseDateFromXml("invalid-date");
+        assertNull(result);
+    }
+}

@@ -1,0 +1,142 @@
+package com.td.mbna.msec.midtier.util;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import javax.xml.soap.SOAPMessage;
+import javax.xml.soap.SOAPBody;
+import javax.xml.soap.SOAPMessageContext;
+import javax.xml.ws.handler.MessageContext;
+
+import static org.mockito.Mockito.*;
+
+public class SoapUtilTest {
+
+    @Mock
+    private SOAPMessageContext smc;
+
+    @Mock
+    private SOAPMessage soapMessage;
+
+    @Mock
+    private SOAPBody soapBody;
+
+    @Mock
+    private MessageContext messageContext;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void testGetMessageStringWithAccessor() {
+        when(smc.get("jaxws.message.accessor")).thenReturn("Mock Message");
+        String result = SoapUtil.getMessageString(smc);
+        assert(result.equals("Mock Message"));
+    }
+
+    @Test
+    public void testGetMessageStringWithoutAccessor() {
+        when(smc.get("jaxws.message.accessor")).thenReturn(null);
+        when(smc.getMessage()).thenReturn(soapMessage);
+        String result = SoapUtil.getMessageString(smc);
+        assert(result != null);
+    }
+
+    @Test
+    public void testMyGetMessageString() throws Exception {
+        when(smc.getMessage()).thenReturn(soapMessage);
+        when(smc.get(MessageContext.WSDL_SERVICE)).thenReturn("testService");
+        String result = SoapUtil.myGetMessageString(smc);
+        assert(result != null);
+    }
+
+    @Test
+    public void testGetFaultString() throws Exception {
+        when(smc.getMessage()).thenReturn(soapMessage);
+        when(soapMessage.getSOAPBody()).thenReturn(soapBody);
+        when(soapBody.getFault()).thenReturn(mock(javax.xml.soap.SOAPFault.class));
+        when(soapBody.getFault().getFaultString()).thenReturn("Fault String");
+        String result = SoapUtil.getFaultString(smc);
+        assert(result.equals("Fault String"));
+    }
+
+    @Test
+    public void testGetFaultStringWithDefaultValue() throws Exception {
+        String result = SoapUtil.getFaultString(smc, "Error");
+        assert(result.equals("Error"));
+    }
+
+    @Test
+    public void testGetBodyDocument() throws Exception {
+        when(smc.getMessage()).thenReturn(soapMessage);
+        when(soapMessage.getSOAPBody()).thenReturn(soapBody);
+        when(soapBody.getOwnerDocument()).thenReturn(mock(org.w3c.dom.Document.class));
+        org.w3c.dom.Document doc = SoapUtil.getBodyDocument(smc);
+        assert(doc != null);
+    }
+
+    @Test
+    public void testIsOutboundMessage() {
+        when(smc.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY)).thenReturn(true);
+        boolean result = SoapUtil.isOutboundMessage(smc);
+        assert(result);
+    }
+
+    @Test
+    public void testIsInboundMessage() {
+        when(smc.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY)).thenReturn(false);
+        boolean result = SoapUtil.isInboundMessage(smc);
+        assert(result);
+    }
+
+    @Test
+    public void testGetServiceNamespace() {
+        when(smc.get(MessageContext.WSDL_SERVICE)).thenReturn(mock(javax.xml.namespace.QName.class));
+        when(((javax.xml.namespace.QName) smc.get(MessageContext.WSDL_SERVICE)).getNamespaceURI()).thenReturn("testNamespace");
+        String result = SoapUtil.getServiceNamespace(smc);
+        assert(result.equals("testNamespace"));
+    }
+
+    @Test
+    public void testGetServiceName() {
+        when(smc.get(MessageContext.WSDL_SERVICE)).thenReturn(mock(javax.xml.namespace.QName.class));
+        when(((javax.xml.namespace.QName) smc.get(MessageContext.WSDL_SERVICE)).getLocalPart()).thenReturn("testService");
+        String result = SoapUtil.getServiceName(smc);
+        assert(result.equals("testService"));
+    }
+
+    @Test
+    public void testGetServiceOperationString() {
+        when(smc.get(MessageContext.WSDL_SERVICE)).thenReturn(mock(javax.xml.namespace.QName.class));
+        when(((javax.xml.namespace.QName) smc.get(MessageContext.WSDL_SERVICE)).getLocalPart()).thenReturn("testService");
+        when(smc.get(MessageContext.WSDL_OPERATION)).thenReturn(mock(javax.xml.namespace.QName.class));
+        when(((javax.xml.namespace.QName) smc.get(MessageContext.WSDL_OPERATION)).getLocalPart()).thenReturn("testOperation");
+        String result = SoapUtil.getServiceOperationString(smc);
+        assert(result.equals("testService::testOperation"));
+    }
+
+    @Test
+    public void testGetOperationName() {
+        when(smc.get(MessageContext.WSDL_OPERATION)).thenReturn(mock(javax.xml.namespace.QName.class));
+        when(((javax.xml.namespace.QName) smc.get(MessageContext.WSDL_OPERATION)).getLocalPart()).thenReturn("testOperation");
+        String result = SoapUtil.getOperationName(smc);
+        assert(result.equals("testOperation"));
+    }
+
+    @Test
+    public void testSoapMsgInfo() {
+        SoapUtil.SoapMsgInfo soapMsgInfo = new SoapUtil.SoapMsgInfo(smc);
+
+        when(smc.get(MessageContext.WSDL_SERVICE)).thenReturn("testService");
+        when(smc.getMessage()).thenReturn(soapMessage);
+
+        assert(soapMsgInfo.getMsg() != null);
+        assert(soapMsgInfo.isRequest() == false); // default isRequest should be false
+        assert(soapMsgInfo.getServiceOperation() != null);
+        assert(soapMsgInfo.getFaultString() != null);
+    }
+}

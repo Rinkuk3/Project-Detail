@@ -1,0 +1,119 @@
+import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
+
+import java.io.ByteArrayOutputStream;
+import java.util.Properties;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.namespace.QName;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.*;
+
+import com.td.mbna.msec.midtier.util.IoUtil;
+import com.td.mbna.msec.midtier.util.JaxbUtil;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+import com.td.mbna.msec.midtier.tdwsservices.TDwsServiceUtil;
+
+public class TDwsServiceUtilTest {
+
+    @Mock
+    private Properties endPtProps;
+
+    @Mock
+    private JAXBContext jaxbContext;
+
+    @Mock
+    private JAXBElement jaxbElement;
+
+    @Mock
+    private ByteArrayOutputStream byteArrayOutputStream;
+
+    @Mock
+    private IoUtil ioUtil;
+
+    @InjectMocks
+    private TDwsServiceUtil tdwsServiceUtil;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void testGetTDServiceParam() {
+        when(endPtProps.getProperty("TD_CUSTAGREEMENT_SERVICE_ENABLED")).thenReturn("true");
+        
+        String result = TDwsServiceUtil.getTDServiceParam("TD_CUSTAGREEMENT_SERVICE_ENABLED");
+        
+        assertEquals("true", result);
+    }
+
+    @Test
+    public void testConvertObjectToStream() throws Exception {
+        when(JaxbUtil.getJaxbContext(anyString())).thenReturn(jaxbContext);
+        when(jaxbContext.createMarshaller()).thenReturn(mock(javax.xml.bind.Marshaller.class));
+        
+        byte[] result = TDwsServiceUtil.convertObjectToStream("context_path", Object.class, new Object(), "tagname", "namespace");
+
+        assertNotNull(result);
+    }
+
+    @Test
+    public void testConvertObjectToStreamWithDefaultParams() throws Exception {
+        when(JaxbUtil.getJaxbContext(anyString())).thenReturn(jaxbContext);
+        when(jaxbContext.createMarshaller()).thenReturn(mock(javax.xml.bind.Marshaller.class));
+        
+        byte[] result = TDwsServiceUtil.convertObjectToStream("context_path", Object.class, new Object(), "tagname");
+
+        assertNotNull(result);
+    }
+
+    @Test
+    public void testSuppressCardNoAndPin() {
+        String inputStr = "<CardNumber>1234567812345678</CardNumber><Value>123456789012</Value>";
+        String expectedStr = "<CardNumber>************5678</CardNumber><Value>************9012</Value>";
+        
+        String result = TDwsServiceUtil.suppressCardNoAndPin(inputStr);
+
+        assertEquals(expectedStr, result);
+    }
+
+    @Test
+    public void testStaticBlockInitialization() {
+        // Verify that static block is executed successfully without exceptions
+        assertNotNull(TDwsServiceUtil.getTDServiceParam("TD_CUSTAGREEMENT_SERVICE_ENABLED"));
+    }
+
+    @Test
+    public void testMaskCardNoPattern() {
+        String inputStr = "<CardNumber>1234567812345678</CardNumber>";
+        String expectedStr = "<CardNumber>************5678</CardNumber>";
+
+        String result = TDwsServiceUtil.suppressCardNoAndPin(inputStr);
+
+        assertEquals(expectedStr, result);
+    }
+
+    @Test
+    public void testMaskArrgnbrWithCardPattern() {
+        String inputStr = "<ArrangementNO>1234567890123456</ArrangementNO>";
+        String expectedStr = "<ArrangementNO>************3456</ArrangementNO>";
+
+        String result = TDwsServiceUtil.suppressCardNoAndPin(inputStr);
+
+        assertEquals(expectedStr, result);
+    }
+
+    @Test
+    public void testMaskValueWithCardPattern() {
+        String inputStr = "<value>1234567890123456</value>";
+        String expectedStr = "<value>************3456</value>";
+
+        String result = TDwsServiceUtil.suppressCardNoAndPin(inputStr);
+
+        assertEquals(expectedStr, result);
+    }
+}

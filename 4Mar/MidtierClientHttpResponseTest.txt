@@ -1,0 +1,83 @@
+package com.td.mbna.msec.midtier.util.services;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.util.StreamUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+public class MidtierClientHttpResponseTest {
+
+    @Mock
+    private ClientHttpResponse mockClientHttpResponse;
+
+    @Mock
+    private HttpHeaders mockHttpHeaders;
+
+    private MidtierClientHttpResponse midtierClientHttpResponse;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        midtierClientHttpResponse = new MidtierClientHttpResponse(mockClientHttpResponse);
+    }
+
+    @Test
+    public void testGetBody() throws IOException {
+        byte[] mockBody = "mock response body".getBytes();
+        InputStream inputStream = new ByteArrayInputStream(mockBody);
+        when(mockClientHttpResponse.getBody()).thenReturn(inputStream);
+
+        InputStream result = midtierClientHttpResponse.getBody();
+        assertNotNull(result);
+        assertEquals(mockBody.length, StreamUtils.copyToByteArray(result).length);
+    }
+
+    @Test
+    public void testGetHeaders() {
+        when(mockClientHttpResponse.getHeaders()).thenReturn(mockHttpHeaders);
+
+        HttpHeaders result = midtierClientHttpResponse.getHeaders();
+        assertEquals(mockHttpHeaders, result);
+    }
+
+    @Test
+    public void testClose() {
+        midtierClientHttpResponse.close();
+        verify(mockClientHttpResponse, times(1)).close();
+    }
+
+    @Test
+    public void testGetRawStatusCode() throws IOException {
+        when(mockClientHttpResponse.getRawStatusCode()).thenReturn(200);
+
+        int statusCode = midtierClientHttpResponse.getRawStatusCode();
+        assertEquals(200, statusCode);
+    }
+
+    @Test
+    public void testGetStatusCode() throws IOException {
+        when(mockClientHttpResponse.getStatusCode()).thenReturn(HttpStatus.OK);
+
+        HttpStatus statusCode = midtierClientHttpResponse.getStatusCode();
+        assertEquals(HttpStatus.OK, statusCode);
+    }
+
+    @Test
+    public void testGetStatusText() throws IOException {
+        when(mockClientHttpResponse.getStatusText()).thenReturn("OK");
+
+        String statusText = midtierClientHttpResponse.getStatusText();
+        assertEquals("OK", statusText);
+    }
+}

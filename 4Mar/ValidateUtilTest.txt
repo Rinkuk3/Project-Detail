@@ -1,0 +1,112 @@
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.validation.BindException;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.Validator;
+
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+
+public class ValidateUtilTest {
+
+    @Mock
+    ApplicationContext context;
+
+    @Mock
+    Validator mockValidator;
+
+    @Test
+    public void testValidateRequest_UsingContextAndObject() {
+        Object request = new Object();
+        String validatorBeanName = "ObjectValidator";
+        Mockito.when(context.getBean(validatorBeanName)).thenReturn(mockValidator);
+
+        ValidationException exception = ValidateUtil.validateRequest(context, validatorBeanName, request);
+        assertNull(exception);  // Since no errors, should return null
+    }
+
+    @Test
+    public void testValidateRequest_UsingValidatorAndObject() {
+        Object request = new Object();
+        Errors vErrors = new BindException(request, "target");
+        Mockito.when(mockValidator.validate(request, vErrors)).thenReturn(null);
+        Mockito.when(vErrors.hasErrors()).thenReturn(true);
+
+        ValidationException exception = ValidateUtil.validateRequest(mockValidator, request);
+        assertNotNull(exception);
+    }
+
+    @Test
+    public void testValidateRequest_WithFieldErrors() {
+        Object request = new Object();
+        Errors vErrors = new BindException(request, "target");
+        ObjectError error = new ObjectError("testField", "testMessage");
+        vErrors.addError(error);
+
+        Mockito.when(mockValidator.validate(request, vErrors)).thenReturn(null);
+
+        ValidationException exception = ValidateUtil.validateRequest(mockValidator, request);
+        assertNotNull(exception);
+        assertTrue(exception.toString().contains("testMessage"));
+    }
+
+    @Test
+    public void testValidateBigDecimalAmount_ValidAmount() throws Exception {
+        BigDecimal validAmount = new BigDecimal("123.45");
+        ValidateUtil.ValidateBigDecimalAmount function = new ValidateUtil.ValidateBigDecimalAmount(null, 0, 0);
+        assertTrue((Boolean) function.doGetResult(validAmount));
+    }
+
+    @Test
+    public void testValidateBigDecimalAmount_InvalidAmount() throws Exception {
+        BigDecimal invalidAmount = new BigDecimal("123.456");
+        ValidateUtil.ValidateBigDecimalAmount function = new ValidateUtil.ValidateBigDecimalAmount(null, 0, 0);
+        assertFalse((Boolean) function.doGetResult(invalidAmount));
+    }
+
+    @Test
+    public void testValidateDoubleAmount_ValidAmount() throws Exception {
+        Double validAmount = 123.45;
+        ValidateUtil.ValidateDoubleAmount function = new ValidateUtil.ValidateDoubleAmount(null, 0, 0);
+        assertTrue((Boolean) function.doGetResult(validAmount));
+    }
+
+    @Test
+    public void testValidateDoubleAmount_InvalidAmount() throws Exception {
+        Double invalidAmount = 123.456;
+        ValidateUtil.ValidateDoubleAmount function = new ValidateUtil.ValidateDoubleAmount(null, 0, 0);
+        assertFalse((Boolean) function.doGetResult(invalidAmount));
+    }
+
+    @Test
+    public void testValidateName_ValidName() throws Exception {
+        String validName = "John Doe";
+        ValidateUtil.ValidateName function = new ValidateUtil.ValidateName(null, 0, 0);
+        assertTrue((Boolean) function.doGetResult(validName));
+    }
+
+    @Test
+    public void testValidateName_InvalidName() throws Exception {
+        String invalidName = "John123";
+        ValidateUtil.ValidateName function = new ValidateUtil.ValidateName(null, 0, 0);
+        assertFalse((Boolean) function.doGetResult(invalidName));
+    }
+
+    @Test
+    public void testGenValidationException() {
+        ValidationException exception = ValidateUtil.genValidationException("MS503");
+        assertNotNull(exception);
+        assertTrue(exception.toString().contains("MS503"));
+    }
+
+    @Test
+    public void testGenValidationException_DefaultErrorCode() {
+        ValidationException exception = ValidateUtil.genValidationException(null);
+        assertNotNull(exception);
+        assertTrue(exception.toString().contains("MS502"));
+    }
+}

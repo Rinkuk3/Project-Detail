@@ -1,0 +1,56 @@
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.xml.sax.SAXParseException;
+
+public class XmlUtilTest {
+
+    @Test
+    public void testGenDocumentBuilder() throws Exception {
+        DocumentBuilder builder = XmlUtil.genDocumentBuilder();
+        assertNotNull(builder);
+    }
+
+    @Test
+    public void testGenDocumentBuilderWithoutExternalDTD() throws Exception {
+        String schemaPath = "schema/path";
+        DocumentBuilder builder = XmlUtil.genDocumentBuilderWithoutExternalDTD(schemaPath);
+        assertNotNull(builder);
+    }
+
+    @Test
+    public void testGenSafeDocumentFactory() throws Exception {
+        DocumentBuilderFactory factory = XmlUtil.genSafeDocumentFactory();
+        assertNotNull(factory);
+    }
+
+    @Test
+    public void testSchemaErrorHandler_warning() {
+        SchemaErrorHandler handler = new SchemaErrorHandler();
+        SAXParseException exception = new SAXParseException("Warning", null);
+        handler.warning(exception);
+        // No assertion here, checking if warning method completes without errors
+    }
+
+    @Test
+    public void testSchemaErrorHandler_error() {
+        SchemaErrorHandler handler = new SchemaErrorHandler();
+        SAXParseException exception = new SAXParseException("Error", null);
+        handler.error(exception);
+        // No assertion here, checking if error method completes without errors
+    }
+
+    @Test
+    public void testSchemaErrorHandler_fatalError() {
+        SchemaErrorHandler handler = new SchemaErrorHandler();
+        SAXParseException exception = new SAXParseException("Fatal Error", null);
+        try {
+            handler.fatalError(exception);
+            fail("Expected SAXParseException");
+        } catch (SAXParseException e) {
+            // Expected exception
+        }
+    }
+}

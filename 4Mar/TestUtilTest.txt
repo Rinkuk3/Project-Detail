@@ -1,0 +1,131 @@
+package com.td.mbna.msec.midtier.util;
+
+import com.td.mbna.msec.midtier.exception.BusinessError;
+import com.td.mbna.msec.midtier.exception.SystemError;
+import com.td.mbna.msec.midtier.exception.ValidationError;
+import com.td.mbna.msec.midtier.types.common.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class TestUtilTest {
+
+    @BeforeEach
+    public void setup() {
+        TestUtil.init();
+    }
+
+    @Test
+    public void testGenerateTrackingInfo() {
+        TrackingInfoType trackingInfo = TestUtil.generateTrackingInfo();
+        assertNotNull(trackingInfo);
+        assertEquals("1234", trackingInfo.getConnectId());
+        assertEquals("test", trackingInfo.getClientAction());
+        assertEquals("127.0.0.1", trackingInfo.getIpAddr());
+        assertEquals("testuser", trackingInfo.getLoginId());
+        assertEquals("testSessionId", trackingInfo.getSessionId());
+        assertEquals("Test", trackingInfo.getFirstName());
+        assertEquals("User", trackingInfo.getLastName());
+    }
+
+    @Test
+    public void testGenerateXsdTrackingInfo() {
+        com.mbnaweb.xsd.types.common.TrackingInfoType trackingInfo = TestUtil.generateXsdTrackingInfo();
+        assertNotNull(trackingInfo);
+        assertEquals("1234", trackingInfo.getConnectId());
+        assertEquals("test", trackingInfo.getClientAction());
+        assertEquals("127.0.0.1", trackingInfo.getIpAddr());
+        assertEquals("testuser", trackingInfo.getLoginId());
+        assertEquals("testSessionId", trackingInfo.getSessionId());
+        assertEquals("Test", trackingInfo.getFirstName());
+        assertEquals("User", trackingInfo.getLastName());
+    }
+
+    @Test
+    public void testGenerateAuditLogInfo() {
+        AuditInfo auditLogInfo = TestUtil.generateAuditLogInfo();
+        assertNotNull(auditLogInfo);
+        assertEquals("SS0402", auditLogInfo.getTransactionCode());
+        assertEquals("A1", auditLogInfo.getAccountDelinquencyCode());
+        assertEquals("ACTIVE", auditLogInfo.getAccountStatusCode());
+        assertEquals("IE", auditLogInfo.getBrowser());
+        assertEquals("1234", auditLogInfo.getConnectId());
+        assertEquals("A2", auditLogInfo.getGroupAffinityCode());
+        assertEquals("windows", auditLogInfo.getOperatingSystem());
+        assertEquals("4", auditLogInfo.getPaaSequence());
+        assertEquals("test", auditLogInfo.getServerID());
+        assertEquals("http://test", auditLogInfo.getUrl());
+        assertEquals("123456", auditLogInfo.getCardEnding());
+        assertFalse(auditLogInfo.isLogLastLogin());
+    }
+
+    @Test
+    public void testGenerateEmailNotificationInfo() {
+        EmailNotificationInfoType emailNotificationInfo = TestUtil.generateEmailNotificationInfo();
+        assertNotNull(emailNotificationInfo);
+        assertEquals("abc@xyz.com", emailNotificationInfo.getPrimaryUserEmailAddress());
+        assertEquals("English", emailNotificationInfo.getPrimaryUserLanguage());
+        assertEquals("John", emailNotificationInfo.getPrimaryUserFirstName());
+        assertEquals("D", emailNotificationInfo.getPrimaryUserMiddleName());
+        assertEquals("Doe", emailNotificationInfo.getPrimaryUserLastName());
+        assertEquals("MBNA Rewards Card", emailNotificationInfo.getCardName());
+        assertEquals("1234", emailNotificationInfo.getCardEnding());
+        assertEquals("def@xyz.com", emailNotificationInfo.getOldEmailAddressChange());
+    }
+
+    @Test
+    public void testGenerateTestException_ValidationException() {
+        TrackableRequest request = new TrackableRequest();
+        SessionInfo sessionInfo = new SessionInfo();
+        sessionInfo.setSessionId("ValidationException");
+        request.setSessionInfo(sessionInfo);
+
+        assertThrows(ValidationError.class, () -> {
+            TestUtil.generateTestException(request);
+        });
+    }
+
+    @Test
+    public void testGenerateTestException_SystemException() {
+        TrackableRequest request = new TrackableRequest();
+        SessionInfo sessionInfo = new SessionInfo();
+        sessionInfo.setSessionId("SystemException");
+        request.setSessionInfo(sessionInfo);
+
+        assertThrows(SystemError.class, () -> {
+            TestUtil.generateTestException(request);
+        });
+    }
+
+    @Test
+    public void testGenerateTestException_BusinessException() {
+        TrackableRequest request = new TrackableRequest();
+        SessionInfo sessionInfo = new SessionInfo();
+        sessionInfo.setSessionId("BusinessException");
+        request.setSessionInfo(sessionInfo);
+
+        assertThrows(BusinessError.class, () -> {
+            TestUtil.generateTestException(request);
+        });
+    }
+
+    @Test
+    public void testIsTest() {
+        System.setProperty(ConfigUtil.SYSTEM_PROPERTY_TEST, "true");
+        assertTrue(TestUtil.isTest());
+
+        System.setProperty(ConfigUtil.SYSTEM_PROPERTY_TEST, "false");
+        assertFalse(TestUtil.isTest());
+    }
+
+    @Test
+    public void testInit() {
+        // Initialize the system properties
+        TestUtil.init();
+
+        assertNotNull(System.getProperty(com.td.mbna.msec.midtier.util.ConfigUtil.SYSTEM_PROPERTY_CONFIG_DIR));
+        assertNotNull(System.getProperty(com.td.mbna.msec.midtier.util.ConfigUtil.SYSTEM_PROPERTY_TEST));
+        assertEquals("com.sun.xml.internal.messaging.saaj.soap.SAAJMetaFactoryImpl", System.getProperty("javax.xml.soap.MetaFactory"));
+    }
+}
