@@ -1,0 +1,189 @@
+package com.td.mbna.msec.midtier.util;
+
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import com.mbnaweb.xsd.msgs.customerprofile.*;
+import com.mbnaweb.xsd.types.common.*;
+import com.mbnaweb.xsd.types.eligibility.AcctEligType;
+import com.mbnaweb.xsd.types.eligibility.CustEligType;
+import com.mbnaweb.xsd.types.eligibility.EligIdType;
+
+public class CustomerProfileUtilTest {
+
+    private CustomerAcctProfileType customerAcctProfile;
+    private RetrieveCustomerProfileResponse retrieveResponse;
+    private CustomerProfileType customerProfile;
+    private CustEligType custElig;
+
+    @Before
+    public void setUp() throws Exception {
+        // Setup common objects
+        customerAcctProfile = new CustomerAcctProfileType();
+        CustomerInfoType custInfo = new CustomerInfoType();
+        custInfo.setBirthDate(DatatypeFactory.newInstance().newXMLGregorianCalendar());
+        custInfo.setLanguagePref("EN");
+        customerAcctProfile.setCustInfo(custInfo);
+
+        retrieveResponse = new RetrieveCustomerProfileResponse();
+        RetrieveCustomerProfileResponse.ResponsePayload payload = new RetrieveCustomerProfileResponse.ResponsePayload();
+        payload.setBusinessPhone("123-456-7890");
+        payload.setHomePhone("234-567-8901");
+        payload.setMobilePhone("345-678-9012");
+        payload.setEmail("test@example.com");
+        payload.setMailingAddressLine1("Mailing Line 1");
+        payload.setMailingCity("Mailing City");
+        payload.setMailingPostalCode("12345");
+        payload.setPhysicalAddressLine1("Physical Line 1");
+        payload.setPhysicalCity("Physical City");
+        payload.setPhysicalPostalCode("67890");
+        retrieveResponse.setResponsePayload(payload);
+
+        customerProfile = new CustomerProfileType();
+        CustomerAcctType acct = new CustomerAcctType();
+        acct.setAcctNum("123456");
+        customerProfile.getAccounts().add(acct);
+
+        custElig = new CustEligType();
+        AcctEligType acctElig = new AcctEligType();
+        acctElig.setAcctId("123456");
+        acctElig.getAcctElig().add(EligIdType.KYC_REFRESH);
+        custElig.getAcctsElig().add(acctElig);
+    }
+
+    @Test
+    public void testSetValues() throws Exception {
+        CustAcctType src = new CustAcctType();
+        src.setAcctNum("123");
+        CustAcctType tgt = new CustAcctType();
+        CustomerProfileUtil.setValues(src, tgt);
+        assertEquals("123", tgt.getAcctNum());
+    }
+
+    @Test
+    public void testDownConvert() {
+        List<CustomerAcctType> list = new ArrayList<>();
+        CustomerAcctType acct = new CustomerAcctType();
+        acct.setAcctNum("123");
+        list.add(acct);
+        List<CustAcctType> result = CustomerProfileUtil.downConvert(list);
+        assertEquals(1, result.size());
+        assertEquals("123", result.get(0).getAcctNum());
+    }
+
+    @Test
+    public void testConvertRetrieveToAcctProfile() {
+        CustomerAcctProfileType result = CustomerProfileUtil.convert(retrieveResponse);
+        assertNotNull(result.getCustInfo());
+        assertNotNull(result.getAcctInfo());
+    }
+
+    @Test
+    public void testConvertAcctProfileToRetrieve() {
+        RetrieveCustomerProfileResponse result = CustomerProfileUtil.convert(customerAcctProfile);
+        assertNotNull(result.getResponsePayload());
+    }
+
+    @Test
+    public void testGenCustAcctProfile() {
+        CustomerAcctProfileType result = CustomerProfileUtil.genCustAcctProfile(customerProfile, "123456");
+        assertNotNull(result.getAcctInfo());
+    }
+
+    @Test
+    public void testFindCustAcctFromProfile() {
+        CustomerAcctType result = CustomerProfileUtil.findCustAcctFromProfile(customerProfile, "123456");
+        assertEquals("123456", result.getAcctNum());
+    }
+
+    @Test
+    public void testMarshalAddresses() {
+        CustomerInfoType custInfo = new CustomerInfoType();
+        custInfo.setPhysicalAddressLine1("Line1");
+        custInfo.setPhysicalCity("City");
+        custInfo.setPhysicalProvince("Province");
+        custInfo.setPhysicalPostalCode("Postal");
+        CustomerAcctInfoType acctInfo = new CustomerAcctInfoType();
+        acctInfo.setMailingAddressLine1("Line1");
+        acctInfo.setMailingCity("City");
+        acctInfo.setMailingProvince("Province");
+        acctInfo.setMailingPostalCode("Postal");
+        CustomerProfileUtil.marshalAddresses(custInfo, acctInfo);
+        assertFalse(acctInfo.isDifferentPhysicalAddress());
+    }
+
+    @Test
+    public void testMapToContactInfoType() {
+        AcctContactInfoType result = CustomerProfileUtil.mapToContactInfoType(retrieveResponse);
+        assertEquals("test@example.com", result.getEmailAddr());
+        assertNotNull(result.getMailingAddress());
+    }
+
+    @Test
+    public void testCompareUpdateTS() {
+        XMLGregorianCalendar now = CustomerProfileUtil.getXMLGregorianCalendarNow();
+        assertTrue(CustomerProfileUtil.compareUpdateTS(now, now));
+    }
+
+    @Test
+    public void testCompareFieldString() {
+        assertTrue(CustomerProfileUtil.compareField("test", "TEST"));
+        assertFalse(CustomerProfileUtil.compareField("test", "test2"));
+    }
+
+    @Test
+    public void testCompareFieldBigDecimal() {
+        BigDecimal bd1 = new BigDecimal("100.00");
+        BigDecimal bd2 = new BigDecimal("100.00");
+        assertTrue(CustomerProfileUtil.compareField(bd1, bd2));
+    }
+
+    @Test
+    public void testGetXMLGregorianCalendarNow() {
+        assertNotNull(CustomerProfileUtil.getXMLGregorianCalendarNow());
+    }
+
+    @Test
+    public void testGetYearlyIncome() {
+        BigDecimal income = CustomerProfileUtil.getYearlyIncome(new BigDecimal("1000"), "MONTHLY");
+        assertEquals(new BigDecimal("12000.00"), income);
+    }
+
+    @Test
+    public void testGetLogonKycList() {
+        List<CustAcctType> accts = new ArrayList<>();
+        CustAcctType acct = new CustAcctType();
+        acct.setAcctNum("123456");
+        CardHolderType cardHolder = new CardHolderType();
+        cardHolder.setPrimaryUser(true);
+        acct.setCardHolder(cardHolder);
+        accts.add(acct);
+        List<CustAcctType> result = CustomerProfileUtil.getLogonKycList(customerProfile, accts, custElig, false);
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    public void testFormatCustomerNotesPhoneNum() {
+        assertEquals("2345678901", CustomerProfileUtil.formatCustomerNotesPhoneNum("1-234-567-8901"));
+    }
+
+    @Test
+    public void testSplitAddressLine() {
+        String[] result = CustomerProfileUtil.splitAddressLine("123 Main St, Apt 4B, Springfield, IL 62704");
+        assertTrue(result[0].length() <= 40);
+    }
+
+    @Test
+    public void testNormalizeSpace() {
+        assertEquals("test string", CustomerProfileUtil.normalizeSpace("  test   string  "));
+    }
+
+    // Additional tests for remaining methods...
+}
