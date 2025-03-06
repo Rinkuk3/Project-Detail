@@ -1,0 +1,96 @@
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+
+public class JAXBContextUtilTest {
+
+    private static final String MOCK_PACKAGE_NAME = "com.td.mbna.msec.midtier.util";
+    private Class<?> mockJaxbClass;
+    private Package mockPackage;
+
+    @BeforeEach
+    public void setUp() {
+        mockJaxbClass = mock(Class.class);
+        mockPackage = mock(Package.class);
+        when(mockJaxbClass.getPackage()).thenReturn(mockPackage);
+        when(mockPackage.getName()).thenReturn(MOCK_PACKAGE_NAME);
+    }
+
+    @Test
+    public void testGetJaxbContext_WithClass() throws JAXBException {
+        try (MockedStatic<JAXBContextUtil> mockedUtil = mockStatic(JAXBContextUtil.class, CALLS_REAL_METHODS);
+             MockedStatic<JaxbContextCache> mockedCache = mockStatic(JaxbContextCache.class)) {
+
+            JAXBContext mockJaxbContext = mock(JAXBContext.class);
+            mockedCache.when(() -> JaxbContextCache.get(MOCK_PACKAGE_NAME)).thenReturn(null);
+            mockedCache.when(() -> JaxbContextCache.put(eq(MOCK_PACKAGE_NAME), any())).thenAnswer(invocation -> null);
+            mockedUtil.when(() -> JAXBContext.newInstance(MOCK_PACKAGE_NAME)).thenReturn(mockJaxbContext);
+
+            JAXBContext result = JAXBContextUtil.getJaxbContext(mockJaxbClass);
+
+            assertNotNull(result);
+            assertEquals(mockJaxbContext, result);
+        }
+    }
+
+    @Test
+    public void testGetJaxbContext_WithClass_CacheHit() throws JAXBException {
+        try (MockedStatic<JaxbContextCache> mockedCache = mockStatic(JaxbContextCache.class)) {
+            JAXBContext mockJaxbContext = mock(JAXBContext.class);
+            mockedCache.when(() -> JaxbContextCache.get(MOCK_PACKAGE_NAME)).thenReturn(mockJaxbContext);
+
+            JAXBContext result = JAXBContextUtil.getJaxbContext(mockJaxbClass);
+
+            assertNotNull(result);
+            assertEquals(mockJaxbContext, result);
+        }
+    }
+
+    @Test
+    public void testGetJaxbContext_WithString_CacheHit() throws JAXBException {
+        try (MockedStatic<JaxbContextCache> mockedCache = mockStatic(JaxbContextCache.class)) {
+            JAXBContext mockJaxbContext = mock(JAXBContext.class);
+            mockedCache.when(() -> JaxbContextCache.get(MOCK_PACKAGE_NAME)).thenReturn(mockJaxbContext);
+
+            JAXBContext result = JAXBContextUtil.getJaxbContext(MOCK_PACKAGE_NAME);
+
+            assertNotNull(result);
+            assertEquals(mockJaxbContext, result);
+        }
+    }
+
+    @Test
+    public void testGetJaxbContext_WithString_CacheMiss() throws JAXBException {
+        try (MockedStatic<JAXBContextUtil> mockedUtil = mockStatic(JAXBContextUtil.class, CALLS_REAL_METHODS);
+             MockedStatic<JaxbContextCache> mockedCache = mockStatic(JaxbContextCache.class)) {
+
+            JAXBContext mockJaxbContext = mock(JAXBContext.class);
+            mockedCache.when(() -> JaxbContextCache.get(MOCK_PACKAGE_NAME)).thenReturn(null);
+            mockedCache.when(() -> JaxbContextCache.put(eq(MOCK_PACKAGE_NAME), any())).thenAnswer(invocation -> null);
+            mockedUtil.when(() -> JAXBContext.newInstance(MOCK_PACKAGE_NAME)).thenReturn(mockJaxbContext);
+
+            JAXBContext result = JAXBContextUtil.getJaxbContext(MOCK_PACKAGE_NAME);
+
+            assertNotNull(result);
+            assertEquals(mockJaxbContext, result);
+        }
+    }
+
+    @Test
+    public void testGetJaxbContext_ThrowsException() throws JAXBException {
+        try (MockedStatic<JAXBContextUtil> mockedUtil = mockStatic(JAXBContextUtil.class, CALLS_REAL_METHODS);
+             MockedStatic<JaxbContextCache> mockedCache = mockStatic(JaxbContextCache.class)) {
+
+            mockedCache.when(() -> JaxbContextCache.get(MOCK_PACKAGE_NAME)).thenReturn(null);
+            mockedUtil.when(() -> JAXBContext.newInstance(MOCK_PACKAGE_NAME)).thenThrow(new JAXBException("Test Exception"));
+
+            assertThrows(JAXBException.class, () -> JAXBContextUtil.getJaxbContext(MOCK_PACKAGE_NAME));
+        }
+    }
+}
