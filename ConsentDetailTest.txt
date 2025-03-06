@@ -1,0 +1,65 @@
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import com.td.mbna.msec.midtier.configuration.beans.ConsentDocBaseDetail;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.w3c.dom.Document;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.List;
+
+class ConsentDetailTest {
+
+    @Mock
+    private Document mockDocument;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testGetDetailsOfDisclosureDocuments_ValidXml() {
+        String xmlResponse = "<root>\n" +
+        "    <c:CustomerAgreement xmlns:c=\"http://example.com\">\n" +
+        "        <c:DocumentBase>\n" +
+        "            <c:DocumentCreateDT>2023-01-01T12:00:00</c:DocumentCreateDT>\n" +
+        "            <c:DocumentTypeCD>TEST_TYPE</c:DocumentTypeCD>\n" +
+        "        </c:DocumentBase>\n" +
+        "    </c:CustomerAgreement>\n" +
+        "</root>";
+
+
+        List<ConsentDocBaseDetail> result = ConsentDetail.getDetailsOfDisclosureDocuments(xmlResponse);
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("TEST_TYPE", result.get(0).getDocTypeCode());
+        assertNotNull(result.get(0).getDate());
+    }
+
+    @Test
+    void testGetDetailsOfDisclosureDocuments_InvalidXml() {
+        String invalidXml = "<root><Invalid></Invalid></root>";
+        List<ConsentDocBaseDetail> result = ConsentDetail.getDetailsOfDisclosureDocuments(invalidXml);
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void testParseDateFromXml_ValidDate() throws Exception {
+        String dateStr = "2023-01-01T12:00:00";
+        XMLGregorianCalendar result = ConsentDetail.parseDateFromXml(dateStr);
+        assertNotNull(result);
+        assertEquals(DatatypeFactory.newInstance().newXMLGregorianCalendar(dateStr), result);
+    }
+
+    @Test
+    void testParseDateFromXml_InvalidDate() {
+        String invalidDate = "invalid-date";
+        XMLGregorianCalendar result = ConsentDetail.parseDateFromXml(invalidDate);
+        assertNull(result);
+    }
+}
