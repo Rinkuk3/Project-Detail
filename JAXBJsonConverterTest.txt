@@ -1,0 +1,108 @@
+package com.td.mbna.msec.midtier.util.services;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.lang.reflect.Method;
+import java.util.Date;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.td.mbna.msec.midtier.util.XMLGregorianCalendarConverter;
+import com.td.mbna.msec.midtier.util.MbnaLogger;
+
+class JAXBJsonConverterTest {
+    private JAXBJsonConverter converter;
+    private MbnaLogger logger;
+
+    @BeforeEach
+    void setUp() {
+        converter = new JAXBJsonConverter();
+        logger = mock(MbnaLogger.class);
+    }
+
+    @Test
+    void testConvertJsonToJAXBInterface() {
+        TestClass obj = new TestClass("test", 123);
+        TestClass result = JAXBJsonConverter.convertJsonToJAXBInterface(obj, TestClass.class);
+        assertNotNull(result);
+        assertEquals(obj.getName(), result.getName());
+        assertEquals(obj.getValue(), result.getValue());
+    }
+
+    @Test
+    void testConvertoJAXBToJsonInterface() {
+        TestClass obj = new TestClass("test", 123);
+        TestClass result = JAXBJsonConverter.convertoJAXBToJsonInterface(obj, TestClass.class);
+        assertNotNull(result);
+        assertEquals(obj.getName(), result.getName());
+        assertEquals(obj.getValue(), result.getValue());
+    }
+
+    @Test
+    void testConvertLongToXMLGregorianCalendar() throws Exception {
+        Long time = System.currentTimeMillis();
+        XMLGregorianCalendar xmlCal = JAXBJsonConverter.convert(time);
+        assertNotNull(xmlCal);
+        assertEquals(time.longValue(), xmlCal.toGregorianCalendar().getTimeInMillis());
+    }
+
+    @Test
+    void testConvertStringToXMLGregorianCalendar() {
+        String dateStr = "2025-03-05T10:15:30";
+        String format = "yyyy-MM-dd'T'HH:mm:ss";
+        XMLGregorianCalendar xmlCal = JAXBJsonConverter.convert(dateStr, format);
+        assertNotNull(xmlCal);
+    }
+
+    @Test
+    void testConvertDateToString() {
+        Date date = new Date();
+        String format = "yyyy-MM-dd";
+        String result = JAXBJsonConverter.convertDateToString(date, format);
+        assertNotNull(result);
+    }
+
+    @Test
+    void testConvertFromStringToDate() {
+        String dateStr = "2025-03-05";
+        String format = "yyyy-MM-dd";
+        Date result = JAXBJsonConverter.convertFromStringToDate(dateStr, format);
+        assertNotNull(result);
+    }
+
+    @Test
+    void testConvertToLong() {
+        String dateStr = "2025-03-05";
+        String format = "yyyy-MM-dd";
+        Long result = JAXBJsonConverter.convertToLong(dateStr, format);
+        assertNotNull(result);
+    }
+
+    @Test
+    void testCopyBeanProperties() throws Exception {
+        TestClass source = new TestClass("test", 123);
+        TestClass target = new TestClass();
+        JAXBJsonConverter.copyBeanProperties(target, source);
+        assertEquals(source.getName(), target.getName());
+        assertEquals(source.getValue(), target.getValue());
+    }
+
+    static class TestClass {
+        private String name;
+        private int value;
+
+        public TestClass() {}
+        public TestClass(String name, int value) {
+            this.name = name;
+            this.value = value;
+        }
+        public String getName() { return name; }
+        public void setName(String name) { this.name = name; }
+        public int getValue() { return value; }
+        public void setValue(int value) { this.value = value; }
+    }
+}

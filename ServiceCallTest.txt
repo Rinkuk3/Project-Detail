@@ -1,0 +1,129 @@
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.*;
+
+public class ServiceCallTest {
+
+    private ServiceCall<String> serviceCall;
+
+    @Before
+    public void setUp() {
+        serviceCall = new ServiceCall<String>() {
+            @Override
+            public String invoke() throws Exception {
+                return "Success";
+            }
+        };
+    }
+
+    @Test
+    public void testCallWithSuccess() throws Exception {
+        serviceCall.setId("123");
+        String response = serviceCall.call();
+        assertNotNull(response);
+        assertEquals("Success", response);
+    }
+
+    @Test
+    public void testCallWithException() throws Exception {
+        serviceCall = new ServiceCall<String>() {
+            @Override
+            public String invoke() throws Exception {
+                throw new Exception("Test Exception");
+            }
+        };
+        serviceCall.setId("123");
+        String response = serviceCall.call();
+        assertNull(response);
+        assertNotNull(serviceCall.getException());
+    }
+
+    @Test
+    public void testGetResponseClassName() {
+        String className = serviceCall.getResponseClassName();
+        assertEquals("java.lang.String", className);
+    }
+
+    @Test
+    public void testToStringWithResponse() throws Exception {
+        serviceCall.setId("123");
+        serviceCall.call();
+        String result = serviceCall.toString();
+        assertTrue(result.contains("+R"));
+    }
+
+    @Test
+    public void testToStringWithException() throws Exception {
+        serviceCall = new ServiceCall<String>() {
+            @Override
+            public String invoke() throws Exception {
+                throw new Exception("Test Exception");
+            }
+        };
+        serviceCall.setId("123");
+        serviceCall.call();
+        String result = serviceCall.toString();
+        assertTrue(result.contains("+E"));
+    }
+
+    @Test
+    public void testGetId() {
+        serviceCall.setId("123");
+        String id = serviceCall.getId();
+        assertEquals("123", id);
+    }
+
+    @Test
+    public void testSetId() {
+        serviceCall.setId("456");
+        String id = serviceCall.getId();
+        assertEquals("456", id);
+    }
+
+    @Test
+    public void testRelease() {
+        serviceCall.release();
+        // No exception should be thrown
+    }
+
+    @Test
+    public void testIsDaemon() {
+        boolean isDaemon = serviceCall.isDaemon();
+        assertFalse(isDaemon);
+    }
+
+    @Test
+    public void testGetException() throws Exception {
+        serviceCall = new ServiceCall<String>() {
+            @Override
+            public String invoke() throws Exception {
+                throw new Exception("Test Exception");
+            }
+        };
+        serviceCall.setId("123");
+        serviceCall.call();
+        Exception exception = serviceCall.getException();
+        assertNotNull(exception);
+        assertEquals("Test Exception", exception.getMessage());
+    }
+
+    @Test
+    public void testGetGenericParameterClassName() {
+        String className = serviceCall.getGenericParameterClassName();
+        assertEquals("java.lang.String", className);
+    }
+
+    @Test
+    public void testGetClassName() {
+        Class<?> clazz = String.class;
+        String className = ServiceCall.getClassName(clazz);
+        assertEquals("java.lang.String", className);
+    }
+
+    @Test
+    public void testGenResponseKey() {
+        String key = ServiceCall.genResponseKey("123", "java.lang.String");
+        assertEquals("123-java.lang.String", key);
+    }
+}

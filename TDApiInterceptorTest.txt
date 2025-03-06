@@ -1,0 +1,94 @@
+package com.td.mbna.msec.midtier.util.services;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.client.ClientHttpRequestExecution;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.mock.http.client.MockClientHttpResponse;
+
+import java.io.IOException;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+class TDApiInterceptorTest {
+    private TDApiInterceptor interceptor;
+    private HttpRequest mockRequest;
+    private ClientHttpRequestExecution mockExecution;
+    private ClientHttpResponse mockResponse;
+    private byte[] mockBody;
+
+    @BeforeEach
+    void setUp() throws IOException {
+        interceptor = new TDApiInterceptor();
+        mockRequest = mock(HttpRequest.class);
+        mockExecution = mock(ClientHttpRequestExecution.class);
+        mockResponse = new MockClientHttpResponse("{}".getBytes(StandardCharsets.UTF_8), 200);
+        mockBody = "request body".getBytes(StandardCharsets.UTF_8);
+
+        when(mockRequest.getURI()).thenReturn(URI.create("https://localhost/mockApi"));
+        when(mockRequest.getMethod()).thenReturn(HttpMethod.GET);
+        when(mockExecution.execute(any(HttpRequest.class), any(byte[].class))).thenReturn(mockResponse);
+    }
+
+    @Test
+    void testIntercept_CacheDisabled() throws IOException {
+        ClientHttpResponse response = interceptor.intercept(mockRequest, mockBody, mockExecution);
+        assertNotNull(response);
+        assertEquals(200, response.getRawStatusCode());
+    }
+
+    @Test
+    void testIntercept_MockResponse() throws IOException {
+        TDRestMockService mockService = mock(TDRestMockService.class);
+        when(mockService.getMockResponse(anyString())).thenReturn(mockResponse);
+        interceptor = new TDApiInterceptor() {
+            @Override
+            public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+                return mockService.getMockResponse(request.getURI().toString());
+            }
+        };
+        ClientHttpResponse response = interceptor.intercept(mockRequest, mockBody, mockExecution);
+        assertNotNull(response);
+        assertEquals(200, response.getRawStatusCode());
+    }
+
+    @Test
+    void testPutAndGetCachedResponse() {
+        MidtierClientHttpResponse response = mock(MidtierClientHttpResponse.class);
+        String connectId = "123";
+        String url = "https://localhost/mockApi";
+
+        interceptor.putCachedResponse(connectId, url, response);
+        assertNotNull(interceptor.getCachedResponse(connectId, url));
+    }
+
+    @Test
+    void testCleanCachedResponse() {
+        String connectId = "123";
+        interceptor.cleanCachedResponse(connectId);
+        assertNull(interceptor.getCachedResponse(connectId, "https://localhost/mockApi"));
+    }
+
+    @Test
+    void testCleanExpiredCachedResponse() {
+        interceptor.cleanExpiredCachedResponse(1);
+        assertEquals(0, interceptor.numberOfCachedUsers());
+    }
+
+    @Test
+    void testAddHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        interceptor.addHeaders(headers, true, false);
+        assertTrue(headers.containsKey(MSECConstants.CLIENT_APPLICATION_PLATFORM_HEADER));
+    }
+}

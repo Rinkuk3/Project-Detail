@@ -1,0 +1,68 @@
+package com.td.mbna.msec.midtier.util.services;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.mock.http.client.MockClientHttpResponse;
+
+import java.io.IOException;
+
+class TDRestMockServiceTest {
+
+    private TDRestMockService tdRestMockService;
+    
+    @BeforeEach
+    void setUp() {
+        tdRestMockService = new TDRestMockService();
+    }
+
+    @Test
+    void testGetMockResponse_ValidEndpoint() throws IOException {
+        String apiUrl = "https://localhost/MOCK_TD_AP_BRANCHES?bankNum=004&branchNum=123";
+        MockClientHttpResponse response = tdRestMockService.getMockResponse(apiUrl);
+        
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("application/json", response.getHeaders().getFirst(HttpHeaders.CONTENT_TYPE));
+        
+        String responseBody = new String(response.getBody().readAllBytes());
+        assertTrue(responseBody.contains("\"financialInstitutionBankNum\": \"004\""));
+        assertTrue(responseBody.contains("\"internalOrganizationBranchNum\": \"123\""));
+    }
+
+    @Test
+    void testGetMockResponse_InvalidEndpoint() {
+        String apiUrl = "https://localhost/INVALID_ENDPOINT";
+        MockClientHttpResponse response = tdRestMockService.getMockResponse(apiUrl);
+        
+        assertNull(response);
+    }
+
+    @Test
+    void testGetBankNameEn() {
+        assertEquals("BANK OF MONTREAL", tdRestMockService.getBankNameEn("001"));
+        assertEquals("BANK OF NOVA SCOTIA", tdRestMockService.getBankNameEn("002"));
+        assertEquals("ROYAL BANK OF CANADA", tdRestMockService.getBankNameEn("003"));
+        assertEquals("THE TORONTO-DOMINION BANK", tdRestMockService.getBankNameEn("004"));
+        assertEquals("NATIONAL BANK OF CANADA", tdRestMockService.getBankNameEn("006"));
+        assertEquals("CIBC", tdRestMockService.getBankNameEn("010"));
+        assertEquals("TANGERINE BANK", tdRestMockService.getBankNameEn("614"));
+        assertEquals("BANK NAME", tdRestMockService.getBankNameEn("999"));
+    }
+
+    @Test
+    void testGetBankNameFr() {
+        assertEquals("BANQUE DE MONTRÉAL", tdRestMockService.getBankNameFr("001"));
+        assertEquals("BANQUE DE NOUVELLE-ÉCOSSE", tdRestMockService.getBankNameFr("002"));
+        assertEquals("BANQUE ROYALE DU CANADA", tdRestMockService.getBankNameFr("003"));
+        assertEquals("LA BANQUE TORONTO-DOMINION", tdRestMockService.getBankNameFr("004"));
+        assertEquals("BANQUE NATIONALE DU CANADA", tdRestMockService.getBankNameFr("006"));
+        assertEquals("BANQUE CIBC", tdRestMockService.getBankNameFr("010"));
+        assertEquals("BANQUE TANGERINE", tdRestMockService.getBankNameFr("614"));
+        assertEquals("NOM DE BANQUE", tdRestMockService.getBankNameFr("999"));
+    }
+}
